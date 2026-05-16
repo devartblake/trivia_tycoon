@@ -54,8 +54,7 @@ void main() {
     });
 
     test('parses completed', () {
-      expect(
-          Challenge.fromJson(_baseJson(completed: true)).completed, isTrue);
+      expect(Challenge.fromJson(_baseJson(completed: true)).completed, isTrue);
     });
 
     test('icon defaults to flash_on_rounded', () {
@@ -165,9 +164,8 @@ void main() {
     });
 
     test('copyWith replaces refreshTime', () {
-      final bundle = ChallengeBundle(
-          challenges: [],
-          refreshTime: DateTime(2025, 1, 1));
+      final bundle =
+          ChallengeBundle(challenges: [], refreshTime: DateTime(2025, 1, 1));
       final newTime = DateTime(2026, 3, 15);
       expect(bundle.copyWith(refreshTime: newTime).refreshTime, newTime);
     });
@@ -175,8 +173,7 @@ void main() {
     test('copyWith preserves unchanged fields', () {
       final original = [Challenge.fromJson(_baseJson())];
       final bundle = ChallengeBundle(
-          challenges: original,
-          refreshTime: DateTime(2025, 6, 1));
+          challenges: original, refreshTime: DateTime(2025, 6, 1));
       final updated = bundle.copyWith(refreshTime: DateTime(2025, 7, 1));
       expect(updated.challenges, original);
     });

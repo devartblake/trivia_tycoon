@@ -24,7 +24,8 @@ final authOperationsProvider = Provider<AuthOperations>((ref) {
 });
 
 /// Provides the singleton GamePlatformAuthService (Game Center / Play Games).
-final gamePlatformAuthServiceProvider = Provider<GamePlatformAuthService>((ref) {
+final gamePlatformAuthServiceProvider =
+    Provider<GamePlatformAuthService>((ref) {
   return GamePlatformAuthService();
 });
 

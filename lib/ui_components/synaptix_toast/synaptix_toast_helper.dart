@@ -263,8 +263,8 @@ class SynaptixToastHelper {
           ],
         ),
       ),
-      backgroundGradient:
-          SynaptixToastThemeManager.getGradientForEvent(rewardType.toLowerCase()),
+      backgroundGradient: SynaptixToastThemeManager.getGradientForEvent(
+          rewardType.toLowerCase()),
       toastType: SynaptixToastType.reward,
       duration: duration,
       shouldIconPulse: true,

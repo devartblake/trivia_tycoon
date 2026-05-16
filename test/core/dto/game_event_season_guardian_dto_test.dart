@@ -74,7 +74,16 @@ void main() {
 
     test('toJson contains all 8 keys', () {
       final j = GameEventDto.fromJson(_full()).toJson();
-      for (final key in ['id', 'name', 'status', 'startsAt', 'entryFee', 'maxPlayers', 'currentPlayers', 'aliveCount']) {
+      for (final key in [
+        'id',
+        'name',
+        'status',
+        'startsAt',
+        'entryFee',
+        'maxPlayers',
+        'currentPlayers',
+        'aliveCount'
+      ]) {
         expect(j.containsKey(key), isTrue, reason: 'missing key: $key');
       }
     });
@@ -129,7 +138,13 @@ void main() {
         'score': 1000,
         'isEliminated': true,
       }).toJson();
-      for (final key in ['playerId', 'username', 'rank', 'score', 'isEliminated']) {
+      for (final key in [
+        'playerId',
+        'username',
+        'rank',
+        'score',
+        'isEliminated'
+      ]) {
         expect(j.containsKey(key), isTrue, reason: 'missing key: $key');
       }
     });
@@ -213,17 +228,20 @@ void main() {
     });
 
     test('fromJson tier defaults 1 when absent', () {
-      final d = PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
+      final d =
+          PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
       expect(d.tier, 1);
     });
 
     test('fromJson xp defaults 0 when absent', () {
-      final d = PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
+      final d =
+          PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
       expect(d.xp, 0);
     });
 
     test('fromJson rank defaults 0 when absent', () {
-      final d = PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
+      final d =
+          PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
       expect(d.rank, 0);
     });
 
@@ -232,7 +250,15 @@ void main() {
         'playerId': 'p1',
         'seasonId': 's1',
       }).toJson();
-      for (final key in ['playerId', 'seasonId', 'tier', 'xp', 'rank', 'guardiansDefeated', 'tilesControlled']) {
+      for (final key in [
+        'playerId',
+        'seasonId',
+        'tier',
+        'xp',
+        'rank',
+        'guardiansDefeated',
+        'tilesControlled'
+      ]) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
     });
@@ -256,22 +282,26 @@ void main() {
     });
 
     test('fromJson avatarUrl null when absent', () {
-      final g = GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
+      final g =
+          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
       expect(g.avatarUrl, isNull);
     });
 
     test('fromJson tier defaults 1 when absent', () {
-      final g = GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
+      final g =
+          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
       expect(g.tier, 1);
     });
 
     test('fromJson defenceCount defaults 0 when absent', () {
-      final g = GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
+      final g =
+          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
       expect(g.defenceCount, 0);
     });
 
     test('fromJson lastChallengedAt null when absent', () {
-      final g = GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
+      final g =
+          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
       expect(g.lastChallengedAt, isNull);
     });
 
@@ -296,7 +326,8 @@ void main() {
     });
 
     test('toJson lastChallengedAt null when absent', () {
-      final g = GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
+      final g =
+          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
       expect(g.toJson()['lastChallengedAt'], isNull);
     });
   });
@@ -317,22 +348,26 @@ void main() {
     });
 
     test('fromJson isGuardian defaults false when absent', () {
-      final d = MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0});
+      final d =
+          MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0});
       expect(d.isGuardian, isFalse);
     });
 
     test('fromJson tier null when absent', () {
-      final d = MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0});
+      final d =
+          MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0});
       expect(d.tier, isNull);
     });
 
     test('fromJson tier stored when present', () {
-      final d = MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0, 'tier': 4});
+      final d = MyGuardianStatusDto.fromJson(
+          {'playerId': 'p1', 'defenceCount': 0, 'tier': 4});
       expect(d.tier, 4);
     });
 
     test('fromJson currentMatchId null when absent', () {
-      final d = MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0});
+      final d =
+          MyGuardianStatusDto.fromJson({'playerId': 'p1', 'defenceCount': 0});
       expect(d.currentMatchId, isNull);
     });
 
@@ -342,7 +377,13 @@ void main() {
         'isGuardian': false,
         'defenceCount': 0,
       }).toJson();
-      for (final key in ['playerId', 'isGuardian', 'tier', 'defenceCount', 'currentMatchId']) {
+      for (final key in [
+        'playerId',
+        'isGuardian',
+        'tier',
+        'defenceCount',
+        'currentMatchId'
+      ]) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
     });

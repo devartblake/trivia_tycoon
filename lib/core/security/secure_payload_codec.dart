@@ -50,7 +50,8 @@ class SecurePayloadCodec {
       final nonce = base64Url.decode(payload.nonce);
       final cipherText = base64Url.decode(payload.ciphertext);
       final mac = Mac(base64Url.decode(payload.mac));
-      final aad = utf8.encode('$_aadVersion|${method.toUpperCase()}|${uri.path}');
+      final aad =
+          utf8.encode('$_aadVersion|${method.toUpperCase()}|${uri.path}');
 
       final clear = await _cipher.decrypt(
         SecretBox(cipherText, nonce: nonce, mac: mac),
@@ -59,7 +60,8 @@ class SecurePayloadCodec {
       );
       final decoded = jsonDecode(utf8.decode(Uint8List.fromList(clear)));
       if (decoded is! Map<String, dynamic>) {
-        throw const SecureDecryptException('Decrypted payload is not an object');
+        throw const SecureDecryptException(
+            'Decrypted payload is not an object');
       }
       return decoded;
     } catch (e) {

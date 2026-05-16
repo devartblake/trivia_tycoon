@@ -49,13 +49,13 @@ void main() {
     });
 
     test('fromApiValue returns unknown for null', () {
-      expect(
-          CryptoTransactionKind.fromApiValue(null), CryptoTransactionKind.unknown);
+      expect(CryptoTransactionKind.fromApiValue(null),
+          CryptoTransactionKind.unknown);
     });
 
     test('fromApiValue returns unknown for empty string', () {
-      expect(
-          CryptoTransactionKind.fromApiValue(''), CryptoTransactionKind.unknown);
+      expect(CryptoTransactionKind.fromApiValue(''),
+          CryptoTransactionKind.unknown);
     });
 
     test('fromApiValue is case-insensitive', () {
@@ -90,11 +90,13 @@ void main() {
     });
 
     test('contains positive, negative, neutral', () {
-      expect(CryptoTransactionDirection.values, containsAll([
-        CryptoTransactionDirection.positive,
-        CryptoTransactionDirection.negative,
-        CryptoTransactionDirection.neutral,
-      ]));
+      expect(
+          CryptoTransactionDirection.values,
+          containsAll([
+            CryptoTransactionDirection.positive,
+            CryptoTransactionDirection.negative,
+            CryptoTransactionDirection.neutral,
+          ]));
     });
   });
 
@@ -332,7 +334,8 @@ void main() {
     });
 
     test('totalPages is 1 when pageSize is 0', () {
-      const r = CryptoHistoryResponse(page: 1, pageSize: 0, total: 5, items: []);
+      const r =
+          CryptoHistoryResponse(page: 1, pageSize: 0, total: 5, items: []);
       expect(r.totalPages, 1);
     });
 
@@ -342,7 +345,12 @@ void main() {
         'pageSize': 1,
         'total': 1,
         'items': [
-          {'transactionId': 'x', 'kind': 'unknown', 'unitsDelta': 0, 'status': 'Applied'}
+          {
+            'transactionId': 'x',
+            'kind': 'unknown',
+            'unitsDelta': 0,
+            'status': 'Applied'
+          }
         ],
       });
       expect(r.hasPendingItems, isFalse);
@@ -354,15 +362,26 @@ void main() {
         'pageSize': 2,
         'total': 2,
         'items': [
-          {'transactionId': 'x', 'kind': 'unknown', 'unitsDelta': 0, 'status': 'Applied'},
-          {'transactionId': 'y', 'kind': 'unknown', 'unitsDelta': 0, 'status': 'Pending'},
+          {
+            'transactionId': 'x',
+            'kind': 'unknown',
+            'unitsDelta': 0,
+            'status': 'Applied'
+          },
+          {
+            'transactionId': 'y',
+            'kind': 'unknown',
+            'unitsDelta': 0,
+            'status': 'Pending'
+          },
         ],
       });
       expect(r.hasPendingItems, isTrue);
     });
 
     test('toJson round-trip preserves page and total', () {
-      const r = CryptoHistoryResponse(page: 3, pageSize: 5, total: 15, items: []);
+      const r =
+          CryptoHistoryResponse(page: 3, pageSize: 5, total: 15, items: []);
       final json = r.toJson();
       final restored = CryptoHistoryResponse.fromJson(json);
       expect(restored.page, 3);
@@ -410,7 +429,8 @@ void main() {
 
   group('CryptoApiException', () {
     test('holds code and message', () {
-      const ex = CryptoApiException(code: 'CRYPTO_DISABLED', message: 'disabled');
+      const ex =
+          CryptoApiException(code: 'CRYPTO_DISABLED', message: 'disabled');
       expect(ex.code, 'CRYPTO_DISABLED');
       expect(ex.message, 'disabled');
     });
@@ -452,10 +472,11 @@ void main() {
       expect(ex.isInsufficientBalance, isTrue);
     });
 
-    test('isInsufficientStakedBalance is true for INSUFFICIENT_STAKED_BALANCE code',
+    test(
+        'isInsufficientStakedBalance is true for INSUFFICIENT_STAKED_BALANCE code',
         () {
-      const ex = CryptoApiException(
-          code: 'INSUFFICIENT_STAKED_BALANCE', message: '');
+      const ex =
+          CryptoApiException(code: 'INSUFFICIENT_STAKED_BALANCE', message: '');
       expect(ex.isInsufficientStakedBalance, isTrue);
     });
 
@@ -476,8 +497,8 @@ void main() {
     });
 
     test('toString includes statusCode when provided', () {
-      const ex = CryptoApiException(
-          code: 'ERR', message: 'msg', statusCode: 400);
+      const ex =
+          CryptoApiException(code: 'ERR', message: 'msg', statusCode: 400);
       expect(ex.toString(), contains('400'));
     });
 
@@ -487,14 +508,14 @@ void main() {
         statusCode: 404,
         errorCode: 'WALLET_NOT_LINKED',
       );
-      final cryptoEx =
-          CryptoApiException.fromApiRequestException(apiEx);
+      final cryptoEx = CryptoApiException.fromApiRequestException(apiEx);
       expect(cryptoEx.code, 'WALLET_NOT_LINKED');
       expect(cryptoEx.message, 'API failed');
       expect(cryptoEx.statusCode, 404);
     });
 
-    test('fromApiRequestException uses default code when errorCode is null', () {
+    test('fromApiRequestException uses default code when errorCode is null',
+        () {
       final apiEx = ApiRequestException('fail', statusCode: 500);
       final cryptoEx = CryptoApiException.fromApiRequestException(apiEx);
       expect(cryptoEx.code, 'CRYPTO_REQUEST_FAILED');
@@ -518,8 +539,8 @@ void main() {
     });
 
     test('default network is solana', () {
-      const req = CryptoLinkWalletRequest(
-          playerId: 'p2', walletAddress: 'addr');
+      const req =
+          CryptoLinkWalletRequest(playerId: 'p2', walletAddress: 'addr');
       expect(req.network, CryptoNetwork.solana);
     });
   });
@@ -610,8 +631,8 @@ void main() {
     });
 
     test('toJson includes stakeId when non-empty', () {
-      const req = CryptoStakeRequest(
-          playerId: 'p1', units: 100, stakeId: 'stake-123');
+      const req =
+          CryptoStakeRequest(playerId: 'p1', units: 100, stakeId: 'stake-123');
       final json = req.toJson();
       expect(json['stakeId'], 'stake-123');
     });
@@ -677,7 +698,9 @@ void main() {
 
     test('toJson round-trip preserves all fields', () {
       const m = CryptoStakingModel(
-          playerId: 'p', availableUnits: 50, stakedUnits: 10,
+          playerId: 'p',
+          availableUnits: 50,
+          stakedUnits: 10,
           unitType: 'CRYPTO_UNITS');
       final json = m.toJson();
       final restored = CryptoStakingModel.fromJson(json);

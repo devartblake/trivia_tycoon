@@ -647,9 +647,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
   /// Compute live progress for a branch category from the skill tree state.
   _GroupProgress _liveProgress(String categoryId) {
     final graph = ref.read(skillTreeProvider).graph;
-    final nodes = graph.nodes
-        .where((n) => n.category.name == categoryId)
-        .toList();
+    final nodes =
+        graph.nodes.where((n) => n.category.name == categoryId).toList();
     final total = nodes.length;
     final unlocked = nodes.where((n) => n.unlocked).length;
     final available = nodes.where((n) => n.available && !n.unlocked).length;
@@ -740,7 +739,8 @@ class SkillSearchResult {
 class _GroupProgress {
   final int progressPercent;
   final int availableSkills;
-  const _GroupProgress({required this.progressPercent, required this.availableSkills});
+  const _GroupProgress(
+      {required this.progressPercent, required this.availableSkills});
 }
 
 extension _AutoPathSheet on _SkillTreeNavScreenState {

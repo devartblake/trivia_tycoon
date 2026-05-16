@@ -401,7 +401,8 @@ class AuthApiClient {
       );
     } catch (e) {
       throw AuthApiException(
-        message: 'Mobile game login request failed before receiving a response.',
+        message:
+            'Mobile game login request failed before receiving a response.',
         path: mobileGameLoginPath,
         method: 'POST',
         innerError: e,
@@ -457,7 +458,8 @@ class AuthApiClient {
       );
     } catch (e) {
       throw AuthApiException(
-        message: 'Link game account request failed before receiving a response.',
+        message:
+            'Link game account request failed before receiving a response.',
         path: linkGameAccountPath,
         method: 'POST',
         innerError: e,

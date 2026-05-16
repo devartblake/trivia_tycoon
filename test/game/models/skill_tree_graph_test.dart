@@ -166,7 +166,8 @@ void main() {
     });
 
     test('defaults missing optional fields', () {
-      final node = SkillNode.fromJson({'id': 'x', 'title': '', 'description': '', 'tier': 0, 'cost': 0});
+      final node = SkillNode.fromJson(
+          {'id': 'x', 'title': '', 'description': '', 'tier': 0, 'cost': 0});
 
       expect(node.category, SkillCategory.unknown);
       expect(node.effects, isEmpty);
@@ -675,8 +676,22 @@ void main() {
     test('parses nodes and edges from flat JSON', () {
       final json = {
         'nodes': [
-          {'id': 'a', 'title': 'A', 'description': '', 'tier': 0, 'cost': 5, 'category': 'luck'},
-          {'id': 'b', 'title': 'B', 'description': '', 'tier': 1, 'cost': 10, 'category': 'risk'},
+          {
+            'id': 'a',
+            'title': 'A',
+            'description': '',
+            'tier': 0,
+            'cost': 5,
+            'category': 'luck'
+          },
+          {
+            'id': 'b',
+            'title': 'B',
+            'description': '',
+            'tier': 1,
+            'cost': 10,
+            'category': 'risk'
+          },
         ],
         'edges': [
           {'fromId': 'a', 'toId': 'b'},
@@ -705,7 +720,8 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SkillTreeGraphBranch — subgraphForBranch', () {
-    test('returns subgraph containing only matching branch nodes and edges', () {
+    test('returns subgraph containing only matching branch nodes and edges',
+        () {
       final a = _node(id: 'a', branchId: 'scholar');
       final b = _node(id: 'b', branchId: 'scholar');
       final c = _node(id: 'c', branchId: 'strategist');

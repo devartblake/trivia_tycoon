@@ -262,8 +262,8 @@ void main() {
 
     test('null when currentIndex >= questions.length', () {
       final q = _q();
-      final state = const AdaptedQuizState()
-          .copyWith(questions: [q], currentIndex: 5);
+      final state =
+          const AdaptedQuizState().copyWith(questions: [q], currentIndex: 5);
       expect(state.currentQuestion, isNull);
     });
   });
@@ -373,14 +373,14 @@ void main() {
     });
 
     test('returns category displayName when set', () {
-      final state = const AdaptedQuizState()
-          .copyWith(category: QuizCategory.science);
+      final state =
+          const AdaptedQuizState().copyWith(category: QuizCategory.science);
       expect(state.categoryDisplayName, QuizCategory.science.displayName);
     });
 
     test('contains "Science" for science category', () {
-      final state = const AdaptedQuizState()
-          .copyWith(category: QuizCategory.science);
+      final state =
+          const AdaptedQuizState().copyWith(category: QuizCategory.science);
       expect(state.categoryDisplayName, contains('Science'));
     });
   });
@@ -395,10 +395,9 @@ void main() {
     });
 
     test('returns category description when set', () {
-      final state = const AdaptedQuizState()
-          .copyWith(category: QuizCategory.history);
-      expect(state.categoryDescription,
-          QuizCategory.history.description);
+      final state =
+          const AdaptedQuizState().copyWith(category: QuizCategory.history);
+      expect(state.categoryDescription, QuizCategory.history.description);
     });
   });
 
@@ -412,8 +411,8 @@ void main() {
     });
 
     test('returns category primaryColor when category is set', () {
-      final state = const AdaptedQuizState()
-          .copyWith(category: QuizCategory.science);
+      final state =
+          const AdaptedQuizState().copyWith(category: QuizCategory.science);
       expect(state.categoryColor, QuizCategory.science.primaryColor);
     });
   });
@@ -428,8 +427,8 @@ void main() {
     });
 
     test('returns category icon when category is set', () {
-      final state = const AdaptedQuizState()
-          .copyWith(category: QuizCategory.mathematics);
+      final state =
+          const AdaptedQuizState().copyWith(category: QuizCategory.mathematics);
       expect(state.categoryIcon, QuizCategory.mathematics.icon);
     });
   });
@@ -464,8 +463,8 @@ void main() {
     });
 
     test('copyWith sets achievements', () {
-      final state = const AdaptedQuizState()
-          .copyWith(achievements: ['Perfect Score']);
+      final state =
+          const AdaptedQuizState().copyWith(achievements: ['Perfect Score']);
       expect(state.achievements, ['Perfect Score']);
     });
   });

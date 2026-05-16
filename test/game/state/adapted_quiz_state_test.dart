@@ -111,14 +111,13 @@ void main() {
     });
 
     test('copies showFeedback', () {
-      expect(
-          const AdaptedQuizState().copyWith(showFeedback: true).showFeedback,
+      expect(const AdaptedQuizState().copyWith(showFeedback: true).showFeedback,
           isTrue);
     });
 
     test('copies isPaused', () {
-      expect(const AdaptedQuizState().copyWith(isPaused: true).isPaused,
-          isTrue);
+      expect(
+          const AdaptedQuizState().copyWith(isPaused: true).isPaused, isTrue);
     });
 
     test('copies isTimerExpired', () {
@@ -166,9 +165,7 @@ void main() {
 
     test('copies selectedAnswer', () {
       expect(
-          const AdaptedQuizState()
-              .copyWith(selectedAnswer: 'B')
-              .selectedAnswer,
+          const AdaptedQuizState().copyWith(selectedAnswer: 'B').selectedAnswer,
           'B');
     });
   });
@@ -221,15 +218,13 @@ void main() {
 
     test('copies audioPosition', () {
       const pos = Duration(seconds: 15);
-      final updated =
-          const AdaptedQuizState().copyWith(audioPosition: pos);
+      final updated = const AdaptedQuizState().copyWith(audioPosition: pos);
       expect(updated.audioPosition, pos);
     });
 
     test('copies audioDuration', () {
       const dur = Duration(minutes: 2);
-      final updated =
-          const AdaptedQuizState().copyWith(audioDuration: dur);
+      final updated = const AdaptedQuizState().copyWith(audioDuration: dur);
       expect(updated.audioDuration, dur);
     });
   });
@@ -285,8 +280,8 @@ void main() {
     });
 
     test('returns length of questions list', () {
-      final state = AdaptedQuizState(
-          questions: [_question(id: 'a'), _question(id: 'b')]);
+      final state =
+          AdaptedQuizState(questions: [_question(id: 'a'), _question(id: 'b')]);
       expect(state.totalQuestions, 2);
     });
   });

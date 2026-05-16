@@ -271,8 +271,8 @@ void main() {
 
   group('AuthService.signup — edge cases', () {
     test('throws on 409 duplicate email', () async {
-      final client = _StubHttpClient(
-          (_) => _jsonResp({'message': 'Email already registered'}, status: 409));
+      final client = _StubHttpClient((_) =>
+          _jsonResp({'message': 'Email already registered'}, status: 409));
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
 
       await expectLater(
@@ -316,8 +316,8 @@ void main() {
         refreshToken: 'expired-refresh',
       ));
 
-      final client =
-          _StubHttpClient((_) => _jsonResp({'message': 'Unauthorized'}, status: 401));
+      final client = _StubHttpClient(
+          (_) => _jsonResp({'message': 'Unauthorized'}, status: 401));
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
 
       await svc.logout();
@@ -347,7 +347,8 @@ void main() {
   });
 
   group('AuthService.refresh — concurrent calls', () {
-    test('two simultaneous refresh calls both complete without error', () async {
+    test('two simultaneous refresh calls both complete without error',
+        () async {
       await tokenStore.save(AuthSession(
         accessToken: 'old-access',
         refreshToken: 'valid-refresh',
@@ -379,8 +380,8 @@ void main() {
         refreshToken: 'rotated-refresh',
       ));
 
-      final client =
-          _StubHttpClient((_) => _jsonResp({'message': 'Token rotated'}, status: 401));
+      final client = _StubHttpClient(
+          (_) => _jsonResp({'message': 'Token rotated'}, status: 401));
       final svc = _makeAuthService(store: tokenStore, httpClient: client);
 
       await expectLater(svc.refresh, throwsA(isA<Exception>()));
@@ -480,8 +481,8 @@ void main() {
     });
 
     test('throws on non-2xx response', () async {
-      final client = _StubHttpClient(
-          (_) => _jsonResp({'message': 'Provider not configured'}, status: 404));
+      final client = _StubHttpClient((_) =>
+          _jsonResp({'message': 'Provider not configured'}, status: 404));
 
       final deviceId = _FakeDeviceIdService();
       final api = AuthApiClient(client,

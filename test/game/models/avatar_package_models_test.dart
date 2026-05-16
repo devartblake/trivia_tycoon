@@ -8,7 +8,8 @@ void main() {
 
   group('AvatarEntry.fromJson — basic fields', () {
     test('parses id and path', () {
-      final entry = AvatarEntry.fromJson({'id': 'av1', 'path': 'assets/av1.png'});
+      final entry =
+          AvatarEntry.fromJson({'id': 'av1', 'path': 'assets/av1.png'});
       expect(entry.id, 'av1');
       expect(entry.path, 'assets/av1.png');
     });
@@ -51,12 +52,14 @@ void main() {
     });
 
     test('parses source from string', () {
-      final entry = AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'source': 'remote'});
+      final entry =
+          AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'source': 'remote'});
       expect(entry.source, AvatarSource.remote);
     });
 
     test('defaults source to asset when unknown string', () {
-      final entry = AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'source': 'bogus'});
+      final entry =
+          AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'source': 'bogus'});
       expect(entry.source, AvatarSource.asset);
     });
 
@@ -69,12 +72,14 @@ void main() {
     });
 
     test('parses kind from string', () {
-      final entry = AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'kind': 'threeD'});
+      final entry =
+          AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'kind': 'threeD'});
       expect(entry.kind, AvatarKind.threeD);
     });
 
     test('defaults kind to image when unknown string', () {
-      final entry = AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'kind': 'unknown'});
+      final entry =
+          AvatarEntry.fromJson({'id': 'x', 'path': 'p', 'kind': 'unknown'});
       expect(entry.kind, AvatarKind.image);
     });
 
@@ -179,13 +184,15 @@ void main() {
     });
 
     test('copies path', () {
-      const e = AvatarEntry(id: 'x', path: 'old_path', source: AvatarSource.asset);
+      const e =
+          AvatarEntry(id: 'x', path: 'old_path', source: AvatarSource.asset);
       expect(e.copyWith(path: 'new_path').path, 'new_path');
     });
 
     test('copies source', () {
       const e = AvatarEntry(id: 'x', path: 'p', source: AvatarSource.asset);
-      expect(e.copyWith(source: AvatarSource.remote).source, AvatarSource.remote);
+      expect(
+          e.copyWith(source: AvatarSource.remote).source, AvatarSource.remote);
     });
 
     test('copies kind', () {
@@ -194,7 +201,8 @@ void main() {
     });
 
     test('copies tags', () {
-      const e = AvatarEntry(id: 'x', path: 'p', source: AvatarSource.asset, tags: ['a']);
+      const e = AvatarEntry(
+          id: 'x', path: 'p', source: AvatarSource.asset, tags: ['a']);
       expect(e.copyWith(tags: ['b', 'c']).tags, ['b', 'c']);
     });
 
@@ -237,7 +245,13 @@ void main() {
 
     test('parses type correctly', () {
       final pkg = AvatarPackage.fromJson(
-        {'packageId': 'x', 'displayName': 'd', 'version': '1', 'type': 'depthCard', 'avatars': []},
+        {
+          'packageId': 'x',
+          'displayName': 'd',
+          'version': '1',
+          'type': 'depthCard',
+          'avatars': []
+        },
         source: AvatarSource.asset,
       );
       expect(pkg.type, AvatarPackageType.depthCard);
@@ -245,7 +259,13 @@ void main() {
 
     test('defaults type to image when unknown', () {
       final pkg = AvatarPackage.fromJson(
-        {'packageId': 'x', 'displayName': 'd', 'version': '1', 'type': 'xyz', 'avatars': []},
+        {
+          'packageId': 'x',
+          'displayName': 'd',
+          'version': '1',
+          'type': 'xyz',
+          'avatars': []
+        },
         source: AvatarSource.asset,
       );
       expect(pkg.type, AvatarPackageType.image);
@@ -388,7 +408,8 @@ void main() {
 
   group('AvatarPackageMetadata — installFolderName', () {
     test('returns id_version format', () {
-      const meta = AvatarPackageMetadata(id: 'fantasy', name: 'Fantasy', version: '1.2.0');
+      const meta = AvatarPackageMetadata(
+          id: 'fantasy', name: 'Fantasy', version: '1.2.0');
       expect(meta.installFolderName, 'fantasy_1.2.0');
     });
   });

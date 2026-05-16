@@ -172,8 +172,7 @@ void main() {
     test('deducts price from user', () async {
       await svc.addCoins(
           userId: 'p1', amount: 500, type: TransactionType.dailyBonus);
-      await svc.purchaseTheme(
-          userId: 'p1', themeId: 'theme_dark', price: 200);
+      await svc.purchaseTheme(userId: 'p1', themeId: 'theme_dark', price: 200);
       expect(svc.getCoinBalance('p1'), 300);
     });
 
@@ -261,7 +260,8 @@ void main() {
           userId: 'tt1', amount: 100, type: TransactionType.dailyBonus);
       await svc.addCoins(
           userId: 'tt1', amount: 50, type: TransactionType.achievementReward);
-      final daily = svc.getTransactionsByType('tt1', TransactionType.dailyBonus);
+      final daily =
+          svc.getTransactionsByType('tt1', TransactionType.dailyBonus);
       expect(daily.every((t) => t.type == TransactionType.dailyBonus), isTrue);
       expect(daily.length, 1);
     });
@@ -283,19 +283,16 @@ void main() {
           userId: 'dr1', amount: 100, type: TransactionType.dailyBonus);
       final start = DateTime.now().subtract(const Duration(minutes: 1));
       final end = DateTime.now().add(const Duration(minutes: 1));
-      final inRange =
-          svc.getTransactionsByDateRange('dr1', start, end);
+      final inRange = svc.getTransactionsByDateRange('dr1', start, end);
       expect(inRange.isNotEmpty, isTrue);
     });
 
     test('returns empty when no transactions in range', () async {
       await svc.addCoins(
           userId: 'dr2', amount: 100, type: TransactionType.dailyBonus);
-      final start =
-          DateTime.now().subtract(const Duration(days: 2));
+      final start = DateTime.now().subtract(const Duration(days: 2));
       final end = DateTime.now().subtract(const Duration(days: 1));
-      final outOfRange =
-          svc.getTransactionsByDateRange('dr2', start, end);
+      final outOfRange = svc.getTransactionsByDateRange('dr2', start, end);
       expect(outOfRange, isEmpty);
     });
   });
@@ -398,8 +395,7 @@ void main() {
       final future = stream.first;
       await svc.addCoins(
           userId: 'stream_u2', amount: 50, type: TransactionType.dailyBonus);
-      final transactions =
-          await future.timeout(const Duration(seconds: 2));
+      final transactions = await future.timeout(const Duration(seconds: 2));
       expect(transactions.isNotEmpty, isTrue);
     });
   });

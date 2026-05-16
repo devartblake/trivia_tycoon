@@ -62,14 +62,14 @@ void main() {
     });
 
     test('prefers name over title', () {
-      expect(
-          OfferItem.fromJson(_json(id: 'x', name: 'Flash Name')).title,
+      expect(OfferItem.fromJson(_json(id: 'x', name: 'Flash Name')).title,
           'Flash Name');
     });
 
     test('parses description', () {
       expect(
-          OfferItem.fromJson(_json(id: 'x', description: 'Best deal')).description,
+          OfferItem.fromJson(_json(id: 'x', description: 'Best deal'))
+              .description,
           'Best deal');
     });
 
@@ -113,8 +113,8 @@ void main() {
     });
 
     test('parses isPopular', () {
-      expect(
-          OfferItem.fromJson(_json(id: 'x', isPopular: true)).isPopular, isTrue);
+      expect(OfferItem.fromJson(_json(id: 'x', isPopular: true)).isPopular,
+          isTrue);
     });
 
     test('isPopular defaults to false when absent', () {
@@ -204,13 +204,12 @@ void main() {
     });
 
     test('parses headline', () {
-      expect(
-          FeaturedOffer.fromJson(_json(headline: '50% OFF')).headline, '50% OFF');
+      expect(FeaturedOffer.fromJson(_json(headline: '50% OFF')).headline,
+          '50% OFF');
     });
 
     test('parses subtitle', () {
-      expect(
-          FeaturedOffer.fromJson(_json(subtitle: 'Daily Deal')).subtitle,
+      expect(FeaturedOffer.fromJson(_json(subtitle: 'Daily Deal')).subtitle,
           'Daily Deal');
     });
 
@@ -221,16 +220,16 @@ void main() {
     });
 
     test('parses expiresAt', () {
-      final o = FeaturedOffer.fromJson(
-          _json(expiresAt: '2025-12-25T00:00:00.000Z'));
+      final o =
+          FeaturedOffer.fromJson(_json(expiresAt: '2025-12-25T00:00:00.000Z'));
       expect(o.expiresAt, isNotNull);
       expect(o.expiresAt!.month, 12);
     });
 
     test('prefers endsAt over expiresAt', () {
-      final o = FeaturedOffer.fromJson(
-          _json(endsAt: '2025-11-01T00:00:00.000Z',
-              expiresAt: '2025-12-01T00:00:00.000Z'));
+      final o = FeaturedOffer.fromJson(_json(
+          endsAt: '2025-11-01T00:00:00.000Z',
+          expiresAt: '2025-12-01T00:00:00.000Z'));
       expect(o.expiresAt!.month, 11);
     });
 
@@ -239,8 +238,7 @@ void main() {
     });
 
     test('parses buttonText', () {
-      expect(
-          FeaturedOffer.fromJson(_json(buttonText: 'Get It')).buttonText,
+      expect(FeaturedOffer.fromJson(_json(buttonText: 'Get It')).buttonText,
           'Get It');
     });
 
@@ -279,9 +277,7 @@ void main() {
 
     test('returns "Expired" when past', () {
       expect(
-          _offer(
-              expiresAt:
-                  DateTime.now().subtract(const Duration(hours: 1)))
+          _offer(expiresAt: DateTime.now().subtract(const Duration(hours: 1)))
               .countdownLabel,
           'Expired');
     });
@@ -392,8 +388,8 @@ void main() {
         description: '',
         price: '1',
         icon: Icons.star,
-        gradient: LinearGradient(
-            colors: [Color(0xFF000000), Color(0xFFFFFFFF)]),
+        gradient:
+            LinearGradient(colors: [Color(0xFF000000), Color(0xFFFFFFFF)]),
         buttonText: 'Buy',
       );
       const offer2 = OfferItem(
@@ -403,8 +399,8 @@ void main() {
         description: '',
         price: '2',
         icon: Icons.star,
-        gradient: LinearGradient(
-            colors: [Color(0xFF000000), Color(0xFFFFFFFF)]),
+        gradient:
+            LinearGradient(colors: [Color(0xFF000000), Color(0xFFFFFFFF)]),
         buttonText: 'Buy',
       );
       final data = StoreOffersData(

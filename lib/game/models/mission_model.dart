@@ -127,10 +127,9 @@ class Mission {
       progress: _intFromJson(json, const ['progress']),
       total: _intFromJson(json, const ['total', 'goal', 'targetCount'], 1),
       target: _intFromJson(json, const ['target', 'goal', 'targetCount']),
-      rewardXp:
-          _intFromJson(json, const ['rewardXp', 'reward_xp', 'xpReward']),
-      icon: _iconFromString((json['icon_name'] ?? json['icon'] ?? 'assignment')
-          .toString()),
+      rewardXp: _intFromJson(json, const ['rewardXp', 'reward_xp', 'xpReward']),
+      icon: _iconFromString(
+          (json['icon_name'] ?? json['icon'] ?? 'assignment').toString()),
       badge: (json['badge'] ?? json['type'] ?? 'mission').toString(),
       type: _parseMissionType(
           json['type'] ?? json['timeframe'] ?? json['missionType']),
@@ -287,9 +286,8 @@ class UserMission {
       id: (json['id'] ?? json['missionId'] ?? json['mission_id'] ?? '')
           .toString(),
       userId: (json['user_id'] ?? json['playerId'] ?? '').toString(),
-      missionId:
-          (json['mission_id'] ?? json['missionId'] ?? json['id'] ?? '')
-              .toString(),
+      missionId: (json['mission_id'] ?? json['missionId'] ?? json['id'] ?? '')
+          .toString(),
       mission: Mission.fromJson(missionJson),
       progress: _intFromJson(json, const ['progress']),
       status: claimed || completed

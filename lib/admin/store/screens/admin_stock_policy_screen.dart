@@ -39,8 +39,7 @@ class _AdminStockPolicyScreenState
           _buildSearchBar(),
           Expanded(
             child: policiesAsync.when(
-              loading: () =>
-                  const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => _buildError(e.toString()),
               data: (policies) {
                 final filtered = _filter(policies);
@@ -110,7 +109,8 @@ class _AdminStockPolicyScreenState
           children: [
             const Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 32),
             const SizedBox(height: 12),
-            Text(message, textAlign: TextAlign.center,
+            Text(message,
+                textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.grey)),
             const SizedBox(height: 12),
             ElevatedButton(

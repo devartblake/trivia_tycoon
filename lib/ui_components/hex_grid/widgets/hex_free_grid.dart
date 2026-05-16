@@ -160,7 +160,9 @@ class _HexagonFreeGridState extends State<HexagonFreeGrid>
         if (!useCoords && !useItems) return const SizedBox.shrink();
 
         // coords-mode: needs at least one of buildTile or buildChild
-        if (useCoords && widget.buildTile == null && widget.buildChild == null) {
+        if (useCoords &&
+            widget.buildTile == null &&
+            widget.buildChild == null) {
           return const SizedBox.shrink();
         }
         if (useItems && widget.buildItem == null) {

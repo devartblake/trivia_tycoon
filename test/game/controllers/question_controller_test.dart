@@ -298,7 +298,8 @@ void main() {
       expect(stateAfterReset.selectedAnswer, isNull);
 
       ctrl.selectAnswer('Paris');
-      expect(container.read(questionControllerProvider).selectedAnswer, 'Paris');
+      expect(
+          container.read(questionControllerProvider).selectedAnswer, 'Paris');
     });
   });
 
@@ -314,7 +315,8 @@ void main() {
       final ctrl = container.read(questionControllerProvider.notifier);
       ctrl.selectAnswer('Berlin');
 
-      expect(container.read(questionControllerProvider).selectedAnswer, 'Berlin');
+      expect(
+          container.read(questionControllerProvider).selectedAnswer, 'Berlin');
 
       ctrl.reset();
       final state = container.read(questionControllerProvider);

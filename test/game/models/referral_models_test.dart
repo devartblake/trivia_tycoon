@@ -28,20 +28,23 @@ void main() {
     }
 
     test('parses code and ownerUserId', () {
-      final rc = ReferralCode.fromJson(_json(code: 'ABCD1234', ownerUserId: 'u42'));
+      final rc =
+          ReferralCode.fromJson(_json(code: 'ABCD1234', ownerUserId: 'u42'));
       expect(rc.code, 'ABCD1234');
       expect(rc.ownerUserId, 'u42');
     });
 
     test('parses createdAt as UTC', () {
-      final rc = ReferralCode.fromJson(_json(createdAt: '2025-06-15T10:00:00.000Z'));
+      final rc =
+          ReferralCode.fromJson(_json(createdAt: '2025-06-15T10:00:00.000Z'));
       expect(rc.createdAt.isUtc, isTrue);
       expect(rc.createdAt.month, 6);
       expect(rc.createdAt.day, 15);
     });
 
     test('parses optional expiresAt', () {
-      final rc = ReferralCode.fromJson(_json(expiresAt: '2025-12-31T23:59:59.000Z'));
+      final rc =
+          ReferralCode.fromJson(_json(expiresAt: '2025-12-31T23:59:59.000Z'));
       expect(rc.expiresAt, isNotNull);
       expect(rc.expiresAt!.isUtc, isTrue);
       expect(rc.expiresAt!.month, 12);
@@ -112,7 +115,10 @@ void main() {
 
     test('expiresAt is null in JSON when not set', () {
       final rc = ReferralCode(
-          code: 'X', ownerUserId: 'u', createdAt: DateTime.utc(2025, 1, 1), isSynced: false);
+          code: 'X',
+          ownerUserId: 'u',
+          createdAt: DateTime.utc(2025, 1, 1),
+          isSynced: false);
       expect(rc.toJson()['expiresAt'], isNull);
     });
   });
@@ -126,11 +132,14 @@ void main() {
     );
 
     test('copies code', () => expect(base.copyWith(code: 'NEW').code, 'NEW'));
-    test('copies status', () => expect(
-        base.copyWith(status: ReferralCodeStatus.expired).status,
-        ReferralCodeStatus.expired));
-    test('copies isSynced', () => expect(base.copyWith(isSynced: true).isSynced, isTrue));
-    test('copies serverId', () => expect(base.copyWith(serverId: 's1').serverId, 's1'));
+    test(
+        'copies status',
+        () => expect(base.copyWith(status: ReferralCodeStatus.expired).status,
+            ReferralCodeStatus.expired));
+    test('copies isSynced',
+        () => expect(base.copyWith(isSynced: true).isSynced, isTrue));
+    test('copies serverId',
+        () => expect(base.copyWith(serverId: 's1').serverId, 's1'));
     test('preserves unchanged fields', () {
       final updated = base.copyWith(isSynced: true);
       expect(updated.code, 'OLD');
@@ -156,8 +165,16 @@ void main() {
     });
 
     test('instances with different codes are not equal', () {
-      final a = ReferralCode(code: 'AAA', ownerUserId: 'u1', createdAt: DateTime.utc(2025), isSynced: false);
-      final b = ReferralCode(code: 'BBB', ownerUserId: 'u1', createdAt: DateTime.utc(2025), isSynced: false);
+      final a = ReferralCode(
+          code: 'AAA',
+          ownerUserId: 'u1',
+          createdAt: DateTime.utc(2025),
+          isSynced: false);
+      final b = ReferralCode(
+          code: 'BBB',
+          ownerUserId: 'u1',
+          createdAt: DateTime.utc(2025),
+          isSynced: false);
       expect(a, isNot(equals(b)));
     });
   });
@@ -378,8 +395,7 @@ void main() {
     );
 
     test('copies status', () {
-      expect(
-          base.copyWith(status: InviteStatus.redeemed).status,
+      expect(base.copyWith(status: InviteStatus.redeemed).status,
           InviteStatus.redeemed);
     });
 

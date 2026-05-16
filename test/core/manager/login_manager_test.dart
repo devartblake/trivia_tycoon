@@ -126,8 +126,7 @@ void main() {
   group('LoginManager — role extraction from metadata', () {
     test('role from top-level "role" field', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'role': 'admin'})),
+        httpClient: _StubHttpClient((_) => _loginResponse({'role': 'admin'})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -140,8 +139,9 @@ void main() {
 
     test('role from top-level "roles" list (first element)', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'roles': ['moderator', 'player']})),
+        httpClient: _StubHttpClient((_) => _loginResponse({
+              'roles': ['moderator', 'player']
+            })),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -167,8 +167,7 @@ void main() {
 
     test('tier admin maps to admin role', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'tier': 'admin'})),
+        httpClient: _StubHttpClient((_) => _loginResponse({'tier': 'admin'})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -181,8 +180,8 @@ void main() {
 
     test('tier moderator maps to moderator role', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'tier': 'moderator'})),
+        httpClient:
+            _StubHttpClient((_) => _loginResponse({'tier': 'moderator'})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -195,8 +194,7 @@ void main() {
 
     test('isAdminUser returns true after admin login', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'role': 'admin'})),
+        httpClient: _StubHttpClient((_) => _loginResponse({'role': 'admin'})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -215,8 +213,7 @@ void main() {
   group('LoginManager — premium status extraction', () {
     test('isPremium=true from top-level field', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'isPremium': true})),
+        httpClient: _StubHttpClient((_) => _loginResponse({'isPremium': true})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -243,8 +240,7 @@ void main() {
 
     test('tier premium → isPremium true', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'tier': 'premium'})),
+        httpClient: _StubHttpClient((_) => _loginResponse({'tier': 'premium'})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -270,8 +266,8 @@ void main() {
 
     test('isPremium=false explicitly → not premium', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'isPremium': false})),
+        httpClient:
+            _StubHttpClient((_) => _loginResponse({'isPremium': false})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,
@@ -369,8 +365,8 @@ void main() {
   group('LoginManager — userId persistence', () {
     test('userId from auth response saved to profileService', () async {
       final manager = _makeManager(
-        httpClient: _StubHttpClient(
-            (_) => _loginResponse({'userId': 'uid-abc'})),
+        httpClient:
+            _StubHttpClient((_) => _loginResponse({'userId': 'uid-abc'})),
         tokenStore: tokenStore,
         secureStorage: secureStorage,
         profileService: profileService,

@@ -8,8 +8,7 @@ void main() {
 
   group('StoreAvailabilityState.fromJson', () {
     test('parses isVisible', () {
-      expect(
-          StoreAvailabilityState.fromJson({'isVisible': false}).isVisible,
+      expect(StoreAvailabilityState.fromJson({'isVisible': false}).isVisible,
           isFalse);
     });
 
@@ -40,8 +39,7 @@ void main() {
     });
 
     test('parses isFlashSale', () {
-      expect(
-          StoreAvailabilityState.fromJson({'isFlashSale': true}).isFlashSale,
+      expect(StoreAvailabilityState.fromJson({'isFlashSale': true}).isFlashSale,
           isTrue);
     });
 
@@ -70,8 +68,7 @@ void main() {
 
   group('StoreStockState.fromJson', () {
     test('parses policyType', () {
-      expect(
-          StoreStockState.fromJson({'policyType': 'per_user'}).policyType,
+      expect(StoreStockState.fromJson({'policyType': 'per_user'}).policyType,
           'per_user');
     });
 
@@ -88,8 +85,7 @@ void main() {
     });
 
     test('parses usedQuantity', () {
-      expect(
-          StoreStockState.fromJson({'usedQuantity': 3}).usedQuantity, 3);
+      expect(StoreStockState.fromJson({'usedQuantity': 3}).usedQuantity, 3);
     });
 
     test('usedQuantity defaults to 0 when absent', () {
@@ -103,20 +99,19 @@ void main() {
     });
 
     test('parses resetInterval', () {
-      expect(
-          StoreStockState.fromJson({'resetInterval': 'daily'}).resetInterval,
+      expect(StoreStockState.fromJson({'resetInterval': 'daily'}).resetInterval,
           'daily');
     });
 
     test('parses lastResetAt', () {
-      final s = StoreStockState.fromJson(
-          {'lastResetAt': '2025-06-01T00:00:00.000Z'});
+      final s =
+          StoreStockState.fromJson({'lastResetAt': '2025-06-01T00:00:00.000Z'});
       expect(s.lastResetAt, isNotNull);
     });
 
     test('parses nextResetAt', () {
-      final s = StoreStockState.fromJson(
-          {'nextResetAt': '2025-06-02T00:00:00.000Z'});
+      final s =
+          StoreStockState.fromJson({'nextResetAt': '2025-06-02T00:00:00.000Z'});
       expect(s.nextResetAt, isNotNull);
       expect(s.nextResetAt!.day, 2);
     });
@@ -130,8 +125,8 @@ void main() {
     });
 
     test('parses isUnlimited', () {
-      expect(
-          StoreStockState.fromJson({'isUnlimited': false}).isUnlimited, isFalse);
+      expect(StoreStockState.fromJson({'isUnlimited': false}).isUnlimited,
+          isFalse);
     });
 
     test('isUnlimited defaults to true when absent', () {
@@ -273,8 +268,7 @@ void main() {
     });
 
     test('parses title', () {
-      expect(
-          PlayerStoreItem.fromJson(_json(title: 'Shield Pack')).title,
+      expect(PlayerStoreItem.fromJson(_json(title: 'Shield Pack')).title,
           'Shield Pack');
     });
 
@@ -287,12 +281,14 @@ void main() {
 
     test('parses description', () {
       expect(
-          PlayerStoreItem.fromJson(_json(description: 'Great item')).description,
+          PlayerStoreItem.fromJson(_json(description: 'Great item'))
+              .description,
           'Great item');
     });
 
     test('parses type', () {
-      expect(PlayerStoreItem.fromJson(_json(type: 'cosmetic')).type, 'cosmetic');
+      expect(
+          PlayerStoreItem.fromJson(_json(type: 'cosmetic')).type, 'cosmetic');
     });
 
     test('parses type from itemType fallback', () {
@@ -316,8 +312,7 @@ void main() {
     });
 
     test('parses currency', () {
-      expect(
-          PlayerStoreItem.fromJson(_json(currency: 'diamonds')).currency,
+      expect(PlayerStoreItem.fromJson(_json(currency: 'diamonds')).currency,
           'diamonds');
     });
 

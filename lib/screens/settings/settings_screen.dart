@@ -7,7 +7,8 @@ import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/auth_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../../game/providers/personalization_providers.dart';
-import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../../game/providers/learning_providers.dart'
+    show currentPlayerIdProvider;
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -839,7 +840,8 @@ class _PersonalizationSection extends ConsumerWidget {
 
     return asyncId.when(
       data: (playerId) {
-        if (playerId == null || playerId.isEmpty) return const SizedBox.shrink();
+        if (playerId == null || playerId.isEmpty)
+          return const SizedBox.shrink();
         return _PersonalizationTile(playerId: playerId);
       },
       loading: () => const SizedBox.shrink(),
@@ -940,16 +942,16 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                               enabled: value,
                             );
                         ref
-                            .read(personalizationEnabledProvider(
-                                    widget.playerId)
-                                .notifier)
+                            .read(
+                                personalizationEnabledProvider(widget.playerId)
+                                    .notifier)
                             .state = newState;
                       } catch (_) {
                         // Optimistically revert on error
                         ref
-                            .read(personalizationEnabledProvider(
-                                    widget.playerId)
-                                .notifier)
+                            .read(
+                                personalizationEnabledProvider(widget.playerId)
+                                    .notifier)
                             .state = enabled;
                       } finally {
                         if (mounted) setState(() => _loading = false);

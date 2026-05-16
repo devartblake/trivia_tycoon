@@ -21,7 +21,8 @@ final adminStorePolicyProvider =
   return ref.watch(adminStorePoliciesProvider.future).then(
         (policies) => policies.firstWhere(
           (p) => p.sku == sku,
-          orElse: () => StockPolicyFormModel(sku: sku, itemTitle: '', itemType: ''),
+          orElse: () =>
+              StockPolicyFormModel(sku: sku, itemTitle: '', itemType: ''),
         ),
       );
 });
@@ -43,8 +44,7 @@ final adminRewardLimitProvider =
 
 // ── Flash Sales ───────────────────────────────────────────────────────────────
 
-final adminFlashSalesProvider =
-    FutureProvider<List<FlashSaleFormModel>>((ref) {
+final adminFlashSalesProvider = FutureProvider<List<FlashSaleFormModel>>((ref) {
   return ref.watch(adminStoreServiceProvider).fetchFlashSales();
 });
 

@@ -31,9 +31,8 @@ class StockResetTimer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(stockCountdownProvider); // rebuild every second
 
-    final target = preferExpiry
-        ? (expiresAt ?? nextResetAt)
-        : (nextResetAt ?? expiresAt);
+    final target =
+        preferExpiry ? (expiresAt ?? nextResetAt) : (nextResetAt ?? expiresAt);
 
     if (target == null) return const SizedBox.shrink();
 
@@ -48,7 +47,9 @@ class StockResetTimer extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(
-          remaining.isNegative ? Icons.timer_off_outlined : Icons.timer_outlined,
+          remaining.isNegative
+              ? Icons.timer_off_outlined
+              : Icons.timer_outlined,
           size: 12,
           color: color,
         ),

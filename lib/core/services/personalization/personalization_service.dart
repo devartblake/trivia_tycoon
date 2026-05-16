@@ -158,24 +158,30 @@ class PersonalizationService {
     );
   }
 
-  void fireNotificationOpened({required String playerId, String? notificationId}) {
+  void fireNotificationOpened(
+      {required String playerId, String? notificationId}) {
     fireEvent(
       playerId,
       BehaviourEventDto(
         eventType: 'notification_opened',
         eventSource: 'notification',
-        metadata: {if (notificationId != null) 'notificationId': notificationId},
+        metadata: {
+          if (notificationId != null) 'notificationId': notificationId
+        },
       ),
     );
   }
 
-  void fireNotificationDismissed({required String playerId, String? notificationId}) {
+  void fireNotificationDismissed(
+      {required String playerId, String? notificationId}) {
     fireEvent(
       playerId,
       BehaviourEventDto(
         eventType: 'notification_dismissed',
         eventSource: 'notification',
-        metadata: {if (notificationId != null) 'notificationId': notificationId},
+        metadata: {
+          if (notificationId != null) 'notificationId': notificationId
+        },
       ),
     );
   }
@@ -214,4 +220,3 @@ class PersonalizationService {
     } catch (_) {}
   }
 }
-

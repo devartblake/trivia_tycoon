@@ -116,8 +116,10 @@ void main() {
     });
 
     test('averageScore = totalPoints / totalGames', () {
-      svc.recordMatch(_match(id: 'm1', userId: uid, score: 500, result: GameResult.draw));
-      svc.recordMatch(_match(id: 'm2', userId: uid, score: 300, result: GameResult.draw));
+      svc.recordMatch(
+          _match(id: 'm1', userId: uid, score: 500, result: GameResult.draw));
+      svc.recordMatch(
+          _match(id: 'm2', userId: uid, score: 300, result: GameResult.draw));
       // 500 + 300 = 800 / 2 = 400
       expect(svc.getUserStats(uid)!.averageScore, closeTo(400.0, 0.01));
     });
@@ -126,7 +128,8 @@ void main() {
       // XP = totalPoints. Need 1000+ XP for level 2.
       // Use large win scores to accumulate XP quickly
       for (int i = 0; i < 5; i++) {
-        svc.recordMatch(_match(id: 'm$i', userId: uid, score: 200, result: GameResult.win));
+        svc.recordMatch(
+            _match(id: 'm$i', userId: uid, score: 200, result: GameResult.win));
       }
       // 5 wins × (200+50) = 1250 XP → level 2
       expect(svc.getUserStats(uid)!.level, 2);
@@ -165,8 +168,18 @@ void main() {
     });
 
     test('category highestScore tracks max', () {
-      svc.recordMatch(_match(id: 'm1', userId: uid, category: 'Science', score: 300, result: GameResult.win));
-      svc.recordMatch(_match(id: 'm2', userId: uid, category: 'Science', score: 700, result: GameResult.win));
+      svc.recordMatch(_match(
+          id: 'm1',
+          userId: uid,
+          category: 'Science',
+          score: 300,
+          result: GameResult.win));
+      svc.recordMatch(_match(
+          id: 'm2',
+          userId: uid,
+          category: 'Science',
+          score: 700,
+          result: GameResult.win));
       // highestScore = max of raw scores seen
       final cs = svc.getCategoryStats(uid, 'Science')!;
       expect(cs.highestScore, greaterThanOrEqualTo(300));
@@ -272,9 +285,12 @@ void main() {
     test('getGlobalLeaderboard sorted descending by totalPoints', () {
       const u2 = 'lb_user_a';
       const u3 = 'lb_user_b';
-      svc.recordMatch(_match(id: 'la1', userId: u2, score: 200, result: GameResult.win));
-      svc.recordMatch(_match(id: 'la2', userId: u3, score: 800, result: GameResult.win));
-      svc.recordMatch(_match(id: 'la3', userId: uid, score: 500, result: GameResult.win));
+      svc.recordMatch(
+          _match(id: 'la1', userId: u2, score: 200, result: GameResult.win));
+      svc.recordMatch(
+          _match(id: 'la2', userId: u3, score: 800, result: GameResult.win));
+      svc.recordMatch(
+          _match(id: 'la3', userId: uid, score: 500, result: GameResult.win));
       final lb = svc.getGlobalLeaderboard();
       // Find these users in leaderboard
       final positions = lb.map((s) => s.key).toList();
@@ -298,7 +314,8 @@ void main() {
 
     test('getCategoryLeaderboard returns users with that category', () {
       const catUser = 'cat_lb_user';
-      svc.recordMatch(_match(userId: catUser, category: 'Movies', result: GameResult.win));
+      svc.recordMatch(
+          _match(userId: catUser, category: 'Movies', result: GameResult.win));
       final lb = svc.getCategoryLeaderboard('Movies');
       expect(lb.any((s) => s.key == catUser), isTrue);
     });
@@ -317,8 +334,10 @@ void main() {
     });
 
     test('getRecentMatches returns most recent first', () {
-      svc.recordMatch(_match(id: 'early', userId: uid, score: 100, result: GameResult.win));
-      svc.recordMatch(_match(id: 'later', userId: uid, score: 200, result: GameResult.win));
+      svc.recordMatch(
+          _match(id: 'early', userId: uid, score: 100, result: GameResult.win));
+      svc.recordMatch(
+          _match(id: 'later', userId: uid, score: 200, result: GameResult.win));
       final recent = svc.getRecentMatches(uid, limit: 2);
       expect(recent.first.id, 'later');
     });
@@ -349,7 +368,8 @@ void main() {
       svc.recordMatch(_match(id: 'init', userId: uid));
       final stream = svc.watchUserStats(uid);
       final future = stream.first;
-      svc.recordMatch(_match(id: 'trigger', userId: uid, result: GameResult.win));
+      svc.recordMatch(
+          _match(id: 'trigger', userId: uid, result: GameResult.win));
       final stats = await future.timeout(const Duration(seconds: 2));
       expect(stats.userId, uid);
     });

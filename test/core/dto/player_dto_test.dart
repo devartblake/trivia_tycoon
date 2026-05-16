@@ -131,8 +131,7 @@ void main() {
     });
 
     test('country null when absent', () {
-      final j = Map<String, dynamic>.from(_fullPlayerJson())
-        ..remove('country');
+      final j = Map<String, dynamic>.from(_fullPlayerJson())..remove('country');
       expect(PlayerDto.fromJson(j).country, isNull);
     });
 
@@ -181,7 +180,8 @@ void main() {
     });
 
     test('contains username', () {
-      expect(PlayerDto.fromJson(_fullPlayerJson()).toJson()['username'], 'alice');
+      expect(
+          PlayerDto.fromJson(_fullPlayerJson()).toJson()['username'], 'alice');
     });
 
     test('wallet serialized as nested map', () {

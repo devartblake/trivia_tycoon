@@ -287,15 +287,15 @@ void main() {
 
     test('false when unlockDate is in the future', () {
       final future = DateTime.now().add(const Duration(days: 30));
-      final r = RewardStep.fromJson(
-          _baseJson(unlockDate: future.toIso8601String()));
+      final r =
+          RewardStep.fromJson(_baseJson(unlockDate: future.toIso8601String()));
       expect(r.isUnlocked, isFalse);
     });
 
     test('true when unlockDate is in the past', () {
       final past = DateTime.now().subtract(const Duration(days: 1));
-      final r = RewardStep.fromJson(
-          _baseJson(unlockDate: past.toIso8601String()));
+      final r =
+          RewardStep.fromJson(_baseJson(unlockDate: past.toIso8601String()));
       expect(r.isUnlocked, isTrue);
     });
 
@@ -313,18 +313,20 @@ void main() {
 
   group('RewardStep — displayText', () {
     test('returns description when quantity is 1', () {
-      final r = RewardStep.fromJson(_baseJson(description: 'Gold coin', quantity: 1));
+      final r =
+          RewardStep.fromJson(_baseJson(description: 'Gold coin', quantity: 1));
       expect(r.displayText, 'Gold coin');
     });
 
     test('appends x{quantity} when quantity > 1', () {
-      final r = RewardStep.fromJson(_baseJson(description: 'Gold coin', quantity: 3));
+      final r =
+          RewardStep.fromJson(_baseJson(description: 'Gold coin', quantity: 3));
       expect(r.displayText, 'Gold coin x3');
     });
 
     test('appends large quantity', () {
-      final r = RewardStep.fromJson(
-          _baseJson(description: 'Gems', quantity: 100));
+      final r =
+          RewardStep.fromJson(_baseJson(description: 'Gems', quantity: 100));
       expect(r.displayText, 'Gems x100');
     });
   });
@@ -409,7 +411,8 @@ void main() {
     });
 
     test('copies description', () {
-      expect(base.copyWith(description: 'New reward').description, 'New reward');
+      expect(
+          base.copyWith(description: 'New reward').description, 'New reward');
     });
 
     test('copies type', () {

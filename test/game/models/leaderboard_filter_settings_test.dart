@@ -38,8 +38,8 @@ void main() {
     });
 
     test('notificationPreference is null when absent', () {
-      expect(
-          LeaderboardFilterSettings.fromJson({}).notificationPreference, isNull);
+      expect(LeaderboardFilterSettings.fromJson({}).notificationPreference,
+          isNull);
     });
   });
 
@@ -50,8 +50,7 @@ void main() {
   group('LeaderboardFilterSettings.fromJson — scalar fields', () {
     test('parses showVerifiedOnly', () {
       expect(
-          LeaderboardFilterSettings.fromJson(
-                  _baseJson(showVerifiedOnly: true))
+          LeaderboardFilterSettings.fromJson(_baseJson(showVerifiedOnly: true))
               .showVerifiedOnly,
           isTrue);
     });
@@ -125,8 +124,7 @@ void main() {
         deviceType: 'desktop',
         notificationPreference: 'email',
       );
-      final restored =
-          LeaderboardFilterSettings.fromJson(original.toJson());
+      final restored = LeaderboardFilterSettings.fromJson(original.toJson());
       expect(restored.showVerifiedOnly, original.showVerifiedOnly);
       expect(restored.excludeBots, original.excludeBots);
       expect(restored.deviceType, original.deviceType);

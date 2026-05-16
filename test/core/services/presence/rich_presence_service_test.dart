@@ -28,7 +28,8 @@ void main() {
     expect(service.currentUserPresence!.activity, 'Reading notes');
   });
 
-  test('setGameActivity switches to inGame and populates gameActivity', () async {
+  test('setGameActivity switches to inGame and populates gameActivity',
+      () async {
     await service.setGameActivity(
       gameType: 'Quiz',
       gameMode: 'Science',
@@ -127,7 +128,8 @@ void main() {
     expect(service.canUserJoinGame('ghost-user'), isFalse);
   });
 
-  test('watchUserPresence stream emits when updateFriendPresence is called', () async {
+  test('watchUserPresence stream emits when updateFriendPresence is called',
+      () async {
     const uid = 'stream-user';
     final presence = UserPresence(
       userId: uid,

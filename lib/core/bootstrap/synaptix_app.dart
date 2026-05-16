@@ -7,7 +7,8 @@ import '../manager/service_manager.dart';
 import '../services/crash_recovery_service.dart';
 import '../services/theme/theme_notifier.dart';
 import '../../game/providers/auth_providers.dart';
-import '../../game/providers/riverpod_providers.dart' hide themeNotifierProvider;
+import '../../game/providers/riverpod_providers.dart'
+    hide themeNotifierProvider;
 import '../../widgets/app_logo.dart';
 import '../../offline_fallback_screen.dart';
 import '../../screens/splash_variants/main_splash.dart';
@@ -84,11 +85,19 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       final apiClient = ref.read(serviceManagerProvider).synaptixApiClient;
       final isHealthy = await apiClient.healthCheck();
       if (!isHealthy) {
-        if (mounted) setState(() { _backendUnreachable = true; _startupChecked = true; });
+        if (mounted)
+          setState(() {
+            _backendUnreachable = true;
+            _startupChecked = true;
+          });
         return;
       }
     } catch (_) {
-      if (mounted) setState(() { _backendUnreachable = true; _startupChecked = true; });
+      if (mounted)
+        setState(() {
+          _backendUnreachable = true;
+          _startupChecked = true;
+        });
       return;
     }
 
@@ -97,7 +106,11 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       if (config.minimumClientVersion != '0.0.0') {
         final info = await PackageInfo.fromPlatform();
         if (_isVersionBelow(info.version, config.minimumClientVersion)) {
-          if (mounted) setState(() { _forceUpdate = true; _startupChecked = true; });
+          if (mounted)
+            setState(() {
+              _forceUpdate = true;
+              _startupChecked = true;
+            });
           return;
         }
       }
@@ -120,7 +133,9 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
 
   List<int> _parseSemver(String v) {
     final parts = v.split('.').map((p) => int.tryParse(p) ?? 0).toList();
-    while (parts.length < 3) { parts.add(0); }
+    while (parts.length < 3) {
+      parts.add(0);
+    }
     return parts;
   }
 

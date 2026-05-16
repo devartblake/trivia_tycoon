@@ -113,8 +113,8 @@ void main() {
     });
 
     test('parses messageId', () {
-      expect(
-          MessageReaction.fromJson(_json(messageId: 'msg99')).messageId, 'msg99');
+      expect(MessageReaction.fromJson(_json(messageId: 'msg99')).messageId,
+          'msg99');
     });
 
     test('parses userId', () {
@@ -179,8 +179,7 @@ void main() {
     });
 
     test('returns customEmoji for custom type', () {
-      final r =
-          _reaction(type: ReactionType.custom, customEmoji: '🦄');
+      final r = _reaction(type: ReactionType.custom, customEmoji: '🦄');
       expect(r.displayEmoji, '🦄');
     });
 
@@ -264,25 +263,25 @@ void main() {
         );
 
     MessageReactionSummary _summary(
-        Map<ReactionType, List<MessageReaction>> reactions,
-        {int? totalCount}) =>
+            Map<ReactionType, List<MessageReaction>> reactions,
+            {int? totalCount}) =>
         MessageReactionSummary(
           messageId: 'msg1',
           reactions: reactions,
-          totalCount: totalCount ??
-              reactions.values.fold(0, (a, b) => a + b.length),
+          totalCount:
+              totalCount ?? reactions.values.fold(0, (a, b) => a + b.length),
           lastUpdated: ts,
         );
 
     test('hasReactions false when totalCount is 0', () {
-      expect(
-          _summary({}, totalCount: 0).hasReactions, isFalse);
+      expect(_summary({}, totalCount: 0).hasReactions, isFalse);
     });
 
     test('hasReactions true when totalCount > 0', () {
       expect(
-          _summary({ReactionType.heart: [_r('u1', ReactionType.heart)]})
-              .hasReactions,
+          _summary({
+            ReactionType.heart: [_r('u1', ReactionType.heart)]
+          }).hasReactions,
           isTrue);
     });
 
@@ -291,7 +290,8 @@ void main() {
         ReactionType.thumbsUp: [_r('u1', ReactionType.thumbsUp)],
         ReactionType.fire: [_r('u2', ReactionType.fire)],
       });
-      expect(s.reactionTypes, containsAll([ReactionType.thumbsUp, ReactionType.fire]));
+      expect(s.reactionTypes,
+          containsAll([ReactionType.thumbsUp, ReactionType.fire]));
     });
 
     test('getCountForType returns correct count', () {
@@ -310,7 +310,9 @@ void main() {
 
     test('getReactionsForType returns list', () {
       final r1 = _r('u1', ReactionType.laugh);
-      final s = _summary({ReactionType.laugh: [r1]});
+      final s = _summary({
+        ReactionType.laugh: [r1]
+      });
       expect(s.getReactionsForType(ReactionType.laugh), contains(r1));
     });
 
@@ -345,7 +347,9 @@ void main() {
 
     test('getUserReaction returns the specific reaction', () {
       final r1 = _r('uid_b', ReactionType.clap);
-      final s = _summary({ReactionType.clap: [r1]});
+      final s = _summary({
+        ReactionType.clap: [r1]
+      });
       expect(s.getUserReaction('uid_b'), r1);
     });
 
@@ -395,8 +399,14 @@ void main() {
     test('getUsersForReaction returns display names', () {
       final s = _summary({
         ReactionType.party: [
-          _reaction(userId: 'uid_a', userDisplayName: 'Alice', type: ReactionType.party),
-          _reaction(userId: 'uid_b', userDisplayName: 'Bob', type: ReactionType.party),
+          _reaction(
+              userId: 'uid_a',
+              userDisplayName: 'Alice',
+              type: ReactionType.party),
+          _reaction(
+              userId: 'uid_b',
+              userDisplayName: 'Bob',
+              type: ReactionType.party),
         ],
       });
       final users = s.getUsersForReaction(ReactionType.party);

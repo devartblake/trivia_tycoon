@@ -206,7 +206,9 @@ class AvatarPackageService {
   /// 5) update installed index
   Future<AvatarPackageInstall> downloadAndInstall(
       AvatarPackageMetadata meta) async {
-    if (kIsWeb) throw UnsupportedError('Avatar package installation is not supported on web.');
+    if (kIsWeb)
+      throw UnsupportedError(
+          'Avatar package installation is not supported on web.');
     final url = meta.archiveUrl;
     if (url == null || url.isEmpty) {
       throw StateError('archiveUrl is missing for package ${meta.id}.');
@@ -273,7 +275,9 @@ class AvatarPackageService {
     required AvatarPackageMetadata meta,
     required String assetArchivePath,
   }) async {
-    if (kIsWeb) throw UnsupportedError('Avatar package installation is not supported on web.');
+    if (kIsWeb)
+      throw UnsupportedError(
+          'Avatar package installation is not supported on web.');
     final root = await _packagesRootDir;
     final installDir = Directory(p.join(root.path, meta.installFolderName));
 

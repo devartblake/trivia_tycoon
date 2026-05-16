@@ -157,7 +157,8 @@ class RecommendationCard extends ConsumerWidget {
                 ),
                 // Dismiss button
                 IconButton(
-                  icon: const Icon(Icons.close, size: 16, color: Colors.black38),
+                  icon:
+                      const Icon(Icons.close, size: 16, color: Colors.black38),
                   splashRadius: 16,
                   onPressed: () => _onDismiss(ref),
                   padding: EdgeInsets.zero,
@@ -177,7 +178,10 @@ class RecommendationCard extends ConsumerWidget {
           BehaviourEventDto(
             eventType: 'recommendation_accepted',
             eventSource: 'recommendation_card',
-            metadata: {'recommendationId': recommendation.id, 'type': recommendation.type},
+            metadata: {
+              'recommendationId': recommendation.id,
+              'type': recommendation.type
+            },
           ),
         );
     ref.invalidate(homePersonalizationProvider(playerId));
@@ -192,7 +196,10 @@ class RecommendationCard extends ConsumerWidget {
           BehaviourEventDto(
             eventType: 'recommendation_dismissed',
             eventSource: 'recommendation_card',
-            metadata: {'recommendationId': recommendation.id, 'type': recommendation.type},
+            metadata: {
+              'recommendationId': recommendation.id,
+              'type': recommendation.type
+            },
           ),
         );
     ref.invalidate(homePersonalizationProvider(playerId));

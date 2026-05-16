@@ -17,13 +17,15 @@ void main() {
     });
 
     test('contains info, debug, warning, error, performance', () {
-      expect(LogLevel.values, containsAll([
-        LogLevel.info,
-        LogLevel.debug,
-        LogLevel.warning,
-        LogLevel.error,
-        LogLevel.performance,
-      ]));
+      expect(
+          LogLevel.values,
+          containsAll([
+            LogLevel.info,
+            LogLevel.debug,
+            LogLevel.warning,
+            LogLevel.error,
+            LogLevel.performance,
+          ]));
     });
 
     test('all values are distinct', () {
@@ -63,14 +65,33 @@ void main() {
 
     test('all color constants are non-empty strings', () {
       final colors = [
-        LogColors.reset, LogColors.black, LogColors.red, LogColors.green,
-        LogColors.yellow, LogColors.blue, LogColors.magenta, LogColors.cyan,
-        LogColors.white, LogColors.gray, LogColors.brightRed,
-        LogColors.brightGreen, LogColors.brightYellow, LogColors.brightBlue,
-        LogColors.brightMagenta, LogColors.brightCyan, LogColors.brightWhite,
-        LogColors.bgRed, LogColors.bgGreen, LogColors.bgYellow,
-        LogColors.bgBlue, LogColors.bgMagenta, LogColors.bgCyan,
-        LogColors.bold, LogColors.dim, LogColors.italic, LogColors.underline,
+        LogColors.reset,
+        LogColors.black,
+        LogColors.red,
+        LogColors.green,
+        LogColors.yellow,
+        LogColors.blue,
+        LogColors.magenta,
+        LogColors.cyan,
+        LogColors.white,
+        LogColors.gray,
+        LogColors.brightRed,
+        LogColors.brightGreen,
+        LogColors.brightYellow,
+        LogColors.brightBlue,
+        LogColors.brightMagenta,
+        LogColors.brightCyan,
+        LogColors.brightWhite,
+        LogColors.bgRed,
+        LogColors.bgGreen,
+        LogColors.bgYellow,
+        LogColors.bgBlue,
+        LogColors.bgMagenta,
+        LogColors.bgCyan,
+        LogColors.bold,
+        LogColors.dim,
+        LogColors.italic,
+        LogColors.underline,
       ];
       for (final c in colors) {
         expect(c.isNotEmpty, isTrue);

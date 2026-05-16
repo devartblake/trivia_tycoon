@@ -613,7 +613,8 @@ class _AdminNotificationsScreenState
         if (_isDeadLetterLoading || _isReplaying)
           const LinearProgressIndicator(minHeight: 2),
         if (!_didLoadDeadLetter)
-          const SizedBox(height: 48, child: Center(child: CircularProgressIndicator()))
+          const SizedBox(
+              height: 48, child: Center(child: CircularProgressIndicator()))
         else if (_deadLetterItems.isEmpty)
           _buildDeadLetterEmptyState()
         else
@@ -635,9 +636,8 @@ class _AdminNotificationsScreenState
                         item['messageId'] ??
                         '')
                     .toString();
-                final title =
-                    (item['title'] ?? item['subject'] ?? '(untitled)')
-                        .toString();
+                final title = (item['title'] ?? item['subject'] ?? '(untitled)')
+                    .toString();
                 final channel =
                     (item['channelKey'] ?? item['channel_key'] ?? '-')
                         .toString();
@@ -652,8 +652,8 @@ class _AdminNotificationsScreenState
                 final ts = DateTime.tryParse(rawTs)?.toLocal();
 
                 return ListTile(
-                  leading: const Icon(Icons.error_outline,
-                      color: Color(0xFFEF4444)),
+                  leading:
+                      const Icon(Icons.error_outline, color: Color(0xFFEF4444)),
                   title: Text(title),
                   subtitle: Text(
                     'channel=$channel\n$reason'
@@ -661,8 +661,9 @@ class _AdminNotificationsScreenState
                   ),
                   isThreeLine: true,
                   trailing: TextButton.icon(
-                    onPressed:
-                        (_isReplaying || id.isEmpty) ? null : () => _replayDeadLetter(id),
+                    onPressed: (_isReplaying || id.isEmpty)
+                        ? null
+                        : () => _replayDeadLetter(id),
                     icon: const Icon(Icons.replay, size: 16),
                     label: const Text('Replay'),
                     style: TextButton.styleFrom(

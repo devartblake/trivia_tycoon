@@ -127,8 +127,8 @@ void main() {
     });
 
     test('preserves id, title, description', () {
-      final a = Achievement.fromJson(
-          _baseJson(id: 'ach5', title: 'Speed Demon'));
+      final a =
+          Achievement.fromJson(_baseJson(id: 'ach5', title: 'Speed Demon'));
       final unlocked = a.unlock();
       expect(unlocked.id, 'ach5');
       expect(unlocked.title, 'Speed Demon');
@@ -169,8 +169,11 @@ void main() {
 
     test('round-trip preserves all fields', () {
       final original = Achievement.fromJson(_baseJson(
-          id: 'ach7', title: 'Champion', description: 'Top scorer',
-          isUnlocked: true, unlockedAt: '2025-08-20T00:00:00.000Z'));
+          id: 'ach7',
+          title: 'Champion',
+          description: 'Top scorer',
+          isUnlocked: true,
+          unlockedAt: '2025-08-20T00:00:00.000Z'));
       final restored = Achievement.fromJson(original.toJson());
       expect(restored.id, original.id);
       expect(restored.title, original.title);

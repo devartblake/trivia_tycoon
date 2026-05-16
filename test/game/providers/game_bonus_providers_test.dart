@@ -337,7 +337,10 @@ void main() {
 
     test('can be cleared back to null', () {
       final c = _container();
-      c.read(categoryBonusProvider.notifier).state = {'category': 'math', 'bonus': 0.1};
+      c.read(categoryBonusProvider.notifier).state = {
+        'category': 'math',
+        'bonus': 0.1
+      };
       c.read(categoryBonusProvider.notifier).state = null;
       expect(c.read(categoryBonusProvider), isNull);
     });

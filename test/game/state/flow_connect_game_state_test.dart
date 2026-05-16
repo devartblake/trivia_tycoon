@@ -5,8 +5,14 @@ import 'package:trivia_tycoon/game/models/flow_connect_path_point.dart';
 
 // Minimal 2×2 grid helper
 List<List<FlowConnectGridCell>> _makeGrid() => [
-      [FlowConnectGridCell(row: 0, col: 0), FlowConnectGridCell(row: 0, col: 1)],
-      [FlowConnectGridCell(row: 1, col: 0), FlowConnectGridCell(row: 1, col: 1)],
+      [
+        FlowConnectGridCell(row: 0, col: 0),
+        FlowConnectGridCell(row: 0, col: 1)
+      ],
+      [
+        FlowConnectGridCell(row: 1, col: 0),
+        FlowConnectGridCell(row: 1, col: 1)
+      ],
     ];
 
 List<FlowConnectPathPoint> _makePath() => [
@@ -87,8 +93,7 @@ void main() {
     });
 
     test('stores status', () {
-      expect(
-          _makeState(status: FlowConnectGameStatus.success).status,
+      expect(_makeState(status: FlowConnectGameStatus.success).status,
           FlowConnectGameStatus.success);
     });
 
@@ -153,8 +158,8 @@ void main() {
     });
 
     test('preserves status when not provided', () {
-      final s =
-          _makeState(status: FlowConnectGameStatus.notStarted).copyWith(gridSize: 3);
+      final s = _makeState(status: FlowConnectGameStatus.notStarted)
+          .copyWith(gridSize: 3);
       expect(s.status, FlowConnectGameStatus.notStarted);
     });
 

@@ -126,15 +126,15 @@ class _PremiumGatingPanelState extends State<PremiumGatingPanel> {
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               ),
-              onChanged: (v) => setState(() => _model = _model.copyWith(
-                  upgradeCtaLabel: v.isEmpty ? null : v)),
+              onChanged: (v) => setState(() => _model =
+                  _model.copyWith(upgradeCtaLabel: v.isEmpty ? null : v)),
             ),
 
             if (_error != null) ...[
               const SizedBox(height: 8),
               Text(_error!,
-                  style: const TextStyle(
-                      color: Color(0xFFEF4444), fontSize: 12)),
+                  style:
+                      const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
             ],
 
             const SizedBox(height: 16),

@@ -362,7 +362,13 @@ void main() {
       final p = await svc.createProfile(name: 'KeyTest');
       final result = await svc.addXPToProfile(p!.id, 50);
 
-      for (final key in ['leveledUp', 'newLevel', 'newXP', 'newMaxXP', 'xpGained']) {
+      for (final key in [
+        'leveledUp',
+        'newLevel',
+        'newXP',
+        'newMaxXP',
+        'xpGained'
+      ]) {
         expect(result.containsKey(key), isTrue, reason: 'Missing key: $key');
       }
     });

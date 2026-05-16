@@ -14,12 +14,14 @@ void main() {
     });
 
     test('contains disconnected, connecting, connected, reconnecting', () {
-      expect(WsState.values, containsAll([
-        WsState.disconnected,
-        WsState.connecting,
-        WsState.connected,
-        WsState.reconnecting,
-      ]));
+      expect(
+          WsState.values,
+          containsAll([
+            WsState.disconnected,
+            WsState.connecting,
+            WsState.connected,
+            WsState.reconnecting,
+          ]));
     });
 
     test('all values are distinct', () {
@@ -77,8 +79,8 @@ void main() {
     });
 
     test('fromJson round-trip preserves all fields', () {
-      final original = WsEnvelope(
-          op: 'match.turn', ts: 12345, seq: 7, data: {'move': 'A'});
+      final original =
+          WsEnvelope(op: 'match.turn', ts: 12345, seq: 7, data: {'move': 'A'});
       final restored = WsEnvelope.fromJson(original.toJson());
       expect(restored.op, 'match.turn');
       expect(restored.ts, 12345);

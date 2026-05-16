@@ -27,8 +27,7 @@ void main() {
     });
 
     test('parses email', () {
-      expect(
-          UserModel.fromJson(_baseJson(email: 'alice@test.com')).email,
+      expect(UserModel.fromJson(_baseJson(email: 'alice@test.com')).email,
           'alice@test.com');
     });
 
@@ -57,8 +56,7 @@ void main() {
 
   group('UserModel.fromJson — roles', () {
     test('parses roles list', () {
-      expect(
-          UserModel.fromJson(_baseJson(roles: ['admin', 'player'])).roles,
+      expect(UserModel.fromJson(_baseJson(roles: ['admin', 'player'])).roles,
           ['admin', 'player']);
     });
 
@@ -81,7 +79,8 @@ void main() {
       final json = _baseJson();
       json['createdAt'] = null;
       final user = UserModel.fromJson(json);
-      expect(user.createdAt.isAfter(before.subtract(const Duration(seconds: 1))),
+      expect(
+          user.createdAt.isAfter(before.subtract(const Duration(seconds: 1))),
           isTrue);
     });
 
@@ -106,8 +105,7 @@ void main() {
     });
 
     test('serializes email', () {
-      expect(
-          UserModel.fromJson(_baseJson(email: 'b@b.com')).toJson()['email'],
+      expect(UserModel.fromJson(_baseJson(email: 'b@b.com')).toJson()['email'],
           'b@b.com');
     });
 
@@ -118,13 +116,13 @@ void main() {
     });
 
     test('serializes roles', () {
-      expect(
-          UserModel.fromJson(_baseJson(roles: ['mod'])).toJson()['roles'],
+      expect(UserModel.fromJson(_baseJson(roles: ['mod'])).toJson()['roles'],
           ['mod']);
     });
 
     test('serializes createdAt as ISO string', () {
-      expect(UserModel.fromJson(_baseJson()).toJson()['createdAt'], isA<String>());
+      expect(
+          UserModel.fromJson(_baseJson()).toJson()['createdAt'], isA<String>());
     });
 
     test('round-trip preserves all fields', () {

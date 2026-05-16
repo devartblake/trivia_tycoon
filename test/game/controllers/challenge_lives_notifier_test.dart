@@ -9,8 +9,7 @@ void main() {
   late GeneralKeyValueStorageService storage;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp
-        .createTemp('challenge_lives_test_');
+    tempDir = await Directory.systemTemp.createTemp('challenge_lives_test_');
     Hive.init(tempDir.path);
     storage = GeneralKeyValueStorageService();
   });

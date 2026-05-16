@@ -8,7 +8,8 @@ import 'toast_theme_manager.dart';
 
 const String synaptixToastRouteName = '/synaptixToastRoute';
 
-typedef SynaptixToastStatusCallback = void Function(SynaptixToastStatus? status);
+typedef SynaptixToastStatusCallback = void Function(
+    SynaptixToastStatus? status);
 typedef OnSynaptixTap = void Function(SynaptixToast toast);
 
 enum SynaptixToastType { success, error, info, reward, custom }
@@ -179,7 +180,8 @@ class SynaptixToast<T> extends StatefulWidget {
   bool isDismissed() =>
       _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.dismissed;
   bool isAppearing() =>
-      _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isAppearing;
+      _toastRouteNotifier.value?.currentStatus ==
+      SynaptixToastStatus.isAppearing;
   bool isHiding() =>
       _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isHiding;
 

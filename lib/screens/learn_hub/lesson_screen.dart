@@ -199,9 +199,9 @@ class _LessonFlowState extends ConsumerState<_LessonFlow> {
       // Fire learning_module_completed behaviour event
       if (playerId.isNotEmpty) {
         ref.read(personalizationServiceProvider).fireLearningModuleCompleted(
-              playerId: playerId,
-              metadata: {'moduleId': widget.moduleId},
-            );
+          playerId: playerId,
+          metadata: {'moduleId': widget.moduleId},
+        );
       }
 
       if (mounted) {

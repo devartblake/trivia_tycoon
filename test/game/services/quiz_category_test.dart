@@ -185,8 +185,8 @@ void main() {
 
   group('QuizCategoryManager static lists', () {
     test('coreCategories contains science', () {
-      expect(QuizCategoryManager.coreCategories,
-          contains(QuizCategory.science));
+      expect(
+          QuizCategoryManager.coreCategories, contains(QuizCategory.science));
     });
 
     test('coreCategories has 10 entries', () {
@@ -230,8 +230,8 @@ void main() {
     });
 
     test('allCategories length equals total enum values', () {
-      expect(QuizCategoryManager.allCategories.length,
-          QuizCategory.values.length);
+      expect(
+          QuizCategoryManager.allCategories.length, QuizCategory.values.length);
     });
 
     test('allCategories has no duplicates', () {
@@ -267,8 +267,8 @@ void main() {
     });
 
     test('"computing" (alias) → QuizCategory.technology', () {
-      expect(QuizCategoryManager.fromString('computing'),
-          QuizCategory.technology);
+      expect(
+          QuizCategoryManager.fromString('computing'), QuizCategory.technology);
     });
 
     test('"tech" (alias) → QuizCategory.technology', () {
@@ -280,8 +280,8 @@ void main() {
     });
 
     test('"cs" (alias) → QuizCategory.computerScience', () {
-      expect(QuizCategoryManager.fromString('cs'),
-          QuizCategory.computerScience);
+      expect(
+          QuizCategoryManager.fromString('cs'), QuizCategory.computerScience);
     });
 
     test('case-insensitive: "SCIENCE" → QuizCategory.science', () {

@@ -176,8 +176,7 @@ class DirectMessagesUpdatedDto {
         conversationId: j['conversationId'] as String? ?? '',
         unreadCount: j['unreadCount'] as int? ?? 0,
         reason: j['reason'] as String? ?? '',
-        occurredAtUtc:
-            DateTime.tryParse(j['occurredAtUtc'] as String? ?? '') ??
-                DateTime.now(),
+        occurredAtUtc: DateTime.tryParse(j['occurredAtUtc'] as String? ?? '') ??
+            DateTime.now(),
       );
 }

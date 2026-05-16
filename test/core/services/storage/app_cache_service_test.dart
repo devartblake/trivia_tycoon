@@ -106,8 +106,7 @@ void main() {
     });
 
     test('entry available before expiration', () async {
-      await cache.put('exp_key2', 'data',
-          expiration: const Duration(hours: 1));
+      await cache.put('exp_key2', 'data', expiration: const Duration(hours: 1));
       expect(await cache.get<String>('exp_key2'), 'data');
     });
 
@@ -252,8 +251,7 @@ void main() {
     });
 
     test('returns map with created/expires/isExpired after put', () async {
-      await cache.put('info_k', 'val',
-          expiration: const Duration(hours: 1));
+      await cache.put('info_k', 'val', expiration: const Duration(hours: 1));
       final info = await cache.getCacheEntryInfo('info_k');
       expect(info, isNotNull);
       expect(info!.containsKey('created'), isTrue);
@@ -261,8 +259,7 @@ void main() {
     });
 
     test('isExpired false for fresh entry', () async {
-      await cache.put('info_fresh', 'v',
-          expiration: const Duration(hours: 1));
+      await cache.put('info_fresh', 'v', expiration: const Duration(hours: 1));
       final info = await cache.getCacheEntryInfo('info_fresh');
       expect(info!['isExpired'], isFalse);
     });
@@ -289,8 +286,7 @@ void main() {
     test('entry still accessible after extension', () async {
       await cache.put('to_extend', 'value',
           expiration: const Duration(milliseconds: 100));
-      await cache.extendCacheEntry(
-          'to_extend', const Duration(hours: 1));
+      await cache.extendCacheEntry('to_extend', const Duration(hours: 1));
       expect(await cache.get<String>('to_extend'), 'value');
     });
   });

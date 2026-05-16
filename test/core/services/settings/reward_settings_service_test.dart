@@ -183,15 +183,15 @@ void main() {
 
     test('isJackpotAvailable true when last win was > 24h ago', () async {
       final svc = _make();
-      await svc.setJackpotTime(
-          DateTime.now().subtract(const Duration(hours: 25)));
+      await svc
+          .setJackpotTime(DateTime.now().subtract(const Duration(hours: 25)));
       expect(await svc.isJackpotAvailable(), isTrue);
     });
 
     test('isJackpotAvailable false when last win was < 24h ago', () async {
       final svc = _make();
-      await svc.setJackpotTime(
-          DateTime.now().subtract(const Duration(hours: 1)));
+      await svc
+          .setJackpotTime(DateTime.now().subtract(const Duration(hours: 1)));
       expect(await svc.isJackpotAvailable(), isFalse);
     });
   });
@@ -321,8 +321,8 @@ void main() {
 
     test('isDailyRewardAvailable true when claimed yesterday', () async {
       final svc = _make();
-      await svc.setLastDailyReward(
-          DateTime.now().subtract(const Duration(days: 1)));
+      await svc
+          .setLastDailyReward(DateTime.now().subtract(const Duration(days: 1)));
       expect(await svc.isDailyRewardAvailable(), isTrue);
     });
 

@@ -28,7 +28,8 @@ SynaptixToast showSuccessToast(
   )..show(context);
 }
 
-SynaptixToast showErrorToast(BuildContext context, String title, String message) {
+SynaptixToast showErrorToast(
+    BuildContext context, String title, String message) {
   return SynaptixToast(
     title: title,
     message: message,

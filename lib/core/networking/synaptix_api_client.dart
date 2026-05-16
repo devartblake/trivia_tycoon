@@ -749,13 +749,15 @@ class SynaptixApiClient {
   // ========================================
 
   /// GET /personalization/{playerId}/profile
-  Future<PlayerMindProfileDto> getPlayerMindProfile({required String playerId}) async {
+  Future<PlayerMindProfileDto> getPlayerMindProfile(
+      {required String playerId}) async {
     final j = await _http.getJson('/personalization/$playerId/profile');
     return PlayerMindProfileDto.fromJson(j);
   }
 
   /// GET /personalization/{playerId}/home
-  Future<PlayerHomePersonalizationDto> getHomePersonalization({required String playerId}) async {
+  Future<PlayerHomePersonalizationDto> getHomePersonalization(
+      {required String playerId}) async {
     final j = await _http.getJson('/personalization/$playerId/home');
     return PlayerHomePersonalizationDto.fromJson(j);
   }
@@ -769,13 +771,19 @@ class SynaptixApiClient {
   }
 
   /// GET /personalization/{playerId}/recommendations
-  Future<List<PlayerRecommendationDto>> getRecommendations({required String playerId}) async {
-    final data = await _http.getJsonList('/personalization/$playerId/recommendations');
-    return data.whereType<Map<String, dynamic>>().map(PlayerRecommendationDto.fromJson).toList();
+  Future<List<PlayerRecommendationDto>> getRecommendations(
+      {required String playerId}) async {
+    final data =
+        await _http.getJsonList('/personalization/$playerId/recommendations');
+    return data
+        .whereType<Map<String, dynamic>>()
+        .map(PlayerRecommendationDto.fromJson)
+        .toList();
   }
 
   /// POST /personalization/{playerId}/toggle
-  Future<bool> togglePersonalization({required String playerId, required bool enabled}) async {
+  Future<bool> togglePersonalization(
+      {required String playerId, required bool enabled}) async {
     final j = await _http.postJson(
       '/personalization/$playerId/toggle',
       body: {'enabled': enabled},
@@ -807,7 +815,8 @@ class SynaptixApiClient {
   // ========================================
 
   /// GET /experiments/player/{playerId} — bootstrap all assignments at session start.
-  Future<PlayerExperimentsDto> getPlayerExperiments({required String playerId}) async {
+  Future<PlayerExperimentsDto> getPlayerExperiments(
+      {required String playerId}) async {
     final j = await _http.getJson('/experiments/player/$playerId');
     return PlayerExperimentsDto.fromJson(j);
   }
@@ -817,7 +826,8 @@ class SynaptixApiClient {
     required String playerId,
     required String experimentKey,
   }) async {
-    final j = await _http.getJson('/experiments/player/$playerId/$experimentKey');
+    final j =
+        await _http.getJson('/experiments/player/$playerId/$experimentKey');
     return SingleExperimentResultDto.fromJson(j);
   }
 

@@ -154,8 +154,8 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
 
             StockIntervalSelector(
               value: _model.interval,
-              onChanged: (v) =>
-                  setState(() => _model = _model.copyWith(interval: v ?? 'daily')),
+              onChanged: (v) => setState(
+                  () => _model = _model.copyWith(interval: v ?? 'daily')),
             ),
             const SizedBox(height: 16),
 
@@ -201,8 +201,8 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
             if (_error != null) ...[
               const SizedBox(height: 8),
               Text(_error!,
-                  style: const TextStyle(
-                      color: Color(0xFFEF4444), fontSize: 12)),
+                  style:
+                      const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
             ],
 
             const SizedBox(height: 16),

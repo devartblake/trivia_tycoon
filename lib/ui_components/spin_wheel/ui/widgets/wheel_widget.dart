@@ -362,7 +362,11 @@ class _WheelImagePainter extends CustomPainter {
         ..color = Colors.black.withValues(alpha: 0.3)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
     );
-    canvas.drawPath(path, Paint()..color = Colors.red..style = PaintingStyle.fill);
+    canvas.drawPath(
+        path,
+        Paint()
+          ..color = Colors.red
+          ..style = PaintingStyle.fill);
     canvas.drawPath(
       path,
       Paint()

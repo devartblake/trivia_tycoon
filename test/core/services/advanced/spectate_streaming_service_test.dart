@@ -31,8 +31,8 @@ void main() {
     });
 
     test('avatar field when provided', () {
-      const withAvatar = PlayerState(
-          id: 'p2', name: 'Bob', score: 100, avatar: 'avatar_url');
+      const withAvatar =
+          PlayerState(id: 'p2', name: 'Bob', score: 100, avatar: 'avatar_url');
       expect(withAvatar.avatar, 'avatar_url');
     });
 
@@ -246,7 +246,8 @@ void main() {
 
   group('watchGame', () {
     test('creates a mock game when game does not exist', () async {
-      final stream = svc.watchGame('new_game_${DateTime.now().microsecondsSinceEpoch}');
+      final stream =
+          svc.watchGame('new_game_${DateTime.now().microsecondsSinceEpoch}');
       expect(stream, isA<Stream<GameSpectateState>>());
     });
 
@@ -305,9 +306,7 @@ void main() {
       final sub = stream.listen(received.add);
 
       svc.joinSpectate(
-          gameId: gameId,
-          spectatorId: 'spec1',
-          spectatorName: 'Spectator One');
+          gameId: gameId, spectatorId: 'spec1', spectatorName: 'Spectator One');
       await Future.delayed(const Duration(milliseconds: 100));
 
       expect(received.any((s) => s.spectatorCount >= 1), isTrue);
@@ -319,12 +318,9 @@ void main() {
       svc.watchGame(gameId);
       await Future.delayed(const Duration(milliseconds: 100));
 
-      svc.joinSpectate(
-          gameId: gameId, spectatorId: 'sa1', spectatorName: 'A');
-      svc.joinSpectate(
-          gameId: gameId, spectatorId: 'sa2', spectatorName: 'B');
-      svc.joinSpectate(
-          gameId: gameId, spectatorId: 'sa3', spectatorName: 'C');
+      svc.joinSpectate(gameId: gameId, spectatorId: 'sa1', spectatorName: 'A');
+      svc.joinSpectate(gameId: gameId, spectatorId: 'sa2', spectatorName: 'B');
+      svc.joinSpectate(gameId: gameId, spectatorId: 'sa3', spectatorName: 'C');
 
       final stream = svc.watchGame(gameId);
       final state = await stream.first.timeout(const Duration(seconds: 2));
@@ -409,8 +405,7 @@ void main() {
         svc.joinSpectate(
             gameId: gameA, spectatorId: 'sa$i', spectatorName: 'S$i');
       }
-      svc.joinSpectate(
-          gameId: gameB, spectatorId: 'sb0', spectatorName: 'S0');
+      svc.joinSpectate(gameId: gameB, spectatorId: 'sb0', spectatorName: 'S0');
       await Future.delayed(const Duration(milliseconds: 50));
 
       final games = svc.getAvailableGames();
@@ -432,9 +427,7 @@ void main() {
     test('completes without error', () {
       expect(
         () => svc.sendReaction(
-            gameId: 'any_game',
-            spectatorId: 'spec1',
-            reaction: '🎉'),
+            gameId: 'any_game', spectatorId: 'spec1', reaction: '🎉'),
         returnsNormally,
       );
     });

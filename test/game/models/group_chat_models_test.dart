@@ -60,8 +60,7 @@ void main() {
     });
 
     test('parses groupId', () {
-      expect(
-          GroupChatInvitation.fromJson(_inviteJson(groupId: 'g42')).groupId,
+      expect(GroupChatInvitation.fromJson(_inviteJson(groupId: 'g42')).groupId,
           'g42');
     });
 
@@ -178,7 +177,8 @@ void main() {
       final future =
           DateTime.now().add(const Duration(days: 7)).toIso8601String();
       expect(
-          GroupChatInvitation.fromJson(_inviteJson(expiresAt: future)).isExpired,
+          GroupChatInvitation.fromJson(_inviteJson(expiresAt: future))
+              .isExpired,
           isFalse);
     });
   });
@@ -254,7 +254,8 @@ void main() {
     });
 
     test('parses groupId', () {
-      expect(GroupChatMessage.fromJson(_msgJson(groupId: 'g99')).groupId, 'g99');
+      expect(
+          GroupChatMessage.fromJson(_msgJson(groupId: 'g99')).groupId, 'g99');
     });
 
     test('parses senderId', () {
@@ -263,13 +264,13 @@ void main() {
     });
 
     test('parses senderName', () {
-      expect(
-          GroupChatMessage.fromJson(_msgJson(senderName: 'Bob')).senderName,
+      expect(GroupChatMessage.fromJson(_msgJson(senderName: 'Bob')).senderName,
           'Bob');
     });
 
     test('parses content', () {
-      expect(GroupChatMessage.fromJson(_msgJson(content: 'Hi!')).content, 'Hi!');
+      expect(
+          GroupChatMessage.fromJson(_msgJson(content: 'Hi!')).content, 'Hi!');
     });
 
     test('parses isSystemMessage', () {
@@ -287,15 +288,13 @@ void main() {
 
     test('parses replyToMessageId', () {
       expect(
-          GroupChatMessage.fromJson(
-                  _msgJson(replyToMessageId: 'orig_msg'))
+          GroupChatMessage.fromJson(_msgJson(replyToMessageId: 'orig_msg'))
               .replyToMessageId,
           'orig_msg');
     });
 
     test('replyToMessageId is null when absent', () {
-      expect(
-          GroupChatMessage.fromJson(_msgJson()).replyToMessageId, isNull);
+      expect(GroupChatMessage.fromJson(_msgJson()).replyToMessageId, isNull);
     });
 
     test('parses metadata', () {
@@ -329,20 +328,23 @@ void main() {
 
     test('replyToMessageId absent from toJson when null', () {
       expect(
-          GroupChatMessage.fromJson(_msgJson()).toJson().containsKey(
-              'replyToMessageId'),
+          GroupChatMessage.fromJson(_msgJson())
+              .toJson()
+              .containsKey('replyToMessageId'),
           isFalse);
     });
 
     test('replyToMessageId present when set', () {
-      final msg = GroupChatMessage.fromJson(
-          _msgJson(replyToMessageId: 'ref_msg'));
+      final msg =
+          GroupChatMessage.fromJson(_msgJson(replyToMessageId: 'ref_msg'));
       expect(msg.toJson()['replyToMessageId'], 'ref_msg');
     });
 
     test('metadata absent from toJson when null', () {
       expect(
-          GroupChatMessage.fromJson(_msgJson()).toJson().containsKey('metadata'),
+          GroupChatMessage.fromJson(_msgJson())
+              .toJson()
+              .containsKey('metadata'),
           isFalse);
     });
 

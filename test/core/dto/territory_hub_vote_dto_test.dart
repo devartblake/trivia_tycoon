@@ -10,19 +10,22 @@ void main() {
 
   group('TileDto', () {
     test('fromJson parses id, row, col', () {
-      final t = TileDto.fromJson({'id': 't1', 'row': 2, 'col': 3, 'xpMultiplier': 1.5});
+      final t = TileDto.fromJson(
+          {'id': 't1', 'row': 2, 'col': 3, 'xpMultiplier': 1.5});
       expect(t.id, 't1');
       expect(t.row, 2);
       expect(t.col, 3);
     });
 
     test('fromJson ownerId null when absent', () {
-      final t = TileDto.fromJson({'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0});
+      final t = TileDto.fromJson(
+          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0});
       expect(t.ownerId, isNull);
     });
 
     test('fromJson ownerUsername null when absent', () {
-      final t = TileDto.fromJson({'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0});
+      final t = TileDto.fromJson(
+          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0});
       expect(t.ownerUsername, isNull);
     });
 
@@ -37,8 +40,16 @@ void main() {
     });
 
     test('toJson contains all 6 keys', () {
-      final j = TileDto.fromJson({'id': 't1', 'row': 1, 'col': 2, 'xpMultiplier': 2.0}).toJson();
-      for (final key in ['id', 'ownerId', 'ownerUsername', 'row', 'col', 'xpMultiplier']) {
+      final j = TileDto.fromJson(
+          {'id': 't1', 'row': 1, 'col': 2, 'xpMultiplier': 2.0}).toJson();
+      for (final key in [
+        'id',
+        'ownerId',
+        'ownerUsername',
+        'row',
+        'col',
+        'xpMultiplier'
+      ]) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
     });
@@ -86,7 +97,9 @@ void main() {
       final b = TerritoryBoardDto.fromJson({
         'seasonId': 's1',
         'tierNumber': 1,
-        'tiles': [{'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0}],
+        'tiles': [
+          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0}
+        ],
       });
       final j = b.toJson();
       expect(j['tiles'], isA<List>());
@@ -106,7 +119,8 @@ void main() {
     });
 
     test('toJson contains matchId and tileId', () {
-      final j = DuelResultDto.fromJson({'matchId': 'm2', 'tileId': 't2'}).toJson();
+      final j =
+          DuelResultDto.fromJson({'matchId': 'm2', 'tileId': 't2'}).toJson();
       expect(j['matchId'], 'm2');
       expect(j['tileId'], 't2');
     });
@@ -142,7 +156,8 @@ void main() {
     });
 
     test('fromJson winningChoice null when absent', () {
-      final v = VoteResultDto.fromJson({'topic': 't', 'tally': {}, 'totalVotes': 0});
+      final v =
+          VoteResultDto.fromJson({'topic': 't', 'tally': {}, 'totalVotes': 0});
       expect(v.winningChoice, isNull);
     });
 
@@ -157,7 +172,9 @@ void main() {
     });
 
     test('toJson contains all 4 keys', () {
-      final j = VoteResultDto.fromJson({'topic': 't', 'tally': {}, 'totalVotes': 0}).toJson();
+      final j =
+          VoteResultDto.fromJson({'topic': 't', 'tally': {}, 'totalVotes': 0})
+              .toJson();
       for (final key in ['topic', 'tally', 'totalVotes', 'winningChoice']) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }

@@ -92,12 +92,10 @@ class GoogleWebAuthResponse {
 
   factory GoogleWebAuthResponse.fromJson(Map<String, dynamic> j) {
     return GoogleWebAuthResponse(
-      accessToken: j['accessToken'] as String? ??
-          j['access_token'] as String? ??
-          '',
-      refreshToken: j['refreshToken'] as String? ??
-          j['refresh_token'] as String? ??
-          '',
+      accessToken:
+          j['accessToken'] as String? ?? j['access_token'] as String? ?? '',
+      refreshToken:
+          j['refreshToken'] as String? ?? j['refresh_token'] as String? ?? '',
       userId: j['userId'] as String? ?? j['user_id'] as String?,
     );
   }

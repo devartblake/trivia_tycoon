@@ -71,7 +71,8 @@ void main() {
       expect(result.first.tierRank, 1);
     });
 
-    test('two entries sorted by score descending, higher score gets rank 1', () {
+    test('two entries sorted by score descending, higher score gets rank 1',
+        () {
       final result = TierAssigner.assignTiers([
         _entry(userId: 1, score: 50),
         _entry(userId: 2, score: 200),
@@ -110,7 +111,8 @@ void main() {
       final result = TierAssigner.assignTiers(entries);
       for (final e in result) {
         expect(e.isPromotionEligible, isTrue,
-            reason: 'rank ${e.rank} (tierRank ${e.tierRank}) should be promotable');
+            reason:
+                'rank ${e.rank} (tierRank ${e.tierRank}) should be promotable');
       }
     });
 

@@ -50,7 +50,8 @@ void main() {
     });
 
     test('parses username', () {
-      expect(AdminUserModel.fromJson(_baseJson(username: 'bob')).username, 'bob');
+      expect(
+          AdminUserModel.fromJson(_baseJson(username: 'bob')).username, 'bob');
     });
 
     test('parses email', () {
@@ -84,8 +85,8 @@ void main() {
     });
 
     test('parses totalPoints', () {
-      expect(
-          AdminUserModel.fromJson(_baseJson(totalPoints: 999)).totalPoints, 999);
+      expect(AdminUserModel.fromJson(_baseJson(totalPoints: 999)).totalPoints,
+          999);
     });
 
     test('totalPoints defaults to 0 when absent', () {
@@ -234,25 +235,23 @@ void main() {
 
   group('AdminUserModel — statusText', () {
     test('online → "Online"', () {
-      expect(
-          AdminUserModel.fromJson(_baseJson(status: 'online')).statusText,
+      expect(AdminUserModel.fromJson(_baseJson(status: 'online')).statusText,
           'Online');
     });
 
     test('offline → "Offline"', () {
-      expect(
-          AdminUserModel.fromJson(_baseJson(status: 'offline')).statusText,
+      expect(AdminUserModel.fromJson(_baseJson(status: 'offline')).statusText,
           'Offline');
     });
 
     test('away → "Away"', () {
-      expect(
-          AdminUserModel.fromJson(_baseJson(status: 'away')).statusText, 'Away');
+      expect(AdminUserModel.fromJson(_baseJson(status: 'away')).statusText,
+          'Away');
     });
 
     test('busy → "Busy"', () {
-      expect(
-          AdminUserModel.fromJson(_baseJson(status: 'busy')).statusText, 'Busy');
+      expect(AdminUserModel.fromJson(_baseJson(status: 'busy')).statusText,
+          'Busy');
     });
   });
 

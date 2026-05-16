@@ -39,8 +39,7 @@ void main() {
     });
 
     test('parses name', () {
-      expect(
-          Conversation.fromJson(_baseJson(name: 'Study Group')).name,
+      expect(Conversation.fromJson(_baseJson(name: 'Study Group')).name,
           'Study Group');
     });
 
@@ -71,8 +70,7 @@ void main() {
     });
 
     test('parses unreadCount', () {
-      expect(
-          Conversation.fromJson(_baseJson(unreadCount: 5)).unreadCount, 5);
+      expect(Conversation.fromJson(_baseJson(unreadCount: 5)).unreadCount, 5);
     });
 
     test('unreadCount defaults to 0 when absent', () {
@@ -116,44 +114,37 @@ void main() {
 
   group('Conversation.fromJson — type parsing', () {
     test('direct → ConversationType.direct', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'direct')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'direct')).type,
           ConversationType.direct);
     });
 
     test('group → ConversationType.group', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'group')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'group')).type,
           ConversationType.group);
     });
 
     test('system → ConversationType.system', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'system')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'system')).type,
           ConversationType.system);
     });
 
     test('challenge → ConversationType.challenge', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'challenge')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'challenge')).type,
           ConversationType.challenge);
     });
 
     test('friendRequest → ConversationType.friendRequest', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'friendRequest')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'friendRequest')).type,
           ConversationType.friendRequest);
     });
 
     test('friend_request → ConversationType.friendRequest', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'friend_request')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'friend_request')).type,
           ConversationType.friendRequest);
     });
 
     test('unknown type falls back to direct', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'unknown')).type,
+      expect(Conversation.fromJson(_baseJson(type: 'unknown')).type,
           ConversationType.direct);
     });
 
@@ -170,8 +161,8 @@ void main() {
 
   group('Conversation.fromJson — participantIds', () {
     test('parses string list', () {
-      final c = Conversation.fromJson(
-          _baseJson(participantIds: ['uid_x', 'uid_y']));
+      final c =
+          Conversation.fromJson(_baseJson(participantIds: ['uid_x', 'uid_y']));
       expect(c.participantIds, ['uid_x', 'uid_y']);
     });
 
@@ -250,25 +241,22 @@ void main() {
 
   group('Conversation — isGroupChat / isDirectMessage', () {
     test('isGroupChat true for group type', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'group')).isGroupChat(), isTrue);
+      expect(Conversation.fromJson(_baseJson(type: 'group')).isGroupChat(),
+          isTrue);
     });
 
     test('isGroupChat false for direct type', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'direct')).isGroupChat(),
+      expect(Conversation.fromJson(_baseJson(type: 'direct')).isGroupChat(),
           isFalse);
     });
 
     test('isDirectMessage true for direct type', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'direct')).isDirectMessage(),
+      expect(Conversation.fromJson(_baseJson(type: 'direct')).isDirectMessage(),
           isTrue);
     });
 
     test('isDirectMessage false for group type', () {
-      expect(
-          Conversation.fromJson(_baseJson(type: 'group')).isDirectMessage(),
+      expect(Conversation.fromJson(_baseJson(type: 'group')).isDirectMessage(),
           isFalse);
     });
   });
@@ -300,8 +288,7 @@ void main() {
     });
 
     test('falls back to "Tap to view messages" when absent', () {
-      expect(
-          Conversation.fromJson(_baseJson()).lastMessagePreview,
+      expect(Conversation.fromJson(_baseJson()).lastMessagePreview,
           'Tap to view messages');
     });
   });
@@ -342,8 +329,8 @@ void main() {
     });
 
     test('round-trip preserves id and type', () {
-      final original = Conversation.fromJson(
-          _baseJson(id: 'orig_conv', type: 'challenge'));
+      final original =
+          Conversation.fromJson(_baseJson(id: 'orig_conv', type: 'challenge'));
       final restored = Conversation.fromJson(original.toJson());
       expect(restored.id, 'orig_conv');
       expect(restored.type, ConversationType.challenge);
@@ -359,8 +346,7 @@ void main() {
     setUp(() => base = Conversation.fromJson(_baseJson()));
 
     test('copies type', () {
-      expect(
-          base.copyWith(type: ConversationType.group).type,
+      expect(base.copyWith(type: ConversationType.group).type,
           ConversationType.group);
     });
 

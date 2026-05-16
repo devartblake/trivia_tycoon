@@ -118,18 +118,18 @@ void main() {
     });
 
     test('successGradient starts with green 0xFF10B981', () {
-      expect(GradientThemes.successGradient.colors.first,
-          const Color(0xFF10B981));
+      expect(
+          GradientThemes.successGradient.colors.first, const Color(0xFF10B981));
     });
 
     test('warningGradient starts with amber 0xFFF59E0B', () {
-      expect(GradientThemes.warningGradient.colors.first,
-          const Color(0xFFF59E0B));
+      expect(
+          GradientThemes.warningGradient.colors.first, const Color(0xFFF59E0B));
     });
 
     test('errorGradient starts with red 0xFFEF4444', () {
-      expect(GradientThemes.errorGradient.colors.first,
-          const Color(0xFFEF4444));
+      expect(
+          GradientThemes.errorGradient.colors.first, const Color(0xFFEF4444));
     });
 
     test('all static getters return distinct first colors', () {
@@ -349,8 +349,8 @@ void main() {
     });
 
     test('logoutGradient last color is darker red 0xFFDC2626', () {
-      expect(DrawerMenuConfig.logoutGradient.colors.last,
-          const Color(0xFFDC2626));
+      expect(
+          DrawerMenuConfig.logoutGradient.colors.last, const Color(0xFFDC2626));
     });
   });
 }

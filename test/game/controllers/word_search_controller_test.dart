@@ -86,8 +86,16 @@ void main() {
   group('words truncated to 8', () {
     test('passing 10 words results in wordPositions.length <= 8', () {
       final ctrl = _make([
-        'CAT', 'DOG', 'FOX', 'BEE', 'ANT',
-        'RAT', 'OWL', 'EEL', 'YAK', 'GNU'
+        'CAT',
+        'DOG',
+        'FOX',
+        'BEE',
+        'ANT',
+        'RAT',
+        'OWL',
+        'EEL',
+        'YAK',
+        'GNU'
       ]);
       expect(ctrl.wordPositions.length, lessThanOrEqualTo(8));
       ctrl.dispose();
@@ -95,8 +103,16 @@ void main() {
 
     test('words list itself is truncated to first 8', () {
       final ctrl = _make([
-        'CAT', 'DOG', 'FOX', 'BEE', 'ANT',
-        'RAT', 'OWL', 'EEL', 'YAK', 'GNU'
+        'CAT',
+        'DOG',
+        'FOX',
+        'BEE',
+        'ANT',
+        'RAT',
+        'OWL',
+        'EEL',
+        'YAK',
+        'GNU'
       ]);
       expect(ctrl.words.length, 8);
       ctrl.dispose();

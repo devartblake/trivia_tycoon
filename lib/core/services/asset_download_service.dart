@@ -192,8 +192,7 @@ class AssetDownloadService {
     if (decoded is! List) return const [];
     return decoded
         .whereType<Map>()
-        .map((m) =>
-            AssetManifestEntry.fromJson(Map<String, dynamic>.from(m)))
+        .map((m) => AssetManifestEntry.fromJson(Map<String, dynamic>.from(m)))
         .toList();
   }
 

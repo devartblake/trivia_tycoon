@@ -217,11 +217,13 @@ void main() {
     });
 
     test('isFirstCompletion true when status is Completed', () {
-      expect(ModuleCompleteResponseDto.fromJson(_full()).isFirstCompletion, isTrue);
+      expect(ModuleCompleteResponseDto.fromJson(_full()).isFirstCompletion,
+          isTrue);
     });
 
     test('isFirstCompletion false for other status', () {
-      final j = Map<String, dynamic>.from(_full())..['status'] = 'AlreadyCompleted';
+      final j = Map<String, dynamic>.from(_full())
+        ..['status'] = 'AlreadyCompleted';
       expect(ModuleCompleteResponseDto.fromJson(j).isFirstCompletion, isFalse);
     });
 

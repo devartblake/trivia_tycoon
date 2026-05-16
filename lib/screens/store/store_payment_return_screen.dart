@@ -89,10 +89,11 @@ class _StorePaymentReturnScreenState
           title: 'Capturing PayPal order...',
           message: 'We are finalizing the approved PayPal order on the server.',
         );
-        final response = await ref.read(storeServiceProvider).capturePayPalOrder(
-              playerId: playerId,
-              orderId: orderId,
-            );
+        final response =
+            await ref.read(storeServiceProvider).capturePayPalOrder(
+                  playerId: playerId,
+                  orderId: orderId,
+                );
         await refreshAuthoritativeWallet(
           ref,
           backendCoinBalance: (response['newBalance'] as num?)?.toInt(),

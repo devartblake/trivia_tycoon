@@ -310,12 +310,12 @@ class ProfileDataUpdater {
       unawaited(
         ref.read(currentUserIdProvider.future).then((playerId) {
           return ref.read(apiServiceProvider).submitQuizComplete(
-            eventId: const Uuid().v4(),
-            playerId: playerId,
-            score: results.score,
-            totalQuestions: results.totalQuestions,
-            category: results.category,
-          );
+                eventId: const Uuid().v4(),
+                playerId: playerId,
+                score: results.score,
+                totalQuestions: results.totalQuestions,
+                category: results.category,
+              );
         }).catchError((_) {}),
       );
 

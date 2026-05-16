@@ -52,8 +52,9 @@ class GamePlatformAuthService {
 
       if (playerId.isEmpty) return null;
 
-      final platform =
-          defaultTargetPlatform == TargetPlatform.iOS ? _iosPlatform : _androidPlatform;
+      final platform = defaultTargetPlatform == TargetPlatform.iOS
+          ? _iosPlatform
+          : _androidPlatform;
 
       return GamePlatformIdentity(
         platform: platform,
@@ -79,6 +80,7 @@ class GamePlatformAuthService {
   }
 
   /// Returns the current platform label (`'ios'` or `'android'`).
-  String get currentPlatform =>
-      defaultTargetPlatform == TargetPlatform.iOS ? _iosPlatform : _androidPlatform;
+  String get currentPlatform => defaultTargetPlatform == TargetPlatform.iOS
+      ? _iosPlatform
+      : _androidPlatform;
 }

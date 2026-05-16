@@ -104,8 +104,7 @@ void main() {
 
     test('parses username', () {
       expect(
-          FriendListItemDto.fromJson(_friendJson(username: 'alice_q'))
-              .username,
+          FriendListItemDto.fromJson(_friendJson(username: 'alice_q')).username,
           'alice_q');
     });
 
@@ -128,8 +127,7 @@ void main() {
     });
 
     test('parses isOnline', () {
-      expect(
-          FriendListItemDto.fromJson(_friendJson(isOnline: true)).isOnline,
+      expect(FriendListItemDto.fromJson(_friendJson(isOnline: true)).isOnline,
           isTrue);
     });
 
@@ -214,8 +212,7 @@ void main() {
     });
 
     test('parses status', () {
-      expect(
-          FriendRequestDto.fromJson(_requestJson(status: 'Accepted')).status,
+      expect(FriendRequestDto.fromJson(_requestJson(status: 'Accepted')).status,
           'Accepted');
     });
 
@@ -227,8 +224,7 @@ void main() {
 
     test('parses senderDisplayName', () {
       expect(
-          FriendRequestDto.fromJson(
-                  _requestJson(senderDisplayName: 'Eve'))
+          FriendRequestDto.fromJson(_requestJson(senderDisplayName: 'Eve'))
               .senderDisplayName,
           'Eve');
     });
@@ -280,12 +276,14 @@ void main() {
 
   group('FriendRequestDto — isPending', () {
     test('true when status is "pending" (case-insensitive)', () {
-      expect(FriendRequestDto.fromJson(_requestJson(status: 'pending')).isPending,
+      expect(
+          FriendRequestDto.fromJson(_requestJson(status: 'pending')).isPending,
           isTrue);
     });
 
     test('true when status is "Pending"', () {
-      expect(FriendRequestDto.fromJson(_requestJson(status: 'Pending')).isPending,
+      expect(
+          FriendRequestDto.fromJson(_requestJson(status: 'Pending')).isPending,
           isTrue);
     });
 
@@ -310,8 +308,8 @@ void main() {
     });
 
     test('round-trip preserves requestId and status', () {
-      final original =
-          FriendRequestDto.fromJson(_requestJson(requestId: 'req42', status: 'Declined'));
+      final original = FriendRequestDto.fromJson(
+          _requestJson(requestId: 'req42', status: 'Declined'));
       final restored = FriendRequestDto.fromJson(original.toJson());
       expect(restored.requestId, 'req42');
       expect(restored.status, 'Declined');
@@ -324,8 +322,8 @@ void main() {
 
   group('FriendSuggestionDto.fromJson — scalar fields', () {
     test('parses id', () {
-      expect(FriendSuggestionDto.fromJson(_suggestionJson(id: 'sg99')).id,
-          'sg99');
+      expect(
+          FriendSuggestionDto.fromJson(_suggestionJson(id: 'sg99')).id, 'sg99');
     });
 
     test('id defaults to "" when absent', () {
@@ -375,8 +373,7 @@ void main() {
 
     test('parses mutualFriendCount', () {
       expect(
-          FriendSuggestionDto.fromJson(
-                  _suggestionJson(mutualFriendCount: 5))
+          FriendSuggestionDto.fromJson(_suggestionJson(mutualFriendCount: 5))
               .mutualFriendCount,
           5);
     });
@@ -404,16 +401,14 @@ void main() {
   group('FriendSuggestionDto — hasMutualFriends', () {
     test('true when mutualFriendCount > 0', () {
       expect(
-          FriendSuggestionDto.fromJson(
-                  _suggestionJson(mutualFriendCount: 3))
+          FriendSuggestionDto.fromJson(_suggestionJson(mutualFriendCount: 3))
               .hasMutualFriends,
           isTrue);
     });
 
     test('false when mutualFriendCount = 0', () {
       expect(
-          FriendSuggestionDto.fromJson(
-                  _suggestionJson(mutualFriendCount: 0))
+          FriendSuggestionDto.fromJson(_suggestionJson(mutualFriendCount: 0))
               .hasMutualFriends,
           isFalse);
     });
@@ -489,8 +484,10 @@ void main() {
 
     test('parses items', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(
-              items: [_friendJson(friendPlayerId: 'fp1'), _friendJson(friendPlayerId: 'fp2')]),
+          _pageJson(items: [
+            _friendJson(friendPlayerId: 'fp1'),
+            _friendJson(friendPlayerId: 'fp2')
+          ]),
           FriendListItemDto.fromJson);
       expect(resp.items.length, 2);
       expect(resp.items.first.friendPlayerId, 'fp1');
@@ -499,16 +496,16 @@ void main() {
     test('empty items list when items absent', () {
       final json = _pageJson();
       json.remove('items');
-      final resp = PaginatedSocialResponse.fromJson(
-          json, FriendListItemDto.fromJson);
+      final resp =
+          PaginatedSocialResponse.fromJson(json, FriendListItemDto.fromJson);
       expect(resp.items, isEmpty);
     });
 
     test('page defaults to 1 when absent', () {
       final json = _pageJson();
       json.remove('page');
-      final resp = PaginatedSocialResponse.fromJson(
-          json, FriendListItemDto.fromJson);
+      final resp =
+          PaginatedSocialResponse.fromJson(json, FriendListItemDto.fromJson);
       expect(resp.page, 1);
     });
   });
@@ -541,10 +538,13 @@ void main() {
 
   group('PaginatedSocialResponse.toJson', () {
     test('round-trip preserves page, pageSize, total', () {
-      final original = PaginatedSocialResponse.fromJson(
-          {'page': 2, 'pageSize': 5, 'total': 15, 'totalPages': 3,
-           'items': [_friendJson()]},
-          FriendListItemDto.fromJson);
+      final original = PaginatedSocialResponse.fromJson({
+        'page': 2,
+        'pageSize': 5,
+        'total': 15,
+        'totalPages': 3,
+        'items': [_friendJson()]
+      }, FriendListItemDto.fromJson);
       final json = original.toJson((item) => item.toJson());
       expect(json['page'], 2);
       expect(json['pageSize'], 5);

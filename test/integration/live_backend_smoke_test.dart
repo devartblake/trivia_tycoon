@@ -166,7 +166,8 @@ void _registerSmokeTests({
           'playerId': _findString(loginJson, const ['userId', 'playerId']) ??
               'flutter-live-smoke',
           'segmentId': 'smoke-invalid-segment',
-          'spinId': 'smoke-invalid-spin-${DateTime.now().millisecondsSinceEpoch}',
+          'spinId':
+              'smoke-invalid-spin-${DateTime.now().millisecondsSinceEpoch}',
         },
         headers: authHeaders,
       );

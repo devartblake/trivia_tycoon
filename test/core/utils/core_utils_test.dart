@@ -59,8 +59,7 @@ void main() {
     });
 
     test('invalid type value returns false', () {
-      final map = Map<String, dynamic>.from(_validQuestion())
-        ..['type'] = 'gif';
+      final map = Map<String, dynamic>.from(_validQuestion())..['type'] = 'gif';
       expect(QuestionSchemaValidator.isValid(map), isFalse);
     });
 
@@ -131,7 +130,8 @@ void main() {
     });
 
     test('normal ASCII string is unchanged', () {
-      expect(UnicodeUtils.replaceProblematicChars('hello world'), 'hello world');
+      expect(
+          UnicodeUtils.replaceProblematicChars('hello world'), 'hello world');
     });
 
     test('removes U+FFFE non-character', () {
@@ -207,7 +207,8 @@ void main() {
     test('Solana: 32 leading-one base58 string decodes to 32 zero bytes', () {
       // 32 '1's in base58 = 32 zero bytes; isValid returns true
       const addr = '11111111111111111111111111111111';
-      expect(CryptoAddressValidator.isValid(addr, CryptoNetwork.solana), isTrue);
+      expect(
+          CryptoAddressValidator.isValid(addr, CryptoNetwork.solana), isTrue);
     });
 
     // XRP
@@ -277,15 +278,13 @@ void main() {
 
     test('validationMessage returns null for valid XRP address', () {
       const addr = 'rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh';
-      expect(
-          CryptoAddressValidator.validationMessage(addr, CryptoNetwork.xrp),
+      expect(CryptoAddressValidator.validationMessage(addr, CryptoNetwork.xrp),
           isNull);
     });
 
     test('validationMessage returns null for valid SHIB address', () {
       const addr = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
-      expect(
-          CryptoAddressValidator.validationMessage(addr, CryptoNetwork.shib),
+      expect(CryptoAddressValidator.validationMessage(addr, CryptoNetwork.shib),
           isNull);
     });
   });

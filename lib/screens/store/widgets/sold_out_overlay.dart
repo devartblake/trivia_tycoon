@@ -24,10 +24,26 @@ class SoldOutOverlay extends StatelessWidget {
         // Dimmed card
         ColorFiltered(
           colorFilter: const ColorFilter.matrix(<double>[
-            0.2126, 0.7152, 0.0722, 0, 0,
-            0.2126, 0.7152, 0.0722, 0, 0,
-            0.2126, 0.7152, 0.0722, 0, 0,
-            0,      0,      0,      0.6, 0,
+            0.2126,
+            0.7152,
+            0.0722,
+            0,
+            0,
+            0.2126,
+            0.7152,
+            0.0722,
+            0,
+            0,
+            0.2126,
+            0.7152,
+            0.0722,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.6,
+            0,
           ]),
           child: child,
         ),
@@ -61,8 +77,7 @@ class SoldOutOverlay extends StatelessWidget {
                       const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.block,
-                              color: Color(0xFFEF4444), size: 14),
+                          Icon(Icons.block, color: Color(0xFFEF4444), size: 14),
                           SizedBox(width: 6),
                           Text(
                             'Sold Out',

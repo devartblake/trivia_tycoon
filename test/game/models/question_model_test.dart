@@ -250,7 +250,10 @@ void main() {
     });
 
     test('parses tags list', () {
-      final json = {'tags': ['science', 'biology'], 'answers': []};
+      final json = {
+        'tags': ['science', 'biology'],
+        'answers': []
+      };
       final q = QuestionModel.fromJson(json);
       expect(q.tags, ['science', 'biology']);
     });
@@ -261,7 +264,10 @@ void main() {
     });
 
     test('parses reducedOptions', () {
-      final json = {'reducedOptions': ['A', 'C'], 'answers': []};
+      final json = {
+        'reducedOptions': ['A', 'C'],
+        'answers': []
+      };
       final q = QuestionModel.fromJson(json);
       expect(q.reducedOptions, ['A', 'C']);
     });
@@ -549,8 +555,7 @@ void main() {
     });
 
     test('copies optionIdByText map', () {
-      final updated =
-          _q().copyWith(optionIdByText: {'Water': 'opt_w'});
+      final updated = _q().copyWith(optionIdByText: {'Water': 'opt_w'});
       expect(updated.optionIdByText!['Water'], 'opt_w');
     });
 

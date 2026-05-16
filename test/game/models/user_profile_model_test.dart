@@ -26,14 +26,12 @@ void main() {
     });
 
     test('parses email', () {
-      expect(
-          UserModel.fromJson(_baseJson(email: 'bob@test.com')).email,
+      expect(UserModel.fromJson(_baseJson(email: 'bob@test.com')).email,
           'bob@test.com');
     });
 
     test('parses isPremium true', () {
-      expect(
-          UserModel.fromJson(_baseJson(isPremium: true)).isPremium, isTrue);
+      expect(UserModel.fromJson(_baseJson(isPremium: true)).isPremium, isTrue);
     });
 
     test('isPremium defaults to false when absent', () {
@@ -45,8 +43,7 @@ void main() {
 
   group('UserModel (profile).fromJson — roles', () {
     test('parses roles list', () {
-      expect(
-          UserModel.fromJson(_baseJson(roles: ['admin', 'mod'])).roles,
+      expect(UserModel.fromJson(_baseJson(roles: ['admin', 'mod'])).roles,
           ['admin', 'mod']);
     });
 
@@ -79,14 +76,12 @@ void main() {
 
   group('UserModel (profile).toJson', () {
     test('serializes userId', () {
-      expect(
-          UserModel.fromJson(_baseJson(userId: 'uid_x')).toJson()['userId'],
+      expect(UserModel.fromJson(_baseJson(userId: 'uid_x')).toJson()['userId'],
           'uid_x');
     });
 
     test('serializes email', () {
-      expect(
-          UserModel.fromJson(_baseJson(email: 'x@y.com')).toJson()['email'],
+      expect(UserModel.fromJson(_baseJson(email: 'x@y.com')).toJson()['email'],
           'x@y.com');
     });
 
@@ -97,8 +92,7 @@ void main() {
     });
 
     test('serializes roles', () {
-      expect(
-          UserModel.fromJson(_baseJson(roles: ['vip'])).toJson()['roles'],
+      expect(UserModel.fromJson(_baseJson(roles: ['vip'])).toJson()['roles'],
           ['vip']);
     });
 

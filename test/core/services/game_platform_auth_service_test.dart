@@ -36,12 +36,15 @@ void main() {
         playerId: 'p',
         displayName: 'd',
       );
-      expect(identity.toJson().keys.toSet(), {'platform', 'playerId', 'displayName'});
+      expect(identity.toJson().keys.toSet(),
+          {'platform', 'playerId', 'displayName'});
     });
 
     test('two identical identities have equal toJson output', () {
-      const a = GamePlatformIdentity(platform: 'ios', playerId: 'x', displayName: 'X');
-      const b = GamePlatformIdentity(platform: 'ios', playerId: 'x', displayName: 'X');
+      const a = GamePlatformIdentity(
+          platform: 'ios', playerId: 'x', displayName: 'X');
+      const b = GamePlatformIdentity(
+          platform: 'ios', playerId: 'x', displayName: 'X');
       expect(a.toJson(), b.toJson());
     });
   });

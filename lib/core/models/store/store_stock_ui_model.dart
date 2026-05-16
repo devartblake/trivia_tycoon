@@ -33,7 +33,8 @@ class StoreAvailabilityState {
 
 /// Stock sub-object returned per store item.
 class StoreStockState {
-  final String policyType; // unlimited | per_user | one_time_purchase | time_limited | event_limited
+  final String
+      policyType; // unlimited | per_user | one_time_purchase | time_limited | event_limited
   final int? maxQuantity;
   final int usedQuantity;
   final int? remainingQuantity;
@@ -141,7 +142,8 @@ class PlayerStoreItem {
     // availabilityState string, stockState string, and stock fields directly.
     final priceCoins = (json['priceCoins'] as num?)?.toInt();
     final price = priceCoins ?? (json['price'] as num?)?.toInt() ?? 0;
-    final currency = priceCoins != null ? 'coins' : (json['currency'] ?? 'coins').toString();
+    final currency =
+        priceCoins != null ? 'coins' : (json['currency'] ?? 'coins').toString();
 
     // Build stock from nested object (legacy) or flat fields (backend).
     final StoreStockState stock;
@@ -169,10 +171,12 @@ class PlayerStoreItem {
     // Build availability from nested object (legacy) or flat availabilityState (backend).
     final StoreAvailabilityState availability;
     if (availJson is Map) {
-      availability = StoreAvailabilityState.fromJson(Map<String, dynamic>.from(availJson));
+      availability =
+          StoreAvailabilityState.fromJson(Map<String, dynamic>.from(availJson));
     } else {
       final availState = json['availabilityState'] as String?;
-      final isAvail = json['isAvailable'] as bool? ?? (availState == 'available');
+      final isAvail =
+          json['isAvailable'] as bool? ?? (availState == 'available');
       final discountPct = (json['discountPercent'] as num?)?.toInt() ?? 0;
       availability = StoreAvailabilityState(
         isVisible: true,

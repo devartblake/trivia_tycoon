@@ -179,12 +179,12 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
 
   Widget _getDismissibleToast(Widget child) {
     return Dismissible(
-      direction:
-          tycoonToast.dismissDirection == SynaptixToastDismissDirection.horizontal
-              ? DismissDirection.horizontal
-              : (tycoonToast.tycoonToastPosition == SynaptixToastPosition.top
-                  ? DismissDirection.up
-                  : DismissDirection.down),
+      direction: tycoonToast.dismissDirection ==
+              SynaptixToastDismissDirection.horizontal
+          ? DismissDirection.horizontal
+          : (tycoonToast.tycoonToastPosition == SynaptixToastPosition.top
+              ? DismissDirection.up
+              : DismissDirection.down),
       key: UniqueKey(),
       onDismissed: (_) {
         navigator?.removeRoute(this);

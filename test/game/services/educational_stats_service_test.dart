@@ -34,8 +34,7 @@ void main() {
   late EducationalStatsService svc;
 
   setUp(() async {
-    tempDir =
-        await Directory.systemTemp.createTemp('educational_stats_test_');
+    tempDir = await Directory.systemTemp.createTemp('educational_stats_test_');
     Hive.init(tempDir.path);
     svc = EducationalStatsService();
     await svc.initialize();
@@ -90,7 +89,8 @@ void main() {
     });
 
     test('averageScore updated', () {
-      expect(EducationalStats().copyWith(averageScore: 75.5).averageScore, 75.5);
+      expect(
+          EducationalStats().copyWith(averageScore: 75.5).averageScore, 75.5);
     });
 
     test('currentStreak updated', () {
@@ -150,7 +150,8 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      final ss = SubjectStats(subject: 'Geography', quizzesCompleted: 5, masteryLevel: 2);
+      final ss = SubjectStats(
+          subject: 'Geography', quizzesCompleted: 5, masteryLevel: 2);
       final updated = ss.copyWith(averageScore: 80.0);
       expect(updated.subject, 'Geography');
       expect(updated.quizzesCompleted, 5);
@@ -255,9 +256,12 @@ void main() {
 
   group('getEducationalStats — multiple records', () {
     setUp(() async {
-      await svc.recordQuizResult(_makeResult(score: 7, totalQuestions: 10, category: 'Science'));
-      await svc.recordQuizResult(_makeResult(score: 9, totalQuestions: 10, category: 'Science'));
-      await svc.recordQuizResult(_makeResult(score: 5, totalQuestions: 10, category: 'History'));
+      await svc.recordQuizResult(
+          _makeResult(score: 7, totalQuestions: 10, category: 'Science'));
+      await svc.recordQuizResult(
+          _makeResult(score: 9, totalQuestions: 10, category: 'Science'));
+      await svc.recordQuizResult(
+          _makeResult(score: 5, totalQuestions: 10, category: 'History'));
     });
 
     test('totalQuizzes is 3', () async {
@@ -369,8 +373,7 @@ void main() {
     });
 
     test('lastQuizDate is set after recording', () async {
-      await svc.recordQuizResult(
-          _makeResult(category: 'Health'));
+      await svc.recordQuizResult(_makeResult(category: 'Health'));
       final stats = await svc.getEducationalStats();
       expect(stats.subjectStats['Health']!.lastQuizDate, isNotNull);
     });
@@ -426,14 +429,16 @@ void main() {
 
     test('quizzes is 0 before any records', () async {
       final activity = await svc.getWeeklyActivity();
-      final totalQuizzes = activity.fold<int>(0, (sum, d) => sum + (d['quizzes'] as int));
+      final totalQuizzes =
+          activity.fold<int>(0, (sum, d) => sum + (d['quizzes'] as int));
       expect(totalQuizzes, 0);
     });
 
     test('today has 1 quiz after recording', () async {
       await svc.recordQuizResult(_makeResult());
       final activity = await svc.getWeeklyActivity();
-      final totalQuizzes = activity.fold<int>(0, (sum, d) => sum + (d['quizzes'] as int));
+      final totalQuizzes =
+          activity.fold<int>(0, (sum, d) => sum + (d['quizzes'] as int));
       expect(totalQuizzes, 1);
     });
 

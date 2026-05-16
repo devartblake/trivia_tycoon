@@ -34,7 +34,8 @@ class _FileImportExportScreenState
   Future<void> _importFromFile() async {
     if (kIsWeb) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('File operations are not supported on web.')),
+        const SnackBar(
+            content: Text('File operations are not supported on web.')),
       );
       return;
     }
@@ -103,7 +104,8 @@ class _FileImportExportScreenState
   Future<void> _exportToFile() async {
     if (kIsWeb) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('File operations are not supported on web.')),
+        const SnackBar(
+            content: Text('File operations are not supported on web.')),
       );
       return;
     }

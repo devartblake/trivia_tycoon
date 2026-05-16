@@ -49,8 +49,7 @@ void main() {
     });
 
     test('parses conversationId', () {
-      expect(
-          Message.fromJson(_baseJson(conversationId: 'c42')).conversationId,
+      expect(Message.fromJson(_baseJson(conversationId: 'c42')).conversationId,
           'c42');
     });
 
@@ -151,8 +150,7 @@ void main() {
     });
 
     test('parses reactions list', () {
-      final msg = Message.fromJson(
-          _baseJson(reactions: ['👍', '❤️']));
+      final msg = Message.fromJson(_baseJson(reactions: ['👍', '❤️']));
       expect(msg.reactions, ['👍', '❤️']);
     });
 
@@ -167,8 +165,8 @@ void main() {
 
   group('Message.fromJson — timestamp', () {
     test('parses timestamp', () {
-      final msg = Message.fromJson(
-          _baseJson(timestamp: '2025-09-15T14:30:00.000Z'));
+      final msg =
+          Message.fromJson(_baseJson(timestamp: '2025-09-15T14:30:00.000Z'));
       expect(msg.timestamp.month, 9);
     });
 
@@ -209,14 +207,12 @@ void main() {
     });
 
     test('"systemNotification" → MessageType.systemNotification', () {
-      expect(
-          Message.fromJson(_baseJson(type: 'systemNotification')).type,
+      expect(Message.fromJson(_baseJson(type: 'systemNotification')).type,
           MessageType.systemNotification);
     });
 
     test('"system_notification" → MessageType.systemNotification', () {
-      expect(
-          Message.fromJson(_baseJson(type: 'system_notification')).type,
+      expect(Message.fromJson(_baseJson(type: 'system_notification')).type,
           MessageType.systemNotification);
     });
 
@@ -226,8 +222,7 @@ void main() {
     });
 
     test('unknown type falls back to text', () {
-      expect(
-          Message.fromJson(_baseJson(type: 'unknown_type')).type,
+      expect(Message.fromJson(_baseJson(type: 'unknown_type')).type,
           MessageType.text);
     });
 
@@ -313,22 +308,24 @@ void main() {
 
   group('Message.toJson', () {
     test('serializes type as name string', () {
-      expect(Message.fromJson(_baseJson(type: 'image')).toJson()['type'],
-          'image');
+      expect(
+          Message.fromJson(_baseJson(type: 'image')).toJson()['type'], 'image');
     });
 
     test('serializes status as name string', () {
-      expect(Message.fromJson(_baseJson(status: 'delivered')).toJson()['status'],
+      expect(
+          Message.fromJson(_baseJson(status: 'delivered')).toJson()['status'],
           'delivered');
     });
 
     test('serializes timestamp as ISO string', () {
-      expect(Message.fromJson(_baseJson()).toJson()['timestamp'], isA<String>());
+      expect(
+          Message.fromJson(_baseJson()).toJson()['timestamp'], isA<String>());
     });
 
     test('round-trip preserves type and status', () {
-      final original = Message.fromJson(
-          _baseJson(type: 'challenge', status: 'read'));
+      final original =
+          Message.fromJson(_baseJson(type: 'challenge', status: 'read'));
       final restored = Message.fromJson(original.toJson());
       expect(restored.type, MessageType.challenge);
       expect(restored.status, MessageStatus.read);

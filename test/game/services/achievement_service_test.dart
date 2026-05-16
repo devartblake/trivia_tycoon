@@ -8,10 +8,12 @@ import 'package:trivia_tycoon/game/services/achievement_service.dart';
 
 // Stub that throws on API calls to keep tests free of network I/O.
 class _StubApiService extends ApiService {
-  _StubApiService() : super(baseUrl: 'http://stub.invalid', initializeCache: false);
+  _StubApiService()
+      : super(baseUrl: 'http://stub.invalid', initializeCache: false);
 
   @override
-  Future<List<Map<String, dynamic>>> fetchAchievements(String playerName) async {
+  Future<List<Map<String, dynamic>>> fetchAchievements(
+      String playerName) async {
     throw UnimplementedError('stub');
   }
 
@@ -21,7 +23,8 @@ class _StubApiService extends ApiService {
   }
 }
 
-Achievement _makeAch({String id = 'ach1', bool unlocked = false}) => Achievement(
+Achievement _makeAch({String id = 'ach1', bool unlocked = false}) =>
+    Achievement(
       id: id,
       title: 'Title $id',
       description: 'Desc $id',
@@ -86,10 +89,7 @@ void main() {
 
     test('toJson / fromJson round-trip', () {
       final a = Achievement(
-          id: 'rt1',
-          title: 'RoundTrip',
-          description: 'Test',
-          isUnlocked: true);
+          id: 'rt1', title: 'RoundTrip', description: 'Test', isUnlocked: true);
       final restored = Achievement.fromJson(a.toJson());
       expect(restored.id, 'rt1');
       expect(restored.title, 'RoundTrip');
@@ -166,7 +166,8 @@ void main() {
       expect(await svc2.isAchievementUnlocked('x10'), isTrue);
     });
 
-    test('returns false for different id even when others are seeded', () async {
+    test('returns false for different id even when others are seeded',
+        () async {
       final box = await Hive.openBox('achievement_data');
       await box.put('unlocked_achievements', [_makeAch(id: 'x20').toJson()]);
 

@@ -109,9 +109,9 @@ class DefaultSecureChannelService implements SecureChannelService {
     );
     final expandedBytes = await expanded.extractBytes();
 
-    final expiresAt = DateTime.tryParse(payload['expiresAtUtc']?.toString() ?? '')
-            ?.toUtc() ??
-        DateTime.now().toUtc().add(const Duration(minutes: 20));
+    final expiresAt =
+        DateTime.tryParse(payload['expiresAtUtc']?.toString() ?? '')?.toUtc() ??
+            DateTime.now().toUtc().add(const Duration(minutes: 20));
 
     final session = SecureSession(
       sessionId: payload['sessionId']?.toString() ?? '',
@@ -148,7 +148,8 @@ class DefaultSecureChannelService implements SecureChannelService {
       uri: uri,
     );
 
-    await _sessionStore.save(session.copyWith(nextSequence: session.nextSequence + 1));
+    await _sessionStore
+        .save(session.copyWith(nextSequence: session.nextSequence + 1));
     return encrypted;
   }
 

@@ -22,7 +22,8 @@ class ExperimentStore {
   }
 
   /// Look up an assignment by key. Returns null when not enrolled or not seeded.
-  ExperimentAssignmentDto? get(String experimentKey) => _assignments[experimentKey];
+  ExperimentAssignmentDto? get(String experimentKey) =>
+      _assignments[experimentKey];
 
   /// Whether [experimentKey] is enrolled in a non-control variant.
   bool isInVariant(String experimentKey) {

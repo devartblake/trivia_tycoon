@@ -48,7 +48,9 @@ class StockMeterBar extends StatelessWidget {
               caption ?? '$remaining / $max',
               style: TextStyle(
                 fontSize: 11,
-                color: isUrgent ? const Color(0xFFEF4444) : const Color(0xFF64748B),
+                color: isUrgent
+                    ? const Color(0xFFEF4444)
+                    : const Color(0xFF64748B),
                 fontWeight: isUrgent ? FontWeight.bold : FontWeight.normal,
               ),
             ),

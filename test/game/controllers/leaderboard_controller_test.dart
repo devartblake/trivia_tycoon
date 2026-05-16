@@ -260,7 +260,8 @@ void main() {
       ctrl.setCategory(LeaderboardCategory.weekly);
 
       expect(ctrl.filteredEntries.length, 2);
-      expect(ctrl.filteredEntries.every((e) => e.timeframe == 'weekly'), isTrue);
+      expect(
+          ctrl.filteredEntries.every((e) => e.timeframe == 'weekly'), isTrue);
     });
 
     test('global category shows only global entries', () async {
@@ -341,9 +342,8 @@ void main() {
         'allEntries': [entry.toJson()],
       });
 
-      ctrl.promoteUser(ctrl.filteredEntries.isEmpty
-          ? entry
-          : ctrl.filteredEntries.first);
+      ctrl.promoteUser(
+          ctrl.filteredEntries.isEmpty ? entry : ctrl.filteredEntries.first);
 
       // If filteredEntries was populated, verify level increased
       // (tier restriction may have cleared filtered, but _allEntries is mutated)
@@ -396,7 +396,8 @@ void main() {
       ctrl.pauseLeaderboard();
       ctrl.resumeLeaderboard();
       // After resume, setCategory should work without throwing
-      expect(() => ctrl.setCategory(LeaderboardCategory.daily), returnsNormally);
+      expect(
+          () => ctrl.setCategory(LeaderboardCategory.daily), returnsNormally);
     });
   });
 

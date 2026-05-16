@@ -116,8 +116,8 @@ class QuestionModel {
                   final text =
                       (map['text'] ?? map['label'] ?? map['optionText'] ?? '')
                           .toString();
-                  final optionId = (map['optionId'] ?? map['id'] ?? text)
-                      .toString();
+                  final optionId =
+                      (map['optionId'] ?? map['id'] ?? text).toString();
                   if (text.isNotEmpty) optionIdByText[text] = optionId;
                   return {
                     'text': text,

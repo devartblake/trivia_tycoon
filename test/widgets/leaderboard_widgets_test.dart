@@ -108,8 +108,8 @@ void main() {
 
     testWidgets('animation completes without error after pumpAndSettle',
         (tester) async {
-      await tester.pumpWidget(
-          _wrap(const AnimatedRankBadge(rank: 2, previousRank: 8)));
+      await tester
+          .pumpWidget(_wrap(const AnimatedRankBadge(rank: 2, previousRank: 8)));
       await tester.pumpAndSettle();
       expect(find.text('#2'), findsOneWidget);
       expect(tester.takeException(), isNull);

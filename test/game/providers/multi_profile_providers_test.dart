@@ -54,7 +54,10 @@ void main() {
         isInitialized: true,
         profiles: [
           ProfileData(
-              id: 'p1', name: 'Bob', createdAt: DateTime(2026), lastActive: DateTime(2026)),
+              id: 'p1',
+              name: 'Bob',
+              createdAt: DateTime(2026),
+              lastActive: DateTime(2026)),
         ],
       );
       final updated = s.copyWith(isLoading: true);
@@ -132,7 +135,8 @@ void main() {
     late ProviderContainer container;
 
     setUp(() async {
-      tempDir = await Directory.systemTemp.createTemp('providers_notifier_test_');
+      tempDir =
+          await Directory.systemTemp.createTemp('providers_notifier_test_');
       Hive.init(tempDir.path);
       await Hive.openBox('multi_profiles');
       await Hive.openBox('settings');
@@ -321,7 +325,8 @@ void main() {
     });
 
     test('availableProfilesProvider returns list', () {
-      expect(container.read(availableProfilesProvider), isA<List<ProfileData>>());
+      expect(
+          container.read(availableProfilesProvider), isA<List<ProfileData>>());
     });
 
     test('currentProfileProvider reflects activeProfile from manager', () {

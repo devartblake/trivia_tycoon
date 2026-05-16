@@ -112,7 +112,8 @@ class BackendAuthService {
   /// Authenticate via a native game platform (Game Center / Play Games).
   ///
   /// On success the returned session is saved to the token store.
-  Future<AuthSession> loginWithGamePlatform(GamePlatformIdentity identity) async {
+  Future<AuthSession> loginWithGamePlatform(
+      GamePlatformIdentity identity) async {
     final session = await _api.loginWithGamePlatform(
       platform: identity.platform,
       playerId: identity.playerId,

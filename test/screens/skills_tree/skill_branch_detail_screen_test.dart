@@ -107,7 +107,8 @@ Widget _buildHarness({
         path: '/skill-branch/:branchId',
         builder: (context, routeState) => SkillBranchDetailScreen(
           branchId: routeState.pathParameters['branchId']!,
-          initialStep: int.tryParse(routeState.uri.queryParameters['step'] ?? ''),
+          initialStep:
+              int.tryParse(routeState.uri.queryParameters['step'] ?? ''),
           showPathInitially: routeState.uri.queryParameters['showPath'] == '1',
         ),
       ),
@@ -116,8 +117,8 @@ Widget _buildHarness({
 
   return ProviderScope(
     overrides: [
-      skillTreeProvider.overrideWith(
-          (ref) => _StaticSkillTreeController(ref, state)),
+      skillTreeProvider
+          .overrideWith((ref) => _StaticSkillTreeController(ref, state)),
       playerXPProvider.overrideWith((_) => 100),
       if (cooldownService != null)
         skillCooldownServiceProvider.overrideWithValue(cooldownService),
@@ -226,7 +227,8 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('shows cooldown messaging and disables use action while cooling down',
+  testWidgets(
+      'shows cooldown messaging and disables use action while cooling down',
       (tester) async {
     final cooldowns = SkillCooldownService()
       ..startCooldown('scholar_root', const Duration(seconds: 75));
@@ -243,8 +245,8 @@ void main() {
     expect(find.textContaining('Next available in'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Cooldown'), findsOneWidget);
 
-    final button =
-        tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Cooldown'));
+    final button = tester
+        .widget<FilledButton>(find.widgetWithText(FilledButton, 'Cooldown'));
     expect(button.onPressed, isNull);
 
     await tester.pump(const Duration(seconds: 2));

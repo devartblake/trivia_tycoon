@@ -58,7 +58,8 @@ void main() {
     });
 
     test('parses body', () {
-      expect(InboxItem.fromJson(_baseJson(body: 'Test body')).body, 'Test body');
+      expect(
+          InboxItem.fromJson(_baseJson(body: 'Test body')).body, 'Test body');
     });
 
     test('body falls back to summary', () {
@@ -77,7 +78,8 @@ void main() {
 
     test('parses actionRoute', () {
       expect(
-          InboxItem.fromJson(_baseJson(actionRoute: '/inbox/detail')).actionRoute,
+          InboxItem.fromJson(_baseJson(actionRoute: '/inbox/detail'))
+              .actionRoute,
           '/inbox/detail');
     });
 
@@ -155,8 +157,8 @@ void main() {
 
   group('InboxItem.fromJson — timestamp', () {
     test('parses timestamp field', () {
-      final item = InboxItem.fromJson(
-          _baseJson(timestamp: '2025-08-15T09:30:00.000Z'));
+      final item =
+          InboxItem.fromJson(_baseJson(timestamp: '2025-08-15T09:30:00.000Z'));
       expect(item.timestamp.month, 8);
       expect(item.timestamp.day, 15);
     });
@@ -211,7 +213,8 @@ void main() {
 
   group('_parseInboxType — type field routing', () {
     test('"alert" → InboxType.alert', () {
-      expect(InboxItem.fromJson(_baseJson(type: 'alert')).type, InboxType.alert);
+      expect(
+          InboxItem.fromJson(_baseJson(type: 'alert')).type, InboxType.alert);
     });
 
     test('"urgent" → InboxType.alert', () {
@@ -377,7 +380,8 @@ void main() {
     });
 
     test('copies actionRoute', () {
-      expect(base.copyWith(actionRoute: '/new/route').actionRoute, '/new/route');
+      expect(
+          base.copyWith(actionRoute: '/new/route').actionRoute, '/new/route');
     });
 
     test('preserves unchanged fields', () {

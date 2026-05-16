@@ -11,6 +11,7 @@ enum SegmentSource { local, remote }
 
 class SegmentLoader {
   final SegmentSource source;
+
   /// [apiService] is used for remote loading when [source] == [SegmentSource.remote].
   /// When null the loader falls back to the local asset bundle.
   final ApiService? apiService;
@@ -93,5 +94,4 @@ class SegmentLoader {
       return streak >= unlockStreak && currency >= unlockCurrency;
     }).toList();
   }
-
 }

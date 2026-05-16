@@ -77,8 +77,8 @@ class ProfileCharacterSection extends ConsumerWidget {
                 child: GestureDetector(
                   onTap: controller.retryUpload,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: Colors.red.shade700,
                       borderRadius: BorderRadius.circular(12),
@@ -89,8 +89,8 @@ class ProfileCharacterSection extends ConsumerWidget {
                         Icon(Icons.refresh, color: Colors.white, size: 14),
                         SizedBox(width: 4),
                         Text('Retry upload',
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 12)),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 12)),
                       ],
                     ),
                   ),

@@ -19,8 +19,7 @@ class AvatarStoreRemoteSource implements AvatarPackageRemoteSource {
       queryParameters: <String, dynamic>{'category': 'avatar'},
     );
 
-    final rawItems =
-        response['items'] as List<dynamic>? ?? const <dynamic>[];
+    final rawItems = response['items'] as List<dynamic>? ?? const <dynamic>[];
 
     return rawItems
         .whereType<Map>()

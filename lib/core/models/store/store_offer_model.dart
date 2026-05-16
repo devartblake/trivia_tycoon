@@ -99,7 +99,8 @@ class FeaturedOffer {
 
   factory FeaturedOffer.fromJson(Map<String, dynamic> json) {
     // Backend uses endsAt; legacy uses expiresAt.
-    final expiresRaw = json['endsAt'] as String? ?? json['expiresAt'] as String?;
+    final expiresRaw =
+        json['endsAt'] as String? ?? json['expiresAt'] as String?;
     return FeaturedOffer(
       badgeText: json['badgeText'] as String? ?? 'SALE',
       headline: json['headline'] as String? ?? '',

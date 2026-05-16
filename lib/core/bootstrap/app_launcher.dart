@@ -309,21 +309,17 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
   void _bootstrapPersonalization(serviceManager) {
     unawaited(() async {
       try {
-        final playerId =
-            await serviceManager.playerProfileService.getUserId();
+        final playerId = await serviceManager.playerProfileService.getUserId();
         if (playerId == null || playerId.isEmpty) return;
-        await ref
-            .read(personalizationServiceProvider)
-            .initSession(playerId);
+        await ref.read(personalizationServiceProvider).initSession(playerId);
 
         // Seed personalization toggle from full profile (lazy fetch)
         try {
           final profile = await ref
               .read(personalizationServiceProvider)
               .getProfile(playerId);
-          ref
-              .read(personalizationEnabledProvider(playerId).notifier)
-              .state = profile.personalizationEnabled;
+          ref.read(personalizationEnabledProvider(playerId).notifier).state =
+              profile.personalizationEnabled;
         } catch (_) {}
 
         LogManager.debug(

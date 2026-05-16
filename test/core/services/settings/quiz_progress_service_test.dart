@@ -16,8 +16,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  Future<QuizProgressService> _make() =>
-      QuizProgressService.initialize();
+  Future<QuizProgressService> _make() => QuizProgressService.initialize();
 
   // Open settings box so sync methods work
   Future<void> _openSettingsBox() async {
@@ -167,8 +166,8 @@ void main() {
       await svc.updateQuizStats(questionsAnswered: 1);
       final progress = await svc.getPlayerProgress();
       final updated = DateTime.parse(progress['last_updated']);
-      expect(updated.isAfter(before.subtract(const Duration(seconds: 1))),
-          isTrue);
+      expect(
+          updated.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
     });
   });
 
@@ -255,8 +254,7 @@ void main() {
       await svc.syncProgress();
       final syncTime = await svc.getLastSyncTime();
       expect(syncTime, isNotNull);
-      expect(
-          syncTime!.isAfter(before.subtract(const Duration(seconds: 1))),
+      expect(syncTime!.isAfter(before.subtract(const Duration(seconds: 1))),
           isTrue);
     });
   });
@@ -354,7 +352,8 @@ void main() {
       final svc = await _make();
       await svc.markMonthlyQuizProgress(
           year: 2025, month: 6, questionsCompleted: 5, totalQuestions: 10);
-      expect(svc.getMonthlyQuizCompletionRateSync(2025, 6), closeTo(0.5, 0.001));
+      expect(
+          svc.getMonthlyQuizCompletionRateSync(2025, 6), closeTo(0.5, 0.001));
     });
 
     test('markMonthlyQuizProgress not completed when partial', () async {

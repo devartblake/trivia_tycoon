@@ -454,7 +454,10 @@ void main() {
       final group = await _createPublicGroup(svc, suffix: 'role1');
       await svc.joinGroup(group.id, 'member_role1', 'Member');
       final result = await svc.updateMemberRole(
-        group.id, 'member_role1', GroupRole.admin, 'owner_role1',
+        group.id,
+        'member_role1',
+        GroupRole.admin,
+        'owner_role1',
       );
       expect(result, isTrue);
       await svc.deleteGroup(group.id, 'owner_role1');
@@ -465,7 +468,10 @@ void main() {
       await svc.joinGroup(group.id, 'memberA_role2', 'MemberA');
       await svc.joinGroup(group.id, 'memberB_role2', 'MemberB');
       final result = await svc.updateMemberRole(
-        group.id, 'memberB_role2', GroupRole.admin, 'memberA_role2',
+        group.id,
+        'memberB_role2',
+        GroupRole.admin,
+        'memberA_role2',
       );
       expect(result, isFalse);
       await svc.deleteGroup(group.id, 'owner_role2');
@@ -475,7 +481,10 @@ void main() {
       final group = await _createPublicGroup(svc, suffix: 'role3');
       await svc.joinGroup(group.id, 'member_role3', 'Member');
       final result = await svc.updateMemberRole(
-        group.id, 'owner_role3', GroupRole.member, 'owner_role3',
+        group.id,
+        'owner_role3',
+        GroupRole.member,
+        'owner_role3',
       );
       expect(result, isFalse);
       await svc.deleteGroup(group.id, 'owner_role3');
@@ -485,7 +494,10 @@ void main() {
       final group = await _createPublicGroup(svc, suffix: 'role4');
       await svc.joinGroup(group.id, 'member_role4', 'Member');
       await svc.updateMemberRole(
-        group.id, 'member_role4', GroupRole.moderator, 'owner_role4',
+        group.id,
+        'member_role4',
+        GroupRole.moderator,
+        'owner_role4',
       );
       final updated = svc.getGroup(group.id)!;
       expect(updated.getMember('member_role4')!.role, GroupRole.moderator);
@@ -716,16 +728,16 @@ void main() {
   group('inviteToGroup', () {
     test('true when owner invites (placeholder implementation)', () async {
       final group = await _createPublicGroup(svc, suffix: 'invite1');
-      final result = await svc.inviteToGroup(
-          group.id, 'invitee1', 'owner_invite1');
+      final result =
+          await svc.inviteToGroup(group.id, 'invitee1', 'owner_invite1');
       expect(result, isTrue);
       await svc.deleteGroup(group.id, 'owner_invite1');
     });
 
     test('false when non-member tries to invite', () async {
       final group = await _createPublicGroup(svc, suffix: 'invite2');
-      final result = await svc.inviteToGroup(
-          group.id, 'invitee2', 'nobody_invite2');
+      final result =
+          await svc.inviteToGroup(group.id, 'invitee2', 'nobody_invite2');
       expect(result, isFalse);
       await svc.deleteGroup(group.id, 'owner_invite2');
     });

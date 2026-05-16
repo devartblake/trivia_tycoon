@@ -6,7 +6,8 @@ import '../../core/helpers/quiz_helpers.dart';
 import '../../game/models/question_model.dart';
 import '../../game/providers/quiz_providers.dart';
 import '../../game/providers/quiz_results_provider.dart';
-import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../../game/providers/learning_providers.dart'
+    show currentPlayerIdProvider;
 import '../../game/providers/personalization_providers.dart';
 import '../../game/services/quiz_category.dart';
 
@@ -473,14 +474,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           ref.read(currentPlayerIdProvider).whenData((playerId) {
             if (playerId != null && playerId.isNotEmpty) {
               ref.read(personalizationServiceProvider).fireMatchCompleted(
-                    playerId: playerId,
-                    mode: finalState.classLevel ?? 'solo',
-                    category: _getCategoryDisplayName(),
-                    metadata: {
-                      'score': reconciledState.score,
-                      'totalQuestions': finalState.totalQuestions,
-                    },
-                  );
+                playerId: playerId,
+                mode: finalState.classLevel ?? 'solo',
+                category: _getCategoryDisplayName(),
+                metadata: {
+                  'score': reconciledState.score,
+                  'totalQuestions': finalState.totalQuestions,
+                },
+              );
             }
           });
 

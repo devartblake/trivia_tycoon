@@ -39,8 +39,7 @@ Future<void> main() async {
           isLoggedInSyncProvider.overrideWith((ref) => isLoggedIn),
           userAgeGroupProvider.overrideWith((ref) => savedAgeGroup),
           synaptixModeProvider.overrideWith((ref) {
-            final notifier =
-                SynaptixModeNotifier(manager.playerProfileService);
+            final notifier = SynaptixModeNotifier(manager.playerProfileService);
             notifier.deriveFromAgeGroup(savedAgeGroup);
             return notifier;
           }),

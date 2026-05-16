@@ -72,10 +72,13 @@ void main() {
     });
 
     test('fromString returns correct value', () {
-      expect(MatchStatusExtension.fromString('your_turn'), MatchStatus.yourTurn);
+      expect(
+          MatchStatusExtension.fromString('your_turn'), MatchStatus.yourTurn);
       expect(MatchStatusExtension.fromString('waiting'), MatchStatus.waiting);
-      expect(MatchStatusExtension.fromString('similar_stats'), MatchStatus.similarStats);
-      expect(MatchStatusExtension.fromString('fast_player'), MatchStatus.fastPlayer);
+      expect(MatchStatusExtension.fromString('similar_stats'),
+          MatchStatus.similarStats);
+      expect(MatchStatusExtension.fromString('fast_player'),
+          MatchStatus.fastPlayer);
       expect(MatchStatusExtension.fromString('finished'), MatchStatus.finished);
     });
 
@@ -168,14 +171,16 @@ void main() {
     });
 
     test('contains all expected modes', () {
-      expect(GameMode.values, containsAll([
-        GameMode.classic,
-        GameMode.topicExplorer,
-        GameMode.survival,
-        GameMode.arena,
-        GameMode.teams,
-        GameMode.daily,
-      ]));
+      expect(
+          GameMode.values,
+          containsAll([
+            GameMode.classic,
+            GameMode.topicExplorer,
+            GameMode.survival,
+            GameMode.arena,
+            GameMode.teams,
+            GameMode.daily,
+          ]));
     });
   });
 
@@ -205,10 +210,12 @@ void main() {
     });
 
     test('contains oneVone and teamVteam', () {
-      expect(VersusMode.values, containsAll([
-        VersusMode.oneVone,
-        VersusMode.teamVteam,
-      ]));
+      expect(
+          VersusMode.values,
+          containsAll([
+            VersusMode.oneVone,
+            VersusMode.teamVteam,
+          ]));
     });
   });
 
@@ -304,7 +311,8 @@ void main() {
     });
 
     test('toJson round-trip preserves name and status', () {
-      final original = MatchData.fromJson({'name': 'Dave', 'status': 'waiting'});
+      final original =
+          MatchData.fromJson({'name': 'Dave', 'status': 'waiting'});
       final json = original.toJson();
       final restored = MatchData.fromJson(json);
       expect(restored.name, 'Dave');
@@ -369,7 +377,8 @@ void main() {
 
   group('ProfileStats', () {
     test('fromMap parses level, currentXP, isPremium', () {
-      final s = ProfileStats.fromMap({'level': 5, 'currentXP': 300, 'isPremium': true});
+      final s = ProfileStats.fromMap(
+          {'level': 5, 'currentXP': 300, 'isPremium': true});
       expect(s.level, 5);
       expect(s.currentXP, 300);
       expect(s.isPremium, isTrue);
@@ -398,18 +407,20 @@ void main() {
     });
 
     test('contains expected categories', () {
-      expect(SearchCategory.values, containsAll([
-        SearchCategory.skills,
-        SearchCategory.questions,
-        SearchCategory.leaderboard,
-        SearchCategory.players,
-        SearchCategory.achievements,
-        SearchCategory.store,
-        SearchCategory.settings,
-        SearchCategory.help,
-        SearchCategory.games,
-        SearchCategory.powerUps,
-      ]));
+      expect(
+          SearchCategory.values,
+          containsAll([
+            SearchCategory.skills,
+            SearchCategory.questions,
+            SearchCategory.leaderboard,
+            SearchCategory.players,
+            SearchCategory.achievements,
+            SearchCategory.store,
+            SearchCategory.settings,
+            SearchCategory.help,
+            SearchCategory.games,
+            SearchCategory.powerUps,
+          ]));
     });
   });
 
@@ -419,16 +430,18 @@ void main() {
     });
 
     test('contains expected types', () {
-      expect(SearchResultType.values, containsAll([
-        SearchResultType.skill,
-        SearchResultType.question,
-        SearchResultType.player,
-        SearchResultType.achievement,
-        SearchResultType.storeItem,
-        SearchResultType.settingPage,
-        SearchResultType.helpArticle,
-        SearchResultType.navigation,
-      ]));
+      expect(
+          SearchResultType.values,
+          containsAll([
+            SearchResultType.skill,
+            SearchResultType.question,
+            SearchResultType.player,
+            SearchResultType.achievement,
+            SearchResultType.storeItem,
+            SearchResultType.settingPage,
+            SearchResultType.helpArticle,
+            SearchResultType.navigation,
+          ]));
     });
   });
 

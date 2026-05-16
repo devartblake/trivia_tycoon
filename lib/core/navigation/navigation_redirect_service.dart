@@ -95,5 +95,7 @@ class NavigationState {
 
   @override
   int get hashCode =>
-      isLoggedIn.hashCode ^ profileSelected.hashCode ^ isOnboardingComplete.hashCode;
+      isLoggedIn.hashCode ^
+      profileSelected.hashCode ^
+      isOnboardingComplete.hashCode;
 }

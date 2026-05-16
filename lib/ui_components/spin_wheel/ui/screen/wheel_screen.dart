@@ -227,7 +227,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
           );
       await refreshAuthoritativeWallet(
         ref,
-        backendCoinBalance: response.newBalance > 0 ? response.newBalance : null,
+        backendCoinBalance:
+            response.newBalance > 0 ? response.newBalance : null,
       );
     } on ApiRequestException catch (e) {
       LogManager.debug('[WheelScreen] Spin claim rejected: ${e.message}');
@@ -522,8 +523,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
             ),
             const Spacer(),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: _canSpin
                     ? Colors.green.withValues(alpha: 0.1)
@@ -625,15 +625,15 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                       16.0),
                                                   child: GestureDetector(
                                                     onVerticalDragEnd: (d) =>
-                                                        _handleGestureSpin(
-                                                            d.velocity
-                                                                .pixelsPerSecond
-                                                                .dy),
+                                                        _handleGestureSpin(d
+                                                            .velocity
+                                                            .pixelsPerSecond
+                                                            .dy),
                                                     onHorizontalDragEnd: (d) =>
-                                                        _handleGestureSpin(
-                                                            d.velocity
-                                                                .pixelsPerSecond
-                                                                .dx),
+                                                        _handleGestureSpin(d
+                                                            .velocity
+                                                            .pixelsPerSecond
+                                                            .dx),
                                                     child: WheelWidget(
                                                       segments: _segments,
                                                       rotationAngle:

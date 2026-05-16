@@ -92,7 +92,10 @@ class _CoachBriefBannerState extends ConsumerState<CoachBriefBanner>
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: accent.withOpacity(0.35), width: 1),
           boxShadow: [
-            BoxShadow(color: accent.withOpacity(0.12), blurRadius: 12, spreadRadius: 1),
+            BoxShadow(
+                color: accent.withOpacity(0.12),
+                blurRadius: 12,
+                spreadRadius: 1),
           ],
         ),
         child: Material(
@@ -158,7 +161,8 @@ class _CoachBriefBannerState extends ConsumerState<CoachBriefBanner>
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, size: 16, color: Colors.white38),
+                    icon: const Icon(Icons.close,
+                        size: 16, color: Colors.white38),
                     splashRadius: 18,
                     onPressed: _dismiss,
                     padding: EdgeInsets.zero,

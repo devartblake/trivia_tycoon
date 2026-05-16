@@ -70,7 +70,8 @@ class SpinWheelApiService {
       'spinId': spinId,
     };
     final json = _encryptedClient != null
-        ? await _encryptedClient!.postEncrypted('/arcade/spin/claim', body: body)
+        ? await _encryptedClient!
+            .postEncrypted('/arcade/spin/claim', body: body)
         : await _apiService.post('/arcade/spin/claim', body: body);
     return SpinClaimResponse.fromJson(json);
   }

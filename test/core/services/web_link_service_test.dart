@@ -10,7 +10,8 @@ import 'package:trivia_tycoon/core/services/web_link_service.dart';
 // Helpers
 // ---------------------------------------------------------------------------
 
-WebLinkService _svc(MockClientHandler handler, {String baseUrl = 'https://api.test'}) {
+WebLinkService _svc(MockClientHandler handler,
+    {String baseUrl = 'https://api.test'}) {
   return WebLinkService(
     httpClient: MockClient(handler),
     apiBaseUrl: baseUrl,
@@ -19,7 +20,8 @@ WebLinkService _svc(MockClientHandler handler, {String baseUrl = 'https://api.te
 }
 
 http.Response _json(Map<String, dynamic> body, {int status = 200}) =>
-    http.Response(jsonEncode(body), status, headers: {'content-type': 'application/json'});
+    http.Response(jsonEncode(body), status,
+        headers: {'content-type': 'application/json'});
 
 http.Response _error(int status) => http.Response('{"error":"fail"}', status);
 
@@ -66,7 +68,8 @@ void main() {
 
   group('generateQrToken()', () {
     test('success returns QrTokenResponse', () async {
-      final svc = _svc((_) async => _json({'qrToken': 'abc123', 'expiresIn': 120}));
+      final svc =
+          _svc((_) async => _json({'qrToken': 'abc123', 'expiresIn': 120}));
       final r = await svc.generateQrToken();
       expect(r.qrToken, 'abc123');
       expect(r.expiresIn, 120);
@@ -120,7 +123,8 @@ void main() {
     });
 
     test('returns consumed status with sessionToken', () async {
-      final svc = _svc((_) async => _json({'status': 'consumed', 'sessionToken': 'ses-123'}));
+      final svc = _svc((_) async =>
+          _json({'status': 'consumed', 'sessionToken': 'ses-123'}));
       final r = await svc.pollQrStatus('token-xyz');
       expect(r.status, QrLinkStatus.consumed);
       expect(r.sessionToken, 'ses-123');
@@ -227,7 +231,8 @@ void main() {
 
     test('throws WebLinkException on HTTP error', () {
       final svc = _svc((_) async => _error(401));
-      expect(svc.authenticateWithGoogleToken('t'), throwsA(isA<WebLinkException>()));
+      expect(svc.authenticateWithGoogleToken('t'),
+          throwsA(isA<WebLinkException>()));
     });
   });
 
@@ -237,7 +242,8 @@ void main() {
 
   group('generateLinkCode()', () {
     test('returns LinkCodeResponse on success', () async {
-      final svc = _svc((_) async => _json({'code': 'ABC123', 'expiresIn': 600}));
+      final svc =
+          _svc((_) async => _json({'code': 'ABC123', 'expiresIn': 600}));
       final r = await svc.generateLinkCode();
       expect(r.code, 'ABC123');
       expect(r.expiresIn, 600);

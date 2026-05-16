@@ -23,7 +23,8 @@ import 'web_link/qr_link_widget.dart';
 
 // Platform check helper — avoids importing dart:io on web
 bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
-bool get _isAndroid => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+bool get _isAndroid =>
+    !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
 /// User data model for mock authentication
 class MockUser {
@@ -797,7 +798,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         const SizedBox(height: 16),
 
                         // Native game platform login (iOS: Game Center, Android: Play Games)
-                        if ((_isIOS || _isAndroid) && ConfigService.useBackendAuth)
+                        if ((_isIOS || _isAndroid) &&
+                            ConfigService.useBackendAuth)
                           _buildNativeGameLoginButton(),
                         const SizedBox(height: 16),
 
@@ -1164,8 +1166,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           SizedBox(
             height: 48,
             child: ElevatedButton.icon(
-              onPressed:
-                  _isGoogleWebLoading ? null : _handleGoogleWebSignIn,
+              onPressed: _isGoogleWebLoading ? null : _handleGoogleWebSignIn,
               icon: _isGoogleWebLoading
                   ? const SizedBox(
                       width: 16,
@@ -1221,7 +1222,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   ),
                   maxLength: 6,
                   textCapitalization: TextCapitalization.characters,
-                  buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
+                  buildCounter: (_,
+                          {required currentLength,
+                          required isFocused,
+                          maxLength}) =>
                       null,
                 ),
               ),
@@ -1231,8 +1235,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6366F1),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
@@ -1272,14 +1276,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
   Widget _buildNativeGameLoginButton() {
     final isIOS = _isIOS;
-    final label = isIOS ? 'Continue with Game Center' : 'Continue with Play Games';
+    final label =
+        isIOS ? 'Continue with Game Center' : 'Continue with Play Games';
     final icon = isIOS ? FontAwesomeIcons.gamepad : FontAwesomeIcons.google;
 
     return SizedBox(
       height: 50,
       child: OutlinedButton.icon(
-        onPressed:
-            (_isGameLoginLoading || _isLoading) ? null : _handleGamePlatformLogin,
+        onPressed: (_isGameLoginLoading || _isLoading)
+            ? null
+            : _handleGamePlatformLogin,
         icon: _isGameLoginLoading
             ? const SizedBox(
                 width: 18,
@@ -1300,7 +1306,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         ),
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Color(0xFF6366F1), width: 1.5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.08),
         ),
       ),

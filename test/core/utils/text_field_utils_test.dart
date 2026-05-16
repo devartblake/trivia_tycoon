@@ -14,8 +14,7 @@ void main() {
     });
 
     test('all values are distinct', () {
-      expect(
-          LoginUserType.values.toSet().length, LoginUserType.values.length);
+      expect(LoginUserType.values.toSet().length, LoginUserType.values.length);
     });
 
     test('contains email', () {
@@ -75,8 +74,8 @@ void main() {
     });
 
     test('phone → AutofillHints.telephoneNumber', () {
-      expect(getAutofillHints(LoginUserType.phone),
-          AutofillHints.telephoneNumber);
+      expect(
+          getAutofillHints(LoginUserType.phone), AutofillHints.telephoneNumber);
     });
 
     test('intlPhone → AutofillHints.telephoneNumber', () {

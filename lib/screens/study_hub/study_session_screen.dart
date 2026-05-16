@@ -85,8 +85,8 @@ class _StudySessionScreenState extends ConsumerState<StudySessionScreen> {
             flashcardAction: action,
             answerRevealed: _answerRevealed,
             currentQuestionIndex: _session.currentQuestionIndex,
-            isCompleted: _session.currentQuestionIndex + 1 >=
-                _session.questionCount,
+            isCompleted:
+                _session.currentQuestionIndex + 1 >= _session.questionCount,
           );
       if (mounted) {
         setState(() {
@@ -315,16 +315,16 @@ class _SelfTestView extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      color ?? const Color(0xFF1E293B),
+                  backgroundColor: color ?? const Color(0xFF1E293B),
                   foregroundColor: Colors.white,
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                onPressed: (revealed || loading) ? null : () => onSelect(opt.id),
+                onPressed:
+                    (revealed || loading) ? null : () => onSelect(opt.id),
                 child: Text(opt.text),
               ),
             );
@@ -350,7 +350,8 @@ class _CompletedView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.check_circle, color: Color(0xFF10B981), size: 72),
+              const Icon(Icons.check_circle,
+                  color: Color(0xFF10B981), size: 72),
               const SizedBox(height: 20),
               const Text(
                 'Session Complete!',
@@ -369,8 +370,8 @@ class _CompletedView extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6366F1),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 32, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),

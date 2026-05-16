@@ -87,14 +87,13 @@ class HexAxisOverlayPainter extends CustomPainter {
     _drawAxisLine(canvas, sAxisPts, sPaint, horizontal: false);
   }
 
-  void _drawAxisLine(
-      Canvas canvas, List<Offset> pts, Paint paint,
+  void _drawAxisLine(Canvas canvas, List<Offset> pts, Paint paint,
       {required bool horizontal}) {
     if (pts.length < 2) return;
     // Sort by the dominant axis coordinate for clean sequential segments
     final sorted = List<Offset>.from(pts)
-      ..sort((a, b) =>
-          horizontal ? a.dx.compareTo(b.dx) : a.dy.compareTo(b.dy));
+      ..sort(
+          (a, b) => horizontal ? a.dx.compareTo(b.dx) : a.dy.compareTo(b.dy));
 
     final path = Path()..moveTo(sorted.first.dx, sorted.first.dy);
     for (int i = 1; i < sorted.length; i++) {

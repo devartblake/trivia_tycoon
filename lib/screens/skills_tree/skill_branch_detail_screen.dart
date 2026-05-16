@@ -39,6 +39,7 @@ class _SkillBranchDetailScreenState
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
   static const int _maxInitialStepIndex = 9999;
+
   /// Radius used for the fallback circle layout when node positions are absent.
   static const double _fallbackLayoutRadius = 260.0;
 
@@ -153,7 +154,8 @@ class _SkillBranchDetailScreenState
 
   int? _readQueryStep() {
     try {
-      return int.tryParse(GoRouterState.of(context).uri.queryParameters['step'] ?? '');
+      return int.tryParse(
+          GoRouterState.of(context).uri.queryParameters['step'] ?? '');
     } catch (_) {
       return null;
     }
@@ -182,7 +184,9 @@ class _SkillBranchDetailScreenState
   }
 
   void _hydrateInitialStepFromQueryOrSaved(List<String> pathIds) {
-    if (_initialStepHydrated || _initialStepHydrationPending || pathIds.isEmpty) {
+    if (_initialStepHydrated ||
+        _initialStepHydrationPending ||
+        pathIds.isEmpty) {
       return;
     }
     final branchId = widget.branchId;
@@ -196,7 +200,8 @@ class _SkillBranchDetailScreenState
           pathSnapshot.isEmpty ||
           hydrationToken != _initialStepHydrationToken ||
           widget.branchId != branchId ||
-          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+          !_pathIdsMatch(
+              ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
         return;
       }
       _initialStepHydrated = true;
@@ -216,7 +221,8 @@ class _SkillBranchDetailScreenState
           pathSnapshot.isEmpty ||
           hydrationToken != _initialStepHydrationToken ||
           widget.branchId != branchId ||
-          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+          !_pathIdsMatch(
+              ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
         return;
       }
 
@@ -505,8 +511,8 @@ class _SkillBranchDetailScreenState
                           cooldownLabel == null
                               ? 'Cost: ${node.cost} • Tier ${node.tier}'
                               : 'Cost: ${node.cost} • Tier ${node.tier} • $cooldownLabel',
-                          style:
-                              const TextStyle(color: Colors.white70, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 12),
                         ),
                         trailing: node.unlocked
                             ? cooldownChipLabel == null
@@ -639,8 +645,8 @@ class _SkillBranchDetailScreenState
                         'Cost: ${node.cost} XP • $status',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(color: Colors.white70, fontSize: 12),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 12),
                       ),
                     ],
                   ),
@@ -722,7 +728,9 @@ class _SkillBranchDetailScreenState
     final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
-    if (pathIds.isNotEmpty && _pathIndex >= pathIds.length && !_stepClampPending) {
+    if (pathIds.isNotEmpty &&
+        _pathIndex >= pathIds.length &&
+        !_stepClampPending) {
       _stepClampPending = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _stepClampPending = false;
@@ -861,8 +869,8 @@ class _SkillBranchDetailScreenState
                           _transform.value = _transform.value.scaled(1.15)),
                       onOut: () => setState(() =>
                           _transform.value = _transform.value.scaled(0.87)),
-                      onReset: () => setState(() => _transform.value =
-                          (vmath.Matrix4.identity()
+                      onReset: () => setState(
+                          () => _transform.value = (vmath.Matrix4.identity()
                             ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
                             ..scale(0.9, 0.9))),
                     ),

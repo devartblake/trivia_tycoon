@@ -46,8 +46,7 @@ void main() {
     });
 
     test('parses description', () {
-      expect(
-          TierModel.fromJson(_baseJson(description: 'Top tier')).description,
+      expect(TierModel.fromJson(_baseJson(description: 'Top tier')).description,
           'Top tier');
     });
 
@@ -67,7 +66,8 @@ void main() {
     });
 
     test('parses isUnlocked', () {
-      expect(TierModel.fromJson(_baseJson(isUnlocked: true)).isUnlocked, isTrue);
+      expect(
+          TierModel.fromJson(_baseJson(isUnlocked: true)).isUnlocked, isTrue);
     });
 
     test('isUnlocked defaults to false when absent', () {
@@ -103,8 +103,8 @@ void main() {
     });
 
     test('parses icon codePoint', () {
-      final tier = TierModel.fromJson(
-          _baseJson(icon: Icons.military_tech.codePoint));
+      final tier =
+          TierModel.fromJson(_baseJson(icon: Icons.military_tech.codePoint));
       expect(tier.icon.codePoint, Icons.military_tech.codePoint);
     });
   });
@@ -115,8 +115,8 @@ void main() {
 
   group('TierModel.fromJson — unlockedAt', () {
     test('parses unlockedAt', () {
-      final tier = TierModel.fromJson(
-          _baseJson(unlockedAt: '2025-06-01T00:00:00.000Z'));
+      final tier =
+          TierModel.fromJson(_baseJson(unlockedAt: '2025-06-01T00:00:00.000Z'));
       expect(tier.unlockedAt, isNotNull);
       expect(tier.unlockedAt!.month, 6);
     });
@@ -152,8 +152,8 @@ void main() {
 
   group('TierModel.toJson', () {
     test('serializes icon as codePoint int', () {
-      final tier = TierModel.fromJson(
-          _baseJson(icon: Icons.military_tech.codePoint));
+      final tier =
+          TierModel.fromJson(_baseJson(icon: Icons.military_tech.codePoint));
       expect(tier.toJson()['icon'], isA<int>());
     });
 
@@ -163,8 +163,8 @@ void main() {
     });
 
     test('serializes unlockedAt as ISO string when set', () {
-      final tier = TierModel.fromJson(
-          _baseJson(unlockedAt: '2025-06-01T00:00:00.000Z'));
+      final tier =
+          TierModel.fromJson(_baseJson(unlockedAt: '2025-06-01T00:00:00.000Z'));
       expect(tier.toJson()['unlockedAt'], isA<String>());
     });
 
@@ -216,8 +216,7 @@ void main() {
     });
 
     test('copies primaryColor', () {
-      expect(
-          base.copyWith(primaryColor: const Color(0xFFFF0000)).primaryColor,
+      expect(base.copyWith(primaryColor: const Color(0xFFFF0000)).primaryColor,
           const Color(0xFFFF0000));
     });
 

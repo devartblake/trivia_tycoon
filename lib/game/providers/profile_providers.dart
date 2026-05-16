@@ -168,7 +168,8 @@ final backendProfileSocialServiceProvider =
     Provider<BackendProfileSocialService>((ref) {
   final apiService = ref.watch(apiServiceProvider);
   final encryptedClient = ref.watch(encryptedApiClientProvider);
-  return BackendProfileSocialService(apiService, encryptedClient: encryptedClient);
+  return BackendProfileSocialService(apiService,
+      encryptedClient: encryptedClient);
 });
 
 final profileLoadoutProvider =

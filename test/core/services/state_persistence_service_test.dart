@@ -298,8 +298,7 @@ void main() {
       expect(await service.hasRecoverableData(), isTrue);
     });
 
-    test(
-        'returns true when crash flag is set and pending actions exist',
+    test('returns true when crash flag is set and pending actions exist',
         () async {
       final box = await Hive.openBox('app_persistence');
       await box.put('crash_recovery_flag', true);

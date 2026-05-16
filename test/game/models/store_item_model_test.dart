@@ -58,8 +58,7 @@ void main() {
     });
 
     test('parses sku', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(sku: 'SKU_ABC')).sku, 'SKU_ABC');
+      expect(StoreItemModel.fromJson(_baseJson(sku: 'SKU_ABC')).sku, 'SKU_ABC');
     });
 
     test('sku is null when absent', () {
@@ -108,8 +107,7 @@ void main() {
     });
 
     test('parses currency', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(currency: 'diamonds')).currency,
+      expect(StoreItemModel.fromJson(_baseJson(currency: 'diamonds')).currency,
           'diamonds');
     });
 
@@ -120,8 +118,7 @@ void main() {
 
     test('parses displayPriceLabel', () {
       expect(
-          StoreItemModel.fromJson(
-                  _baseJson(displayPriceLabel: '200 coins'))
+          StoreItemModel.fromJson(_baseJson(displayPriceLabel: '200 coins'))
               .displayPriceLabel,
           '200 coins');
     });
@@ -132,33 +129,28 @@ void main() {
 
     test('parses requiresExternalCheckout true', () {
       expect(
-          StoreItemModel.fromJson(
-                  _baseJson(requiresExternalCheckout: true))
+          StoreItemModel.fromJson(_baseJson(requiresExternalCheckout: true))
               .requiresExternalCheckout,
           isTrue);
     });
 
     test('requiresExternalCheckout defaults to false', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson()).requiresExternalCheckout,
+      expect(StoreItemModel.fromJson(_baseJson()).requiresExternalCheckout,
           isFalse);
     });
 
     test('parses isLimited', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(isLimited: true)).isLimited,
+      expect(StoreItemModel.fromJson(_baseJson(isLimited: true)).isLimited,
           isTrue);
     });
 
     test('parses isFeatured', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(isFeatured: true)).isFeatured,
+      expect(StoreItemModel.fromJson(_baseJson(isFeatured: true)).isFeatured,
           isTrue);
     });
 
     test('parses duration', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(duration: 1800)).duration, 1800);
+      expect(StoreItemModel.fromJson(_baseJson(duration: 1800)).duration, 1800);
     });
 
     test('duration is null when absent', () {
@@ -166,8 +158,7 @@ void main() {
     });
 
     test('parses type', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(type: 'consumable')).type,
+      expect(StoreItemModel.fromJson(_baseJson(type: 'consumable')).type,
           'consumable');
     });
 
@@ -192,26 +183,22 @@ void main() {
     });
 
     test('parses grantQuantity', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(grantQuantity: 3)).grantQuantity,
+      expect(StoreItemModel.fromJson(_baseJson(grantQuantity: 3)).grantQuantity,
           3);
     });
 
     test('parses maxPerPlayer', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(maxPerPlayer: 10)).maxPerPlayer,
+      expect(StoreItemModel.fromJson(_baseJson(maxPerPlayer: 10)).maxPerPlayer,
           10);
     });
 
     test('parses mediaKey', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(mediaKey: 'mk_001')).mediaKey,
+      expect(StoreItemModel.fromJson(_baseJson(mediaKey: 'mk_001')).mediaKey,
           'mk_001');
     });
 
     test('parses sortOrder', () {
-      expect(
-          StoreItemModel.fromJson(_baseJson(sortOrder: 7)).sortOrder, 7);
+      expect(StoreItemModel.fromJson(_baseJson(sortOrder: 7)).sortOrder, 7);
     });
 
     test('sortOrder is null when absent', () {
@@ -259,14 +246,15 @@ void main() {
 
   group('StoreItemModel.fromStoreCatalog — price mapping', () {
     test('priceCoins > 0 → price and currency=coins', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'priceCoins': 300});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'priceCoins': 300});
       expect(item.price, 300);
       expect(item.currency, 'coins');
     });
 
     test('priceDiamonds > 0 (no priceCoins) → price and currency=diamonds', () {
-      final item = StoreItemModel.fromStoreCatalog(
-          {'id': 's1', 'priceDiamonds': 50});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'priceDiamonds': 50});
       expect(item.price, 50);
       expect(item.currency, 'diamonds');
     });
@@ -278,7 +266,9 @@ void main() {
       expect(item.currency, 'coins');
     });
 
-    test('both zero + no displayItem → currency=usd, price=0, externalCheckout=true', () {
+    test(
+        'both zero + no displayItem → currency=usd, price=0, externalCheckout=true',
+        () {
       final item = StoreItemModel.fromStoreCatalog({'id': 's1'});
       expect(item.currency, 'usd');
       expect(item.price, 0);
@@ -286,10 +276,10 @@ void main() {
     });
 
     test('both zero + displayItem with price → uses displayItem price', () {
-      final display = StoreItemModel.fromJson(
-          _baseJson(price: 999, currency: 'coins'));
-      final item = StoreItemModel.fromStoreCatalog(
-          {'id': 's1'}, displayItem: display);
+      final display =
+          StoreItemModel.fromJson(_baseJson(price: 999, currency: 'coins'));
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1'}, displayItem: display);
       expect(item.price, 999);
       expect(item.currency, 'coins');
     });
@@ -313,13 +303,15 @@ void main() {
     });
 
     test('name from json', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'name': 'Rocket Pack'});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'name': 'Rocket Pack'});
       expect(item.name, 'Rocket Pack');
     });
 
     test('name falls back to displayItem.name', () {
       final display = StoreItemModel.fromJson(_baseJson(name: 'Display Name'));
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1'}, displayItem: display);
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1'}, displayItem: display);
       expect(item.name, 'Display Name');
     });
 
@@ -331,35 +323,41 @@ void main() {
 
   group('StoreItemModel.fromStoreCatalog — category and iconPath', () {
     test('category from itemType', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'avatar'});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'avatar'});
       expect(item.category, 'avatar');
     });
 
     test('default icon for powerup category', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'powerup'});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'powerup'});
       expect(item.iconPath, contains('power-up'));
     });
 
     test('default icon for avatar category', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'avatar'});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'avatar'});
       expect(item.iconPath, contains('avatar'));
     });
 
     test('default icon for theme category', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'theme'});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'theme'});
       expect(item.iconPath, contains('theme'));
     });
 
     test('default icon for currency category', () {
-      final item = StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'currency'});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'itemType': 'currency'});
       expect(item.iconPath, contains('coins'));
     });
 
     test('displayItem iconPath takes precedence', () {
-      final display = StoreItemModel.fromJson(
-          _baseJson(iconPath: 'assets/custom.png'));
+      final display =
+          StoreItemModel.fromJson(_baseJson(iconPath: 'assets/custom.png'));
       final item = StoreItemModel.fromStoreCatalog(
-          {'id': 's1', 'itemType': 'avatar'}, displayItem: display);
+          {'id': 's1', 'itemType': 'avatar'},
+          displayItem: display);
       expect(item.iconPath, 'assets/custom.png');
     });
   });
@@ -377,14 +375,13 @@ void main() {
     });
 
     test('parses maxPerPlayer', () {
-      final item = StoreItemModel.fromStoreCatalog(
-          {'id': 's1', 'maxPerPlayer': 3});
+      final item =
+          StoreItemModel.fromStoreCatalog({'id': 's1', 'maxPerPlayer': 3});
       expect(item.maxPerPlayer, 3);
     });
 
     test('owned from parameter', () {
-      final item = StoreItemModel.fromStoreCatalog(
-          {'id': 's1'}, owned: true);
+      final item = StoreItemModel.fromStoreCatalog({'id': 's1'}, owned: true);
       expect(item.owned, isTrue);
     });
   });

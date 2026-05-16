@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/helpers/mission_notification_helper.dart';
-import '../../game/state/hybrid_mission_state.dart'
-    hide currentUserIdProvider;
-import '../../game/providers/profile_providers.dart'
-    show currentUserIdProvider;
+import '../../game/state/hybrid_mission_state.dart' hide currentUserIdProvider;
+import '../../game/providers/profile_providers.dart' show currentUserIdProvider;
 
 class MissionsScreen extends ConsumerStatefulWidget {
   const MissionsScreen({super.key});

@@ -102,7 +102,8 @@ void main() {
 
     test('parses avatarUrl', () {
       expect(
-          ReceivedGift.fromJson(_json(avatarUrl: 'https://img/a.png')).avatarUrl,
+          ReceivedGift.fromJson(_json(avatarUrl: 'https://img/a.png'))
+              .avatarUrl,
           'https://img/a.png');
     });
 
@@ -115,7 +116,8 @@ void main() {
     });
 
     test('parses icon', () {
-      expect(ReceivedGift.fromJson(_json(icon: 'flash_on')).icon, Icons.flash_on);
+      expect(
+          ReceivedGift.fromJson(_json(icon: 'flash_on')).icon, Icons.flash_on);
     });
 
     test('unknown icon falls back to card_giftcard', () {
@@ -129,8 +131,7 @@ void main() {
     });
 
     test('parses timeLabel', () {
-      expect(
-          ReceivedGift.fromJson(_json(timeLabel: '1 day ago')).timeLabel,
+      expect(ReceivedGift.fromJson(_json(timeLabel: '1 day ago')).timeLabel,
           '1 day ago');
     });
 
@@ -185,8 +186,7 @@ void main() {
     });
 
     test('parses description', () {
-      expect(
-          SendableGift.fromJson(_json(description: '10 gems')).description,
+      expect(SendableGift.fromJson(_json(description: '10 gems')).description,
           '10 gems');
     });
 
@@ -195,8 +195,8 @@ void main() {
     });
 
     test('unknown icon falls back to card_giftcard', () {
-      expect(SendableGift.fromJson(_json(icon: 'unk')).icon,
-          Icons.card_giftcard);
+      expect(
+          SendableGift.fromJson(_json(icon: 'unk')).icon, Icons.card_giftcard);
     });
 
     test('parses cost', () {
@@ -250,7 +250,8 @@ void main() {
     });
 
     test('parses type', () {
-      expect(GiftHistoryItem.fromJson(_json(type: 'received')).type, 'received');
+      expect(
+          GiftHistoryItem.fromJson(_json(type: 'received')).type, 'received');
     });
 
     test('type defaults to "sent" when absent', () {
@@ -268,19 +269,17 @@ void main() {
     });
 
     test('parses giftName', () {
-      expect(
-          GiftHistoryItem.fromJson(_json(giftName: '1000 Coins')).giftName,
+      expect(GiftHistoryItem.fromJson(_json(giftName: '1000 Coins')).giftName,
           '1000 Coins');
     });
 
     test('parses status', () {
-      expect(GiftHistoryItem.fromJson(_json(status: 'Claimed')).status,
-          'Claimed');
+      expect(
+          GiftHistoryItem.fromJson(_json(status: 'Claimed')).status, 'Claimed');
     });
 
     test('parses icon', () {
-      expect(
-          GiftHistoryItem.fromJson(_json(icon: 'monetization_on')).icon,
+      expect(GiftHistoryItem.fromJson(_json(icon: 'monetization_on')).icon,
           Icons.monetization_on);
     });
   });
@@ -291,15 +290,16 @@ void main() {
 
   group('GiftStats.fromJson', () {
     test('parses string values', () {
-      final stats = GiftStats.fromJson(
-          {'received': '10', 'sent': '5', 'pending': '2'});
+      final stats =
+          GiftStats.fromJson({'received': '10', 'sent': '5', 'pending': '2'});
       expect(stats.received, '10');
       expect(stats.sent, '5');
       expect(stats.pending, '2');
     });
 
     test('coerces int values via toString()', () {
-      final stats = GiftStats.fromJson({'received': 10, 'sent': 5, 'pending': 2});
+      final stats =
+          GiftStats.fromJson({'received': 10, 'sent': 5, 'pending': 2});
       expect(stats.received, '10');
       expect(stats.sent, '5');
       expect(stats.pending, '2');

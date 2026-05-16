@@ -38,7 +38,8 @@ class FeatureDisabledException implements Exception {
   final String feature;
   final String message;
 
-  const FeatureDisabledException({required this.feature, required this.message});
+  const FeatureDisabledException(
+      {required this.feature, required this.message});
 
   @override
   String toString() => 'FeatureDisabledException[$feature]: $message';
@@ -151,7 +152,9 @@ class ApiService {
       final body = response.data;
       final items = body is List
           ? body
-          : (body is Map ? body['questions'] ?? body['items'] ?? const [] : const []);
+          : (body is Map
+              ? body['questions'] ?? body['items'] ?? const []
+              : const []);
       return List<Map<String, dynamic>>.from(items);
     });
   }

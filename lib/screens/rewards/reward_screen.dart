@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
-import '../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
+import '../../game/providers/game_providers.dart'
+    show rewardSettingsServiceProvider;
 import '../../game/providers/profile_providers.dart'
     show coinBalanceProvider, refreshAuthoritativeWallet, walletProvider;
 import '../../game/providers/reward_backend_providers.dart';
@@ -144,7 +145,8 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
     var newBalance = 0;
 
     try {
-      final claim = await ref.read(rewardsApiServiceProvider).claimDailyReward();
+      final claim =
+          await ref.read(rewardsApiServiceProvider).claimDailyReward();
       coinsEarned = claim.coinsGranted;
       newBalance = claim.newBalance;
       await refreshAuthoritativeWallet(ref, backendCoinBalance: newBalance);

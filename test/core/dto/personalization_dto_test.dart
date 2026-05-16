@@ -68,12 +68,14 @@ void main() {
     });
 
     test('categoryStrengths empty when non-Map', () {
-      final p = PlayerMindProfileDto.fromJson({'categoryStrengths': 'not-a-map'});
+      final p =
+          PlayerMindProfileDto.fromJson({'categoryStrengths': 'not-a-map'});
       expect(p.categoryStrengths, isEmpty);
     });
 
     test('lastCalculatedAt stored when present', () {
-      final p = PlayerMindProfileDto.fromJson({'lastCalculatedAt': '2025-01-01'});
+      final p =
+          PlayerMindProfileDto.fromJson({'lastCalculatedAt': '2025-01-01'});
       expect(p.lastCalculatedAt, '2025-01-01');
     });
   });
@@ -105,12 +107,15 @@ void main() {
     });
 
     test('shouldReducePushBadges true for notificationFatigueScore = 0.7', () {
-      final p = PlayerMindProfileDto.fromJson({'notificationFatigueScore': 0.7});
+      final p =
+          PlayerMindProfileDto.fromJson({'notificationFatigueScore': 0.7});
       expect(p.shouldReducePushBadges, isTrue);
     });
 
-    test('shouldReducePushBadges false for notificationFatigueScore = 0.69', () {
-      final p = PlayerMindProfileDto.fromJson({'notificationFatigueScore': 0.69});
+    test('shouldReducePushBadges false for notificationFatigueScore = 0.69',
+        () {
+      final p =
+          PlayerMindProfileDto.fromJson({'notificationFatigueScore': 0.69});
       expect(p.shouldReducePushBadges, isFalse);
     });
   });
@@ -121,7 +126,8 @@ void main() {
 
   group('CoachBriefDto', () {
     test('fromJson parses title and message', () {
-      final b = CoachBriefDto.fromJson({'title': 'Keep going!', 'message': 'You are doing great.'});
+      final b = CoachBriefDto.fromJson(
+          {'title': 'Keep going!', 'message': 'You are doing great.'});
       expect(b.title, 'Keep going!');
       expect(b.message, 'You are doing great.');
     });
@@ -137,7 +143,8 @@ void main() {
     });
 
     test('fromJson explicit tone stored', () {
-      final b = CoachBriefDto.fromJson({'title': 'X', 'message': 'Y', 'tone': 'urgent'});
+      final b = CoachBriefDto.fromJson(
+          {'title': 'X', 'message': 'Y', 'tone': 'urgent'});
       expect(b.tone, 'urgent');
     });
   });
@@ -179,7 +186,8 @@ void main() {
     });
 
     test('fromJson explicit priority stored', () {
-      final r = PlayerRecommendationDto.fromJson({'id': 'r1', 'type': 'x', 'priority': 5});
+      final r = PlayerRecommendationDto.fromJson(
+          {'id': 'r1', 'type': 'x', 'priority': 5});
       expect(r.priority, 5);
     });
   });
@@ -274,7 +282,8 @@ void main() {
 
   group('ExperimentAssignmentDto', () {
     test('fromJson parses experimentKey', () {
-      final e = ExperimentAssignmentDto.fromJson({'experimentKey': 'exp_A', 'variantKey': 'v1'});
+      final e = ExperimentAssignmentDto.fromJson(
+          {'experimentKey': 'exp_A', 'variantKey': 'v1'});
       expect(e.experimentKey, 'exp_A');
     });
 
@@ -302,7 +311,8 @@ void main() {
     });
 
     test('getBool returns fallback when key absent', () {
-      final e = ExperimentAssignmentDto.fromJson({'experimentKey': 'x', 'config': {}});
+      final e = ExperimentAssignmentDto.fromJson(
+          {'experimentKey': 'x', 'config': {}});
       expect(e.getBool('missing', fallback: true), isTrue);
     });
 
@@ -353,7 +363,8 @@ void main() {
 
   group('PlayerExperimentsDto', () {
     test('fromJson parses playerId', () {
-      final d = PlayerExperimentsDto.fromJson({'playerId': 'p1', 'assignments': []});
+      final d =
+          PlayerExperimentsDto.fromJson({'playerId': 'p1', 'assignments': []});
       expect(d.playerId, 'p1');
     });
 

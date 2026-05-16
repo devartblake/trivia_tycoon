@@ -302,8 +302,8 @@ void main() {
 
   group('PVPChallenge — timeRemaining', () {
     test('returns positive duration for future expiresAt', () {
-      final c = _challenge(
-          expiresAt: DateTime.now().add(const Duration(hours: 2)));
+      final c =
+          _challenge(expiresAt: DateTime.now().add(const Duration(hours: 2)));
       expect(c.timeRemaining.inMinutes, greaterThan(100));
     });
 
@@ -389,7 +389,8 @@ void main() {
     });
 
     test('copies category', () {
-      final updated = _challenge(category: 'science').copyWith(category: 'math');
+      final updated =
+          _challenge(category: 'science').copyWith(category: 'math');
       expect(updated.category, 'math');
     });
 

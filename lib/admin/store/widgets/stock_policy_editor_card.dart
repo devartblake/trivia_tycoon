@@ -73,8 +73,8 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
             const SizedBox(height: 16),
             StockIntervalSelector(
               value: _model.resetInterval,
-              onChanged: (v) =>
-                  setState(() => _model = _model.copyWith(resetInterval: v, clearResetInterval: v == null)),
+              onChanged: (v) => setState(() => _model = _model.copyWith(
+                  resetInterval: v, clearResetInterval: v == null)),
             ),
             const SizedBox(height: 16),
             _buildExpiryRow(),
@@ -82,7 +82,9 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
             _buildToggles(),
             if (_error != null) ...[
               const SizedBox(height: 8),
-              Text(_error!, style: const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
+              Text(_error!,
+                  style:
+                      const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
             ],
             const SizedBox(height: 16),
             _buildActions(),
@@ -111,8 +113,8 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
             children: [
               Text(
                 _model.itemTitle.isNotEmpty ? _model.itemTitle : _model.sku,
-                style: const TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               Text(
                 'SKU: ${_model.sku}  ·  ${_model.itemType}',
@@ -155,9 +157,8 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
                 fontSize: 12,
               ),
               side: BorderSide(
-                color: selected
-                    ? const Color(0xFF6366F1)
-                    : Colors.grey.shade300,
+                color:
+                    selected ? const Color(0xFF6366F1) : Colors.grey.shade300,
               ),
             );
           }).toList(),
@@ -198,8 +199,7 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
                   EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             ),
             onChanged: (v) => setState(() => _model = _model.copyWith(
-                minimumLevel: int.tryParse(v),
-                clearMinimumLevel: v.isEmpty)),
+                minimumLevel: int.tryParse(v), clearMinimumLevel: v.isEmpty)),
           ),
         ),
       ],
@@ -307,8 +307,8 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
     );
     if (picked != null) {
       setState(() => _model = _model.copyWith(
-          expiresAt: DateTime(picked.year, picked.month, picked.day,
-              23, 59, 59)));
+          expiresAt:
+              DateTime(picked.year, picked.month, picked.day, 23, 59, 59)));
     }
   }
 
@@ -362,8 +362,7 @@ class _StockPolicyEditorCardState extends State<StockPolicyEditorCard> {
       await widget.onReset!();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Stock reset.'),
-            backgroundColor: Color(0xFF10B981)));
+            content: Text('Stock reset.'), backgroundColor: Color(0xFF10B981)));
       }
     } catch (e) {
       if (mounted) setState(() => _error = 'Reset failed: $e');

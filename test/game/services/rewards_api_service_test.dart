@@ -360,7 +360,8 @@ void main() {
     });
 
     test('getDailyConfig propagates error from stub', () async {
-      await expectLater(svc.getDailyConfig(), throwsA(isA<UnimplementedError>()));
+      await expectLater(
+          svc.getDailyConfig(), throwsA(isA<UnimplementedError>()));
     });
 
     test('getDailyStatus propagates error from stub', () async {

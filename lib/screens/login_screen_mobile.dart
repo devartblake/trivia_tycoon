@@ -18,8 +18,7 @@ import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/steps/constants.dart';
 
 // Platform check helpers — no dart:io needed; kIsWeb is always false here.
-bool get _isIOS =>
-    !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 bool get _isAndroid =>
     !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
@@ -167,7 +166,8 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
       // games_services not available in this build variant — ignore silently.
     } on PlatformException catch (e) {
       // Play Games / Game Center not configured or unavailable — show form.
-      debugPrint('[LoginScreenMobile] Platform game login unavailable: ${e.code}');
+      debugPrint(
+          '[LoginScreenMobile] Platform game login unavailable: ${e.code}');
     } catch (_) {
       // Any other error — fall through to manual login form.
     }
@@ -473,7 +473,6 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                     child: Image.asset(tSynaptixAppLogo, height: 80),
                   ),
                   const SizedBox(height: 32),
-
                   Hero(
                     tag: Constants.titleTag,
                     child: Material(
@@ -502,7 +501,6 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
-
                   Form(
                     key: _formKey,
                     child: Column(
@@ -518,8 +516,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                             if (value == null || value.isEmpty) {
                               return 'Email is required';
                             }
-                            if (!value.contains('@') ||
-                                !value.contains('.')) {
+                            if (!value.contains('@') || !value.contains('.')) {
                               return 'Please enter a valid email';
                             }
                             return null;
@@ -586,15 +583,15 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                                       fillColor:
                                           WidgetStateProperty.resolveWith(
                                               (states) {
-                                        if (states.contains(
-                                            WidgetState.selected)) {
+                                        if (states
+                                            .contains(WidgetState.selected)) {
                                           return const Color(0xFF6366F1);
                                         }
                                         return Colors.transparent;
                                       }),
                                       side: BorderSide(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.3),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.3),
                                         width: 2,
                                       ),
                                     ),
@@ -723,14 +720,12 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                             ),
                             TextButton(
                               onPressed: () {
-                                setState(
-                                    () => _isSignUpMode = !_isSignUpMode);
+                                setState(() => _isSignUpMode = !_isSignUpMode);
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: const Size(0, 0),
-                                tapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               child: Text(
                                 _isSignUpMode ? 'Sign in' : 'Sign up',
@@ -784,8 +779,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            const Color(0xFF6366F1).withValues(alpha: 0.3),
+                        color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                         blurRadius: 50,
                         spreadRadius: 10,
                       ),
@@ -825,8 +819,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
             bottom: 40,
             right: 40,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(30),
@@ -896,28 +889,23 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
         fillColor: Colors.white.withValues(alpha: 0.05),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              const BorderSide(color: Color(0xFF6366F1), width: 2),
+          borderSide: const BorderSide(color: Color(0xFF6366F1), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              const BorderSide(color: Color(0xFFEF4444)),
+          borderSide: const BorderSide(color: Color(0xFFEF4444)),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              const BorderSide(color: Color(0xFFEF4444), width: 2),
+          borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -968,8 +956,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border:
-            Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: IconButton(
         onPressed: onPressed,
@@ -1000,8 +987,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                 height: 18,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
                 ),
               )
             : FaIcon(icon, size: 18, color: const Color(0xFF6366F1)),
@@ -1017,8 +1003,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
           side: const BorderSide(color: Color(0xFF6366F1), width: 1.5),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          backgroundColor:
-              const Color(0xFF6366F1).withValues(alpha: 0.08),
+          backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.08),
         ),
       ),
     );

@@ -93,4 +93,3 @@ final recommendationsProvider = FutureProvider.autoDispose
 /// Seeded from profile on first load; mutated by Settings.
 final personalizationEnabledProvider =
     StateProvider.family<bool, String>((ref, playerId) => true);
-

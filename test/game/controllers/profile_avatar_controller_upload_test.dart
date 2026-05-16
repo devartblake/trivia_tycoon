@@ -146,7 +146,8 @@ void main() {
     expect(controller.uploadError, isNotNull);
 
     // Rebuild controller with a succeeding upload service.
-    final successController = _controller(upload: _uploadService(putStatus: 200));
+    final successController =
+        _controller(upload: _uploadService(putStatus: 200));
     successController.imageFileForTesting = _sampleFile;
 
     // Second attempt succeeds — error is cleared.

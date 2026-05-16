@@ -7,8 +7,7 @@ void main() {
   late Directory tempDir;
 
   setUp(() async {
-    tempDir =
-        await Directory.systemTemp.createTemp('purchase_settings_test_');
+    tempDir = await Directory.systemTemp.createTemp('purchase_settings_test_');
     Hive.init(tempDir.path);
   });
 

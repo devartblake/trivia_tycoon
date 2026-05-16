@@ -52,7 +52,8 @@ class PlayerMindProfileDto {
     Map<String, double> _dmap(String key) {
       final raw = j[key];
       if (raw is! Map) return {};
-      return raw.map((k, v) => MapEntry(k.toString(), (v as num?)?.toDouble() ?? 0.0));
+      return raw.map(
+          (k, v) => MapEntry(k.toString(), (v as num?)?.toDouble() ?? 0.0));
     }
 
     return PlayerMindProfileDto(
@@ -190,7 +191,8 @@ class PlayerHomePersonalizationDto {
 
   /// Top 3 recommendations ordered by priority ASC (as per contract).
   List<PlayerRecommendationDto> get topRecommendations {
-    final sorted = [...recommendations]..sort((a, b) => a.priority.compareTo(b.priority));
+    final sorted = [...recommendations]
+      ..sort((a, b) => a.priority.compareTo(b.priority));
     return sorted.take(3).toList();
   }
 }

@@ -257,8 +257,10 @@ void main() {
     test('kEnergyMax is positive', () => expect(kEnergyMax, greaterThan(0)));
     test('kEnergyCasualCost < kEnergyMax',
         () => expect(kEnergyCasualCost, lessThan(kEnergyMax)));
-    test('kEnergyRankedCost >= kEnergyCasualCost',
-        () => expect(kEnergyRankedCost, greaterThanOrEqualTo(kEnergyCasualCost)));
+    test(
+        'kEnergyRankedCost >= kEnergyCasualCost',
+        () =>
+            expect(kEnergyRankedCost, greaterThanOrEqualTo(kEnergyCasualCost)));
     test('kEnergyPracticeCost is positive',
         () => expect(kEnergyPracticeCost, greaterThan(0)));
   });

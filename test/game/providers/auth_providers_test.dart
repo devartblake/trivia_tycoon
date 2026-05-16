@@ -121,10 +121,10 @@ void main() {
       addTearDown(container.dispose);
 
       await container.read(authStateProvider.notifier).signup(
-            'new@example.com',
-            'password',
-            {'username': 'newuser'},
-          );
+        'new@example.com',
+        'password',
+        {'username': 'newuser'},
+      );
 
       final state = container.read(authStateProvider);
       expect(state.isLoggedIn, isTrue);

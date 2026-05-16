@@ -36,8 +36,9 @@ class StockOverrideFormModel {
     return StockOverrideFormModel(
       playerId: playerId ?? this.playerId,
       sku: sku ?? this.sku,
-      overrideMaxQuantity:
-          clearQuantity ? null : (overrideMaxQuantity ?? this.overrideMaxQuantity),
+      overrideMaxQuantity: clearQuantity
+          ? null
+          : (overrideMaxQuantity ?? this.overrideMaxQuantity),
       overrideExpiresAt:
           clearExpiry ? null : (overrideExpiresAt ?? this.overrideExpiresAt),
       grantFreeItem: grantFreeItem ?? this.grantFreeItem,
@@ -50,7 +51,8 @@ class StockOverrideFormModel {
   Map<String, dynamic> toJson() => {
         if (playerId != null) 'playerId': playerId,
         'sku': sku,
-        if (overrideMaxQuantity != null) 'overrideMaxQuantity': overrideMaxQuantity,
+        if (overrideMaxQuantity != null)
+          'overrideMaxQuantity': overrideMaxQuantity,
         if (overrideExpiresAt != null)
           'overrideExpiresAt': overrideExpiresAt!.toUtc().toIso8601String(),
         'grantFreeItem': grantFreeItem,
@@ -109,16 +111,21 @@ class FlashSaleFormModel {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       purchaseCapPerUser: purchaseCapPerUser ?? this.purchaseCapPerUser,
-      discountPercent: clearDiscountPercent ? null : (discountPercent ?? this.discountPercent),
-      discountAmount: clearDiscountAmount ? null : (discountAmount ?? this.discountAmount),
-      eligibleCohort: clearCohort ? null : (eligibleCohort ?? this.eligibleCohort),
+      discountPercent: clearDiscountPercent
+          ? null
+          : (discountPercent ?? this.discountPercent),
+      discountAmount:
+          clearDiscountAmount ? null : (discountAmount ?? this.discountAmount),
+      eligibleCohort:
+          clearCohort ? null : (eligibleCohort ?? this.eligibleCohort),
       isActive: isActive ?? this.isActive,
     );
   }
 
   factory FlashSaleFormModel.fromJson(Map<String, dynamic> json) {
     // Backend (handoff 2026-04-26) uses startsAtUtc/endsAtUtc; legacy uses startTime/endTime.
-    final startRaw = json['startsAtUtc']?.toString() ?? json['startTime']?.toString();
+    final startRaw =
+        json['startsAtUtc']?.toString() ?? json['startTime']?.toString();
     final endRaw = json['endsAtUtc']?.toString() ?? json['endTime']?.toString();
     final now = DateTime.now().toUtc();
     return FlashSaleFormModel(
@@ -126,7 +133,9 @@ class FlashSaleFormModel {
       title: (json['title'] ?? json['reason'] ?? json['sku'] ?? '').toString(),
       linkedSku: (json['sku'] ?? json['linkedSku'] ?? '').toString(),
       startTime: startRaw != null ? DateTime.parse(startRaw) : now,
-      endTime: endRaw != null ? DateTime.parse(endRaw) : now.add(const Duration(days: 1)),
+      endTime: endRaw != null
+          ? DateTime.parse(endRaw)
+          : now.add(const Duration(days: 1)),
       purchaseCapPerUser: (json['purchaseCapPerUser'] as num?)?.toInt() ?? 1,
       discountPercent: (json['discountPercent'] as num?)?.toDouble(),
       discountAmount: (json['discountAmount'] as num?)?.toInt(),

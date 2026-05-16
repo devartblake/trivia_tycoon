@@ -135,9 +135,9 @@ class _LinkCodeScreenState extends ConsumerState<LinkCodeScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-
             if (_isLoading)
-              const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+              const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF6366F1)))
             else if (_errorMessage != null) ...[
               Text(
                 _errorMessage!,
@@ -162,7 +162,8 @@ class _LinkCodeScreenState extends ConsumerState<LinkCodeScreen> {
               GestureDetector(
                 onTap: _copyCode,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                   decoration: BoxDecoration(
                     color: const Color(0xFF6366F1).withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),

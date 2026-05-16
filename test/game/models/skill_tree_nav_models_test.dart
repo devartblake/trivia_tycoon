@@ -267,7 +267,9 @@ void main() {
 
     test('category assigned from branchId', () {
       final vm = _makeBranch(
-        nodeMaps: [{'id': 'n1'}],
+        nodeMaps: [
+          {'id': 'n1'}
+        ],
         branchId: 'combat',
       );
       final graph = vm.toGraph();
@@ -277,7 +279,10 @@ void main() {
     test('edges created from requires field', () {
       final vm = _makeBranch(nodeMaps: [
         {'id': 'root'},
-        {'id': 'child', 'requires': ['root']},
+        {
+          'id': 'child',
+          'requires': ['root']
+        },
       ]);
       final graph = vm.toGraph();
       expect(graph.edges.length, 1);
@@ -289,7 +294,10 @@ void main() {
       final vm = _makeBranch(nodeMaps: [
         {'id': 'a'},
         {'id': 'b'},
-        {'id': 'c', 'requires': ['a', 'b']},
+        {
+          'id': 'c',
+          'requires': ['a', 'b']
+        },
       ]);
       final graph = vm.toGraph();
       expect(graph.edges.length, 2);
@@ -329,7 +337,10 @@ void main() {
     test('root node gets tier 0', () {
       final g = _graph([
         {'id': 'root'},
-        {'id': 'child', 'requires': ['root']},
+        {
+          'id': 'child',
+          'requires': ['root']
+        },
       ]);
       expect(_node(g, 'root').tier, 0);
     });
@@ -337,7 +348,10 @@ void main() {
     test('direct child of root gets tier 1', () {
       final g = _graph([
         {'id': 'root'},
-        {'id': 'child', 'requires': ['root']},
+        {
+          'id': 'child',
+          'requires': ['root']
+        },
       ]);
       expect(_node(g, 'child').tier, 1);
     });
@@ -345,8 +359,14 @@ void main() {
     test('grandchild gets tier 2', () {
       final g = _graph([
         {'id': 'root'},
-        {'id': 'mid', 'requires': ['root']},
-        {'id': 'leaf', 'requires': ['mid']},
+        {
+          'id': 'mid',
+          'requires': ['root']
+        },
+        {
+          'id': 'leaf',
+          'requires': ['mid']
+        },
       ]);
       expect(_node(g, 'leaf').tier, 2);
     });
@@ -358,8 +378,14 @@ void main() {
       final g = _graph([
         {'id': 'a'},
         {'id': 'b'},
-        {'id': 'c', 'requires': ['a']},
-        {'id': 'd', 'requires': ['c', 'b']},
+        {
+          'id': 'c',
+          'requires': ['a']
+        },
+        {
+          'id': 'd',
+          'requires': ['c', 'b']
+        },
       ]);
       expect(_node(g, 'a').tier, 0);
       expect(_node(g, 'b').tier, 0);
@@ -368,7 +394,9 @@ void main() {
     });
 
     test('isolated node (no edges) gets tier 0', () {
-      final g = _graph([{'id': 'alone'}]);
+      final g = _graph([
+        {'id': 'alone'}
+      ]);
       expect(_node(g, 'alone').tier, 0);
     });
 
@@ -403,8 +431,7 @@ void main() {
 
   group('SkillTreeGroupVM', () {
     SkillBranchVM _branch(
-        {required String id,
-        required List<Map<String, dynamic>> nodes}) =>
+            {required String id, required List<Map<String, dynamic>> nodes}) =>
         SkillBranchVM(
           branchId: id,
           groupId: SkillTreeGroupId.combat,

@@ -274,12 +274,14 @@ void main() {
           uri: uri,
         );
         expect(nonces.add(enc.nonce), isTrue,
-            reason: 'nonce must be unique across all encryptions (got duplicate at index $i)');
+            reason:
+                'nonce must be unique across all encryptions (got duplicate at index $i)');
       }
       expect(nonces.length, 50);
     });
 
-    test('replayed ciphertext from one nonce cannot be decrypted with a different nonce',
+    test(
+        'replayed ciphertext from one nonce cannot be decrypted with a different nonce',
         () async {
       final body = {'userId': 'u-1'};
 
@@ -313,11 +315,13 @@ void main() {
           uri: uri,
         ),
         throwsA(isA<SecureDecryptException>()),
-        reason: 'replaying a ciphertext with a different session nonce must fail',
+        reason:
+            'replaying a ciphertext with a different session nonce must fail',
       );
     });
 
-    test('ciphertext encrypted with session-A key fails to decrypt with session-B key',
+    test(
+        'ciphertext encrypted with session-A key fails to decrypt with session-B key',
         () async {
       final keyA = _randomKey();
       final keyB = _randomKey();
@@ -333,7 +337,8 @@ void main() {
       await expectLater(
         () => codec.decryptJson(
           encryptedBody: enc.toJson(),
-          keyBytes: keyB, // wrong session key — simulates session-A payload replayed in session-B
+          keyBytes:
+              keyB, // wrong session key — simulates session-A payload replayed in session-B
           method: 'DELETE',
           uri: uri,
         ),
@@ -342,7 +347,8 @@ void main() {
       );
     });
 
-    test('AAD binding: ciphertext for endpoint A cannot be replayed at endpoint B',
+    test(
+        'AAD binding: ciphertext for endpoint A cannot be replayed at endpoint B',
         () async {
       final uriA = Uri.parse('https://api.example.com/friends/request');
       final uriB = Uri.parse('https://api.example.com/friends/accept');
@@ -363,11 +369,13 @@ void main() {
           uri: uriB, // different endpoint — AAD mismatch
         ),
         throwsA(isA<SecureDecryptException>()),
-        reason: 'replay to a different endpoint must fail due to AAD URI binding',
+        reason:
+            'replay to a different endpoint must fail due to AAD URI binding',
       );
     });
 
-    test('AAD binding: ciphertext for POST cannot be replayed as DELETE', () async {
+    test('AAD binding: ciphertext for POST cannot be replayed as DELETE',
+        () async {
       final body = {'resourceId': 'r-99'};
 
       final enc = await codec.encryptJson(
@@ -385,7 +393,8 @@ void main() {
           uri: uri,
         ),
         throwsA(isA<SecureDecryptException>()),
-        reason: 'replaying a POST payload as a DELETE must fail due to AAD method binding',
+        reason:
+            'replaying a POST payload as a DELETE must fail due to AAD method binding',
       );
     });
   });
@@ -435,7 +444,8 @@ void main() {
       expect(base.nextSequence, 5, reason: 'original must be immutable');
     });
 
-    test('toJson / fromJson round-trip preserves all fields including nextSequence',
+    test(
+        'toJson / fromJson round-trip preserves all fields including nextSequence',
         () {
       final original = SecureSession(
         sessionId: 'session-abc',
@@ -475,7 +485,8 @@ void main() {
               : DateTime.now().toUtc().add(const Duration(minutes: 20)),
         );
 
-    test('load returns null when storage has no key — web fallback / fresh install',
+    test(
+        'load returns null when storage has no key — web fallback / fresh install',
         () async {
       final store = SecureSessionStore(_MemorySecureStorage());
       expect(await store.load(), isNull);
@@ -532,7 +543,8 @@ void main() {
           reason: 'renewal must overwrite the previous session');
     });
 
-    test('expired session is persisted and flagged correctly on reload', () async {
+    test('expired session is persisted and flagged correctly on reload',
+        () async {
       final store = SecureSessionStore(_MemorySecureStorage());
       final expiredSession = _makeSession(expired: true);
 
@@ -545,7 +557,8 @@ void main() {
               'store preserves sessions as-is; expiry check is caller responsibility');
     });
 
-    test('load across two store instances sharing storage reflects same session',
+    test(
+        'load across two store instances sharing storage reflects same session',
         () async {
       final sharedStorage = _MemorySecureStorage();
       final storeA = SecureSessionStore(sharedStorage);

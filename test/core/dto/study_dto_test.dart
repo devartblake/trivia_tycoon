@@ -41,17 +41,20 @@ void main() {
     });
 
     test('fromJson description defaults empty when absent', () {
-      final s = StudySetListItem.fromJson({'id': 'x', 'title': 'X', 'kind': 'K', 'category': 'C'});
+      final s = StudySetListItem.fromJson(
+          {'id': 'x', 'title': 'X', 'kind': 'K', 'category': 'C'});
       expect(s.description, '');
     });
 
     test('fromJson kind defaults Category when absent', () {
-      final s = StudySetListItem.fromJson({'id': 'x', 'title': 'X', 'category': 'C'});
+      final s =
+          StudySetListItem.fromJson({'id': 'x', 'title': 'X', 'category': 'C'});
       expect(s.kind, 'Category');
     });
 
     test('fromJson questionCount defaults 0 when absent', () {
-      final s = StudySetListItem.fromJson({'id': 'x', 'title': 'X', 'kind': 'K', 'category': 'C'});
+      final s = StudySetListItem.fromJson(
+          {'id': 'x', 'title': 'X', 'kind': 'K', 'category': 'C'});
       expect(s.questionCount, 0);
     });
   });
@@ -285,7 +288,8 @@ void main() {
     });
 
     test('fromJson answeredQuestionIds empty when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('answeredQuestionIds');
+      final j = Map<String, dynamic>.from(_full())
+        ..remove('answeredQuestionIds');
       expect(StudySession.fromJson(j).answeredQuestionIds, isEmpty);
     });
   });

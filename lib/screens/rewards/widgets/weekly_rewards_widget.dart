@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import '../../../core/manager/log_manager.dart';
-import '../../../game/providers/game_providers.dart' show rewardSettingsServiceProvider;
-import '../../../game/providers/profile_providers.dart' show refreshAuthoritativeWallet;
+import '../../../game/providers/game_providers.dart'
+    show rewardSettingsServiceProvider;
+import '../../../game/providers/profile_providers.dart'
+    show refreshAuthoritativeWallet;
 import '../../../game/providers/reward_backend_providers.dart';
 import '../../../game/services/rewards_api_service.dart';
 import '../../../ui_components/synaptix_toast/synaptix_toast_helper.dart';
@@ -119,8 +121,7 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
         setState(() {
           _claimedThroughDay = claim.updatedStreak.claimedDays.isEmpty
               ? day
-              : claim.updatedStreak.claimedDays
-                  .reduce((a, b) => a > b ? a : b);
+              : claim.updatedStreak.claimedDays.reduce((a, b) => a > b ? a : b);
           _canClaimToday = false;
           _schedule = claim.updatedStreak.schedule.isNotEmpty
               ? claim.updatedStreak.schedule
@@ -264,16 +265,33 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
               children: [
                 Expanded(
                     child: _buildDayCard(
-                        context, 1, _rewardTypeLabel(_rewardForDay(1)), _rewardForDay(1)?.amountLabel ?? '100', Icons.monetization_on,
-                        Colors.amber, nextClaimableDay)),
+                        context,
+                        1,
+                        _rewardTypeLabel(_rewardForDay(1)),
+                        _rewardForDay(1)?.amountLabel ?? '100',
+                        Icons.monetization_on,
+                        Colors.amber,
+                        nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 2, _rewardTypeLabel(_rewardForDay(2)), _rewardForDay(2)?.amountLabel ?? '5', Icons.diamond,
-                        Colors.blue, nextClaimableDay)),
+                    child: _buildDayCard(
+                        context,
+                        2,
+                        _rewardTypeLabel(_rewardForDay(2)),
+                        _rewardForDay(2)?.amountLabel ?? '5',
+                        Icons.diamond,
+                        Colors.blue,
+                        nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 3, _rewardTypeLabel(_rewardForDay(3)), _rewardForDay(3)?.amountLabel ?? '1x',
-                        Icons.flash_on, Colors.orange, nextClaimableDay)),
+                    child: _buildDayCard(
+                        context,
+                        3,
+                        _rewardTypeLabel(_rewardForDay(3)),
+                        _rewardForDay(3)?.amountLabel ?? '1x',
+                        Icons.flash_on,
+                        Colors.orange,
+                        nextClaimableDay)),
               ],
             ),
             const SizedBox(height: 4),
@@ -281,16 +299,33 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
               children: [
                 Expanded(
                     child: _buildDayCard(
-                        context, 4, _rewardTypeLabel(_rewardForDay(4)), _rewardForDay(4)?.amountLabel ?? '200', Icons.monetization_on,
-                        Colors.amber, nextClaimableDay)),
+                        context,
+                        4,
+                        _rewardTypeLabel(_rewardForDay(4)),
+                        _rewardForDay(4)?.amountLabel ?? '200',
+                        Icons.monetization_on,
+                        Colors.amber,
+                        nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 5, _rewardTypeLabel(_rewardForDay(5)), _rewardForDay(5)?.amountLabel ?? '10', Icons.diamond,
-                        Colors.blue, nextClaimableDay)),
+                    child: _buildDayCard(
+                        context,
+                        5,
+                        _rewardTypeLabel(_rewardForDay(5)),
+                        _rewardForDay(5)?.amountLabel ?? '10',
+                        Icons.diamond,
+                        Colors.blue,
+                        nextClaimableDay)),
                 const SizedBox(width: 6),
                 Expanded(
-                    child: _buildDayCard(context, 6, _rewardTypeLabel(_rewardForDay(6)), _rewardForDay(6)?.amountLabel ?? '3', Icons.casino,
-                        Colors.purple, nextClaimableDay)),
+                    child: _buildDayCard(
+                        context,
+                        6,
+                        _rewardTypeLabel(_rewardForDay(6)),
+                        _rewardForDay(6)?.amountLabel ?? '3',
+                        Icons.casino,
+                        Colors.purple,
+                        nextClaimableDay)),
               ],
             ),
             const SizedBox(height: 4),
@@ -360,8 +395,7 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
                     color: color,
                     shape: BoxShape.circle,
                   ),
-                  child:
-                      const Icon(Icons.star, size: 10, color: Colors.white),
+                  child: const Icon(Icons.star, size: 10, color: Colors.white),
                 ),
               ),
             Padding(
@@ -390,8 +424,7 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
-                      color:
-                          claimed || canClaim ? color : Colors.grey.shade600,
+                      color: claimed || canClaim ? color : Colors.grey.shade600,
                     ),
                   ),
                   Text(
@@ -399,8 +432,7 @@ class _WeeklyRewardsWidgetState extends ConsumerState<WeeklyRewardsWidget> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color:
-                          claimed || canClaim ? color : Colors.grey.shade600,
+                      color: claimed || canClaim ? color : Colors.grey.shade600,
                     ),
                   ),
                 ],

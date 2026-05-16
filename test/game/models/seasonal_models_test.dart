@@ -99,7 +99,10 @@ void main() {
 
     test('hasError is true when error is set', () {
       final result = SeasonEndResult(
-          promoted: [], demoted: [], tiebreakers: [], seasonId: 's1',
+          promoted: [],
+          demoted: [],
+          tiebreakers: [],
+          seasonId: 's1',
           error: 'Something went wrong');
       expect(result.hasError, isTrue);
     });
@@ -126,13 +129,9 @@ void main() {
 
     test('hasTiebreakers true when list has items', () {
       final p = SeasonPlayer.fromJson(_seasonPlayerJson());
-      final result = SeasonEndResult(
-          promoted: [],
-          demoted: [],
-          tiebreakers: [
-            [p, p]
-          ],
-          seasonId: 's1');
+      final result = SeasonEndResult(promoted: [], demoted: [], tiebreakers: [
+        [p, p]
+      ], seasonId: 's1');
       expect(result.hasTiebreakers, isTrue);
     });
   });
@@ -186,8 +185,7 @@ void main() {
     });
 
     test('parses tierRank', () {
-      expect(
-          SeasonRewardPreview.fromJson(_previewJson(tierRank: 12)).tierRank,
+      expect(SeasonRewardPreview.fromJson(_previewJson(tierRank: 12)).tierRank,
           12);
     });
 
@@ -220,8 +218,8 @@ void main() {
     });
 
     test('parses isActive', () {
-      expect(
-          SeasonalTheme.fromJson(_themeJson(isActive: false)).isActive, isFalse);
+      expect(SeasonalTheme.fromJson(_themeJson(isActive: false)).isActive,
+          isFalse);
     });
 
     test('isActive defaults to false when absent', () {
@@ -272,8 +270,7 @@ void main() {
     });
 
     test('"allStar" → ThemeType.allStar', () {
-      expect(
-          SeasonalTheme.fromJson(_themeJson(themeType: 'allStar')).themeType,
+      expect(SeasonalTheme.fromJson(_themeJson(themeType: 'allStar')).themeType,
           ThemeType.allStar);
     });
 
@@ -285,8 +282,7 @@ void main() {
     });
 
     test('unknown themeType falls back to main', () {
-      expect(
-          SeasonalTheme.fromJson(_themeJson(themeType: 'unknown')).themeType,
+      expect(SeasonalTheme.fromJson(_themeJson(themeType: 'unknown')).themeType,
           ThemeType.main);
     });
   });
@@ -299,8 +295,7 @@ void main() {
     test('true when isActive=true and now is within range', () {
       final start =
           DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
-      final end =
-          DateTime.now().add(const Duration(days: 1)).toIso8601String();
+      final end = DateTime.now().add(const Duration(days: 1)).toIso8601String();
       final theme = SeasonalTheme.fromJson(
           _themeJson(isActive: true, startDate: start, endDate: end));
       expect(theme.isCurrentlyActive(), isTrue);
@@ -309,8 +304,7 @@ void main() {
     test('false when isActive=false even if within date range', () {
       final start =
           DateTime.now().subtract(const Duration(days: 1)).toIso8601String();
-      final end =
-          DateTime.now().add(const Duration(days: 1)).toIso8601String();
+      final end = DateTime.now().add(const Duration(days: 1)).toIso8601String();
       final theme = SeasonalTheme.fromJson(
           _themeJson(isActive: false, startDate: start, endDate: end));
       expect(theme.isCurrentlyActive(), isFalse);
@@ -354,10 +348,9 @@ void main() {
     });
 
     test('round-trip preserves name, themeType, isActive', () {
-      final original =
-          SeasonalTheme.fromJson(_themeJson(name: 'Blaze', themeType: 'competition', isActive: false));
-      final restored =
-          SeasonalTheme.fromJson(original.toJson());
+      final original = SeasonalTheme.fromJson(
+          _themeJson(name: 'Blaze', themeType: 'competition', isActive: false));
+      final restored = SeasonalTheme.fromJson(original.toJson());
       expect(restored.name, 'Blaze');
       expect(restored.themeType, ThemeType.competition);
       expect(restored.isActive, isFalse);

@@ -38,14 +38,12 @@ void main() {
 
     test('parses description', () {
       expect(
-          PowerUp.fromJson(_baseJson(description: 'Shows a hint'))
-              .description,
+          PowerUp.fromJson(_baseJson(description: 'Shows a hint')).description,
           'Shows a hint');
     });
 
     test('parses iconPath', () {
-      expect(
-          PowerUp.fromJson(_baseJson(iconPath: 'assets/hint.png')).iconPath,
+      expect(PowerUp.fromJson(_baseJson(iconPath: 'assets/hint.png')).iconPath,
           'assets/hint.png');
     });
 

@@ -162,31 +162,38 @@ void main() {
 
   group('Mission.fromJson — MissionType parsing', () {
     test('daily → MissionType.daily', () {
-      expect(Mission.fromJson(_missionJson(type: 'daily')).type, MissionType.daily);
+      expect(Mission.fromJson(_missionJson(type: 'daily')).type,
+          MissionType.daily);
     });
 
     test('weekly → MissionType.weekly', () {
-      expect(Mission.fromJson(_missionJson(type: 'weekly')).type, MissionType.weekly);
+      expect(Mission.fromJson(_missionJson(type: 'weekly')).type,
+          MissionType.weekly);
     });
 
     test('seasonal → MissionType.seasonal', () {
-      expect(Mission.fromJson(_missionJson(type: 'seasonal')).type, MissionType.seasonal);
+      expect(Mission.fromJson(_missionJson(type: 'seasonal')).type,
+          MissionType.seasonal);
     });
 
     test('one_time → MissionType.oneTime', () {
-      expect(Mission.fromJson(_missionJson(type: 'one_time')).type, MissionType.oneTime);
+      expect(Mission.fromJson(_missionJson(type: 'one_time')).type,
+          MissionType.oneTime);
     });
 
     test('onetime → MissionType.oneTime', () {
-      expect(Mission.fromJson(_missionJson(type: 'onetime')).type, MissionType.oneTime);
+      expect(Mission.fromJson(_missionJson(type: 'onetime')).type,
+          MissionType.oneTime);
     });
 
     test('one-time → MissionType.oneTime', () {
-      expect(Mission.fromJson(_missionJson(type: 'one-time')).type, MissionType.oneTime);
+      expect(Mission.fromJson(_missionJson(type: 'one-time')).type,
+          MissionType.oneTime);
     });
 
     test('unknown string → MissionType.unknown', () {
-      expect(Mission.fromJson(_missionJson(type: 'bogus')).type, MissionType.unknown);
+      expect(Mission.fromJson(_missionJson(type: 'bogus')).type,
+          MissionType.unknown);
     });
 
     test('type from timeframe fallback', () {
@@ -203,8 +210,8 @@ void main() {
 
   group('Mission.fromJson — MissionStatus parsing', () {
     test('active → MissionStatus.active', () {
-      expect(
-          Mission.fromJson(_missionJson(status: 'active')).status, MissionStatus.active);
+      expect(Mission.fromJson(_missionJson(status: 'active')).status,
+          MissionStatus.active);
     });
 
     test('completed → MissionStatus.completed', () {
@@ -239,7 +246,8 @@ void main() {
 
   group('Mission.fromJson — DateTime fields', () {
     test('parses createdAt from created_at', () {
-      final m = Mission.fromJson(_missionJson(createdAt: '2025-03-15T08:00:00.000Z'));
+      final m =
+          Mission.fromJson(_missionJson(createdAt: '2025-03-15T08:00:00.000Z'));
       expect(m.createdAt.month, 3);
       expect(m.createdAt.day, 15);
     });
@@ -257,8 +265,8 @@ void main() {
     });
 
     test('parses expiresAt when present', () {
-      final m = Mission.fromJson(
-          _missionJson(expiresAt: '2025-12-31T23:59:59.000Z'));
+      final m =
+          Mission.fromJson(_missionJson(expiresAt: '2025-12-31T23:59:59.000Z'));
       expect(m.expiresAt, isNotNull);
       expect(m.expiresAt!.year, 2025);
       expect(m.expiresAt!.month, 12);
@@ -328,8 +336,8 @@ void main() {
     });
 
     test('true when expiresAt is in the past', () {
-      final m = _mission(
-          expiresAt: DateTime.now().subtract(const Duration(days: 1)));
+      final m =
+          _mission(expiresAt: DateTime.now().subtract(const Duration(days: 1)));
       expect(m.isExpired, isTrue);
     });
   });
@@ -354,7 +362,8 @@ void main() {
 
   group('Mission.toJson', () {
     test('serializes type and status as name strings', () {
-      final m = _mission(type: MissionType.weekly, status: MissionStatus.completed);
+      final m =
+          _mission(type: MissionType.weekly, status: MissionStatus.completed);
       final json = m.toJson();
       expect(json['type'], 'weekly');
       expect(json['status'], 'completed');
@@ -394,7 +403,8 @@ void main() {
     });
 
     test('copies type', () {
-      final updated = _mission(type: MissionType.daily).copyWith(type: MissionType.weekly);
+      final updated =
+          _mission(type: MissionType.daily).copyWith(type: MissionType.weekly);
       expect(updated.type, MissionType.weekly);
     });
 
@@ -607,8 +617,7 @@ void main() {
     });
 
     test('copies status', () {
-      final updated =
-          _userMission().copyWith(status: MissionStatus.completed);
+      final updated = _userMission().copyWith(status: MissionStatus.completed);
       expect(updated.status, MissionStatus.completed);
     });
 

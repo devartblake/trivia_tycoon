@@ -97,7 +97,8 @@ class SynaptixLinearProgressIndicator extends StatefulWidget {
 }
 
 class _SynaptixLinearProgressIndicatorState
-    extends State<SynaptixLinearProgressIndicator> with TickerProviderStateMixin {
+    extends State<SynaptixLinearProgressIndicator>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   late AnimationController _xpPulseController;

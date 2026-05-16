@@ -175,29 +175,29 @@ void main() {
         };
 
     test('parses id', () {
-      expect(
-          StoreSectionData.fromJson(_sectionJson(id: 'powerups')).id, 'powerups');
+      expect(StoreSectionData.fromJson(_sectionJson(id: 'powerups')).id,
+          'powerups');
     });
 
     test('parses title', () {
-      expect(StoreSectionData.fromJson(_sectionJson(title: 'Gems')).title, 'Gems');
+      expect(
+          StoreSectionData.fromJson(_sectionJson(title: 'Gems')).title, 'Gems');
     });
 
     test('parses subtitle', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(subtitle: 'Buy gems')).subtitle,
+          StoreSectionData.fromJson(_sectionJson(subtitle: 'Buy gems'))
+              .subtitle,
           'Buy gems');
     });
 
     test('parses icon', () {
-      expect(
-          StoreSectionData.fromJson(_sectionJson(icon: 'diamond')).icon,
+      expect(StoreSectionData.fromJson(_sectionJson(icon: 'diamond')).icon,
           Icons.diamond);
     });
 
     test('icon defaults to Icons.store for unknown name', () {
-      expect(
-          StoreSectionData.fromJson(_sectionJson(icon: 'unknown')).icon,
+      expect(StoreSectionData.fromJson(_sectionJson(icon: 'unknown')).icon,
           Icons.store);
     });
 
@@ -225,7 +225,8 @@ void main() {
 
     test('parses itemCount', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(itemCount: '5 items')).itemCount,
+          StoreSectionData.fromJson(_sectionJson(itemCount: '5 items'))
+              .itemCount,
           '5 items');
     });
 
@@ -283,8 +284,7 @@ void main() {
     });
 
     test('parses title', () {
-      expect(
-          FeaturedItemData.fromJson(_featuredJson(title: 'Mega Deal')).title,
+      expect(FeaturedItemData.fromJson(_featuredJson(title: 'Mega Deal')).title,
           'Mega Deal');
     });
 
@@ -353,8 +353,8 @@ void main() {
           title: 'Test',
           subtitle: '',
           icon: Icons.store,
-          gradient:
-              const LinearGradient(colors: [Color(0xFF000000), Color(0xFFFFFFFF)]),
+          gradient: const LinearGradient(
+              colors: [Color(0xFF000000), Color(0xFFFFFFFF)]),
           expiresAt: expiresAt,
         );
 
@@ -375,14 +375,14 @@ void main() {
     });
 
     test('returns "Ending soon" when ≤ 1 hour remaining', () {
-      final item = _makeItem(
-          expiresAt: DateTime.now().add(const Duration(minutes: 30)));
+      final item =
+          _makeItem(expiresAt: DateTime.now().add(const Duration(minutes: 30)));
       expect(item.countdownLabel, 'Ending soon');
     });
 
     test('returns "Ending soon" when expiresAt is in the past', () {
-      final item =
-          _makeItem(expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
+      final item = _makeItem(
+          expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
       expect(item.countdownLabel, 'Ending soon');
     });
   });
@@ -600,8 +600,7 @@ void main() {
     });
 
     test('section ids are unique', () {
-      final ids =
-          StoreHubData.fallback.sections.map((s) => s.id).toSet();
+      final ids = StoreHubData.fallback.sections.map((s) => s.id).toSet();
       expect(ids.length, StoreHubData.fallback.sections.length);
     });
   });

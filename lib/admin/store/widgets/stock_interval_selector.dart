@@ -62,17 +62,16 @@ class StockIntervalSelector extends StatelessWidget {
             return ChoiceChip(
               label: Text(_kLabels[interval]!),
               selected: selected,
-              onSelected: (_) => onChanged(interval == 'none' ? null : interval),
+              onSelected: (_) =>
+                  onChanged(interval == 'none' ? null : interval),
               selectedColor: const Color(0xFF6366F1).withValues(alpha: 0.15),
               labelStyle: TextStyle(
                 color: selected ? const Color(0xFF6366F1) : Colors.grey[700],
-                fontWeight:
-                    selected ? FontWeight.bold : FontWeight.normal,
+                fontWeight: selected ? FontWeight.bold : FontWeight.normal,
               ),
               side: BorderSide(
-                color: selected
-                    ? const Color(0xFF6366F1)
-                    : Colors.grey.shade300,
+                color:
+                    selected ? const Color(0xFF6366F1) : Colors.grey.shade300,
               ),
             );
           }).toList(),

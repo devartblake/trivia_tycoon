@@ -49,8 +49,7 @@ void main() {
     });
 
     test('parses tierRank', () {
-      expect(
-          RankedLeaderboardEntry.fromJson(_entryJson(tierRank: 12)).tierRank,
+      expect(RankedLeaderboardEntry.fromJson(_entryJson(tierRank: 12)).tierRank,
           12);
     });
 
@@ -66,8 +65,7 @@ void main() {
     });
 
     test('parses losses', () {
-      expect(
-          RankedLeaderboardEntry.fromJson(_entryJson(losses: 7)).losses, 7);
+      expect(RankedLeaderboardEntry.fromJson(_entryJson(losses: 7)).losses, 7);
     });
 
     test('parses draws', () {
@@ -127,21 +125,20 @@ void main() {
     });
 
     test('parses items list', () {
-      final resp = RankedLeaderboardResponse.fromJson(
-          _responseJson(items: [_entryJson(playerId: 'p1'), _entryJson(playerId: 'p2')]));
+      final resp = RankedLeaderboardResponse.fromJson(_responseJson(
+          items: [_entryJson(playerId: 'p1'), _entryJson(playerId: 'p2')]));
       expect(resp.items.length, 2);
     });
 
     test('item fields parsed correctly', () {
-      final resp = RankedLeaderboardResponse.fromJson(
-          _responseJson(items: [_entryJson(playerId: 'top_player', seasonRank: 1)]));
+      final resp = RankedLeaderboardResponse.fromJson(_responseJson(
+          items: [_entryJson(playerId: 'top_player', seasonRank: 1)]));
       expect(resp.items.first.playerId, 'top_player');
       expect(resp.items.first.seasonRank, 1);
     });
 
     test('empty items list', () {
-      final resp = RankedLeaderboardResponse.fromJson(
-          _responseJson(items: []));
+      final resp = RankedLeaderboardResponse.fromJson(_responseJson(items: []));
       expect(resp.items, isEmpty);
     });
   });

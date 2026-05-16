@@ -118,15 +118,13 @@ void main() {
 
     test('getWinnerName returns challenger name when challenger wins', () {
       final won = challenge.copyWith(
-          winnerId: 'c_user',
-          status: PVPChallengeStatus.completed);
+          winnerId: 'c_user', status: PVPChallengeStatus.completed);
       expect(won.getWinnerName(), 'Challenger');
     });
 
     test('getWinnerName returns opponent name when opponent wins', () {
       final won = challenge.copyWith(
-          winnerId: 'o_user',
-          status: PVPChallengeStatus.completed);
+          winnerId: 'o_user', status: PVPChallengeStatus.completed);
       expect(won.getWinnerName(), 'Opponent');
     });
 
@@ -190,28 +188,40 @@ void main() {
   group('createChallenge', () {
     test('returns non-null challenge', () async {
       final challenge = await _createNoWagerChallenge(
-        _svc, challengerId: 'cc_c1', opponentId: 'cc_o1', suffix: '1',
+        _svc,
+        challengerId: 'cc_c1',
+        opponentId: 'cc_o1',
+        suffix: '1',
       );
       expect(challenge, isNotNull);
     });
 
     test('challenge has pending status initially', () async {
       final challenge = await _createNoWagerChallenge(
-        _svc, challengerId: 'cc_c2', opponentId: 'cc_o2', suffix: '2',
+        _svc,
+        challengerId: 'cc_c2',
+        opponentId: 'cc_o2',
+        suffix: '2',
       );
       expect(challenge.status, PVPChallengeStatus.pending);
     });
 
     test('challenge retrievable by ID', () async {
       final challenge = await _createNoWagerChallenge(
-        _svc, challengerId: 'cc_c3', opponentId: 'cc_o3', suffix: '3',
+        _svc,
+        challengerId: 'cc_c3',
+        opponentId: 'cc_o3',
+        suffix: '3',
       );
       expect(_svc.getChallenge(challenge.id), isNotNull);
     });
 
     test('challenge appears in getUserChallenges for challenger', () async {
       final challenge = await _createNoWagerChallenge(
-        _svc, challengerId: 'cc_c4', opponentId: 'cc_o4', suffix: '4',
+        _svc,
+        challengerId: 'cc_c4',
+        opponentId: 'cc_o4',
+        suffix: '4',
       );
       final challenges = _svc.getUserChallenges('cc_c4');
       expect(challenges.any((c) => c.id == challenge.id), isTrue);
@@ -219,7 +229,10 @@ void main() {
 
     test('challenge appears in getUserChallenges for opponent', () async {
       final challenge = await _createNoWagerChallenge(
-        _svc, challengerId: 'cc_c5', opponentId: 'cc_o5', suffix: '5',
+        _svc,
+        challengerId: 'cc_c5',
+        opponentId: 'cc_o5',
+        suffix: '5',
       );
       final challenges = _svc.getUserChallenges('cc_o5');
       expect(challenges.any((c) => c.id == challenge.id), isTrue);
@@ -263,7 +276,10 @@ void main() {
   group('acceptChallenge', () {
     test('true when opponent accepts pending challenge', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ac_c1', opponentId: 'ac_o1', suffix: 'ac1',
+        _svc,
+        challengerId: 'ac_c1',
+        opponentId: 'ac_o1',
+        suffix: 'ac1',
       );
       final result = await _svc.acceptChallenge(ch.id, 'ac_o1');
       expect(result, isTrue);
@@ -271,7 +287,10 @@ void main() {
 
     test('status becomes accepted after accept', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ac_c2', opponentId: 'ac_o2', suffix: 'ac2',
+        _svc,
+        challengerId: 'ac_c2',
+        opponentId: 'ac_o2',
+        suffix: 'ac2',
       );
       await _svc.acceptChallenge(ch.id, 'ac_o2');
       expect(_svc.getChallenge(ch.id)!.status, PVPChallengeStatus.accepted);
@@ -279,7 +298,10 @@ void main() {
 
     test('false when non-opponent tries to accept', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ac_c3', opponentId: 'ac_o3', suffix: 'ac3',
+        _svc,
+        challengerId: 'ac_c3',
+        opponentId: 'ac_o3',
+        suffix: 'ac3',
       );
       final result = await _svc.acceptChallenge(ch.id, 'wrong_user');
       expect(result, isFalse);
@@ -287,7 +309,10 @@ void main() {
 
     test('false when challenge already accepted', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ac_c4', opponentId: 'ac_o4', suffix: 'ac4',
+        _svc,
+        challengerId: 'ac_c4',
+        opponentId: 'ac_o4',
+        suffix: 'ac4',
       );
       await _svc.acceptChallenge(ch.id, 'ac_o4');
       final result = await _svc.acceptChallenge(ch.id, 'ac_o4');
@@ -302,7 +327,10 @@ void main() {
   group('declineChallenge', () {
     test('true when opponent declines pending challenge', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'dc_c1', opponentId: 'dc_o1', suffix: 'dc1',
+        _svc,
+        challengerId: 'dc_c1',
+        opponentId: 'dc_o1',
+        suffix: 'dc1',
       );
       final result = await _svc.declineChallenge(ch.id, 'dc_o1');
       expect(result, isTrue);
@@ -310,7 +338,10 @@ void main() {
 
     test('status becomes declined after decline', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'dc_c2', opponentId: 'dc_o2', suffix: 'dc2',
+        _svc,
+        challengerId: 'dc_c2',
+        opponentId: 'dc_o2',
+        suffix: 'dc2',
       );
       await _svc.declineChallenge(ch.id, 'dc_o2');
       expect(_svc.getChallenge(ch.id)!.status, PVPChallengeStatus.declined);
@@ -318,7 +349,10 @@ void main() {
 
     test('false when non-opponent tries to decline', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'dc_c3', opponentId: 'dc_o3', suffix: 'dc3',
+        _svc,
+        challengerId: 'dc_c3',
+        opponentId: 'dc_o3',
+        suffix: 'dc3',
       );
       final result = await _svc.declineChallenge(ch.id, 'wrong_user3');
       expect(result, isFalse);
@@ -349,7 +383,9 @@ void main() {
   group('cancelChallenge', () {
     test('true when challenger cancels pending challenge', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'cancel_c1', opponentId: 'cancel_o1',
+        _svc,
+        challengerId: 'cancel_c1',
+        opponentId: 'cancel_o1',
         suffix: 'cancel1',
       );
       final result = await _svc.cancelChallenge(ch.id, 'cancel_c1');
@@ -358,7 +394,9 @@ void main() {
 
     test('status becomes cancelled', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'cancel_c2', opponentId: 'cancel_o2',
+        _svc,
+        challengerId: 'cancel_c2',
+        opponentId: 'cancel_o2',
         suffix: 'cancel2',
       );
       await _svc.cancelChallenge(ch.id, 'cancel_c2');
@@ -367,7 +405,9 @@ void main() {
 
     test('false when non-challenger tries to cancel', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'cancel_c3', opponentId: 'cancel_o3',
+        _svc,
+        challengerId: 'cancel_c3',
+        opponentId: 'cancel_o3',
         suffix: 'cancel3',
       );
       final result = await _svc.cancelChallenge(ch.id, 'cancel_o3');
@@ -383,7 +423,10 @@ void main() {
     test('returns PVPChallengeResult with correct winner when challenger wins',
         () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'comp_c1', opponentId: 'comp_o1', suffix: 'comp1',
+        _svc,
+        challengerId: 'comp_c1',
+        opponentId: 'comp_o1',
+        suffix: 'comp1',
       );
       await _svc.acceptChallenge(ch.id, 'comp_o1');
       final result = await _svc.completeChallenge(
@@ -397,7 +440,10 @@ void main() {
 
     test('winner is opponent when opponent has higher score', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'comp_c2', opponentId: 'comp_o2', suffix: 'comp2',
+        _svc,
+        challengerId: 'comp_c2',
+        opponentId: 'comp_o2',
+        suffix: 'comp2',
       );
       await _svc.acceptChallenge(ch.id, 'comp_o2');
       final result = await _svc.completeChallenge(
@@ -410,7 +456,10 @@ void main() {
 
     test('draw: winnerId is empty string in result', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'comp_c3', opponentId: 'comp_o3', suffix: 'comp3',
+        _svc,
+        challengerId: 'comp_c3',
+        opponentId: 'comp_o3',
+        suffix: 'comp3',
       );
       await _svc.acceptChallenge(ch.id, 'comp_o3');
       final result = await _svc.completeChallenge(
@@ -423,18 +472,23 @@ void main() {
 
     test('challenge status becomes completed', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'comp_c4', opponentId: 'comp_o4', suffix: 'comp4',
+        _svc,
+        challengerId: 'comp_c4',
+        opponentId: 'comp_o4',
+        suffix: 'comp4',
       );
       await _svc.acceptChallenge(ch.id, 'comp_o4');
       await _svc.completeChallenge(
           challengeId: ch.id, challengerScore: 5, opponentScore: 3);
-      expect(
-          _svc.getChallenge(ch.id)!.status, PVPChallengeStatus.completed);
+      expect(_svc.getChallenge(ch.id)!.status, PVPChallengeStatus.completed);
     });
 
     test('returns null for non-active challenge', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'comp_c5', opponentId: 'comp_o5', suffix: 'comp5',
+        _svc,
+        challengerId: 'comp_c5',
+        opponentId: 'comp_o5',
+        suffix: 'comp5',
       );
       // Not accepted, still pending
       final result = await _svc.completeChallenge(
@@ -450,27 +504,36 @@ void main() {
   group('submitScore', () {
     test('true when challenger submits score', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ss_c1', opponentId: 'ss_o1', suffix: 'ss1',
+        _svc,
+        challengerId: 'ss_c1',
+        opponentId: 'ss_o1',
+        suffix: 'ss1',
       );
       await _svc.acceptChallenge(ch.id, 'ss_o1');
-      final result = await _svc.submitScore(
-          challengeId: ch.id, userId: 'ss_c1', score: 7);
+      final result =
+          await _svc.submitScore(challengeId: ch.id, userId: 'ss_c1', score: 7);
       expect(result, isTrue);
     });
 
     test('true when opponent submits score', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ss_c2', opponentId: 'ss_o2', suffix: 'ss2',
+        _svc,
+        challengerId: 'ss_c2',
+        opponentId: 'ss_o2',
+        suffix: 'ss2',
       );
       await _svc.acceptChallenge(ch.id, 'ss_o2');
-      final result = await _svc.submitScore(
-          challengeId: ch.id, userId: 'ss_o2', score: 4);
+      final result =
+          await _svc.submitScore(challengeId: ch.id, userId: 'ss_o2', score: 4);
       expect(result, isTrue);
     });
 
     test('false for non-participant', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ss_c3', opponentId: 'ss_o3', suffix: 'ss3',
+        _svc,
+        challengerId: 'ss_c3',
+        opponentId: 'ss_o3',
+        suffix: 'ss3',
       );
       await _svc.acceptChallenge(ch.id, 'ss_o3');
       final result = await _svc.submitScore(
@@ -480,13 +543,15 @@ void main() {
 
     test('auto-completes when both scores submitted', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'ss_c4', opponentId: 'ss_o4', suffix: 'ss4',
+        _svc,
+        challengerId: 'ss_c4',
+        opponentId: 'ss_o4',
+        suffix: 'ss4',
       );
       await _svc.acceptChallenge(ch.id, 'ss_o4');
       await _svc.submitScore(challengeId: ch.id, userId: 'ss_c4', score: 8);
       await _svc.submitScore(challengeId: ch.id, userId: 'ss_o4', score: 6);
-      expect(
-          _svc.getChallenge(ch.id)!.status, PVPChallengeStatus.completed);
+      expect(_svc.getChallenge(ch.id)!.status, PVPChallengeStatus.completed);
     });
   });
 
@@ -497,7 +562,10 @@ void main() {
   group('getPendingChallenges', () {
     test('contains pending challenge for opponent', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'pend_c1', opponentId: 'pend_o1', suffix: 'pend1',
+        _svc,
+        challengerId: 'pend_c1',
+        opponentId: 'pend_o1',
+        suffix: 'pend1',
       );
       final pending = _svc.getPendingChallenges('pend_o1');
       expect(pending.any((c) => c.id == ch.id), isTrue);
@@ -505,7 +573,10 @@ void main() {
 
     test('not in pending after accept', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'pend_c2', opponentId: 'pend_o2', suffix: 'pend2',
+        _svc,
+        challengerId: 'pend_c2',
+        opponentId: 'pend_o2',
+        suffix: 'pend2',
       );
       await _svc.acceptChallenge(ch.id, 'pend_o2');
       final pending = _svc.getPendingChallenges('pend_o2');
@@ -516,7 +587,10 @@ void main() {
   group('getSentChallenges', () {
     test('contains sent challenge for challenger', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'sent_c1', opponentId: 'sent_o1', suffix: 'sent1',
+        _svc,
+        challengerId: 'sent_c1',
+        opponentId: 'sent_o1',
+        suffix: 'sent1',
       );
       final sent = _svc.getSentChallenges('sent_c1');
       expect(sent.any((c) => c.id == ch.id), isTrue);
@@ -531,7 +605,9 @@ void main() {
 
     test('contains challenge after accept', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'active_c1', opponentId: 'active_o1',
+        _svc,
+        challengerId: 'active_c1',
+        opponentId: 'active_o1',
         suffix: 'active1',
       );
       await _svc.acceptChallenge(ch.id, 'active_o1');
@@ -543,7 +619,10 @@ void main() {
   group('getCompletedChallenges', () {
     test('contains completed challenge', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'cmpl_c1', opponentId: 'cmpl_o1', suffix: 'cmpl1',
+        _svc,
+        challengerId: 'cmpl_c1',
+        opponentId: 'cmpl_o1',
+        suffix: 'cmpl1',
       );
       await _svc.acceptChallenge(ch.id, 'cmpl_o1');
       await _svc.completeChallenge(
@@ -556,7 +635,10 @@ void main() {
   group('getChallengeHistory', () {
     test('returns finished challenges', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'hist_c1', opponentId: 'hist_o1', suffix: 'hist1',
+        _svc,
+        challengerId: 'hist_c1',
+        opponentId: 'hist_o1',
+        suffix: 'hist1',
       );
       await _svc.declineChallenge(ch.id, 'hist_o1');
       final history = _svc.getChallengeHistory('hist_c1');
@@ -589,18 +671,17 @@ void main() {
     });
 
     test('returns map with losses key', () {
-      expect(_svc.getChallengeStats('stats_user_2').containsKey('losses'),
-          isTrue);
+      expect(
+          _svc.getChallengeStats('stats_user_2').containsKey('losses'), isTrue);
     });
 
     test('returns map with draws key', () {
-      expect(_svc.getChallengeStats('stats_user_3').containsKey('draws'),
-          isTrue);
+      expect(
+          _svc.getChallengeStats('stats_user_3').containsKey('draws'), isTrue);
     });
 
     test('returns map with coinBalance key', () {
-      expect(
-          _svc.getChallengeStats('stats_user_4').containsKey('coinBalance'),
+      expect(_svc.getChallengeStats('stats_user_4').containsKey('coinBalance'),
           isTrue);
     });
 
@@ -612,7 +693,9 @@ void main() {
 
     test('wins count correct after winning a challenge', () async {
       final ch = await _createNoWagerChallenge(
-        _svc, challengerId: 'stats_winner', opponentId: 'stats_loser',
+        _svc,
+        challengerId: 'stats_winner',
+        opponentId: 'stats_loser',
         suffix: 'statswin',
       );
       await _svc.acceptChallenge(ch.id, 'stats_loser');
@@ -638,8 +721,7 @@ void main() {
         opponentId: 'stream_opp_1',
         suffix: 'stream1',
       );
-      final emitted =
-          await future.timeout(const Duration(seconds: 2));
+      final emitted = await future.timeout(const Duration(seconds: 2));
       expect(emitted, isA<List<PVPChallenge>>());
     });
   });

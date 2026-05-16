@@ -21,7 +21,8 @@ class SkillTreeNavRepository {
     final groups = <SkillTreeGroupVM>[];
 
     if (decoded is Map && decoded['skill_tree_groups'] is Map) {
-      groups.addAll(_parseSkillTreeGroupsMap(decoded['skill_tree_groups'] as Map));
+      groups.addAll(
+          _parseSkillTreeGroupsMap(decoded['skill_tree_groups'] as Map));
     } else if (decoded is Map && decoded['groups'] is List) {
       for (final g in decoded['groups']) {
         groups.add(_parseGroupMap(g));
@@ -125,8 +126,7 @@ class SkillTreeNavRepository {
     SkillTreeGroupId groupId, {
     String fallbackBranchId = 'unknown',
   }) {
-    final branchId =
-        (b['branch_id'] ?? b['id'] ?? fallbackBranchId).toString();
+    final branchId = (b['branch_id'] ?? b['id'] ?? fallbackBranchId).toString();
     final title = (b['title'] ?? branchId).toString();
     final desc = (b['description'] ?? '').toString();
     final colorHex =

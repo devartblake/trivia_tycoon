@@ -80,8 +80,7 @@ void main() {
     });
 
     test('parses accentColor via resolveColor', () {
-      expect(
-          AdRemovePlan.fromJson(_json(accentColor: 'green')).accentColor,
+      expect(AdRemovePlan.fromJson(_json(accentColor: 'green')).accentColor,
           const Color(0xFF10B981));
     });
 
@@ -354,26 +353,28 @@ void main() {
     });
 
     test('defaults value to "" when absent', () {
-      expect(
-          SaleBenefitItem.fromJson({'icon': 'star', 'color': 'blue'}).value,
+      expect(SaleBenefitItem.fromJson({'icon': 'star', 'color': 'blue'}).value,
           '');
     });
 
     test('parses icon', () {
-      expect(SaleBenefitItem.fromJson({'icon': 'star', 'value': '', 'label': '', 'color': 'blue'}).icon,
+      expect(
+          SaleBenefitItem.fromJson(
+              {'icon': 'star', 'value': '', 'label': '', 'color': 'blue'}).icon,
           Icons.star);
     });
 
     test('unknown icon falls back to star', () {
       expect(
-          SaleBenefitItem.fromJson({'icon': 'unk', 'value': '', 'label': '', 'color': 'blue'}).icon,
+          SaleBenefitItem.fromJson(
+              {'icon': 'unk', 'value': '', 'label': '', 'color': 'blue'}).icon,
           Icons.star);
     });
 
     test('parses color', () {
       expect(
-          SaleBenefitItem.fromJson({'value': '', 'label': '', 'color': 'purple'})
-              .color,
+          SaleBenefitItem.fromJson(
+              {'value': '', 'label': '', 'color': 'purple'}).color,
           const Color(0xFF8B5CF6));
     });
   });
@@ -384,8 +385,7 @@ void main() {
 
   group('SaleInfoData.fromJson', () {
     test('parses badgeText', () {
-      expect(
-          SaleInfoData.fromJson({'badgeText': 'HOT DEAL'}).badgeText,
+      expect(SaleInfoData.fromJson({'badgeText': 'HOT DEAL'}).badgeText,
           'HOT DEAL');
     });
 
@@ -414,14 +414,13 @@ void main() {
     });
 
     test('parses expiresAt', () {
-      final s = SaleInfoData.fromJson(
-          {'expiresAt': '2025-12-01T00:00:00.000Z'});
+      final s =
+          SaleInfoData.fromJson({'expiresAt': '2025-12-01T00:00:00.000Z'});
       expect(s.expiresAt, isNotNull);
     });
 
     test('parses buttonText', () {
-      expect(
-          SaleInfoData.fromJson({'buttonText': 'Grab It'}).buttonText,
+      expect(SaleInfoData.fromJson({'buttonText': 'Grab It'}).buttonText,
           'Grab It');
     });
 
@@ -452,22 +451,22 @@ void main() {
     });
 
     test('parses id from rewardId fallback', () {
-      expect(
-          RewardCard.fromJson({'rewardId': 'rc2', 'isAvailable': false}).id,
+      expect(RewardCard.fromJson({'rewardId': 'rc2', 'isAvailable': false}).id,
           'rc2');
     });
 
     test('parses title', () {
       expect(
           RewardCard.fromJson(
-              {'id': 'rc1', 'title': 'Daily Check-in', 'isAvailable': true})
+                  {'id': 'rc1', 'title': 'Daily Check-in', 'isAvailable': true})
               .title,
           'Daily Check-in');
     });
 
     test('parses reward from reward field', () {
       expect(
-          RewardCard.fromJson({'id': 'rc1', 'reward': '500 Coins', 'isAvailable': false})
+          RewardCard.fromJson(
+                  {'id': 'rc1', 'reward': '500 Coins', 'isAvailable': false})
               .reward,
           '500 Coins');
     });
@@ -475,21 +474,20 @@ void main() {
     test('parses reward from rewardLabel fallback', () {
       expect(
           RewardCard.fromJson(
-              {'id': 'rc1', 'rewardLabel': '200 XP', 'isAvailable': false})
+                  {'id': 'rc1', 'rewardLabel': '200 XP', 'isAvailable': false})
               .reward,
           '200 XP');
     });
 
     test('parses progress', () {
       expect(
-          RewardCard.fromJson({'id': 'rc1', 'progress': 0.75, 'isAvailable': true})
-              .progress,
+          RewardCard.fromJson(
+              {'id': 'rc1', 'progress': 0.75, 'isAvailable': true}).progress,
           closeTo(0.75, 0.001));
     });
 
     test('progress is null when absent', () {
-      expect(
-          RewardCard.fromJson({'id': 'rc1', 'isAvailable': false}).progress,
+      expect(RewardCard.fromJson({'id': 'rc1', 'isAvailable': false}).progress,
           isNull);
     });
 
@@ -501,14 +499,13 @@ void main() {
 
     test('parses isAvailable from isClaimAvailable fallback', () {
       expect(
-          RewardCard.fromJson(
-              {'id': 'rc1', 'isClaimAvailable': true}).isAvailable,
+          RewardCard.fromJson({'id': 'rc1', 'isClaimAvailable': true})
+              .isAvailable,
           isTrue);
     });
 
     test('isAvailable defaults to false when absent', () {
-      expect(
-          RewardCard.fromJson({'id': 'rc1'}).isAvailable, isFalse);
+      expect(RewardCard.fromJson({'id': 'rc1'}).isAvailable, isFalse);
     });
 
     test('parses gradient from list', () {

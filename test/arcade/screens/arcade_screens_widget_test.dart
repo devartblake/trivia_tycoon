@@ -76,7 +76,8 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('coin reward amount appears in unclaimed state', (tester) async {
+    testWidgets('coin reward amount appears in unclaimed state',
+        (tester) async {
       final bonus = ArcadeDailyBonusService(cache);
       final expectedCoins = bonus.todayCoins;
 

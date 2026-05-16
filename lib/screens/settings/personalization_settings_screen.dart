@@ -98,7 +98,8 @@ class PersonalizationSettingsScreen extends ConsumerWidget {
               icon: Icons.restart_alt_rounded,
               iconColor: const Color(0xFFF59E0B),
               title: 'Reset recommendations',
-              subtitle: 'Clears local preference history — takes effect next session',
+              subtitle:
+                  'Clears local preference history — takes effect next session',
               onTap: () => _resetRecommendations(context, ref),
             ),
           ],

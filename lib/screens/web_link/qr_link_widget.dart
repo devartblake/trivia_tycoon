@@ -133,7 +133,6 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
             ),
           ),
           const SizedBox(height: 16),
-
           if (_isLoading)
             const SizedBox(
               height: 200,
@@ -168,7 +167,6 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
               backgroundColor: Colors.white,
               padding: const EdgeInsets.all(8),
             ),
-
           const SizedBox(height: 16),
           Text(
             _isExpired

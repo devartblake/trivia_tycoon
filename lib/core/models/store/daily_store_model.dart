@@ -29,15 +29,19 @@ class DailyStoreItem {
     // Backend sends priceCoins/priceDiamonds (flat). Fallback to legacy price/currency.
     final priceCoins = (json['priceCoins'] as num?)?.toInt();
     final price = priceCoins ?? (json['price'] as num?)?.toInt() ?? 0;
-    final currency = priceCoins != null ? 'coins' : (json['currency'] as String? ?? 'coins');
+    final currency =
+        priceCoins != null ? 'coins' : (json['currency'] as String? ?? 'coins');
 
     // Build stock state from flat backend fields or legacy nested stock object.
     final StoreStockState stock;
     if (json['stock'] != null) {
-      stock = StoreStockState.fromJson(Map<String, dynamic>.from(json['stock'] as Map));
+      stock = StoreStockState.fromJson(
+          Map<String, dynamic>.from(json['stock'] as Map));
     } else {
       stock = StoreStockState(
-        policyType: (json['resetInterval'] as String?) != null ? 'per_user' : 'unlimited',
+        policyType: (json['resetInterval'] as String?) != null
+            ? 'per_user'
+            : 'unlimited',
         maxQuantity: (json['maxQuantity'] as num?)?.toInt(),
         remainingQuantity: (json['remainingQuantity'] as num?)?.toInt(),
         resetInterval: json['resetInterval'] as String?,
@@ -97,7 +101,8 @@ class DailyStoreData {
   factory DailyStoreData.fromJson(Map<String, dynamic> json) {
     final rawItems = json['items'] as List? ?? [];
     // Backend sends "resetsAt"; fallback to legacy "nextResetAt".
-    final resetRaw = json['resetsAt'] as String? ?? json['nextResetAt'] as String?;
+    final resetRaw =
+        json['resetsAt'] as String? ?? json['nextResetAt'] as String?;
     final resetAt = resetRaw != null
         ? DateTime.parse(resetRaw).toUtc()
         : DateTime.now().toUtc().add(const Duration(hours: 24));
@@ -108,7 +113,8 @@ class DailyStoreData {
           .map((i) => DailyStoreItem.fromJson(Map<String, dynamic>.from(i)))
           .toList(),
       nextResetAt: resetAt,
-      resetIntervalSeconds: (json['resetIntervalSeconds'] as num?)?.toInt() ?? 86400,
+      resetIntervalSeconds:
+          (json['resetIntervalSeconds'] as num?)?.toInt() ?? 86400,
       bannerMessage: json['bannerMessage'] as String?,
     );
   }

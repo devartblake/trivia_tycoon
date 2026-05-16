@@ -262,8 +262,7 @@ void main() {
 
   group('AuthSession — toJson / fromJson round-trip', () {
     test('round-trips basic fields', () {
-      final expiry =
-          DateTime.utc(2030, 6, 15, 12, 0, 0); // truncate to seconds
+      final expiry = DateTime.utc(2030, 6, 15, 12, 0, 0); // truncate to seconds
       final session = AuthSession(
         accessToken: 'access-xyz',
         refreshToken: 'refresh-xyz',
@@ -394,7 +393,8 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('AuthTokenStore — updateAccessToken', () {
-    test('replaces access token and expiry while keeping refresh token', () async {
+    test('replaces access token and expiry while keeping refresh token',
+        () async {
       await store.save(AuthSession(
         accessToken: 'old-access',
         refreshToken: 'keep-refresh',

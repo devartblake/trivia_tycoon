@@ -109,7 +109,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
       );
       ref.invalidate(serverAvatarPackagesProvider);
       if (!mounted) return;
-      _showSnack('${meta.name} purchased! Tap Install to download.', const Color(0xFF10B981));
+      _showSnack('${meta.name} purchased! Tap Install to download.',
+          const Color(0xFF10B981));
     } on ApiRequestException catch (e) {
       if (!mounted) return;
       _showSnack(e.message, const Color(0xFFEF4444));
@@ -146,7 +147,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
       ref.invalidate(installedAvatarPackagesProvider);
 
       if (!mounted) return;
-      _showSnack('${meta.name} installed! Tap Equip to use it.', const Color(0xFF10B981));
+      _showSnack('${meta.name} installed! Tap Equip to use it.',
+          const Color(0xFF10B981));
     } catch (e) {
       LogManager.debug('Avatar install failed: $e');
       if (!mounted) return;
@@ -226,7 +228,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
               ),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.threed_rotation, color: Colors.white, size: 20),
+            child: const Icon(Icons.threed_rotation,
+                color: Colors.white, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -253,7 +256,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
             decoration: BoxDecoration(
               color: const Color(0xFF10B981).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
+              border: Border.all(
+                  color: const Color(0xFF10B981).withValues(alpha: 0.3)),
             ),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
@@ -280,7 +284,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
   // Viewer card — 3D when installed, thumbnail when owned, lock overlay otherwise
   // ---------------------------------------------------------------------------
 
-  Widget _buildViewerCard(AvatarPackageInstall? install, AvatarPackageMetadata? meta) {
+  Widget _buildViewerCard(
+      AvatarPackageInstall? install, AvatarPackageMetadata? meta) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() => _isPressed = true);
@@ -311,7 +316,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
     );
   }
 
-  Widget _buildViewerContent(AvatarPackageInstall? install, AvatarPackageMetadata? meta) {
+  Widget _buildViewerContent(
+      AvatarPackageInstall? install, AvatarPackageMetadata? meta) {
     // Installed — render the local GLB file
     if (install != null) {
       final glb = _glbPath(install);
@@ -330,7 +336,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
       return Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(thumb, fit: BoxFit.cover,
+          Image.network(thumb,
+              fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => _buildGradientPlaceholder()),
           Container(
             alignment: Alignment.center,
@@ -338,7 +345,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.download_rounded, color: Colors.white, size: 40),
+                const Icon(Icons.download_rounded,
+                    color: Colors.white, size: 40),
                 const SizedBox(height: 8),
                 Text(
                   'Tap Install to download',
@@ -403,7 +411,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
   // Action bar — Buy / Install / Equip
   // ---------------------------------------------------------------------------
 
-  Widget _buildActionBar(AvatarPackageInstall? install, AvatarPackageMetadata? meta) {
+  Widget _buildActionBar(
+      AvatarPackageInstall? install, AvatarPackageMetadata? meta) {
     if (_isInstalling) {
       return _buildProgressBar();
     }
@@ -460,7 +469,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF64748B).withValues(alpha: 0.1)),
+        border:
+            Border.all(color: const Color(0xFF64748B).withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF64748B).withValues(alpha: 0.05),
@@ -489,7 +499,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
                   install != null
                       ? 'Select it from your profile'
                       : 'Purchase and install your 3D avatar',
-                  style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                  style:
+                      const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
                 ),
               ],
             ),
@@ -514,7 +525,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
           ? const SizedBox(
               width: 16,
               height: 16,
-              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: Colors.white),
             )
           : Icon(icon, size: 16),
       label: loading ? const SizedBox.shrink() : Text(label),
@@ -534,7 +546,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF6366F1).withValues(alpha: 0.2)),
+        border:
+            Border.all(color: const Color(0xFF6366F1).withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -570,7 +583,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
   // ---------------------------------------------------------------------------
 
   Widget _buildPlaceholder() {
-    LogManager.debug('Building TryNowWidget placeholder for: ${widget.modelPath}');
+    LogManager.debug(
+        'Building TryNowWidget placeholder for: ${widget.modelPath}');
     return FadeTransition(
       opacity: _fadeAnimation,
       child: Container(
@@ -590,7 +604,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.threed_rotation, color: Colors.white, size: 20),
+                    child: const Icon(Icons.threed_rotation,
+                        color: Colors.white, size: 20),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -607,7 +622,8 @@ class _TryNowWidgetState extends ConsumerState<TryNowWidget>
                         ),
                         const Text(
                           'Interactive 3D experience',
-                          style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                          style:
+                              TextStyle(fontSize: 12, color: Color(0xFF64748B)),
                         ),
                       ],
                     ),

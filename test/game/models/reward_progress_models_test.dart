@@ -62,17 +62,13 @@ void main() {
 
     test('skips claimed steps', () {
       final rp = RewardProgress(
-          currentPoints: 0,
-          steps: steps,
-          claimedRewards: [steps[0]]);
+          currentPoints: 0, steps: steps, claimedRewards: [steps[0]]);
       expect(rp.nextReward, steps[1]);
     });
 
     test('null when all steps claimed', () {
       final rp = RewardProgress(
-          currentPoints: 999,
-          steps: steps,
-          claimedRewards: steps);
+          currentPoints: 999, steps: steps, claimedRewards: steps);
       expect(rp.nextReward, isNull);
     });
 
@@ -101,9 +97,7 @@ void main() {
 
     test('null when no next reward', () {
       final rp = RewardProgress(
-          currentPoints: 999,
-          steps: steps,
-          claimedRewards: steps);
+          currentPoints: 999, steps: steps, claimedRewards: steps);
       expect(rp.pointsToNextReward, isNull);
     });
   });
@@ -160,9 +154,7 @@ void main() {
 
     test('excludes claimed steps', () {
       final rp = RewardProgress(
-          currentPoints: 200,
-          steps: steps,
-          claimedRewards: [steps[0]]);
+          currentPoints: 200, steps: steps, claimedRewards: [steps[0]]);
       expect(rp.availableRewards, [steps[1]]);
     });
 
@@ -191,9 +183,7 @@ void main() {
 
     test('false when already claimed', () {
       final rp = RewardProgress(
-          currentPoints: 100,
-          steps: steps,
-          claimedRewards: [steps[0]]);
+          currentPoints: 100, steps: steps, claimedRewards: [steps[0]]);
       expect(rp.canClaimReward(steps[0]), isFalse);
     });
   });

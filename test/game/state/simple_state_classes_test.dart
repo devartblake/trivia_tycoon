@@ -87,7 +87,8 @@ void main() {
 
     test('stores expiryDate when provided', () {
       final dt = DateTime(2026, 12, 31);
-      final s = PremiumStatus(isPremium: true, discountPercent: 10, expiryDate: dt);
+      final s =
+          PremiumStatus(isPremium: true, discountPercent: 10, expiryDate: dt);
       expect(s.expiryDate, dt);
     });
   });
@@ -226,8 +227,8 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      final base = QuestionState(
-          questions: [_q()], score: 50, diamonds: 10, money: 100);
+      final base =
+          QuestionState(questions: [_q()], score: 50, diamonds: 10, money: 100);
       final updated = base.copyWith(score: 200);
       expect(updated.questions.length, 1);
       expect(updated.diamonds, 10);

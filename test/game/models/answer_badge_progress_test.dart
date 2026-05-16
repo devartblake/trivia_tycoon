@@ -137,14 +137,22 @@ void main() {
 
     test('round-trip preserves id', () {
       final b = GameBadge(
-        id: 'b7', name: 'X', description: 'Y', iconPath: 'Z', isUnlocked: true,
+        id: 'b7',
+        name: 'X',
+        description: 'Y',
+        iconPath: 'Z',
+        isUnlocked: true,
       );
       expect(GameBadge.fromJson(b.toJson()).id, 'b7');
     });
 
     test('round-trip preserves isUnlocked true', () {
       final b = GameBadge(
-        id: 'b8', name: 'X', description: 'Y', iconPath: 'Z', isUnlocked: true,
+        id: 'b8',
+        name: 'X',
+        description: 'Y',
+        iconPath: 'Z',
+        isUnlocked: true,
       );
       expect(GameBadge.fromJson(b.toJson()).isUnlocked, isTrue);
     });
@@ -206,8 +214,14 @@ void main() {
   group('FlowConnectLevelData', () {
     FlowConnectLevelData _build() {
       final grid = [
-        [FlowConnectGridCell(row: 0, col: 0), FlowConnectGridCell(row: 0, col: 1)],
-        [FlowConnectGridCell(row: 1, col: 0), FlowConnectGridCell(row: 1, col: 1)],
+        [
+          FlowConnectGridCell(row: 0, col: 0),
+          FlowConnectGridCell(row: 0, col: 1)
+        ],
+        [
+          FlowConnectGridCell(row: 1, col: 0),
+          FlowConnectGridCell(row: 1, col: 1)
+        ],
       ];
       final path = [
         FlowConnectPathPoint(row: 0, col: 0, order: 0),

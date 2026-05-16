@@ -125,8 +125,7 @@ void main() {
     test('queue empty after successful retry', () async {
       final svc = await _make();
       await svc.enqueueEvent('/ep', {'data': 1});
-      await svc.retryQueuedEvents(
-          (endpoint, payload) async {/* success */});
+      await svc.retryQueuedEvents((endpoint, payload) async {/* success */});
       expect((await svc.getPendingEvents()).length, 0);
     });
 
@@ -357,7 +356,8 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('state persistence', () {
-    test('events survive service restart (new instance + initialize)', () async {
+    test('events survive service restart (new instance + initialize)',
+        () async {
       final svc1 = await _make();
       await svc1.enqueueEvent('/persisted', {'data': 'keep'});
 

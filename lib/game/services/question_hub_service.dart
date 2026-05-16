@@ -377,8 +377,8 @@ class QuestionHubService {
         );
         return {
           'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
-          'subjectCount': (response['subjectCount'] as num?)?.toInt() ??
-              categories.length,
+          'subjectCount':
+              (response['subjectCount'] as num?)?.toInt() ?? categories.length,
           'availableCategories': categories,
           'source': 'backend',
           'meta': envelope.meta,

@@ -101,13 +101,15 @@ void main() {
     });
 
     test('contains up, down, left, right, none', () {
-      expect(Direction.values, containsAll([
-        Direction.up,
-        Direction.down,
-        Direction.left,
-        Direction.right,
-        Direction.none,
-      ]));
+      expect(
+          Direction.values,
+          containsAll([
+            Direction.up,
+            Direction.down,
+            Direction.left,
+            Direction.right,
+            Direction.none,
+          ]));
     });
   });
 

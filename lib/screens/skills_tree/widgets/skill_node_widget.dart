@@ -115,7 +115,8 @@ class SkillNodeWidget extends StatelessWidget {
 
     // Dark-to-pastel gradient: dark background with category color blended in.
     // Mix factor scales with node state so unlocked/selected cells glow more.
-    final mixA = isSelected ? 0.45 : (isUnlocked ? 0.30 : (isAvailable ? 0.22 : 0.12));
+    final mixA =
+        isSelected ? 0.45 : (isUnlocked ? 0.30 : (isAvailable ? 0.22 : 0.12));
     final mixB = mixA + 0.12;
     final gradient = LinearGradient(
       colors: [
@@ -148,12 +149,10 @@ class SkillNodeWidget extends StatelessWidget {
     final iconSz = _titleFontSize * 0.85;
 
     // Abbreviated title — single line, max 11 chars
-    final abbrev = node.title.length > 11
-        ? '${node.title.substring(0, 10)}…'
-        : node.title;
+    final abbrev =
+        node.title.length > 11 ? '${node.title.substring(0, 10)}…' : node.title;
 
-    final statusIcon =
-        _getStatusIcon(isUnlocked, isAvailable, base, iconSz);
+    final statusIcon = _getStatusIcon(isUnlocked, isAvailable, base, iconSz);
 
     final content = Column(
       mainAxisAlignment: MainAxisAlignment.center,

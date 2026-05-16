@@ -101,7 +101,10 @@ void main() {
 
     test('copyWith status updated, others preserved', () {
       final r = ReadReceipt(
-          messageId: 'msg2', userId: 'u2', status: ReadStatus.sent, timestamp: ts);
+          messageId: 'msg2',
+          userId: 'u2',
+          status: ReadStatus.sent,
+          timestamp: ts);
       final updated = r.copyWith(status: ReadStatus.read);
       expect(updated.status, ReadStatus.read);
       expect(updated.messageId, 'msg2');
@@ -110,7 +113,10 @@ void main() {
 
     test('copyWith error updated', () {
       final r = ReadReceipt(
-          messageId: 'm3', userId: 'u3', status: ReadStatus.failed, timestamp: ts);
+          messageId: 'm3',
+          userId: 'u3',
+          status: ReadStatus.failed,
+          timestamp: ts);
       final withErr = r.copyWith(error: 'bad gateway');
       expect(withErr.error, 'bad gateway');
     });
@@ -127,7 +133,8 @@ void main() {
       expect(restored.messageId, r.messageId);
       expect(restored.userId, r.userId);
       expect(restored.status, r.status);
-      expect(restored.timestamp.toIso8601String(), r.timestamp.toIso8601String());
+      expect(
+          restored.timestamp.toIso8601String(), r.timestamp.toIso8601String());
       expect(restored.error, isNull);
     });
 
@@ -176,13 +183,17 @@ void main() {
     }
 
     test('totalRecipients', () {
-      final s =
-          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered, 'u3': ReadStatus.sent});
+      final s = _makeStatus({
+        'u1': ReadStatus.read,
+        'u2': ReadStatus.delivered,
+        'u3': ReadStatus.sent
+      });
       expect(s.totalRecipients, 3);
     });
 
     test('readCount counts only read status', () {
-      final s = _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s =
+          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.readCount, 1);
     });
 
@@ -201,7 +212,8 @@ void main() {
     });
 
     test('isReadByAll false when some not read', () {
-      final s = _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s =
+          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.isReadByAll, isFalse);
     });
 
@@ -212,27 +224,32 @@ void main() {
     });
 
     test('isDeliveredToAll true when all delivered or read', () {
-      final s = _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s =
+          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.isDeliveredToAll, isTrue);
     });
 
     test('isDeliveredToAll false when any sent or failed', () {
-      final s = _makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.sent});
+      final s =
+          _makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.sent});
       expect(s.isDeliveredToAll, isFalse);
     });
 
     test('hasFailures true when any failed', () {
-      final s = _makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.failed});
+      final s =
+          _makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.failed});
       expect(s.hasFailures, isTrue);
     });
 
     test('hasFailures false when none failed', () {
-      final s = _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s =
+          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.hasFailures, isFalse);
     });
 
     test('getReceiptForUser returns correct receipt', () {
-      final s = _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s =
+          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.getReceiptForUser('u1')?.status, ReadStatus.read);
     });
 
@@ -318,7 +335,9 @@ void main() {
     test('updates status for tracked recipient', () {
       svc.trackMessage(messageId: 'ums1_msg', recipientIds: ['ums_u1']);
       svc.updateMessageStatus(
-          messageId: 'ums1_msg', userId: 'ums_u1', status: ReadStatus.delivered);
+          messageId: 'ums1_msg',
+          userId: 'ums_u1',
+          status: ReadStatus.delivered);
       final receipt =
           svc.getMessageStatus('ums1_msg')?.getReceiptForUser('ums_u1');
       expect(receipt?.status, ReadStatus.delivered);
@@ -329,7 +348,9 @@ void main() {
       svc.updateMessageStatus(
           messageId: 'ums2_msg', userId: 'ums_u2', status: ReadStatus.read);
       svc.updateMessageStatus(
-          messageId: 'ums2_msg', userId: 'ums_u2', status: ReadStatus.delivered);
+          messageId: 'ums2_msg',
+          userId: 'ums_u2',
+          status: ReadStatus.delivered);
       final receipt =
           svc.getMessageStatus('ums2_msg')?.getReceiptForUser('ums_u2');
       expect(receipt?.status, ReadStatus.read); // not downgraded
@@ -374,11 +395,17 @@ void main() {
       svc.trackMessage(messageId: 'mmar2_msg', recipientIds: ['mmar_user']);
       svc.markMultipleAsRead(['mmar1_msg', 'mmar2_msg'], 'mmar_user');
       expect(
-        svc.getMessageStatus('mmar1_msg')?.getReceiptForUser('mmar_user')?.status,
+        svc
+            .getMessageStatus('mmar1_msg')
+            ?.getReceiptForUser('mmar_user')
+            ?.status,
         ReadStatus.read,
       );
       expect(
-        svc.getMessageStatus('mmar2_msg')?.getReceiptForUser('mmar_user')?.status,
+        svc
+            .getMessageStatus('mmar2_msg')
+            ?.getReceiptForUser('mmar_user')
+            ?.status,
         ReadStatus.read,
       );
     });
@@ -411,11 +438,17 @@ void main() {
         ),
       ]);
       expect(
-        svc.getMessageStatus('batch1_msg')?.getReceiptForUser('batch_u')?.status,
+        svc
+            .getMessageStatus('batch1_msg')
+            ?.getReceiptForUser('batch_u')
+            ?.status,
         ReadStatus.delivered,
       );
       expect(
-        svc.getMessageStatus('batch2_msg')?.getReceiptForUser('batch_u')?.status,
+        svc
+            .getMessageStatus('batch2_msg')
+            ?.getReceiptForUser('batch_u')
+            ?.status,
         ReadStatus.read,
       );
     });
@@ -491,7 +524,8 @@ void main() {
       expect(svc.shouldShowDeliveryStatus('untracked_abc'), isFalse);
     });
 
-    test('shouldShowDeliveryStatus true for tracked message (when enabled)', () {
+    test('shouldShowDeliveryStatus true for tracked message (when enabled)',
+        () {
       svc.updateSettings(deliveryReceiptsEnabled: true);
       svc.trackMessage(messageId: 'ssds_msg', recipientIds: ['ssds_u']);
       expect(svc.shouldShowDeliveryStatus('ssds_msg'), isTrue);
@@ -512,7 +546,8 @@ void main() {
       svc.trackMessage(messageId: 'uc2_msg', recipientIds: ['uc_user']);
       svc.trackMessage(messageId: 'uc3_msg', recipientIds: ['uc_user']);
       svc.markMessageAsRead('uc1_msg', 'uc_user'); // uc1 is read
-      final count = svc.getUnreadCount(['uc1_msg', 'uc2_msg', 'uc3_msg'], 'uc_user');
+      final count =
+          svc.getUnreadCount(['uc1_msg', 'uc2_msg', 'uc3_msg'], 'uc_user');
       expect(count, 2); // uc2 and uc3 are not read
     });
 
@@ -594,8 +629,7 @@ void main() {
 
   group('watchReceipts stream', () {
     test('emits ReadReceipt after updateMessageStatus', () async {
-      svc.trackMessage(
-          messageId: 'wr1_msg', recipientIds: ['wr_u1']);
+      svc.trackMessage(messageId: 'wr1_msg', recipientIds: ['wr_u1']);
       final stream = svc.watchReceipts('wr1_msg');
 
       final completer = Completer<ReadReceipt>();

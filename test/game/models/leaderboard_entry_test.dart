@@ -435,7 +435,8 @@ void main() {
     });
 
     test('copies tier and tierRank', () {
-      final updated = _entry(tier: 5, tierRank: 10).copyWith(tier: 8, tierRank: 2);
+      final updated =
+          _entry(tier: 5, tierRank: 10).copyWith(tier: 8, tierRank: 2);
       expect(updated.tier, 8);
       expect(updated.tierRank, 2);
     });

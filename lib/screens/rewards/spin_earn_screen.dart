@@ -649,11 +649,12 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                 await AppSettings.setSpinRewardPoints(value);
 
                 // Track slider interaction
-                await _trackUserAction('reward_slider_changed', additionalData: {
-                  'old_value': oldValue,
-                  'new_value': value,
-                  'difference': value - oldValue,
-                });
+                await _trackUserAction('reward_slider_changed',
+                    additionalData: {
+                      'old_value': oldValue,
+                      'new_value': value,
+                      'difference': value - oldValue,
+                    });
               },
               rewardSteps: rewardSteps,
               progressColor: Colors.orange,

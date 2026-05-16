@@ -333,11 +333,20 @@ void main() {
   group('getPopularReactions', () {
     test('returns sorted descending by count', () async {
       await svc.addReaction(
-          messageId: 'msg_2', userId: 'u1', userDisplayName: 'U1', type: ReactionType.thumbsUp);
+          messageId: 'msg_2',
+          userId: 'u1',
+          userDisplayName: 'U1',
+          type: ReactionType.thumbsUp);
       await svc.addReaction(
-          messageId: 'msg_2', userId: 'u2', userDisplayName: 'U2', type: ReactionType.thumbsUp);
+          messageId: 'msg_2',
+          userId: 'u2',
+          userDisplayName: 'U2',
+          type: ReactionType.thumbsUp);
       await svc.addReaction(
-          messageId: 'msg_2', userId: 'u3', userDisplayName: 'U3', type: ReactionType.heart);
+          messageId: 'msg_2',
+          userId: 'u3',
+          userDisplayName: 'U3',
+          type: ReactionType.heart);
       final popular = svc.getPopularReactions(limit: 10);
       if (popular.length >= 2) {
         expect(popular.first.value, greaterThanOrEqualTo(popular[1].value));

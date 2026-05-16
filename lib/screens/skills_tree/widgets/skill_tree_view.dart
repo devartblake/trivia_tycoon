@@ -41,6 +41,7 @@ extension SkillNodeFilterModeLabel on SkillNodeFilterMode {
 
 class SkillTreeView extends ConsumerStatefulWidget {
   final SkillNodeFilterMode filterMode;
+
   /// When set, only nodes of this category are shown (e.g. 'scholar', 'xp').
   final String? categoryId;
 

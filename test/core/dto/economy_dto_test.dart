@@ -33,7 +33,10 @@ void main() {
 
     test('stores adjustedCost when provided', () {
       final d = ModeCostDto(
-          mode: 'solo', costType: 'energy', baseCost: 5, available: true,
+          mode: 'solo',
+          costType: 'energy',
+          baseCost: 5,
+          available: true,
           adjustedCost: 3);
       expect(d.adjustedCost, 3);
     });
@@ -48,7 +51,10 @@ void main() {
 
     test('returns adjustedCost when non-null', () {
       final d = ModeCostDto(
-          mode: 'x', costType: 'energy', baseCost: 8, available: true,
+          mode: 'x',
+          costType: 'energy',
+          baseCost: 8,
+          available: true,
           adjustedCost: 4);
       expect(d.effectiveCost, 4);
     });
@@ -63,21 +69,30 @@ void main() {
 
     test('true when adjustedCost < baseCost', () {
       final d = ModeCostDto(
-          mode: 'x', costType: 'energy', baseCost: 10, available: true,
+          mode: 'x',
+          costType: 'energy',
+          baseCost: 10,
+          available: true,
           adjustedCost: 7);
       expect(d.hasDiscount, isTrue);
     });
 
     test('false when adjustedCost == baseCost', () {
       final d = ModeCostDto(
-          mode: 'x', costType: 'energy', baseCost: 5, available: true,
+          mode: 'x',
+          costType: 'energy',
+          baseCost: 5,
+          available: true,
           adjustedCost: 5);
       expect(d.hasDiscount, isFalse);
     });
 
     test('false when adjustedCost > baseCost', () {
       final d = ModeCostDto(
-          mode: 'x', costType: 'energy', baseCost: 5, available: true,
+          mode: 'x',
+          costType: 'energy',
+          baseCost: 5,
+          available: true,
           adjustedCost: 8);
       expect(d.hasDiscount, isFalse);
     });
@@ -85,14 +100,22 @@ void main() {
 
   group('ModeCostDto.fromJson', () {
     test('parses mode', () {
-      final d = ModeCostDto.fromJson(
-          {'mode': 'duo', 'costType': 'energy', 'baseCost': 3, 'available': true});
+      final d = ModeCostDto.fromJson({
+        'mode': 'duo',
+        'costType': 'energy',
+        'baseCost': 3,
+        'available': true
+      });
       expect(d.mode, 'duo');
     });
 
     test('parses costType', () {
-      final d = ModeCostDto.fromJson(
-          {'mode': 'x', 'costType': 'ticket', 'baseCost': 1, 'available': true});
+      final d = ModeCostDto.fromJson({
+        'mode': 'x',
+        'costType': 'ticket',
+        'baseCost': 1,
+        'available': true
+      });
       expect(d.costType, 'ticket');
     });
 
@@ -112,8 +135,8 @@ void main() {
     });
 
     test('parses adjustedCost when present', () {
-      final d = ModeCostDto.fromJson(
-          {'mode': 'x', 'baseCost': 5, 'adjustedCost': 3});
+      final d =
+          ModeCostDto.fromJson({'mode': 'x', 'baseCost': 5, 'adjustedCost': 3});
       expect(d.adjustedCost, 3);
     });
   });
@@ -121,29 +144,35 @@ void main() {
   group('ModeCostDto.toJson', () {
     test('mode always present', () {
       final j = ModeCostDto(
-          mode: 'solo', costType: 'energy', baseCost: 5, available: true)
+              mode: 'solo', costType: 'energy', baseCost: 5, available: true)
           .toJson();
       expect(j['mode'], 'solo');
     });
 
     test('adjustedCost omitted when null', () {
       final j = ModeCostDto(
-          mode: 'x', costType: 'energy', baseCost: 5, available: true)
+              mode: 'x', costType: 'energy', baseCost: 5, available: true)
           .toJson();
       expect(j.containsKey('adjustedCost'), isFalse);
     });
 
     test('adjustedCost included when non-null', () {
       final j = ModeCostDto(
-          mode: 'x', costType: 'energy', baseCost: 5, available: true,
-          adjustedCost: 3)
+              mode: 'x',
+              costType: 'energy',
+              baseCost: 5,
+              available: true,
+              adjustedCost: 3)
           .toJson();
       expect(j['adjustedCost'], 3);
     });
 
     test('round-trip with adjustedCost', () {
       final d = ModeCostDto(
-          mode: 'pvp', costType: 'ticket', baseCost: 2, available: false,
+          mode: 'pvp',
+          costType: 'ticket',
+          baseCost: 2,
+          available: false,
           adjustedCost: 1);
       final d2 = ModeCostDto.fromJson(d.toJson());
       expect(d2.mode, d.mode);
@@ -195,7 +224,8 @@ void main() {
     });
 
     test('fromJson parses firstSessionDiscount true', () {
-      expect(EconomyStateDto.fromJson(_fullJson()).firstSessionDiscount, isTrue);
+      expect(
+          EconomyStateDto.fromJson(_fullJson()).firstSessionDiscount, isTrue);
     });
 
     test('fromJson parses modes map into ModeCostDto objects', () {
@@ -244,7 +274,12 @@ void main() {
       final d = SessionStartDto.fromJson({
         'discountApplied': true,
         'adjustedCosts': {
-          'solo': {'mode': 'solo', 'costType': 'energy', 'baseCost': 3, 'available': true},
+          'solo': {
+            'mode': 'solo',
+            'costType': 'energy',
+            'baseCost': 3,
+            'available': true
+          },
         },
       });
       expect(d.adjustedCosts['solo'], isA<ModeCostDto>());
@@ -256,7 +291,8 @@ void main() {
     });
 
     test('toJson contains adjustedCosts', () {
-      final d = const SessionStartDto(discountApplied: false, adjustedCosts: {});
+      final d =
+          const SessionStartDto(discountApplied: false, adjustedCosts: {});
       expect(d.toJson().containsKey('adjustedCosts'), isTrue);
     });
   });
@@ -287,8 +323,8 @@ void main() {
     });
 
     test('toJson success present', () {
-      final d =
-          DailyTicketClaimDto.fromJson({'success': true, 'ticketsRemaining': 2});
+      final d = DailyTicketClaimDto.fromJson(
+          {'success': true, 'ticketsRemaining': 2});
       expect(d.toJson()['success'], isTrue);
     });
 
@@ -298,8 +334,7 @@ void main() {
     });
 
     test('toJson denyReason included when non-null', () {
-      final d =
-          DailyTicketClaimDto.fromJson({'denyReason': 'no tickets left'});
+      final d = DailyTicketClaimDto.fromJson({'denyReason': 'no tickets left'});
       expect(d.toJson()['denyReason'], 'no tickets left');
     });
   });
@@ -310,8 +345,12 @@ void main() {
 
   group('ReviveQuoteDto', () {
     test('stores baseCost', () {
-      final d = ReviveQuoteDto.fromJson(
-          {'baseCost': 50, 'finalCost': 40, 'almostWinApplied': false, 'costCurrency': 'coins'});
+      final d = ReviveQuoteDto.fromJson({
+        'baseCost': 50,
+        'finalCost': 40,
+        'almostWinApplied': false,
+        'costCurrency': 'coins'
+      });
       expect(d.baseCost, 50);
     });
 
@@ -336,9 +375,12 @@ void main() {
     });
 
     test('toJson contains all 4 fields', () {
-      final j = ReviveQuoteDto.fromJson(
-          {'baseCost': 20, 'finalCost': 15, 'almostWinApplied': true, 'costCurrency': 'gems'})
-          .toJson();
+      final j = ReviveQuoteDto.fromJson({
+        'baseCost': 20,
+        'finalCost': 15,
+        'almostWinApplied': true,
+        'costCurrency': 'gems'
+      }).toJson();
       expect(j.containsKey('baseCost'), isTrue);
       expect(j.containsKey('finalCost'), isTrue);
       expect(j.containsKey('almostWinApplied'), isTrue);

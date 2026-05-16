@@ -196,16 +196,18 @@ class StoreHubData {
     // Backend format: { featured: [...], daily: [...], categories: [...] }
     // Legacy format:  { sections: [...], featured: {}, stats: {} }
     final rawFeaturedField = json['featured'];
-    final isBackendFormat = rawFeaturedField is List || json['categories'] != null;
+    final isBackendFormat =
+        rawFeaturedField is List || json['categories'] != null;
 
     if (isBackendFormat) {
       // New backend format from GET /store/hub
-      final featuredList = (rawFeaturedField as List?)?.whereType<Map>().toList() ?? [];
-      final dailyList = (json['daily'] as List?)?.whereType<Map>().toList() ?? [];
-      final categories = (json['categories'] as List?)
-              ?.map((c) => c.toString())
-              .toList() ??
-          const <String>[];
+      final featuredList =
+          (rawFeaturedField as List?)?.whereType<Map>().toList() ?? [];
+      final dailyList =
+          (json['daily'] as List?)?.whereType<Map>().toList() ?? [];
+      final categories =
+          (json['categories'] as List?)?.map((c) => c.toString()).toList() ??
+              const <String>[];
 
       // Map first featured catalog item to FeaturedItemData for the carousel.
       FeaturedItemData? featured;
@@ -215,7 +217,8 @@ class StoreHubData {
           id: first['sku']?.toString() ?? '',
           title: first['name']?.toString() ?? '',
           subtitle: first['description']?.toString() ?? '',
-          icon: resolveIcon(first['itemType']?.toString(), fallback: Icons.auto_awesome),
+          icon: resolveIcon(first['itemType']?.toString(),
+              fallback: Icons.auto_awesome),
           gradient: resolveGradient(null),
           buttonText: 'View',
           sku: first['sku']?.toString(),

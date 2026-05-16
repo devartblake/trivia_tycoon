@@ -3,8 +3,7 @@ import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 
 // Minimal valid QuestionModel for constructing submissions
-QuestionModel _makeQuestion({String id = 'q1'}) =>
-    QuestionModel.fromJson({
+QuestionModel _makeQuestion({String id = 'q1'}) => QuestionModel.fromJson({
       'id': id,
       'question': 'What is 2+2?',
       'correctAnswer': '4',

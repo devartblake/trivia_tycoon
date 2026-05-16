@@ -42,8 +42,7 @@ void main() {
     });
 
     test('parses category', () {
-      expect(
-          CollectionItem.fromJson(_baseJson(category: 'science')).category,
+      expect(CollectionItem.fromJson(_baseJson(category: 'science')).category,
           'science');
     });
 
@@ -67,13 +66,12 @@ void main() {
     });
 
     test('parses pointValue', () {
-      expect(CollectionItem.fromJson(_baseJson(pointValue: 500)).pointValue,
-          500);
+      expect(
+          CollectionItem.fromJson(_baseJson(pointValue: 500)).pointValue, 500);
     });
 
     test('parses isUnlocked true', () {
-      expect(
-          CollectionItem.fromJson(_baseJson(isUnlocked: true)).isUnlocked,
+      expect(CollectionItem.fromJson(_baseJson(isUnlocked: true)).isUnlocked,
           isTrue);
     });
 
@@ -124,8 +122,7 @@ void main() {
     });
 
     test('epic → purple', () {
-      expect(
-          CollectionItem.fromJson(_baseJson(rarity: 'epic')).rarityColor,
+      expect(CollectionItem.fromJson(_baseJson(rarity: 'epic')).rarityColor,
           '#A335EE');
     });
 
@@ -135,8 +132,7 @@ void main() {
     });
 
     test('uncommon → green', () {
-      expect(
-          CollectionItem.fromJson(_baseJson(rarity: 'uncommon')).rarityColor,
+      expect(CollectionItem.fromJson(_baseJson(rarity: 'uncommon')).rarityColor,
           '#1EFF00');
     });
 
@@ -146,8 +142,7 @@ void main() {
     });
 
     test('unknown rarity → gray (default)', () {
-      expect(
-          CollectionItem.fromJson(_baseJson(rarity: 'mythical')).rarityColor,
+      expect(CollectionItem.fromJson(_baseJson(rarity: 'mythical')).rarityColor,
           '#9D9D9D');
     });
 
@@ -170,13 +165,13 @@ void main() {
     });
 
     test('epic = 4', () {
-      expect(CollectionItem.fromJson(_baseJson(rarity: 'epic')).rarityWeight,
-          4);
+      expect(
+          CollectionItem.fromJson(_baseJson(rarity: 'epic')).rarityWeight, 4);
     });
 
     test('rare = 3', () {
-      expect(CollectionItem.fromJson(_baseJson(rarity: 'rare')).rarityWeight,
-          3);
+      expect(
+          CollectionItem.fromJson(_baseJson(rarity: 'rare')).rarityWeight, 3);
     });
 
     test('uncommon = 2', () {
@@ -186,8 +181,8 @@ void main() {
     });
 
     test('common = 1', () {
-      expect(CollectionItem.fromJson(_baseJson(rarity: 'common')).rarityWeight,
-          1);
+      expect(
+          CollectionItem.fromJson(_baseJson(rarity: 'common')).rarityWeight, 1);
     });
 
     test('unknown rarity = 1 (default)', () {
@@ -270,8 +265,8 @@ void main() {
     });
 
     test('unlockedAt is null in toJson when absent', () {
-      expect(CollectionItem.fromJson(_baseJson()).toJson()['unlockedAt'],
-          isNull);
+      expect(
+          CollectionItem.fromJson(_baseJson()).toJson()['unlockedAt'], isNull);
     });
 
     test('round-trip preserves all fields', () {

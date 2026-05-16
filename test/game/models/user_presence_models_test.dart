@@ -51,11 +51,16 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('PresenceStatus — displayName', () {
-    test('online → "Online"', () => expect(PresenceStatus.online.displayName, 'Online'));
-    test('away → "Away"', () => expect(PresenceStatus.away.displayName, 'Away'));
-    test('busy → "Busy"', () => expect(PresenceStatus.busy.displayName, 'Busy'));
-    test('inGame → "In Game"', () => expect(PresenceStatus.inGame.displayName, 'In Game'));
-    test('offline → "Offline"', () => expect(PresenceStatus.offline.displayName, 'Offline'));
+    test('online → "Online"',
+        () => expect(PresenceStatus.online.displayName, 'Online'));
+    test(
+        'away → "Away"', () => expect(PresenceStatus.away.displayName, 'Away'));
+    test(
+        'busy → "Busy"', () => expect(PresenceStatus.busy.displayName, 'Busy'));
+    test('inGame → "In Game"',
+        () => expect(PresenceStatus.inGame.displayName, 'In Game'));
+    test('offline → "Offline"',
+        () => expect(PresenceStatus.offline.displayName, 'Offline'));
   });
 
   group('PresenceStatus — iconCode', () {
@@ -78,11 +83,16 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('GameState — displayName', () {
-    test('lobby → "In Lobby"', () => expect(GameState.lobby.displayName, 'In Lobby'));
-    test('waiting → "Waiting"', () => expect(GameState.waiting.displayName, 'Waiting'));
-    test('playing → "Playing"', () => expect(GameState.playing.displayName, 'Playing'));
-    test('paused → "Paused"', () => expect(GameState.paused.displayName, 'Paused'));
-    test('finished → "Finished"', () => expect(GameState.finished.displayName, 'Finished'));
+    test('lobby → "In Lobby"',
+        () => expect(GameState.lobby.displayName, 'In Lobby'));
+    test('waiting → "Waiting"',
+        () => expect(GameState.waiting.displayName, 'Waiting'));
+    test('playing → "Playing"',
+        () => expect(GameState.playing.displayName, 'Playing'));
+    test('paused → "Paused"',
+        () => expect(GameState.paused.displayName, 'Paused'));
+    test('finished → "Finished"',
+        () => expect(GameState.finished.displayName, 'Finished'));
   });
 
   group('GameState — allowsJoining', () {
@@ -151,10 +161,9 @@ void main() {
 
     test('parses status using toString() format', () {
       for (final status in PresenceStatus.values) {
-        final p = UserPresence.fromJson(
-            _presenceJson(status: status.toString()));
-        expect(p.status, status,
-            reason: 'Failed for ${status.toString()}');
+        final p =
+            UserPresence.fromJson(_presenceJson(status: status.toString()));
+        expect(p.status, status, reason: 'Failed for ${status.toString()}');
       }
     });
 
@@ -164,8 +173,7 @@ void main() {
     });
 
     test('parses optional activity', () {
-      final p = UserPresence.fromJson(
-          _presenceJson(activity: 'Playing Quiz'));
+      final p = UserPresence.fromJson(_presenceJson(activity: 'Playing Quiz'));
       expect(p.activity, 'Playing Quiz');
     });
 
@@ -268,8 +276,9 @@ void main() {
 
   group('UserPresence — statusColor', () {
     test('each status has a unique non-zero color', () {
-      final colors = PresenceStatus.values.map((s) =>
-          _makePresence(s).statusColor).toSet();
+      final colors = PresenceStatus.values
+          .map((s) => _makePresence(s).statusColor)
+          .toSet();
       expect(colors.length, PresenceStatus.values.length);
     });
 
@@ -329,7 +338,8 @@ void main() {
     });
 
     test('gameActivity is null in JSON when not set', () {
-      expect(_makePresence(PresenceStatus.online).toJson()['gameActivity'], isNull);
+      expect(_makePresence(PresenceStatus.online).toJson()['gameActivity'],
+          isNull);
     });
   });
 
@@ -369,8 +379,8 @@ void main() {
 
   group('GameActivity.fromJson', () {
     test('parses gameType and gameState', () {
-      final ga = GameActivity.fromJson(
-          _gameActivityJson(gameType: 'trivia', gameState: 'GameState.playing'));
+      final ga = GameActivity.fromJson(_gameActivityJson(
+          gameType: 'trivia', gameState: 'GameState.playing'));
       expect(ga.gameType, 'trivia');
       expect(ga.gameState, GameState.playing);
     });
@@ -412,8 +422,8 @@ void main() {
     });
 
     test('parses metadata map', () {
-      final ga = GameActivity.fromJson(_gameActivityJson(
-          metadata: {'allowSpectators': true}));
+      final ga = GameActivity.fromJson(
+          _gameActivityJson(metadata: {'allowSpectators': true}));
       expect(ga.metadata['allowSpectators'], isTrue);
     });
   });
@@ -454,12 +464,17 @@ void main() {
           gameState: state,
           startTime: DateTime.now(),
         );
-        expect(ga.canJoin, isTrue, reason: 'should be joinable in ${state.name}');
+        expect(ga.canJoin, isTrue,
+            reason: 'should be joinable in ${state.name}');
       }
     });
 
     test('canJoin false for playing, paused, finished', () {
-      for (final state in [GameState.playing, GameState.paused, GameState.finished]) {
+      for (final state in [
+        GameState.playing,
+        GameState.paused,
+        GameState.finished
+      ]) {
         final ga = GameActivity(
           gameType: 'quiz',
           gameState: state,
@@ -482,7 +497,8 @@ void main() {
       final ga = GameActivity(
         gameType: 'quiz',
         gameState: GameState.playing,
-        startTime: DateTime.now().subtract(const Duration(hours: 2, minutes: 30)),
+        startTime:
+            DateTime.now().subtract(const Duration(hours: 2, minutes: 30)),
       );
       expect(ga.formattedDuration, contains('h'));
       expect(ga.formattedDuration, contains('m'));

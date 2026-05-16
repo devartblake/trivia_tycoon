@@ -118,13 +118,12 @@ void main() {
     });
 
     test('parses title from title field', () {
-      expect(
-          DailyStoreItem.fromJson(_json(title: 'Hint Pack')).title, 'Hint Pack');
+      expect(DailyStoreItem.fromJson(_json(title: 'Hint Pack')).title,
+          'Hint Pack');
     });
 
     test('parses description', () {
-      expect(
-          DailyStoreItem.fromJson(_json(description: 'Great')).description,
+      expect(DailyStoreItem.fromJson(_json(description: 'Great')).description,
           'Great');
     });
 
@@ -142,8 +141,7 @@ void main() {
     });
 
     test('parses currency', () {
-      expect(
-          DailyStoreItem.fromJson(_json(currency: 'diamonds')).currency,
+      expect(DailyStoreItem.fromJson(_json(currency: 'diamonds')).currency,
           'diamonds');
     });
 
@@ -167,8 +165,7 @@ void main() {
     });
 
     test('parses category from category fallback', () {
-      expect(
-          DailyStoreItem.fromJson(_json(category: 'cosmetic')).category,
+      expect(DailyStoreItem.fromJson(_json(category: 'cosmetic')).category,
           'cosmetic');
     });
 
@@ -274,20 +271,20 @@ void main() {
     });
 
     test('items defaults to empty when absent', () {
-      final data = DailyStoreData.fromJson(
-          {'resetsAt': '2025-06-02T00:00:00.000Z'});
+      final data =
+          DailyStoreData.fromJson({'resetsAt': '2025-06-02T00:00:00.000Z'});
       expect(data.items, isEmpty);
     });
 
     test('parses resetsAt as nextResetAt', () {
-      final data = DailyStoreData.fromJson(
-          {'resetsAt': '2025-09-01T00:00:00.000Z'});
+      final data =
+          DailyStoreData.fromJson({'resetsAt': '2025-09-01T00:00:00.000Z'});
       expect(data.nextResetAt.month, 9);
     });
 
     test('parses nextResetAt as fallback', () {
-      final data = DailyStoreData.fromJson(
-          {'nextResetAt': '2025-10-01T00:00:00.000Z'});
+      final data =
+          DailyStoreData.fromJson({'nextResetAt': '2025-10-01T00:00:00.000Z'});
       expect(data.nextResetAt.month, 10);
     });
 
@@ -322,8 +319,8 @@ void main() {
     });
 
     test('bannerMessage is null when absent', () {
-      final data = DailyStoreData.fromJson(
-          {'resetsAt': '2025-06-02T00:00:00.000Z'});
+      final data =
+          DailyStoreData.fromJson({'resetsAt': '2025-06-02T00:00:00.000Z'});
       expect(data.bannerMessage, isNull);
     });
   });
@@ -390,8 +387,7 @@ void main() {
 
     test('nextResetAt is in the future', () {
       expect(
-          DailyStoreData.fallback.nextResetAt
-              .isAfter(DateTime.now().toUtc()),
+          DailyStoreData.fallback.nextResetAt.isAfter(DateTime.now().toUtc()),
           isTrue);
     });
 
