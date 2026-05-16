@@ -12,9 +12,8 @@ import 'package:trivia_tycoon/screens/skills_tree/skill_branch_detail_screen.dar
 import 'package:trivia_tycoon/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
 
 class _StaticSkillTreeController extends SkillTreeController {
-  _StaticSkillTreeController(Ref ref, SkillTreeState initial)
+  _StaticSkillTreeController(super.ref, SkillTreeState initial)
       : super(
-          ref,
           initialGraph: initial.graph,
           startingPoints: initial.playerPoints,
         ) {

@@ -17,9 +17,8 @@ import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_notifier.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 
 class _StaticSkillTreeController extends SkillTreeController {
-  _StaticSkillTreeController(Ref ref, SkillTreeState initial)
+  _StaticSkillTreeController(super.ref, SkillTreeState initial)
       : super(
-          ref,
           initialGraph: initial.graph,
           startingPoints: initial.playerPoints,
         ) {
