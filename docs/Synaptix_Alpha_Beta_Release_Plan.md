@@ -642,8 +642,17 @@ The immediate requirement is discipline and scope control.
 
 | Item | Priority | Notes |
 |---|---|---|
-| Reward idempotency client-side guard | Medium | Prevent double-call to `updateAfterQuiz` on screen re-entry; backend idempotency via `POST /quiz/complete` is complete |
-| Live smoke test against staging | Required before Alpha launch | `test/integration/live_backend_smoke_test.dart` exists; run against migrated staging env |
+| Live smoke test against staging | Required before Alpha launch | `test/integration/live_backend_smoke_test.dart` exists; run with `SYNAPTIX_TEST_EMAIL` + `SYNAPTIX_TEST_PASSWORD` + `SYNAPTIX_API_BASE_URL` against migrated staging env |
+
+---
+
+## Completed Since Initial Status ✅
+
+| Item | Notes |
+|---|---|
+| `POST /quiz/complete` wired | `ApiService.submitQuizComplete()` added; fire-and-forget call in `ProfileDataUpdater.updateAfterQuiz()` with UUID `eventId` for server-side idempotency |
+| Reward idempotency | Client-side: `ScoreSummaryScreenWrapper._hasProcessedResults` guard. Server-side: `CompleteQuizHandler` deduplicates via `EventId` unique index |
+| Release documentation | `docs/releases/` created with all 5 required files |
 
 ---
 
@@ -655,8 +664,8 @@ Load Profile           ✅ ProfileSyncService.fetchRemoteProfile() on startup
 Load Wallet            ✅ walletProvider + walletSyncProvider active on login
 Start Trivia Session   ✅ question_loader_service.dart, quiz state machine
 Answer Questions       ✅ AdaptedQuizNotifier, encrypted session storage
-Submit Results         ✅ POST /leaderboard (score) — backend reward endpoint TBD
-Grant XP/Coins         ✅ Local grants + post-quiz wallet refresh from backend
+Submit Results         ✅ POST /leaderboard (score) + POST /quiz/complete (authoritative reward grant)
+Grant XP/Coins         ✅ POST /quiz/complete → EconomyService.ApplyAsync idempotent; wallet re-fetched from backend
 Update Leaderboard     ✅ LeaderboardController.submitScore() called after quiz
 Return to Home         ✅ Router navigates to /home on completion
 ```

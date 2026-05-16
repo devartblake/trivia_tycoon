@@ -190,6 +190,24 @@ class ApiService {
     });
   }
 
+  Future<void> submitQuizComplete({
+    required String eventId,
+    required String playerId,
+    required int score,
+    required int totalQuestions,
+    required String category,
+  }) async {
+    await _handleRequest(() async {
+      await _dio.post('/quiz/complete', data: {
+        'eventId': eventId,
+        'playerId': playerId,
+        'score': score,
+        'totalQuestions': totalQuestions,
+        'category': category,
+      });
+    });
+  }
+
   Future<void> unlockAchievement(String playerName, String achievement) async {
     await _handleRequest(() async {
       await _dio.post('/achievements', data: {

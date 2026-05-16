@@ -305,6 +305,20 @@ class ProfileDataUpdater {
         }).catchError((_) {}),
       );
 
+      // Fire-and-forget: authoritative server-side XP/coin grant with idempotency.
+      // Backend deduplicates via EventId unique index (CompleteQuizHandler).
+      unawaited(
+        ref.read(currentUserIdProvider.future).then((playerId) {
+          return ref.read(apiServiceProvider).submitQuizComplete(
+            eventId: const Uuid().v4(),
+            playerId: playerId,
+            score: results.score,
+            totalQuestions: results.totalQuestions,
+            category: results.category,
+          );
+        }).catchError((_) {}),
+      );
+
       // Report win/loss to pity system (non-blocking, fire-and-forget)
       _reportPity(ref, results);
 
