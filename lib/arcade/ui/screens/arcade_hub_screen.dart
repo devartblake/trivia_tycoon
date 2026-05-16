@@ -7,7 +7,6 @@ import '../../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
 import '../../providers/arcade_providers.dart';
-import 'arcade_game_shell.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class ArcadeHubScreen extends ConsumerWidget {

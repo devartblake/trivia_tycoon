@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 
 import '../api_service.dart';
 import '../../models/social/friend_list_item_dto.dart';

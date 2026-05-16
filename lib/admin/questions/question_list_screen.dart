@@ -67,7 +67,7 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
     final updated = await context.push<QuestionModel>('/admin/question-editor',
         extra: question);
 
-    if (updated != null && updated is QuestionModel) {
+    if (updated != null) {
       final i = _questions.indexWhere((q) => q.id == question.id);
       if (i != -1) {
         try {
@@ -311,7 +311,7 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
 
   void _handleAddQuestion() async {
     final newQ = await context.push<QuestionModel>('/admin/question-editor');
-    if (newQ != null && newQ is QuestionModel) {
+    if (newQ != null) {
       try {
         final serviceManager = ref.read(serviceManagerProvider);
         await serviceManager.apiService
