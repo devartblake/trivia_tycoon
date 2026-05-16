@@ -818,22 +818,32 @@ This gives the project a stable, repeatable, and production-friendly migration p
 
 # 18. Implementation Status
 
-**Last updated: 2026-05-15**
+**Last updated: 2026-05-16**
 
 ## Phase Completion
 
-| Phase | Description | Status |
-|---|---|---|
-| Phase 1 | Migration Runner Project (`Tycoon.DatabaseMigrator`) | ⏳ Pending |
-| Phase 2 | PostgreSQL Advisory Lock | ⏳ Pending |
-| Phase 3 | Migration Runner Logic + Logging | ⏳ Pending |
-| Phase 4 | Idempotent SQL Script Generation | ⏳ Pending |
-| Phase 5 | Migration Manifest (CI artifact) | ⏳ Pending |
-| Phase 6 | Docker Migrator Image (`Dockerfile.migrator`) | ⏳ Pending |
-| Phase 7 | Docker Compose `db-migrator` Service | ⏳ Pending |
-| Phase 8 | GitHub Actions Migration Validation Workflow | ⏳ Pending |
-| Phase 9 | Release Migration Gate (backup → migrate → smoke test → deploy) | ⏳ Pending |
-| Phase 10 | Post-Migration Smoke Tests | ⏳ Pending |
+| Phase | Description | Status | Notes |
+|---|---|---|---|
+| Phase 1 | Migration Runner Project | ✅ Complete | `Tycoon.MigrationService` (not `Tycoon.DatabaseMigrator` as planned) — `MigrationWorker.cs` orchestrates full migration lifecycle |
+| Phase 2 | PostgreSQL Advisory Lock | ✅ Complete | `pg_advisory_lock(987654321)` / `pg_advisory_unlock` added to `MigrationWorker.ExecuteAsync` around `MigrateAsync`; using raw `DbConnection` pattern consistent with rest of the file |
+| Phase 3 | Migration Runner Logic + Logging | ✅ Complete | Three modes: `MigrateAndSeed`, `MigrateSeedAndRebuildElastic`, `RebuildElastic`; Serilog throughout; exit code `1` on failure; idempotent seeders (tiers, missions, store catalog) |
+| Phase 4 | Idempotent SQL Script Generation | ✅ Complete | Added to `schema-validation` job in `dotnet-ci.yml`; outputs `artifacts/migrations/idempotent.sql` via `dotnet ef migrations script --idempotent`; uploaded as `migration-artifacts` artifact |
+| Phase 5 | Migration Manifest (CI artifact) | ✅ Complete | Shell step in same job writes `artifacts/migrations/migration-manifest.json` with release name, timestamp, and script reference; uploaded alongside SQL |
+| Phase 6 | Docker Migrator Image | ✅ Complete | `docker/Dockerfile.migration-service` — production-ready multi-stage build, non-root user, Kerberos PostgreSQL auth |
+| Phase 7 | Docker Compose `db-migrator` Service | ✅ Complete | `compose.yml` has `migration` service (`Dockerfile.migrate`) with `restart: "no"`; `backend-api` depends on it via `condition: service_completed_successfully` |
+| Phase 8 | GitHub Actions Migration Validation Workflow | ✅ Complete | `schema-validation` job in `dotnet-ci.yml` generates `artifacts/migrations/idempotent.sql` + `migration-manifest.json` and uploads as `migration-artifacts` artifact; `compose-smoke.yml` and `operator-cutover-readiness.yml` provide additional gate coverage |
+| Phase 9 | Release Migration Gate | ✅ Complete | `release-gate.yml` added — chains schema artifact verification → API health smoke → readiness report; `operator-cutover-readiness.yml` provides manual evidence-collection gate for sign-off |
+| Phase 10 | Post-Migration Smoke Tests | ⚠️ Partial | `alpha-p0-smoke.yml` and `compose-smoke.yml` exist and cover golden path endpoints; not yet validated against a fully migrated staging environment |
+
+---
+
+## Key Implementation Notes
+
+**Naming difference:** The plan in Sections 4–6 specifies a project named `Tycoon.DatabaseMigrator`. The actual implementation is `Tycoon.MigrationService`, which covers the same responsibilities and more (seeding, Elastic rebuild, dashboard readiness validation). All plan references to `Tycoon.DatabaseMigrator` map to `Tycoon.MigrationService` in the codebase.
+
+**Advisory lock approach:** `pg_advisory_lock(987654321)` / `pg_advisory_unlock` are implemented in `MigrationWorker.ExecuteAsync` around the `MigrateAsync` call using the raw `DbConnection` pattern consistent with the rest of the file. Added in Session 5.
+
+**24 EF migrations applied:** The migration history runs from `20260325180201_InitialCreate` through `20260515102821_AddMayCutoverSchemaSync`. All core Alpha/Beta tables (users, wallet, questions, matches, leaderboard, rewards, anti-cheat) are present in the current schema.
 
 ---
 
@@ -844,13 +854,13 @@ The Flutter client is ready to integrate against a stable migrated backend. The 
 | Endpoint | Required By | Flutter Status |
 |---|---|---|
 | `GET /health` | Startup health check | ✅ `SynaptixApiClient.healthCheck()` implemented |
-| `GET /api/v1/app/config` | Feature flags + minimum version check | ✅ `appConfigProvider` fetches on startup |
+| `GET /api/v1/app/config` | Feature flags + minimum version check | ✅ Backend: `AppConfigEndpoints.cs` (unauthenticated); Flutter: `appConfigProvider` fetches on startup |
 | `POST /auth/signup` | `/register` route | ✅ `BackendAuthService.signup()` implemented |
 | `POST /auth/login` | `/login` route | ✅ `BackendAuthService.login()` implemented |
 | `GET /users/me/wallet` | Wallet sync on login + post-quiz refresh | ✅ `walletProvider` + `walletSyncProvider` active |
 | `POST /leaderboard` | Solo quiz score submission | ✅ Fire-and-forget after every quiz |
 | `GET /leaderboard` | Leaderboard screen | ✅ `LeaderboardController` implemented |
-| `POST /quiz/complete` or `/solo/results` | Authoritative XP/coin grant + idempotency | ⏳ Backend endpoint not yet created |
+| `POST /quiz/complete` | Authoritative XP/coin grant + idempotency | ✅ `QuizEndpoints.cs` + `CompleteQuizHandler.cs` — idempotent via `EconomyService.ApplyAsync` |
 
 ---
 
@@ -877,26 +887,32 @@ This test must pass before Alpha launch. It covers the golden path end-to-end:
 
 | Item | Priority | Notes |
 |---|---|---|
-| Implement all 10 migration phases | Critical | No migration automation exists yet |
-| Create `POST /quiz/complete` or `/solo/results` endpoint | High | Needed for authoritative XP/coin grants and reward idempotency; `POST /leaderboard` records score only |
-| Run smoke tests against migrated staging environment | Required | Flutter integration test exists; blocked on stable staging |
-| Create release documentation | Required | `ALPHA_ENABLED_FEATURES.md`, `ALPHA_DISABLED_FEATURES.md`, `ALPHA_RELEASE_CRITERIA.md`, `ALPHA_KNOWN_ISSUES.md`, `ALPHA_ROLLBACK_PLAN.md` |
+| Run smoke tests against migrated staging environment | Required | Flutter integration test exists; blocked on stable staging with migrations applied |
+| Alpha release sign-off | Required | Complete checklist in `docs/releases/ALPHA_RELEASE_CRITERIA.md`; four-role sign-off required |
 
 ---
 
 ## Definition of Done — Current Gaps
 
-From Section 15, the migration work is **not yet complete**. The following are unmet:
+From Section 15, progress against the definition of done:
 
 ```text
-- [ ] db-migrator runs successfully against local PostgreSQL
-- [ ] db-migrator applies pending migrations
-- [ ] duplicate migrator runs are protected by advisory lock
-- [ ] CI generates idempotent SQL
-- [ ] CI uploads migration artifacts
-- [ ] APIs start only after migrations succeed in local/dev compose
+- [x] db-migrator runs successfully against local PostgreSQL
+      (Tycoon.MigrationService + Dockerfile.migration-service confirmed)
+- [x] db-migrator applies pending migrations
+      (MigrationWorker.ExecuteAsync applies EF Core migrations with logging)
+- [x] duplicate migrator runs are protected by advisory lock
+      (pg_advisory_lock(987654321) added in MigrationWorker.ExecuteAsync around MigrateAsync call)
+- [x] CI generates idempotent SQL
+      (schema-validation job in dotnet-ci.yml: dotnet ef migrations script --idempotent → artifacts/migrations/idempotent.sql)
+- [x] CI uploads migration artifacts
+      (upload-artifact@v4 step in schema-validation job uploads migration-artifacts)
+- [x] APIs start only after migrations succeed in local/dev compose
+      (migration service in compose.yml; backend-api depends on it via service_completed_successfully)
 - [ ] smoke tests pass after migration
-- [ ] rollback notes exist for release
+      (smoke test workflows exist; staging validation not yet completed — blocked on stable staging environment)
+- [x] rollback notes exist for release
+      (artifacts/migrations/rollback-notes.md created — 24 migrations documented with risk assessment)
 ```
 
-Flutter frontend is unblocked. Backend migration automation is the critical path to Alpha/Beta launch.
+Flutter frontend is unblocked. The only remaining gap is live smoke test validation against a migrated staging environment.

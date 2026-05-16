@@ -596,7 +596,7 @@ The immediate requirement is discipline and scope control.
 
 # 24. Flutter Frontend Implementation Status
 
-**Last updated: 2026-05-15**
+**Last updated: 2026-05-16**
 
 ## Completed ✅
 
@@ -642,10 +642,8 @@ The immediate requirement is discipline and scope control.
 
 | Item | Priority | Notes |
 |---|---|---|
-| Backend endpoint for solo quiz rewards | High | `POST /leaderboard` records the score; a dedicated `/quiz/complete` or `/solo/results` endpoint is needed on the backend to authoritatively grant XP/coins and prevent duplicates |
-| Reward idempotency client-side guard | Medium | Prevent double-call to `updateAfterQuiz` on screen re-entry |
+| Reward idempotency client-side guard | Medium | Prevent double-call to `updateAfterQuiz` on screen re-entry; backend idempotency via `POST /quiz/complete` is complete |
 | Live smoke test against staging | Required before Alpha launch | `test/integration/live_backend_smoke_test.dart` exists; run against migrated staging env |
-| Release documentation | Required | Create `ALPHA_ENABLED_FEATURES.md`, `ALPHA_DISABLED_FEATURES.md`, `ALPHA_RELEASE_CRITERIA.md` |
 
 ---
 
@@ -661,4 +659,154 @@ Submit Results         ✅ POST /leaderboard (score) — backend reward endpoint
 Grant XP/Coins         ✅ Local grants + post-quiz wallet refresh from backend
 Update Leaderboard     ✅ LeaderboardController.submitScore() called after quiz
 Return to Home         ✅ Router navigates to /home on completion
+```
+
+---
+
+# 25. Backend System Implementation Status
+
+**Last updated: 2026-05-16**
+
+## Completed ✅
+
+### Authentication
+- `POST /auth/register` — email registration
+- `POST /auth/signup` — combined register + login for mobile
+- `POST /auth/login` — email + password login
+- `POST /auth/refresh` — JWT token refresh
+- `POST /auth/logout` — session termination
+- JWT Bearer authentication with role-based access control (RBAC)
+- Admin login via `POST /admin/auth/login` with email allowlist (`AdminEmailAcl`)
+
+### User Profiles
+- `Player` entity with profile fields, avatar, XP level
+- Profile sync on startup via `ProfileSyncService`
+- Avatar customization endpoints (`/avatars`)
+
+### Wallet System
+- `PlayerWallet` entity (XP, Coins, Diamonds currencies)
+- `EconomyTransaction` + `EconomyTransactionLine` double-entry ledger
+- `PlayerEconomySafeguardState` abuse detection
+- `GET /users/me/wallet` — wallet retrieval
+
+### Core Trivia Gameplay
+- Question loading endpoints (`/questions`, `/questions/bootstrap`)
+- Answer grading and validation
+- Study sessions (`/study`) and study sets
+- Quiz state machine (question loader service)
+- `ProcessedGameplayEvent` entity for deduplication infrastructure
+
+### Match Result Submission
+- `Match`, `MatchResult`, `MatchParticipantResult` entities
+- `POST /matches` — match creation and submission
+
+### XP/Coin Rewards
+- `EconomyTransaction` reward system
+- `POST /leaderboard` — score submission (fires after every quiz)
+- Hangfire leaderboard recalculation job (daily 05:00 UTC)
+
+### Leaderboards
+- Tier-based leaderboards with pagination (`/leaderboards/tiers/{tierId}`)
+- Player rank lookup (`/leaderboards/me/{playerId}`)
+- 6 tiers seeded (Neural Initiate → Synaptix Prime)
+
+### Health Checks
+- `GET /healthz` — simple liveness check
+- `GET /health/ready` — readiness probe with dependency status
+- `GET /` — service info with feature availability
+
+### Logging / Monitoring
+- Serilog structured logging throughout all projects
+- OpenTelemetry distributed tracing with OTLP exporter
+- `AdminSecurityAudit` and `AdminSecurityMetrics` for security auditing
+- Hangfire dashboard at `/hangfire` (development)
+
+### Admin Dashboard
+- 20+ admin endpoint groups: users, questions, economy, seasons, anti-cheat, moderation, analytics, notifications, store, personalization, experiments
+- `GET /api/v1/admin/config` — feature flag read
+- `PATCH /api/v1/admin/config` — feature flag update
+
+### Feature Flag Infrastructure
+- `FeatureFlagService` (`Tycoon.Backend.Application/Config/FeatureFlagService.cs`)
+- `AdminAppConfig` entity — stores flags as JSON in `FeatureFlagsJson` column
+- Group-level `AddEndpointFilter` gates enforced across all 14 user-facing systems (all return HTTP 403 `FeatureDisabled`)
+- SignalR hubs gated via path-based middleware (`/ws/*`) in `Program.cs`
+- All flags togglable at runtime via `PATCH /api/v1/admin/config` with no restart
+
+### Migration Safety
+- `pg_advisory_lock(987654321)` / `pg_advisory_unlock` in `MigrationWorker.ExecuteAsync` — prevents concurrent migrator container runs
+- `artifacts/migrations/rollback-notes.md` — all 24 migrations documented with data risk assessment and rollback steps
+- `artifacts/migrations/idempotent.sql` — generated in CI for every `main` branch push
+
+### Release Documentation
+- `docs/releases/ALPHA_ENABLED_FEATURES.md` — full list of active Alpha endpoints
+- `docs/releases/ALPHA_DISABLED_FEATURES.md` — all 9+ flag-gated systems with reasons
+- `docs/releases/ALPHA_RELEASE_CRITERIA.md` — must-pass / should-pass checklist for launch sign-off
+- `docs/releases/ALPHA_KNOWN_ISSUES.md` — P1/P2 issues with mitigations
+- `docs/releases/ALPHA_ROLLBACK_PLAN.md` — Level 1 (flag), Level 2 (container), Level 3 (DB restore) procedures
+
+### Release Gate CI
+- `.github/workflows/release-gate.yml` — automated gate: verifies migration artifact → API health smoke → feature flag audit → readiness report to `GITHUB_STEP_SUMMARY` + uploaded as `release-gate-report-<env>-<run_number>` artifact (retained 90 days)
+
+### Quiz Completion Rewards
+- `POST /quiz/complete` — authoritative server-side XP/coin grant with idempotency
+- `CompleteQuizHandler` uses `EconomyService.ApplyAsync` (idempotent via `EventId` unique index)
+- `ProcessedGameplayEvent` recorded for mission-tracking deduplication
+- Rate-limited via `matches-submit` policy (10 req/10s)
+
+### Public App Config
+- `GET /api/v1/app/config` — unauthenticated; serves `minimumClientVersion` + all 14 feature flags
+- Reads from `AdminAppConfig.FeatureFlagsJson`; falls back to safe defaults (alpha-off for disabled systems)
+- `AppConfig:MinimumClientVersion` settable in `appsettings.json`
+
+### Rate Limiting
+- `api` policy: 100 req/min per IP
+- `matches-submit`: 10 req/10s per user
+- `admin-auth-login`: 5 req/min per IP
+
+### Background Jobs (Hangfire)
+- Leaderboard recalculation: `0 5 * * *` (daily 05:00 UTC)
+- Guardian assignment: `0 2 * * *` (daily 02:00 UTC)
+- Admin notification dispatch: every 1 minute
+- Game event scheduler: every 1 minute
+
+### Infrastructure
+- PostgreSQL with 24 applied EF Core migrations (through `20260515102821_AddMayCutoverSchemaSync`)
+- Redis (cache + SignalR backplane)
+- MinIO (object storage, seed catalog)
+- RabbitMQ (messaging)
+- SignalR hubs: `/ws/match`, `/ws/presence`, `/ws/notify` — gated via `realtime_multiplayer_enabled` inline middleware in `Program.cs`
+
+---
+
+## Partial ⚠️
+
+### Feature Flag Enforcement Gap (14 of 14 enforced — complete)
+- **All 14 Alpha/Beta feature flag gates are now enforced** server-side with HTTP 403 `FeatureDisabled`
+- Fully gated systems: game events, guardian, territory, matchmaking, friends, social messages (`social_enabled`), party (`social_enabled`), experiments, personalization, crypto, skill tree, notifications, ML/AI sidecar, realtime multiplayer (SignalR `/ws/*` middleware gate)
+- Remaining partial coverage: Tournaments and Advanced Seasons have no dedicated flag yet (no endpoint group exists; controlled by the `realtime_multiplayer_enabled` gate at the matchmaking level)
+
+---
+
+## Remaining — Backend ⏳
+
+| Item | Priority | Notes |
+|---|---|---|
+| Live smoke test against staging | Required before Alpha | `test/integration/live_backend_smoke_test.dart` exists; blocked on stable staging environment with applied migrations and network access |
+| Alpha release sign-off | Required | Complete checklist in `docs/releases/ALPHA_RELEASE_CRITERIA.md`; all Must Pass items green; four-role sign-off obtained |
+
+---
+
+## Golden Path Backend Status
+
+```text
+Register/Login         ✅ POST /auth/register, /auth/signup, /auth/login
+Load Profile           ✅ Player entity + profile sync on startup
+Load Wallet            ✅ GET /users/me/wallet — PlayerWallet entity
+Start Trivia Session   ✅ GET /questions/bootstrap — question loader
+Answer Questions       ✅ Answer grading, quiz state machine
+Submit Results         ✅ POST /leaderboard (score) + POST /quiz/complete (authoritative reward grant)
+Grant XP/Coins         ✅ POST /quiz/complete — EconomyService.ApplyAsync idempotent grant; ProcessedGameplayEvent deduplication
+Update Leaderboard     ✅ Hangfire recalculation job + POST /leaderboard score record
+Return to Home         ✅ (frontend-driven; backend is stateless between sessions)
 ```
