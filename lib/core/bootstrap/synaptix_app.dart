@@ -11,6 +11,8 @@ import '../../game/providers/riverpod_providers.dart' hide themeNotifierProvider
 import '../../widgets/app_logo.dart';
 import '../../offline_fallback_screen.dart';
 import '../../screens/splash_variants/main_splash.dart';
+import '../../screens/widgets/custom_alert_dialog.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Root widget shared by all platform entry points (main.dart, main_mobile.dart,
 /// main_web.dart). Manages the splash → crash-recovery → init → app sequence.
@@ -28,6 +30,9 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
   bool _initialized = false;
   bool _splashFinished = false;
   bool _recoveryChecked = false;
+  bool _startupChecked = false;
+  bool _forceUpdate = false;
+  bool _backendUnreachable = false;
   Object? _error;
 
   @override
@@ -69,11 +74,61 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
     _checkForCrashRecovery();
   }
 
+  void _completeRecoveryPhase() {
+    _completeRecoveryPhase();
+    _runStartupChecks();
+  }
+
+  Future<void> _runStartupChecks() async {
+    try {
+      final apiClient = ref.read(serviceManagerProvider).synaptixApiClient;
+      final isHealthy = await apiClient.healthCheck();
+      if (!isHealthy) {
+        if (mounted) setState(() { _backendUnreachable = true; _startupChecked = true; });
+        return;
+      }
+    } catch (_) {
+      if (mounted) setState(() { _backendUnreachable = true; _startupChecked = true; });
+      return;
+    }
+
+    try {
+      final config = await ref.read(appConfigProvider.future);
+      if (config.minimumClientVersion != '0.0.0') {
+        final info = await PackageInfo.fromPlatform();
+        if (_isVersionBelow(info.version, config.minimumClientVersion)) {
+          if (mounted) setState(() { _forceUpdate = true; _startupChecked = true; });
+          return;
+        }
+      }
+    } catch (_) {
+      // Config unavailable — safe defaults, allow launch.
+    }
+
+    if (mounted) setState(() => _startupChecked = true);
+  }
+
+  bool _isVersionBelow(String current, String minimum) {
+    final c = _parseSemver(current);
+    final m = _parseSemver(minimum);
+    for (var i = 0; i < 3; i++) {
+      if (c[i] < m[i]) return true;
+      if (c[i] > m[i]) return false;
+    }
+    return false;
+  }
+
+  List<int> _parseSemver(String v) {
+    final parts = v.split('.').map((p) => int.tryParse(p) ?? 0).toList();
+    while (parts.length < 3) { parts.add(0); }
+    return parts;
+  }
+
   Future<void> _checkForCrashRecovery() async {
     try {
       final persistenceService = AppInit.persistenceService;
       if (persistenceService == null) {
-        setState(() => _recoveryChecked = true);
+        _completeRecoveryPhase();
         return;
       }
 
@@ -83,12 +138,12 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
         final summary = await persistenceService.getRecoverySummary();
         _showCrashRecoveryDialog(summary);
       } else {
-        setState(() => _recoveryChecked = true);
+        _completeRecoveryPhase();
       }
     } catch (e) {
       LogManager.error('[Recovery] Check failed: $e',
           source: '_SynaptixAppState');
-      setState(() => _recoveryChecked = true);
+      _completeRecoveryPhase();
     }
   }
 
@@ -158,7 +213,8 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
           TextButton(
             onPressed: () async {
               await AppInit.persistenceService?.clearAll();
-              setState(() => _recoveryChecked = true);
+              if (!context.mounted) return;
+              _completeRecoveryPhase();
               Navigator.of(context).pop();
             },
             child: const Text('Start Fresh'),
@@ -166,7 +222,8 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
           ElevatedButton(
             onPressed: () async {
               await _restoreCrashedSession(summary);
-              setState(() => _recoveryChecked = true);
+              if (!context.mounted) return;
+              _completeRecoveryPhase();
               Navigator.of(context).pop();
             },
             style: ElevatedButton.styleFrom(
@@ -283,6 +340,79 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
           ),
         ),
       );
+    }
+
+    if (!_startupChecked) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppLogo(size: 120, animate: true),
+              const SizedBox(height: 32),
+              const CircularProgressIndicator(color: Color(0xFF6366F1)),
+              const SizedBox(height: 16),
+              const Text(
+                'Connecting to server...',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_backendUnreachable) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFF5F7FA),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.cloud_off_rounded, size: 64, color: Colors.grey),
+              const SizedBox(height: 24),
+              const Text(
+                'Cannot reach the server',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Please check your connection and try again.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _startupChecked = false;
+                    _backendUnreachable = false;
+                  });
+                  _runStartupChecks();
+                },
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_forceUpdate) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        showCustomAlertDialog(
+          context: context,
+          title: 'Update Required',
+          message:
+              'A new version of Synaptix is required to continue. Please update the app.',
+          type: AlertType.warning,
+          confirmText: 'Update Now',
+          showCancelButton: false,
+          onConfirm: () {},
+        );
+      });
     }
 
     if (!_initialized || _initialData == null) {

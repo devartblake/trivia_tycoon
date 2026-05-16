@@ -47,7 +47,7 @@ class GamePlatformAuthService {
     try {
       await GamesServices.signIn();
 
-      final playerId = await GamesServices.getPlayerId() ?? '';
+      final playerId = await GamesServices.getPlayerID() ?? '';
       final playerName = await GamesServices.getPlayerName() ?? '';
 
       if (playerId.isEmpty) return null;
@@ -71,7 +71,7 @@ class GamePlatformAuthService {
     if (kIsWeb) return false;
     try {
       await GamesServices.signIn();
-      final id = await GamesServices.getPlayerId();
+      final id = await GamesServices.getPlayerID();
       return id != null && id.isNotEmpty;
     } catch (_) {
       return false;

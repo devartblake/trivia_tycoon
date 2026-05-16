@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../providers/quiz_results_provider.dart';
@@ -292,8 +294,23 @@ class ProfileDataUpdater {
 
       LogManager.debug('Quiz completion processing finished successfully');
 
+      // Fire-and-forget: post solo quiz score to backend leaderboard.
+      // Same pattern as _reportPity: async chain, errors swallowed so the
+      // local completion flow is never blocked by a network failure.
+      unawaited(
+        ref.read(currentUserIdProvider.future).then((playerId) {
+          return ref
+              .read(leaderboardControllerProvider)
+              .submitScore(playerId, results.score);
+        }).catchError((_) {}),
+      );
+
       // Report win/loss to pity system (non-blocking, fire-and-forget)
       _reportPity(ref, results);
+
+      // Invalidate cached wallet so walletSyncProvider re-fetches from backend.
+      // Picks up any server-side balance changes (rewards, purchases, etc.).
+      ref.invalidate(walletProvider);
     } catch (e) {
       LogManager.debug('Error in ProfileDataUpdater.updateAfterQuiz: $e');
       rethrow;

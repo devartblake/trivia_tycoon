@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/game/state/quiz_state.dart';
+import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/services/quiz_category.dart';
 
@@ -14,7 +15,12 @@ QuestionModel _q({
       id: id,
       category: category,
       question: question,
-      answers: ['Water', 'Fire', 'Earth', 'Air'],
+      answers: [
+        Answer(text: 'Water', isCorrect: true),
+        Answer(text: 'Fire', isCorrect: false),
+        Answer(text: 'Earth', isCorrect: false),
+        Answer(text: 'Air', isCorrect: false),
+      ],
       correctAnswer: 'Water',
       type: 'multiple_choice',
       difficulty: difficulty,

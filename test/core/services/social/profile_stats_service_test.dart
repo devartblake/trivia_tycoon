@@ -277,7 +277,7 @@ void main() {
       svc.recordMatch(_match(id: 'la3', userId: uid, score: 500, result: GameResult.win));
       final lb = svc.getGlobalLeaderboard();
       // Find these users in leaderboard
-      final positions = lb.map((s) => s.userId).toList();
+      final positions = lb.map((s) => s.key).toList();
       final u3Pos = positions.indexOf(u3);
       final uidPos = positions.indexOf(uid);
       final u2Pos = positions.indexOf(u2);
@@ -300,7 +300,7 @@ void main() {
       const catUser = 'cat_lb_user';
       svc.recordMatch(_match(userId: catUser, category: 'Movies', result: GameResult.win));
       final lb = svc.getCategoryLeaderboard('Movies');
-      expect(lb.any((s) => s.userId == catUser), isTrue);
+      expect(lb.any((s) => s.key == catUser), isTrue);
     });
   });
 

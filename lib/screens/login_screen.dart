@@ -46,7 +46,9 @@ class MockUser {
 /// Modern game-inspired login screen
 class LoginScreen extends ConsumerStatefulWidget {
   static const routeName = '/auth';
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, this.startInSignUpMode = false});
+
+  final bool startInSignUpMode;
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -115,6 +117,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   @override
   void initState() {
     super.initState();
+    _isSignUpMode = widget.startInSignUpMode;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,

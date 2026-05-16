@@ -88,7 +88,7 @@ void main() {
 
   group('ReferralCode.toJson', () {
     test('serializes status as name string', () {
-      const rc = ReferralCode(
+      final rc = ReferralCode(
         code: 'ABC',
         ownerUserId: 'u1',
         createdAt: DateTime(2025, 1, 1),
@@ -101,7 +101,7 @@ void main() {
     });
 
     test('serializes createdAt as UTC ISO string', () {
-      const rc = ReferralCode(
+      final rc = ReferralCode(
         code: 'X',
         ownerUserId: 'u',
         createdAt: DateTime.utc(2025, 3, 10),
@@ -111,14 +111,14 @@ void main() {
     });
 
     test('expiresAt is null in JSON when not set', () {
-      const rc = ReferralCode(
+      final rc = ReferralCode(
           code: 'X', ownerUserId: 'u', createdAt: DateTime.utc(2025, 1, 1), isSynced: false);
       expect(rc.toJson()['expiresAt'], isNull);
     });
   });
 
   group('ReferralCode.copyWith', () {
-    const base = ReferralCode(
+    final base = ReferralCode(
       code: 'OLD',
       ownerUserId: 'u1',
       createdAt: DateTime.utc(2025, 1, 1),
@@ -140,13 +140,13 @@ void main() {
 
   group('ReferralCode — Equatable props', () {
     test('two identical instances are equal', () {
-      const a = ReferralCode(
+      final a = ReferralCode(
         code: 'ABC',
         ownerUserId: 'u1',
         createdAt: DateTime.utc(2025, 1, 1),
         isSynced: false,
       );
-      const b = ReferralCode(
+      final b = ReferralCode(
         code: 'ABC',
         ownerUserId: 'u1',
         createdAt: DateTime.utc(2025, 1, 1),
@@ -156,8 +156,8 @@ void main() {
     });
 
     test('instances with different codes are not equal', () {
-      const a = ReferralCode(code: 'AAA', ownerUserId: 'u1', createdAt: DateTime.utc(2025), isSynced: false);
-      const b = ReferralCode(code: 'BBB', ownerUserId: 'u1', createdAt: DateTime.utc(2025), isSynced: false);
+      final a = ReferralCode(code: 'AAA', ownerUserId: 'u1', createdAt: DateTime.utc(2025), isSynced: false);
+      final b = ReferralCode(code: 'BBB', ownerUserId: 'u1', createdAt: DateTime.utc(2025), isSynced: false);
       expect(a, isNot(equals(b)));
     });
   });

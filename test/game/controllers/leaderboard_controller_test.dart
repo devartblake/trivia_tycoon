@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/admin/states/admin_filter_state.dart';
 import 'package:trivia_tycoon/core/services/leaderboard_data_service.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/game/controllers/leaderboard_controller.dart';
 import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
+import 'package:trivia_tycoon/admin/controllers/admin_filter_controller.dart';
 import 'package:trivia_tycoon/admin/leaderboard/leaderboard_filter_screen.dart';
 
 // ---------------------------------------------------------------------------
@@ -16,9 +16,8 @@ import 'package:trivia_tycoon/admin/leaderboard/leaderboard_filter_screen.dart';
 
 /// Stub AdminFilterController: holds a default AdminFilterState with no
 /// active filters, so _applyFilters() passes through all entries unchanged.
-class _StubAdminFilterController
-    extends StateNotifier<AdminFilterState> {
-  _StubAdminFilterController() : super(const AdminFilterState(isLoading: false));
+class _StubAdminFilterController extends AdminFilterController {
+  _StubAdminFilterController(super.ref);
 }
 
 /// Fake LeaderboardDataService: returns an empty list on loadLeaderboard.
@@ -131,7 +130,7 @@ void main() {
     container = ProviderContainer(
       overrides: [
         adminFilterProvider.overrideWith(
-          (ref) => _StubAdminFilterController(),
+          (ref) => _StubAdminFilterController(ref),
         ),
       ],
     );

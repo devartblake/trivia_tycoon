@@ -6,11 +6,28 @@ import 'package:trivia_tycoon/screens/multiplayer/widgets/player_chip.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import 'dialogs/exit_match_confirm.dart';
 
-class RoomLobbyScreen extends ConsumerWidget {
-  const RoomLobbyScreen({super.key});
+class RoomLobbyScreen extends ConsumerStatefulWidget {
+  const RoomLobbyScreen({super.key, this.roomId});
+
+  final String? roomId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RoomLobbyScreen> createState() => _RoomLobbyScreenState();
+}
+
+class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.roomId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(roomControllerProvider.notifier).joinRoom(widget.roomId!);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(roomControllerProvider);
     final players = state.players;
     final theme = Theme.of(context);
@@ -355,7 +372,7 @@ class RoomLobbyScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           if (players.isEmpty)
-            Container(
+            SizedBox(
               height: 100,
               child: Center(
                 child: Column(

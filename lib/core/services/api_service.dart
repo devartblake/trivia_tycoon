@@ -34,6 +34,16 @@ class ApiRequestException implements Exception {
   }
 }
 
+class FeatureDisabledException implements Exception {
+  final String feature;
+  final String message;
+
+  const FeatureDisabledException({required this.feature, required this.message});
+
+  @override
+  String toString() => 'FeatureDisabledException[$feature]: $message';
+}
+
 class ApiPageEnvelope<T> {
   final List<T> items;
   final int page;
@@ -189,6 +199,14 @@ class ApiService {
     });
   }
 
+  Future<Map<String, dynamic>> fetchAppConfig() async {
+    return _handleRequest(() async {
+      final response = await _dio.get('/api/v1/app/config');
+      final data = response.data;
+      return data is Map<String, dynamic> ? data : <String, dynamic>{};
+    });
+  }
+
   Future<void> clearCache() async {
     await _cacheStore.clean();
   }
@@ -248,6 +266,18 @@ class ApiService {
       var normalizedMessage =
           _extractErrorMessageFromResponse(e, envelope: envelope);
 
+      if (e.response?.statusCode == 403) {
+        final errorCode =
+            envelope['error']?.toString() ?? envelope['code']?.toString();
+        if (errorCode == 'FeatureDisabled') {
+          throw FeatureDisabledException(
+            feature: envelope['feature']?.toString() ?? 'unknown',
+            message: envelope['message']?.toString() ??
+                'This feature is not available in the current release.',
+          );
+        }
+      }
+
       if (_shouldAttemptRefresh(e, allowAuthRetry)) {
         final refreshed = await _refreshSessionToken();
         if (refreshed) {
@@ -280,6 +310,7 @@ class ApiService {
         LogManager.debug("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
+      if (e is FeatureDisabledException) rethrow;
       throw Exception("Unexpected Error: $e");
     }
   }

@@ -53,7 +53,9 @@ class MockUser {
 ///   variants without games_services configured fail gracefully.
 class LoginScreenMobile extends ConsumerStatefulWidget {
   static const routeName = '/auth';
-  const LoginScreenMobile({super.key});
+  const LoginScreenMobile({super.key, this.startInSignUpMode = false});
+
+  final bool startInSignUpMode;
 
   @override
   ConsumerState<LoginScreenMobile> createState() => _LoginScreenMobileState();
@@ -118,6 +120,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
   @override
   void initState() {
     super.initState();
+    _isSignUpMode = widget.startInSignUpMode;
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
