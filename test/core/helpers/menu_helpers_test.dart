@@ -15,8 +15,8 @@ void main() {
     test('10000 → "10.0K"', () => expect(MenuHelpers.formatNumber(10000), '10.0K'));
     test('1000000 → "1.0M"', () => expect(MenuHelpers.formatNumber(1000000), '1.0M'));
     test('2500000 → "2.5M"', () => expect(MenuHelpers.formatNumber(2500000), '2.5M'));
-    test('1234 → contains comma separator', () {
-      // 1234 is below 1000 threshold? No, 1234 > 1000 → '1.2K'
+    test('1234 → "1.2K"', () {
+      // Values >= 1000 are abbreviated rather than formatted with separators.
       expect(MenuHelpers.formatNumber(1234), '1.2K');
     });
   });
