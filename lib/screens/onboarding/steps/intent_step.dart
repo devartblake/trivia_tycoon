@@ -76,6 +76,24 @@ class _IntentStepState extends State<IntentStep> {
       ),
       title: 'What brings you here?',
       subtitle: 'We\'ll tailor your experience to match your goal',
+      footer: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: _selected != null ? _continue : null,
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          child: Text(
+            'Continue',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
       child: ListView.separated(
         itemCount: _options.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),
@@ -143,24 +161,6 @@ class _IntentStepState extends State<IntentStep> {
             ),
           );
         },
-      ),
-      footer: SizedBox(
-        width: double.infinity,
-        child: FilledButton(
-          onPressed: _selected != null ? _continue : null,
-          style: FilledButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-          child: Text(
-            'Continue',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
       ),
     );
   }

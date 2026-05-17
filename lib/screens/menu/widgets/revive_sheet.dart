@@ -61,17 +61,19 @@ class _ReviveSheetState extends ConsumerState<ReviveSheet> {
         'almostWin': widget.almostWin,
         'discounted': q.hasDiscount,
       });
-      if (mounted)
+      if (mounted) {
         setState(() {
           _quote = q;
           _loading = false;
         });
+      }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _error = e.toString();
           _loading = false;
         });
+      }
     }
   }
 

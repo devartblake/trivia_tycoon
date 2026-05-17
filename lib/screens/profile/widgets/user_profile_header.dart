@@ -12,8 +12,9 @@ class UserProfileHeader extends StatelessWidget {
   }
 
   Widget _buildFlag(String? countryCode) {
-    if (countryCode == null || countryCode.isEmpty)
+    if (countryCode == null || countryCode.isEmpty) {
       return const SizedBox.shrink();
+    }
 
     // Ensure only letters A-Z are processed and cast to int
     final codeUnits = countryCode

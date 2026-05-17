@@ -58,16 +58,6 @@ class _StubHttpClient extends http.BaseClient {
 // Helpers
 // ---------------------------------------------------------------------------
 
-AuthApiClient _makeApiClient(
-  _StubHttpClient httpClient,
-  _FakeDeviceIdService deviceId,
-) =>
-    AuthApiClient(
-      httpClient,
-      apiBaseUrl: 'https://example.test',
-      deviceId: deviceId,
-    );
-
 BackendAuthService _makeAuthService({
   required AuthTokenStore store,
   required _StubHttpClient httpClient,

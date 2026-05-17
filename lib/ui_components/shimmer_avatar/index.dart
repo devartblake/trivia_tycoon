@@ -22,7 +22,7 @@
 /// )
 /// ```
 
-library shimmer_avatar;
+library;
 
 // Main widget
 export 'shimmer_avatar.dart';

@@ -43,7 +43,7 @@ class AchievementService {
     return achievements;
   }
 
-  /// Saves a list of unlocked achievements (original method with List<Achievement> parameter)
+  /// Saves a list of unlocked achievements (original method with List<&ltAchievement&gt> parameter)
   Future<void> saveAchievements(List<Achievement> achievements) async {
     try {
       // Save using your original AppSettings method

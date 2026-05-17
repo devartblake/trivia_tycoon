@@ -4,11 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../game/controllers/settings_controller.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../game/providers/auth_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../../game/providers/personalization_providers.dart';
-import '../../game/providers/learning_providers.dart'
-    show currentPlayerIdProvider;
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -695,7 +692,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             return Switch.adaptive(
               value: value,
               onChanged: (_) => item['toggleFunction'](),
-              activeColor: const Color(0xFF10B981),
+              activeThumbColor: const Color(0xFF10B981),
             );
           },
         ),
@@ -840,8 +837,9 @@ class _PersonalizationSection extends ConsumerWidget {
 
     return asyncId.when(
       data: (playerId) {
-        if (playerId == null || playerId.isEmpty)
+        if (playerId == null || playerId.isEmpty) {
           return const SizedBox.shrink();
+        }
         return _PersonalizationTile(playerId: playerId);
       },
       loading: () => const SizedBox.shrink(),
@@ -929,7 +927,7 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                 ),
               ),
               value: enabled,
-              activeColor: const Color(0xFF6366F1),
+              activeThumbColor: const Color(0xFF6366F1),
               onChanged: _loading
                   ? null
                   : (value) async {

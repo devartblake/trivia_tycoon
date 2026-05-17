@@ -210,17 +210,6 @@ class MultiplayerQuizService {
     }
   }
 
-  String _getCategoryForGameMode(String gameMode) {
-    switch (gameMode) {
-      case 'arena':
-        return 'mixed'; // Treasure Mine uses mixed categories
-      case 'teams':
-        return 'general'; // Survival Arena uses general knowledge
-      default:
-        return 'mixed';
-    }
-  }
-
   GameMode? _mapGameMode(String gameMode) {
     switch (gameMode) {
       case 'arena':

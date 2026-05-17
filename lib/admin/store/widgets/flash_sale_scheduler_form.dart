@@ -192,7 +192,7 @@ class _FlashSaleSchedulerFormState extends State<FlashSaleSchedulerForm> {
                   value: _model.isActive,
                   onChanged: (v) =>
                       setState(() => _model = _model.copyWith(isActive: v)),
-                  activeColor: const Color(0xFF6366F1),
+                  activeThumbColor: const Color(0xFF6366F1),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 const SizedBox(width: 6),

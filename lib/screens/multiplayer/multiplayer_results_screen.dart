@@ -479,7 +479,7 @@ class _MultiplayerResultsScreenState
               Expanded(
                 child: _buildStatItem(
                   'Questions',
-                  '${correctAnswers}/${quizState.totalQuestions}',
+                  '$correctAnswers/${quizState.totalQuestions}',
                   Icons.quiz,
                   Colors.blue,
                 ),

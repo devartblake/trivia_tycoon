@@ -14,8 +14,8 @@ import '../services/avatar_package_service.dart';
 /// 3) Optional: locally installed avatar packages via AvatarPackageService
 ///
 /// IMPORTANT:
-/// - The legacy API returns List<String> for UI compatibility.
-/// - The preferred API returns List<AvatarAssetRef> so UI can correctly render
+/// - The legacy API returns List<&ltString&gt> for UI compatibility.
+/// - The preferred API returns List<&ltAvatarAssetRef&gt> so UI can correctly render
 ///   AssetImage vs FileImage without guessing.
 ///
 /// Index format expected:

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/paint/hex_shape.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/widgets/hexagon.dart';

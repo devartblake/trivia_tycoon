@@ -30,7 +30,7 @@ class StockIntervalSelector extends StatelessWidget {
 
   Widget _buildDropdown(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       decoration: const InputDecoration(
         labelText: 'Reset Interval',
         border: OutlineInputBorder(),

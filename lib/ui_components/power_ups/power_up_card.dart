@@ -78,7 +78,7 @@ class PowerUpCard extends ConsumerWidget {
 
             // Description
             Text(
-              powerUpItem.description ?? '',
+              powerUpItem.description,
               style: const TextStyle(fontSize: 12),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

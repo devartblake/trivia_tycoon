@@ -103,6 +103,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
   Future<void> _loadSpinData() async {
     try {
+      await _checkAndResetDailyCounts();
       final results = await Future.wait([
         ref.read(spinStatisticsProvider.future),
         AppSettings.getSpinRewardPoints(),

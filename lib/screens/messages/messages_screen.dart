@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
 import '../../game/providers/message_providers.dart';
 import '../../synaptix/mode/synaptix_mode_provider.dart';
-import '../profile/dialogs/add_friend_dialog.dart';
-import '../search/dialogs/search_dialog.dart';
-import 'dialogs/create_dm_dialog.dart';
-import 'dialogs/message_request_dialog.dart';
-import 'message_detail_screen.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class MessagesScreen extends ConsumerStatefulWidget {

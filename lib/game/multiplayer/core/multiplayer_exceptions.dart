@@ -5,12 +5,12 @@ sealed class MultiplayerException implements Exception {
   const MultiplayerException(this.message, {this.status});
 
   @override
-  String toString() => '${runtimeType}(status: $status, message: $message)';
+  String toString() => '$runtimeType(status: $status, message: $message)';
 }
 
 /// Thrown when the WebSocket disconnects unexpectedly.
 class WsDisconnected extends MultiplayerException {
-  const WsDisconnected([String msg = 'WebSocket disconnected']) : super(msg);
+  const WsDisconnected([super.msg = 'WebSocket disconnected']);
 }
 
 /// Generic HTTP failure with status & body.
@@ -23,21 +23,21 @@ class HttpFailure extends MultiplayerException {
 
 /// Protocol-level error (unexpected op, parse error).
 class ProtocolFailure extends MultiplayerException {
-  const ProtocolFailure(String message) : super(message);
+  const ProtocolFailure(super.message);
 }
 
 /// User not authorized/forbidden.
 class NotAuthorized extends MultiplayerException {
-  const NotAuthorized([String msg = 'Not authorized'])
-      : super(msg, status: 401);
+  const NotAuthorized([super.msg = 'Not authorized'])
+      : super(status: 401);
 }
 
 /// Room is full.
 class RoomFull extends MultiplayerException {
-  const RoomFull([String msg = 'Room is full']) : super(msg);
+  const RoomFull([super.msg = 'Room is full']);
 }
 
 /// Request validation / bad input.
 class BadRequest extends MultiplayerException {
-  const BadRequest([String msg = 'Bad request']) : super(msg, status: 400);
+  const BadRequest([super.msg = 'Bad request']) : super(status: 400);
 }

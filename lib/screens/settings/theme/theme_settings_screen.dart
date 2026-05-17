@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Durations;
+﻿import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/services/theme/seasonal_theme_service.dart';
@@ -185,7 +185,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
       ),
       title: Text(
         'Theme Settings',
-        style: TextStyles.H1.textColor(theme.txt).size(FontSizes.s18).bold,
+        style: TextStyles.h1.textColor(theme.txt).size(FontSizes.s18).bold,
       ),
     );
   }
@@ -244,14 +244,14 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                       children: [
                         Text(
                           'Live Preview',
-                          style: TextStyles.Caption.textColor(
+                          style: TextStyles.caption.textColor(
                             theme.accentTxt.withValues(alpha: 0.8),
                           ),
                         ),
                         SizedBox(height: Insets.xs),
                         Text(
                           _getThemeName(theme.type),
-                          style: TextStyles.H1
+                          style: TextStyles.h1
                               .textColor(theme.accentTxt)
                               .size(FontSizes.s18)
                               .bold,
@@ -322,7 +322,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             child: Text(
               label,
               style:
-                  TextStyles.Caption.textColor(textColor).size(FontSizes.s11),
+                  TextStyles.caption.textColor(textColor).size(FontSizes.s11),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -390,14 +390,14 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                         SizedBox(width: Insets.xs),
                         Text(
                           'SEASONAL THEME ACTIVE',
-                          style: TextStyles.T2.textColor(theme.focus),
+                          style: TextStyles.t2.textColor(theme.focus),
                         ),
                       ],
                     ),
                     SizedBox(height: Insets.xs),
                     Text(
                       seasonalTheme.name,
-                      style: TextStyles.H1
+                      style: TextStyles.h1
                           .textColor(theme.txt)
                           .size(FontSizes.s16)
                           .bold,
@@ -406,7 +406,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                       SizedBox(height: Insets.xs),
                       Text(
                         seasonalTheme.description!,
-                        style: TextStyles.Caption.textColor(theme.grey),
+                        style: TextStyles.caption.textColor(theme.grey),
                       ),
                     ],
                   ],
@@ -569,12 +569,12 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                   children: [
                     Text(
                       title,
-                      style: TextStyles.H2.textColor(theme.txt).bold,
+                      style: TextStyles.h2.textColor(theme.txt).bold,
                     ),
                     SizedBox(height: Insets.xs),
                     Text(
                       subtitle,
-                      style: TextStyles.Caption.textColor(theme.grey),
+                      style: TextStyles.caption.textColor(theme.grey),
                     ),
                   ],
                 ),
@@ -646,7 +646,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                         value: themeName,
                         child: Text(
                           themeName,
-                          style: TextStyles.Body1.textColor(theme.txt),
+                          style: TextStyles.body1.textColor(theme.txt),
                         ),
                       );
                     }).toList(),
@@ -749,7 +749,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             ),
             title: Text(
               title,
-              style: TextStyles.H2.textColor(theme.txt).bold,
+              style: TextStyles.h2.textColor(theme.txt).bold,
             ),
             trailing: AnimatedRotation(
               turns: isExpanded ? 0.5 : 0,
@@ -792,7 +792,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
         children: [
           Text(
             'Quick Colors',
-            style: TextStyles.Caption.textColor(theme.grey),
+            style: TextStyles.caption.textColor(theme.grey),
           ),
           SizedBox(height: Insets.m),
           Wrap(
@@ -949,12 +949,12 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                 children: [
                   Text(
                     'About Themes',
-                    style: TextStyles.H2.textColor(theme.txt).bold,
+                    style: TextStyles.h2.textColor(theme.txt).bold,
                   ),
                   SizedBox(height: Insets.sm),
                   Text(
                     'Seasonal themes are automatically activated during special events. You can override them or customize your own colors below.',
-                    style: TextStyles.Body3.textColor(theme.grey),
+                    style: TextStyles.body3.textColor(theme.grey),
                   ),
                 ],
               ),
@@ -994,7 +994,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
           SizedBox(width: Insets.m),
           Text(
             title,
-            style: TextStyles.H1.textColor(theme.txt).size(FontSizes.s16).bold,
+            style: TextStyles.h1.textColor(theme.txt).size(FontSizes.s16).bold,
           ),
         ],
       ),

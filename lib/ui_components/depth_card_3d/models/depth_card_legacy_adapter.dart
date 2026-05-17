@@ -38,10 +38,10 @@ extension DepthCardConfigLegacyAdapter on DepthCardConfig {
       mode: modeOverride ?? inferredMode,
       media: mediaRef,
       background: bgRef,
-      text: text ?? '',
+      text: text,
       width: width,
       height: height,
-      parallaxDepth: parallaxDepth ?? 0.2,
+      parallaxDepth: parallaxDepth,
       themeId: themeId,
       // We deliberately do not serialize runtime theme objects here.
       // If you want, you can map selected primitives into themeOverrides.
@@ -54,14 +54,14 @@ extension DepthCardConfigLegacyAdapter on DepthCardConfig {
   /// Infer render mode from legacy config.
   DepthCardRenderModeV2 _inferMode() {
     final p = modelAssetPath;
-    if (p != null && _looks3D(p)) return DepthCardRenderModeV2.threeD;
+    if (_looks3D(p)) return DepthCardRenderModeV2.threeD;
     // If you also store a file path for 3D, add checks here.
     return DepthCardRenderModeV2.image;
   }
 
   DepthCardResourceRefV2 _legacyMediaRef() {
     final p3d = modelAssetPath;
-    if (p3d != null && p3d.isNotEmpty) {
+    if (p3d.isNotEmpty) {
       // Legacy assumes assets for models
       return DepthCardResourceRefV2(
         source: DepthCardResourceSourceV2.asset,
@@ -107,7 +107,6 @@ extension DepthCardConfigLegacyAdapter on DepthCardConfig {
     final t = theme;
     // Example (adjust to your actual theme type):
     // if (t != null) return t.id;
-    if (t == null) return null;
     return t.runtimeType.toString();
   }
 

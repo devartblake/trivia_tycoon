@@ -9,12 +9,12 @@ class MemberPresenceGrid extends StatelessWidget {
   final Function(GroupMember)? onMemberTap;
 
   const MemberPresenceGrid({
-    Key? key,
+    super.key,
     required this.group,
     this.compact = false,
     this.scrollController,
     this.onMemberTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

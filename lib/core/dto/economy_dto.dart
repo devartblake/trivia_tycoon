@@ -1,6 +1,7 @@
 /// DTOs for the mobile economy endpoints.
 ///
 /// All values are server-driven — never hardcode economy constants on the client.
+library;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /mobile/economy/state

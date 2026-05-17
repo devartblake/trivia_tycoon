@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/dto/personalization_dto.dart';
 import '../../game/providers/personalization_providers.dart';
 import '../../game/providers/personalization_settings_provider.dart';
 import 'recommendation_card.dart';

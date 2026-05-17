@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../../../core/services/api_service.dart';
-import '../../../core/services/store/avatar_asset_service.dart';
 import '../../../game/models/avatar_package_models.dart';
 import '../../../game/providers/avatar_package_providers.dart';
 import '../../../game/providers/riverpod_providers.dart';

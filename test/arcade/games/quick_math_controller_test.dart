@@ -20,16 +20,6 @@ QuickMathController _controller({
       rng: Random(seed),
     );
 
-/// Drives the controller through [n] answer cycles, using the correct answer
-/// each time. Returns the final state.
-QuickMathState _answerCorrectly(QuickMathController ctrl, int n) {
-  late QuickMathState last;
-  for (int i = 0; i < n; i++) {
-    ctrl.answer(ctrl.state.question.answer, (s) => last = s);
-  }
-  return last;
-}
-
 void main() {
   // ---------------------------------------------------------------------------
   // Initial state

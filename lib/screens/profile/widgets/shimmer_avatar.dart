@@ -212,8 +212,9 @@ class _ShimmerAvatarState extends State<ShimmerAvatar>
   }
 
   Widget _buildBadge() {
-    if (widget.badgeType == AvatarBadgeType.none)
+    if (widget.badgeType == AvatarBadgeType.none) {
       return const SizedBox.shrink();
+    }
 
     Widget badgeContent;
     Color badgeColor;

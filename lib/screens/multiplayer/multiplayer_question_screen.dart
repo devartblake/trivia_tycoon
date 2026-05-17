@@ -689,18 +689,21 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
   }
 
   String _getResultText() {
-    if (widget.isCorrect && !widget.isOpponentCorrect)
+    if (widget.isCorrect && !widget.isOpponentCorrect) {
       return 'You Win This Round!';
+    }
     if (!widget.isCorrect && widget.isOpponentCorrect) return 'Opponent Wins!';
     if (widget.isCorrect && widget.isOpponentCorrect) return 'Both Correct!';
     return 'Both Incorrect!';
   }
 
   IconData _getResultIcon() {
-    if (widget.isCorrect && !widget.isOpponentCorrect)
+    if (widget.isCorrect && !widget.isOpponentCorrect) {
       return Icons.emoji_events;
-    if (!widget.isCorrect && widget.isOpponentCorrect)
+    }
+    if (!widget.isCorrect && widget.isOpponentCorrect) {
       return Icons.sentiment_dissatisfied;
+    }
     if (widget.isCorrect && widget.isOpponentCorrect) return Icons.handshake;
     return Icons.help_outline;
   }

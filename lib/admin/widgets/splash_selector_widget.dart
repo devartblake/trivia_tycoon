@@ -53,9 +53,33 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: SplashType.values.map((type) {
+    return RadioGroup<SplashType>(
+      groupValue: _selectedType,
+      onChanged: (val) async {
+        if (val == null) return;
+        setState(() => _selectedType = val);
+        await AppSettings.setSplashType(val);
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white),
+                const SizedBox(width: 12),
+                Text('Splash screen set to ${_formatSplashName(val.name)}'),
+              ],
+            ),
+            backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: SplashType.values.map((type) {
         final isSelected = _selectedType == type;
         return Container(
           margin: const EdgeInsets.only(bottom: 12),
@@ -213,36 +237,7 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
                               : Colors.grey[300]!,
                         ),
                       ),
-                      child: Radio<SplashType>(
-                        value: type,
-                        groupValue: _selectedType,
-                        activeColor: const Color(0xFFF59E0B),
-                        onChanged: (val) async {
-                          if (val != null) {
-                            setState(() => _selectedType = val);
-                            await AppSettings.setSplashType(val);
-                            if (!mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  children: [
-                                    const Icon(Icons.check_circle,
-                                        color: Colors.white),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                        'Splash screen set to ${_formatSplashName(val.name)}'),
-                                  ],
-                                ),
-                                backgroundColor: const Color(0xFF10B981),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
+                      child: Radio<SplashType>(value: type),
                     ),
                   ],
                 ),
@@ -250,7 +245,8 @@ class _SplashSelectorWidgetState extends State<SplashSelectorWidget> {
             ),
           ),
         );
-      }).toList(),
+        }).toList(),
+      ),
     );
   }
 

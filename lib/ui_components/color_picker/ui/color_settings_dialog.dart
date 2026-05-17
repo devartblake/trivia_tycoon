@@ -527,7 +527,7 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
       ),
       value: _localSettings.useCustomPalette,
       onChanged: (value) => _updateSetting('useCustomPalette', value),
-      activeColor: Colors.orange,
+      activeThumbColor: Colors.orange,
       contentPadding: EdgeInsets.zero,
     );
   }

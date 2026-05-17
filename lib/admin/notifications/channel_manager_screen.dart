@@ -276,7 +276,7 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<NotificationImportance>(
-                        value: _importance,
+                        initialValue: _importance,
                         decoration:
                             const InputDecoration(labelText: 'Importance'),
                         items: NotificationImportance.values.map((imp) {

@@ -18,7 +18,6 @@ import 'steps/avatar_step.dart';
 import 'steps/first_session_challenge_step.dart';
 import 'steps/reward_reveal_step.dart';
 import 'steps/completion_step.dart';
-import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/wallet_providers.dart';
 

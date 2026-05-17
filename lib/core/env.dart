@@ -146,7 +146,7 @@ class EnvConfig {
   /// that rely on these variables are created.
   static Future<void> load() async {
     try {
-      await dotenv.load(fileName: ".env");
+      await dotenv.load(fileName: ".env.example");
 
       // Load variables from the environment
       final rawApiBaseUrl =

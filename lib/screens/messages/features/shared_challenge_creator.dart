@@ -92,7 +92,7 @@ class _SharedChallengeCreatorState extends State<SharedChallengeCreator> {
                 _buildSection(
                   'Category',
                   DropdownButtonFormField<String>(
-                    value: _selectedCategory,
+                    initialValue: _selectedCategory,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.category),

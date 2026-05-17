@@ -408,8 +408,12 @@ class PhysicsUtils {
 
   /// Normalize angle to 0-2π range
   static double normalizeAngle(double angle) {
-    while (angle < 0) angle += 2 * pi;
-    while (angle >= 2 * pi) angle -= 2 * pi;
+    while (angle < 0) {
+      angle += 2 * pi;
+    }
+    while (angle >= 2 * pi) {
+      angle -= 2 * pi;
+    }
     return angle;
   }
 

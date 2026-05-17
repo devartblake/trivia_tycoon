@@ -430,7 +430,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
               playerId: playerId,
               category: currentQuestion.category,
               difficulty: currentQuestion.difficulty.toString(),
-              mode: state.classLevel ?? 'solo',
+              mode: state.classLevel,
               correct: isCorrect,
               timeMs: state.timeRemaining > 0
                   ? ((QuizHelpers.getTimeLimitForClass(state.classLevel) -
@@ -475,7 +475,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
             if (playerId != null && playerId.isNotEmpty) {
               ref.read(personalizationServiceProvider).fireMatchCompleted(
                 playerId: playerId,
-                mode: finalState.classLevel ?? 'solo',
+                mode: finalState.classLevel,
                 category: _getCategoryDisplayName(),
                 metadata: {
                   'score': reconciledState.score,

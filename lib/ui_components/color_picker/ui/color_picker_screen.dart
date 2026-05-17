@@ -29,7 +29,6 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
   late Animation<double> _fadeAnimation;
 
   List<Color> savedColors = [];
-  String _fpsCategory = "High";
   ColorPickerTheme _colorPickerTheme = ColorPickerTheme.light;
   int _selectedTabIndex = 0;
 
@@ -49,13 +48,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
       CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic),
     );
 
-    _performanceTracker.startTracking(onUpdated: () {
-      if (mounted) {
-        setState(() {
-          _fpsCategory = _performanceTracker.getPerformanceCategory();
-        });
-      }
-    });
+    _performanceTracker.startTracking(onUpdated: () {});
 
     _loadSavedColors();
     _loadTheme();

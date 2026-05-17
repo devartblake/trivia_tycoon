@@ -262,8 +262,6 @@ class _RewardIconOverlayState extends State<RewardIconOverlay>
   }
 
   Widget _buildIconContent() {
-    final theme = Theme.of(context);
-
     return Stack(
       children: [
         // Background glow effect

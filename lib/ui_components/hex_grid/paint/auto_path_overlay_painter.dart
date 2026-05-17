@@ -57,7 +57,7 @@ class AutoPathOverlayPainter extends CustomPainter {
 
       canvas.saveLayer(layerBounds, Paint());
       canvas.drawRect(layerBounds, maskPaint);
-      canvas.drawPath(fullPath!, clearPaint);
+      canvas.drawPath(fullPath, clearPaint);
       canvas.restore();
     }
 

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 /// Profile Header Section with Avatar, Name, Username, and Title System

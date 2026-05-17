@@ -12,9 +12,9 @@ class CenteredElasticOutCurve extends Curve {
   const CenteredElasticOutCurve([this.period = 0.4]);
 
   @override
-  double transform(double x) {
+  double transform(double t) {
     // A modified version of ElasticOutCurve with the oscillation centered around 0.5
-    return math.pow(2.0, -10.0 * x) * math.sin(x * 2.0 * math.pi / period) +
+    return math.pow(2.0, -10.0 * t) * math.sin(t * 2.0 * math.pi / period) +
         0.5;
   }
 }
@@ -25,10 +25,10 @@ class CenteredElasticInCurve extends Curve {
   const CenteredElasticInCurve([this.period = 0.4]);
 
   @override
-  double transform(double x) {
+  double transform(double t) {
     // Basically just a slightly modified version of the built in ElasticInCurve
-    return -math.pow(2.0, 10.0 * (x - 1.0)) *
-            math.sin((x - 1.0) * 2.0 * math.pi / period) +
+    return -math.pow(2.0, 10.0 * (t - 1.0)) *
+            math.sin((t - 1.0) * 2.0 * math.pi / period) +
         0.5;
   }
 }
@@ -40,12 +40,12 @@ class LinearPointCurve extends Curve {
   const LinearPointCurve(this.pIn, this.pOut);
 
   @override
-  double transform(double x) {
+  double transform(double t) {
     // Just a simple bit of linear interpolation math
     final lowerScale = pOut / pIn;
     final upperScale = (1.0 - pOut) / (1.0 - pIn);
     final upperOffset = 1.0 - upperScale;
-    return x < pIn ? x * lowerScale : x * upperScale + upperOffset;
+    return t < pIn ? t * lowerScale : t * upperScale + upperOffset;
   }
 }
 
@@ -56,11 +56,11 @@ class PiecewiseLinearCurve extends Curve {
       : assert(points.isNotEmpty && points.first == 0 && points.last == 1);
 
   @override
-  double transform(double x) {
-    assert(x >= 0 && x <= 1, 'x must be between 0 and 1');
+  double transform(double t) {
+    assert(t >= 0 && t <= 1, 't must be between 0 and 1');
     for (int i = 0; i < points.length - 1; i++) {
-      if (x >= points[i] && x <= points[i + 1]) {
-        final scale = (x - points[i]) / (points[i + 1] - points[i]);
+      if (t >= points[i] && t <= points[i + 1]) {
+        final scale = (t - points[i]) / (points[i + 1] - points[i]);
         return points[i] + scale * (points[i + 1] - points[i]);
       }
     }

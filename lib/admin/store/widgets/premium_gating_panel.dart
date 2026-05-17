@@ -188,7 +188,7 @@ class _PremiumGatingPanelState extends State<PremiumGatingPanel> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF8B5CF6),
+            activeThumbColor: const Color(0xFF8B5CF6),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ],

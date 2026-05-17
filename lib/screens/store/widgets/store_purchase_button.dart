@@ -38,16 +38,7 @@ class StorePurchaseButton extends ConsumerWidget {
       height: compact ? 32 : 40,
       child: ElevatedButton.icon(
         onPressed: cfg.enabled ? _onTap : null,
-        icon: cfg.loading
-            ? SizedBox(
-                width: 14,
-                height: 14,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white.withValues(alpha: 0.9),
-                ),
-              )
-            : Icon(cfg.icon, size: compact ? 13 : 15),
+        icon: Icon(cfg.icon, size: compact ? 13 : 15),
         label: Text(
           cfg.label,
           style: TextStyle(
@@ -150,13 +141,11 @@ class _ButtonState {
   final IconData icon;
   final Color color;
   final bool enabled;
-  final bool loading;
 
   const _ButtonState({
     required this.label,
     required this.icon,
     required this.color,
     required this.enabled,
-    this.loading = false,
   });
 }

@@ -143,7 +143,6 @@ void main() {
 
     test('a new question is generated after answering', () {
       final c = _ctrl();
-      final oldAnswer = c.state.question.answer;
       final oldSequence = c.state.question.sequence;
       c.answer(c.state.question.answer, (_) {});
       // New question state is set even if question happens to have same answer

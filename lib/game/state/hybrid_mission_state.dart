@@ -14,7 +14,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   final AgeGroup _ageGroup;
   final MissionService? _missionService; // Optional for backend integration
   List<Map<String, dynamic>> _allAvailableMissions = [];
-  String? _userId;
+  final String? _userId;
   bool _isBackendMode = false;
 
   HybridMissionNotifier(

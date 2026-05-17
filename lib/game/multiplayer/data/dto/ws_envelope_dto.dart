@@ -98,8 +98,9 @@ bool _mapEq(Map<String, dynamic>? a, Map<String, dynamic>? b) {
     if (!b.containsKey(k)) return false;
     final av = a[k], bv = b[k];
     if (av is Map && bv is Map) {
-      if (!_mapEq(av.cast<String, dynamic>(), bv.cast<String, dynamic>()))
+      if (!_mapEq(av.cast<String, dynamic>(), bv.cast<String, dynamic>())) {
         return false;
+      }
     } else if (av != bv) {
       return false;
     }

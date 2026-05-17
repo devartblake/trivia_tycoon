@@ -18,14 +18,12 @@ import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
 import '../../game/providers/economy_providers.dart';
-import '../../game/providers/core_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/synaptix_toast/synaptix_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/wallet_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import '../../game/providers/personalization_providers.dart';
 import 'widgets/coach_brief_banner.dart';
 import '../../personalization/widgets/recommended_for_you_section.dart';
 

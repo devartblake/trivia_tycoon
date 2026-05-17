@@ -25,16 +25,7 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
   SynaptixToastStatus? currentStatus;
 
   // Stack positioning
-  int _stackIndex = 0;
-  void _updateStackPosition(int index) {
-    _stackIndex = index;
-    // Reconfigure alignment when stack position changes
-    if (_animation != null) {
-      _configureAlignment(tycoonToast.tycoonToastPosition);
-      // Create new animation with updated alignment
-      _animation = createAnimation();
-    }
-  }
+  final int _stackIndex = 0;
 
   SynaptixToastRoute({
     required this.tycoonToast,
@@ -127,7 +118,6 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
         );
 
       case SynaptixToastTransition.slide:
-      default:
         // Enhanced slide with slight rotation for reward toasts
         if (tycoonToast.toastType == SynaptixToastType.reward) {
           return AnimatedBuilder(

@@ -387,8 +387,9 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
               onSelected: isDisabled
                   ? null
                   : (selected) {
-                      if (selected)
+                      if (selected) {
                         setState(() => selectedQuestionCount = count);
+                      }
                     },
             );
           }).toList(),

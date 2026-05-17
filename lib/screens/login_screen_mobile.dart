@@ -11,9 +11,6 @@ import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
-import '../game/providers/auth_providers.dart';
-import '../game/providers/core_providers.dart';
-import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/steps/constants.dart';
 

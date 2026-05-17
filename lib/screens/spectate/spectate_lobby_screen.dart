@@ -7,10 +7,10 @@ class SpectateLobbyScreen extends StatefulWidget {
   final String currentUserDisplayName;
 
   const SpectateLobbyScreen({
-    Key? key,
+    super.key,
     required this.currentUserId,
     required this.currentUserDisplayName,
-  }) : super(key: key);
+  });
 
   @override
   State<SpectateLobbyScreen> createState() => _SpectateLobbyScreenState();
@@ -150,7 +150,7 @@ class _SpectateLobbyScreenState extends State<SpectateLobbyScreen>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: TabBar(

@@ -360,7 +360,7 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField<CryptoNetwork>(
-            value: selectedNetwork,
+            initialValue: selectedNetwork,
             dropdownColor: const Color(0xFF1B2235),
             decoration: _inputDecoration('Network'),
             items: networks
@@ -592,7 +592,7 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField<CryptoNetwork>(
-            value: selectedNetwork,
+            initialValue: selectedNetwork,
             dropdownColor: const Color(0xFF1B2235),
             decoration: _inputDecoration('Network'),
             items: networks

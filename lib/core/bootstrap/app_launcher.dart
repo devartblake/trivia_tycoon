@@ -518,8 +518,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              textScaleFactor:
-                  MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.4),
+              textScaler: TextScaler.linear(
+                MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.4),
+              ),
             ),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),

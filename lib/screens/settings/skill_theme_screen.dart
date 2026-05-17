@@ -550,7 +550,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                       value: snap,
                       onChanged: (v) =>
                           ref.read(hexSnapToNodesProvider.notifier).state = v,
-                      activeColor: const Color(0xFF10B981),
+                      activeThumbColor: const Color(0xFF10B981),
                     ),
                   ],
                 ),

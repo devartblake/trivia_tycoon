@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/dto/web_link_dto.dart';
-import '../../core/services/web_link_service.dart';
 import '../../game/providers/web_link_providers.dart';
 
 /// Mobile screen that generates a one-time 6-character link code and displays

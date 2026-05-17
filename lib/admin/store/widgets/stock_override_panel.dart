@@ -252,7 +252,7 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
 
   Widget _buildReasonRow() {
     return DropdownButtonFormField<String>(
-      value: _model.reasonCode,
+      initialValue: _model.reasonCode,
       decoration: const InputDecoration(
         labelText: 'Reason Code',
         border: OutlineInputBorder(),

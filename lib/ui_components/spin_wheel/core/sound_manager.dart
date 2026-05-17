@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart' as just_audio;
 import 'package:flutter_soloud/flutter_soloud.dart' as soloud;
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 enum SoundEffect {
   spinStart,
@@ -71,9 +72,9 @@ class SoundManager {
       await _musicPlayer!.setLoopMode(just_audio.LoopMode.all);
 
       _initialized = true;
-      print('SoundManager initialized successfully');
+      LogManager.debug('SoundManager initialized successfully');
     } catch (e) {
-      print('SoundManager initialization failed: $e');
+      LogManager.debug('SoundManager initialization failed: $e');
     }
   }
 
@@ -88,7 +89,7 @@ class SoundManager {
         _soLoud!.setGlobalVolume(_soundVolume);
       }
     } catch (e) {
-      print('Failed to load sound settings: $e');
+      LogManager.debug('Failed to load sound settings: $e');
     }
   }
 
@@ -102,7 +103,7 @@ class SoundManager {
         _audioSources[entry.key] = audioSource;
       }
     } catch (e) {
-      print('Failed to preload sound effects: $e');
+      LogManager.debug('Failed to preload sound effects: $e');
     }
   }
 
@@ -131,7 +132,7 @@ class SoundManager {
         _cleanupSoundHandle(effect, handle);
       }
     } catch (e) {
-      print('Failed to play sound $effect: $e');
+      LogManager.debug('Failed to play sound $effect: $e');
     }
   }
 
@@ -153,7 +154,7 @@ class SoundManager {
       await _musicPlayer!.setAsset(musicPath);
       await _musicPlayer!.play();
     } catch (e) {
-      print('Failed to play background music: $e');
+      LogManager.debug('Failed to play background music: $e');
     }
   }
 
@@ -214,7 +215,7 @@ class SoundManager {
         playSound(SoundEffect.spinEnd);
       });
     } catch (e) {
-      print('Failed to play spin sequence: $e');
+      LogManager.debug('Failed to play spin sequence: $e');
     }
   }
 
@@ -359,9 +360,9 @@ class SoundManager {
       }
 
       _initialized = false;
-      print('SoundManager disposed successfully');
+      LogManager.debug('SoundManager disposed successfully');
     } catch (e) {
-      print('Error disposing SoundManager: $e');
+      LogManager.debug('Error disposing SoundManager: $e');
     }
   }
 }

@@ -172,7 +172,7 @@ void main() {
       final svc = _svc((req) async {
         captured = req.url;
         headers = req.headers;
-        body = (req as http.Request).body;
+        body = req.body;
         return http.Response('{}', 200);
       });
       await svc.consumeQrToken('qr-tok');
@@ -210,7 +210,7 @@ void main() {
       String? body;
       final svc = _svc((req) async {
         captured = req.url;
-        body = (req as http.Request).body;
+        body = req.body;
         return _json({'accessToken': 'at', 'refreshToken': 'rt'});
       });
       await svc.authenticateWithGoogleToken('my-google-token');
@@ -288,7 +288,7 @@ void main() {
       String? body;
       final svc = _svc((req) async {
         captured = req.url;
-        body = (req as http.Request).body;
+        body = req.body;
         return _json({'accessToken': 'at', 'refreshToken': 'rt'});
       });
       await svc.consumeLinkCode('XY9KM2');

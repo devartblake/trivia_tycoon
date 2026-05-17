@@ -56,7 +56,7 @@ class SynaptixLinearProgressIndicator extends StatefulWidget {
   /// You can set this value to more than 100%.
   final double maxValue;
 
-  /// [gradientColors]: A List<Color> value specifying the colors for the gradient fill of the progress bar.
+  /// [gradientColors]: A List<&ltColor&gt> value specifying the colors for the gradient fill of the progress bar.
   final List<Color>? gradientColors;
 
   /// [trailingXpIcon]: A widget (usually an Icon or Image) that appears when progress is complete.

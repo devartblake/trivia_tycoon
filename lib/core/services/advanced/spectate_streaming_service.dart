@@ -123,6 +123,7 @@ class SpectateStreamingService extends ChangeNotifier {
     LogManager.debug('SpectateStreamingService initialized');
   }
 
+  @override
   void dispose() {
     _updateTimer?.cancel();
     for (final controller in _gameStreams.values) {

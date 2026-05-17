@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/core/repositories/question_repository.dart';
-import 'package:trivia_tycoon/game/controllers/question_controller.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';

@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/game/controllers/word_search_controller.dart';
-import 'package:trivia_tycoon/game/models/word_search_model.dart';
 
 WordSearchController _make([List<String>? words]) =>
     WordSearchController(words ?? ['CAT', 'DOG'], onPuzzleComplete: () {});

@@ -13,7 +13,6 @@ class QrDecoder {
 
   Future<QrDecodeResult?> decode(BinaryBitmap bitmap) async {
     final matrix = bitmap.getBlackMatrix();
-    final dimension = matrix.getWidth();
 
     // Step 1: Get version
     final version =
@@ -100,17 +99,6 @@ class QrDecoder {
     return success ? copy : null;
   }
 
-  String _decodeBytes(List<int> bytes) {
-    final buffer = StringBuffer();
-
-    // Basic byte-mode decoder for demo (skipping ECI, Kanji, etc.)
-    for (final b in bytes) {
-      if (b >= 32 && b <= 126) {
-        buffer.writeCharCode(b);
-      }
-    }
-    return buffer.toString();
-  }
 }
 
 class QrDecodeResult {

@@ -14,6 +14,7 @@
 /// **Method 3 — One-time link code**
 /// Mobile generates a 6-character alphanumeric code → user types it into the
 /// web browser → backend validates and returns a session.
+library;
 
 // ---------------------------------------------------------------------------
 // QR linking

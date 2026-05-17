@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'dialogs/add_friend_dialog.dart';
 import '../../core/services/api_service.dart';
 import '../../core/models/social/friend_list_item_dto.dart';
 import '../../core/models/social/friend_request_dto.dart';
@@ -14,7 +13,6 @@ import '../../game/providers/profile_providers.dart' hide currentUserIdProvider;
 import '../../ui_components/presence/presence_status_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
-import '../messages/message_detail_screen.dart';
 
 class FriendsScreen extends ConsumerStatefulWidget {
   const FriendsScreen({super.key});

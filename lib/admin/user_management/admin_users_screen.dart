@@ -784,7 +784,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<UserRole>(
-                  value: selectedRole,
+                  initialValue: selectedRole,
                   items: UserRole.values
                       .map((r) => DropdownMenuItem(
                           value: r, child: Text(getRoleText(r))))
@@ -796,7 +796,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<AgeGroup>(
-                  value: selectedAge,
+                  initialValue: selectedAge,
                   items: AgeGroup.values
                       .map((a) => DropdownMenuItem(
                           value: a, child: Text(getAgeGroupText(a))))
@@ -881,7 +881,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<UserRole>(
-                value: selectedRole,
+                initialValue: selectedRole,
                 items: UserRole.values
                     .map((r) =>
                         DropdownMenuItem(value: r, child: Text(getRoleText(r))))

@@ -85,19 +85,21 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       final apiClient = ref.read(serviceManagerProvider).synaptixApiClient;
       final isHealthy = await apiClient.healthCheck();
       if (!isHealthy) {
-        if (mounted)
+        if (mounted) {
           setState(() {
             _backendUnreachable = true;
             _startupChecked = true;
           });
+        }
         return;
       }
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _backendUnreachable = true;
           _startupChecked = true;
         });
+      }
       return;
     }
 
@@ -106,11 +108,12 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       if (config.minimumClientVersion != '0.0.0') {
         final info = await PackageInfo.fromPlatform();
         if (_isVersionBelow(info.version, config.minimumClientVersion)) {
-          if (mounted)
+          if (mounted) {
             setState(() {
               _forceUpdate = true;
               _startupChecked = true;
             });
+          }
           return;
         }
       }

@@ -170,8 +170,9 @@ class FlowConnectStateNotifier extends ChangeNotifier {
   }
 
   FlowConnectGameStatus onPanEnd() {
-    if (_gameState.status != FlowConnectGameStatus.playing)
+    if (_gameState.status != FlowConnectGameStatus.playing) {
       return _gameState.status;
+    }
 
     if (FlowConnectPathValidator.checkWinCondition(_gameState)) {
       _endTime = DateTime.now();

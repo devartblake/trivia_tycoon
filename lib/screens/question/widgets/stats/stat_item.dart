@@ -6,7 +6,7 @@ class StatItem extends StatelessWidget {
   final IconData icon;
   final Color color;
 
-  const StatItem({
+  const StatItem({super.key,
     required this.title,
     required this.value,
     required this.icon,

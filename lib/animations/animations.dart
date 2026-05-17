@@ -1,7 +1,7 @@
 /// Central exports for shared animation primitives and widgets.
 ///
 /// Import this file to consume animation utilities from a single location.
-library animations;
+library;
 
 export 'math/curves.dart';
 export 'math/transforms.dart';

@@ -107,7 +107,7 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
                   value: _model.isActive,
                   onChanged: (v) =>
                       setState(() => _model = _model.copyWith(isActive: v)),
-                  activeColor: const Color(0xFF10B981),
+                  activeThumbColor: const Color(0xFF10B981),
                 ),
               ],
             ),
@@ -170,7 +170,7 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
                         value: _model.requiresAd,
                         onChanged: (v) => setState(
                             () => _model = _model.copyWith(requiresAd: v)),
-                        activeColor: const Color(0xFF6366F1),
+                        activeThumbColor: const Color(0xFF6366F1),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       const SizedBox(width: 4),

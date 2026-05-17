@@ -310,8 +310,9 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                 final worldPos = entry.value;
                                 final node = state.graph.byId[nodeId];
 
-                                if (node == null)
+                                if (node == null) {
                                   return const SizedBox.shrink();
+                                }
 
                                 return Positioned(
                                   left: worldPos.dx - _nodeRadius,

@@ -35,7 +35,7 @@ class AnalyticsService {
   DateTime? _sessionStartTime;
   bool _isPaused = false;
   Map<String, dynamic> _sessionMetrics = {};
-  bool _analyticsEndpointUnavailable = false;
+  final bool _analyticsEndpointUnavailable = false;
 
   AnalyticsService(this.apiService, this.eventQueueService);
 

@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/notifications/player_inbox_item.dart';
 import '../../game/providers/player_notification_providers.dart';
 import '../../core/services/api_service.dart';
-import 'notification_detail_screen.dart';
 
 // === Screen ===
 class NotificationsScreen extends ConsumerStatefulWidget {

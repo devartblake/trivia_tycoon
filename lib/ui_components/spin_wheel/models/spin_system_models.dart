@@ -501,10 +501,10 @@ class WheelSegment {
 
     final requirements = <String>[];
     if (requiredStreak > 0) {
-      requirements.add('${requiredStreak}+ streak');
+      requirements.add('$requiredStreak+ streak');
     }
     if (requiredCurrency > 0) {
-      requirements.add('${requiredCurrency}💎');
+      requirements.add('$requiredCurrency💎');
     }
 
     return requirements.isEmpty ? null : requirements.join(' & ');

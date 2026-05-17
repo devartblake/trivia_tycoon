@@ -103,7 +103,7 @@ class AuthOperations {
     }
   }
 
-  /// Convert Map<String, dynamic>? to Map<String, String>? for SignupData
+  /// Convert Map<&ltString, dynamic&gt>? to Map<&ltString, String&gt>? for SignupData
   Map<String, String>? _convertToStringMap(Map<String, dynamic>? input) {
     if (input == null) return null;
     return input.map((key, value) => MapEntry(key, value.toString()));

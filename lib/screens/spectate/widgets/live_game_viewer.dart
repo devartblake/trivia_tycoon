@@ -6,10 +6,10 @@ class LiveGameViewer extends StatefulWidget {
   final Function(int)? onQuestionChange;
 
   const LiveGameViewer({
-    Key? key,
+    super.key,
     required this.gameState,
     this.onQuestionChange,
-  }) : super(key: key);
+  });
 
   @override
   State<LiveGameViewer> createState() => _LiveGameViewerState();

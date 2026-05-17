@@ -510,18 +510,23 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     int score = 0;
 
     // Exact title match gets highest score
-    if (title == query)
+    if (title == query) {
       score += 100;
-    // Title starts with query
-    else if (title.startsWith(query))
-      score += 80;
+    } else if (title.startsWith(query))
+      {
+        score += 80;
+      }
     // Title contains query
-    else if (title.contains(query)) score += 60;
+    else if (title.contains(query)) {
+      score += 60;
+    }
 
     // Description matches get lower scores
-    if (description.startsWith(query))
+    if (description.startsWith(query)) {
       score += 40;
-    else if (description.contains(query)) score += 20;
+    } else if (description.contains(query)) {
+      score += 20;
+    }
 
     return score;
   }
@@ -813,7 +818,7 @@ extension _AutoPathSheet on _SkillTreeNavScreenState {
                       Switch(
                         value: highlight,
                         onChanged: (v) => setSheetState(() => highlight = v),
-                        activeColor: Colors.cyanAccent,
+                        activeThumbColor: Colors.cyanAccent,
                       ),
                     ],
                   ),

@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../../core/constants/question_paths.dart';
@@ -38,280 +38,280 @@ String? _getExactPathFromConstants(String category) {
     case 'art':
     case 'visual_arts':
     case 'creative_arts':
-      return Arts.ARTS_QUESTION;
+      return Arts.artsQuestion;
 
     case 'general':
     case 'general knowledge':
     case 'mixed':
-      return General.GENERAL_QUESTIONS;
+      return General.generalQuestions;
 
     case 'science':
     case 'natural science':
     case 'physics':
     case 'chemistry':
     case 'biology':
-      return Science.SCIENCE_QUESTION;
+      return Science.scienceQuestion;
 
     case 'history':
     case 'world history':
     case 'historical':
-      return History.HISTORY_QUESTION;
+      return History.historyQuestion;
 
     case 'entertainment':
     case 'movies':
     case 'film':
     case 'music':
     case 'celebrities':
-      return Entertainment.ENTERTAINMENT_QUESTION;
+      return Entertainment.entertainmentQuestion;
 
     case 'sports':
     case 'athletics':
     case 'games':
     case 'fitness':
-      return Sports.SPORTS_QUESTION;
+      return Sports.sportsQuestion;
 
     case 'geography':
     case 'world_geography':
     case 'countries':
     case 'capitals':
-      return Geography.GEOGRAPHY_QUESTION;
+      return Geography.geographyQuestion;
 
     case 'literature':
     case 'books':
     case 'authors':
     case 'poetry':
     case 'writing':
-      return Literature.LITERATURE_QUESTION;
+      return Literature.literatureQuestion;
 
     case 'mathematics':
     case 'math':
     case 'maths':
     case 'algebra':
     case 'geometry':
-      return Math.MATH_QUESTION;
+      return Math.mathQuestion;
 
     case 'kids':
     case 'kids_questions':
     case 'children':
     case 'family':
-      return Kids.KIDS_QUESTIONS;
+      return Kids.kidsQuestions;
 
     case 'media':
     case 'journalism':
     case 'communication':
-      return Media.MEDIA_QUESTION;
+      return Media.mediaQuestion;
 
     case 'social':
     case 'social_studies':
     case 'sociology':
-      return Social.SOCIAL_QUESTION;
+      return Social.socialQuestion;
 
     case 'technology':
     case 'tech':
     case 'computing':
     case 'programming':
     case 'it':
-      return Tech.TECH_QUESTION;
+      return Tech.techQuestion;
 
     case 'world':
     case 'world_affairs':
     case 'international':
     case 'global':
-      return World.WORLD_QUESTION;
+      return World.worldQuestion;
 
     // Extended subjects
     case 'current_events':
     case 'news':
     case 'current_affairs':
-      return CurrentEvents.CURRENT_EVENTS_QUESTION;
+      return CurrentEvents.currentEventsQuestion;
 
     case 'economics':
     case 'economy':
     case 'finance':
-      return Economics.ECONOMICS_QUESTION;
+      return Economics.economicsQuestion;
 
     case 'environment':
     case 'environmental':
     case 'ecology':
     case 'climate':
-      return Environment.ENVIRONMENT_QUESTION;
+      return Environment.environmentQuestion;
 
     case 'health':
     case 'medicine':
     case 'medical':
     case 'wellness':
     case 'nutrition':
-      return Health.HEALTH_QUESTION;
+      return Health.healthQuestion;
 
     case 'law':
     case 'legal':
     case 'justice':
     case 'rights':
-      return Law.LAW_QUESTION;
+      return Law.lawQuestion;
 
     case 'philosophy':
     case 'ethics':
     case 'logic':
     case 'critical thinking':
-      return Philosophy.PHILOSOPHY_QUESTION;
+      return Philosophy.philosophyQuestion;
 
     case 'politics':
     case 'political':
     case 'government':
     case 'civic':
-      return Politics.POLITICS_QUESTION;
+      return Politics.politicsQuestion;
 
     case 'psychology':
     case 'mental_health':
     case 'behavior':
     case 'cognition':
-      return Psychology.PSYCHOLOGY_QUESTION;
+      return Psychology.psychologyQuestion;
 
     // NEW CATEGORIES FROM YOUR QUESTION_PATHS.DART
     case 'architecture':
     case 'architectural':
     case 'buildings':
     case 'design':
-      return Architecture.ARCHITECTURE_QUESTION;
+      return Architecture.architectureQuestion;
 
     case 'art_history':
     case 'art history':
     case 'artistic history':
     case 'fine arts history':
-      return ArtHistory.ART_HISTORY_QUESTION;
+      return ArtHistory.artHistoryQuestion;
 
     case 'astronomy':
     case 'space':
     case 'stars':
     case 'planets':
     case 'cosmos':
-      return Astronomy.ASTRONOMY_QUESTION;
+      return Astronomy.astronomyQuestion;
 
     case 'entrepreneurship':
     case 'management':
     case 'commerce':
     case 'business':
-      return Business.BUSINESS_QUESTION;
+      return Business.businessQuestion;
 
     case 'civics_law':
-      return CivicsLaw.CIVICS_LAW_QUESTION;
+      return CivicsLaw.civicsLawQuestion;
 
     case 'comparative_religions':
     case 'comparative religions':
     case 'religions':
     case 'religious studies':
     case 'theology':
-      return ComparativeReligions.COMPARATIVE_RELIGIONS_QUESTION;
+      return ComparativeReligions.comparativeReligionsQuestion;
 
     case 'computer_science':
     case 'computer science':
     case 'software engineering':
     case 'algorithms':
-      return ComputerScience.COMPUTER_SCIENCE_QUESTION;
+      return ComputerScience.computerScienceQuestion;
 
     case 'cultures':
     case 'global_cultures':
     case 'global cultures':
     case 'cultural studies':
     case 'anthropology':
-      return Cultures.GLOBAL_CULTURES_QUESTION;
+      return Cultures.globalCulturesQuestion;
 
     case 'economics_finance':
     case 'economics finance':
     case 'financial economics':
     case 'finance economics':
-      return EconomicsFinance.ECONOMICS_FINANCE_QUESTION;
+      return EconomicsFinance.economicsFinanceQuestion;
 
     case 'engineering_technology':
     case 'engineering technology':
     case 'engineering':
     case 'mechanical engineering':
     case 'electrical engineering':
-      return EngineeringTechnology.ENGINEERING_TECHNOLOGY_QUESTION;
+      return EngineeringTechnology.engineeringTechnologyQuestion;
 
     case 'environmental_science':
     case 'environmental science':
     case 'environmental studies':
     case 'ecology advanced':
-      return EnvironmentalScience.ENVIRONMENTAL_SCIENCE_ADVANCED_QUESTION;
+      return EnvironmentalScience.environmentalScienceAdvancedQuestion;
 
     case 'health_medicine':
     case 'health medicine':
     case 'medical science':
     case 'healthcare':
-      return HealthMedicine.HEALTH_MEDICINE_QUESTION;
+      return HealthMedicine.healthMedicineQuestion;
 
     case 'kids_grade2':
     case 'kids grade2':
     case 'grade 2 kids':
     case 'second grade':
-      return Kids.KIDS_GRADE2_QUESTIONS;
+      return Kids.kidsGrade2Questions;
 
     case 'statistics_data':
     case 'statistics data':
     case 'data literacy':
     case 'statistics':
     case 'data science':
-      return StatisticsData.STATISTICS_DATA_LITERACY_QUESTION;
+      return StatisticsData.statisticsDataLiteracyQuestion;
 
     case 'world_literature':
     case 'world literature':
     case 'international literature':
     case 'global literature':
-      return WorldLiterature.WORLD_LITERATURE_QUESTION;
+      return WorldLiterature.worldLiteratureQuestion;
 
     // Alternative file paths for existing categories
     case 'media_questions':
     case 'media alternative':
-      return Media.MEDIA_QUESTIONS;
+      return Media.mediaQuestion;
 
     case 'science_questions':
     case 'science alternative':
-      return Science.SCIENCE_QUESTIONS;
+      return Science.scienceQuestion;
 
     case 'world_ext':
     case 'world extended':
     case 'world extension':
-      return World.WORLD_EXT_QUESTION;
+      return World.worldExtQuestion;
 
     // Misc categories
     case 'misc':
     case 'miscellaneous':
     case 'mixed questions':
-      return Misc.QUESTIONS;
+      return Misc.questions;
 
     case 'offline':
     case 'offline pack':
     case 'questions offline':
-      return Misc.QUESTIONS_OFFLINE_PACK;
+      return Misc.questionsOfflinePack;
 
     // Game mode categories
     case 'media_challenge':
     case 'media challenge':
     case 'challenge media':
-      return Modes.MEDIA_CHALLENGE_QUESTION;
+      return Modes.mediaChallengeQuestion;
 
     case 'multimedia':
     case 'multi media':
     case 'mixed media':
-      return Modes.MULTIMEDIA_QUESTION;
+      return Modes.multimediaQuestion;
 
     case 'multiplayer':
     case 'multi player':
     case 'team play':
-      return Modes.MULTIPLAYER_QUESTION;
+      return Modes.multiplayerQuestion;
 
     case 'speed_round':
     case 'speed round':
     case 'speed quiz':
     case 'quick round':
-      return Modes.SPEED_ROUND_QUESTION;
+      return Modes.speedRoundQuestion;
 
     case 'speed_ultra':
     case 'speed ultra':
     case 'ultra speed':
     case 'lightning round':
-      return Modes.SPEED_ULTRA_QUESTION;
+      return Modes.speedUltraQuestion;
 
     // Class-based categories with multiple variations
     case 'class k':
@@ -319,97 +319,97 @@ String? _getExactPathFromConstants(String category) {
     case 'kindergarten':
     case 'grade k':
     case 'k':
-      return Classes.CLASS_K_QUESTIONS;
+      return Classes.classKQuestions;
 
     case 'class 1':
     case 'class_1':
     case 'grade 1':
     case 'first grade':
     case '1':
-      return Classes.CLASS_1_QUESTIONS;
+      return Classes.class1Questions;
 
     case 'class 2':
     case 'class_2':
     case 'grade 2':
     case '2':
-      return Classes.CLASS_2_QUESTIONS;
+      return Classes.class2Questions;
 
     case 'class 3':
     case 'class_3':
     case 'grade 3':
     case 'third grade':
     case '3':
-      return Classes.CLASS_3_QUESTIONS;
+      return Classes.class3Questions;
 
     case 'class 4':
     case 'class_4':
     case 'grade 4':
     case 'fourth grade':
     case '4':
-      return Classes.CLASS_4_QUESTIONS;
+      return Classes.class4Questions;
 
     case 'class 5':
     case 'class_5':
     case 'grade 5':
     case 'fifth grade':
     case '5':
-      return Classes.CLASS_5_QUESTIONS;
+      return Classes.class5Questions;
 
     case 'class 6':
     case 'class_6':
     case 'grade 6':
     case 'sixth grade':
     case '6':
-      return Classes.CLASS_6_QUESTIONS;
+      return Classes.class6Questions;
 
     case 'class 7':
     case 'class_7':
     case 'grade 7':
     case 'seventh grade':
     case '7':
-      return Classes.CLASS_7_QUESTIONS;
+      return Classes.class7Questions;
 
     case 'class 8':
     case 'class_8':
     case 'grade 8':
     case 'eighth grade':
     case '8':
-      return Classes.CLASS_8_QUESTIONS;
+      return Classes.class8Questions;
 
     case 'class 9':
     case 'class_9':
     case 'grade 9':
     case 'ninth grade':
     case '9':
-      return Classes.CLASS_9_QUESTIONS;
+      return Classes.class9Questions;
 
     case 'class 10':
     case 'class_10':
     case 'grade 10':
     case 'tenth grade':
     case '10':
-      return Classes.CLASS_10_QUESTIONS;
+      return Classes.class10Questions;
 
     case 'class 11':
     case 'class_11':
     case 'grade 11':
     case 'eleventh grade':
     case '11':
-      return Classes.CLASS_11_QUESTIONS;
+      return Classes.class11Questions;
 
     case 'class 12':
     case 'class_12':
     case 'grade 12':
     case 'twelfth grade':
     case '12':
-      return Classes.CLASS_12_QUESTIONS;
+      return Classes.class12Questions;
 
     // Bonus/Extended content
     case 'bonus':
     case 'extended':
     case 'special':
     case 'challenge':
-      return Bonus.EXTENDED_QUESTIONS;
+      return Bonus.extendedQuestions;
 
     default:
       return null; // No exact match found

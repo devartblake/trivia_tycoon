@@ -102,10 +102,6 @@ class SkillNodeWidget extends StatelessWidget {
 
   double get _effectiveRadius => radius ?? _sizeConfig[size]!['radius']!;
   double get _titleFontSize => _sizeConfig[size]!['titleFontSize']!;
-  double get _subtitleFontSize => _sizeConfig[size]!['subtitleFontSize']!;
-  double get _iconSize => _sizeConfig[size]!['iconSize']!;
-  double get _iconSpacing => _sizeConfig[size]!['iconSpacing']!;
-  double get _statusSpacing => _sizeConfig[size]!['statusSpacing']!;
   double get _paddingFactor => _sizeConfig[size]!['paddingFactor']!;
 
   @override
@@ -294,8 +290,6 @@ class SkillNodeWidget extends StatelessWidget {
       return Icon(Icons.lock, color: Colors.white24, size: size);
     }
   }
-
-  Color _tint(Color c, double a) => c.withValues(alpha: a);
 }
 
 class _CooldownBadge extends StatelessWidget {

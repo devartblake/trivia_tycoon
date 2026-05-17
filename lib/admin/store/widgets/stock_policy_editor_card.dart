@@ -395,7 +395,7 @@ class _Toggle extends StatelessWidget {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: const Color(0xFF6366F1),
+          activeThumbColor: const Color(0xFF6366F1),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         const SizedBox(width: 4),

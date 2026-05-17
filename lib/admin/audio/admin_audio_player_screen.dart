@@ -341,7 +341,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                                 fontWeight: FontWeight.w700)),
                         const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
-                          value: _selectedTrack,
+                          initialValue: _selectedTrack,
                           decoration: const InputDecoration(
                             filled: true,
                             fillColor: Color(0x22000000),
@@ -415,7 +415,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
                                 fontWeight: FontWeight.w700)),
                         const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
-                          value: _selectedSfx,
+                          initialValue: _selectedSfx,
                           decoration: const InputDecoration(
                             filled: true,
                             fillColor: Color(0x22000000),

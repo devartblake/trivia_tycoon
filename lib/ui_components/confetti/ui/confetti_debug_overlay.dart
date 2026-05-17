@@ -61,7 +61,7 @@ class ConfettiDebugOverlay extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildMetricRow('FPS', '${tracker.fps.toStringAsFixed(1)}',
+                  _buildMetricRow('FPS', tracker.fps.toStringAsFixed(1),
                       Icons.speed, Colors.green),
                   const SizedBox(height: 12),
                   _buildMetricRow(

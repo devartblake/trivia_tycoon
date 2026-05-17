@@ -12,8 +12,6 @@ import 'package:trivia_tycoon/core/services/device_id_service.dart';
 import 'package:trivia_tycoon/core/services/settings/onboarding_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
-import 'package:trivia_tycoon/ui_components/login/models/signup_data.dart';
-
 // ---------------------------------------------------------------------------
 // Fakes
 // ---------------------------------------------------------------------------

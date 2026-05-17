@@ -64,7 +64,9 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
   void _processCameraImage(CameraImage image) async {
     if (_isPaused ||
         _isProcessing ||
-        image.format.group != ImageFormatGroup.yuv420) return;
+        image.format.group != ImageFormatGroup.yuv420) {
+      return;
+    }
     _isProcessing = true;
 
     try {
@@ -125,8 +127,9 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isInitialized)
+    if (!_isInitialized) {
       return const Center(child: CircularProgressIndicator());
+    }
 
     return Stack(
       alignment: Alignment.center,

@@ -15,12 +15,12 @@ class GroupChatScreen extends StatefulWidget {
   final bool userIsPremium;
 
   const GroupChatScreen({
-    Key? key,
+    super.key,
     required this.groupId,
     required this.currentUserId,
     required this.currentUserDisplayName,
     this.userIsPremium = false,
-  }) : super(key: key);
+  });
 
   @override
   State<GroupChatScreen> createState() => _GroupChatScreenState();
@@ -228,7 +228,7 @@ class _GroupChatScreenState extends State<GroupChatScreen>
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     border: Border(
                       bottom: BorderSide(
                         color: Theme.of(context)
@@ -339,7 +339,7 @@ class _GroupChatScreenState extends State<GroupChatScreen>
         decoration: BoxDecoration(
           color: Theme.of(context)
               .colorScheme
-              .surfaceVariant
+              .surfaceContainerHighest
               .withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
         ),
@@ -362,7 +362,7 @@ class _GroupChatScreenState extends State<GroupChatScreen>
       return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           border: Border(
             top: BorderSide(
               color:
@@ -420,7 +420,7 @@ class _GroupChatScreenState extends State<GroupChatScreen>
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Theme.of(context).colorScheme.surfaceVariant,
+                  fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,

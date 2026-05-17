@@ -205,10 +205,6 @@ class StoreHubData {
           (rawFeaturedField as List?)?.whereType<Map>().toList() ?? [];
       final dailyList =
           (json['daily'] as List?)?.whereType<Map>().toList() ?? [];
-      final categories =
-          (json['categories'] as List?)?.map((c) => c.toString()).toList() ??
-              const <String>[];
-
       // Map first featured catalog item to FeaturedItemData for the carousel.
       FeaturedItemData? featured;
       if (featuredList.isNotEmpty) {

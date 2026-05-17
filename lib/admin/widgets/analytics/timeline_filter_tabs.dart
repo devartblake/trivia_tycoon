@@ -78,22 +78,22 @@ class TimelineFilterTabs extends ConsumerWidget {
                   newSelection.first;
             },
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return const Color(0xFF3B82F6);
                 }
                 return Colors.white;
               }),
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+              foregroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return const Color(0xFF6B7280);
               }),
-              side: MaterialStateProperty.all(
+              side: WidgetStateProperty.all(
                 BorderSide(color: Colors.grey[300]!),
               ),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               ),
             ),

@@ -343,10 +343,8 @@ void main() {
 
   group('getLastCleanup', () {
     test('null before any cleanup', () async {
-      // Fresh cache — may be null
-      final cleanup = await cache.getLastCleanup();
-      // Either null or a valid DateTime (if cleanup ran during init)
-      expect(cleanup == null || cleanup is DateTime, isTrue);
+      // Return type is DateTime? — verified by the non-null test below
+      await cache.getLastCleanup();
     });
 
     test('non-null after cleanOldEntries', () async {

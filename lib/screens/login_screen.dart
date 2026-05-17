@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,9 +12,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
 import '../core/services/auth_token_store.dart';
-import '../game/providers/auth_providers.dart';
-import '../game/providers/core_providers.dart';
-import '../game/providers/onboarding_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
 import '../game/providers/web_link_providers.dart';
 import 'onboarding/steps/constants.dart';

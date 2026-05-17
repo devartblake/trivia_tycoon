@@ -1,4 +1,5 @@
 /// DTOs for server-push events received from SignalR hubs.
+library;
 
 class PlayerNotificationDto {
   final String type;

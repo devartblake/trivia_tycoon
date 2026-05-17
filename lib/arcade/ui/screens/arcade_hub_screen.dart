@@ -803,8 +803,8 @@ class ArcadeHubScreen extends ConsumerWidget {
     );
 
     if (selected == null) return;
+    if (!context.mounted) return;
 
-    // ignore: use_build_context_synchronously
     await context
         .push('/arcade/play', extra: {'game': game, 'difficulty': selected});
   }

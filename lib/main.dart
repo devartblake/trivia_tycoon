@@ -4,8 +4,6 @@ import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'core/bootstrap/synaptix_app.dart';
 import 'core/env.dart';
-import 'core/manager/service_manager.dart';
-import 'core/services/theme/theme_notifier.dart';
 import 'game/providers/auth_providers.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
 import 'synaptix/mode/synaptix_mode_notifier.dart';

@@ -82,7 +82,7 @@ class SynaptixToast<T> extends StatefulWidget {
     this.isDismissible = true,
   }) : onStatusChanged = onStatusChanged ?? ((_) {}) {
     // Apply modern gradient with glassmorphism effect
-    this.backgroundGradient ??=
+    backgroundGradient ??=
         SynaptixToastThemeManager.getGradientForEvent(themeEvent);
   }
 

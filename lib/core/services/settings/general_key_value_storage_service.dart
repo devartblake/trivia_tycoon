@@ -21,13 +21,13 @@ class GeneralKeyValueStorageService {
     return box.get(key);
   }
 
-  /// Save a List<String> as a single comma-separated string
+  /// Save a List<&ltString&gt> as a single comma-separated string
   Future<void> setStringList(String key, List<String> values) async {
     final box = await Hive.openBox('preferences');
     await box.put(key, values.join(','));
   }
 
-  /// Retrieve a List<String> by splitting a comma-separated string
+  /// Retrieve a List<&ltString&gt> by splitting a comma-separated string
   Future<List<String>?> getStringList(String key) async {
     final box = await Hive.openBox('preferences');
     final stored = box.get(key);

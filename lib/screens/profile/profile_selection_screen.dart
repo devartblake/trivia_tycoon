@@ -5,9 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/manager/log_manager.dart';
 import '../../core/services/settings/multi_profile_service.dart';
 import '../../game/analytics/managers/profile_analytics_manager.dart';
-import '../../game/providers/auth_providers.dart';
 import '../../game/providers/multi_profile_providers.dart';
-import '../../game/providers/onboarding_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 // You'll need to create this provider

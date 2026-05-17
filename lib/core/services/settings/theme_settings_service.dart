@@ -202,7 +202,7 @@ class ThemeSettingsService {
 
       if (kDebugMode) {
         LogManager.debug(
-            'Current theme saved successfully: ${_cachedThemeName}');
+            'Current theme saved successfully: $_cachedThemeName');
       }
     } catch (e) {
       if (kDebugMode) {

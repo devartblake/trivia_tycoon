@@ -232,10 +232,12 @@ class AuthApiClient {
       if (user.containsKey('role')) metadata['role'] = user['role'];
       if (user.containsKey('roles')) metadata['roles'] = user['roles'];
       if (user.containsKey('tier')) metadata['tier'] = user['tier'];
-      if (user.containsKey('isPremium'))
+      if (user.containsKey('isPremium')) {
         metadata['isPremium'] = user['isPremium'];
-      if (user.containsKey('is_premium'))
+      }
+      if (user.containsKey('is_premium')) {
         metadata['is_premium'] = user['is_premium'];
+      }
       if (user.containsKey('premium')) metadata['premium'] = user['premium'];
       if (user.containsKey('subscriptionStatus')) {
         metadata['subscriptionStatus'] = user['subscriptionStatus'];
@@ -249,10 +251,12 @@ class AuthApiClient {
     if (response.containsKey('role')) metadata['role'] = response['role'];
     if (response.containsKey('roles')) metadata['roles'] = response['roles'];
     if (response.containsKey('tier')) metadata['tier'] = response['tier'];
-    if (response.containsKey('isPremium'))
+    if (response.containsKey('isPremium')) {
       metadata['isPremium'] = response['isPremium'];
-    if (response.containsKey('is_premium'))
+    }
+    if (response.containsKey('is_premium')) {
       metadata['is_premium'] = response['is_premium'];
+    }
 
     return metadata;
   }

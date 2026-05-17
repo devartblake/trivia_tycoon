@@ -395,7 +395,7 @@ class GameController extends ChangeNotifier {
   int bestScore = 0;
   Timer? _timer;
   int _secondsElapsed = 0;
-  List<GameSnapshot> _history = [];
+  final List<GameSnapshot> _history = [];
   bool _won = false;
   bool _wonDialogShown = false;
   bool _gameOver = false;

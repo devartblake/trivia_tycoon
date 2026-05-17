@@ -8,10 +8,10 @@ class GroupSettingsScreen extends StatefulWidget {
   final String currentUserId;
 
   const GroupSettingsScreen({
-    Key? key,
+    super.key,
     required this.groupId,
     required this.currentUserId,
-  }) : super(key: key);
+  });
 
   @override
   State<GroupSettingsScreen> createState() => _GroupSettingsScreenState();
@@ -576,7 +576,7 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

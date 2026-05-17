@@ -16,12 +16,15 @@ class LimitedOfferChip extends StatelessWidget {
 
   factory LimitedOfferChip.fromLabel(String label) {
     final lower = label.toLowerCase();
-    if (lower.contains('flash'))
+    if (lower.contains('flash')) {
       return const LimitedOfferChip(kind: LimitedOfferKind.flashSale);
-    if (lower.contains('weekend'))
+    }
+    if (lower.contains('weekend')) {
       return const LimitedOfferChip(kind: LimitedOfferKind.weekendOffer);
-    if (lower.contains('season'))
+    }
+    if (lower.contains('season')) {
       return const LimitedOfferChip(kind: LimitedOfferKind.seasonal);
+    }
     return const LimitedOfferChip(kind: LimitedOfferKind.limitedBundle);
   }
 

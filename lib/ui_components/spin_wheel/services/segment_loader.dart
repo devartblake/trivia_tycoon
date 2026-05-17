@@ -83,7 +83,7 @@ class SegmentLoader {
   Future<List<WheelSegment>> _filterUnlockedSegments(
       List<WheelSegment> all) async {
     final streak = await spinWheelService.getWinStreak();
-    final currency = await generalKeyStorage.getInt("exclusiveCurrency") ?? 0;
+    final currency = await generalKeyStorage.getInt("exclusiveCurrency");
 
     return all.where((seg) {
       if (!seg.isExclusive) return true;

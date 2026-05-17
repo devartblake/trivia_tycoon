@@ -1298,7 +1298,7 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<UserRole>(
-                value: selectedRole,
+                initialValue: selectedRole,
                 items: UserRole.values
                     .map((r) => DropdownMenuItem(value: r, child: Text(r.name)))
                     .toList(),

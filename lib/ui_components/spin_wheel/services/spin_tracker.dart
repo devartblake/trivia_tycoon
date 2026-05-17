@@ -7,8 +7,6 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// Enhanced spin tracker with performance optimizations and better state management
 class EnhancedSpinTracker {
   static const String _stateKey = 'spin_tracker_state';
-  static const int _defaultMaxSpinsPerDay = 5;
-  static const Duration _defaultCooldown = Duration(hours: 3);
   static const Duration _cacheTimeout = Duration(minutes: 1);
 
   // Cached state to avoid repeated database reads

@@ -112,8 +112,9 @@ class GFPoly {
 
   List<int> evaluateAt(int a) {
     if (a == 0) return [coefficients.last];
-    if (a == 1)
+    if (a == 1) {
       return [coefficients.reduce((a, b) => field.addOrSubtract(a, b))];
+    }
 
     int result = coefficients[0];
     for (int i = 1; i < coefficients.length; i++) {

@@ -3,6 +3,8 @@
 /// Represents the client’s connection lifecycle to the multiplayer backend.
 /// Keep this state **UI-agnostic** so it can be consumed by controllers, services,
 /// and widgets alike.
+library;
+
 class MultiplayerState {
   /// True when the socket/session is open and authenticated (if applicable).
   final bool connected;
