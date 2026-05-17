@@ -2,7 +2,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/notification_service.dart';
-import '../../game/providers/notification_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/services/channel_prefs.dart';
 
