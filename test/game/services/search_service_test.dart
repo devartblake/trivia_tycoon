@@ -121,7 +121,7 @@ void main() {
       expect(results.map((r) => r.id).toList(), ['high', 'mid', 'low']);
     });
 
-    test('equal scores preserve relative order', () async {
+    test('equal scores return all matching results', () async {
       final provider = _MockProvider(results: [
         _result(id: 'a', relevanceScore: 50),
         _result(id: 'b', relevanceScore: 50),
