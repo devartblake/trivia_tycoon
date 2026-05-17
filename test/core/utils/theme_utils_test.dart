@@ -24,9 +24,8 @@ void main() {
       expect(ThemeUtils.getAccentColor(''), Colors.blueAccent);
     });
 
-    test('case-sensitive: "Kids" (capital) defaults to blueAccent', () {
-      // The switch uses .toLowerCase() is NOT used here — exact match required
-      expect(ThemeUtils.getAccentColor('Kids'), Colors.blueAccent);
+    test('"Kids" (capitalized) → pinkAccent', () {
+      expect(ThemeUtils.getAccentColor('Kids'), Colors.pinkAccent);
     });
   });
 }
