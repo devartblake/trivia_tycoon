@@ -128,24 +128,21 @@ void main() {
       expect(_entry(day1: 0).retentionPercentage, 0.0);
     });
 
-    // _formatDay: weekdays[date.weekday % 7]
-    // weekdays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] (index 0–6)
-    // 2026-05-11 is Monday: weekday=1, 1%7=1 → weekdays[1]='Tue'
-    test('day maps Monday (weekday=1) via index 1%7=1 → Tue', () {
+    // Correct weekday labels should map directly from Monday..Sunday
+    // to ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].
+    test('day maps Monday to Mon', () {
       final e = _entry(date: DateTime(2026, 5, 11)); // Monday
-      expect(e.day, 'Tue');
-    });
-
-    // 2026-05-16 is Saturday: weekday=6, 6%7=6 → weekdays[6]='Sun'
-    test('day maps Saturday (weekday=6) via index 6%7=6 → Sun', () {
-      final e = _entry(date: DateTime(2026, 5, 16)); // Saturday
-      expect(e.day, 'Sun');
-    });
-
-    // 2026-05-17 is Sunday: weekday=7, 7%7=0 → weekdays[0]='Mon'
-    test('day maps Sunday (weekday=7) via index 7%7=0 → Mon', () {
-      final e = _entry(date: DateTime(2026, 5, 17)); // Sunday
       expect(e.day, 'Mon');
+    });
+
+    test('day maps Saturday to Sat', () {
+      final e = _entry(date: DateTime(2026, 5, 16)); // Saturday
+      expect(e.day, 'Sat');
+    });
+
+    test('day maps Sunday to Sun', () {
+      final e = _entry(date: DateTime(2026, 5, 17)); // Sunday
+      expect(e.day, 'Sun');
     });
   });
 }
