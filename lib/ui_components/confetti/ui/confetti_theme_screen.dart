@@ -672,7 +672,7 @@ class _ConfettiThemeScreenState extends ConsumerState<ConfettiThemeScreen>
       onSave: () async {
         await _storage.saveTheme(_settings.name, _settings);
         _controller.updateSettings(_settings);
-        if (!context.mounted) return;
+        if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

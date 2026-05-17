@@ -341,11 +341,25 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
       final isLoggedIn = await serviceManager.authService.isLoggedIn();
       final hasOnboarded = await serviceManager.onboardingSettingsService
           .hasCompletedOnboarding();
+      await ref.read(playerIdentityProvider.notifier).initialize();
+      final hasFullAccountIdentity =
+          ref.read(playerIdentityProvider).kind == PlayerIdentityKind.fullAccount;
 
       // Update the provider state to match service state
       if (isLoggedIn) {
         ref.read(isLoggedInSyncProvider.notifier).state = true;
         _bootstrapPersonalization(serviceManager);
+      } else if (hasFullAccountIdentity) {
+        _bootstrapPersonalization(serviceManager);
+      }
+
+      try {
+        final profiles =
+            await ref.read(multiProfileServiceProvider).getAllProfiles();
+        ref.read(profileSelectedProvider.notifier).state =
+            !(isLoggedIn || hasFullAccountIdentity) || profiles.length <= 1;
+      } catch (_) {
+        ref.read(profileSelectedProvider.notifier).state = true;
       }
 
       if (isLoggedIn && hasOnboarded) {

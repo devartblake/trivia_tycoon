@@ -3,8 +3,6 @@ import 'package:trivia_tycoon/ui_components/hex_grid/paint/hex_shape.dart';
 import 'package:trivia_tycoon/ui_components/hex_grid/widgets/hexagon.dart';
 
 import 'index.dart';
-import 'math/hex_orientation.dart';
-import 'model/coordinates.dart'; // re-exports math/model/paint/widgets
 
 /// --- hex_spider_background_painter.dart (alias) ---------------------------
 /// If code still imports the old filename, re-export your new painter:

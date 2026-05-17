@@ -34,9 +34,8 @@ class MultiplayerState {
         error = null;
 
   /// Connected with an optional latency snapshot.
-  const MultiplayerState.connected({int latencyMs = 0})
+  const MultiplayerState.connected({this.latencyMs = 0})
       : connected = true,
-        latencyMs = latencyMs,
         error = null;
 
   /// Error state (disconnected).

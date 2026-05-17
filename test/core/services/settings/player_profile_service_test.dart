@@ -16,9 +16,9 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  PlayerProfileService _make() => PlayerProfileService();
+  PlayerProfileService makeService() => PlayerProfileService();
 
-  Future<void> _openBox() async => Hive.openBox('settings');
+  Future<void> openBox() async => Hive.openBox('settings');
 
   // -------------------------------------------------------------------------
   // player name
@@ -26,18 +26,18 @@ void main() {
 
   group('savePlayerName / getPlayerName', () {
     test('defaults to "Player"', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getPlayerName(), 'Player');
     });
 
     test('saves and retrieves name', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePlayerName('Alice');
       expect(await svc.getPlayerName(), 'Alice');
     });
 
     test('overwrites previous name', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePlayerName('Alice');
       await svc.savePlayerName('Bob');
       expect(await svc.getPlayerName(), 'Bob');
@@ -50,12 +50,12 @@ void main() {
 
   group('saveUsername / getUsername', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getUsername(), isNull);
     });
 
     test('saves and retrieves username', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUsername('alice99');
       expect(await svc.getUsername(), 'alice99');
     });
@@ -67,12 +67,12 @@ void main() {
 
   group('saveUserId / getUserId', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getUserId(), isNull);
     });
 
     test('saves and retrieves userId', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserId('backend-uid-123');
       expect(await svc.getUserId(), 'backend-uid-123');
     });
@@ -84,12 +84,12 @@ void main() {
 
   group('saveUserRole / getUserRole', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getUserRole(), isNull);
     });
 
     test('saves and retrieves role', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRole('admin');
       expect(await svc.getUserRole(), 'admin');
     });
@@ -101,12 +101,12 @@ void main() {
 
   group('saveUserRoles / getUserRoles', () {
     test('empty list when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getUserRoles(), isEmpty);
     });
 
     test('saves and retrieves roles list', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRoles(['admin', 'player']);
       expect(await svc.getUserRoles(), ['admin', 'player']);
     });
@@ -118,18 +118,18 @@ void main() {
 
   group('setPremiumStatus / isPremiumUser', () {
     test('defaults to false', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.isPremiumUser(), isFalse);
     });
 
     test('true after setting', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setPremiumStatus(true);
       expect(await svc.isPremiumUser(), isTrue);
     });
 
     test('false after unsetting', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setPremiumStatus(true);
       await svc.setPremiumStatus(false);
       expect(await svc.isPremiumUser(), isFalse);
@@ -142,18 +142,18 @@ void main() {
 
   group('saveCountry / getCountry', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getCountry(), isNull);
     });
 
     test('saves and retrieves country', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveCountry('CA');
       expect(await svc.getCountry(), 'CA');
     });
 
     test('null country is no-op', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveCountry(null);
       expect(await svc.getCountry(), isNull);
     });
@@ -165,12 +165,12 @@ void main() {
 
   group('saveAgeGroup / getAgeGroup', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getAgeGroup(), isNull);
     });
 
     test('saves and retrieves age group', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveAgeGroup('teen');
       expect(await svc.getAgeGroup(), 'teen');
     });
@@ -182,18 +182,18 @@ void main() {
 
   group('saveAvatar / getAvatar', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getAvatar(), isNull);
     });
 
     test('saves and retrieves avatar path', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveAvatar('assets/avatars/cat.png');
       expect(await svc.getAvatar(), 'assets/avatars/cat.png');
     });
 
     test('null avatar is no-op', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveAvatar(null);
       expect(await svc.getAvatar(), isNull);
     });
@@ -205,36 +205,36 @@ void main() {
 
   group('isAdminUser / hasRole', () {
     test('isAdminUser false when no role set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.isAdminUser(), isFalse);
     });
 
     test('isAdminUser true when legacy role is admin', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRole('admin');
       expect(await svc.isAdminUser(), isTrue);
     });
 
     test('isAdminUser true when roles list contains admin', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRoles(['mod', 'admin']);
       expect(await svc.isAdminUser(), isTrue);
     });
 
     test('isAdminUser false when role is player', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRole('player');
       expect(await svc.isAdminUser(), isFalse);
     });
 
     test('hasRole true when exact match', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRole('mod');
       expect(await svc.hasRole('mod'), isTrue);
     });
 
     test('hasRole false when no match', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserRole('player');
       expect(await svc.hasRole('admin'), isFalse);
     });
@@ -246,12 +246,12 @@ void main() {
 
   group('saveSynaptixMode / getSynaptixMode', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getSynaptixMode(), isNull);
     });
 
     test('saves and retrieves mode', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveSynaptixMode('teen');
       expect(await svc.getSynaptixMode(), 'teen');
     });
@@ -263,12 +263,12 @@ void main() {
 
   group('savePreferredHomeSurface / getPreferredHomeSurface', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getPreferredHomeSurface(), isNull);
     });
 
     test('saves and retrieves surface', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePreferredHomeSurface('hub');
       expect(await svc.getPreferredHomeSurface(), 'hub');
     });
@@ -280,12 +280,12 @@ void main() {
 
   group('saveReducedMotion / getReducedMotion', () {
     test('false by default', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getReducedMotion(), isFalse);
     });
 
     test('saves and retrieves true', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveReducedMotion(true);
       expect(await svc.getReducedMotion(), isTrue);
     });
@@ -297,12 +297,12 @@ void main() {
 
   group('saveTonePreference / getTonePreference', () {
     test('null when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getTonePreference(), isNull);
     });
 
     test('saves and retrieves tone', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveTonePreference('casual');
       expect(await svc.getTonePreference(), 'casual');
     });
@@ -314,12 +314,12 @@ void main() {
 
   group('savePreferredCategories / getPreferredCategories', () {
     test('empty list when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getPreferredCategories(), isEmpty);
     });
 
     test('saves and retrieves categories', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePreferredCategories(['science', 'history']);
       expect(await svc.getPreferredCategories(), ['science', 'history']);
     });
@@ -331,7 +331,7 @@ void main() {
 
   group('clearProfile', () {
     test('clears all profile fields', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePlayerName('Alice');
       await svc.saveUserId('uid1');
       await svc.saveUserRole('admin');
@@ -358,7 +358,7 @@ void main() {
 
   group('loadCompleteProfile', () {
     test('returns map with all expected keys', () async {
-      final svc = _make();
+      final svc = makeService();
       final profile = await svc.loadCompleteProfile();
       expect(profile.containsKey('player_name'), isTrue);
       expect(profile.containsKey('user_id'), isTrue);
@@ -368,7 +368,7 @@ void main() {
     });
 
     test('reflects saved values', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePlayerName('Carol');
       await svc.setPremiumStatus(true);
       final profile = await svc.loadCompleteProfile();
@@ -383,7 +383,7 @@ void main() {
 
   group('saveProfileBatch', () {
     test('saves player_name, user_id, is_premium fields', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveProfileBatch({
         'player_name': 'Dave',
         'user_id': 'uid-99',
@@ -407,7 +407,7 @@ void main() {
     });
 
     test('ignores missing keys', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePlayerName('Eve');
       await svc.saveProfileBatch({'country': 'AU'});
       expect(await svc.getPlayerName(), 'Eve');
@@ -420,12 +420,12 @@ void main() {
 
   group('updateLastActive / getLastActiveTime', () {
     test('null before any update', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getLastActiveTime(), isNull);
     });
 
     test('set after updateLastActive', () async {
-      final svc = _make();
+      final svc = makeService();
       final before = DateTime.now();
       await svc.updateLastActive();
       final ts = await svc.getLastActiveTime();
@@ -440,26 +440,26 @@ void main() {
 
   group('validateProfile', () {
     test('has_name false when name is default', () async {
-      final svc = _make();
+      final svc = makeService();
       final v = await svc.validateProfile();
       expect(v['has_name'], isFalse);
     });
 
     test('has_name true when name is set', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePlayerName('Alice');
       final v = await svc.validateProfile();
       expect(v['has_name'], isTrue);
     });
 
     test('has_user_id false when not set', () async {
-      final svc = _make();
+      final svc = makeService();
       final v = await svc.validateProfile();
       expect(v['has_user_id'], isFalse);
     });
 
     test('has_user_id true when set', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveUserId('uid1');
       final v = await svc.validateProfile();
       expect(v['has_user_id'], isTrue);
@@ -472,15 +472,15 @@ void main() {
 
   group('getProfile', () {
     test('returns defaults when box not open', () {
-      final svc = _make();
+      final svc = makeService();
       final profile = svc.getProfile();
       expect(profile['name'], 'Player');
       expect(profile['isPremium'], isFalse);
     });
 
     test('returns saved values when box is open', () async {
-      await _openBox();
-      final svc = _make();
+      await openBox();
+      final svc = makeService();
       await svc.savePlayerName('Frank');
       await svc.setPremiumStatus(true);
       final profile = svc.getProfile();
@@ -494,39 +494,39 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('_calculateRank via level', () {
-    Future<String> _rankForLevel(int level) async {
-      await _openBox();
-      final svc = _make();
+    Future<String> rankForLevel(int level) async {
+      await openBox();
+      final svc = makeService();
       await svc.saveLevelData(level: level);
       return svc.getProfile()['rank'] as String;
     }
 
     test('level 0 → Trivia Novice', () async {
-      expect(await _rankForLevel(0), 'Trivia Novice');
+      expect(await rankForLevel(0), 'Trivia Novice');
     });
 
     test('level 5 → Quiz Enthusiast', () async {
-      expect(await _rankForLevel(5), 'Quiz Enthusiast');
+      expect(await rankForLevel(5), 'Quiz Enthusiast');
     });
 
     test('level 10 → Trivia Master', () async {
-      expect(await _rankForLevel(10), 'Trivia Master');
+      expect(await rankForLevel(10), 'Trivia Master');
     });
 
     test('level 20 → Trivia Veteran', () async {
-      expect(await _rankForLevel(20), 'Trivia Veteran');
+      expect(await rankForLevel(20), 'Trivia Veteran');
     });
 
     test('level 30 → Knowledge Expert', () async {
-      expect(await _rankForLevel(30), 'Knowledge Expert');
+      expect(await rankForLevel(30), 'Knowledge Expert');
     });
 
     test('level 40 → Quiz Master', () async {
-      expect(await _rankForLevel(40), 'Quiz Master');
+      expect(await rankForLevel(40), 'Quiz Master');
     });
 
     test('level 50 → Trivia Legend', () async {
-      expect(await _rankForLevel(50), 'Trivia Legend');
+      expect(await rankForLevel(50), 'Trivia Legend');
     });
   });
 
@@ -536,7 +536,7 @@ void main() {
 
   group('addXP', () {
     test('increments XP without level up', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveLevelData(level: 0, currentXP: 0, maxXP: 500);
       final result = await svc.addXP(100);
       expect(result['leveledUp'], isFalse);
@@ -544,7 +544,7 @@ void main() {
     });
 
     test('levels up when XP reaches maxXP', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveLevelData(level: 0, currentXP: 490, maxXP: 500);
       final result = await svc.addXP(20);
       expect(result['leveledUp'], isTrue);
@@ -552,21 +552,21 @@ void main() {
     });
 
     test('XP wraps around on level up', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveLevelData(level: 0, currentXP: 490, maxXP: 500);
       final result = await svc.addXP(20);
       expect(result['newXP'], 10);
     });
 
     test('maxXP increases per level', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveLevelData(level: 0, currentXP: 490, maxXP: 500);
       final result = await svc.addXP(20);
       expect(result['newMaxXP'], 550); // 500 + 1 * 50
     });
 
     test('multiple level ups in one XP gain', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveLevelData(level: 0, currentXP: 0, maxXP: 500);
       final result = await svc.addXP(2000);
       expect(result['newLevel'], greaterThan(1));

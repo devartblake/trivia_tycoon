@@ -87,7 +87,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('MessageReaction.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> jsonMap({
       String id = 'r1',
       String messageId = 'msg1',
       String userId = 'uid_a',
@@ -109,60 +109,60 @@ void main() {
         };
 
     test('parses id', () {
-      expect(MessageReaction.fromJson(_json(id: 'rxyz')).id, 'rxyz');
+      expect(MessageReaction.fromJson(jsonMap(id: 'rxyz')).id, 'rxyz');
     });
 
     test('parses messageId', () {
-      expect(MessageReaction.fromJson(_json(messageId: 'msg99')).messageId,
+      expect(MessageReaction.fromJson(jsonMap(messageId: 'msg99')).messageId,
           'msg99');
     });
 
     test('parses userId', () {
-      expect(MessageReaction.fromJson(_json(userId: 'u123')).userId, 'u123');
+      expect(MessageReaction.fromJson(jsonMap(userId: 'u123')).userId, 'u123');
     });
 
     test('parses userDisplayName', () {
       expect(
-          MessageReaction.fromJson(_json(userDisplayName: 'Bob'))
+          MessageReaction.fromJson(jsonMap(userDisplayName: 'Bob'))
               .userDisplayName,
           'Bob');
     });
 
     test('parses type by code for each ReactionType', () {
       for (final t in ReactionType.values) {
-        final r = MessageReaction.fromJson(_json(type: t.code));
+        final r = MessageReaction.fromJson(jsonMap(type: t.code));
         expect(r.type, t);
       }
     });
 
     test('unknown type falls back to thumbsUp', () {
-      final r = MessageReaction.fromJson(_json(type: 'unknown_reaction'));
+      final r = MessageReaction.fromJson(jsonMap(type: 'unknown_reaction'));
       expect(r.type, ReactionType.thumbsUp);
     });
 
     test('parses customEmoji', () {
       final r =
-          MessageReaction.fromJson(_json(customEmoji: '🦊', type: 'custom'));
+          MessageReaction.fromJson(jsonMap(customEmoji: '🦊', type: 'custom'));
       expect(r.customEmoji, '🦊');
     });
 
     test('customEmoji is null when absent', () {
-      expect(MessageReaction.fromJson(_json()).customEmoji, isNull);
+      expect(MessageReaction.fromJson(jsonMap()).customEmoji, isNull);
     });
 
     test('parses timestamp', () {
       final r = MessageReaction.fromJson(
-          _json(timestamp: '2025-09-15T14:30:00.000Z'));
+          jsonMap(timestamp: '2025-09-15T14:30:00.000Z'));
       expect(r.timestamp.month, 9);
     });
 
     test('parses isPremium', () {
       expect(
-          MessageReaction.fromJson(_json(isPremium: true)).isPremium, isTrue);
+          MessageReaction.fromJson(jsonMap(isPremium: true)).isPremium, isTrue);
     });
 
     test('isPremium defaults to false when absent', () {
-      final json = _json();
+      final json = jsonMap();
       json.remove('isPremium');
       expect(MessageReaction.fromJson(json).isPremium, isFalse);
     });
@@ -255,14 +255,14 @@ void main() {
   group('MessageReactionSummary', () {
     final ts = DateTime(2025, 6, 1);
 
-    MessageReaction _r(String userId, ReactionType type) => _reaction(
+    MessageReaction reactionFor(String userId, ReactionType type) => _reaction(
           userId: userId,
           userDisplayName: userId,
           type: type,
           timestamp: ts,
         );
 
-    MessageReactionSummary _summary(
+    MessageReactionSummary reactionSummary(
             Map<ReactionType, List<MessageReaction>> reactions,
             {int? totalCount}) =>
         MessageReactionSummary(
@@ -274,111 +274,111 @@ void main() {
         );
 
     test('hasReactions false when totalCount is 0', () {
-      expect(_summary({}, totalCount: 0).hasReactions, isFalse);
+      expect(reactionSummary({}, totalCount: 0).hasReactions, isFalse);
     });
 
     test('hasReactions true when totalCount > 0', () {
       expect(
-          _summary({
-            ReactionType.heart: [_r('u1', ReactionType.heart)]
+          reactionSummary({
+            ReactionType.heart: [reactionFor('u1', ReactionType.heart)]
           }).hasReactions,
           isTrue);
     });
 
     test('reactionTypes returns all present types', () {
-      final s = _summary({
-        ReactionType.thumbsUp: [_r('u1', ReactionType.thumbsUp)],
-        ReactionType.fire: [_r('u2', ReactionType.fire)],
+      final s = reactionSummary({
+        ReactionType.thumbsUp: [reactionFor('u1', ReactionType.thumbsUp)],
+        ReactionType.fire: [reactionFor('u2', ReactionType.fire)],
       });
       expect(s.reactionTypes,
           containsAll([ReactionType.thumbsUp, ReactionType.fire]));
     });
 
     test('getCountForType returns correct count', () {
-      final s = _summary({
+      final s = reactionSummary({
         ReactionType.heart: [
-          _r('u1', ReactionType.heart),
-          _r('u2', ReactionType.heart),
+          reactionFor('u1', ReactionType.heart),
+          reactionFor('u2', ReactionType.heart),
         ],
       });
       expect(s.getCountForType(ReactionType.heart), 2);
     });
 
     test('getCountForType returns 0 for absent type', () {
-      expect(_summary({}).getCountForType(ReactionType.thumbsUp), 0);
+      expect(reactionSummary({}).getCountForType(ReactionType.thumbsUp), 0);
     });
 
     test('getReactionsForType returns list', () {
-      final r1 = _r('u1', ReactionType.laugh);
-      final s = _summary({
+      final r1 = reactionFor('u1', ReactionType.laugh);
+      final s = reactionSummary({
         ReactionType.laugh: [r1]
       });
       expect(s.getReactionsForType(ReactionType.laugh), contains(r1));
     });
 
     test('getReactionsForType returns empty for absent type', () {
-      expect(_summary({}).getReactionsForType(ReactionType.wow), isEmpty);
+      expect(reactionSummary({}).getReactionsForType(ReactionType.wow), isEmpty);
     });
 
     test('hasUserReacted true when user has reaction', () {
-      final s = _summary({
-        ReactionType.thumbsUp: [_r('uid_x', ReactionType.thumbsUp)],
+      final s = reactionSummary({
+        ReactionType.thumbsUp: [reactionFor('uid_x', ReactionType.thumbsUp)],
       });
       expect(s.hasUserReacted('uid_x'), isTrue);
     });
 
     test('hasUserReacted false for user with no reaction', () {
-      final s = _summary({
-        ReactionType.thumbsUp: [_r('uid_x', ReactionType.thumbsUp)],
+      final s = reactionSummary({
+        ReactionType.thumbsUp: [reactionFor('uid_x', ReactionType.thumbsUp)],
       });
       expect(s.hasUserReacted('uid_z'), isFalse);
     });
 
     test('getUserReactionType returns correct type', () {
-      final s = _summary({
-        ReactionType.fire: [_r('uid_a', ReactionType.fire)],
+      final s = reactionSummary({
+        ReactionType.fire: [reactionFor('uid_a', ReactionType.fire)],
       });
       expect(s.getUserReactionType('uid_a'), ReactionType.fire);
     });
 
     test('getUserReactionType returns null for absent user', () {
-      expect(_summary({}).getUserReactionType('nobody'), isNull);
+      expect(reactionSummary({}).getUserReactionType('nobody'), isNull);
     });
 
     test('getUserReaction returns the specific reaction', () {
-      final r1 = _r('uid_b', ReactionType.clap);
-      final s = _summary({
+      final r1 = reactionFor('uid_b', ReactionType.clap);
+      final s = reactionSummary({
         ReactionType.clap: [r1]
       });
       expect(s.getUserReaction('uid_b'), r1);
     });
 
     test('getTopReactions respects limit', () {
-      final s = _summary({
+      final s = reactionSummary({
         ReactionType.heart: [
-          _r('u1', ReactionType.heart),
-          _r('u2', ReactionType.heart),
+          reactionFor('u1', ReactionType.heart),
+          reactionFor('u2', ReactionType.heart),
         ],
-        ReactionType.fire: [_r('u3', ReactionType.fire)],
+        ReactionType.fire: [reactionFor('u3', ReactionType.fire)],
         ReactionType.thumbsUp: [
-          _r('u4', ReactionType.thumbsUp),
-          _r('u5', ReactionType.thumbsUp),
-          _r('u6', ReactionType.thumbsUp),
+          reactionFor('u4', ReactionType.thumbsUp),
+          reactionFor('u5', ReactionType.thumbsUp),
+          reactionFor('u6', ReactionType.thumbsUp),
         ],
-        ReactionType.wow: [_r('u7', ReactionType.wow)],
+        ReactionType.wow: [reactionFor('u7', ReactionType.wow)],
       });
       final top = s.getTopReactions(limit: 2);
       expect(top.length, 2);
     });
 
     test('getTopReactions sorted descending by count', () {
-      final s = _summary({
+      final s = reactionSummary({
         ReactionType.heart: [
-          _r('u1', ReactionType.heart),
-          _r('u2', ReactionType.heart),
-          _r('u3', ReactionType.heart),
+          reactionFor('u1', ReactionType.heart),
+          reactionFor('u2', ReactionType.heart),
+          reactionFor('u3', ReactionType.heart),
         ],
-        ReactionType.fire: [_r('u4', ReactionType.fire)],
+        ReactionType.fire: [reactionFor('u4', ReactionType.fire)],
       });
       final top = s.getTopReactions();
       expect(top.first.key, ReactionType.heart);
@@ -386,18 +386,18 @@ void main() {
     });
 
     test('getFormattedSummary returns empty when no reactions', () {
-      expect(_summary({}, totalCount: 0).getFormattedSummary(), '');
+      expect(reactionSummary({}, totalCount: 0).getFormattedSummary(), '');
     });
 
     test('getFormattedSummary returns non-empty when reactions present', () {
-      final s = _summary({
-        ReactionType.thumbsUp: [_r('u1', ReactionType.thumbsUp)],
+      final s = reactionSummary({
+        ReactionType.thumbsUp: [reactionFor('u1', ReactionType.thumbsUp)],
       });
       expect(s.getFormattedSummary(), isNotEmpty);
     });
 
     test('getUsersForReaction returns display names', () {
-      final s = _summary({
+      final s = reactionSummary({
         ReactionType.party: [
           _reaction(
               userId: 'uid_a',
@@ -414,7 +414,7 @@ void main() {
     });
 
     test('getUsersForReaction returns empty for absent type', () {
-      expect(_summary({}).getUsersForReaction(ReactionType.gem), isEmpty);
+      expect(reactionSummary({}).getUsersForReaction(ReactionType.gem), isEmpty);
     });
   });
 }

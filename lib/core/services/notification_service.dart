@@ -609,6 +609,7 @@ class NotificationService {
         return true;
       }
 
+      if (!context.mounted) return false;
       final shouldRequest = await showDialog<bool>(
         context: context,
         barrierDismissible: true,

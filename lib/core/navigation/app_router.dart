@@ -110,7 +110,9 @@ import '../../screens/study_hub/study_custom_set_screen.dart';
 import '../dto/study_dto.dart';
 import '../../screens/login_screen.dart';
 import '../../screens/login_screen_mobile.dart';
+import '../../screens/account/account_link_rewards_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
+import '../../screens/web_link/link_code_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
 import '../../screens/profile/friends_screen.dart';
 import '../../screens/help_screen.dart';
@@ -202,6 +204,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/account-link',
+        name: 'account-link',
+        builder: (context, state) => AccountLinkRewardsScreen(
+          fromOnboarding: state.uri.queryParameters['from'] == 'onboarding',
+        ),
+      ),
+      GoRoute(
+        path: '/link-code',
+        name: 'link-code',
+        builder: (context, state) => const LinkCodeScreen(),
       ),
 
       /// 🏠 Main App Routes

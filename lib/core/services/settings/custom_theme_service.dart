@@ -32,8 +32,8 @@ class CustomThemeService {
     required bool isDark,
   }) async {
     await _settingsBox.put(_themeNameKey, name);
-    await _settingsBox.put(_primaryColorKey, primary.value);
-    await _settingsBox.put(_secondaryColorKey, secondary.value);
+    await _settingsBox.put(_primaryColorKey, primary.toARGB32());
+    await _settingsBox.put(_secondaryColorKey, secondary.toARGB32());
     await _settingsBox.put(_darkModeKey, isDark);
   }
 
@@ -65,8 +65,8 @@ class CustomThemeService {
     final box = await Hive.openBox(_presetBoxName);
     final encoded = {
       'name': theme.themeName,
-      'primary': theme.primaryColor.value,
-      'secondary': theme.secondaryColor.value,
+      'primary': theme.primaryColor.toARGB32(),
+      'secondary': theme.secondaryColor.toARGB32(),
       'brightness': theme.brightness == Brightness.dark ? 'dark' : 'light',
     };
     await box.put(theme.themeName, encoded);

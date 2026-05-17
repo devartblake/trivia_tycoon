@@ -292,6 +292,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
           const SizedBox(height: 16),
           _animatedComponent(2, _buildRewardsWidget()),
           const SizedBox(height: 16),
+          _buildAccountRewardsCard(),
+          const SizedBox(height: 16),
           _animatedComponent(3, _buildActionButtons()),
           const SizedBox(height: 20),
           _animatedComponent(4, _buildRankCard()),
@@ -348,6 +350,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
             children: [
               _animatedComponent(0, _buildRewardsWidget()),
               const SizedBox(height: 20),
+              _buildAccountRewardsCard(),
+              const SizedBox(height: 20),
               _animatedComponent(1, _buildCurrencyWidget()),
               const SizedBox(height: 24),
               _animatedComponent(3, _buildActionButtons()),
@@ -397,6 +401,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
           child: Column(
             children: [
               _animatedComponent(0, _buildRewardsWidget()),
+              const SizedBox(height: 20),
+              _buildAccountRewardsCard(),
               const SizedBox(height: 20),
               _animatedComponent(2, _buildRankCard()),
               const SizedBox(height: 24),
@@ -455,6 +461,58 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildAccountRewardsCard() {
+    final claims = ref.watch(accountRewardsProvider).valueOrNull;
+    if (claims == null) return const SizedBox.shrink();
+
+    final remaining = accountRewardDefinitions
+        .where((reward) => !claims.contains(reward.key))
+        .length;
+    if (remaining == 0) return const SizedBox.shrink();
+
+    final colors = Theme.of(context).colorScheme;
+    return Card(
+      elevation: 0,
+      color: colors.primaryContainer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => context.push('/account-link'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Icon(Icons.link_rounded, color: colors.onPrimaryContainer),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$remaining account reward${remaining == 1 ? '' : 's'} available',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: colors.onPrimaryContainer,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    Text(
+                      'Link web and social accounts for coins, XP, and items.',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: colors.onPrimaryContainer,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded,
+                  color: colors.onPrimaryContainer),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

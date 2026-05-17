@@ -212,7 +212,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('FlowConnectLevelData', () {
-    FlowConnectLevelData _build() {
+    FlowConnectLevelData buildProgress() {
       final grid = [
         [
           FlowConnectGridCell(row: 0, col: 0),
@@ -236,20 +236,20 @@ void main() {
     }
 
     test('stores gridSize', () {
-      expect(_build().gridSize, 2);
+      expect(buildProgress().gridSize, 2);
     });
 
     test('stores totalNumbers', () {
-      expect(_build().totalNumbers, 1);
+      expect(buildProgress().totalNumbers, 1);
     });
 
     test('stores grid with correct dimensions', () {
-      expect(_build().grid.length, 2);
-      expect(_build().grid[0].length, 2);
+      expect(buildProgress().grid.length, 2);
+      expect(buildProgress().grid[0].length, 2);
     });
 
     test('stores solutionPath with correct length', () {
-      expect(_build().solutionPath.length, 2);
+      expect(buildProgress().solutionPath.length, 2);
     });
   });
 

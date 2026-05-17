@@ -206,8 +206,7 @@ class AchievementsTab extends ConsumerWidget {
                     achievement['color'] as Color,
                     achievement['date'] as String,
                     achievement['isNew'] as bool,
-                  ))
-              .toList(),
+                  )),
         ],
       ),
     );
@@ -374,8 +373,7 @@ class AchievementsTab extends ConsumerWidget {
                     subject['level'] as int,
                     subject['maxLevel'] as int,
                     subject['color'] as Color,
-                  ))
-              .toList(),
+                  )),
         ],
       ),
     );
@@ -522,8 +520,7 @@ class AchievementsTab extends ConsumerWidget {
                     achievement['icon'] as IconData,
                     achievement['color'] as Color,
                     achievement['completed'] as bool,
-                  ))
-              .toList(),
+                  )),
         ],
       ),
     );

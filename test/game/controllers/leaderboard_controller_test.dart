@@ -228,7 +228,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('LeaderboardController — category filtering', () {
-    Future<LeaderboardController> _ctrlWithEntries(
+    Future<LeaderboardController> ctrlWithEntries(
         List<LeaderboardEntry> entries) async {
       final ctrl = container.read(_testLeaderboardProvider);
       await ctrl.importLeaderboardData({
@@ -243,7 +243,7 @@ void main() {
         _entry(userId: 2, score: 80, rank: 2, timeframe: 'weekly'),
         _entry(userId: 3, score: 60, rank: 3, timeframe: 'global'),
       ];
-      final ctrl = await _ctrlWithEntries(entries);
+      final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.daily);
 
       expect(ctrl.filteredEntries.length, 1);
@@ -256,7 +256,7 @@ void main() {
         _entry(userId: 2, score: 80, rank: 2, timeframe: 'weekly'),
         _entry(userId: 3, score: 60, rank: 3, timeframe: 'global'),
       ];
-      final ctrl = await _ctrlWithEntries(entries);
+      final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.weekly);
 
       expect(ctrl.filteredEntries.length, 2);
@@ -269,7 +269,7 @@ void main() {
         _entry(userId: 1, score: 100, rank: 1, timeframe: 'daily'),
         _entry(userId: 2, score: 80, rank: 2, timeframe: 'global'),
       ];
-      final ctrl = await _ctrlWithEntries(entries);
+      final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.global);
 
       expect(ctrl.filteredEntries.length, 1);
@@ -282,7 +282,7 @@ void main() {
         _entry(userId: 2, score: 80, rank: 2, timeframe: 'weekly'),
         _entry(userId: 3, score: 60, rank: 3, timeframe: 'global'),
       ];
-      final ctrl = await _ctrlWithEntries(entries);
+      final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.topXP);
 
       // Tier restriction will filter since no currentUser in _allEntries

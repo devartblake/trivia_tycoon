@@ -201,8 +201,9 @@ class AppCacheService {
     try {
       return raw.map((e) {
         if (e is Map<String, dynamic>) return LeaderboardEntry.fromJson(e);
-        if (e is Map)
+        if (e is Map) {
           return LeaderboardEntry.fromJson(Map<String, dynamic>.from(e));
+        }
         throw StateError('Invalid leaderboard entry type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -236,8 +237,9 @@ class AppCacheService {
     try {
       return raw.map((e) {
         if (e is Map<String, dynamic>) return QuestionModel.fromJson(e);
-        if (e is Map)
+        if (e is Map) {
           return QuestionModel.fromJson(Map<String, dynamic>.from(e));
+        }
         throw StateError('Invalid question type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -270,8 +272,9 @@ class AppCacheService {
       if (raw is List) {
         return raw.map((q) {
           if (q is Map<String, dynamic>) return QuestionModel.fromJson(q);
-          if (q is Map)
+          if (q is Map) {
             return QuestionModel.fromJson(Map<String, dynamic>.from(q));
+          }
           throw StateError('Invalid saved question type: ${q.runtimeType}');
         }).toList();
       }
@@ -302,8 +305,9 @@ class AppCacheService {
       final raw = getJsonList('qr_scan_history') ?? const <dynamic>[];
       return raw.map((e) {
         if (e is Map<String, dynamic>) return ScanHistoryItem.fromJson(e);
-        if (e is Map)
+        if (e is Map) {
           return ScanHistoryItem.fromJson(Map<String, dynamic>.from(e));
+        }
         throw StateError('Invalid scan item type: ${e.runtimeType}');
       }).toList();
     } catch (e) {

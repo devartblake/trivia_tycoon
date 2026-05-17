@@ -1,4 +1,4 @@
-import 'dart:math';
+﻿import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ColorConversion {
@@ -9,7 +9,7 @@ class ColorConversion {
 
   /// Convert Color to HEX String with caching
   static String colorToHex(Color color, {bool leadingHashSign = true}) {
-    final cacheKey = color.value;
+    final cacheKey = color.toARGB32();
 
     // Check cache first
     if (_colorToHexCache.containsKey(cacheKey)) {
@@ -18,7 +18,7 @@ class ColorConversion {
     }
 
     // Generate hex string
-    final hex = color.value.toRadixString(16).padLeft(8, '0').toUpperCase();
+    final hex = color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
     final result = '#$hex';
 
     // Cache the result
@@ -144,13 +144,13 @@ class ColorConversion {
 
   /// Convert Color to CSS-style RGB string
   static String colorToRgb(Color color) {
-    return 'rgb(${color.red}, ${color.green}, ${color.blue})';
+    return 'rgb(${(color.r * 255.0).round()}, ${(color.g * 255.0).round()}, ${(color.b * 255.0).round()})';
   }
 
   /// Convert Color to CSS-style RGBA string
   static String colorToRgba(Color color) {
-    final alpha = (color.alpha / 255.0).toStringAsFixed(2);
-    return 'rgba(${color.red}, ${color.green}, ${color.blue}, $alpha)';
+    final alpha = color.a.toStringAsFixed(2);
+    return 'rgba(${(color.r * 255.0).round()}, ${(color.g * 255.0).round()}, ${(color.b * 255.0).round()}, $alpha)';
   }
 
   /// Convert Color to HSL CSS string
@@ -168,7 +168,7 @@ class ColorConversion {
     final h = hsl.hue.round();
     final s = (hsl.saturation * 100).round();
     final l = (hsl.lightness * 100).round();
-    final a = (color.alpha / 255.0).toStringAsFixed(2);
+    final a = color.a.toStringAsFixed(2);
     return 'hsla($h, $s%, $l%, $a)';
   }
 
@@ -261,10 +261,10 @@ class ColorConversion {
   /// Blend two colors with given ratio (0.0 to 1.0)
   static Color blendColors(Color color1, Color color2, double ratio) {
     ratio = ratio.clamp(0.0, 1.0);
-    final r = (color1.red * (1 - ratio) + color2.red * ratio).round();
-    final g = (color1.green * (1 - ratio) + color2.green * ratio).round();
-    final b = (color1.blue * (1 - ratio) + color2.blue * ratio).round();
-    final a = (color1.alpha * (1 - ratio) + color2.alpha * ratio).round();
+    final r = (color1.r * (1 - ratio) * 255.0 + color2.r * ratio * 255.0).round().clamp(0, 255);
+    final g = (color1.g * (1 - ratio) * 255.0 + color2.g * ratio * 255.0).round().clamp(0, 255);
+    final b = (color1.b * (1 - ratio) * 255.0 + color2.b * ratio * 255.0).round().clamp(0, 255);
+    final a = (color1.a * (1 - ratio) * 255.0 + color2.a * ratio * 255.0).round().clamp(0, 255);
     return Color.fromARGB(a, r, g, b);
   }
 
@@ -305,8 +305,8 @@ class ColorConversion {
   /// Convert color to grayscale
   static Color toGrayscale(Color color) {
     final gray =
-        (color.red * 0.299 + color.green * 0.587 + color.blue * 0.114).round();
-    return Color.fromARGB(color.alpha, gray, gray, gray);
+        (color.r * 0.299 * 255.0 + color.g * 0.587 * 255.0 + color.b * 0.114 * 255.0).round().clamp(0, 255);
+    return Color.fromARGB((color.a * 255.0).round().clamp(0, 255), gray, gray, gray);
   }
 
   /// Get complementary color (opposite on color wheel)
@@ -343,7 +343,7 @@ class ColorConversion {
 
   /// Convert Color to integer value
   static int colorToInt(Color color) {
-    return color.value;
+    return color.toARGB32();
   }
 
   /// Convert integer to Color

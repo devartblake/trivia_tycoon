@@ -284,7 +284,7 @@ class AnalyticsService {
       required String platform,
       required String appVersion}) async {
     final sessionId = _currentSessionId ?? const Uuid().v4();
-    final deviceId = const Uuid().v5(Uuid.NAMESPACE_URL, userId);
+    final deviceId = const Uuid().v5(Namespace.url.value, userId);
     final timestamp = DateTime.now().toUtc().toIso8601String();
 
     final payload = {

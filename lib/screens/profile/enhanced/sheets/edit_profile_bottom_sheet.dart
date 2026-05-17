@@ -164,10 +164,9 @@ class _EditProfileBottomSheetState
             loadoutSynced = false;
           }
 
-          // Refresh the profile data
           ref.read(profileManagerProvider.notifier).refreshProfiles();
 
-          // Show success message
+          if (!mounted) return;
           if (loadoutSynced) {
             _showSuccessSnackBar('Profile updated successfully!');
           } else {

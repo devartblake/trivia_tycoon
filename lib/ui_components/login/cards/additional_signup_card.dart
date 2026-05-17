@@ -126,18 +126,18 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
         break;
     }
 
-    if (context.mounted) {
+    if (mounted) {
       await _submitController.reverse();
     }
 
     if (!isNullOrEmpty(error)) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorToast(context, messages.toastTitleError, error!);
       }
       setState(() => _isSubmitting = false);
       return false;
     } else {
-      if (context.mounted) {
+      if (mounted) {
         showSuccessToast(
           context,
           messages.toastTitleSuccess,

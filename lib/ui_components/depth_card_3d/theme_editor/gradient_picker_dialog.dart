@@ -323,7 +323,7 @@ class _GradientPickerDialogState extends State<GradientPickerDialog>
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

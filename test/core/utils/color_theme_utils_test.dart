@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/core/utils/color_utils.dart';
 
+int colorChannel(double value) =>
+    (value * 255.0).round().clamp(0, 255).toInt();
+
 void main() {
   // -------------------------------------------------------------------------
   // ColorShade enum
@@ -109,35 +112,35 @@ void main() {
   group('ColorUtils.parseHex', () {
     test('parses "#FF0000" as red', () {
       final c = ColorUtils.parseHex('#FF0000');
-      expect(c.red, 255);
-      expect(c.green, 0);
-      expect(c.blue, 0);
+      expect(colorChannel(c.r), 255);
+      expect(colorChannel(c.g), 0);
+      expect(colorChannel(c.b), 0);
     });
 
     test('parses "#00FF00" as green', () {
       final c = ColorUtils.parseHex('#00FF00');
-      expect(c.red, 0);
-      expect(c.green, 255);
-      expect(c.blue, 0);
+      expect(colorChannel(c.r), 0);
+      expect(colorChannel(c.g), 255);
+      expect(colorChannel(c.b), 0);
     });
 
     test('parses "#0000FF" as blue', () {
       final c = ColorUtils.parseHex('#0000FF');
-      expect(c.red, 0);
-      expect(c.green, 0);
-      expect(c.blue, 255);
+      expect(colorChannel(c.r), 0);
+      expect(colorChannel(c.g), 0);
+      expect(colorChannel(c.b), 255);
     });
 
     test('parses "#FFFFFF" as white', () {
       final c = ColorUtils.parseHex('#FFFFFF');
-      expect(c.red, 255);
-      expect(c.green, 255);
-      expect(c.blue, 255);
+      expect(colorChannel(c.r), 255);
+      expect(colorChannel(c.g), 255);
+      expect(colorChannel(c.b), 255);
     });
 
     test('parsed color has full alpha', () {
       final c = ColorUtils.parseHex('#123456');
-      expect(c.alpha, 255);
+      expect(colorChannel(c.a), 255);
     });
   });
 
@@ -150,30 +153,30 @@ void main() {
       const white = Color(0xFFFFFFFF);
       const black = Color(0xFF000000);
       final result = ColorUtils.blend(white, black, 0.0);
-      expect(result.red, 255);
-      expect(result.green, 255);
-      expect(result.blue, 255);
+      expect(colorChannel(result.r), 255);
+      expect(colorChannel(result.g), 255);
+      expect(colorChannel(result.b), 255);
     });
 
     test('blend(white, black, 1.0) returns black', () {
       const white = Color(0xFFFFFFFF);
       const black = Color(0xFF000000);
       final result = ColorUtils.blend(white, black, 1.0);
-      expect(result.red, 0);
-      expect(result.green, 0);
-      expect(result.blue, 0);
+      expect(colorChannel(result.r), 0);
+      expect(colorChannel(result.g), 0);
+      expect(colorChannel(result.b), 0);
     });
 
     test('blend(white, black, 0.5) returns near-mid-gray', () {
       const white = Color(0xFFFFFFFF);
       const black = Color(0xFF000000);
       final result = ColorUtils.blend(white, black, 0.5);
-      expect(result.red, inInclusiveRange(120, 135));
+      expect(colorChannel(result.r), inInclusiveRange(120, 135));
     });
 
     test('blend result has full alpha', () {
       final result = ColorUtils.blend(Colors.red, Colors.blue, 0.5);
-      expect(result.alpha, 255);
+      expect(colorChannel(result.a), 255);
     });
   });
 

@@ -151,7 +151,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('StoreSectionData.fromJson', () {
-    Map<String, dynamic> _sectionJson({
+    Map<String, dynamic> sectionJson({
       String id = 'sec1',
       String title = 'Power-Ups',
       String subtitle = 'Boost your score',
@@ -175,79 +175,79 @@ void main() {
         };
 
     test('parses id', () {
-      expect(StoreSectionData.fromJson(_sectionJson(id: 'powerups')).id,
+      expect(StoreSectionData.fromJson(sectionJson(id: 'powerups')).id,
           'powerups');
     });
 
     test('parses title', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(title: 'Gems')).title, 'Gems');
+          StoreSectionData.fromJson(sectionJson(title: 'Gems')).title, 'Gems');
     });
 
     test('parses subtitle', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(subtitle: 'Buy gems'))
+          StoreSectionData.fromJson(sectionJson(subtitle: 'Buy gems'))
               .subtitle,
           'Buy gems');
     });
 
     test('parses icon', () {
-      expect(StoreSectionData.fromJson(_sectionJson(icon: 'diamond')).icon,
+      expect(StoreSectionData.fromJson(sectionJson(icon: 'diamond')).icon,
           Icons.diamond);
     });
 
     test('icon defaults to Icons.store for unknown name', () {
-      expect(StoreSectionData.fromJson(_sectionJson(icon: 'unknown')).icon,
+      expect(StoreSectionData.fromJson(sectionJson(icon: 'unknown')).icon,
           Icons.store);
     });
 
     test('parses gradient from list', () {
       final s = StoreSectionData.fromJson(
-          _sectionJson(gradient: ['#FF0000', '#0000FF']));
+          sectionJson(gradient: ['#FF0000', '#0000FF']));
       expect(s.gradient.colors.first, const Color(0xFFFF0000));
     });
 
     test('gradient falls back when absent', () {
-      final s = StoreSectionData.fromJson(_sectionJson());
+      final s = StoreSectionData.fromJson(sectionJson());
       expect(s.gradient.colors.length, 2);
     });
 
     test('parses route', () {
       final s =
-          StoreSectionData.fromJson(_sectionJson(route: '/store/powerups'));
+          StoreSectionData.fromJson(sectionJson(route: '/store/powerups'));
       expect(s.route, '/store/powerups');
     });
 
     test('route defaults to /store when absent', () {
-      final s = StoreSectionData.fromJson(_sectionJson());
+      final s = StoreSectionData.fromJson(sectionJson());
       expect(s.route, '/store');
     });
 
     test('parses itemCount', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(itemCount: '5 items'))
+          StoreSectionData.fromJson(sectionJson(itemCount: '5 items'))
               .itemCount,
           '5 items');
     });
 
     test('parses badge', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(badge: 'HOT')).badge, 'HOT');
+          StoreSectionData.fromJson(sectionJson(badge: 'HOT')).badge, 'HOT');
     });
 
     test('badge is null when absent', () {
-      expect(StoreSectionData.fromJson(_sectionJson()).badge, isNull);
+      expect(StoreSectionData.fromJson(sectionJson()).badge, isNull);
     });
 
     test('parses preview', () {
       expect(
-          StoreSectionData.fromJson(_sectionJson(preview: 'Best power-ups'))
+          StoreSectionData.fromJson(sectionJson(preview: 'Best power-ups'))
               .preview,
           'Best power-ups');
     });
 
     test('id defaults to "" when absent', () {
-      final json = _sectionJson();
+      final json = sectionJson();
       json.remove('id');
       expect(StoreSectionData.fromJson(json).id, '');
     });
@@ -258,7 +258,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('FeaturedItemData.fromJson', () {
-    Map<String, dynamic> _featuredJson({
+    Map<String, dynamic> featuredJson({
       String id = 'feat1',
       String title = 'Weekly Bundle',
       String subtitle = '5 power-ups',
@@ -280,65 +280,65 @@ void main() {
         };
 
     test('parses id', () {
-      expect(FeaturedItemData.fromJson(_featuredJson(id: 'f99')).id, 'f99');
+      expect(FeaturedItemData.fromJson(featuredJson(id: 'f99')).id, 'f99');
     });
 
     test('parses title', () {
-      expect(FeaturedItemData.fromJson(_featuredJson(title: 'Mega Deal')).title,
+      expect(FeaturedItemData.fromJson(featuredJson(title: 'Mega Deal')).title,
           'Mega Deal');
     });
 
     test('parses subtitle', () {
       expect(
-          FeaturedItemData.fromJson(_featuredJson(subtitle: 'Great value'))
+          FeaturedItemData.fromJson(featuredJson(subtitle: 'Great value'))
               .subtitle,
           'Great value');
     });
 
     test('parses icon', () {
-      expect(FeaturedItemData.fromJson(_featuredJson(icon: 'star')).icon,
+      expect(FeaturedItemData.fromJson(featuredJson(icon: 'star')).icon,
           Icons.star);
     });
 
     test('icon falls back to auto_awesome for unknown name', () {
-      expect(FeaturedItemData.fromJson(_featuredJson(icon: 'unk')).icon,
+      expect(FeaturedItemData.fromJson(featuredJson(icon: 'unk')).icon,
           Icons.auto_awesome);
     });
 
     test('parses buttonText', () {
       expect(
-          FeaturedItemData.fromJson(_featuredJson(buttonText: 'Buy Now'))
+          FeaturedItemData.fromJson(featuredJson(buttonText: 'Buy Now'))
               .buttonText,
           'Buy Now');
     });
 
     test('buttonText is null when absent', () {
-      expect(FeaturedItemData.fromJson(_featuredJson()).buttonText, isNull);
+      expect(FeaturedItemData.fromJson(featuredJson()).buttonText, isNull);
     });
 
     test('parses sku', () {
-      expect(FeaturedItemData.fromJson(_featuredJson(sku: 'SKU001')).sku,
+      expect(FeaturedItemData.fromJson(featuredJson(sku: 'SKU001')).sku,
           'SKU001');
     });
 
     test('sku is null when absent', () {
-      expect(FeaturedItemData.fromJson(_featuredJson()).sku, isNull);
+      expect(FeaturedItemData.fromJson(featuredJson()).sku, isNull);
     });
 
     test('parses expiresAt', () {
       final f = FeaturedItemData.fromJson(
-          _featuredJson(expiresAt: '2025-12-31T23:59:00.000Z'));
+          featuredJson(expiresAt: '2025-12-31T23:59:00.000Z'));
       expect(f.expiresAt, isNotNull);
       expect(f.expiresAt!.month, 12);
     });
 
     test('expiresAt is null when absent', () {
-      expect(FeaturedItemData.fromJson(_featuredJson()).expiresAt, isNull);
+      expect(FeaturedItemData.fromJson(featuredJson()).expiresAt, isNull);
     });
 
     test('invalid expiresAt returns null via tryParse', () {
       final f =
-          FeaturedItemData.fromJson(_featuredJson(expiresAt: 'not-a-date'));
+          FeaturedItemData.fromJson(featuredJson(expiresAt: 'not-a-date'));
       expect(f.expiresAt, isNull);
     });
   });
@@ -348,7 +348,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('FeaturedItemData — countdownLabel', () {
-    FeaturedItemData _makeItem({DateTime? expiresAt}) => FeaturedItemData(
+    FeaturedItemData makeItem({DateTime? expiresAt}) => FeaturedItemData(
           id: 'test',
           title: 'Test',
           subtitle: '',
@@ -359,29 +359,29 @@ void main() {
         );
 
     test('returns "" when expiresAt is null', () {
-      expect(_makeItem().countdownLabel, '');
+      expect(makeItem().countdownLabel, '');
     });
 
     test('returns "N days left" when > 1 day remaining', () {
       final item =
-          _makeItem(expiresAt: DateTime.now().add(const Duration(days: 5)));
+          makeItem(expiresAt: DateTime.now().add(const Duration(days: 5)));
       expect(item.countdownLabel, contains('days left'));
     });
 
     test('returns "N hours left" when > 1 hour but ≤ 1 day remaining', () {
       final item =
-          _makeItem(expiresAt: DateTime.now().add(const Duration(hours: 3)));
+          makeItem(expiresAt: DateTime.now().add(const Duration(hours: 3)));
       expect(item.countdownLabel, contains('hours left'));
     });
 
     test('returns "Ending soon" when ≤ 1 hour remaining', () {
       final item =
-          _makeItem(expiresAt: DateTime.now().add(const Duration(minutes: 30)));
+          makeItem(expiresAt: DateTime.now().add(const Duration(minutes: 30)));
       expect(item.countdownLabel, 'Ending soon');
     });
 
     test('returns "Ending soon" when expiresAt is in the past', () {
-      final item = _makeItem(
+      final item = makeItem(
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
       expect(item.countdownLabel, 'Ending soon');
     });
@@ -427,7 +427,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('StoreHubData.fromJson — legacy format', () {
-    Map<String, dynamic> _legacyJson({
+    Map<String, dynamic> legacyJson({
       List<dynamic>? sections,
       Map<String, dynamic>? featured,
       Map<String, dynamic>? stats,
@@ -441,7 +441,7 @@ void main() {
         };
 
     test('parses sections list', () {
-      final data = StoreHubData.fromJson(_legacyJson(sections: [
+      final data = StoreHubData.fromJson(legacyJson(sections: [
         {
           'id': 'sec1',
           'title': 'Test',
@@ -456,12 +456,12 @@ void main() {
     });
 
     test('sections defaults to empty when absent', () {
-      final data = StoreHubData.fromJson(_legacyJson());
+      final data = StoreHubData.fromJson(legacyJson());
       expect(data.sections, isEmpty);
     });
 
     test('parses featured map', () {
-      final data = StoreHubData.fromJson(_legacyJson(
+      final data = StoreHubData.fromJson(legacyJson(
         featured: {
           'id': 'f1',
           'title': 'Deal',
@@ -474,30 +474,30 @@ void main() {
     });
 
     test('featured is null when absent', () {
-      final data = StoreHubData.fromJson(_legacyJson());
+      final data = StoreHubData.fromJson(legacyJson());
       expect(data.featured, isNull);
     });
 
     test('parses stats', () {
-      final data = StoreHubData.fromJson(_legacyJson(
+      final data = StoreHubData.fromJson(legacyJson(
         stats: {'totalItems': '50', 'activeOffers': '5', 'newToday': '3'},
       ));
       expect(data.stats.totalItems, '50');
     });
 
     test('stats defaults to zeros when absent', () {
-      final data = StoreHubData.fromJson(_legacyJson());
+      final data = StoreHubData.fromJson(legacyJson());
       expect(data.stats.totalItems, '0');
     });
 
     test('parses flashSaleMessage', () {
       final data =
-          StoreHubData.fromJson(_legacyJson(flashSaleMessage: '50% off!'));
+          StoreHubData.fromJson(legacyJson(flashSaleMessage: '50% off!'));
       expect(data.flashSaleMessage, '50% off!');
     });
 
     test('flashSaleMessage is null when absent', () {
-      expect(StoreHubData.fromJson(_legacyJson()).flashSaleMessage, isNull);
+      expect(StoreHubData.fromJson(legacyJson()).flashSaleMessage, isNull);
     });
   });
 

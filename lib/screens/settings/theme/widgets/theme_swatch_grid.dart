@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../game/controllers/theme_settings_controller.dart';
@@ -198,7 +198,7 @@ class _ThemeSwatchGridState extends ConsumerState<ThemeSwatchGrid>
             final swatch = swatches[index];
             final color = swatch['color'] as Color;
             final name = swatch['name'] as String;
-            final isSelected = color.value == currentColor.value;
+            final isSelected = color.toARGB32() == currentColor.toARGB32();
             final animationIndex =
                 isPrimary ? index : index + _primarySwatches.length;
 

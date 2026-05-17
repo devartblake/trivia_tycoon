@@ -332,7 +332,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
               final item = entry.value;
               return _buildSettingItem(
                   item, index, index == _settingsItems.length);
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -533,6 +533,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
     );
 
     if (confirmed == true) {
+      if (!mounted) return;
       await ref.read(authOperationsProvider).logout(context);
     }
   }

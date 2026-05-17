@@ -52,7 +52,7 @@ void main() {
     group('fromLookups', () {
       test('uses getString/getBool callback results', () {
         final cfg = MultiplayerConfig.fromLookups(
-          getString: (key, {required String fallback}) {
+          getString: (key, {String fallback = ''}) {
             const values = {
               'mp.http_base': 'https://custom.api.com',
               'mp.ws_uri': 'wss://custom.api.com/ws',
@@ -62,7 +62,7 @@ void main() {
             };
             return values[key] ?? fallback;
           },
-          getBool: (key, {required bool fallback}) =>
+          getBool: (key, {bool fallback = false}) =>
               key == 'mp.debug' ? true : fallback,
         );
         expect(cfg.httpBase.host, 'custom.api.com');
@@ -75,8 +75,8 @@ void main() {
 
       test('falls back to defaults when keys are absent', () {
         final cfg = MultiplayerConfig.fromLookups(
-          getString: (key, {required String fallback}) => fallback,
-          getBool: (key, {required bool fallback}) => fallback,
+          getString: (key, {String fallback = ''}) => fallback,
+          getBool: (key, {bool fallback = false}) => fallback,
         );
         expect(cfg.httpBase.host, 'api.example.com');
         expect(cfg.wsUri.scheme, 'wss');

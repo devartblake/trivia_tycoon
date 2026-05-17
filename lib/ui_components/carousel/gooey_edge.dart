@@ -1,10 +1,11 @@
-import 'dart:math';
+﻿import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'side.dart';
 
 class GooeyEdge extends ChangeNotifier {
-  List<_GooeyPoint> points = [];
+  final List<_GooeyPoint> _points = [];
   Side side;
   double edgeTension = 0.01;
   double farEdgeTension = 0.0;
@@ -18,12 +19,12 @@ class GooeyEdge extends ChangeNotifier {
 
   GooeyEdge({count = 10, this.side = Side.left}) {
     for (int i = 0; i < count; i++) {
-      points.add(_GooeyPoint(0.0, i / (count - 1)));
+      _points.add(_GooeyPoint(0.0, i / (count - 1)));
     }
   }
 
   void reset() {
-    for (var pt in points) {
+    for (var pt in _points) {
       pt.x = pt.velX = pt.velY = 0.0;
     }
   }
@@ -46,29 +47,29 @@ class GooeyEdge extends ChangeNotifier {
   }
 
   Path buildPath(Size size, {double margin = 0.0}) {
-    if (points.isEmpty) {
+    if (_points.isEmpty) {
       return Path();
     }
 
     Matrix4 mtx = _getTransform(size, margin);
 
     Path path = Path();
-    int l = points.length;
+    int l = _points.length;
     Offset pt = _GooeyPoint(-margin, 1.0).toOffset(mtx), pt1;
     path.moveTo(pt.dx, pt.dy); // bl
 
     pt = _GooeyPoint(-margin, 0.0).toOffset(mtx);
     path.lineTo(pt.dx, pt.dy); // tl
 
-    pt = points[0].toOffset(mtx);
+    pt = _points[0].toOffset(mtx);
     path.lineTo(pt.dx, pt.dy); // tr
 
-    pt1 = points[1].toOffset(mtx);
+    pt1 = _points[1].toOffset(mtx);
     path.lineTo(pt.dx + (pt1.dx - pt.dx) / 2, pt.dy + (pt1.dy - pt.dy) / 2);
 
     for (int i = 2; i < l; i++) {
       pt = pt1;
-      pt1 = points[i].toOffset(mtx);
+      pt1 = _points[i].toOffset(mtx);
       double midX = pt.dx + (pt1.dx - pt.dx) / 2;
       double midY = pt.dy + (pt1.dy - pt.dy) / 2;
       path.quadraticBezierTo(pt.dx, pt.dy, midX, midY);
@@ -81,16 +82,16 @@ class GooeyEdge extends ChangeNotifier {
   }
 
   void tick(Duration duration) {
-    if (points.isEmpty) {
+    if (_points.isEmpty) {
       return;
     }
-    int l = points.length;
+    int l = _points.length;
     double t = min(1.5, (duration.inMilliseconds - lastT) / 1000 * 60);
     lastT = duration.inMilliseconds;
     double dampingT = pow(damping, t) as double;
 
     for (int i = 0; i < l; i++) {
-      _GooeyPoint pt = points[i];
+      _GooeyPoint pt = _points[i];
       pt.velX -= pt.x * edgeTension * t;
       pt.velX += (1.0 - pt.x) * farEdgeTension * t;
       if (touchOffset != null) {
@@ -99,16 +100,16 @@ class GooeyEdge extends ChangeNotifier {
         pt.velX += (touchOffset!.dx - pt.x) * touchTension * ratio * t;
       }
       if (i > 0) {
-        _addPointTension(pt, points[i - 1].x, t);
+        _addPointTension(pt, _points[i - 1].x, t);
       }
       if (i < l - 1) {
-        _addPointTension(pt, points[i + 1].x, t);
+        _addPointTension(pt, _points[i + 1].x, t);
       }
       pt.velX *= dampingT;
     }
 
     for (int i = 0; i < l; i++) {
-      _GooeyPoint pt = points[i];
+      _GooeyPoint pt = _points[i];
       pt.x += pt.velX * t;
     }
     notifyListeners();
@@ -120,20 +121,20 @@ class GooeyEdge extends ChangeNotifier {
     double h = (vertical ? size.width : size.height) + margin * 2;
 
     Matrix4 mtx = Matrix4.identity()
-      ..translate(-margin, 0.0)
-      ..scale(w, h);
+      ..translateByVector3(Vector3(-margin, 0.0, 0.0))
+      ..scaleByVector3(Vector3(w, h, 1.0));
     if (side == Side.top) {
       mtx
         ..rotateZ(pi / 2)
-        ..translate(0.0, -1.0);
+        ..translateByVector3(Vector3(0.0, -1.0, 0.0));
     } else if (side == Side.right) {
       mtx
         ..rotateZ(pi)
-        ..translate(-1.0, -1.0);
+        ..translateByVector3(Vector3(-1.0, -1.0, 0.0));
     } else if (side == Side.bottom) {
       mtx
         ..rotateZ(pi * 3 / 2)
-        ..translate(-1.0, 0.0);
+        ..translateByVector3(Vector3(-1.0, 0.0, 0.0));
     }
 
     return mtx;

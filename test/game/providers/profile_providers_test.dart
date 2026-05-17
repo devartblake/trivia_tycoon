@@ -31,7 +31,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  ProviderContainer _makeContainer() {
+  ProviderContainer makeContainer() {
     return ProviderContainer(
       overrides: [
         authServiceProvider.overrideWithValue(authService),
@@ -48,7 +48,7 @@ void main() {
     test('returns stored userId when present', () async {
       await profileService.saveUserId('uid-abc');
 
-      final container = _makeContainer();
+      final container = makeContainer();
       addTearDown(container.dispose);
 
       final userId = await container.read(currentUserIdProvider.future);
@@ -59,7 +59,7 @@ void main() {
       // authService.login stores email in SecureStorage via the key 'user_email'
       await authService.login('alice@example.com');
 
-      final container = _makeContainer();
+      final container = makeContainer();
       addTearDown(container.dispose);
 
       final userId = await container.read(currentUserIdProvider.future);
@@ -69,7 +69,7 @@ void main() {
     test('returns player name when no userId or email is stored', () async {
       await profileService.savePlayerName('QuizMaster');
 
-      final container = _makeContainer();
+      final container = makeContainer();
       addTearDown(container.dispose);
 
       final userId = await container.read(currentUserIdProvider.future);
@@ -78,7 +78,7 @@ void main() {
 
     test('returns "guest" when nothing meaningful is stored', () async {
       // No userId, no email, player name defaults to 'Player'
-      final container = _makeContainer();
+      final container = makeContainer();
       addTearDown(container.dispose);
 
       final userId = await container.read(currentUserIdProvider.future);
@@ -89,7 +89,7 @@ void main() {
       await profileService.saveUserId('stored-uid');
       await authService.login('other@example.com');
 
-      final container = _makeContainer();
+      final container = makeContainer();
       addTearDown(container.dispose);
 
       final userId = await container.read(currentUserIdProvider.future);
@@ -100,7 +100,7 @@ void main() {
       await authService.login('bob@test.com');
       await profileService.savePlayerName('BobCustomName');
 
-      final container = _makeContainer();
+      final container = makeContainer();
       addTearDown(container.dispose);
 
       final userId = await container.read(currentUserIdProvider.future);

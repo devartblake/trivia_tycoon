@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -113,7 +113,7 @@ class _EnergyPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: energyColor.withOpacity(0.6)),
+        border: Border.all(color: energyColor.withValues(alpha: 0.6)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -134,7 +134,7 @@ class _EnergyPill extends StatelessWidget {
               _regenText(),
               style: TextStyle(
                 fontSize: 11,
-                color: colorScheme.onSurface.withOpacity(0.6),
+                color: colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -154,9 +154,9 @@ class _TicketBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFD700).withOpacity(0.15),
+        color: const Color(0xFFFFD700).withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.7)),
+        border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.7)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -190,7 +190,7 @@ class _OfflineDot extends StatelessWidget {
       child: Icon(
         Icons.cloud_off_outlined,
         size: 14,
-        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
       ),
     );
   }

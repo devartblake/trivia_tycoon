@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -88,12 +88,12 @@ class _CoachBriefBannerState extends ConsumerState<CoachBriefBanner>
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(
-          color: const Color(0xFF0D1035).withOpacity(0.92),
+          color: const Color(0xFF0D1035).withValues(alpha: 0.92),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: accent.withOpacity(0.35), width: 1),
+          border: Border.all(color: accent.withValues(alpha: 0.35), width: 1),
           boxShadow: [
             BoxShadow(
-                color: accent.withOpacity(0.12),
+                color: accent.withValues(alpha: 0.12),
                 blurRadius: 12,
                 spreadRadius: 1),
           ],

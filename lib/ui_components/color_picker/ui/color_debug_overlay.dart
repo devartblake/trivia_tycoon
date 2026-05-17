@@ -157,7 +157,7 @@ class _ColorDebugOverlayState extends State<ColorDebugOverlay>
   Widget _buildExpandedView() {
     final hexColor = ColorConversion.colorToHex(widget.selectedColor);
     final rgbColor =
-        "RGB(${widget.selectedColor.red},${widget.selectedColor.green},${widget.selectedColor.blue})";
+        "RGB(${(widget.selectedColor.r * 255.0).round()},${(widget.selectedColor.g * 255.0).round()},${(widget.selectedColor.b * 255.0).round()})";
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -474,7 +474,7 @@ class SpinAnalyticsDashboard extends ConsumerWidget {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

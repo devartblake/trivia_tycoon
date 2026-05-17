@@ -162,6 +162,7 @@ final httpClientProvider = Provider<HttpClient>((ref) {
 final synaptixApiClientProvider = Provider<SynaptixApiClient>((ref) {
   return SynaptixApiClient(
     httpClient: ref.watch(httpClientProvider),
+    healthCheckUrl: EnvConfig.apiHealthUrl,
   );
 });
 

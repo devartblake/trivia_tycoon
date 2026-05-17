@@ -318,16 +318,15 @@ class _AdminNotificationsScreenState
         IconButton(
           tooltip: 'Request Permission',
           onPressed: () async {
+            final messenger = ScaffoldMessenger.of(context);
             await NotificationService().requestPermission();
             _refresh();
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Permission requested'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('Permission requested'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           },
           icon: Container(
             padding: const EdgeInsets.all(8),
@@ -345,16 +344,15 @@ class _AdminNotificationsScreenState
         IconButton(
           tooltip: 'Cancel All',
           onPressed: () async {
+            final messenger = ScaffoldMessenger.of(context);
             await NotificationService().cancelAll();
             _refresh();
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('All notifications canceled'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('All notifications canceled'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           },
           icon: Container(
             padding: const EdgeInsets.all(8),

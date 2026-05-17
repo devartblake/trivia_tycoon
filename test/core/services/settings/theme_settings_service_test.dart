@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -35,19 +35,19 @@ void main() {
     });
 
     test('primary color is 0xFF2196F3', () async {
-      expect((await svc.getPrimaryColor()).value, 0xFF2196F3);
+      expect((await svc.getPrimaryColor()).toARGB32(), 0xFF2196F3);
     });
 
     test('secondary color is 0xFF03DAC6', () async {
-      expect((await svc.getSecondaryColor()).value, 0xFF03DAC6);
+      expect((await svc.getSecondaryColor()).toARGB32(), 0xFF03DAC6);
     });
 
     test('cached primaryColor getter matches default', () {
-      expect(svc.primaryColor.value, 0xFF2196F3);
+      expect(svc.primaryColor.toARGB32(), 0xFF2196F3);
     });
 
     test('cached secondaryColor getter matches default', () {
-      expect(svc.secondaryColor.value, 0xFF03DAC6);
+      expect(svc.secondaryColor.toARGB32(), 0xFF03DAC6);
     });
 
     test('cached brightness getter is light', () {
@@ -119,7 +119,7 @@ void main() {
     test('set color value and retrieve', () async {
       const color = Color(0xFFFF5722);
       await svc.setPrimaryColor(color);
-      expect((await svc.getPrimaryColor()).value, 0xFFFF5722);
+      expect((await svc.getPrimaryColor()).toARGB32(), 0xFFFF5722);
     });
 
     test('returned as Color type', () async {
@@ -129,7 +129,7 @@ void main() {
 
     test('cached primaryColor updated after set', () async {
       await svc.setPrimaryColor(const Color(0xFF607D8B));
-      expect(svc.primaryColor.value, 0xFF607D8B);
+      expect(svc.primaryColor.toARGB32(), 0xFF607D8B);
     });
   });
 
@@ -141,7 +141,7 @@ void main() {
     test('set color value and retrieve', () async {
       const color = Color(0xFF4CAF50);
       await svc.setSecondaryColor(color);
-      expect((await svc.getSecondaryColor()).value, 0xFF4CAF50);
+      expect((await svc.getSecondaryColor()).toARGB32(), 0xFF4CAF50);
     });
 
     test('returned as Color type', () async {
@@ -151,7 +151,7 @@ void main() {
 
     test('cached secondaryColor updated after set', () async {
       await svc.setSecondaryColor(const Color(0xFF009688));
-      expect(svc.secondaryColor.value, 0xFF009688);
+      expect(svc.secondaryColor.toARGB32(), 0xFF009688);
     });
   });
 
@@ -189,7 +189,7 @@ void main() {
       await svc.saveThemePreset(preset);
       final presets = await svc.getAllThemePresets();
       final saved = presets.firstWhere((p) => p.themeName == 'MyPreset');
-      expect(saved.primaryColor.value, 0xFF3F51B5);
+      expect(saved.primaryColor.toARGB32(), 0xFF3F51B5);
     });
 
     test('preset stored with correct brightness', () async {
@@ -214,8 +214,8 @@ void main() {
       );
       await svc.saveThemePreset(preset);
       await svc.applyThemePreset('NeonTheme');
-      expect(svc.primaryColor.value, 0xFFE040FB);
-      expect(svc.secondaryColor.value, 0xFF64FFDA);
+      expect(svc.primaryColor.toARGB32(), 0xFFE040FB);
+      expect(svc.secondaryColor.toARGB32(), 0xFF64FFDA);
       expect(svc.brightness, Brightness.dark);
       expect(svc.themeName, 'NeonTheme');
     });
@@ -224,7 +224,7 @@ void main() {
       await svc.setBrightness(Brightness.dark);
       await svc.applyThemePreset('NonExistentPreset');
       expect(await svc.getThemeName(), 'Default');
-      expect((await svc.getPrimaryColor()).value, 0xFF2196F3);
+      expect((await svc.getPrimaryColor()).toARGB32(), 0xFF2196F3);
       expect(await svc.getBrightness(), Brightness.light);
     });
   });
@@ -248,7 +248,7 @@ void main() {
     test('returns current primary color', () async {
       await svc.setPrimaryColor(const Color(0xFF1A237E));
       final theme = await svc.getCurrentTheme();
-      expect(theme.primaryColor.value, 0xFF1A237E);
+      expect(theme.primaryColor.toARGB32(), 0xFF1A237E);
     });
 
     test('returns current brightness', () async {
@@ -353,7 +353,7 @@ void main() {
         'secondaryColor': 0xFF1A237E,
         'brightness': 'light',
       });
-      expect((await svc.getPrimaryColor()).value, 0xFF880E4F);
+      expect((await svc.getPrimaryColor()).toARGB32(), 0xFF880E4F);
     });
 
     test('sets brightness from import data', () async {
@@ -389,7 +389,7 @@ void main() {
       final box = await Hive.openBox('settings');
       await box.delete('primary_color');
       await svc.validateThemeIntegrity();
-      expect((await svc.getPrimaryColor()).value, 0xFF2196F3);
+      expect((await svc.getPrimaryColor()).toARGB32(), 0xFF2196F3);
     });
 
     test('repairs missing brightness to light', () async {

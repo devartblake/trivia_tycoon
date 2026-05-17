@@ -305,7 +305,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
     final graph = ref.read(skillTreeProvider).graph;
 
     // Pre-compute counts for each filter mode
-    int _count(SkillNodeFilterMode mode) => switch (mode) {
+    int count(SkillNodeFilterMode mode) => switch (mode) {
           SkillNodeFilterMode.all => graph.nodes.length,
           SkillNodeFilterMode.unlocked => graph.unlockedNodes.length,
           SkillNodeFilterMode.available => graph.availableNodes.length,
@@ -323,7 +323,15 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setSheetState) => Padding(
+        builder: (ctx, setSheetState) => RadioGroup<SkillNodeFilterMode>(
+          groupValue: sheetSelected,
+          onChanged: (v) {
+            if (v == null) return;
+            setSheetState(() => sheetSelected = v);
+            setState(() => _filterMode = v);
+            Navigator.pop(ctx);
+          },
+          child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -351,19 +359,12 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
               ),
               const SizedBox(height: 12),
               ...SkillNodeFilterMode.values.map((mode) {
-                final count = _count(mode);
+                final modeCount = count(mode);
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Radio<SkillNodeFilterMode>(
                     value: mode,
-                    groupValue: sheetSelected,
                     activeColor: mode.color,
-                    onChanged: (v) {
-                      if (v == null) return;
-                      setSheetState(() => sheetSelected = v);
-                      setState(() => _filterMode = v);
-                      Navigator.pop(ctx);
-                    },
                   ),
                   title: Row(
                     children: [
@@ -374,7 +375,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
                     ],
                   ),
                   subtitle: Text(
-                    '$count skill${count == 1 ? '' : 's'}',
+                    '$modeCount skill${modeCount == 1 ? '' : 's'}',
                     style: const TextStyle(color: Colors.white38, fontSize: 12),
                   ),
                   onTap: () {
@@ -386,6 +387,7 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
               }),
             ],
           ),
+        ),
         ),
       ),
     );

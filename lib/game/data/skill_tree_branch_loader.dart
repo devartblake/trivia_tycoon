@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/skill_tree_graph.dart';
 
 SkillCategory _parseCategory(String raw) {
   // matches enum by its string name (scholar/strategist/xp/…)
   return SkillCategory.values.firstWhere(
-    (e) => describeEnum(e) == raw,
+    (e) => e.name == raw,
     orElse: () => SkillCategory.unknown,
   );
 }

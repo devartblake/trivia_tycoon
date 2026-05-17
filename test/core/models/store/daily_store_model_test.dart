@@ -76,7 +76,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('DailyStoreItem.fromJson — nested stock', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String? sku,
       String? id,
       String? name,
@@ -105,30 +105,30 @@ void main() {
         };
 
     test('parses sku', () {
-      expect(DailyStoreItem.fromJson(_json(sku: 'daily:xp')).sku, 'daily:xp');
+      expect(DailyStoreItem.fromJson(makeJson(sku: 'daily:xp')).sku, 'daily:xp');
     });
 
     test('uses id as sku fallback', () {
-      expect(DailyStoreItem.fromJson(_json(id: 'id_sku')).sku, 'id_sku');
+      expect(DailyStoreItem.fromJson(makeJson(id: 'id_sku')).sku, 'id_sku');
     });
 
     test('parses title from name', () {
       expect(
-          DailyStoreItem.fromJson(_json(name: 'Double XP')).title, 'Double XP');
+          DailyStoreItem.fromJson(makeJson(name: 'Double XP')).title, 'Double XP');
     });
 
     test('parses title from title field', () {
-      expect(DailyStoreItem.fromJson(_json(title: 'Hint Pack')).title,
+      expect(DailyStoreItem.fromJson(makeJson(title: 'Hint Pack')).title,
           'Hint Pack');
     });
 
     test('parses description', () {
-      expect(DailyStoreItem.fromJson(_json(description: 'Great')).description,
+      expect(DailyStoreItem.fromJson(makeJson(description: 'Great')).description,
           'Great');
     });
 
     test('parses price', () {
-      expect(DailyStoreItem.fromJson(_json(price: 150)).price, 150);
+      expect(DailyStoreItem.fromJson(makeJson(price: 150)).price, 150);
     });
 
     test('parses priceCoins and sets currency to coins', () {
@@ -141,18 +141,18 @@ void main() {
     });
 
     test('parses currency', () {
-      expect(DailyStoreItem.fromJson(_json(currency: 'diamonds')).currency,
+      expect(DailyStoreItem.fromJson(makeJson(currency: 'diamonds')).currency,
           'diamonds');
     });
 
     test('parses iconPath', () {
       expect(
-          DailyStoreItem.fromJson(_json(iconPath: 'assets/icon.png')).iconPath,
+          DailyStoreItem.fromJson(makeJson(iconPath: 'assets/icon.png')).iconPath,
           'assets/icon.png');
     });
 
     test('iconPath is null when absent', () {
-      expect(DailyStoreItem.fromJson(_json()).iconPath, isNull);
+      expect(DailyStoreItem.fromJson(makeJson()).iconPath, isNull);
     });
 
     test('parses category from itemType', () {
@@ -165,23 +165,23 @@ void main() {
     });
 
     test('parses category from category fallback', () {
-      expect(DailyStoreItem.fromJson(_json(category: 'cosmetic')).category,
+      expect(DailyStoreItem.fromJson(makeJson(category: 'cosmetic')).category,
           'cosmetic');
     });
 
     test('parses owned', () {
-      expect(DailyStoreItem.fromJson(_json(owned: true)).owned, isTrue);
+      expect(DailyStoreItem.fromJson(makeJson(owned: true)).owned, isTrue);
     });
 
     test('owned defaults to false when absent', () {
-      final json = _json();
-      json.remove('owned');
-      expect(DailyStoreItem.fromJson(json).owned, isFalse);
+      final map = makeJson();
+      map.remove('owned');
+      expect(DailyStoreItem.fromJson(map).owned, isFalse);
     });
 
     test('parses nested stock object', () {
       final item = DailyStoreItem.fromJson(
-          _json(stock: {'isSoldOut': true, 'isUnlimited': false}));
+          makeJson(stock: {'isSoldOut': true, 'isUnlimited': false}));
       expect(item.stock.isSoldOut, isTrue);
     });
   });

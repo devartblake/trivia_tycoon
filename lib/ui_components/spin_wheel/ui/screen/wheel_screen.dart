@@ -78,6 +78,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   Future<void> _showSpinReadyToast() async {
     await _trackUserAction('spin_ready_toast_shown');
 
+    if (!mounted) return;
     await SpinReadyToast.show(
       context: context,
       onSpinNow: () {

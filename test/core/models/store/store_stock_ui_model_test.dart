@@ -227,7 +227,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('PlayerStoreItem.fromJson — nested format', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String sku = 'power-up-hint',
       String title = 'Hint Pack',
       String description = '5 hints',
@@ -257,23 +257,23 @@ void main() {
         };
 
     test('parses sku', () {
-      expect(PlayerStoreItem.fromJson(_json(sku: 'sku_x')).sku, 'sku_x');
+      expect(PlayerStoreItem.fromJson(makeJson(sku: 'sku_x')).sku, 'sku_x');
     });
 
     test('parses sku from id fallback', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('sku');
       json['id'] = 'id_fallback';
       expect(PlayerStoreItem.fromJson(json).sku, 'id_fallback');
     });
 
     test('parses title', () {
-      expect(PlayerStoreItem.fromJson(_json(title: 'Shield Pack')).title,
+      expect(PlayerStoreItem.fromJson(makeJson(title: 'Shield Pack')).title,
           'Shield Pack');
     });
 
     test('parses title from name fallback', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('title');
       json['name'] = 'Power Pack';
       expect(PlayerStoreItem.fromJson(json).title, 'Power Pack');
@@ -281,29 +281,29 @@ void main() {
 
     test('parses description', () {
       expect(
-          PlayerStoreItem.fromJson(_json(description: 'Great item'))
+          PlayerStoreItem.fromJson(makeJson(description: 'Great item'))
               .description,
           'Great item');
     });
 
     test('parses type', () {
       expect(
-          PlayerStoreItem.fromJson(_json(type: 'cosmetic')).type, 'cosmetic');
+          PlayerStoreItem.fromJson(makeJson(type: 'cosmetic')).type, 'cosmetic');
     });
 
     test('parses type from itemType fallback', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('type');
       json['itemType'] = 'power_up';
       expect(PlayerStoreItem.fromJson(json).type, 'power_up');
     });
 
     test('parses price', () {
-      expect(PlayerStoreItem.fromJson(_json(price: 300)).price, 300);
+      expect(PlayerStoreItem.fromJson(makeJson(price: 300)).price, 300);
     });
 
     test('parses priceCoins and sets currency to coins', () {
-      final json = _json();
+      final json = makeJson();
       json['priceCoins'] = 250;
       json.remove('price');
       final item = PlayerStoreItem.fromJson(json);
@@ -312,40 +312,40 @@ void main() {
     });
 
     test('parses currency', () {
-      expect(PlayerStoreItem.fromJson(_json(currency: 'diamonds')).currency,
+      expect(PlayerStoreItem.fromJson(makeJson(currency: 'diamonds')).currency,
           'diamonds');
     });
 
     test('parses owned', () {
-      expect(PlayerStoreItem.fromJson(_json(owned: true)).owned, isTrue);
+      expect(PlayerStoreItem.fromJson(makeJson(owned: true)).owned, isTrue);
     });
 
     test('owned defaults to false when absent', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('owned');
       expect(PlayerStoreItem.fromJson(json).owned, isFalse);
     });
 
     test('parses isFeatured', () {
       expect(
-          PlayerStoreItem.fromJson(_json(isFeatured: true)).isFeatured, isTrue);
+          PlayerStoreItem.fromJson(makeJson(isFeatured: true)).isFeatured, isTrue);
     });
 
     test('parses iconPath', () {
       expect(
-          PlayerStoreItem.fromJson(_json(iconPath: 'assets/icon.png')).iconPath,
+          PlayerStoreItem.fromJson(makeJson(iconPath: 'assets/icon.png')).iconPath,
           'assets/icon.png');
     });
 
     test('parses nested stock', () {
-      final item = PlayerStoreItem.fromJson(_json(
+      final item = PlayerStoreItem.fromJson(makeJson(
         stock: {'isSoldOut': true, 'isUnlimited': false},
       ));
       expect(item.stock.isSoldOut, isTrue);
     });
 
     test('parses nested availability', () {
-      final item = PlayerStoreItem.fromJson(_json(
+      final item = PlayerStoreItem.fromJson(makeJson(
         availability: {'isPurchasable': false},
       ));
       expect(item.availability.isPurchasable, isFalse);

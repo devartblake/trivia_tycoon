@@ -61,7 +61,7 @@ class GeneralKeyValueStorageService {
 
   Future<void> setColor(String key, Color color) async {
     final box = await Hive.openBox(_boxName);
-    await box.put(key, color.value);
+    await box.put(key, color.toARGB32());
   }
 
   Future<Color?> getColor(String key) async {

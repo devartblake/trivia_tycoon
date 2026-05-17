@@ -54,9 +54,9 @@ class _AnimatedRankBadgeState extends State<AnimatedRankBadge>
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: improved
-                ? Colors.green.withOpacity(0.2 * (1 - _controller.value))
+                ? Colors.green.withValues(alpha: 0.2 * (1 - _controller.value))
                 : declined
-                    ? Colors.red.withOpacity(0.2 * (1 - _controller.value))
+                    ? Colors.red.withValues(alpha: 0.2 * (1 - _controller.value))
                     : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),

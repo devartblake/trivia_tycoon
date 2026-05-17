@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/animations/animation_manager.dart';
@@ -78,10 +78,9 @@ class _MultiplayerGameMatchmakingScreenState
 
         _searchController.stop();
 
-        // Show versus screen before starting match
         await _showVersusScreen(result);
 
-        // Navigate to multiplayer question screen
+        if (!mounted) return;
         context.go('/multiplayer/quiz/${widget.gameMode}');
       }
     } catch (e) {
@@ -177,7 +176,7 @@ class _MultiplayerGameMatchmakingScreenState
 
     return PopScope(
       canPop: !_isSearching,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
 
         showDialog(

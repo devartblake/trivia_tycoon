@@ -216,9 +216,10 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                             tooltip: 'Remove draft',
                             icon: const Icon(Icons.delete_outline),
                             onPressed: () async {
+                              final messenger = ScaffoldMessenger.of(context);
                               await ChannelPrefs.instance.removeDraft(key);
                               if (mounted) setState(() {});
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              messenger.showSnackBar(
                                 const SnackBar(content: Text('Draft removed')),
                               );
                             },
@@ -305,9 +306,10 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
   }
 
   Future<void> _toggleChannel(String key, bool enabled) async {
+    final messenger = ScaffoldMessenger.of(context);
     await ChannelPrefs.instance.setEnabled(key, enabled);
     setState(() => _enabled[key] = enabled);
-    ScaffoldMessenger.of(context).showSnackBar(
+    messenger.showSnackBar(
       SnackBar(
           content: Text('Channel $key ${enabled ? 'enabled' : 'disabled'}')),
     );

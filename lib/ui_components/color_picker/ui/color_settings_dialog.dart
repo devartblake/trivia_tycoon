@@ -330,38 +330,34 @@ class _ColorSettingsDialogState extends State<ColorSettingsDialog>
                               try {
                                 await ColorStorage.savePickerSettings(
                                     _localSettings);
+                                if (!context.mounted) return;
                                 Navigator.pop(context);
-
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Row(
-                                        children: [
-                                          Icon(Icons.check_circle_outline,
-                                              color: Colors.white, size: 20),
-                                          SizedBox(width: 12),
-                                          Text("Settings saved successfully!"),
-                                        ],
-                                      ),
-                                      backgroundColor: Colors.green.shade600,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      margin: EdgeInsets.all(16),
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.check_circle_outline,
+                                            color: Colors.white, size: 20),
+                                        SizedBox(width: 12),
+                                        Text("Settings saved successfully!"),
+                                      ],
                                     ),
-                                  );
-                                }
+                                    backgroundColor: Colors.green.shade600,
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    margin: EdgeInsets.all(16),
+                                  ),
+                                );
                               } catch (e) {
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content:
-                                          Text("Error saving settings: $e"),
-                                      backgroundColor: Colors.red.shade600,
-                                    ),
-                                  );
-                                }
+                                if (!context.mounted) return;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Error saving settings: $e"),
+                                    backgroundColor: Colors.red.shade600,
+                                  ),
+                                );
                               }
                             },
                             icon: const Icon(Icons.save_rounded),

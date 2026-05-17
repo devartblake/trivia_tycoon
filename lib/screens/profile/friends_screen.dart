@@ -985,6 +985,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
           friend.id,
         );
         if (conversation != null) {
+          if (!mounted) return;
           final presence = _presenceService.getUserPresence(friend.id);
           context.push('/messages/detail/${conversation.id}', extra: {
             'contactName': friend.name,

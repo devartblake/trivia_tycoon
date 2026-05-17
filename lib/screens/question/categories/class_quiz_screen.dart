@@ -409,7 +409,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       orElse: () => {'name': 'Unknown'},
     );
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(

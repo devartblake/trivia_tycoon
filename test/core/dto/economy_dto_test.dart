@@ -193,7 +193,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('EconomyStateDto', () {
-    Map<String, dynamic> _fullJson() => {
+    Map<String, dynamic> fullJson() => {
           'energy': 20,
           'maxEnergy': 50,
           'regenIntervalMinutes': 30,
@@ -212,39 +212,39 @@ void main() {
         };
 
     test('fromJson parses energy', () {
-      expect(EconomyStateDto.fromJson(_fullJson()).energy, 20);
+      expect(EconomyStateDto.fromJson(fullJson()).energy, 20);
     });
 
     test('fromJson parses maxEnergy', () {
-      expect(EconomyStateDto.fromJson(_fullJson()).maxEnergy, 50);
+      expect(EconomyStateDto.fromJson(fullJson()).maxEnergy, 50);
     });
 
     test('fromJson parses regenIntervalMinutes', () {
-      expect(EconomyStateDto.fromJson(_fullJson()).regenIntervalMinutes, 30);
+      expect(EconomyStateDto.fromJson(fullJson()).regenIntervalMinutes, 30);
     });
 
     test('fromJson parses firstSessionDiscount true', () {
       expect(
-          EconomyStateDto.fromJson(_fullJson()).firstSessionDiscount, isTrue);
+          EconomyStateDto.fromJson(fullJson()).firstSessionDiscount, isTrue);
     });
 
     test('fromJson parses modes map into ModeCostDto objects', () {
-      final dto = EconomyStateDto.fromJson(_fullJson());
+      final dto = EconomyStateDto.fromJson(fullJson());
       expect(dto.modes['solo'], isA<ModeCostDto>());
       expect(dto.modes['solo']!.baseCost, 5);
     });
 
     test('fromJson with empty modes gives empty map', () {
-      final j = Map<String, dynamic>.from(_fullJson())..['modes'] = {};
+      final j = Map<String, dynamic>.from(fullJson())..['modes'] = {};
       expect(EconomyStateDto.fromJson(j).modes, isEmpty);
     });
 
     test('toJson contains energy key', () {
-      expect(EconomyStateDto.fromJson(_fullJson()).toJson()['energy'], 20);
+      expect(EconomyStateDto.fromJson(fullJson()).toJson()['energy'], 20);
     });
 
     test('toJson serializes modes map back to nested maps', () {
-      final j = EconomyStateDto.fromJson(_fullJson()).toJson();
+      final j = EconomyStateDto.fromJson(fullJson()).toJson();
       expect(j['modes'], isA<Map>());
       expect((j['modes'] as Map)['solo'], isA<Map>());
     });

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -201,19 +200,19 @@ class ColorPickerTheme {
   /// Convert theme to a map for JSON storage
   Map<String, dynamic> toMap() {
     return {
-      'backgroundColor': backgroundColor.value,
-      'borderColor': borderColor.value,
+      'backgroundColor': backgroundColor.toARGB32(),
+      'borderColor': borderColor.toARGB32(),
       'borderWidth': borderWidth,
-      'indicatorColor': indicatorColor.value,
-      'sliderTrackColor': sliderTrackColor.value,
-      'presetButtonColor': presetButtonColor.value,
+      'indicatorColor': indicatorColor.toARGB32(),
+      'sliderTrackColor': sliderTrackColor.toARGB32(),
+      'presetButtonColor': presetButtonColor.toARGB32(),
       'presetButtonSize': presetButtonSize,
-      'surfaceColor': surfaceColor.value,
-      'onSurfaceColor': onSurfaceColor.value,
-      'primaryColor': primaryColor.value,
-      'secondaryColor': secondaryColor.value,
-      'errorColor': errorColor.value,
-      'shadowColor': shadowColor.value,
+      'surfaceColor': surfaceColor.toARGB32(),
+      'onSurfaceColor': onSurfaceColor.toARGB32(),
+      'primaryColor': primaryColor.toARGB32(),
+      'secondaryColor': secondaryColor.toARGB32(),
+      'errorColor': errorColor.toARGB32(),
+      'shadowColor': shadowColor.toARGB32(),
       'elevation': elevation,
       'borderRadius': {
         'topLeft': borderRadius.topLeft.x,
@@ -223,8 +222,8 @@ class ColorPickerTheme {
       },
       'textStyle': {
         'fontSize': textStyle.fontSize,
-        'fontWeight': textStyle.fontWeight?.index,
-        'color': textStyle.color?.value,
+        'fontWeight': textStyle.fontWeight?.value,
+        'color': textStyle.color?.toARGB32(),
         'fontFamily': textStyle.fontFamily,
       },
       'useMaterial3': useMaterial3,
@@ -246,20 +245,20 @@ class ColorPickerTheme {
       final textStyleMap = map['textStyle'] as Map<String, dynamic>? ?? {};
 
       return ColorPickerTheme(
-        backgroundColor: Color(map['backgroundColor'] ?? Colors.white.value),
-        borderColor: Color(map['borderColor'] ?? Colors.black.value),
+        backgroundColor: Color(map['backgroundColor'] ?? Colors.white.toARGB32()),
+        borderColor: Color(map['borderColor'] ?? Colors.black.toARGB32()),
         borderWidth: (map['borderWidth'] ?? 2.0).toDouble(),
-        indicatorColor: Color(map['indicatorColor'] ?? Colors.black.value),
-        sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.value),
+        indicatorColor: Color(map['indicatorColor'] ?? Colors.black.toARGB32()),
+        sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.toARGB32()),
         presetButtonColor:
-            Color(map['presetButtonColor'] ?? Colors.blueAccent.value),
+            Color(map['presetButtonColor'] ?? Colors.blueAccent.toARGB32()),
         presetButtonSize: (map['presetButtonSize'] ?? 40.0).toDouble(),
-        surfaceColor: Color(map['surfaceColor'] ?? Colors.white.value),
-        onSurfaceColor: Color(map['onSurfaceColor'] ?? Colors.black87.value),
-        primaryColor: Color(map['primaryColor'] ?? Colors.blueAccent.value),
-        secondaryColor: Color(map['secondaryColor'] ?? Colors.grey.value),
-        errorColor: Color(map['errorColor'] ?? Colors.red.value),
-        shadowColor: Color(map['shadowColor'] ?? Colors.black26.value),
+        surfaceColor: Color(map['surfaceColor'] ?? Colors.white.toARGB32()),
+        onSurfaceColor: Color(map['onSurfaceColor'] ?? Colors.black87.toARGB32()),
+        primaryColor: Color(map['primaryColor'] ?? Colors.blueAccent.toARGB32()),
+        secondaryColor: Color(map['secondaryColor'] ?? Colors.grey.toARGB32()),
+        errorColor: Color(map['errorColor'] ?? Colors.red.toARGB32()),
+        shadowColor: Color(map['shadowColor'] ?? Colors.black26.toARGB32()),
         elevation: (map['elevation'] ?? 4.0).toDouble(),
         borderRadius: BorderRadius.only(
           topLeft:
@@ -273,9 +272,7 @@ class ColorPickerTheme {
         ),
         textStyle: TextStyle(
           fontSize: (textStyleMap['fontSize'] ?? 14.0).toDouble(),
-          fontWeight: textStyleMap['fontWeight'] != null
-              ? FontWeight.values[textStyleMap['fontWeight']]
-              : FontWeight.w500,
+          fontWeight: _fontWeightFromSerialized(textStyleMap['fontWeight']),
           color: textStyleMap['color'] != null
               ? Color(textStyleMap['color'])
               : null,
@@ -289,16 +286,30 @@ class ColorPickerTheme {
     }
   }
 
+  static FontWeight _fontWeightFromSerialized(dynamic value) {
+    if (value is! int) return FontWeight.w500;
+
+    for (final weight in FontWeight.values) {
+      if (weight.value == value) return weight;
+    }
+
+    if (value >= 0 && value < FontWeight.values.length) {
+      return FontWeight.values[value];
+    }
+
+    return FontWeight.w500;
+  }
+
   /// Handle legacy theme format
   static ColorPickerTheme _fromLegacyMap(Map<String, dynamic> map) {
     return ColorPickerTheme(
-      backgroundColor: Color(map['backgroundColor'] ?? Colors.white.value),
-      borderColor: Color(map['borderColor'] ?? Colors.black.value),
+      backgroundColor: Color(map['backgroundColor'] ?? Colors.white.toARGB32()),
+      borderColor: Color(map['borderColor'] ?? Colors.black.toARGB32()),
       borderWidth: (map['borderWidth'] ?? 2.0).toDouble(),
-      indicatorColor: Color(map['indicatorColor'] ?? Colors.black.value),
-      sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.value),
+      indicatorColor: Color(map['indicatorColor'] ?? Colors.black.toARGB32()),
+      sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.toARGB32()),
       presetButtonColor:
-          Color(map['presetButtonColor'] ?? Colors.blueAccent.value),
+          Color(map['presetButtonColor'] ?? Colors.blueAccent.toARGB32()),
       presetButtonSize: (map['presetButtonSize'] ?? 40.0).toDouble(),
     );
   }

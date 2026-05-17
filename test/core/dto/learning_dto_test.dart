@@ -34,7 +34,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('ModuleDto.fromJson', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'id': 'm1',
           'title': 'Intro to Science',
           'description': 'Basic science questions',
@@ -47,38 +47,38 @@ void main() {
         };
 
     test('parses id and title', () {
-      final m = ModuleDto.fromJson(_full());
+      final m = ModuleDto.fromJson(full());
       expect(m.id, 'm1');
       expect(m.title, 'Intro to Science');
     });
 
     test('description defaults empty when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('description');
+      final j = Map<String, dynamic>.from(full())..remove('description');
       expect(ModuleDto.fromJson(j).description, '');
     });
 
     test('category defaults empty when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('category');
+      final j = Map<String, dynamic>.from(full())..remove('category');
       expect(ModuleDto.fromJson(j).category, '');
     });
 
     test('difficulty defaults 1 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('difficulty');
+      final j = Map<String, dynamic>.from(full())..remove('difficulty');
       expect(ModuleDto.fromJson(j).difficulty, 1);
     });
 
     test('lessonCount defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('lessonCount');
+      final j = Map<String, dynamic>.from(full())..remove('lessonCount');
       expect(ModuleDto.fromJson(j).lessonCount, 0);
     });
 
     test('rewardXp defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('rewardXp');
+      final j = Map<String, dynamic>.from(full())..remove('rewardXp');
       expect(ModuleDto.fromJson(j).rewardXp, 0);
     });
 
     test('isCompleted defaults false when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('isCompleted');
+      final j = Map<String, dynamic>.from(full())..remove('isCompleted');
       expect(ModuleDto.fromJson(j).isCompleted, isFalse);
     });
   });
@@ -122,7 +122,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('LessonDto', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'lessonId': 'l1',
           'order': 3,
           'questionId': 'q1',
@@ -137,46 +137,46 @@ void main() {
         };
 
     test('fromJson parses lessonId', () {
-      expect(LessonDto.fromJson(_full()).lessonId, 'l1');
+      expect(LessonDto.fromJson(full()).lessonId, 'l1');
     });
 
     test('fromJson parses order', () {
-      expect(LessonDto.fromJson(_full()).order, 3);
+      expect(LessonDto.fromJson(full()).order, 3);
     });
 
     test('fromJson order defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('order');
+      final j = Map<String, dynamic>.from(full())..remove('order');
       expect(LessonDto.fromJson(j).order, 0);
     });
 
     test('fromJson parses questionText', () {
-      expect(LessonDto.fromJson(_full()).questionText,
+      expect(LessonDto.fromJson(full()).questionText,
           'What is the capital of France?');
     });
 
     test('fromJson parses correctOptionId', () {
-      expect(LessonDto.fromJson(_full()).correctOptionId, 'opt1');
+      expect(LessonDto.fromJson(full()).correctOptionId, 'opt1');
     });
 
     test('fromJson options deserialized as LessonOptionDto list', () {
-      final lesson = LessonDto.fromJson(_full());
+      final lesson = LessonDto.fromJson(full());
       expect(lesson.options.length, 2);
       expect(lesson.options.first, isA<LessonOptionDto>());
       expect(lesson.options.first.id, 'opt1');
     });
 
     test('fromJson empty options list when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('options');
+      final j = Map<String, dynamic>.from(full())..remove('options');
       expect(LessonDto.fromJson(j).options, isEmpty);
     });
 
     test('fromJson explanation null when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('explanation');
+      final j = Map<String, dynamic>.from(full())..remove('explanation');
       expect(LessonDto.fromJson(j).explanation, isNull);
     });
 
     test('fromJson explanation stored when present', () {
-      expect(LessonDto.fromJson(_full()).explanation,
+      expect(LessonDto.fromJson(full()).explanation,
           'Paris is the capital of France.');
     });
   });
@@ -186,7 +186,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('ModuleCompleteResponseDto', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'moduleId': 'm1',
           'playerId': 'p1',
           'status': 'Completed',
@@ -197,38 +197,38 @@ void main() {
         };
 
     test('fromJson parses moduleId and playerId', () {
-      final d = ModuleCompleteResponseDto.fromJson(_full());
+      final d = ModuleCompleteResponseDto.fromJson(full());
       expect(d.moduleId, 'm1');
       expect(d.playerId, 'p1');
     });
 
     test('fromJson parses status', () {
-      expect(ModuleCompleteResponseDto.fromJson(_full()).status, 'Completed');
+      expect(ModuleCompleteResponseDto.fromJson(full()).status, 'Completed');
     });
 
     test('fromJson rewardXp defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('rewardXp');
+      final j = Map<String, dynamic>.from(full())..remove('rewardXp');
       expect(ModuleCompleteResponseDto.fromJson(j).rewardXp, 0);
     });
 
     test('fromJson balanceCoins defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('balanceCoins');
+      final j = Map<String, dynamic>.from(full())..remove('balanceCoins');
       expect(ModuleCompleteResponseDto.fromJson(j).balanceCoins, 0);
     });
 
     test('isFirstCompletion true when status is Completed', () {
-      expect(ModuleCompleteResponseDto.fromJson(_full()).isFirstCompletion,
+      expect(ModuleCompleteResponseDto.fromJson(full()).isFirstCompletion,
           isTrue);
     });
 
     test('isFirstCompletion false for other status', () {
-      final j = Map<String, dynamic>.from(_full())
+      final j = Map<String, dynamic>.from(full())
         ..['status'] = 'AlreadyCompleted';
       expect(ModuleCompleteResponseDto.fromJson(j).isFirstCompletion, isFalse);
     });
 
     test('isFirstCompletion false for empty status', () {
-      final j = Map<String, dynamic>.from(_full())..['status'] = '';
+      final j = Map<String, dynamic>.from(full())..['status'] = '';
       expect(ModuleCompleteResponseDto.fromJson(j).isFirstCompletion, isFalse);
     });
   });

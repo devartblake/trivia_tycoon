@@ -8,7 +8,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('OfferItem.fromJson — legacy format', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String? id,
       String? sku,
       String tab = 'Limited Time',
@@ -43,97 +43,97 @@ void main() {
         };
 
     test('parses id from id field', () {
-      expect(OfferItem.fromJson(_json(id: 'offer_x')).id, 'offer_x');
+      expect(OfferItem.fromJson(makeJson(id: 'offer_x')).id, 'offer_x');
     });
 
     test('prefers sku over id', () {
-      expect(OfferItem.fromJson(_json(sku: 'sku_1', id: 'id_1')).id, 'sku_1');
+      expect(OfferItem.fromJson(makeJson(sku: 'sku_1', id: 'id_1')).id, 'sku_1');
     });
 
     test('tab defaults to "Limited Time" when absent', () {
-      final json = _json(id: 'x');
+      final json = makeJson(id: 'x');
       json.remove('tab');
       expect(OfferItem.fromJson(json).tab, 'Limited Time');
     });
 
     test('parses title', () {
-      expect(OfferItem.fromJson(_json(id: 'x', title: 'Mega Deal')).title,
+      expect(OfferItem.fromJson(makeJson(id: 'x', title: 'Mega Deal')).title,
           'Mega Deal');
     });
 
     test('prefers name over title', () {
-      expect(OfferItem.fromJson(_json(id: 'x', name: 'Flash Name')).title,
+      expect(OfferItem.fromJson(makeJson(id: 'x', name: 'Flash Name')).title,
           'Flash Name');
     });
 
     test('parses description', () {
       expect(
-          OfferItem.fromJson(_json(id: 'x', description: 'Best deal'))
+          OfferItem.fromJson(makeJson(id: 'x', description: 'Best deal'))
               .description,
           'Best deal');
     });
 
     test('parses price from legacy price field', () {
-      expect(OfferItem.fromJson(_json(id: 'x', price: '9.99')).price, '9.99');
+      expect(OfferItem.fromJson(makeJson(id: 'x', price: '9.99')).price, '9.99');
     });
 
     test('parses originalPrice', () {
       expect(
-          OfferItem.fromJson(_json(id: 'x', originalPrice: '19.99'))
+          OfferItem.fromJson(makeJson(id: 'x', originalPrice: '19.99'))
               .originalPrice,
           '19.99');
     });
 
     test('originalPrice is null when absent', () {
-      expect(OfferItem.fromJson(_json(id: 'x')).originalPrice, isNull);
+      expect(OfferItem.fromJson(makeJson(id: 'x')).originalPrice, isNull);
     });
 
     test('parses discount', () {
-      expect(OfferItem.fromJson(_json(id: 'x', discount: 50)).discount, 50);
+      expect(OfferItem.fromJson(makeJson(id: 'x', discount: 50)).discount, 50);
     });
 
     test('discount is null when absent', () {
-      expect(OfferItem.fromJson(_json(id: 'x')).discount, isNull);
+      expect(OfferItem.fromJson(makeJson(id: 'x')).discount, isNull);
     });
 
     test('parses icon', () {
-      expect(OfferItem.fromJson(_json(id: 'x', icon: 'diamond')).icon,
+      expect(OfferItem.fromJson(makeJson(id: 'x', icon: 'diamond')).icon,
           Icons.diamond);
     });
 
     test('unknown icon falls back to local_offer', () {
-      expect(OfferItem.fromJson(_json(id: 'x', icon: 'unknown')).icon,
+      expect(OfferItem.fromJson(makeJson(id: 'x', icon: 'unknown')).icon,
           Icons.local_offer);
     });
 
     test('buttonText defaults to "Buy Now" when absent', () {
-      final json = _json(id: 'x');
+      final json = makeJson(id: 'x');
       json.remove('buttonText');
       expect(OfferItem.fromJson(json).buttonText, 'Buy Now');
     });
 
     test('parses isPopular', () {
-      expect(OfferItem.fromJson(_json(id: 'x', isPopular: true)).isPopular,
+      expect(OfferItem.fromJson(makeJson(id: 'x', isPopular: true)).isPopular,
           isTrue);
     });
 
     test('isPopular defaults to false when absent', () {
-      final json = _json(id: 'x');
+      final json = makeJson(id: 'x');
       json.remove('isPopular');
       expect(OfferItem.fromJson(json).isPopular, isFalse);
     });
 
     test('parses tier', () {
-      expect(OfferItem.fromJson(_json(id: 'x', tier: 'elite')).tier, 'elite');
+      expect(OfferItem.fromJson(makeJson(id: 'x', tier: 'elite')).tier, 'elite');
     });
 
     test('tier is null when absent', () {
-      expect(OfferItem.fromJson(_json(id: 'x')).tier, isNull);
+      expect(OfferItem.fromJson(makeJson(id: 'x')).tier, isNull);
     });
 
     test('parses billingPeriod', () {
       expect(
-          OfferItem.fromJson(_json(id: 'x', billingPeriod: 'monthly'))
+          OfferItem.fromJson(makeJson(id: 'x', billingPeriod: 'monthly'))
               .billingPeriod,
           'monthly');
     });
@@ -171,7 +171,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('FeaturedOffer.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String badgeText = 'FLASH SALE',
       String headline = '80% OFF',
       String subtitle = 'Premium',
@@ -194,66 +194,66 @@ void main() {
 
     test('parses badgeText', () {
       expect(
-          FeaturedOffer.fromJson(_json(badgeText: 'SALE')).badgeText, 'SALE');
+          FeaturedOffer.fromJson(makeJson(badgeText: 'SALE')).badgeText, 'SALE');
     });
 
     test('badgeText defaults to "SALE" when absent', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('badgeText');
       expect(FeaturedOffer.fromJson(json).badgeText, 'SALE');
     });
 
     test('parses headline', () {
-      expect(FeaturedOffer.fromJson(_json(headline: '50% OFF')).headline,
+      expect(FeaturedOffer.fromJson(makeJson(headline: '50% OFF')).headline,
           '50% OFF');
     });
 
     test('parses subtitle', () {
-      expect(FeaturedOffer.fromJson(_json(subtitle: 'Daily Deal')).subtitle,
+      expect(FeaturedOffer.fromJson(makeJson(subtitle: 'Daily Deal')).subtitle,
           'Daily Deal');
     });
 
     test('parses description', () {
       expect(
-          FeaturedOffer.fromJson(_json(description: 'Great value')).description,
+          FeaturedOffer.fromJson(makeJson(description: 'Great value')).description,
           'Great value');
     });
 
     test('parses expiresAt', () {
       final o =
-          FeaturedOffer.fromJson(_json(expiresAt: '2025-12-25T00:00:00.000Z'));
+          FeaturedOffer.fromJson(makeJson(expiresAt: '2025-12-25T00:00:00.000Z'));
       expect(o.expiresAt, isNotNull);
       expect(o.expiresAt!.month, 12);
     });
 
     test('prefers endsAt over expiresAt', () {
-      final o = FeaturedOffer.fromJson(_json(
+      final o = FeaturedOffer.fromJson(makeJson(
           endsAt: '2025-11-01T00:00:00.000Z',
           expiresAt: '2025-12-01T00:00:00.000Z'));
       expect(o.expiresAt!.month, 11);
     });
 
     test('expiresAt is null when absent', () {
-      expect(FeaturedOffer.fromJson(_json()).expiresAt, isNull);
+      expect(FeaturedOffer.fromJson(makeJson()).expiresAt, isNull);
     });
 
     test('parses buttonText', () {
-      expect(FeaturedOffer.fromJson(_json(buttonText: 'Get It')).buttonText,
+      expect(FeaturedOffer.fromJson(makeJson(buttonText: 'Get It')).buttonText,
           'Get It');
     });
 
     test('buttonText defaults to "Claim Offer" when absent', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('buttonText');
       expect(FeaturedOffer.fromJson(json).buttonText, 'Claim Offer');
     });
 
     test('parses sku', () {
-      expect(FeaturedOffer.fromJson(_json(sku: 'SKU99')).sku, 'SKU99');
+      expect(FeaturedOffer.fromJson(makeJson(sku: 'SKU99')).sku, 'SKU99');
     });
 
     test('sku is null when absent', () {
-      expect(FeaturedOffer.fromJson(_json()).sku, isNull);
+      expect(FeaturedOffer.fromJson(makeJson()).sku, isNull);
     });
   });
 
@@ -262,7 +262,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('FeaturedOffer — countdownLabel', () {
-    FeaturedOffer _offer({DateTime? expiresAt}) => FeaturedOffer(
+    FeaturedOffer offer({DateTime? expiresAt}) => FeaturedOffer(
           badgeText: 'SALE',
           headline: 'Test',
           subtitle: '',
@@ -272,40 +272,40 @@ void main() {
         );
 
     test('returns "" when expiresAt is null', () {
-      expect(_offer().countdownLabel, '');
+      expect(offer().countdownLabel, '');
     });
 
     test('returns "Expired" when past', () {
       expect(
-          _offer(expiresAt: DateTime.now().subtract(const Duration(hours: 1)))
+          offer(expiresAt: DateTime.now().subtract(const Duration(hours: 1)))
               .countdownLabel,
           'Expired');
     });
 
     test('returns "N days left" when > 1 day', () {
       expect(
-          _offer(expiresAt: DateTime.now().add(const Duration(days: 3)))
+          offer(expiresAt: DateTime.now().add(const Duration(days: 3)))
               .countdownLabel,
           contains('days left'));
     });
 
     test('returns "Nh left" when > 1 hour', () {
       expect(
-          _offer(expiresAt: DateTime.now().add(const Duration(hours: 3)))
+          offer(expiresAt: DateTime.now().add(const Duration(hours: 3)))
               .countdownLabel,
           contains('h left'));
     });
 
     test('returns "Nm left" when > 1 minute and <= 1 hour', () {
       expect(
-          _offer(expiresAt: DateTime.now().add(const Duration(minutes: 15)))
+          offer(expiresAt: DateTime.now().add(const Duration(minutes: 15)))
               .countdownLabel,
           contains('m left'));
     });
 
     test('returns "Ending soon" when <= 1 minute', () {
       expect(
-          _offer(expiresAt: DateTime.now().add(const Duration(seconds: 30)))
+          offer(expiresAt: DateTime.now().add(const Duration(seconds: 30)))
               .countdownLabel,
           'Ending soon');
     });

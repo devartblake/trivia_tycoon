@@ -26,7 +26,7 @@ class Coordinates {
   String toString() => 'Coordinates(q: $q, r: $r, s: $s)';
 
   @override
-  bool operator ==(Object o) => o is Coordinates && o.q == q && o.r == r;
+  bool operator ==(Object other) => other is Coordinates && other.q == q && other.r == r;
 
   @override
   int get hashCode => Object.hash(q, r);

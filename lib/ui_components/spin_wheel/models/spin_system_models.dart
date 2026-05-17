@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:flutter/material.dart';
 
 /// Enhanced PrizeEntry with additional metadata and validation
@@ -516,7 +516,7 @@ class WheelSegment {
         'label': label,
         'rewardType': rewardType,
         'reward': reward,
-        'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
+        'color': '#${color.toARGB32().toRadixString(16).padLeft(8, '0')}',
         'imagePath': imagePath,
         'isExclusive': isExclusive,
         'requiredStreak': requiredStreak,

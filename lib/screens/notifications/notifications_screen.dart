@@ -269,7 +269,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         // Allow detail navigation even if mark-read refresh fails.
       }
     }
-    // Navigate to detail screen
+    if (!mounted) return;
     context.push('/notifications/detail', extra: item);
   }
 

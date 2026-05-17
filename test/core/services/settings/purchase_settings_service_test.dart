@@ -16,7 +16,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  PurchaseSettingsService _make() => PurchaseSettingsService();
+  PurchaseSettingsService makeService() => PurchaseSettingsService();
 
   // -------------------------------------------------------------------------
   // addPurchasedItem / hasItem / getAllPurchasedItems
@@ -24,23 +24,23 @@ void main() {
 
   group('addPurchasedItem / hasItem / getAllPurchasedItems', () {
     test('hasItem false before adding', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.hasItem('song_1'), isFalse);
     });
 
     test('hasItem true after adding', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('song_1');
       expect(await svc.hasItem('song_1'), isTrue);
     });
 
     test('getAllPurchasedItems empty initially', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getAllPurchasedItems(), isEmpty);
     });
 
     test('getAllPurchasedItems returns all added items', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('a');
       await svc.addPurchasedItem('b');
       final items = await svc.getAllPurchasedItems();
@@ -49,7 +49,7 @@ void main() {
 
     test('idempotent: adding same item twice still shows once in purchased',
         () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('x');
       await svc.addPurchasedItem('x');
       final items = await svc.getAllPurchasedItems();
@@ -63,18 +63,18 @@ void main() {
 
   group('inventory', () {
     test('getInventory empty initially', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getInventory(), isEmpty);
     });
 
     test('addToInventory adds item', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addToInventory('potion');
       expect(await svc.isInInventory('potion'), isTrue);
     });
 
     test('addToInventory no duplicates', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addToInventory('potion');
       await svc.addToInventory('potion');
       final inv = await svc.getInventory();
@@ -82,20 +82,20 @@ void main() {
     });
 
     test('removeFromInventory removes item', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addToInventory('shield');
       await svc.removeFromInventory('shield');
       expect(await svc.isInInventory('shield'), isFalse);
     });
 
     test('removeFromInventory no-op when not present', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.removeFromInventory('ghost');
       expect(await svc.getInventory(), isEmpty);
     });
 
     test('isInInventory false for absent item', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.isInInventory('nope'), isFalse);
     });
   });
@@ -106,12 +106,12 @@ void main() {
 
   group('getItemCount', () {
     test('0 when not in inventory', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getItemCount('gem'), 0);
     });
 
     test('1 when one instance present', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addToInventory('gem');
       expect(await svc.getItemCount('gem'), 1);
     });
@@ -123,13 +123,13 @@ void main() {
 
   group('purchaseSong / getPurchasedSongs / savePurchasedSongs', () {
     test('purchaseSong adds to purchased items', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.purchaseSong('track_01.mp3');
       expect(await svc.hasItem('track_01.mp3'), isTrue);
     });
 
     test('getPurchasedSongs returns all purchased items', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.purchaseSong('a.mp3');
       await svc.purchaseSong('b.mp3');
       final songs = await svc.getPurchasedSongs();
@@ -137,7 +137,7 @@ void main() {
     });
 
     test('savePurchasedSongs persists multiple songs', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.savePurchasedSongs(['x.mp3', 'y.mp3']);
       expect(await svc.hasItem('x.mp3'), isTrue);
       expect(await svc.hasItem('y.mp3'), isTrue);
@@ -150,12 +150,12 @@ void main() {
 
   group('addPendingPurchase / getPendingPurchases / clearPendingPurchases', () {
     test('empty list initially', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getPendingPurchases(), isEmpty);
     });
 
     test('addPendingPurchase stores entry', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPendingPurchase('item_x', {'price': 100});
       final pending = await svc.getPendingPurchases();
       expect(pending.length, 1);
@@ -163,21 +163,21 @@ void main() {
     });
 
     test('addPendingPurchase accumulates multiple entries', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPendingPurchase('a', {});
       await svc.addPendingPurchase('b', {});
       expect((await svc.getPendingPurchases()).length, 2);
     });
 
     test('clearPendingPurchases empties the list', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPendingPurchase('a', {});
       await svc.clearPendingPurchases();
       expect(await svc.getPendingPurchases(), isEmpty);
     });
 
     test('pending purchase includes timestamp', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPendingPurchase('item_z', {'qty': 1});
       final pending = await svc.getPendingPurchases();
       expect(pending.first['timestamp'], isNotNull);
@@ -190,12 +190,12 @@ void main() {
 
   group('setLastSyncTime / getLastSyncTime', () {
     test('null before any sync', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getLastSyncTime(), isNull);
     });
 
     test('returns saved sync time', () async {
-      final svc = _make();
+      final svc = makeService();
       final now = DateTime(2025, 6, 15, 10, 30);
       await svc.setLastSyncTime(now);
       final result = await svc.getLastSyncTime();
@@ -211,13 +211,13 @@ void main() {
 
   group('getPurchaseStats', () {
     test('totalPurchases 0 initially', () async {
-      final svc = _make();
+      final svc = makeService();
       final stats = await svc.getPurchaseStats();
       expect(stats['totalPurchases'], 0);
     });
 
     test('totalPurchases increments with purchases', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('p1');
       await svc.addPurchasedItem('p2');
       final stats = await svc.getPurchaseStats();
@@ -225,14 +225,14 @@ void main() {
     });
 
     test('inventoryItems increments with inventory', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addToInventory('sword');
       final stats = await svc.getPurchaseStats();
       expect(stats['inventoryItems'], 1);
     });
 
     test('contains cacheValid key', () async {
-      final svc = _make();
+      final svc = makeService();
       final stats = await svc.getPurchaseStats();
       expect(stats.containsKey('cacheValid'), isTrue);
     });
@@ -244,21 +244,21 @@ void main() {
 
   group('clearAllData', () {
     test('clears purchased items', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('item_a');
       await svc.clearAllData();
       expect(await svc.getAllPurchasedItems(), isEmpty);
     });
 
     test('clears inventory', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addToInventory('armor');
       await svc.clearAllData();
       expect(await svc.getInventory(), isEmpty);
     });
 
     test('after clearAllData hasItem returns false', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('gone');
       await svc.clearAllData();
       expect(await svc.hasItem('gone'), isFalse);
@@ -271,12 +271,12 @@ void main() {
 
   group('validatePurchaseIntegrity', () {
     test('runs without error on empty state', () async {
-      final svc = _make();
+      final svc = makeService();
       await expectLater(svc.validatePurchaseIntegrity(), completes);
     });
 
     test('preserves valid items after validation', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.addPurchasedItem('valid_item');
       await svc.addToInventory('valid_inv');
       await svc.validatePurchaseIntegrity();
@@ -291,12 +291,12 @@ void main() {
 
   group('saveState', () {
     test('completes without error', () async {
-      final svc = _make();
+      final svc = makeService();
       await expectLater(svc.saveState(), completes);
     });
 
     test('sets lastSyncTime after saveState', () async {
-      final svc = _make();
+      final svc = makeService();
       final before = DateTime.now();
       await svc.saveState();
       final syncTime = await svc.getLastSyncTime();

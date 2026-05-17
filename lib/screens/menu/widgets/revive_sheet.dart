@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/dto/economy_dto.dart';
 import '../../../game/analytics/providers/analytics_providers.dart';
@@ -25,8 +25,8 @@ class ReviveSheet extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => ProviderScope(
-        parent: ProviderScope.containerOf(context),
+      builder: (_) => UncontrolledProviderScope(
+        container: ProviderScope.containerOf(context),
         child: ReviveSheet._(almostWin: almostWin),
       ),
     ).then((v) => v ?? false);
@@ -99,7 +99,7 @@ class _ReviveSheetState extends ConsumerState<ReviveSheet> {
             height: 4,
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.4),
+              color: Colors.grey.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -153,10 +153,10 @@ class _ReviveSheetContent extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFF4CAF50).withOpacity(0.15),
+              color: const Color(0xFF4CAF50).withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
               border:
-                  Border.all(color: const Color(0xFF4CAF50).withOpacity(0.5)),
+                  Border.all(color: const Color(0xFF4CAF50).withValues(alpha: 0.5)),
             ),
             child: const Text(
               'Almost-win discount applied!',
@@ -178,7 +178,7 @@ class _ReviveSheetContent extends StatelessWidget {
                 '${_currencyIcon()} ${quote.baseCost}',
                 style: TextStyle(
                   fontSize: 18,
-                  color: theme.colorScheme.onSurface.withOpacity(0.4),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   decoration: TextDecoration.lineThrough,
                 ),
               ),
@@ -198,7 +198,7 @@ class _ReviveSheetContent extends StatelessWidget {
           quote.costCurrency == 'gems' ? 'gems' : 'coins',
           style: TextStyle(
             fontSize: 13,
-            color: theme.colorScheme.onSurface.withOpacity(0.5),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
           ),
         ),
         const SizedBox(height: 28),

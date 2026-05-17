@@ -471,7 +471,7 @@ class ProfileGameCard extends ConsumerWidget {
                 Switch(
                   value: adminModeEnabled,
                   onChanged: onToggleAdmin,
-                  activeColor: Colors.white,
+                  activeThumbColor: Colors.white,
                   activeTrackColor: Colors.white.withValues(alpha: 0.3),
                   inactiveThumbColor: Colors.white70,
                   inactiveTrackColor: Colors.white.withValues(alpha: 0.2),

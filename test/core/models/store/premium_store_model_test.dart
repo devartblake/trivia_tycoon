@@ -8,7 +8,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('AdRemovePlan.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String id = 'ad-free-365',
       String? title,
       String? subtitle,
@@ -33,59 +33,59 @@ void main() {
         };
 
     test('parses id', () {
-      expect(AdRemovePlan.fromJson(_json(id: 'plan_x')).id, 'plan_x');
+      expect(AdRemovePlan.fromJson(makeJson(id: 'plan_x')).id, 'plan_x');
     });
 
     test('parses price from price field', () {
-      expect(AdRemovePlan.fromJson(_json(price: r'$9.99')).price, r'$9.99');
+      expect(AdRemovePlan.fromJson(makeJson(price: r'$9.99')).price, r'$9.99');
     });
 
     test('prefers priceLabel when price absent', () {
-      final json = _json();
-      json.remove('price');
-      json['priceLabel'] = r'$4.99';
-      expect(AdRemovePlan.fromJson(json).price, r'$4.99');
+      final map = makeJson();
+      map.remove('price');
+      map['priceLabel'] = r'$4.99';
+      expect(AdRemovePlan.fromJson(map).price, r'$4.99');
     });
 
     test('parses durationLabel', () {
       expect(
-          AdRemovePlan.fromJson(_json(durationLabel: '7 DAYS')).durationLabel,
+          AdRemovePlan.fromJson(makeJson(durationLabel: '7 DAYS')).durationLabel,
           '7 DAYS');
     });
 
     test('durationLabel falls back to title when absent', () {
-      final plan = AdRemovePlan.fromJson(_json(title: 'Annual Plan'));
+      final plan = AdRemovePlan.fromJson(makeJson(title: 'Annual Plan'));
       expect(plan.durationLabel, 'Annual Plan');
     });
 
     test('parses badge', () {
-      expect(AdRemovePlan.fromJson(_json(badge: 'Hot Deal')).badge, 'Hot Deal');
+      expect(AdRemovePlan.fromJson(makeJson(badge: 'Hot Deal')).badge, 'Hot Deal');
     });
 
     test('badge defaults to "" when absent', () {
-      final json = _json();
-      json.remove('badge');
-      expect(AdRemovePlan.fromJson(json).badge, '');
+      final map = makeJson();
+      map.remove('badge');
+      expect(AdRemovePlan.fromJson(map).badge, '');
     });
 
     test('parses isBestValue', () {
       expect(
-          AdRemovePlan.fromJson(_json(isBestValue: true)).isBestValue, isTrue);
+          AdRemovePlan.fromJson(makeJson(isBestValue: true)).isBestValue, isTrue);
     });
 
     test('isBestValue defaults to false when absent', () {
-      final json = _json();
-      json.remove('isBestValue');
-      expect(AdRemovePlan.fromJson(json).isBestValue, isFalse);
+      final map = makeJson();
+      map.remove('isBestValue');
+      expect(AdRemovePlan.fromJson(map).isBestValue, isFalse);
     });
 
     test('parses accentColor via resolveColor', () {
-      expect(AdRemovePlan.fromJson(_json(accentColor: 'green')).accentColor,
+      expect(AdRemovePlan.fromJson(makeJson(accentColor: 'green')).accentColor,
           const Color(0xFF10B981));
     });
 
     test('parses sku', () {
-      expect(AdRemovePlan.fromJson(_json(sku: 'ad_sku_1')).sku, 'ad_sku_1');
+      expect(AdRemovePlan.fromJson(makeJson(sku: 'ad_sku_1')).sku, 'ad_sku_1');
     });
   });
 

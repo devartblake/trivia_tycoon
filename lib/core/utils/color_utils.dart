@@ -49,11 +49,16 @@ MaterialColor getMaterialColor(Color color) {
   return Colors.primaries.firstWhere(
     (c) => c.r == color.r && c.g == color.g && c.b == color.b,
     orElse: () => MaterialColor(
-      color.value,
+      color.toARGB32(),
       Map.fromEntries(
         shades.entries.map(
-          (entry) => MapEntry(entry.value,
-              Color.fromRGBO(color.red, color.green, color.blue, 1)),
+          (entry) => MapEntry(
+              entry.value,
+              Color.fromRGBO(
+                  (color.r * 255.0).round().clamp(0, 255),
+                  (color.g * 255.0).round().clamp(0, 255),
+                  (color.b * 255.0).round().clamp(0, 255),
+                  1)),
         ),
       ),
     ),

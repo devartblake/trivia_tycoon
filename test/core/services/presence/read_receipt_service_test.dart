@@ -168,7 +168,7 @@ void main() {
   group('MessageReadStatus', () {
     final ts = DateTime(2026, 1, 1, 12);
 
-    MessageReadStatus _makeStatus(Map<String, ReadStatus> userStatuses) {
+    MessageReadStatus makeStatus(Map<String, ReadStatus> userStatuses) {
       final receipts = <String, ReadReceipt>{};
       for (final entry in userStatuses.entries) {
         receipts[entry.key] = ReadReceipt(
@@ -183,7 +183,7 @@ void main() {
     }
 
     test('totalRecipients', () {
-      final s = _makeStatus({
+      final s = makeStatus({
         'u1': ReadStatus.read,
         'u2': ReadStatus.delivered,
         'u3': ReadStatus.sent
@@ -193,12 +193,12 @@ void main() {
 
     test('readCount counts only read status', () {
       final s =
-          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.readCount, 1);
     });
 
     test('deliveredCount counts read and delivered', () {
-      final s = _makeStatus({
+      final s = makeStatus({
         'u1': ReadStatus.read,
         'u2': ReadStatus.delivered,
         'u3': ReadStatus.sent
@@ -207,13 +207,13 @@ void main() {
     });
 
     test('isReadByAll true when all read', () {
-      final s = _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.read});
+      final s = makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.read});
       expect(s.isReadByAll, isTrue);
     });
 
     test('isReadByAll false when some not read', () {
       final s =
-          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.isReadByAll, isFalse);
     });
 
@@ -225,41 +225,41 @@ void main() {
 
     test('isDeliveredToAll true when all delivered or read', () {
       final s =
-          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.isDeliveredToAll, isTrue);
     });
 
     test('isDeliveredToAll false when any sent or failed', () {
       final s =
-          _makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.sent});
+          makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.sent});
       expect(s.isDeliveredToAll, isFalse);
     });
 
     test('hasFailures true when any failed', () {
       final s =
-          _makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.failed});
+          makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.failed});
       expect(s.hasFailures, isTrue);
     });
 
     test('hasFailures false when none failed', () {
       final s =
-          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.hasFailures, isFalse);
     });
 
     test('getReceiptForUser returns correct receipt', () {
       final s =
-          _makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.getReceiptForUser('u1')?.status, ReadStatus.read);
     });
 
     test('getReceiptForUser returns null for unknown user', () {
-      final s = _makeStatus({'u1': ReadStatus.read});
+      final s = makeStatus({'u1': ReadStatus.read});
       expect(s.getReceiptForUser('unknown_xyz'), isNull);
     });
 
     test('getReceiptsByStatus filters correctly', () {
-      final s = _makeStatus({
+      final s = makeStatus({
         'u1': ReadStatus.read,
         'u2': ReadStatus.delivered,
         'u3': ReadStatus.delivered,
@@ -270,12 +270,12 @@ void main() {
     });
 
     test('getReceiptsByStatus returns empty when none match', () {
-      final s = _makeStatus({'u1': ReadStatus.read});
+      final s = makeStatus({'u1': ReadStatus.read});
       expect(s.getReceiptsByStatus(ReadStatus.failed), isEmpty);
     });
 
     test('copyWith messageId updated', () {
-      final s = _makeStatus({'u1': ReadStatus.read});
+      final s = makeStatus({'u1': ReadStatus.read});
       final updated = s.copyWith(messageId: 'new_id');
       expect(updated.messageId, 'new_id');
       expect(updated.receipts.length, 1); // preserved

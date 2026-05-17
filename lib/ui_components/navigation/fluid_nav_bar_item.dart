@@ -63,9 +63,7 @@ class FluidNavBarItem extends StatefulWidget {
             'An iconPath or an icon must be provided.');
 
   @override
-  State createState() {
-    return _FluidNavBarItemState(selected);
-  }
+  State createState() => _FluidNavBarItemState();
 }
 
 class _FluidNavBarItemState extends State<FluidNavBarItem>
@@ -74,15 +72,13 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
   static const double _defaultOffset = 0;
   static const double _iconSize = 24;
 
-  bool _selected;
+  bool _selected = false;
 
   late AnimationController _animationController;
   late Animation<double> _activeColorClipAnimation;
   late Animation<double> _yOffsetAnimation;
   late Animation<double> _activatingAnimation;
   late Animation<double> _inactivatingAnimation;
-
-  _FluidNavBarItemState(this._selected);
 
   void _initializeAnimations() {
     double waveRatio = 0.28;
@@ -125,6 +121,7 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
   @override
   void initState() {
     super.initState();
+    _selected = widget.selected;
     _initializeAnimations();
     _startAnimation();
   }
@@ -173,10 +170,9 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
               child: widget.icon == null
                   ? SvgPicture.string(
                       widget.svgPath!,
-                      color: widget.unselectedForegroundColor,
+                      colorFilter: ColorFilter.mode(widget.unselectedForegroundColor, BlendMode.srcIn),
                       width: _iconSize,
                       height: _iconSize * scaleAnimation.value,
-                      colorBlendMode: BlendMode.srcIn,
                     )
                   : Icon(
                       widget.icon,
@@ -192,10 +188,9 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
                 child: widget.icon == null
                     ? SvgPicture.string(
                         widget.svgPath!,
-                        color: widget.selectedForegroundColor,
+                        colorFilter: ColorFilter.mode(widget.selectedForegroundColor, BlendMode.srcIn),
                         width: _iconSize,
                         height: _iconSize * scaleAnimation.value,
-                        colorBlendMode: BlendMode.srcIn,
                       )
                     : Icon(
                         widget.icon,

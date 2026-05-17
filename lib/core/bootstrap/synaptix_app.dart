@@ -6,7 +6,6 @@ import '../manager/log_manager.dart';
 import '../manager/service_manager.dart';
 import '../services/crash_recovery_service.dart';
 import '../services/theme/theme_notifier.dart';
-import '../../game/providers/auth_providers.dart';
 import '../../game/providers/riverpod_providers.dart'
     hide themeNotifierProvider;
 import '../../widgets/app_logo.dart';
@@ -76,8 +75,17 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
   }
 
   void _completeRecoveryPhase() {
-    _completeRecoveryPhase();
-    _runStartupChecks();
+    if (!mounted) return;
+
+    if (!_recoveryChecked) {
+      setState(() {
+        _recoveryChecked = true;
+      });
+    }
+
+    if (!_startupChecked) {
+      _runStartupChecks();
+    }
   }
 
   Future<void> _runStartupChecks() async {
@@ -192,9 +200,9 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.blue.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                  border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

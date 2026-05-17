@@ -570,18 +570,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
               color: Colors.white70,
               fontSize: 12,
             ),
-            onTimeExpired: () {
-              // Handle season end
+            onTimeExpired: () async {
               final seasonService =
                   ref.read(seasonalCompetitionServiceProvider);
-              seasonService.endSeason().then((result) {
-                if (result.hasTiebreakers) {
-                  // Show tiebreaker notification
-                  _showTiebreakerDialog(context, result.tiebreakers);
-                }
-                // Refresh leaderboard
-                ref.invalidate(seasonLeaderboardProvider);
-              });
+              final result = await seasonService.endSeason();
+              ref.invalidate(seasonLeaderboardProvider);
+              if (!context.mounted) return;
+              if (result.hasTiebreakers) {
+                _showTiebreakerDialog(context, result.tiebreakers);
+              }
             },
           ),
           loading: () => const Column(

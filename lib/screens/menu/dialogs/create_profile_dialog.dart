@@ -281,6 +281,7 @@ class _CreateProfileDialogState extends ConsumerState<CreateProfileDialog> {
           avatar: _selectedAvatar,
         );
 
+        if (!mounted) return;
         Navigator.pop(context);
         widget.onProfileCreated();
         ScaffoldMessenger.of(context).showSnackBar(

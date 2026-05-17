@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:just_audio/just_audio.dart';
 import 'synaptix_toast_route.dart' as route;
 import 'toast_theme_manager.dart';
@@ -149,6 +148,7 @@ class SynaptixToast<T> extends StatefulWidget {
       unawaited(player.play());
     }
 
+    if (!context.mounted) return null;
     final toastRoute = route.showSynaptixToast<T>(
       context: context,
       toast: this,

@@ -321,7 +321,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
               final index = _themeData.keys.toList().indexOf(entry.key) + 1;
               return _buildThemeOption(
                   entry.key, entry.value, currentTheme, index);
-            }).toList(),
+            }),
           ],
         ),
       ),

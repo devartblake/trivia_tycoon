@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:ui' show Color;
 import 'package:flutter/services.dart' show rootBundle;
 import '../../../game/models/skill_tree_nav_models.dart';
@@ -150,7 +150,7 @@ class SkillTreeNavRepository {
   }
 
   String _colorToHex(Color color) {
-    final value = color.value;
+    final value = color.toARGB32();
     return '#${(value & 0x00FFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
   }
 }

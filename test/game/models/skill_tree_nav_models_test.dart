@@ -140,7 +140,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SkillBranchVM — computed properties', () {
-    SkillBranchVM _makeBranch(List<Map<String, dynamic>> nodeMaps) =>
+    SkillBranchVM makeBranch(List<Map<String, dynamic>> nodeMaps) =>
         SkillBranchVM(
           branchId: 'scholar',
           groupId: SkillTreeGroupId.enhancement,
@@ -152,7 +152,7 @@ void main() {
         );
 
     test('totalNodes returns node count', () {
-      final vm = _makeBranch([
+      final vm = makeBranch([
         {'id': 'n1'},
         {'id': 'n2'},
         {'id': 'n3'},
@@ -161,11 +161,11 @@ void main() {
     });
 
     test('totalNodes is 0 for empty list', () {
-      expect(_makeBranch([]).totalNodes, 0);
+      expect(makeBranch([]).totalNodes, 0);
     });
 
     test('unlockedCount counts only unlocked nodes', () {
-      final vm = _makeBranch([
+      final vm = makeBranch([
         {'id': 'n1', 'unlocked': true},
         {'id': 'n2', 'unlocked': false},
         {'id': 'n3', 'unlocked': true},
@@ -174,7 +174,7 @@ void main() {
     });
 
     test('unlockedCount treats missing unlocked as false', () {
-      final vm = _makeBranch([
+      final vm = makeBranch([
         {'id': 'n1'},
         {'id': 'n2', 'unlocked': true},
       ]);
@@ -182,11 +182,11 @@ void main() {
     });
 
     test('progress is 0 when no nodes', () {
-      expect(_makeBranch([]).progress, 0.0);
+      expect(makeBranch([]).progress, 0.0);
     });
 
     test('progress is correct fraction', () {
-      final vm = _makeBranch([
+      final vm = makeBranch([
         {'id': 'n1', 'unlocked': true},
         {'id': 'n2', 'unlocked': false},
       ]);
@@ -194,7 +194,7 @@ void main() {
     });
 
     test('progress is 1.0 when all unlocked', () {
-      final vm = _makeBranch([
+      final vm = makeBranch([
         {'id': 'n1', 'unlocked': true},
         {'id': 'n2', 'unlocked': true},
       ]);
@@ -207,7 +207,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SkillBranchVM.toGraph — basic structure', () {
-    SkillBranchVM _makeBranch({
+    SkillBranchVM makeBranch({
       required List<Map<String, dynamic>> nodeMaps,
       String branchId = 'scholar',
     }) =>
@@ -222,7 +222,7 @@ void main() {
         );
 
     test('returns SkillTreeGraph with correct node count', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'a', 'title': 'Node A', 'cost': 1},
         {'id': 'b', 'title': 'Node B', 'cost': 2},
       ]);
@@ -231,13 +231,13 @@ void main() {
     });
 
     test('empty nodeMaps → empty graph', () {
-      final graph = _makeBranch(nodeMaps: []).toGraph();
+      final graph = makeBranch(nodeMaps: []).toGraph();
       expect(graph.nodes, isEmpty);
       expect(graph.edges, isEmpty);
     });
 
     test('node titles and IDs are set correctly', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'scholar_root', 'title': 'Scholar Root', 'cost': 3},
       ]);
       final graph = vm.toGraph();
@@ -248,7 +248,7 @@ void main() {
     });
 
     test('node title falls back to id when absent', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'fallback_node'},
       ]);
       final graph = vm.toGraph();
@@ -256,7 +256,7 @@ void main() {
     });
 
     test('node unlocked flag is preserved', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'n1', 'unlocked': true},
         {'id': 'n2', 'unlocked': false},
       ]);
@@ -266,7 +266,7 @@ void main() {
     });
 
     test('category assigned from branchId', () {
-      final vm = _makeBranch(
+      final vm = makeBranch(
         nodeMaps: [
           {'id': 'n1'}
         ],
@@ -277,7 +277,7 @@ void main() {
     });
 
     test('edges created from requires field', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'root'},
         {
           'id': 'child',
@@ -291,7 +291,7 @@ void main() {
     });
 
     test('multiple requires create multiple edges', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'a'},
         {'id': 'b'},
         {
@@ -304,7 +304,7 @@ void main() {
     });
 
     test('no requires → no edges', () {
-      final vm = _makeBranch(nodeMaps: [
+      final vm = makeBranch(nodeMaps: [
         {'id': 'a'},
         {'id': 'b'},
       ]);
@@ -317,7 +317,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SkillBranchVM.toGraph — tier assignment', () {
-    SkillBranchVM _makeBranch(List<Map<String, dynamic>> nodeMaps) =>
+    SkillBranchVM makeBranch(List<Map<String, dynamic>> nodeMaps) =>
         SkillBranchVM(
           branchId: 'xp',
           groupId: SkillTreeGroupId.utility,
@@ -328,36 +328,36 @@ void main() {
           nodeMaps: nodeMaps,
         );
 
-    SkillTreeGraph _graph(List<Map<String, dynamic>> maps) =>
-        _makeBranch(maps).toGraph();
+    SkillTreeGraph graph(List<Map<String, dynamic>> maps) =>
+        makeBranch(maps).toGraph();
 
-    SkillNode _node(SkillTreeGraph g, String id) =>
+    SkillNode node(SkillTreeGraph g, String id) =>
         g.nodes.firstWhere((n) => n.id == id);
 
     test('root node gets tier 0', () {
-      final g = _graph([
+      final g = graph([
         {'id': 'root'},
         {
           'id': 'child',
           'requires': ['root']
         },
       ]);
-      expect(_node(g, 'root').tier, 0);
+      expect(node(g, 'root').tier, 0);
     });
 
     test('direct child of root gets tier 1', () {
-      final g = _graph([
+      final g = graph([
         {'id': 'root'},
         {
           'id': 'child',
           'requires': ['root']
         },
       ]);
-      expect(_node(g, 'child').tier, 1);
+      expect(node(g, 'child').tier, 1);
     });
 
     test('grandchild gets tier 2', () {
-      final g = _graph([
+      final g = graph([
         {'id': 'root'},
         {
           'id': 'mid',
@@ -368,14 +368,14 @@ void main() {
           'requires': ['mid']
         },
       ]);
-      expect(_node(g, 'leaf').tier, 2);
+      expect(node(g, 'leaf').tier, 2);
     });
 
     test('longest-path tier when multiple parents (diamond shape)', () {
       // a → c → d
       // b → d  (b has no dependencies → tier 0)
       // c is at tier 1; d should be tier 2 (max(1,0) + 1)
-      final g = _graph([
+      final g = graph([
         {'id': 'a'},
         {'id': 'b'},
         {
@@ -387,39 +387,39 @@ void main() {
           'requires': ['c', 'b']
         },
       ]);
-      expect(_node(g, 'a').tier, 0);
-      expect(_node(g, 'b').tier, 0);
-      expect(_node(g, 'c').tier, 1);
-      expect(_node(g, 'd').tier, 2);
+      expect(node(g, 'a').tier, 0);
+      expect(node(g, 'b').tier, 0);
+      expect(node(g, 'c').tier, 1);
+      expect(node(g, 'd').tier, 2);
     });
 
     test('isolated node (no edges) gets tier 0', () {
-      final g = _graph([
+      final g = graph([
         {'id': 'alone'}
       ]);
-      expect(_node(g, 'alone').tier, 0);
+      expect(node(g, 'alone').tier, 0);
     });
 
     test('effects parsed from node map', () {
-      final g = _graph([
+      final g = graph([
         {
           'id': 'n1',
           'effects': {'xp_multiplier': 1.5, 'extra_time': 3},
         }
       ]);
-      final effects = _node(g, 'n1').effects;
+      final effects = node(g, 'n1').effects;
       expect(effects['xp_multiplier'], 1.5);
       expect(effects['extra_time'], 3);
     });
 
     test('non-num effect values are ignored', () {
-      final g = _graph([
+      final g = graph([
         {
           'id': 'n1',
           'effects': {'label': 'bonus', 'value': 10},
         }
       ]);
-      final effects = _node(g, 'n1').effects;
+      final effects = node(g, 'n1').effects;
       expect(effects.containsKey('label'), isFalse);
       expect(effects['value'], 10);
     });
@@ -430,7 +430,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SkillTreeGroupVM', () {
-    SkillBranchVM _branch(
+    SkillBranchVM branch(
             {required String id, required List<Map<String, dynamic>> nodes}) =>
         SkillBranchVM(
           branchId: id,
@@ -452,12 +452,12 @@ void main() {
         accent: const Color(0xFFFF4444),
         colorHex: '#FF4444',
         branches: [
-          _branch(id: 'combat', nodes: [
+          branch(id: 'combat', nodes: [
             {'id': 'a', 'unlocked': true},
             {'id': 'b', 'unlocked': false},
             {'id': 'c', 'unlocked': true},
           ]),
-          _branch(id: 'risk', nodes: [
+          branch(id: 'risk', nodes: [
             {'id': 'd', 'unlocked': false},
             {'id': 'e', 'unlocked': true},
           ]),
@@ -485,7 +485,7 @@ void main() {
         accent: Colors.purple,
         colorHex: '#8E44AD',
         branches: [
-          _branch(id: 'xp', nodes: []),
+          branch(id: 'xp', nodes: []),
         ],
       );
       expect(empty.progress, 0.0);
@@ -499,7 +499,7 @@ void main() {
         accent: Colors.orange,
         colorHex: '#F39C12',
         branches: [
-          _branch(id: 'scholar', nodes: [
+          branch(id: 'scholar', nodes: [
             {'id': 'a', 'unlocked': true},
             {'id': 'b', 'unlocked': true},
           ]),

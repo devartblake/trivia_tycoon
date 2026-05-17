@@ -272,6 +272,7 @@ class EnhancedSpinningController extends ChangeNotifier {
 
     // Check if can spin
     if (!await SpinTracker.canSpin()) {
+      if (!context.mounted) return null;
       _showCooldownMessage(context);
       return null;
     }
@@ -295,16 +296,16 @@ class EnhancedSpinningController extends ChangeNotifier {
         spinId: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
-      // Simulate spin duration
       await Future.delayed(Duration(milliseconds: (duration * 1000).round()));
 
-      // Handle completion
+      if (!context.mounted) return null;
       await _handleSpinComplete(spinResult, context);
 
       return spinResult;
     } catch (e) {
       LogManager.debug('Spin failed: $e');
       _updateState(_state.copyWith(isSpinning: false));
+      if (!context.mounted) return null;
       _showErrorMessage(context, 'Spin failed. Please try again.');
       return null;
     }

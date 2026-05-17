@@ -427,7 +427,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('UserMission.fromJson', () {
-    Map<String, dynamic> _userMissionJson({
+    Map<String, dynamic> userMissionJson({
       String id = 'um1',
       String userId = 'user_1',
       String missionId = 'm1',
@@ -449,7 +449,7 @@ void main() {
     }
 
     test('parses id, userId, missionId', () {
-      final um = UserMission.fromJson(_userMissionJson(
+      final um = UserMission.fromJson(userMissionJson(
         id: 'um99',
         userId: 'u42',
         missionId: 'mission_5',
@@ -460,42 +460,42 @@ void main() {
     });
 
     test('parses progress', () {
-      final um = UserMission.fromJson(_userMissionJson(progress: 7));
+      final um = UserMission.fromJson(userMissionJson(progress: 7));
       expect(um.progress, 7);
     });
 
     test('parses status active', () {
-      final um = UserMission.fromJson(_userMissionJson(status: 'active'));
+      final um = UserMission.fromJson(userMissionJson(status: 'active'));
       expect(um.status, MissionStatus.active);
     });
 
     test('sets status to completed when claimed is true', () {
-      final json = _userMissionJson(status: 'active');
+      final json = userMissionJson(status: 'active');
       json['claimed'] = true;
       final um = UserMission.fromJson(json);
       expect(um.status, MissionStatus.completed);
     });
 
     test('sets status to completed when completed flag is true', () {
-      final json = _userMissionJson(status: 'active');
+      final json = userMissionJson(status: 'active');
       json['completed'] = true;
       final um = UserMission.fromJson(json);
       expect(um.status, MissionStatus.completed);
     });
 
     test('parses swapCount', () {
-      final um = UserMission.fromJson(_userMissionJson(swapCount: 2));
+      final um = UserMission.fromJson(userMissionJson(swapCount: 2));
       expect(um.swapCount, 2);
     });
 
     test('parses nested mission', () {
-      final um = UserMission.fromJson(_userMissionJson(missionId: 'nest_m'));
+      final um = UserMission.fromJson(userMissionJson(missionId: 'nest_m'));
       expect(um.mission.id, 'nest_m');
     });
 
     test('parses assignedAt DateTime', () {
       final um = UserMission.fromJson(
-          _userMissionJson(assignedAt: '2025-05-15T10:00:00.000Z'));
+          userMissionJson(assignedAt: '2025-05-15T10:00:00.000Z'));
       expect(um.assignedAt.month, 5);
       expect(um.assignedAt.day, 15);
     });
@@ -600,7 +600,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('UserMission.copyWith', () {
-    UserMission _userMission() => UserMission(
+    UserMission userMission() => UserMission(
           id: 'um_copy',
           userId: 'user_copy',
           missionId: 'm_copy',
@@ -612,22 +612,22 @@ void main() {
         );
 
     test('copies progress', () {
-      final updated = _userMission().copyWith(progress: 9);
+      final updated = userMission().copyWith(progress: 9);
       expect(updated.progress, 9);
     });
 
     test('copies status', () {
-      final updated = _userMission().copyWith(status: MissionStatus.completed);
+      final updated = userMission().copyWith(status: MissionStatus.completed);
       expect(updated.status, MissionStatus.completed);
     });
 
     test('copies swapCount', () {
-      final updated = _userMission().copyWith(swapCount: 3);
+      final updated = userMission().copyWith(swapCount: 3);
       expect(updated.swapCount, 3);
     });
 
     test('preserves unchanged fields', () {
-      final original = _userMission();
+      final original = userMission();
       final updated = original.copyWith(progress: 5);
       expect(updated.id, 'um_copy');
       expect(updated.userId, 'user_copy');

@@ -16,10 +16,10 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  Future<QuizProgressService> _make() => QuizProgressService.initialize();
+  Future<QuizProgressService> makeService() => QuizProgressService.initialize();
 
   // Open settings box so sync methods work
-  Future<void> _openSettingsBox() async {
+  Future<void> openSettingsBox() async {
     await Hive.openBox('settings');
   }
 
@@ -29,7 +29,7 @@ void main() {
 
   group('saveQuizProgress / getQuizProgress', () {
     test('stores and retrieves quiz progress map', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.saveQuizProgress({'score': 85, 'question': 3});
       final result = await svc.getQuizProgress();
       expect(result['score'], 85);
@@ -37,12 +37,12 @@ void main() {
     });
 
     test('returns empty map when nothing stored', () async {
-      final svc = await _make();
+      final svc = await makeService();
       expect(await svc.getQuizProgress(), isEmpty);
     });
 
     test('overwrites previous progress', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.saveQuizProgress({'score': 50});
       await svc.saveQuizProgress({'score': 75});
       expect((await svc.getQuizProgress())['score'], 75);
@@ -55,12 +55,12 @@ void main() {
 
   group('setOnboardingCompleted / getOnboardingStatus', () {
     test('false by default', () async {
-      final svc = await _make();
+      final svc = await makeService();
       expect(await svc.getOnboardingStatus(), isFalse);
     });
 
     test('true after setOnboardingCompleted', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.setOnboardingCompleted();
       expect(await svc.getOnboardingStatus(), isTrue);
     });
@@ -72,18 +72,18 @@ void main() {
 
   group('savePlayerName / getPlayerName', () {
     test('defaults to "Player"', () async {
-      final svc = await _make();
+      final svc = await makeService();
       expect(await svc.getPlayerName(), 'Player');
     });
 
     test('returns saved name', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.savePlayerName('Alice');
       expect(await svc.getPlayerName(), 'Alice');
     });
 
     test('overwrites previous name', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.savePlayerName('Alice');
       await svc.savePlayerName('Bob');
       expect(await svc.getPlayerName(), 'Bob');
@@ -96,12 +96,12 @@ void main() {
 
   group('savePlayerProgress / getPlayerProgress', () {
     test('returns empty map when nothing stored', () async {
-      final svc = await _make();
+      final svc = await makeService();
       expect(await svc.getPlayerProgress(), isEmpty);
     });
 
     test('stores and retrieves progress', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.savePlayerProgress({'score': 100, 'streak': 5});
       final result = await svc.getPlayerProgress();
       expect(result['score'], 100);
@@ -115,7 +115,7 @@ void main() {
 
   group('updateQuizStats', () {
     test('increments total_questions', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(questionsAnswered: 5);
       await svc.updateQuizStats(questionsAnswered: 3);
       final progress = await svc.getPlayerProgress();
@@ -123,7 +123,7 @@ void main() {
     });
 
     test('increments correct_answers', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(correctAnswers: 4);
       await svc.updateQuizStats(correctAnswers: 2);
       final progress = await svc.getPlayerProgress();
@@ -131,14 +131,14 @@ void main() {
     });
 
     test('sets current_streak', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(currentStreak: 7);
       final progress = await svc.getPlayerProgress();
       expect(progress['current_streak'], 7);
     });
 
     test('updates best_streak only when higher', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(bestStreak: 5);
       await svc.updateQuizStats(bestStreak: 3);
       final progress = await svc.getPlayerProgress();
@@ -146,7 +146,7 @@ void main() {
     });
 
     test('updates best_streak when higher', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(bestStreak: 5);
       await svc.updateQuizStats(bestStreak: 8);
       final progress = await svc.getPlayerProgress();
@@ -154,14 +154,14 @@ void main() {
     });
 
     test('sets average_time', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(averageTime: 3.5);
       final progress = await svc.getPlayerProgress();
       expect(progress['average_time'], 3.5);
     });
 
     test('sets last_updated', () async {
-      final svc = await _make();
+      final svc = await makeService();
       final before = DateTime.now();
       await svc.updateQuizStats(questionsAnswered: 1);
       final progress = await svc.getPlayerProgress();
@@ -177,14 +177,14 @@ void main() {
 
   group('clearAllProgress', () {
     test('clears quiz progress', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.saveQuizProgress({'score': 100});
       await svc.clearAllProgress();
       expect(await svc.getQuizProgress(), isEmpty);
     });
 
     test('clears player progress', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.savePlayerProgress({'score': 100});
       await svc.clearAllProgress();
       expect(await svc.getPlayerProgress(), isEmpty);
@@ -197,21 +197,21 @@ void main() {
 
   group('getProgressSummary', () {
     test('has_quiz_progress false when empty', () async {
-      final svc = await _make();
-      await _openSettingsBox();
+      final svc = await makeService();
+      await openSettingsBox();
       final summary = svc.getProgressSummary();
       expect(summary['has_quiz_progress'], isFalse);
     });
 
     test('total_questions default 0', () async {
-      final svc = await _make();
-      await _openSettingsBox();
+      final svc = await makeService();
+      await openSettingsBox();
       final summary = svc.getProgressSummary();
       expect(summary['total_questions'], 0);
     });
 
     test('best_streak reflected in summary', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizStats(bestStreak: 10);
       final summary = svc.getProgressSummary();
       expect(summary['best_streak'], 10);
@@ -224,12 +224,12 @@ void main() {
 
   group('autoSave / restoreFromAutoSave', () {
     test('restoreFromAutoSave returns null when nothing saved', () async {
-      final svc = await _make();
+      final svc = await makeService();
       expect(await svc.restoreFromAutoSave(), isNull);
     });
 
     test('restores auto-saved data', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.saveQuizProgress({'q': 1});
       await svc.autoSave();
       final restored = await svc.restoreFromAutoSave();
@@ -244,12 +244,12 @@ void main() {
 
   group('syncProgress / getLastSyncTime', () {
     test('getLastSyncTime returns null before sync', () async {
-      final svc = await _make();
+      final svc = await makeService();
       expect(await svc.getLastSyncTime(), isNull);
     });
 
     test('syncProgress sets last sync time', () async {
-      final svc = await _make();
+      final svc = await makeService();
       final before = DateTime.now();
       await svc.syncProgress();
       final syncTime = await svc.getLastSyncTime();
@@ -265,7 +265,7 @@ void main() {
 
   group('saveCurrentProgress', () {
     test('adds last_saved and save_reason to quiz progress', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.saveQuizProgress({'score': 10});
       await svc.saveCurrentProgress();
       final result = await svc.getQuizProgress();
@@ -280,30 +280,30 @@ void main() {
 
   group('Daily quiz tracking', () {
     test('getDailyQuizLastCompletedDateSync returns null initially', () async {
-      await _make();
-      await _openSettingsBox();
-      final svc = await _make();
+      await makeService();
+      await openSettingsBox();
+      final svc = await makeService();
       expect(svc.getDailyQuizLastCompletedDateSync(), isNull);
     });
 
     test('getDailyQuizStreakSync returns 0 initially', () async {
-      await _make();
-      await _openSettingsBox();
-      final svc = await _make();
+      await makeService();
+      await openSettingsBox();
+      final svc = await makeService();
       expect(svc.getDailyQuizStreakSync(), 0);
     });
 
     test('markDailyQuizCompleted sets streak to 1 on first completion',
         () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markDailyQuizCompleted();
       expect(svc.getDailyQuizStreakSync(), 1);
     });
 
     test('markDailyQuizCompleted sets lastCompletedDate to today', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markDailyQuizCompleted();
       final date = svc.getDailyQuizLastCompletedDateSync();
       expect(date, isNotNull);
@@ -314,8 +314,8 @@ void main() {
     });
 
     test('markDailyQuizCompleted is idempotent on same day', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markDailyQuizCompleted();
       await svc.markDailyQuizCompleted();
       expect(svc.getDailyQuizStreakSync(), 1);
@@ -328,28 +328,28 @@ void main() {
 
   group('Monthly quiz tracking', () {
     test('getMonthlyQuizCompletedSync false initially', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       expect(svc.getMonthlyQuizCompletedSync(2025, 6), isFalse);
     });
 
     test('getMonthlyQuizCompletionRateSync 0.0 initially', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       expect(svc.getMonthlyQuizCompletionRateSync(2025, 6), 0.0);
     });
 
     test('markMonthlyQuizProgress sets completed when full', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markMonthlyQuizProgress(
           year: 2025, month: 6, questionsCompleted: 10, totalQuestions: 10);
       expect(svc.getMonthlyQuizCompletedSync(2025, 6), isTrue);
     });
 
     test('markMonthlyQuizProgress sets rate correctly', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markMonthlyQuizProgress(
           year: 2025, month: 6, questionsCompleted: 5, totalQuestions: 10);
       expect(
@@ -357,16 +357,16 @@ void main() {
     });
 
     test('markMonthlyQuizProgress not completed when partial', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markMonthlyQuizProgress(
           year: 2025, month: 6, questionsCompleted: 3, totalQuestions: 10);
       expect(svc.getMonthlyQuizCompletedSync(2025, 6), isFalse);
     });
 
     test('months are tracked independently', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.markMonthlyQuizProgress(
           year: 2025, month: 6, questionsCompleted: 10, totalQuestions: 10);
       expect(svc.getMonthlyQuizCompletedSync(2025, 7), isFalse);
@@ -379,15 +379,15 @@ void main() {
 
   group('isFeaturedChallengeUnlocked', () {
     test('unlocked when total_quizzes >= 3', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.savePlayerProgress({'total_quizzes': 3});
       expect(svc.isFeaturedChallengeUnlocked(), isTrue);
     });
 
     test('locked when total_quizzes < 3', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       await svc.savePlayerProgress({'total_quizzes': 2});
       expect(svc.isFeaturedChallengeUnlocked(), isFalse);
     });
@@ -399,8 +399,8 @@ void main() {
 
   group('getQuizStats', () {
     test('returns map with expected keys', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       final stats = svc.getQuizStats();
       expect(stats.containsKey('totalQuizzes'), isTrue);
       expect(stats.containsKey('totalQuestions'), isTrue);
@@ -411,8 +411,8 @@ void main() {
     });
 
     test('averageScore is 0 when no questions answered', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       final stats = svc.getQuizStats();
       expect(stats['averageScore'], 0.0);
     });
@@ -424,7 +424,7 @@ void main() {
 
   group('updateQuizCompletion', () {
     test('increments total_quizzes', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizCompletion(
           questionsTotal: 5,
           questionsCorrect: 3,
@@ -435,7 +435,7 @@ void main() {
     });
 
     test('increments total_questions', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizCompletion(
           questionsTotal: 5,
           questionsCorrect: 5,
@@ -446,7 +446,7 @@ void main() {
     });
 
     test('increments correct_answers', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizCompletion(
           questionsTotal: 5,
           questionsCorrect: 4,
@@ -457,7 +457,7 @@ void main() {
     });
 
     test('increments current_streak on perfect score', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizCompletion(
           questionsTotal: 5,
           questionsCorrect: 5,
@@ -468,7 +468,7 @@ void main() {
     });
 
     test('resets current_streak on imperfect score', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.savePlayerProgress({'current_streak': 5});
       await svc.updateQuizCompletion(
           questionsTotal: 5,
@@ -480,7 +480,7 @@ void main() {
     });
 
     test('tracks category_stats', () async {
-      final svc = await _make();
+      final svc = await makeService();
       await svc.updateQuizCompletion(
           questionsTotal: 5,
           questionsCorrect: 4,
@@ -499,16 +499,16 @@ void main() {
 
   group('getRecentQuizzes / saveCompletedQuiz', () {
     test('getRecentQuizzes returns default list when nothing stored', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       final quizzes = svc.getRecentQuizzes();
       expect(quizzes, isNotEmpty);
       expect(quizzes.first.containsKey('title'), isTrue);
     });
 
     test('saveCompletedQuiz adds to front', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       // Save one first to populate
       await svc.saveCompletedQuiz(
           title: 'My Quiz', score: '90%', category: 'math');
@@ -517,8 +517,8 @@ void main() {
     });
 
     test('saveCompletedQuiz caps at 10 entries', () async {
-      await _openSettingsBox();
-      final svc = await _make();
+      await openSettingsBox();
+      final svc = await makeService();
       for (int i = 0; i < 12; i++) {
         await svc.saveCompletedQuiz(
             title: 'Quiz $i', score: '80%', category: 'cat');

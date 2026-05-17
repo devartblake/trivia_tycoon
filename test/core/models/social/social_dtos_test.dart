@@ -436,7 +436,7 @@ void main() {
   // =========================================================================
 
   group('PaginatedSocialResponse.fromJson', () {
-    Map<String, dynamic> _pageJson({
+    Map<String, dynamic> pageJson({
       int page = 1,
       int pageSize = 10,
       int total = 30,
@@ -453,38 +453,38 @@ void main() {
 
     test('parses page', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(page: 2), FriendListItemDto.fromJson);
+          pageJson(page: 2), FriendListItemDto.fromJson);
       expect(resp.page, 2);
     });
 
     test('parses pageSize', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(pageSize: 25), FriendListItemDto.fromJson);
+          pageJson(pageSize: 25), FriendListItemDto.fromJson);
       expect(resp.pageSize, 25);
     });
 
     test('parses total', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(total: 100), FriendListItemDto.fromJson);
+          pageJson(total: 100), FriendListItemDto.fromJson);
       expect(resp.total, 100);
     });
 
     test('parses totalPages when provided', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(total: 30, pageSize: 10, totalPages: 3),
+          pageJson(total: 30, pageSize: 10, totalPages: 3),
           FriendListItemDto.fromJson);
       expect(resp.totalPages, 3);
     });
 
     test('infers totalPages when absent (ceil division)', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(total: 25, pageSize: 10), FriendListItemDto.fromJson);
+          pageJson(total: 25, pageSize: 10), FriendListItemDto.fromJson);
       expect(resp.totalPages, 3);
     });
 
     test('parses items', () {
       final resp = PaginatedSocialResponse.fromJson(
-          _pageJson(items: [
+          pageJson(items: [
             _friendJson(friendPlayerId: 'fp1'),
             _friendJson(friendPlayerId: 'fp2')
           ]),
@@ -494,7 +494,7 @@ void main() {
     });
 
     test('empty items list when items absent', () {
-      final json = _pageJson();
+      final json = pageJson();
       json.remove('items');
       final resp =
           PaginatedSocialResponse.fromJson(json, FriendListItemDto.fromJson);
@@ -502,7 +502,7 @@ void main() {
     });
 
     test('page defaults to 1 when absent', () {
-      final json = _pageJson();
+      final json = pageJson();
       json.remove('page');
       final resp =
           PaginatedSocialResponse.fromJson(json, FriendListItemDto.fromJson);

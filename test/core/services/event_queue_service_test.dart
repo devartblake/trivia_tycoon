@@ -16,7 +16,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  Future<EventQueueService> _make() async {
+  Future<EventQueueService> make() async {
     final svc = EventQueueService();
     await svc.initialize();
     return svc;
@@ -28,17 +28,17 @@ void main() {
 
   group('initialize', () {
     test('starts empty', () async {
-      final svc = await _make();
+      final svc = await make();
       expect(await svc.getPendingEvents(), isEmpty);
     });
 
     test('isInCooldown false initially', () async {
-      final svc = await _make();
+      final svc = await make();
       expect(svc.isInCooldown, isFalse);
     });
 
     test('idempotent — second initialize does not crash', () async {
-      final svc = await _make();
+      final svc = await make();
       await expectLater(svc.initialize(), completes);
     });
   });
@@ -49,41 +49,41 @@ void main() {
 
   group('enqueueEvent', () {
     test('1 entry after enqueue', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/api/test', {'key': 'val'});
       expect((await svc.getPendingEvents()).length, 1);
     });
 
     test('entry has endpoint field', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/api/users', {'id': '1'});
       final events = await svc.getPendingEvents();
       expect(events.first['endpoint'], '/api/users');
     });
 
     test('entry has payload field', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/api/data', {'score': 100});
       final events = await svc.getPendingEvents();
       expect(events.first['payload']['score'], 100);
     });
 
     test('entry has timestamp field', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
       final events = await svc.getPendingEvents();
       expect(events.first['timestamp'], isNotNull);
     });
 
     test('entry has retry_count = 0', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
       final events = await svc.getPendingEvents();
       expect(events.first['retry_count'], 0);
     });
 
     test('multiple events accumulate', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep1', {});
       await svc.enqueueEvent('/ep2', {});
       await svc.enqueueEvent('/ep3', {});
@@ -97,7 +97,7 @@ void main() {
 
   group('queue size limit', () {
     test('55 events → only 50 remain after limit enforcement', () async {
-      final svc = await _make();
+      final svc = await make();
       for (int i = 0; i < 55; i++) {
         await svc.enqueueEvent('/ep', {'i': i});
       }
@@ -105,7 +105,7 @@ void main() {
     });
 
     test('oldest events removed first (FIFO)', () async {
-      final svc = await _make();
+      final svc = await make();
       // Enqueue 55 events with different payloads
       for (int i = 0; i < 55; i++) {
         await svc.enqueueEvent('/ep', {'i': i});
@@ -123,17 +123,17 @@ void main() {
 
   group('retryQueuedEvents — success', () {
     test('queue empty after successful retry', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {'data': 1});
       await svc.retryQueuedEvents((endpoint, payload) async {/* success */});
       expect((await svc.getPendingEvents()).length, 0);
     });
 
     test('consecutive failures reset to 0 on success', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {});
-      final status = await svc.getQueueStatus();
+      await svc.retryQueuedEvents((e, p) async {});
+      final status = svc.getQueueStatus();
       expect(status['consecutive_failures'], 0);
     });
   });
@@ -144,18 +144,18 @@ void main() {
 
   group('retryQueuedEvents — failure', () {
     test('event stays in queue after failure', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {
+      await svc.retryQueuedEvents((e, p) async {
         throw Exception('Network error');
       });
       expect((await svc.getPendingEvents()).length, 1);
     });
 
     test('retry_count incremented after failure', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {
+      await svc.retryQueuedEvents((e, p) async {
         throw Exception('fail');
       });
       final events = await svc.getPendingEvents();
@@ -163,9 +163,9 @@ void main() {
     });
 
     test('last_error set after failure', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {
+      await svc.retryQueuedEvents((e, p) async {
         throw Exception('Custom error message');
       });
       final events = await svc.getPendingEvents();
@@ -179,9 +179,9 @@ void main() {
 
   group('retryQueuedEvents — NonRetryableEventException', () {
     test('event dropped permanently on NonRetryableEventException', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {
+      await svc.retryQueuedEvents((e, p) async {
         throw NonRetryableEventException('Do not retry');
       });
       expect((await svc.getPendingEvents()).length, 0);
@@ -194,10 +194,10 @@ void main() {
 
   group('failure cycles → cooldown', () {
     test('5 all-fail cycles triggers cooldown', () async {
-      final svc = await _make();
+      final svc = await make();
       for (int cycle = 0; cycle < 5; cycle++) {
         await svc.enqueueEvent('/ep_$cycle', {});
-        await svc.retryQueuedEvents((_e, _p) async {
+        await svc.retryQueuedEvents((e, p) async {
           throw Exception('fail cycle $cycle');
         });
       }
@@ -211,11 +211,11 @@ void main() {
 
   group('cooldown blocks enqueue', () {
     test('enqueue returns false when in cooldown', () async {
-      final svc = await _make();
+      final svc = await make();
       // Trigger 5 failure cycles to enter cooldown
       for (int i = 0; i < 5; i++) {
         await svc.enqueueEvent('/ep$i', {});
-        await svc.retryQueuedEvents((_e, _p) async {
+        await svc.retryQueuedEvents((e, p) async {
           throw Exception('fail');
         });
       }
@@ -231,10 +231,10 @@ void main() {
 
   group('forceExitCooldown', () {
     test('immediately exits cooldown state', () async {
-      final svc = await _make();
+      final svc = await make();
       for (int i = 0; i < 5; i++) {
         await svc.enqueueEvent('/ep$i', {});
-        await svc.retryQueuedEvents((_e, _p) async {
+        await svc.retryQueuedEvents((e, p) async {
           throw Exception('fail');
         });
       }
@@ -244,10 +244,10 @@ void main() {
     });
 
     test('enqueue succeeds after forceExitCooldown', () async {
-      final svc = await _make();
+      final svc = await make();
       for (int i = 0; i < 5; i++) {
         await svc.enqueueEvent('/ep$i', {});
-        await svc.retryQueuedEvents((_e, _p) async {
+        await svc.retryQueuedEvents((e, p) async {
           throw Exception('fail');
         });
       }
@@ -263,26 +263,26 @@ void main() {
 
   group('getQueueStatus', () {
     test('returns map with is_in_cooldown key', () async {
-      final svc = await _make();
-      final status = await svc.getQueueStatus();
+      final svc = await make();
+      final status = svc.getQueueStatus();
       expect(status.containsKey('is_in_cooldown'), isTrue);
     });
 
     test('returns map with consecutive_failures key', () async {
-      final svc = await _make();
-      final status = await svc.getQueueStatus();
+      final svc = await make();
+      final status = svc.getQueueStatus();
       expect(status.containsKey('consecutive_failures'), isTrue);
     });
 
     test('is_in_cooldown false initially', () async {
-      final svc = await _make();
-      final status = await svc.getQueueStatus();
+      final svc = await make();
+      final status = svc.getQueueStatus();
       expect(status['is_in_cooldown'], isFalse);
     });
 
     test('consecutive_failures 0 initially', () async {
-      final svc = await _make();
-      final status = await svc.getQueueStatus();
+      final svc = await make();
+      final status = svc.getQueueStatus();
       expect(status['consecutive_failures'], 0);
     });
   });
@@ -293,28 +293,28 @@ void main() {
 
   group('clearAll', () {
     test('empties queue', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
       await svc.clearAll();
       expect((await svc.getPendingEvents()).length, 0);
     });
 
     test('resets consecutive failures', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {
+      await svc.retryQueuedEvents((e, p) async {
         throw Exception('fail');
       });
       await svc.clearAll();
-      final status = await svc.getQueueStatus();
+      final status = svc.getQueueStatus();
       expect(status['consecutive_failures'], 0);
     });
 
     test('isInCooldown false after clearAll', () async {
-      final svc = await _make();
+      final svc = await make();
       for (int i = 0; i < 5; i++) {
         await svc.enqueueEvent('/ep$i', {});
-        await svc.retryQueuedEvents((_e, _p) async {
+        await svc.retryQueuedEvents((e, p) async {
           throw Exception('fail');
         });
       }
@@ -329,21 +329,21 @@ void main() {
 
   group('exportFailedEventsForUpload', () {
     test('returns map with player_id key', () async {
-      final svc = await _make();
+      final svc = await make();
       final export = await svc.exportFailedEventsForUpload('player123');
       expect(export['player_id'], 'player123');
     });
 
     test('contains export_timestamp key', () async {
-      final svc = await _make();
+      final svc = await make();
       final export = await svc.exportFailedEventsForUpload('player123');
       expect(export.containsKey('export_timestamp'), isTrue);
     });
 
     test('contains failed_events key', () async {
-      final svc = await _make();
+      final svc = await make();
       await svc.enqueueEvent('/ep', {});
-      await svc.retryQueuedEvents((_e, _p) async {
+      await svc.retryQueuedEvents((e, p) async {
         throw Exception('fail');
       });
       final export = await svc.exportFailedEventsForUpload('p1');
@@ -358,7 +358,7 @@ void main() {
   group('state persistence', () {
     test('events survive service restart (new instance + initialize)',
         () async {
-      final svc1 = await _make();
+      final svc1 = await make();
       await svc1.enqueueEvent('/persisted', {'data': 'keep'});
 
       // Create new service instance and initialize from same Hive

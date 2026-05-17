@@ -69,7 +69,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('ReceivedGift.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String id = 'g1',
       String from = 'Alice',
       String? avatarUrl,
@@ -93,63 +93,63 @@ void main() {
         };
 
     test('parses id', () {
-      expect(ReceivedGift.fromJson(_json(id: 'gift_x')).id, 'gift_x');
+      expect(ReceivedGift.fromJson(makeJson(id: 'gift_x')).id, 'gift_x');
     });
 
     test('parses from', () {
-      expect(ReceivedGift.fromJson(_json(from: 'Bob')).from, 'Bob');
+      expect(ReceivedGift.fromJson(makeJson(from: 'Bob')).from, 'Bob');
     });
 
     test('parses avatarUrl', () {
       expect(
-          ReceivedGift.fromJson(_json(avatarUrl: 'https://img/a.png'))
+          ReceivedGift.fromJson(makeJson(avatarUrl: 'https://img/a.png'))
               .avatarUrl,
           'https://img/a.png');
     });
 
     test('avatarUrl is null when absent', () {
-      expect(ReceivedGift.fromJson(_json()).avatarUrl, isNull);
+      expect(ReceivedGift.fromJson(makeJson()).avatarUrl, isNull);
     });
 
     test('parses giftName', () {
-      expect(ReceivedGift.fromJson(_json(giftName: 'Coins')).giftName, 'Coins');
+      expect(ReceivedGift.fromJson(makeJson(giftName: 'Coins')).giftName, 'Coins');
     });
 
     test('parses icon', () {
       expect(
-          ReceivedGift.fromJson(_json(icon: 'flash_on')).icon, Icons.flash_on);
+          ReceivedGift.fromJson(makeJson(icon: 'flash_on')).icon, Icons.flash_on);
     });
 
     test('unknown icon falls back to card_giftcard', () {
-      expect(ReceivedGift.fromJson(_json(icon: 'unknown')).icon,
+      expect(ReceivedGift.fromJson(makeJson(icon: 'unknown')).icon,
           Icons.card_giftcard);
     });
 
     test('parses color via resolveColor', () {
-      expect(ReceivedGift.fromJson(_json(color: 'red')).color,
+      expect(ReceivedGift.fromJson(makeJson(color: 'red')).color,
           const Color(0xFFEF4444));
     });
 
     test('parses timeLabel', () {
-      expect(ReceivedGift.fromJson(_json(timeLabel: '1 day ago')).timeLabel,
+      expect(ReceivedGift.fromJson(makeJson(timeLabel: '1 day ago')).timeLabel,
           '1 day ago');
     });
 
     test('parses message', () {
-      expect(ReceivedGift.fromJson(_json(message: 'Good luck!')).message,
+      expect(ReceivedGift.fromJson(makeJson(message: 'Good luck!')).message,
           'Good luck!');
     });
 
     test('message is null when absent', () {
-      expect(ReceivedGift.fromJson(_json()).message, isNull);
+      expect(ReceivedGift.fromJson(makeJson()).message, isNull);
     });
 
     test('parses claimed', () {
-      expect(ReceivedGift.fromJson(_json(claimed: true)).claimed, isTrue);
+      expect(ReceivedGift.fromJson(makeJson(claimed: true)).claimed, isTrue);
     });
 
     test('claimed defaults to false when absent', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('claimed');
       expect(ReceivedGift.fromJson(json).claimed, isFalse);
     });
@@ -160,7 +160,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SendableGift.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String id = 'sg1',
       String name = 'Energy Pack',
       String description = '5 refills',
@@ -178,33 +178,33 @@ void main() {
         };
 
     test('parses id', () {
-      expect(SendableGift.fromJson(_json(id: 'sg_x')).id, 'sg_x');
+      expect(SendableGift.fromJson(makeJson(id: 'sg_x')).id, 'sg_x');
     });
 
     test('parses name', () {
-      expect(SendableGift.fromJson(_json(name: 'Gem Gift')).name, 'Gem Gift');
+      expect(SendableGift.fromJson(makeJson(name: 'Gem Gift')).name, 'Gem Gift');
     });
 
     test('parses description', () {
-      expect(SendableGift.fromJson(_json(description: '10 gems')).description,
+      expect(SendableGift.fromJson(makeJson(description: '10 gems')).description,
           '10 gems');
     });
 
     test('parses icon', () {
-      expect(SendableGift.fromJson(_json(icon: 'diamond')).icon, Icons.diamond);
+      expect(SendableGift.fromJson(makeJson(icon: 'diamond')).icon, Icons.diamond);
     });
 
     test('unknown icon falls back to card_giftcard', () {
       expect(
-          SendableGift.fromJson(_json(icon: 'unk')).icon, Icons.card_giftcard);
+          SendableGift.fromJson(makeJson(icon: 'unk')).icon, Icons.card_giftcard);
     });
 
     test('parses cost', () {
-      expect(SendableGift.fromJson(_json(cost: '100 Coins')).cost, '100 Coins');
+      expect(SendableGift.fromJson(makeJson(cost: '100 Coins')).cost, '100 Coins');
     });
 
     test('parses color', () {
-      expect(SendableGift.fromJson(_json(color: 'purple')).color,
+      expect(SendableGift.fromJson(makeJson(color: 'purple')).color,
           const Color(0xFF8B5CF6));
     });
 
@@ -222,7 +222,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('GiftHistoryItem.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> makeJson({
       String id = 'h1',
       String type = 'sent',
       String to = 'Bob',
@@ -246,40 +246,40 @@ void main() {
         };
 
     test('parses id', () {
-      expect(GiftHistoryItem.fromJson(_json(id: 'h99')).id, 'h99');
+      expect(GiftHistoryItem.fromJson(makeJson(id: 'h99')).id, 'h99');
     });
 
     test('parses type', () {
       expect(
-          GiftHistoryItem.fromJson(_json(type: 'received')).type, 'received');
+          GiftHistoryItem.fromJson(makeJson(type: 'received')).type, 'received');
     });
 
     test('type defaults to "sent" when absent', () {
-      final json = _json();
+      final json = makeJson();
       json.remove('type');
       expect(GiftHistoryItem.fromJson(json).type, 'sent');
     });
 
     test('parses to', () {
-      expect(GiftHistoryItem.fromJson(_json(to: 'Charlie')).to, 'Charlie');
+      expect(GiftHistoryItem.fromJson(makeJson(to: 'Charlie')).to, 'Charlie');
     });
 
     test('parses from', () {
-      expect(GiftHistoryItem.fromJson(_json(from: 'Dave')).from, 'Dave');
+      expect(GiftHistoryItem.fromJson(makeJson(from: 'Dave')).from, 'Dave');
     });
 
     test('parses giftName', () {
-      expect(GiftHistoryItem.fromJson(_json(giftName: '1000 Coins')).giftName,
+      expect(GiftHistoryItem.fromJson(makeJson(giftName: '1000 Coins')).giftName,
           '1000 Coins');
     });
 
     test('parses status', () {
       expect(
-          GiftHistoryItem.fromJson(_json(status: 'Claimed')).status, 'Claimed');
+          GiftHistoryItem.fromJson(makeJson(status: 'Claimed')).status, 'Claimed');
     });
 
     test('parses icon', () {
-      expect(GiftHistoryItem.fromJson(_json(icon: 'monetization_on')).icon,
+      expect(GiftHistoryItem.fromJson(makeJson(icon: 'monetization_on')).icon,
           Icons.monetization_on);
     });
   });

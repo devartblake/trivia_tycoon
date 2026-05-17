@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../core/confetti_theme.dart';
 import 'confetti_shape.dart';
 
@@ -75,7 +75,7 @@ class ConfettiSettings {
       'density': density,
       'gravity': gravity,
       'images': images,
-      'colors': colors.map((c) => c.value).toList(),
+      'colors': colors.map((c) => c.toARGB32()).toList(),
       'shapes': shapes.map((s) => s.index).toList(),
       'enableGravity': enableGravity,
       'enableRotation': enableRotation,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 import 'package:trivia_tycoon/animations/animations.dart';
 
@@ -92,8 +93,8 @@ class SwipeItemState extends State<SwipeItem> {
             child: Transform(
               alignment: FractionalOffset(0.5, 0.5),
               transform: Matrix4.identity()
-                ..translate(swipeDistance * swipeSign * -0.5, 0.0)
-                ..scale(0.5 + 0.5 * swipeRatio),
+                ..translateByVector3(Vector3(swipeDistance * swipeSign * -0.5, 0.0, 0.0))
+                ..scaleByVector3(Vector3(0.5 + 0.5 * swipeRatio, 0.5 + 0.5 * swipeRatio, 1.0)),
               child: Stack(alignment: Alignment.center, children: [
                 Container(
                   width: 28,

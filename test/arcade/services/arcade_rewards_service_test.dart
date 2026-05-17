@@ -67,25 +67,25 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('ArcadeRewardsService difficulty scaling', () {
-    ArcadeRewards _rewardsFor(ArcadeDifficulty diff) => service.computeRewards(
+    ArcadeRewards rewardsFor(ArcadeDifficulty diff) => service.computeRewards(
           _result(score: 500, difficulty: diff),
         );
 
     test('insane yields more XP than easy', () {
-      final insane = _rewardsFor(ArcadeDifficulty.insane);
-      final easy = _rewardsFor(ArcadeDifficulty.easy);
+      final insane = rewardsFor(ArcadeDifficulty.insane);
+      final easy = rewardsFor(ArcadeDifficulty.easy);
       expect(insane.xp, greaterThan(easy.xp));
     });
 
     test('hard yields more XP than normal', () {
-      final hard = _rewardsFor(ArcadeDifficulty.hard);
-      final normal = _rewardsFor(ArcadeDifficulty.normal);
+      final hard = rewardsFor(ArcadeDifficulty.hard);
+      final normal = rewardsFor(ArcadeDifficulty.normal);
       expect(hard.xp, greaterThan(normal.xp));
     });
 
     test('difficulty order is easy < normal < hard < insane for XP', () {
       final xps =
-          ArcadeDifficulty.values.map((d) => _rewardsFor(d).xp).toList();
+          ArcadeDifficulty.values.map((d) => rewardsFor(d).xp).toList();
       for (int i = 1; i < xps.length; i++) {
         expect(xps[i], greaterThanOrEqualTo(xps[i - 1]));
       }

@@ -1,4 +1,4 @@
-import 'dart:math' as Math;
+﻿import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../models/spin_system_models.dart';
@@ -361,12 +361,12 @@ class SparklePainter extends CustomPainter {
     for (int i = 0; i < 4; i++) {
       final angle = (i * 3.14159 / 2) + (animation * 3.14159 / 4);
       final startOffset = Offset(
-        center.dx + radius * 0.6 * Math.cos(angle),
-        center.dy + radius * 0.6 * Math.sin(angle),
+        center.dx + radius * 0.6 * math.cos(angle),
+        center.dy + radius * 0.6 * math.sin(angle),
       );
       final endOffset = Offset(
-        center.dx + radius * Math.cos(angle),
-        center.dy + radius * Math.sin(angle),
+        center.dx + radius * math.cos(angle),
+        center.dy + radius * math.sin(angle),
       );
 
       canvas.drawLine(startOffset, endOffset, paint);

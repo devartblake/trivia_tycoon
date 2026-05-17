@@ -683,7 +683,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -793,7 +793,7 @@ class _EnhancedScoreSummaryScreenState extends State<EnhancedScoreSummaryScreen>
                 "${entry.value} correct",
                 Icons.book,
               );
-            }).toList(),
+            }),
           ],
         ],
       ),

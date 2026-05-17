@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
 import '../../game/controllers/onboarding_controller.dart';
+import '../../game/providers/multi_profile_providers.dart';
 import 'steps/welcome_step.dart';
 import 'steps/username_step.dart';
 import 'steps/age_group_step.dart';
@@ -19,7 +20,6 @@ import 'steps/first_session_challenge_step.dart';
 import 'steps/reward_reveal_step.dart';
 import 'steps/completion_step.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../game/providers/wallet_providers.dart';
 
 // Confetti particle class
 class Confetti {
@@ -297,6 +297,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       await profileService.saveSynaptixMode(synaptixMode);
     }
     await profileService.savePreferredHomeSurface(preferredSurface);
+    ref.read(profileSelectedProvider.notifier).state = true;
+
+    try {
+      final multiProfileService = ref.read(multiProfileServiceProvider);
+      final existingProfiles = await multiProfileService.getAllProfiles();
+      if (existingProfiles.isEmpty) {
+        await multiProfileService.createProfile(
+          name: username,
+          avatar: avatar,
+          country: country,
+          ageGroup: ageGroup,
+        );
+      }
+    } catch (e) {
+      LogManager.debug('[Onboarding] First profile creation skipped: $e');
+    }
 
     final profileSyncService = ProfileSyncService(
       apiService: serviceManager.apiService,
@@ -345,8 +361,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
     // Seed starter economy rewards
     try {
-      ref.read(walletServiceProvider).addCoins(250);
-      await profileService.addXP(100);
+      await ref
+          .read(accountRewardsProvider.notifier)
+          .claim('onboarding_complete', allowLocalFallback: true);
     } catch (e) {
       LogManager.debug('[Onboarding] Starter reward seeding failed: $e');
     }
@@ -363,7 +380,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     ref.read(userAgeGroupProvider.notifier).state = ageGroup;
 
     if (mounted) {
-      context.go('/home');
+      context.go('/account-link?from=onboarding');
     }
   }
 

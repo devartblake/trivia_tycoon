@@ -15,6 +15,7 @@ class PremiumCheckoutLauncher {
     required String purchaseLabel,
   }) async {
     final status = await ref.read(storeSystemStatusProvider.future);
+    if (!context.mounted) return;
     if (status['storeEnabled'] == false || status['paymentsEnabled'] == false) {
       _showSnack(
         context,
@@ -35,6 +36,7 @@ class PremiumCheckoutLauncher {
     final playerId = await ref.read(currentUserIdProvider.future);
     final storeService = ref.read(storeServiceProvider);
 
+    if (!context.mounted) return;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -74,9 +76,8 @@ class PremiumCheckoutLauncher {
               ),
             );
 
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
 
       final redirectUrl =
           (useStripe ? response['checkoutUrl'] : response['approveUrl'])
@@ -92,6 +93,7 @@ class PremiumCheckoutLauncher {
 
       final uri = Uri.tryParse(redirectUrl);
       if (uri == null || !await canLaunchUrl(uri)) {
+        if (!context.mounted) return;
         _showSnack(
           context,
           'Unable to open the subscription page on this device.',
@@ -105,6 +107,7 @@ class PremiumCheckoutLauncher {
       ref.invalidate(storeSubscriptionStatusProvider(playerId));
       ref.invalidate(premiumAccessStatusProvider);
 
+      if (!context.mounted) return;
       _showSnack(
         context,
         useStripe
@@ -113,14 +116,12 @@ class PremiumCheckoutLauncher {
         const Color(0xFF10B981),
       );
     } on ApiRequestException catch (e) {
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
       _showSnack(context, e.message, const Color(0xFFEF4444));
     } catch (_) {
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
       _showSnack(
         context,
         'Subscription checkout failed. Please try again.',

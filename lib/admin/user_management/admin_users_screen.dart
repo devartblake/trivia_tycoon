@@ -844,16 +844,16 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                     'isVerified': isVerified,
                     'temporaryPassword': tempPassword,
                   });
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   await _loadUsersFromBackend();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('User created successfully'),
                     behavior: SnackBarBehavior.floating,
                   ));
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Failed to create user: $e'),
                     behavior: SnackBarBehavior.floating,
@@ -912,16 +912,16 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                     'role': selectedRole.name,
                     'isVerified': verified,
                   });
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   await _loadUsersFromBackend();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('User updated'),
                     behavior: SnackBarBehavior.floating,
                   ));
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Failed to update user: $e'),
                   ));

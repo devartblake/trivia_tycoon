@@ -62,7 +62,7 @@ class _SkillBranchDetailScreenState
   @override
   void initState() {
     super.initState();
-    _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
+    _transform.value = vmath.Matrix4.identity()..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
     _showPath = widget.showPathInitially;
     if (widget.initialStep != null) {
       _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
@@ -79,6 +79,7 @@ class _SkillBranchDetailScreenState
     });
 
     Future.microtask(() {
+      if (!mounted) return;
       final args = GoRouterState.of(context).extra as BranchDetailArgs?;
       if (args?.initialStep != null) {
         _listCtrl.jumpTo((args!.initialStep!) * 88.0);
@@ -780,8 +781,8 @@ class _SkillBranchDetailScreenState
                 if (!mounted) return;
                 setState(() {
                   _transform.value = vmath.Matrix4.identity()
-                    ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
-                    ..scale(0.9, 0.9);
+                    ..translateByVector3(vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
+                    ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
                 });
               });
             }
@@ -866,13 +867,13 @@ class _SkillBranchDetailScreenState
                     bottom: 12,
                     child: _ZoomPad(
                       onIn: () => setState(() =>
-                          _transform.value = _transform.value.scaled(1.15)),
+                          _transform.value = _transform.value.scaledByDouble(1.15, 1.15, 1.0, 1.0)),
                       onOut: () => setState(() =>
-                          _transform.value = _transform.value.scaled(0.87)),
+                          _transform.value = _transform.value.scaledByDouble(0.87, 0.87, 1.0, 1.0)),
                       onReset: () => setState(
                           () => _transform.value = (vmath.Matrix4.identity()
-                            ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
-                            ..scale(0.9, 0.9))),
+                            ..translateByVector3(vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
+                            ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0)))),
                     ),
                   ),
                   // Add overlay controls for debugging (optional)

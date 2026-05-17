@@ -128,7 +128,7 @@ class _FakeQuestionRepository implements QuestionRepository {
 }
 
 void main() {
-  ProviderContainer _containerWithRepo(QuestionRepository repo) {
+  ProviderContainer containerWithRepo(QuestionRepository repo) {
     return ProviderContainer(
       overrides: [
         question_data.questionRepositoryProvider.overrideWithValue(repo),
@@ -137,7 +137,7 @@ void main() {
   }
 
   test('question providers normalize repository outputs', () async {
-    final container = _containerWithRepo(_FakeQuestionRepository());
+    final container = containerWithRepo(_FakeQuestionRepository());
     addTearDown(container.dispose);
 
     final questionStats =
@@ -168,7 +168,7 @@ void main() {
   test(
       'serviceStatusProvider returns normalized repository-backed status payload',
       () async {
-    final container = _containerWithRepo(_FakeQuestionRepository());
+    final container = containerWithRepo(_FakeQuestionRepository());
     addTearDown(container.dispose);
 
     final status = await container.read(serviceStatusProvider.future);

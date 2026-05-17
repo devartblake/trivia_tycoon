@@ -632,7 +632,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
                     ),
                   ),
                   child: DropdownButtonFormField<String>(
-                    value: _selectedTheme,
+                    initialValue: _selectedTheme,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       icon: Icon(
@@ -799,7 +799,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             spacing: 12,
             runSpacing: 12,
             children: _colorSwatches.map((color) {
-              final isSelected = color.value == currentColor.value;
+              final isSelected = color.toARGB32() == currentColor.toARGB32();
               return GestureDetector(
                 onTap: () {
                   ref

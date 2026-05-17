@@ -85,7 +85,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('RankedLeaderboardResponse.fromJson', () {
-    Map<String, dynamic> _responseJson({
+    Map<String, dynamic> responseJson({
       String seasonId = 's2025',
       int page = 1,
       int pageSize = 10,
@@ -102,43 +102,43 @@ void main() {
 
     test('parses seasonId', () {
       final resp = RankedLeaderboardResponse.fromJson(
-          _responseJson(seasonId: 'season_7'));
+          responseJson(seasonId: 'season_7'));
       expect(resp.seasonId, 'season_7');
     });
 
     test('parses page', () {
       expect(
-          RankedLeaderboardResponse.fromJson(_responseJson(page: 3)).page, 3);
+          RankedLeaderboardResponse.fromJson(responseJson(page: 3)).page, 3);
     });
 
     test('parses pageSize', () {
       expect(
-          RankedLeaderboardResponse.fromJson(_responseJson(pageSize: 25))
+          RankedLeaderboardResponse.fromJson(responseJson(pageSize: 25))
               .pageSize,
           25);
     });
 
     test('parses total', () {
       expect(
-          RankedLeaderboardResponse.fromJson(_responseJson(total: 500)).total,
+          RankedLeaderboardResponse.fromJson(responseJson(total: 500)).total,
           500);
     });
 
     test('parses items list', () {
-      final resp = RankedLeaderboardResponse.fromJson(_responseJson(
+      final resp = RankedLeaderboardResponse.fromJson(responseJson(
           items: [_entryJson(playerId: 'p1'), _entryJson(playerId: 'p2')]));
       expect(resp.items.length, 2);
     });
 
     test('item fields parsed correctly', () {
-      final resp = RankedLeaderboardResponse.fromJson(_responseJson(
+      final resp = RankedLeaderboardResponse.fromJson(responseJson(
           items: [_entryJson(playerId: 'top_player', seasonRank: 1)]));
       expect(resp.items.first.playerId, 'top_player');
       expect(resp.items.first.seasonRank, 1);
     });
 
     test('empty items list', () {
-      final resp = RankedLeaderboardResponse.fromJson(_responseJson(items: []));
+      final resp = RankedLeaderboardResponse.fromJson(responseJson(items: []));
       expect(resp.items, isEmpty);
     });
   });

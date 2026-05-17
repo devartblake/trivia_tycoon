@@ -426,8 +426,8 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
       final service = ref.read(multiProfileServiceProvider);
       final success = await service.setActiveProfile(profile.id);
 
-      if (success && mounted) {
-        // Show a brief confirmation
+      if (success) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Welcome back, ${profile.name}!'),
@@ -436,23 +436,9 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
           ),
         );
 
-        // After successfully selecting/switching to a profile, add this:
-        await ref
-            .read(onboardingProgressProvider.notifier)
-            .markOnboardingCompleted(true);
-
-        // And update the onboarding phase
-        final serviceManager = ref.read(serviceManagerProvider);
-        await serviceManager.onboardingSettingsService
-            .setOnboardingCompleted(true);
-        await serviceManager.onboardingSettingsService
-            .setHasCompletedOnboarding(true);
-
-        // Mark profile as selected for this session — the router will now
-        // allow navigation past the profile-selection gate.
         ref.read(profileSelectedProvider.notifier).state = true;
 
-        // Navigate to home screen
+        if (!mounted) return;
         context.go('/home');
       }
     } catch (e) {

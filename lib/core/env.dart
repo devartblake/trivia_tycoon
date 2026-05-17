@@ -17,6 +17,7 @@ class EnvConfig {
   static String? _presenceHubUrl;
   static String? _notifyHubUrl;
   static String? _appRedirectBaseUrl;
+  static String? _apiHealthUrl;
   static bool _cryptoSurfacesEnabled = true;
   static bool _cryptoWritesEnabled = true;
   static Set<String> _enabledCryptoNetworks = const {'solana', 'xrp'};
@@ -55,6 +56,12 @@ class EnvConfig {
   /// Optional frontend/app base URL for payment return routing.
   static String? get appRedirectBaseUrl => _appRedirectBaseUrl;
 
+  /// Public backend health endpoint used by startup readiness checks.
+  static String get apiHealthUrl {
+    assert(_apiHealthUrl != null, 'API_HEALTH_URL is not loaded from .env');
+    return _apiHealthUrl!;
+  }
+
   /// Enables player-facing crypto wallet surfaces.
   static bool get cryptoSurfacesEnabled => _cryptoSurfacesEnabled;
 
@@ -86,6 +93,29 @@ class EnvConfig {
     return baseUri
         .replace(pathSegments: mergedSegments, fragment: '')
         .toString();
+  }
+
+  static String _resolveApiHealthUrl({
+    required String apiBaseUrl,
+    String? configuredHealthUrl,
+    String? configuredHealthPath,
+  }) {
+    final healthUrl = configuredHealthUrl?.trim();
+    if (healthUrl != null && healthUrl.isNotEmpty) {
+      return _normalizeApiBaseUrlForRuntime(healthUrl);
+    }
+
+    final healthPath = configuredHealthPath?.trim();
+    final path = healthPath == null || healthPath.isEmpty
+        ? '/healthz'
+        : healthPath;
+
+    final parsedPath = Uri.tryParse(path);
+    if (parsedPath != null && parsedPath.hasScheme) {
+      return _normalizeApiBaseUrlForRuntime(path);
+    }
+
+    return _joinWsPath(apiBaseUrl, path);
   }
 
   static String _normalizeApiBaseUrlForRuntime(String rawUrl) {
@@ -146,19 +176,39 @@ class EnvConfig {
   /// that rely on these variables are created.
   static Future<void> load() async {
     try {
-      await dotenv.load(fileName: ".env.example");
+      const envFile =
+          String.fromEnvironment('ENV_FILE', defaultValue: '.env.example');
+      await dotenv.load(fileName: envFile);
 
       // Load variables from the environment
-      final rawApiBaseUrl =
-          dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
+      const dartDefinedApiBaseUrl = String.fromEnvironment('API_BASE_URL');
+      const dartDefinedApiHealthUrl = String.fromEnvironment('API_HEALTH_URL');
+      const dartDefinedApiHealthPath =
+          String.fromEnvironment('API_HEALTH_PATH');
+      const dartDefinedApiWsBaseUrl = String.fromEnvironment('API_WS_BASE_URL');
+
+      final rawApiBaseUrl = dartDefinedApiBaseUrl.isNotEmpty
+          ? dartDefinedApiBaseUrl
+          : dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
       _apiBaseUrl = _normalizeApiBaseUrlForRuntime(rawApiBaseUrl);
+      _apiHealthUrl = _resolveApiHealthUrl(
+        apiBaseUrl: apiBaseUrl,
+        configuredHealthUrl: dartDefinedApiHealthUrl.isNotEmpty
+            ? dartDefinedApiHealthUrl
+            : dotenv.env['API_HEALTH_URL'],
+        configuredHealthPath: dartDefinedApiHealthPath.isNotEmpty
+            ? dartDefinedApiHealthPath
+            : dotenv.env['API_HEALTH_PATH'],
+      );
 
       // Derive WebSocket URL from HTTP URL
       // Convert http:// to ws:// and https:// to wss://
-      _apiWsBaseUrl =
-          '${apiBaseUrl.replaceFirst('http://', 'ws://').replaceFirst('https://', 'wss://')}/ws';
+      _apiWsBaseUrl = dartDefinedApiWsBaseUrl.isNotEmpty
+          ? _normalizeApiBaseUrlForRuntime(dartDefinedApiWsBaseUrl)
+          : '${apiBaseUrl.replaceFirst('http://', 'ws://').replaceFirst('https://', 'wss://')}/ws';
 
       LogManager.debug('[EnvConfig] API Base: $apiBaseUrl');
+      LogManager.debug('[EnvConfig] API Health: $apiHealthUrl');
       LogManager.debug('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
       _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
@@ -190,6 +240,7 @@ class EnvConfig {
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||
           _apiWsBaseUrl == null ||
+          _apiHealthUrl == null ||
           _matchHubUrl == null ||
           _presenceHubUrl == null ||
           _notifyHubUrl == null) {
@@ -198,6 +249,7 @@ class EnvConfig {
         ERROR: One or more environment variables not found in .env file.
         Please ensure your .env file is in the root of your project.
         API_BASE_URL: $_apiBaseUrl
+        API_HEALTH_URL: $_apiHealthUrl
         API_WS_BASE_URL: $_apiWsBaseUrl
         API_MATCH_HUB_URL: $_matchHubUrl
         API_PRESENCE_HUB_URL: $_presenceHubUrl

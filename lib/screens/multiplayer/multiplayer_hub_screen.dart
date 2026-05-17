@@ -234,9 +234,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 onTap: () async {
                   final ok =
                       await ref.read(multiplayerServiceProvider).quickMatch();
-                  if (context.mounted && ok) {
-                    context.push('/multiplayer/find');
-                  }
+                  if (!mounted) return;
+                  if (ok) context.push('/multiplayer/find');
                 },
               ),
             ),
@@ -381,7 +380,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
 
   Widget _buildRoomsList(List<Map<String, dynamic>> rooms, bool isDark) {
     if (rooms.isEmpty) {
-      return Container(
+      return SizedBox(
         height: 200,
         child: Center(
           // Add explicit Center widget
@@ -458,7 +457,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
   }
 
   Widget _buildLoadingState() {
-    return Container(
+    return SizedBox(
       height: 150,
       child: const Center(
         child: Column(
@@ -474,7 +473,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
   }
 
   Widget _buildErrorState(Object error) {
-    return Container(
+    return SizedBox(
       height: 150,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

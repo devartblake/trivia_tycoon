@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -245,7 +246,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
       builder: (context, child) => Transform(
         alignment: Alignment.center,
         transform: Matrix4.identity()
-          ..translate(iconTranslateAnimation.value)
+          ..translateByVector3(Vector3(iconTranslateAnimation.value, 0.0, 0.0))
           ..rotateZ(iconRotationAnimation.value),
         child: child,
       ),

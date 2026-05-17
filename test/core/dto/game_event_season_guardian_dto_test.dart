@@ -9,7 +9,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('GameEventDto', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'id': 'e1',
           'name': 'Friday Night Quiz',
           'status': 'live',
@@ -21,59 +21,59 @@ void main() {
         };
 
     test('fromJson parses id', () {
-      expect(GameEventDto.fromJson(_full()).id, 'e1');
+      expect(GameEventDto.fromJson(full()).id, 'e1');
     });
 
     test('fromJson parses name', () {
-      expect(GameEventDto.fromJson(_full()).name, 'Friday Night Quiz');
+      expect(GameEventDto.fromJson(full()).name, 'Friday Night Quiz');
     });
 
     test('fromJson parses status', () {
-      expect(GameEventDto.fromJson(_full()).status, 'live');
+      expect(GameEventDto.fromJson(full()).status, 'live');
     });
 
     test('fromJson status defaults upcoming when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('status');
+      final j = Map<String, dynamic>.from(full())..remove('status');
       expect(GameEventDto.fromJson(j).status, 'upcoming');
     });
 
     test('fromJson parses startsAt as DateTime', () {
-      expect(GameEventDto.fromJson(_full()).startsAt, isA<DateTime>());
-      expect(GameEventDto.fromJson(_full()).startsAt.year, 2025);
+      expect(GameEventDto.fromJson(full()).startsAt, isA<DateTime>());
+      expect(GameEventDto.fromJson(full()).startsAt.year, 2025);
     });
 
     test('fromJson entryFee defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('entryFee');
+      final j = Map<String, dynamic>.from(full())..remove('entryFee');
       expect(GameEventDto.fromJson(j).entryFee, 0);
     });
 
     test('fromJson maxPlayers defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('maxPlayers');
+      final j = Map<String, dynamic>.from(full())..remove('maxPlayers');
       expect(GameEventDto.fromJson(j).maxPlayers, 0);
     });
 
     test('fromJson currentPlayers defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('currentPlayers');
+      final j = Map<String, dynamic>.from(full())..remove('currentPlayers');
       expect(GameEventDto.fromJson(j).currentPlayers, 0);
     });
 
     test('fromJson aliveCount defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('aliveCount');
+      final j = Map<String, dynamic>.from(full())..remove('aliveCount');
       expect(GameEventDto.fromJson(j).aliveCount, 0);
     });
 
     test('toJson contains id', () {
-      expect(GameEventDto.fromJson(_full()).toJson()['id'], 'e1');
+      expect(GameEventDto.fromJson(full()).toJson()['id'], 'e1');
     });
 
     test('toJson startsAt is ISO string', () {
-      final j = GameEventDto.fromJson(_full()).toJson();
+      final j = GameEventDto.fromJson(full()).toJson();
       expect(j['startsAt'], isA<String>());
       expect((j['startsAt'] as String).contains('2025'), isTrue);
     });
 
     test('toJson contains all 8 keys', () {
-      final j = GameEventDto.fromJson(_full()).toJson();
+      final j = GameEventDto.fromJson(full()).toJson();
       for (final key in [
         'id',
         'name',
@@ -155,7 +155,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SeasonDto', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'id': 's1',
           'name': 'Season One',
           'startsAt': '2025-01-01T00:00:00.000Z',
@@ -164,43 +164,43 @@ void main() {
         };
 
     test('fromJson parses id and name', () {
-      final s = SeasonDto.fromJson(_full());
+      final s = SeasonDto.fromJson(full());
       expect(s.id, 's1');
       expect(s.name, 'Season One');
     });
 
     test('fromJson parses isActive true', () {
-      expect(SeasonDto.fromJson(_full()).isActive, isTrue);
+      expect(SeasonDto.fromJson(full()).isActive, isTrue);
     });
 
     test('fromJson isActive defaults false when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('isActive');
+      final j = Map<String, dynamic>.from(full())..remove('isActive');
       expect(SeasonDto.fromJson(j).isActive, isFalse);
     });
 
     test('fromJson startsAt as DateTime with correct year', () {
-      expect(SeasonDto.fromJson(_full()).startsAt.year, 2025);
+      expect(SeasonDto.fromJson(full()).startsAt.year, 2025);
     });
 
     test('fromJson endsAt as DateTime', () {
-      expect(SeasonDto.fromJson(_full()).endsAt, isA<DateTime>());
+      expect(SeasonDto.fromJson(full()).endsAt, isA<DateTime>());
     });
 
     test('toJson contains all 5 keys', () {
-      final j = SeasonDto.fromJson(_full()).toJson();
+      final j = SeasonDto.fromJson(full()).toJson();
       for (final key in ['id', 'name', 'startsAt', 'endsAt', 'isActive']) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
     });
 
     test('toJson dates are ISO strings', () {
-      final j = SeasonDto.fromJson(_full()).toJson();
+      final j = SeasonDto.fromJson(full()).toJson();
       expect(j['startsAt'], isA<String>());
       expect(j['endsAt'], isA<String>());
     });
 
     test('round-trip preserves id and isActive', () {
-      final s = SeasonDto.fromJson(_full());
+      final s = SeasonDto.fromJson(full());
       final j = s.toJson();
       final s2 = SeasonDto.fromJson(j);
       expect(s2.id, 's1');

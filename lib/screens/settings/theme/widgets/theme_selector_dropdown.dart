@@ -81,7 +81,7 @@ class _ThemeSelectorDropdownState extends ConsumerState<ThemeSelectorDropdown>
       child: ScaleTransition(
         scale: _scaleAnimation ?? const AlwaysStoppedAnimation(1.0),
         child: DropdownButtonFormField<String>(
-          value: currentTheme.themeName,
+          initialValue: currentTheme.themeName,
           decoration: InputDecoration(
             labelText: 'Theme Style',
             labelStyle: TextStyle(

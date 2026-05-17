@@ -10,8 +10,6 @@ import '../../core/services/api_service.dart';
 import '../../core/services/store/store_return_url_builder.dart';
 import '../../core/services/settings/app_settings.dart';
 import '../../game/models/store_item_model.dart';
-import '../../game/providers/learning_providers.dart'
-    show currentPlayerIdProvider;
 import '../../game/providers/personalization_providers.dart';
 import 'widgets/currency_display_bar.dart';
 import 'widgets/store_category_tab.dart';
@@ -844,6 +842,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
     final playerId = await ref.read(currentUserIdProvider.future);
     final storeService = ref.read(storeServiceProvider);
 
+    if (!mounted) return;
     showDialog(
       context: context,
       barrierDismissible: false,

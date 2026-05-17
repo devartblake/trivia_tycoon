@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
@@ -579,13 +579,13 @@ void main() {
   group('AppSettings — primary color', () {
     test('getPrimaryColor defaults to blue', () async {
       final color = await AppSettings.getPrimaryColor();
-      expect(color.value, const Color(0xFF2196F3).value);
+      expect(color.toARGB32(), const Color(0xFF2196F3).toARGB32());
     });
 
     test('set and get primary color', () async {
       await AppSettings.setPrimaryColor(const Color(0xFFFF0000));
       final color = await AppSettings.getPrimaryColor();
-      expect(color.value, const Color(0xFFFF0000).value);
+      expect(color.toARGB32(), const Color(0xFFFF0000).toARGB32());
     });
   });
 
@@ -775,7 +775,7 @@ void main() {
     test('setColor and getColor', () async {
       await AppSettings.setColor('test_color', const Color(0xFFABCDEF));
       final color = await AppSettings.getColor('test_color');
-      expect(color!.value, const Color(0xFFABCDEF).value);
+      expect(color!.toARGB32(), const Color(0xFFABCDEF).toARGB32());
     });
 
     test('getColor returns null when not set', () async {

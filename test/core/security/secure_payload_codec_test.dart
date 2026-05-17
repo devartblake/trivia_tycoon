@@ -473,7 +473,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SecureSessionStore — reinstall and web fallback', () {
-    SecureSession _makeSession({bool expired = false}) => SecureSession(
+    SecureSession makeSession({bool expired = false}) => SecureSession(
           sessionId: 'session-test',
           protocolVersion: 'syn-sec-v1',
           selectedSuite: 'X25519-HKDF-SHA256-AES256GCM',
@@ -493,7 +493,7 @@ void main() {
 
     test('save then load returns the same session', () async {
       final store = SecureSessionStore(_MemorySecureStorage());
-      final session = _makeSession();
+      final session = makeSession();
 
       await store.save(session);
       final loaded = await store.load();
@@ -505,7 +505,7 @@ void main() {
 
     test('clear then load returns null — reinstall simulation', () async {
       final store = SecureSessionStore(_MemorySecureStorage());
-      await store.save(_makeSession());
+      await store.save(makeSession());
       expect(await store.load(), isNotNull);
 
       await store.clear(); // simulate reinstall wiping secure storage
@@ -545,7 +545,7 @@ void main() {
     test('expired session is persisted and flagged correctly on reload',
         () async {
       final store = SecureSessionStore(_MemorySecureStorage());
-      final expiredSession = _makeSession(expired: true);
+      final expiredSession = makeSession(expired: true);
 
       await store.save(expiredSession);
       final loaded = await store.load();
@@ -563,7 +563,7 @@ void main() {
       final storeA = SecureSessionStore(sharedStorage);
       final storeB = SecureSessionStore(sharedStorage);
 
-      final session = _makeSession();
+      final session = makeSession();
       await storeA.save(session);
 
       final loaded = await storeB.load();

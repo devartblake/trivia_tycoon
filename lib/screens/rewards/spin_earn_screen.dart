@@ -361,6 +361,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       leading: IconButton(
         onPressed: () async {
           await _trackUserAction('back_button_pressed');
+          if (!mounted) return;
           if (context.canPop()) {
             context.pop();
           } else {
@@ -373,6 +374,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         IconButton(
           onPressed: () async {
             await _trackUserAction('settings_button_pressed');
+            if (!mounted) return;
             _showSettingsDialog(theme);
           },
           icon: const Icon(Icons.settings, color: Colors.white),
@@ -857,6 +859,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       'reward_points': _currentSpinSliderValue,
     });
 
+    if (!mounted) return;
     final result = await context.push('/spin-earn/wheel');
 
     await _trackUserAction('returned_from_wheel', additionalData: {

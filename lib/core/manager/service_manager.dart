@@ -311,7 +311,10 @@ class ServiceManager {
       authClient: authHttpClient,
       baseUrl: '$baseUrl/api/v1',
     );
-    final synaptixApi = SynaptixApiClient(httpClient: httpClient);
+    final synaptixApi = SynaptixApiClient(
+      httpClient: httpClient,
+      healthCheckUrl: EnvConfig.apiHealthUrl,
+    );
     final notifyHub = NotificationHub();
     final mHub = MatchHub();
 

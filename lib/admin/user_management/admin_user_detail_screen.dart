@@ -1329,15 +1329,15 @@ class _AdminUserDetailScreenState extends ConsumerState<AdminUserDetailScreen>
                     'role': selectedRole.name,
                     'isVerified': verified,
                   });
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   await _loadUser();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('User updated')),
                   );
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Failed to update user: $e')),
                   );

@@ -246,7 +246,7 @@ class BackendProfileSocialService {
   // Block / unblock
   // ---------------------------------------------------------------------------
 
-  // TODO(backend): These endpoints are not yet deployed.
+  // Backend endpoints are not yet deployed.
   // They will throw once called; stub provides the correct contract shape.
 
   Future<void> blockUser(String targetUserId) async {

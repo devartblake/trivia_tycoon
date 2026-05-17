@@ -20,7 +20,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  EnergyNotifier _make() => EnergyNotifier(storage);
+  EnergyNotifier makeNotifier() => EnergyNotifier(storage);
 
   // -------------------------------------------------------------------------
   // EnergyState — copyWith
@@ -76,13 +76,13 @@ void main() {
 
   group('EnergyNotifier — initial state', () {
     test('starts at kEnergyMax', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.state.current, kEnergyMax);
       notifier.dispose();
     });
 
     test('max equals kEnergyMax', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.state.max, kEnergyMax);
       notifier.dispose();
     });
@@ -94,25 +94,25 @@ void main() {
 
   group('EnergyNotifier — canPlay getters', () {
     test('canPlayCasual is true when energy >= kEnergyCasualCost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.canPlayCasual, isTrue);
       notifier.dispose();
     });
 
     test('canPlayRanked is true when energy >= kEnergyRankedCost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.canPlayRanked, isTrue);
       notifier.dispose();
     });
 
     test('canPlayPractice is true when energy >= kEnergyPracticeCost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.canPlayPractice, isTrue);
       notifier.dispose();
     });
 
     test('canPlayCasual is false when energy is below cost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       // Use all energy first
       notifier.useEnergy(kEnergyMax);
       expect(notifier.canPlayCasual, isFalse);
@@ -120,14 +120,14 @@ void main() {
     });
 
     test('canPlayRanked is false when energy is 0', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.useEnergy(kEnergyMax);
       expect(notifier.canPlayRanked, isFalse);
       notifier.dispose();
     });
 
     test('canPlayPractice is false when energy is 0', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.useEnergy(kEnergyMax);
       expect(notifier.canPlayPractice, isFalse);
       notifier.dispose();
@@ -140,7 +140,7 @@ void main() {
 
   group('EnergyNotifier — useEnergy', () {
     test('deducts energy and returns true when sufficient', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       final result = notifier.useEnergy(5);
       expect(result, isTrue);
       expect(notifier.state.current, kEnergyMax - 5);
@@ -148,7 +148,7 @@ void main() {
     });
 
     test('returns false and does not deduct when insufficient', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.useEnergy(kEnergyMax); // drain to 0
       final result = notifier.useEnergy(1);
       expect(result, isFalse);
@@ -157,7 +157,7 @@ void main() {
     });
 
     test('exact cost deduction succeeds', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       final result = notifier.useEnergy(kEnergyMax);
       expect(result, isTrue);
       expect(notifier.state.current, 0);
@@ -165,7 +165,7 @@ void main() {
     });
 
     test('useCasualEnergy deducts kEnergyCasualCost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       final before = notifier.state.current;
       notifier.useCasualEnergy();
       expect(notifier.state.current, before - kEnergyCasualCost);
@@ -173,7 +173,7 @@ void main() {
     });
 
     test('useRankedEnergy deducts kEnergyRankedCost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       final before = notifier.state.current;
       notifier.useRankedEnergy();
       expect(notifier.state.current, before - kEnergyRankedCost);
@@ -181,7 +181,7 @@ void main() {
     });
 
     test('usePracticeEnergy deducts kEnergyPracticeCost', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       final before = notifier.state.current;
       notifier.usePracticeEnergy();
       expect(notifier.state.current, before - kEnergyPracticeCost);
@@ -195,7 +195,7 @@ void main() {
 
   group('EnergyNotifier — addEnergy', () {
     test('adds energy up to max', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.useEnergy(5);
       notifier.addEnergy(3);
       expect(notifier.state.current, kEnergyMax - 2);
@@ -203,14 +203,14 @@ void main() {
     });
 
     test('clamped at max: adding excess energy stays at max', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.addEnergy(100); // already at max
       expect(notifier.state.current, kEnergyMax);
       notifier.dispose();
     });
 
     test('adds energy from 0 back up to max', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.useEnergy(kEnergyMax);
       expect(notifier.state.current, 0);
       notifier.addEnergy(kEnergyMax);
@@ -225,7 +225,7 @@ void main() {
 
   group('EnergyNotifier — syncWithServer', () {
     test('sets state from server values', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.syncWithServer(12, 25, const Duration(minutes: 5));
       expect(notifier.state.current, 12);
       expect(notifier.state.max, 25);
@@ -234,7 +234,7 @@ void main() {
     });
 
     test('clamps server energy to server max', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.syncWithServer(30, 20, const Duration(minutes: 10));
       // 30 > max of 20, so clamped to 20
       expect(notifier.state.current, 20);
@@ -242,7 +242,7 @@ void main() {
     });
 
     test('clamps negative server energy to 0', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.syncWithServer(-5, 20, const Duration(minutes: 10));
       expect(notifier.state.current, 0);
       notifier.dispose();

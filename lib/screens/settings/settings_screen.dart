@@ -510,7 +510,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                     );
                   },
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),
@@ -872,7 +872,7 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -888,7 +888,7 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF6366F1).withOpacity(0.1),
+                      color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(Icons.psychology_rounded,
@@ -923,7 +923,7 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                     : 'Showing default experience',
                 style: TextStyle(
                   fontSize: 12,
-                  color: const Color(0xFF64748B).withOpacity(0.85),
+                  color: const Color(0xFF64748B).withValues(alpha: 0.85),
                 ),
               ),
               value: enabled,

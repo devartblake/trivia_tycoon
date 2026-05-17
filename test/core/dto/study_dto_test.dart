@@ -64,7 +64,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('StudyQuestion', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'id': 'sq1',
           'text': 'What is H2O?',
           'category': 'chemistry',
@@ -79,41 +79,41 @@ void main() {
         };
 
     test('fromJson parses id, text, category', () {
-      final q = StudyQuestion.fromJson(_full());
+      final q = StudyQuestion.fromJson(full());
       expect(q.id, 'sq1');
       expect(q.text, 'What is H2O?');
       expect(q.category, 'chemistry');
     });
 
     test('fromJson difficulty defaults Easy when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('difficulty');
+      final j = Map<String, dynamic>.from(full())..remove('difficulty');
       expect(StudyQuestion.fromJson(j).difficulty, 'Easy');
     });
 
     test('fromJson options deserialized as StudyOption list', () {
-      final q = StudyQuestion.fromJson(_full());
+      final q = StudyQuestion.fromJson(full());
       expect(q.options.length, 2);
       expect(q.options.first, isA<StudyOption>());
       expect(q.options.first.id, 'o1');
     });
 
     test('fromJson empty options when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('options');
+      final j = Map<String, dynamic>.from(full())..remove('options');
       expect(StudyQuestion.fromJson(j).options, isEmpty);
     });
 
     test('fromJson correctOptionId null when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('correctOptionId');
+      final j = Map<String, dynamic>.from(full())..remove('correctOptionId');
       expect(StudyQuestion.fromJson(j).correctOptionId, isNull);
     });
 
     test('fromJson explanation null when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('explanation');
+      final j = Map<String, dynamic>.from(full())..remove('explanation');
       expect(StudyQuestion.fromJson(j).explanation, isNull);
     });
 
     test('fromJson mediaKey null when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('mediaKey');
+      final j = Map<String, dynamic>.from(full())..remove('mediaKey');
       expect(StudyQuestion.fromJson(j).mediaKey, isNull);
     });
   });
@@ -222,7 +222,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('StudySession', () {
-    Map<String, dynamic> _full() => {
+    Map<String, dynamic> full() => {
           'id': 'sess1',
           'studySetId': 'ss1',
           'mode': 'Flashcard',
@@ -238,57 +238,57 @@ void main() {
         };
 
     test('fromJson parses id and studySetId', () {
-      final s = StudySession.fromJson(_full());
+      final s = StudySession.fromJson(full());
       expect(s.id, 'sess1');
       expect(s.studySetId, 'ss1');
     });
 
     test('fromJson mode Flashcard → flashcard', () {
-      expect(StudySession.fromJson(_full()).mode, StudySessionMode.flashcard);
+      expect(StudySession.fromJson(full()).mode, StudySessionMode.flashcard);
     });
 
     test('fromJson mode SelfTest → selfTest', () {
-      final j = Map<String, dynamic>.from(_full())..['mode'] = 'SelfTest';
+      final j = Map<String, dynamic>.from(full())..['mode'] = 'SelfTest';
       expect(StudySession.fromJson(j).mode, StudySessionMode.selfTest);
     });
 
     test('fromJson unknown mode → selfTest', () {
-      final j = Map<String, dynamic>.from(_full())..['mode'] = 'Unknown';
+      final j = Map<String, dynamic>.from(full())..['mode'] = 'Unknown';
       expect(StudySession.fromJson(j).mode, StudySessionMode.selfTest);
     });
 
     test('fromJson answeredCount defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('answeredCount');
+      final j = Map<String, dynamic>.from(full())..remove('answeredCount');
       expect(StudySession.fromJson(j).answeredCount, 0);
     });
 
     test('fromJson correctCount defaults 0 when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('correctCount');
+      final j = Map<String, dynamic>.from(full())..remove('correctCount');
       expect(StudySession.fromJson(j).correctCount, 0);
     });
 
     test('fromJson isCompleted defaults false when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('isCompleted');
+      final j = Map<String, dynamic>.from(full())..remove('isCompleted');
       expect(StudySession.fromJson(j).isCompleted, isFalse);
     });
 
     test('fromJson questionIds parsed as list of strings', () {
-      final s = StudySession.fromJson(_full());
+      final s = StudySession.fromJson(full());
       expect(s.questionIds, ['q1', 'q2', 'q3']);
     });
 
     test('fromJson questionIds empty when absent', () {
-      final j = Map<String, dynamic>.from(_full())..remove('questionIds');
+      final j = Map<String, dynamic>.from(full())..remove('questionIds');
       expect(StudySession.fromJson(j).questionIds, isEmpty);
     });
 
     test('fromJson answeredQuestionIds parsed', () {
-      final s = StudySession.fromJson(_full());
+      final s = StudySession.fromJson(full());
       expect(s.answeredQuestionIds, ['q1', 'q2']);
     });
 
     test('fromJson answeredQuestionIds empty when absent', () {
-      final j = Map<String, dynamic>.from(_full())
+      final j = Map<String, dynamic>.from(full())
         ..remove('answeredQuestionIds');
       expect(StudySession.fromJson(j).answeredQuestionIds, isEmpty);
     });

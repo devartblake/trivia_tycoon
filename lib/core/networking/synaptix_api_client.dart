@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+
 import 'http_client.dart';
 import '../dto/player_dto.dart';
 import '../dto/season_dto.dart';
@@ -15,8 +17,13 @@ import '../dto/personalization_dto.dart';
 /// automatic authentication and error handling.
 class SynaptixApiClient {
   final HttpClient _http;
+  final String? _healthCheckUrl;
 
-  SynaptixApiClient({required HttpClient httpClient}) : _http = httpClient;
+  SynaptixApiClient({
+    required HttpClient httpClient,
+    String? healthCheckUrl,
+  })  : _http = httpClient,
+        _healthCheckUrl = healthCheckUrl;
 
   // ========================================
   // Low-Level Convenience Methods
@@ -644,12 +651,26 @@ class SynaptixApiClient {
 
   /// Health check
   Future<bool> healthCheck() async {
-    try {
-      final response = await _http.get('/health');
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
+    final apiRoot = _http.baseUrl.replaceFirst(RegExp(r'/api/v1/?$'), '');
+    final urls = <String>[
+      if (_healthCheckUrl != null && _healthCheckUrl!.trim().isNotEmpty)
+        _healthCheckUrl!.trim(),
+      '$apiRoot/healthz',
+      '$apiRoot/health/readiness',
+      '$apiRoot/health/liveness',
+      '${_http.baseUrl}/health',
+    ];
+
+    for (final url in urls.toSet()) {
+      try {
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) return true;
+      } catch (_) {
+        // Try the next configured/fallback health endpoint.
+      }
     }
+
+    return false;
   }
 
   // ========================================

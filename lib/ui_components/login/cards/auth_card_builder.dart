@@ -3,6 +3,7 @@ library;
 import 'dart:math';
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -517,8 +518,8 @@ class AuthCardState extends ConsumerState<AuthCard>
           alignment: Alignment.center,
           transform: Matrix4.identity()
             ..rotateZ(_cardRotationAnimation.value)
-            ..scale(_cardSizeAnimation.value, _cardSizeAnimation.value)
-            ..scale(_cardSize2AnimationX.value, _cardSize2AnimationY.value),
+            ..scaleByVector3(Vector3(_cardSizeAnimation.value, _cardSizeAnimation.value, 1.0))
+            ..scaleByVector3(Vector3(_cardSize2AnimationX.value, _cardSize2AnimationY.value, 1.0)),
           child: current,
         );
       },

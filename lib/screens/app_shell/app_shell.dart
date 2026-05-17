@@ -25,7 +25,7 @@ class AppShell extends ConsumerWidget {
     final brightness = themeSettings.brightness;
 
     return MaterialApp.router(
-      key: ValueKey("${primaryColor.value}-${brightness.name}"),
+      key: ValueKey("${primaryColor.toARGB32()}-${brightness.name}"),
       debugShowCheckedModeBanner: false,
       scrollBehavior: AppScrollBehavior(),
       title: 'Synaptix',

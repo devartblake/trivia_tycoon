@@ -19,7 +19,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  ChallengeLivesNotifier _make() => ChallengeLivesNotifier(storage);
+  ChallengeLivesNotifier makeNotifier() => ChallengeLivesNotifier(storage);
 
   // -------------------------------------------------------------------------
   // ChallengeLivesState — computed properties
@@ -130,17 +130,17 @@ void main() {
 
   group('ChallengeLivesNotifier — initial state', () {
     test('starts with kChallengeLivesPerRun lives', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.state.current, kChallengeLivesPerRun);
     });
 
     test('starts with isRunActive = false', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.state.isRunActive, isFalse);
     });
 
     test('starts with 0 premium revives used', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.state.premiumRevivesUsed, 0);
     });
   });
@@ -151,19 +151,19 @@ void main() {
 
   group('ChallengeLivesNotifier — startRun', () {
     test('sets isRunActive to true', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       expect(notifier.state.isRunActive, isTrue);
     });
 
     test('resets lives to kChallengeLivesPerRun', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       expect(notifier.state.current, kChallengeLivesPerRun);
     });
 
     test('resets premiumRevivesUsed to 0', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       notifier.loseLife();
@@ -175,7 +175,7 @@ void main() {
     });
 
     test('restores to kPremiumRevivesPerRun allowed', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       expect(notifier.state.premiumRevivesAllowed, kPremiumRevivesPerRun);
     });
@@ -187,14 +187,14 @@ void main() {
 
   group('ChallengeLivesNotifier — endRun', () {
     test('sets isRunActive to false', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.endRun();
       expect(notifier.state.isRunActive, isFalse);
     });
 
     test('resets lives to kChallengeLivesPerRun', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       notifier.endRun();
@@ -208,25 +208,25 @@ void main() {
 
   group('ChallengeLivesNotifier — loseLife', () {
     test('returns false when run is not active', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.loseLife(), isFalse);
     });
 
     test('decrements current by 1', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       expect(notifier.state.current, kChallengeLivesPerRun - 1);
     });
 
     test('returns true when lives remain after losing', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       expect(notifier.loseLife(), isTrue); // 3→2
     });
 
     test('returns false when lives reach 0', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife(); // 3→2
       notifier.loseLife(); // 2→1
@@ -236,7 +236,7 @@ void main() {
     });
 
     test('does not go below 0', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       notifier.loseLife();
@@ -252,19 +252,19 @@ void main() {
 
   group('ChallengeLivesNotifier — useRevive', () {
     test('returns false when run is not active', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       expect(notifier.useRevive(), isFalse);
     });
 
     test('returns false when no revive available', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.useRevive(); // uses the one available
       expect(notifier.useRevive(), isFalse);
     });
 
     test('returns true when revive is available', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       notifier.loseLife();
@@ -273,7 +273,7 @@ void main() {
     });
 
     test('restores lives to kChallengeLivesPerRun', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       notifier.loseLife();
@@ -282,14 +282,14 @@ void main() {
     });
 
     test('increments premiumRevivesUsed', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.useRevive();
       expect(notifier.state.premiumRevivesUsed, 1);
     });
 
     test('canRevive is false after using the single allowed revive', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.useRevive();
       expect(notifier.state.canRevive, isFalse);
@@ -302,7 +302,7 @@ void main() {
 
   group('ChallengeLivesNotifier — isGameOver integration', () {
     test('game over when out of lives and revive used', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       notifier.loseLife();
@@ -315,7 +315,7 @@ void main() {
     });
 
     test('not game over when lives remain', () {
-      final notifier = _make();
+      final notifier = makeNotifier();
       notifier.startRun();
       notifier.loseLife();
       expect(notifier.state.isGameOver, isFalse);
@@ -328,19 +328,19 @@ void main() {
 
   group('ChallengeLivesNotifier — loadRunState', () {
     test('restores persisted run state', () async {
-      final notifier1 = _make();
+      final notifier1 = makeNotifier();
       notifier1.startRun();
       notifier1.loseLife(); // 3→2
       await Future.delayed(const Duration(milliseconds: 50));
 
-      final notifier2 = _make();
+      final notifier2 = makeNotifier();
       await notifier2.loadRunState();
       expect(notifier2.state.current, 2);
       expect(notifier2.state.isRunActive, isTrue);
     });
 
     test('defaults to kChallengeLivesPerRun when nothing persisted', () async {
-      final notifier = _make();
+      final notifier = makeNotifier();
       await notifier.loadRunState();
       expect(notifier.state.current, kChallengeLivesPerRun);
     });

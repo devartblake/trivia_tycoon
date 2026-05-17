@@ -5,7 +5,6 @@ import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/ui_components/shimmer_avatar/shimmer_avatar.dart';
 import '../mode/synaptix_mode.dart';
 import '../mode/synaptix_mode_provider.dart';
-import '../../game/providers/hub_providers.dart';
 
 /// Provider that builds ticker items from live notification events,
 /// falling back to a seeded rotation when no live data is available.

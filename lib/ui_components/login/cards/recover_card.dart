@@ -68,16 +68,16 @@ class _RecoverCardState extends ConsumerState<_RecoverCard>
     final error = await auth.onRecoverPassword!(auth.email);
 
     if (error != null) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorToast(context, messages.toastTitleError, error);
       }
       setState(() => _isSubmitting = false);
-      if (context.mounted) {
+      if (mounted) {
         await _submitController.reverse();
       }
       return false;
     } else {
-      if (context.mounted) {
+      if (mounted) {
         showSuccessToast(
           context,
           messages.toastTitleSuccess,

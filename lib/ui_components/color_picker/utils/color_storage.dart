@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../core/color_picker_settings.dart';
@@ -82,8 +82,8 @@ class ColorStorage {
   static Future<bool> saveColor(Color color) async {
     try {
       final box = await _getBox(_settingsBox);
-      await box.put('selectedColor', color.value);
-      _setCache('selectedColor', color.value);
+      await box.put('selectedColor', color.toARGB32());
+      _setCache('selectedColor', color.toARGB32());
       return true;
     } catch (e) {
       LogManager.debug('Error saving color: $e');
@@ -124,7 +124,7 @@ class ColorStorage {
         palette = palette.take(50).toList();
       }
 
-      final colorValues = palette.map((c) => c.value).toList();
+      final colorValues = palette.map((c) => c.toARGB32()).toList();
       final box = await _getBox(_settingsBox);
       await box.put('customPalette', colorValues);
       _setCache('customPalette', colorValues);
@@ -189,7 +189,7 @@ class ColorStorage {
       // Add selected color if not already included
       if (selectedColorValue != null) {
         final selectedColor = Color(selectedColorValue);
-        if (!savedColors.any((c) => c.value == selectedColor.value)) {
+        if (!savedColors.any((c) => c.toARGB32() == selectedColor.toARGB32())) {
           savedColors.insert(0, selectedColor);
         }
       }

@@ -69,7 +69,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
     );
 
     if (error != null) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorToast(context, messages.toastTitleError, error);
       }
       setState(() => _isSubmitting = false);
@@ -77,7 +77,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
       return false;
     }
 
-    if (context.mounted) {
+    if (mounted) {
       showSuccessToast(
         context,
         messages.toastTitleSuccess,
@@ -115,7 +115,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
     );
 
     if (error != null) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorToast(context, messages.toastTitleError, error);
       }
 
@@ -124,7 +124,7 @@ class _ConfirmSignupCardState extends ConsumerState<_ConfirmSignupCard>
       return false;
     }
 
-    if (context.mounted) {
+    if (mounted) {
       showSuccessToast(
         context,
         messages.toastTitleSuccess,

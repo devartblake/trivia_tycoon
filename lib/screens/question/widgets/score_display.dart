@@ -396,7 +396,7 @@ class _EnhancedScoreDisplayState extends ConsumerState<EnhancedScoreDisplay>
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

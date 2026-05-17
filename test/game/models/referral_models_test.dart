@@ -7,7 +7,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('ReferralCode.fromJson', () {
-    Map<String, dynamic> _json({
+    Map<String, dynamic> jsonMap({
       String code = 'RC8A9K2M',
       String ownerUserId = 'uid_1',
       String createdAt = '2025-01-01T00:00:00.000Z',
@@ -29,14 +29,14 @@ void main() {
 
     test('parses code and ownerUserId', () {
       final rc =
-          ReferralCode.fromJson(_json(code: 'ABCD1234', ownerUserId: 'u42'));
+          ReferralCode.fromJson(jsonMap(code: 'ABCD1234', ownerUserId: 'u42'));
       expect(rc.code, 'ABCD1234');
       expect(rc.ownerUserId, 'u42');
     });
 
     test('parses createdAt as UTC', () {
       final rc =
-          ReferralCode.fromJson(_json(createdAt: '2025-06-15T10:00:00.000Z'));
+          ReferralCode.fromJson(jsonMap(createdAt: '2025-06-15T10:00:00.000Z'));
       expect(rc.createdAt.isUtc, isTrue);
       expect(rc.createdAt.month, 6);
       expect(rc.createdAt.day, 15);
@@ -44,48 +44,48 @@ void main() {
 
     test('parses optional expiresAt', () {
       final rc =
-          ReferralCode.fromJson(_json(expiresAt: '2025-12-31T23:59:59.000Z'));
+          ReferralCode.fromJson(jsonMap(expiresAt: '2025-12-31T23:59:59.000Z'));
       expect(rc.expiresAt, isNotNull);
       expect(rc.expiresAt!.isUtc, isTrue);
       expect(rc.expiresAt!.month, 12);
     });
 
     test('expiresAt is null when absent', () {
-      expect(ReferralCode.fromJson(_json()).expiresAt, isNull);
+      expect(ReferralCode.fromJson(jsonMap()).expiresAt, isNull);
     });
 
     test('parses status active', () {
-      expect(ReferralCode.fromJson(_json(status: 'active')).status,
+      expect(ReferralCode.fromJson(jsonMap(status: 'active')).status,
           ReferralCodeStatus.active);
     });
 
     test('parses status disabled', () {
-      expect(ReferralCode.fromJson(_json(status: 'disabled')).status,
+      expect(ReferralCode.fromJson(jsonMap(status: 'disabled')).status,
           ReferralCodeStatus.disabled);
     });
 
     test('parses status expired', () {
-      expect(ReferralCode.fromJson(_json(status: 'expired')).status,
+      expect(ReferralCode.fromJson(jsonMap(status: 'expired')).status,
           ReferralCodeStatus.expired);
     });
 
     test('defaults status to active for unknown string', () {
-      expect(ReferralCode.fromJson(_json(status: 'bogus')).status,
+      expect(ReferralCode.fromJson(jsonMap(status: 'bogus')).status,
           ReferralCodeStatus.active);
     });
 
     test('parses isSynced', () {
-      expect(ReferralCode.fromJson(_json(isSynced: true)).isSynced, isTrue);
-      expect(ReferralCode.fromJson(_json(isSynced: false)).isSynced, isFalse);
+      expect(ReferralCode.fromJson(jsonMap(isSynced: true)).isSynced, isTrue);
+      expect(ReferralCode.fromJson(jsonMap(isSynced: false)).isSynced, isFalse);
     });
 
     test('parses optional serverId', () {
-      final rc = ReferralCode.fromJson(_json(serverId: 'srv_99'));
+      final rc = ReferralCode.fromJson(jsonMap(serverId: 'srv_99'));
       expect(rc.serverId, 'srv_99');
     });
 
     test('serverId is null when absent', () {
-      expect(ReferralCode.fromJson(_json()).serverId, isNull);
+      expect(ReferralCode.fromJson(jsonMap()).serverId, isNull);
     });
   });
 
@@ -183,7 +183,7 @@ void main() {
   // ReferralInvite.fromJson / toJson / copyWith / computed props
   // -------------------------------------------------------------------------
 
-  Map<String, dynamic> _inviteJson({
+  Map<String, dynamic> inviteJson({
     String id = 'inv_1',
     String referrerUserId = 'uid_ref',
     String referralCode = 'RC123',
@@ -215,7 +215,7 @@ void main() {
 
   group('ReferralInvite.fromJson', () {
     test('parses all required fields', () {
-      final inv = ReferralInvite.fromJson(_inviteJson(
+      final inv = ReferralInvite.fromJson(inviteJson(
         id: 'inv_99',
         referrerUserId: 'u_ref',
         referralCode: 'CODE_X',
@@ -226,27 +226,27 @@ void main() {
     });
 
     test('parses status pending', () {
-      expect(ReferralInvite.fromJson(_inviteJson(status: 'pending')).status,
+      expect(ReferralInvite.fromJson(inviteJson(status: 'pending')).status,
           InviteStatus.pending);
     });
 
     test('parses status redeemed', () {
-      expect(ReferralInvite.fromJson(_inviteJson(status: 'redeemed')).status,
+      expect(ReferralInvite.fromJson(inviteJson(status: 'redeemed')).status,
           InviteStatus.redeemed);
     });
 
     test('parses status expired', () {
-      expect(ReferralInvite.fromJson(_inviteJson(status: 'expired')).status,
+      expect(ReferralInvite.fromJson(inviteJson(status: 'expired')).status,
           InviteStatus.expired);
     });
 
     test('defaults status to pending for unknown', () {
-      expect(ReferralInvite.fromJson(_inviteJson(status: 'nope')).status,
+      expect(ReferralInvite.fromJson(inviteJson(status: 'nope')).status,
           InviteStatus.pending);
     });
 
     test('parses optional redeemedBy and redeemedAt', () {
-      final inv = ReferralInvite.fromJson(_inviteJson(
+      final inv = ReferralInvite.fromJson(inviteJson(
         redeemedBy: 'uid_redeemer',
         redeemedAt: '2025-02-04T12:00:00.000Z',
       ));
@@ -256,13 +256,13 @@ void main() {
     });
 
     test('redeemedBy and redeemedAt are null when absent', () {
-      final inv = ReferralInvite.fromJson(_inviteJson());
+      final inv = ReferralInvite.fromJson(inviteJson());
       expect(inv.redeemedBy, isNull);
       expect(inv.redeemedAt, isNull);
     });
 
     test('parses inviteeName and inviteeEmail', () {
-      final inv = ReferralInvite.fromJson(_inviteJson(
+      final inv = ReferralInvite.fromJson(inviteJson(
         inviteeName: 'Charlie',
         inviteeEmail: 'charlie@test.com',
       ));
@@ -272,7 +272,7 @@ void main() {
   });
 
   group('ReferralInvite — computed properties', () {
-    ReferralInvite _invite({
+    ReferralInvite invite({
       InviteStatus status = InviteStatus.pending,
       DateTime? expiresAt,
     }) {
@@ -287,70 +287,70 @@ void main() {
     }
 
     test('isRedeemed true when status is redeemed', () {
-      expect(_invite(status: InviteStatus.redeemed).isRedeemed, isTrue);
+      expect(invite(status: InviteStatus.redeemed).isRedeemed, isTrue);
     });
 
     test('isRedeemed false for pending', () {
-      expect(_invite(status: InviteStatus.pending).isRedeemed, isFalse);
+      expect(invite(status: InviteStatus.pending).isRedeemed, isFalse);
     });
 
     test('isExpired true when status is expired', () {
-      expect(_invite(status: InviteStatus.expired).isExpired, isTrue);
+      expect(invite(status: InviteStatus.expired).isExpired, isTrue);
     });
 
     test('isExpired true when expiresAt is in the past', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
       expect(inv.isExpired, isTrue);
     });
 
     test('isExpired false when expiresAt is in the future', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().add(const Duration(days: 7)));
       expect(inv.isExpired, isFalse);
     });
 
     test('isPending true when status pending and not expired', () {
-      final inv = _invite(status: InviteStatus.pending);
+      final inv = invite(status: InviteStatus.pending);
       expect(inv.isPending, isTrue);
     });
 
     test('isPending false when expired', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
       expect(inv.isPending, isFalse);
     });
 
     test('daysUntilExpiration returns 0 when expired', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
       expect(inv.daysUntilExpiration, 0);
     });
 
     test('daysUntilExpiration returns 0 when redeemed', () {
-      expect(_invite(status: InviteStatus.redeemed).daysUntilExpiration, 0);
+      expect(invite(status: InviteStatus.redeemed).daysUntilExpiration, 0);
     });
 
     test('daysUntilExpiration returns positive days for future expiry', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().add(const Duration(days: 5)));
       expect(inv.daysUntilExpiration, greaterThanOrEqualTo(4));
     });
 
     test('hoursUntilExpiration returns 0 when expired', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().subtract(const Duration(hours: 1)));
       expect(inv.hoursUntilExpiration, 0);
     });
 
     test('hoursUntilExpiration returns positive hours for future expiry', () {
-      final inv = _invite(
+      final inv = invite(
           status: InviteStatus.pending,
           expiresAt: DateTime.now().add(const Duration(hours: 10)));
       expect(inv.hoursUntilExpiration, greaterThanOrEqualTo(9));

@@ -450,7 +450,7 @@ class OBJLoader {
 
     for (final face in faces) {
       final matColor =
-          _materials[face.materialName]?.diffuseColor?.value ?? 0xFFFFFFFF;
+          _materials[face.materialName]?.diffuseColor?.toARGB32() ?? 0xFFFFFFFF;
       final atlasRegion = atlas?.regions[face.materialName];
 
       for (int j = 0; j < 3; j++) {
@@ -794,9 +794,8 @@ class MultiMeshCustomPainter extends CustomPainter {
           instance.texture!,
           TileMode.clamp,
           TileMode.clamp,
-          Matrix4.identity()
-              .scaled(1 / instance.texture!.width, 1 / instance.texture!.height,
-                  1.0)
+          Matrix4.diagonal3Values(1 / instance.texture!.width,
+                  1 / instance.texture!.height, 1.0)
               .storage,
         );
       }
@@ -836,8 +835,7 @@ class MeshCustomPainter extends CustomPainter {
             _meshInstance!.texture!,
             TileMode.clamp,
             TileMode.clamp,
-            Matrix4.identity()
-                .scaled(1 / _meshInstance!.texture!.width,
+            Matrix4.diagonal3Values(1 / _meshInstance!.texture!.width,
                     1 / _meshInstance!.texture!.height, 1.0)
                 .storage);
       }

@@ -18,7 +18,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  Future<StatePersistenceService> _makeInitialized() async {
+  Future<StatePersistenceService> makeInitialized() async {
     final service = StatePersistenceService();
     await service.initialize();
     return service;
@@ -42,7 +42,7 @@ void main() {
     });
 
     test('getLastSaveTime returns null on fresh box', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(service.getLastSaveTime(), isNull);
     });
   });
@@ -53,7 +53,7 @@ void main() {
 
   group('StatePersistenceService — saveAll / getters', () {
     test('saves and retrieves game state', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(gameState: {'score': 42, 'level': 3});
 
       final state = await service.getGameState();
@@ -61,7 +61,7 @@ void main() {
     });
 
     test('saves and retrieves user session', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(userSession: {'userId': 'u1', 'token': 'tok'});
 
       final session = await service.getUserSession();
@@ -69,7 +69,7 @@ void main() {
     });
 
     test('saves and retrieves WebSocket state', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(wsState: {'connected': true, 'channel': 'main'});
 
       final ws = await service.getWebSocketState();
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('saves and retrieves pending actions', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       final actions = [
         {'type': 'submit_score', 'score': 100},
         {'type': 'send_message', 'text': 'hello'},
@@ -91,7 +91,7 @@ void main() {
     });
 
     test('saves multiple keys in a single call', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(
         gameState: {'q': 5},
         userSession: {'uid': 'me'},
@@ -108,7 +108,7 @@ void main() {
     });
 
     test('null arguments do not overwrite existing data', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(gameState: {'score': 7});
       // saveAll with null gameState — existing value should stay
       await service.saveAll(userSession: {'uid': 'x'});
@@ -117,7 +117,7 @@ void main() {
     });
 
     test('empty map argument does not overwrite existing data', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(gameState: {'score': 10});
       // Empty map — should not overwrite
       await service.saveAll(gameState: {});
@@ -132,22 +132,22 @@ void main() {
 
   group('StatePersistenceService — getters return empty defaults', () {
     test('getGameState returns null when not saved', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(await service.getGameState(), isNull);
     });
 
     test('getUserSession returns null when not saved', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(await service.getUserSession(), isNull);
     });
 
     test('getWebSocketState returns null when not saved', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(await service.getWebSocketState(), isNull);
     });
 
     test('getPendingActions returns empty list when not saved', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(await service.getPendingActions(), isEmpty);
     });
   });
@@ -158,12 +158,12 @@ void main() {
 
   group('StatePersistenceService — getLastSaveTime', () {
     test('returns null before any successful save', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(service.getLastSaveTime(), isNull);
     });
 
     test('returns a valid DateTime after saveAll with data', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       final before = DateTime.now().subtract(const Duration(seconds: 1));
       await service.saveAll(gameState: {'x': 1});
       final after = DateTime.now().add(const Duration(seconds: 1));
@@ -175,7 +175,7 @@ void main() {
     });
 
     test('updates timestamp on each save', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(gameState: {'x': 1});
       final first = service.getLastSaveTime();
 
@@ -193,7 +193,7 @@ void main() {
 
   group('StatePersistenceService — clearPendingActions', () {
     test('removes pending actions while preserving other data', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(
         gameState: {'score': 50},
         pendingActions: [
@@ -208,7 +208,7 @@ void main() {
     });
 
     test('clearPendingActions on empty store does not throw', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await expectLater(service.clearPendingActions(), completes);
     });
   });
@@ -220,7 +220,7 @@ void main() {
   group('StatePersistenceService — clearTemporaryData', () {
     test('removes game state but preserves user session and pending actions',
         () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(
         gameState: {'score': 99},
         userSession: {'uid': 'u1'},
@@ -243,7 +243,7 @@ void main() {
 
   group('StatePersistenceService — clearAll', () {
     test('removes all saved data', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(
         gameState: {'score': 5},
         userSession: {'uid': 'u2'},
@@ -272,12 +272,12 @@ void main() {
     test('returns false on fresh box (no crash, no data)', () async {
       // Fresh box: crash flag = false (default) → true after init,
       // but no game/session/pending data → returns false.
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       expect(await service.hasRecoverableData(), isFalse);
     });
 
     test('returns false after a normal saveAll (crash flag cleared)', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(gameState: {'score': 1});
       // saveAll calls _markSaveComplete which sets crash flag to false.
       expect(await service.hasRecoverableData(), isFalse);
@@ -319,7 +319,7 @@ void main() {
 
   group('StatePersistenceService — getRecoverySummary', () {
     test('returns correct keys in summary', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       await service.saveAll(
         gameState: {'score': 10},
         pendingActions: [
@@ -339,7 +339,7 @@ void main() {
     });
 
     test('returns empty summary fields when no data exists', () async {
-      final service = await _makeInitialized();
+      final service = await makeInitialized();
       final summary = await service.getRecoverySummary();
 
       expect(summary['has_game_state'], isFalse);

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import '../../../core/dto/learning_dto.dart';
 
@@ -17,7 +17,7 @@ class ModuleCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: color.withOpacity(0.6), width: 1.5),
+        side: BorderSide(color: color.withValues(alpha: 0.6), width: 1.5),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -90,7 +90,7 @@ class _DifficultyBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color, width: 1),
       ),

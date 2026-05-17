@@ -141,7 +141,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SeasonRewardPreview.fromJson', () {
-    Map<String, dynamic> _previewJson({
+    Map<String, dynamic> previewJson({
       String seasonId = 'szn1',
       String playerId = 'p1',
       bool eligible = true,
@@ -162,42 +162,42 @@ void main() {
 
     test('parses seasonId', () {
       expect(
-          SeasonRewardPreview.fromJson(_previewJson(seasonId: 'szn_x'))
+          SeasonRewardPreview.fromJson(previewJson(seasonId: 'szn_x'))
               .seasonId,
           'szn_x');
     });
 
     test('parses playerId', () {
       expect(
-          SeasonRewardPreview.fromJson(_previewJson(playerId: 'uid_y'))
+          SeasonRewardPreview.fromJson(previewJson(playerId: 'uid_y'))
               .playerId,
           'uid_y');
     });
 
     test('parses eligible', () {
       expect(
-          SeasonRewardPreview.fromJson(_previewJson(eligible: false)).eligible,
+          SeasonRewardPreview.fromJson(previewJson(eligible: false)).eligible,
           isFalse);
     });
 
     test('parses tier', () {
-      expect(SeasonRewardPreview.fromJson(_previewJson(tier: 5)).tier, 5);
+      expect(SeasonRewardPreview.fromJson(previewJson(tier: 5)).tier, 5);
     });
 
     test('parses tierRank', () {
-      expect(SeasonRewardPreview.fromJson(_previewJson(tierRank: 12)).tierRank,
+      expect(SeasonRewardPreview.fromJson(previewJson(tierRank: 12)).tierRank,
           12);
     });
 
     test('parses rewardXp', () {
       expect(
-          SeasonRewardPreview.fromJson(_previewJson(rewardXp: 1000)).rewardXp,
+          SeasonRewardPreview.fromJson(previewJson(rewardXp: 1000)).rewardXp,
           1000);
     });
 
     test('parses rewardCoins', () {
       expect(
-          SeasonRewardPreview.fromJson(_previewJson(rewardCoins: 500))
+          SeasonRewardPreview.fromJson(previewJson(rewardCoins: 500))
               .rewardCoins,
           500);
     });

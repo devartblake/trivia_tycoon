@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../confetti/utils/confetti_storage.dart';
@@ -198,7 +198,7 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
         'particleDensity': _particleDensity,
         'isRandomTheme': isRandomTheme,
         'currentTheme': currentTheme.name,
-        'customColors': customColors.map((c) => c.value).toList(),
+        'customColors': customColors.map((c) => c.toARGB32()).toList(),
         'timestamp': DateTime.now().toIso8601String(),
       };
 
@@ -370,7 +370,7 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       'particleDensity': _particleDensity,
       'currentTheme': currentTheme.name,
       'isRandomTheme': isRandomTheme,
-      'customColors': customColors.map((c) => c.value).toList(),
+      'customColors': customColors.map((c) => c.toARGB32()).toList(),
       'exported': DateTime.now().toIso8601String(),
     };
   }

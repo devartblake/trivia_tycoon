@@ -43,7 +43,7 @@ class _ColorSliderPickerState extends State<ColorSliderPicker> {
       _hue = hsl.hue;
       _saturation = hsl.saturation;
       _lightness = hsl.lightness;
-      _alpha = color.alpha / 255.0;
+      _alpha = color.a;
     });
   }
 

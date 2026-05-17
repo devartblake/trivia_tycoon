@@ -366,9 +366,8 @@ class ProfileManagementTile extends ConsumerWidget {
             profileName: profile.name,
           );
 
-          // Refresh the profiles list to reflect the deletion
           ref.invalidate(profilesProvider);
-
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Profile "${profile.name}" deleted'),

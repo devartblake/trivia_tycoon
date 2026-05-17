@@ -27,7 +27,7 @@ class _ThemeColorPickerScreenState extends State<ThemeColorPickerScreen> {
   }
 
   String _getColorHex(Color color) =>
-      '#${color.value.toRadixString(16).padLeft(8, '0').toUpperCase()}';
+      '#${color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase()}';
 
   String _getColorName(Color color) {
     final hex = _getColorHex(color);

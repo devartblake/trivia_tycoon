@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/power_up_timer_provider.dart';
 import 'package:trivia_tycoon/game/models/power_up.dart';
 import '../../game/providers/riverpod_providers.dart';
 
