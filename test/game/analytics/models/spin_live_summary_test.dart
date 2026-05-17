@@ -190,7 +190,7 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SpinLiveSummary.toMap', () {
-    test('includes all 10 keys', () {
+    test('includes all 11 keys', () {
       final keys = _fromFull().toMap().keys.toSet();
       expect(
         keys,

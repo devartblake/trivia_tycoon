@@ -44,7 +44,7 @@ void main() {
       expect(SynaptixLabels.surface('admin', SynaptixMode.adult), 'Synaptix Command');
     });
 
-    test('unknown key falls back to teen value if teen exists', () {
+    test('unknown key returns raw internalName', () {
       // For a known key, teen fallback is the teen value itself (covered above)
       // For an unknown key, returns raw internalName
       expect(SynaptixLabels.surface('unknown_surface', SynaptixMode.kids), 'unknown_surface');
