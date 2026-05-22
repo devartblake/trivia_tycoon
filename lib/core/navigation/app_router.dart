@@ -70,6 +70,7 @@ import '../../screens/question/categories/monthly_quiz_screen.dart';
 import '../../screens/question/score_summary_screen_wrapper.dart';
 import '../../screens/question/transitional/how_to_play_screen.dart';
 import '../../screens/report_screen.dart';
+import '../../features/reward_reactor/screens/reward_reactor_screen.dart';
 import '../../screens/rewards/mission_screen.dart';
 import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
@@ -494,6 +495,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       /// 🏆 Reward Routes
+      GoRoute(
+        path: '/rewards/reactor',
+        name: 'reward-reactor',
+        builder: (context, state) => const RewardReactorScreen(),
+      ),
       GoRoute(
         path: '/spin-earn',
         builder: (context, state) => const SpinEarnScreen(),

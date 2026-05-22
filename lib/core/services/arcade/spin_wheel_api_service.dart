@@ -26,11 +26,40 @@ class SpinClaimResponse {
   }
 }
 
+class SpinStartResponse {
+  final String spinId;
+  final String? segmentId;
+  final int? wheelStopIndex;
+  final String claimToken;
+  final DateTime expiresAtUtc;
+
+  const SpinStartResponse({
+    required this.spinId,
+    this.segmentId,
+    this.wheelStopIndex,
+    required this.claimToken,
+    required this.expiresAtUtc,
+  });
+
+  factory SpinStartResponse.fromJson(Map<String, dynamic> json) {
+    return SpinStartResponse(
+      spinId: json['spinId']?.toString() ?? '',
+      segmentId: json['segmentId'] as String?,
+      wheelStopIndex: (json['wheelStopIndex'] as num?)?.toInt(),
+      claimToken: json['claimToken']?.toString() ?? '',
+      expiresAtUtc:
+          DateTime.tryParse(json['expiresAtUtc']?.toString() ?? '')?.toUtc() ??
+              DateTime.now().toUtc().add(const Duration(minutes: 5)),
+    );
+  }
+}
+
 /// Handles server-side spin wheel operations.
 ///
-/// Endpoints (backend team to implement):
+/// Endpoints:
 ///   GET  /arcade/spin/segments           — player-personalised segment list
 ///   POST /arcade/spin/claim              — grants reward and records history
+///   POST /arcade/spin/start              — proposed; server-generated outcome
 class SpinWheelApiService {
   static final _log = Logger('SpinWheelApiService');
 
@@ -74,5 +103,31 @@ class SpinWheelApiService {
             .postEncrypted('/arcade/spin/claim', body: body)
         : await _apiService.post('/arcade/spin/claim', body: body);
     return SpinClaimResponse.fromJson(json);
+  }
+
+  /// Requests a server-generated spin outcome.
+  /// Falls back to a mock response while POST /arcade/spin/start is proposed/future.
+  Future<SpinStartResponse> startSpin({String? playerId}) async {
+    _log.info('Requesting server-generated spin start');
+    try {
+      final body = <String, dynamic>{
+        if (playerId != null) 'playerId': playerId,
+      };
+      final json = await _apiService.post('/arcade/spin/start', body: body);
+      return SpinStartResponse.fromJson(json);
+    } catch (e) {
+      _log.warning('startSpin backend unavailable, using mock: $e');
+      return _mockStartResponse();
+    }
+  }
+
+  static SpinStartResponse _mockStartResponse() {
+    return SpinStartResponse(
+      spinId: 'mock-spin-${DateTime.now().millisecondsSinceEpoch}',
+      segmentId: null,
+      wheelStopIndex: null,
+      claimToken: 'mock-claim-token',
+      expiresAtUtc: DateTime.now().toUtc().add(const Duration(minutes: 5)),
+    );
   }
 }

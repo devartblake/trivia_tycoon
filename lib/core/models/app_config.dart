@@ -21,6 +21,7 @@ class FeatureFlags {
   final bool territoryEnabled;
   final bool guardiansEnabled;
   final bool experimentsEnabled;
+  final bool rewardReactorEnabled;
 
   const FeatureFlags({
     this.coreTriviaEnabled = true,
@@ -41,6 +42,7 @@ class FeatureFlags {
     this.territoryEnabled = false,
     this.guardiansEnabled = false,
     this.experimentsEnabled = false,
+    this.rewardReactorEnabled = false,
   });
 
   factory FeatureFlags.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,7 @@ class FeatureFlags {
       territoryEnabled: flag('territoryEnabled'),
       guardiansEnabled: flag('guardiansEnabled'),
       experimentsEnabled: flag('experimentsEnabled'),
+      rewardReactorEnabled: flag('rewardReactorEnabled'),
     );
   }
 

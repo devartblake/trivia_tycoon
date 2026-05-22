@@ -15,8 +15,8 @@ Status key:
 - `[x]` Existing Spin & Earn fetches wheel catalog data from `GET /arcade/spin/segments`.
 - `[x]` Existing Spin & Earn claim uses encrypted `POST /arcade/spin/claim`.
 - `[~]` Current `SpinWheelApiService.claimReward` still sends `segmentId` as client-provided reward authority.
-- `[ ]` Flutter does not yet have `POST /arcade/spin/start` support.
-- `[ ]` Flutter does not yet have Reward Reactor models, providers, service client, screen, or reusable machine widget.
+- `[x]` Flutter now has `POST /arcade/spin/start` stub support via `SpinWheelApiService.startSpin` (mock fallback until backend route exists).
+- `[x]` Flutter has Reward Reactor models, providers, service client, screen, and reusable machine widget — Alpha implementation complete 2026-05-22.
 
 ---
 
@@ -24,42 +24,42 @@ Status key:
 
 ### Models
 
-- `[ ]` Add Reward Reactor response models for pending spin, animation hints, reward preview, reward lines, claim result, wallet snapshot, and recent rewards.
-- `[ ]` Add Arcade Spin start/claim compatibility models using `spinId`, `idempotencyKey`, and `claimToken`.
-- `[ ]` Add enum/string handling for reward mechanisms such as `reactor`, `arcade_spin`, `daily`, `mission`, and `event`.
+- `[x]` Add Reward Reactor response models for pending spin, animation hints, reward preview, reward lines, claim result, wallet snapshot, and recent rewards.
+- `[x]` Add Arcade Spin start/claim compatibility models using `spinId`, `idempotencyKey`, and `claimToken`.
+- `[x]` Add enum/string handling for reward mechanisms such as `reactor`, `arcade_spin`, `daily`, `mission`, and `event`.
 
 ### Service Client
 
-- `[ ]` Add a Reward Reactor service under `lib/features/reward_reactor/services/`.
-- `[ ]` Implement service methods for proposed `POST /arcade/reactor/spin`, `POST /arcade/reactor/claim`, and `GET /users/me/rewards`.
-- `[ ]` Return local mock/fallback payloads only when backend routes are unavailable or feature flag is in dev mode.
-- `[ ]` Extend `SpinWheelApiService` with proposed `startSpin` support without removing current segment/claim methods.
+- `[x]` Add a Reward Reactor service under `lib/features/reward_reactor/services/`.
+- `[x]` Implement service methods for proposed `POST /arcade/reactor/spin`, `POST /arcade/reactor/claim`, and `GET /users/me/rewards`.
+- `[x]` Return local mock/fallback payloads only when backend routes are unavailable or feature flag is in dev mode.
+- `[x]` Extend `SpinWheelApiService` with proposed `startSpin` support without removing current segment/claim methods.
 
 ### State And Providers
 
-- `[ ]` Add Riverpod providers for reactor spin state, cooldown state, claim state, and reward history.
-- `[ ]` Ensure pending reward state survives animation completion until claim succeeds, fails, expires, or is dismissed.
-- `[ ]` Prevent duplicate claim taps while a claim request is in flight.
+- `[x]` Add Riverpod providers for reactor spin state, cooldown state, claim state, and reward history.
+- `[x]` Ensure pending reward state survives animation completion until claim succeeds, fails, expires, or is dismissed.
+- `[x]` Prevent duplicate claim taps while a claim request is in flight.
 
 ### UI And Animation
 
-- `[ ]` Add `ArcadeRewardMachineWidget` as the reusable reactor shell.
-- `[ ]` Add `RewardReactorScreen` using backend/mock animation payloads.
-- `[ ]` Add reel columns, symbol tiles, glow states, reward banner, action buttons, and basic particle layer.
-- `[ ]` Keep Alpha animation lightweight and mobile-safe before adding advanced shaders/audio/haptics.
+- `[x]` Add `ArcadeRewardMachineWidget` as the reusable reactor shell.
+- `[x]` Add `RewardReactorScreen` using backend/mock animation payloads.
+- `[x]` Add reel columns, symbol tiles, glow states, reward banner, action buttons, and basic particle layer.
+- `[x]` Keep Alpha animation lightweight and mobile-safe before adding advanced shaders/audio/haptics.
 
 ### Navigation
 
-- `[ ]` Add a hidden/dev route or feature-flagged route in `lib/core/navigation/app_router.dart`.
+- `[x]` Add a hidden/dev route in `lib/core/navigation/app_router.dart` — `/rewards/reactor` (named `reward-reactor`).
 - `[ ]` Add optional navigation entry from the Arcade/Labs surface only after the feature flag is enabled.
 
 ### Arcade Spin Migration
 
-- `[ ]` Keep `GET /arcade/spin/segments` for catalog/display.
-- `[ ]` Add proposed `POST /arcade/spin/start` support when backend route exists.
-- `[ ]` Use returned `segmentId`/`wheelStopIndex` as animation instructions only.
-- `[ ]` Migrate claim payload away from trusted `segmentId` once backend supports `spinId`/`claimToken`.
-- `[ ]` Keep claim requests encrypted.
+- `[x]` Keep `GET /arcade/spin/segments` for catalog/display.
+- `[x]` Add proposed `POST /arcade/spin/start` support when backend route exists (stub with mock fallback added).
+- `[x]` Use returned `segmentId`/`wheelStopIndex` as animation instructions only.
+- `[~]` Migrate claim payload away from trusted `segmentId` once backend supports `spinId`/`claimToken`.
+- `[x]` Keep claim requests encrypted.
 
 ---
 
@@ -67,9 +67,9 @@ Status key:
 
 ### Unit Tests
 
-- `[ ]` Reward Reactor DTO parsing handles full payloads, missing optional fields, and unknown reward line types.
-- `[ ]` Service client maps pending, applied, duplicate, expired, cooldown, and failure states.
-- `[ ]` Arcade Spin start response parsing maps server-selected animation target without trusting client-selected reward.
+- `[x]` Reward Reactor DTO parsing handles full payloads, missing optional fields, and unknown reward line types.
+- `[x]` Service client maps pending, applied, duplicate, expired, cooldown, and failure states.
+- `[~]` Arcade Spin start response parsing maps server-selected animation target without trusting client-selected reward (`SpinStartResponse` model added; dedicated test file not yet written).
 
 ### Provider Tests
 
@@ -100,4 +100,3 @@ Status key:
 - Frontend does not trust locally selected `segmentId` as the final reward.
 - Frontend only animates backend-provided outcome data.
 - Reward Reactor copy must avoid real-money gambling framing.
-

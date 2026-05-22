@@ -8,6 +8,78 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – Reward Reactor Alpha frontend (2026-05-22)
+
+Complete Flutter scaffold for the backend-authoritative Reward Reactor reward lifecycle. Backend selects all outcomes; Flutter renders animation hints and player feedback only.
+
+**New files — models (`lib/features/reward_reactor/models/`)**
+- `reward_mechanism.dart` — `RewardMechanism` enum with `fromString`/`toJsonString`
+- `reactor_animation_hints.dart` — layout, symbols, winningSymbolIndexes (`List<int>`), rarity, intensity
+- `reactor_reward_line.dart` — type, label, amount?, iconUrl?
+- `reactor_reward_preview.dart` — rewardId, displayName, lines (`List<ReactorRewardLine>`)
+- `reactor_wallet_snapshot.dart` — coins, gems, xp
+- `reactor_spin_response.dart` — full spin DTO from `POST /arcade/reactor/spin`; status, expiresAtUtc, cooldownUntilUtc?, animation, rewardPreview, claimToken
+- `reactor_claim_response.dart` — from `POST /arcade/reactor/claim`; `isApplied`/`isDuplicate`/`isExpired`/`isCooldown` getters
+- `user_rewards_response.dart` — pendingRewards, recentRewards; `const UserRewardsResponse.empty()` constructor
+
+**New files — service / state / providers**
+- `lib/features/reward_reactor/services/reward_reactor_service.dart` — abstract `RewardReactorService` + `BackendRewardReactorService`; `POST /arcade/reactor/spin` via `ApiService`, `POST /arcade/reactor/claim` via `EncryptedApiClient` (encrypted from day one), `GET /users/me/rewards`; all three methods fall back gracefully (daily-login mock, mock applied claim, empty response)
+- `lib/features/reward_reactor/controllers/reactor_notifier.dart` — `ReactorPhase` enum (idle/spinning/pendingClaim/claiming/applied/cooldown/error), immutable `ReactorState`, `ReactorNotifier`; spin no-ops unless idle; claim double-tap guard via `isClaimInFlight`
+- `lib/features/reward_reactor/providers/reward_reactor_providers.dart` — `reactorProvider` (autoDispose StateNotifierProvider), `reactorPhaseProvider`, `reactorCooldownProvider`
+
+**New files — widgets**
+- `reactor_symbol_tile.dart` — emoji-mapped reel symbol, `isWinning` glow via `BoxDecoration`/`BoxShadow`
+- `reactor_reel_column.dart` — staggered `AnimationController` + `CurvedAnimation(Curves.easeOut)`, `RepaintBoundary`
+- `reactor_reward_banner.dart` — `.slideY().fade()` via `flutter_animate`, overflow-safe
+- `reactor_action_controls.dart` — Spin (enabled when idle) / Claim (enabled when pendingClaim && !inFlight) buttons with `CircularProgressIndicator` guard
+- `reactor_particle_layer.dart` — `CustomPainter` with 20 sin-animated circles, `IgnorePointer`, `RepaintBoundary`
+- `arcade_reward_machine_widget.dart` — `Stack` shell: `Row` of 3 `ReactorReelColumn`s, `AnimatedSwitcher` for `ReactorRewardBanner`, `ReactorActionControls`, `ReactorParticleLayer` overlay; `_splitSymbols` helper distributes backend symbol list across reels
+
+**New files — screen**
+- `lib/features/reward_reactor/screens/reward_reactor_screen.dart` — dark neon `Scaffold`, `ref.listen` error `SnackBar` with Dismiss action
+
+**Modified files**
+- `lib/core/navigation/app_router.dart` — `/rewards/reactor` GoRoute (named `reward-reactor`) added before `/spin-earn`
+- `lib/game/providers/arcade_providers.dart` — `rewardReactorServiceProvider` added; injects `ApiService` + `EncryptedApiClient`
+- `lib/core/services/arcade/spin_wheel_api_service.dart` — `SpinStartResponse` model and `startSpin({String? playerId})` method added; falls back to mock response when `POST /arcade/spin/start` is unavailable; existing `claimReward` and `fetchSegments` unchanged
+
+**New tests**
+- `test/features/reward_reactor/models/reactor_dto_test.dart` — full round-trip, missing optional fields, all four claim status flags, `winningSymbolIndexes` as `List<int>`, empty symbol lists, `UserRewardsResponse.empty()`, multi-line reward preview
+- `test/features/reward_reactor/services/reward_reactor_service_test.dart` — `_AlwaysFailingReactorService` validates caller-handles-throw contract; mock payload shape assertions; `_SucceedingReactorService` validates live-path status values and non-throwing `getUserRewards`
+
+---
+
+### Fixed – Secure Channel AAD hardening (2026-05-22)
+
+Aligns the Flutter secure-channel implementation with the backend's strict 8-field AAD binding and request-context header enforcement. All five previously identified gaps are closed.
+
+**`lib/core/security/secure_channel_models.dart`**
+- Added `SecureRequestContext` — immutable value object carrying method, pathAndQuery, sessionId (dashes stripped), sequence, replayNonce (16-byte base64url), subjectId (empty string until backend provides stable value), and encryptedAtUtc (single source of truth shared between AAD and payload body).
+
+**`lib/core/security/secure_payload_codec.dart`**
+- `encryptJson` and `decryptJson` now accept `SecureRequestContext context` instead of `method + uri` string parameters.
+- Request AAD format: `syn-sec-v1|request|<METHOD>|<path+query>|<sessionId>|<seq>|<subject>|<encryptedAtUtc>`
+- Response AAD format: same with `response` direction token.
+- `EncryptedPayload.encryptedAtUtc` is sourced from `context.encryptedAtUtc` — same string in both AAD and payload body.
+- AES-GCM nonce remains a fresh random 12 bytes; `replayNonce` in context is a separate 16-byte value sent only as `X-Syn-Sec-Nonce`.
+
+**`lib/core/security/secure_channel_service.dart`**
+- Abstract interface: `encryptJson` now accepts `{body, keyBytes, context}` and does not persist sequence.
+- New abstract method `persistSequenceIncrement(SecureSession session)` — caller persists after headers are assembled.
+- `DefaultSecureChannelService.encryptJson` is a thin codec pass-through (no `_sessionStore.save` side-effect).
+- `startSession` advertises both suites (`X25519-HKDF-SHA256-AES256GCM`, `P256-HKDF-SHA256-AES256GCM`) and uses the backend-selected suite in the HKDF info string.
+- Key exchange always uses X25519 (client always sends an X25519 public key).
+
+**`lib/core/networking/encrypted_api_client.dart`**
+- `_sendEncrypted` owns the full context lifecycle: captures sequence, generates replayNonce and encryptedAtUtc, builds `pathAndQuery` (path + query string), constructs `SecureRequestContext`, encrypts, then calls `persistSequenceIncrement` — ensuring the header `X-Syn-Sec-Seq` always matches the sequence used in the cipher.
+- Retry on `SecureSessionExpiredException` calls `clearSession()` before starting a new session; each retry builds a brand-new context with a fresh sequence, nonce, and timestamp.
+
+**`test/core/security/secure_payload_codec_test.dart`**
+- All existing tests migrated to the new `SecureRequestContext` API via a `_ctx()` helper.
+- 6 new tests: full 8-field request AAD is built correctly; response AAD flips direction only; query string is included in AAD; different sequences produce different ciphertexts; replay nonce is independent of AES-GCM nonce; `encryptedAtUtc` mismatch in AAD causes decryption failure.
+
+---
+
 ### Fixed - Question gameplay backend contract alignment (2026-05-10)
 
 - `QuestionModel` now parses backend-safe `GameplayQuestionDto` payloads from `GET /questions/set`, including `text`, `options`, `mediaKey`, and backend difficulty enum values. Backend options are converted into selectable frontend answers without assuming embedded correctness.

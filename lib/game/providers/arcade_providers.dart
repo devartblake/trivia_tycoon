@@ -23,6 +23,7 @@ import '../../game/services/seasonal_competition_service.dart';
 import '../../game/state/tier_progression_state.dart';
 import '../../game/state/tier_update_result.dart';
 import '../../core/services/arcade/spin_wheel_api_service.dart';
+import '../../features/reward_reactor/services/reward_reactor_service.dart';
 import '../../ui_components/spin_wheel/controllers/spining_controller.dart';
 import '../../ui_components/spin_wheel/services/segment_loader.dart';
 import 'core_providers.dart';
@@ -36,6 +37,13 @@ final spinWheelApiServiceProvider = Provider<SpinWheelApiService>((ref) {
   return SpinWheelApiService(
     ref.read(apiServiceProvider),
     encryptedClient: ref.read(encryptedApiClientProvider),
+  );
+});
+
+final rewardReactorServiceProvider = Provider<RewardReactorService>((ref) {
+  return BackendRewardReactorService(
+    ref.read(apiServiceProvider),
+    ref.read(encryptedApiClientProvider),
   );
 });
 
