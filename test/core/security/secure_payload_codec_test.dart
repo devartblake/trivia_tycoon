@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -10,10 +11,28 @@ import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 List<int> _randomKey() =>
     List<int>.generate(32, (_) => Random.secure().nextInt(256));
 
+SecureRequestContext _ctx({
+  String method = 'POST',
+  String pathAndQuery = '/users/me/friends/request',
+  String sessionId = 'testsession1234',
+  int sequence = 1,
+  String? replayNonce,
+  String subjectId = '',
+  String? encryptedAtUtc,
+}) =>
+    SecureRequestContext(
+      method: method,
+      pathAndQuery: pathAndQuery,
+      sessionId: sessionId,
+      sequence: sequence,
+      replayNonce: replayNonce ?? base64Url.encode(List<int>.generate(16, (_) => 0)),
+      subjectId: subjectId,
+      encryptedAtUtc: encryptedAtUtc ?? DateTime.utc(2026, 5, 21).toIso8601String(),
+    );
+
 void main() {
   late SecurePayloadCodec codec;
   late List<int> keyBytes;
-  final uri = Uri.parse('https://api.example.com/users/me/friends/request');
 
   setUp(() {
     codec = SecurePayloadCodec();
@@ -23,19 +42,18 @@ void main() {
   group('SecurePayloadCodec', () {
     test('encrypt/decrypt round-trip returns original payload', () async {
       final body = {'targetUserId': 'user-123', 'message': 'hello'};
+      final ctx = _ctx();
 
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
 
       final decrypted = await codec.decryptJson(
         encryptedBody: encrypted.toJson(),
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
 
       expect(decrypted, equals(body));
@@ -47,14 +65,12 @@ void main() {
       final enc1 = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: _ctx(),
       );
       final enc2 = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: _ctx(),
       );
 
       expect(enc1.nonce, isNot(equals(enc2.nonce)));
@@ -66,14 +82,12 @@ void main() {
       final enc1 = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: _ctx(),
       );
       final enc2 = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: _ctx(),
       );
 
       expect(enc1.ciphertext, isNot(equals(enc2.ciphertext)));
@@ -82,20 +96,19 @@ void main() {
     test('wrong key throws SecureDecryptException', () async {
       final body = {'data': 42};
       final wrongKey = _randomKey();
+      final ctx = _ctx();
 
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
 
       expect(
         () => codec.decryptJson(
           encryptedBody: encrypted.toJson(),
           keyBytes: wrongKey,
-          method: 'POST',
-          uri: uri,
+          context: ctx,
         ),
         throwsA(isA<SecureDecryptException>()),
       );
@@ -103,15 +116,14 @@ void main() {
 
     test('tampered MAC throws SecureDecryptException', () async {
       final body = {'amount': 100};
+      final ctx = _ctx();
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
 
       final json = encrypted.toJson();
-      // Flip the last character of the MAC
       final mac = json['mac'] as String;
       json['mac'] =
           mac.substring(0, mac.length - 1) + (mac.endsWith('A') ? 'B' : 'A');
@@ -120,8 +132,7 @@ void main() {
         () => codec.decryptJson(
           encryptedBody: json,
           keyBytes: keyBytes,
-          method: 'POST',
-          uri: uri,
+          context: ctx,
         ),
         throwsA(isA<SecureDecryptException>()),
       );
@@ -129,11 +140,11 @@ void main() {
 
     test('wrong nonce throws SecureDecryptException', () async {
       final body = {'amount': 100};
+      final ctx = _ctx();
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
 
       final json = encrypted.toJson();
@@ -145,8 +156,7 @@ void main() {
         () => codec.decryptJson(
           encryptedBody: json,
           keyBytes: keyBytes,
-          method: 'POST',
-          uri: uri,
+          context: ctx,
         ),
         throwsA(isA<SecureDecryptException>()),
       );
@@ -154,19 +164,20 @@ void main() {
 
     test('wrong method in AAD causes decryption failure', () async {
       final body = {'x': 1};
+      final encCtx = _ctx(method: 'POST');
+      final decCtx = _ctx(method: 'GET');
+
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: encCtx,
       );
 
       expect(
         () => codec.decryptJson(
           encryptedBody: encrypted.toJson(),
           keyBytes: keyBytes,
-          method: 'GET', // wrong method
-          uri: uri,
+          context: decCtx,
         ),
         throwsA(isA<SecureDecryptException>()),
       );
@@ -174,19 +185,20 @@ void main() {
 
     test('wrong URI path in AAD causes decryption failure', () async {
       final body = {'x': 1};
+      final encCtx = _ctx(pathAndQuery: '/friends/request');
+      final decCtx = _ctx(pathAndQuery: '/different/path');
+
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: encCtx,
       );
 
       expect(
         () => codec.decryptJson(
           encryptedBody: encrypted.toJson(),
           keyBytes: keyBytes,
-          method: 'POST',
-          uri: Uri.parse('https://api.example.com/different/path'),
+          context: decCtx,
         ),
         throwsA(isA<SecureDecryptException>()),
       );
@@ -198,8 +210,7 @@ void main() {
       final encrypted = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'PUT',
-        uri: uri,
+        context: _ctx(method: 'PUT'),
       );
 
       expect(encrypted.contentType, equals('application/json'));
@@ -215,19 +226,18 @@ void main() {
           'message': List<String>.filled(size, 'x').join(),
           'metadata': {'size': size},
         };
+        final ctx = _ctx(method: 'PATCH');
 
         final encrypted = await codec.encryptJson(
           body: body,
           keyBytes: keyBytes,
-          method: 'PATCH',
-          uri: uri,
+          context: ctx,
         );
 
         final decrypted = await codec.decryptJson(
           encryptedBody: encrypted.toJson(),
           keyBytes: keyBytes,
-          method: 'PATCH',
-          uri: uri,
+          context: ctx,
         );
 
         expect(decrypted, equals(body));
@@ -269,8 +279,7 @@ void main() {
         final enc = await codec.encryptJson(
           body: body,
           keyBytes: keyBytes,
-          method: 'POST',
-          uri: uri,
+          context: _ctx(sequence: i + 1),
         );
         expect(nonces.add(enc.nonce), isTrue,
             reason:
@@ -283,24 +292,22 @@ void main() {
         'replayed ciphertext from one nonce cannot be decrypted with a different nonce',
         () async {
       final body = {'userId': 'u-1'};
+      final ctx = _ctx();
 
       final enc1 = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
       final enc2 = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: ctx,
       );
 
-      // Swap nonces: enc1's ciphertext with enc2's nonce
       final tampered = {
         'ciphertext': enc1.ciphertext,
-        'nonce': enc2.nonce, // wrong nonce for this ciphertext
+        'nonce': enc2.nonce,
         'mac': enc1.mac,
         'contentType': enc1.contentType,
         'encryptedAtUtc': enc1.encryptedAtUtc,
@@ -310,8 +317,7 @@ void main() {
         () => codec.decryptJson(
           encryptedBody: tampered,
           keyBytes: keyBytes,
-          method: 'POST',
-          uri: uri,
+          context: ctx,
         ),
         throwsA(isA<SecureDecryptException>()),
         reason:
@@ -325,21 +331,19 @@ void main() {
       final keyA = _randomKey();
       final keyB = _randomKey();
       final body = {'data': 'secret'};
+      final ctx = _ctx(method: 'DELETE');
 
       final enc = await codec.encryptJson(
         body: body,
         keyBytes: keyA,
-        method: 'DELETE',
-        uri: uri,
+        context: ctx,
       );
 
       await expectLater(
         () => codec.decryptJson(
           encryptedBody: enc.toJson(),
-          keyBytes:
-              keyB, // wrong session key — simulates session-A payload replayed in session-B
-          method: 'DELETE',
-          uri: uri,
+          keyBytes: keyB,
+          context: ctx,
         ),
         throwsA(isA<SecureDecryptException>()),
         reason: 'cross-session replay with a different key must be rejected',
@@ -349,23 +353,21 @@ void main() {
     test(
         'AAD binding: ciphertext for endpoint A cannot be replayed at endpoint B',
         () async {
-      final uriA = Uri.parse('https://api.example.com/friends/request');
-      final uriB = Uri.parse('https://api.example.com/friends/accept');
       final body = {'targetUserId': 'u-42'};
+      final ctxA = _ctx(pathAndQuery: '/friends/request');
+      final ctxB = _ctx(pathAndQuery: '/friends/accept');
 
       final enc = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uriA,
+        context: ctxA,
       );
 
       await expectLater(
         () => codec.decryptJson(
           encryptedBody: enc.toJson(),
           keyBytes: keyBytes,
-          method: 'POST',
-          uri: uriB, // different endpoint — AAD mismatch
+          context: ctxB,
         ),
         throwsA(isA<SecureDecryptException>()),
         reason:
@@ -376,20 +378,20 @@ void main() {
     test('AAD binding: ciphertext for POST cannot be replayed as DELETE',
         () async {
       final body = {'resourceId': 'r-99'};
+      final postCtx = _ctx(method: 'POST');
+      final deleteCtx = _ctx(method: 'DELETE');
 
       final enc = await codec.encryptJson(
         body: body,
         keyBytes: keyBytes,
-        method: 'POST',
-        uri: uri,
+        context: postCtx,
       );
 
       await expectLater(
         () => codec.decryptJson(
           encryptedBody: enc.toJson(),
           keyBytes: keyBytes,
-          method: 'DELETE', // different verb — AAD mismatch
-          uri: uri,
+          context: deleteCtx,
         ),
         throwsA(isA<SecureDecryptException>()),
         reason:
@@ -508,7 +510,7 @@ void main() {
       await store.save(makeSession());
       expect(await store.load(), isNotNull);
 
-      await store.clear(); // simulate reinstall wiping secure storage
+      await store.clear();
       expect(await store.load(), isNull,
           reason: 'session must be invalidated after reinstall (clear)');
     });
@@ -570,6 +572,161 @@ void main() {
       expect(loaded?.sessionId, session.sessionId,
           reason:
               'any store instance sharing the same secure storage must see the same session');
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // NEW: AAD contract and context binding
+  // -------------------------------------------------------------------------
+
+  group('SecurePayloadCodec — AAD contract and context binding', () {
+    test('request AAD contains all 8 fields in the correct order', () async {
+      final timestamp = '2026-05-21T00:00:00.000000Z';
+      final ctx = SecureRequestContext(
+        method: 'POST',
+        pathAndQuery: '/users/me/friends/request?page=1',
+        sessionId: 'abc123',
+        sequence: 3,
+        replayNonce: 'AAAA',
+        subjectId: '',
+        encryptedAtUtc: timestamp,
+      );
+      final body = {'x': 1};
+
+      final encrypted = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        context: ctx,
+      );
+
+      // encryptedAtUtc in the payload must match the context (single source of truth).
+      expect(encrypted.encryptedAtUtc, equals(timestamp));
+
+      // Decrypting with the same context (request→response direction flip) must succeed.
+      final decrypted = await codec.decryptJson(
+        encryptedBody: encrypted.toJson(),
+        keyBytes: keyBytes,
+        context: ctx,
+      );
+      expect(decrypted, equals(body));
+    });
+
+    test('query string is included in AAD — path without query fails to decrypt',
+        () async {
+      final body = {'spin': true};
+      final ctxWithQuery =
+          _ctx(pathAndQuery: '/arcade/spin/claim?sessionToken=tok');
+      final ctxPathOnly = _ctx(pathAndQuery: '/arcade/spin/claim');
+
+      final encrypted = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        context: ctxWithQuery,
+      );
+
+      await expectLater(
+        () => codec.decryptJson(
+          encryptedBody: encrypted.toJson(),
+          keyBytes: keyBytes,
+          context: ctxPathOnly,
+        ),
+        throwsA(isA<SecureDecryptException>()),
+        reason: 'omitting query string from AAD must cause MAC failure',
+      );
+    });
+
+    test('different sequence numbers produce different AAD and ciphertexts',
+        () async {
+      final body = {'value': 42};
+      final ctx1 = _ctx(sequence: 1);
+      final ctx2 = _ctx(sequence: 2);
+
+      final enc1 = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        context: ctx1,
+      );
+      final enc2 = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        context: ctx2,
+      );
+
+      expect(enc1.ciphertext, isNot(equals(enc2.ciphertext)),
+          reason: 'different sequences must produce different ciphertexts');
+
+      await expectLater(
+        () => codec.decryptJson(
+          encryptedBody: enc1.toJson(),
+          keyBytes: keyBytes,
+          context: ctx2,
+        ),
+        throwsA(isA<SecureDecryptException>()),
+        reason: 'decrypting seq-1 payload with seq-2 context must fail',
+      );
+    });
+
+    test('replay nonce in context is independent of AES-GCM nonce in payload',
+        () async {
+      final replayNonce = base64Url.encode(List<int>.generate(16, (_) => 0xAB));
+      final ctx = _ctx(replayNonce: replayNonce);
+
+      final encrypted = await codec.encryptJson(
+        body: {'action': 'spin'},
+        keyBytes: keyBytes,
+        context: ctx,
+      );
+
+      // The AES nonce in the EncryptedPayload is a fresh random 12 bytes —
+      // it must differ from the replay nonce used for the header.
+      expect(encrypted.nonce, isNot(equals(replayNonce)),
+          reason:
+              'AES-GCM nonce (payload) must be independent of the replay nonce (header)');
+    });
+
+    test('different session IDs produce different AAD and ciphertexts',
+        () async {
+      final body = {'loadout': 'default'};
+      final ctxA = _ctx(sessionId: 'sessionaaa');
+      final ctxB = _ctx(sessionId: 'sessionbbb');
+
+      final encA = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        context: ctxA,
+      );
+
+      await expectLater(
+        () => codec.decryptJson(
+          encryptedBody: encA.toJson(),
+          keyBytes: keyBytes,
+          context: ctxB,
+        ),
+        throwsA(isA<SecureDecryptException>()),
+        reason: 'session-A payload must not decrypt under session-B AAD',
+      );
+    });
+
+    test('encryptedAtUtc mismatch in AAD causes decryption failure', () async {
+      final body = {'friendId': 'f-1'};
+      final ctxEnc = _ctx(encryptedAtUtc: '2026-05-21T10:00:00.000000Z');
+      final ctxDec = _ctx(encryptedAtUtc: '2026-05-21T10:00:01.000000Z');
+
+      final encrypted = await codec.encryptJson(
+        body: body,
+        keyBytes: keyBytes,
+        context: ctxEnc,
+      );
+
+      await expectLater(
+        () => codec.decryptJson(
+          encryptedBody: encrypted.toJson(),
+          keyBytes: keyBytes,
+          context: ctxDec,
+        ),
+        throwsA(isA<SecureDecryptException>()),
+        reason: 'a different encryptedAtUtc in the AAD must cause MAC failure',
+      );
     });
   });
 }

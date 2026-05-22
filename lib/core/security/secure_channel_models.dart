@@ -93,3 +93,23 @@ class EncryptedPayload {
             DateTime.now().toUtc().toIso8601String(),
       );
 }
+
+class SecureRequestContext {
+  final String method;
+  final String pathAndQuery;
+  final String sessionId;
+  final int sequence;
+  final String replayNonce;
+  final String subjectId;
+  final String encryptedAtUtc;
+
+  const SecureRequestContext({
+    required this.method,
+    required this.pathAndQuery,
+    required this.sessionId,
+    required this.sequence,
+    required this.replayNonce,
+    required this.subjectId,
+    required this.encryptedAtUtc,
+  });
+}
