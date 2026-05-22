@@ -89,7 +89,7 @@ class DefaultSecureChannelService implements SecureChannelService {
         'deviceId': deviceId,
         'clientNonce': base64Url.encode(clientNonce),
         'clientPublicKey': base64Url.encode(publicKey.bytes),
-        'supportedSuites': [_suiteX25519, _suiteP256],
+        'supportedSuites': [_suiteX25519, 'P256-HKDF-SHA256-AES256GCM'],
       }),
     );
 
