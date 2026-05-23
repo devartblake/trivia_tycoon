@@ -22,12 +22,21 @@ Future<String?> adminGuard(BuildContext context, GoRouterState state) async {
   return (isAdmin && isAdminMode) ? null : '/';
 }
 
-/// Redirects users who haven't completed onboarding
+/// Redirects users who haven't completed onboarding.
+///
+/// Dev tester accounts (role 'tester') bypass onboarding entirely when the
+/// backend has enabled [FeatureFlags.devTesterEnabled].
 Future<String?> onboardingGuard(
     BuildContext context, GoRouterState state) async {
   final container = ProviderScope.containerOf(context);
-  final onboardingService = container.read(onboardingSettingsServiceProvider);
 
+  final flags = container.read(featureFlagsProvider);
+  if (flags.devTesterEnabled) {
+    final playerProfile = container.read(playerProfileServiceProvider);
+    if (await playerProfile.isDevTesterAccount()) return null;
+  }
+
+  final onboardingService = container.read(onboardingSettingsServiceProvider);
   final hasCompleted = await onboardingService.hasCompletedOnboarding();
   return hasCompleted ? null : '/onboarding';
 }

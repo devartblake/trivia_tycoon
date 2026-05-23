@@ -415,6 +415,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             name: 'admin-store-analytics',
             builder: (context, state) => const AdminStockAnalyticsScreen(),
           ),
+          GoRoute(
+            path: '/admin/reward-reactor',
+            name: 'admin-reward-reactor',
+            builder: (context, state) => const RewardReactorScreen(),
+          ),
         ],
       ),
 
@@ -499,6 +504,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/rewards/reactor',
         name: 'reward-reactor',
         builder: (context, state) => const RewardReactorScreen(),
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/spin-earn',

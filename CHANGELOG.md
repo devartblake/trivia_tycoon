@@ -80,6 +80,50 @@ Aligns the Flutter secure-channel implementation with the backend's strict 8-fie
 
 ---
 
+### Added – Reward Reactor admin entry point & route hardening (2026-05-22)
+
+Makes the Reward Reactor screen reachable for internal Alpha testing without requiring the backend to enable `rewardReactorEnabled`, and hardens the production route.
+
+**`lib/core/navigation/app_router.dart`**
+- `/admin/reward-reactor` GoRoute (named `admin-reward-reactor`) added inside the admin `ShellRoute`; protected automatically by the existing `enhancedAdminGuard` with no additional guard needed.
+- `onboardingGuard` added to the `/rewards/reactor` production route (was previously unguarded).
+
+**`lib/admin/admin_dashboard.dart`**
+- "Reward Reactor" tile added to `_getAdminActions()` (`Icons.flash_on_rounded`, `Colors.deepPurple`) — pushes to `/admin/reward-reactor`.
+
+**`lib/features/reward_reactor/services/reward_reactor_service.dart`**
+- Mock `_mockSpinResponse()` expanded from a single `daily-login-coins` line to an Alpha bundle covering all three planned reward sources:
+  - `daily-login-coins` — Daily Login: 50 Coins
+  - `mission-xp` — Mission Complete: 100 XP
+  - `arcade-token` — Arcade Challenge: 1 Skin Token
+- Animation rarity/intensity upgraded from `common`/`medium` to `rare`/`high` to exercise the full reel animation in testing.
+
+---
+
+### Added – Dev tester account system (2026-05-22)
+
+Backend-controlled dev tester accounts that bypass onboarding. The backend assigns the `tester` role and enables the feature flag; the Flutter guard checks both before applying any onboarding redirect.
+
+**`lib/core/models/app_config.dart`**
+- `devTesterEnabled: bool` added to `FeatureFlags` (default `false`). Backend sends `"devTesterEnabled": true` inside the `features` object of `GET /api/v1/app/config` to activate the system.
+
+**`lib/core/services/settings/player_profile_service.dart`**
+- `isDevTesterAccount()` added — checks both the legacy single-role field and the `userRoles` list for `'tester'`, consistent with the existing `isAdminUser()` pattern. The backend assigns this via `user_roles: ["tester"]` on `GET /users/me`, which `ProfileSyncService` already syncs automatically.
+
+**`lib/core/router/auth_guard.dart`**
+- `onboardingGuard` updated with a two-gate dev tester bypass:
+  1. If `devTesterEnabled` is `false` (default), the check is skipped entirely — zero overhead for non-tester builds.
+  2. If `devTesterEnabled` is `true`, checks `PlayerProfileService.isDevTesterAccount()`; if the account holds the `tester` role, the guard returns `null` and onboarding is skipped.
+- Both signals (`devTesterEnabled` flag AND `tester` role) must be present — a tester role alone has no effect if the flag is off, giving the backend a kill switch for the entire system.
+
+**Backend contract to enable a dev tester account:**
+```
+GET /api/v1/app/config  →  { "features": { "devTesterEnabled": true } }
+GET /users/me           →  { "user_roles": ["tester"] }
+```
+
+---
+
 ### Fixed - Question gameplay backend contract alignment (2026-05-10)
 
 - `QuestionModel` now parses backend-safe `GameplayQuestionDto` payloads from `GET /questions/set`, including `text`, `options`, `mediaKey`, and backend difficulty enum values. Backend options are converted into selectable frontend answers without assuming embedded correctness.

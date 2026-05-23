@@ -162,10 +162,12 @@ Recommended migration path:
 
 ---
 
-## Open Questions For PR Discussion
+## Open Questions — Resolved (2026-05-22)
 
-- Which route should host the Alpha screen: `/arcade/reward-reactor`, `/rewards/reactor`, or a hidden dev-only route?
-- Should the first Alpha use local mock payloads only, or wire a service method now that is ready for backend routes when they land?
-- Should Reward Reactor claim requests use the secure encrypted client from the start, matching Spin & Earn claim behavior?
-- Which first reward sources should be shown in Alpha: daily login, mission completion, arcade challenge, or manual dev test payload?
+| Question | Decision |
+|---|---|
+| Which route should host the Alpha screen? | `/rewards/reactor` — registered in GoRouter, `onboardingGuard` applied. Internal testers reach it via `/admin/reward-reactor` (admin panel tile, no flag required). |
+| Mock-only or wired service from the start? | Both — `BackendRewardReactorService` is wired to all three backend endpoints with graceful mock fallback when routes are not yet live. |
+| Should claim use the encrypted client from the start? | Yes — `POST /arcade/reactor/claim` routes through `EncryptedApiClient`, matching Spin & Earn claim behavior. |
+| Which first reward sources for Alpha mock? | Daily login (50 Coins), Mission Complete (100 XP), Arcade Challenge (1 Skin Token) — all three lines returned in a single `alpha-combined` mock spin response. |
 

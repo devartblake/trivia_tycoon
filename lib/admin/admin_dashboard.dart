@@ -460,6 +460,13 @@ class AdminDashboardScreen extends ConsumerWidget {
         color: const Color(0xFF6366F1),
         onTap: () => context.push('/admin/store'),
       ),
+      _AdminAction(
+        title: 'Reward Reactor',
+        subtitle: 'Alpha test — spin, claim, and reward preview',
+        icon: Icons.flash_on_rounded,
+        color: Colors.deepPurple,
+        onTap: () => context.push('/admin/reward-reactor'),
+      ),
     ];
   }
 }

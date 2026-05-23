@@ -77,21 +77,23 @@ class BackendRewardReactorService implements RewardReactorService {
 
   static ReactorSpinResponse _mockSpinResponse() {
     return ReactorSpinResponse(
-      spinId: 'mock-daily-${DateTime.now().toUtc().millisecondsSinceEpoch}',
+      spinId: 'mock-alpha-${DateTime.now().toUtc().millisecondsSinceEpoch}',
       status: 'pending_claim',
       expiresAtUtc: DateTime.now().toUtc().add(const Duration(minutes: 5)),
       animation: const ReactorAnimationHints(
         layout: 'reel3',
-        symbols: ['coin', 'coin', 'star', 'coin', 'gem', 'star', 'coin', 'coin', 'star'],
+        symbols: ['coin', 'star', 'gem', 'coin', 'star', 'gem', 'coin', 'star', 'gem'],
         winningSymbolIndexes: [0, 3, 6],
-        rarity: 'common',
-        intensity: 'medium',
+        rarity: 'rare',
+        intensity: 'high',
       ),
       rewardPreview: ReactorRewardPreview(
-        rewardId: 'daily-login-coins',
-        displayName: 'Daily Login Reward',
+        rewardId: 'alpha-combined',
+        displayName: 'Alpha Reward Bundle',
         lines: const [
-          ReactorRewardLine(type: 'coins', label: '50 Coins', amount: 50),
+          ReactorRewardLine(type: 'coins',  label: 'Daily Login — 50 Coins',          amount: 50),
+          ReactorRewardLine(type: 'xp',     label: 'Mission Complete — 100 XP',       amount: 100),
+          ReactorRewardLine(type: 'tokens', label: 'Arcade Challenge — 1 Skin Token', amount: 1),
         ],
       ),
       claimToken: 'mock-claim-token',
