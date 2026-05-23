@@ -11,8 +11,8 @@ final reactorProvider =
   return ReactorNotifier(ref.read(rewardReactorServiceProvider));
 });
 
-final reactorPhaseProvider = Provider.autoDispose<ReactorPhase>((ref) =>
-    ref.watch(reactorProvider).phase);
+final reactorPhaseProvider = Provider.autoDispose<ReactorPhase>(
+    (ref) => ref.watch(reactorProvider).phase);
 
-final reactorCooldownProvider = Provider.autoDispose<DateTime?>((ref) =>
-    ref.watch(reactorProvider).cooldownUntil);
+final reactorCooldownProvider = Provider.autoDispose<DateTime?>(
+    (ref) => ref.watch(reactorProvider).cooldownUntil);

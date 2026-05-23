@@ -9,6 +9,9 @@ class ReactorSpinResponse {
   final ReactorAnimationHints animation;
   final ReactorRewardPreview rewardPreview;
   final String claimToken;
+  final String? eventId;
+  final double? eventMultiplier;
+  final String? seasonKey;
 
   const ReactorSpinResponse({
     required this.spinId,
@@ -18,6 +21,9 @@ class ReactorSpinResponse {
     required this.animation,
     required this.rewardPreview,
     required this.claimToken,
+    this.eventId,
+    this.eventMultiplier,
+    this.seasonKey,
   });
 
   factory ReactorSpinResponse.fromJson(Map<String, dynamic> json) {
@@ -28,12 +34,16 @@ class ReactorSpinResponse {
           DateTime.tryParse(json['expiresAtUtc']?.toString() ?? '')?.toUtc() ??
               DateTime.now().toUtc().add(const Duration(minutes: 5)),
       cooldownUntilUtc:
-          DateTime.tryParse(json['cooldownUntilUtc']?.toString() ?? '')?.toUtc(),
+          DateTime.tryParse(json['cooldownUntilUtc']?.toString() ?? '')
+              ?.toUtc(),
       animation: ReactorAnimationHints.fromJson(
           Map<String, dynamic>.from(json['animation'] as Map? ?? {})),
       rewardPreview: ReactorRewardPreview.fromJson(
           Map<String, dynamic>.from(json['rewardPreview'] as Map? ?? {})),
       claimToken: json['claimToken']?.toString() ?? '',
+      eventId: json['eventId']?.toString(),
+      eventMultiplier: (json['eventMultiplier'] as num?)?.toDouble(),
+      seasonKey: json['seasonKey']?.toString(),
     );
   }
 
@@ -46,5 +56,8 @@ class ReactorSpinResponse {
         'animation': animation.toJson(),
         'rewardPreview': rewardPreview.toJson(),
         'claimToken': claimToken,
+        if (eventId != null) 'eventId': eventId,
+        if (eventMultiplier != null) 'eventMultiplier': eventMultiplier,
+        if (seasonKey != null) 'seasonKey': seasonKey,
       };
 }

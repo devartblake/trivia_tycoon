@@ -14,6 +14,10 @@ class _AlwaysFailingReactorService implements RewardReactorService {
   Future<ReactorSpinResponse> startSpin() => Future.error(Exception('404'));
 
   @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      Future.error(Exception('404'));
+
+  @override
   Future<ReactorClaimResponse> claimReward({
     required String spinId,
     required String claimToken,
@@ -32,7 +36,10 @@ class _SucceedingReactorService implements RewardReactorService {
       ReactorSpinResponse.fromJson({
         'spinId': 'live-spin-1',
         'status': 'pending_claim',
-        'expiresAtUtc': DateTime.now().toUtc().add(const Duration(minutes: 5)).toIso8601String(),
+        'expiresAtUtc': DateTime.now()
+            .toUtc()
+            .add(const Duration(minutes: 5))
+            .toIso8601String(),
         'animation': {
           'layout': 'reel3',
           'symbols': ['coin', 'gem', 'star'],
@@ -49,6 +56,10 @@ class _SucceedingReactorService implements RewardReactorService {
         },
         'claimToken': 'live-token',
       });
+
+  @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      startSpin();
 
   @override
   Future<ReactorClaimResponse> claimReward({
@@ -78,7 +89,8 @@ class _SucceedingReactorService implements RewardReactorService {
 // ---------------------------------------------------------------------------
 
 void main() {
-  group('_AlwaysFailingReactorService (simulates 404 / unreachable backend)', () {
+  group('_AlwaysFailingReactorService (simulates 404 / unreachable backend)',
+      () {
     final service = _AlwaysFailingReactorService();
 
     test('startSpin throws on failure (caller should handle)', () async {
@@ -87,6 +99,13 @@ void main() {
 
     test('getUserRewards throws on failure (caller should handle)', () async {
       expect(() => service.getUserRewards(), throwsA(isA<Exception>()));
+    });
+
+    test('chainSpin throws on failure (caller should handle)', () async {
+      expect(
+        () => service.chainSpin(chainedSpinId: 'missing-chain'),
+        throwsA(isA<Exception>()),
+      );
     });
   });
 
@@ -103,7 +122,17 @@ void main() {
         'expiresAtUtc': DateTime.now().toUtc().toIso8601String(),
         'animation': {
           'layout': 'reel3',
-          'symbols': ['coin', 'coin', 'star', 'coin', 'gem', 'star', 'coin', 'coin', 'star'],
+          'symbols': [
+            'coin',
+            'coin',
+            'star',
+            'coin',
+            'gem',
+            'star',
+            'coin',
+            'coin',
+            'star'
+          ],
           'winningSymbolIndexes': [0, 3, 6],
           'rarity': 'common',
           'intensity': 'medium',
@@ -150,6 +179,12 @@ void main() {
       final response = await service.startSpin();
       expect(response.status, 'pending_claim');
       expect(response.spinId, isNotEmpty);
+      expect(response.claimToken, isNotEmpty);
+    });
+
+    test('chainSpin returns a pending claim payload', () async {
+      final response = await service.chainSpin(chainedSpinId: 'chain-1');
+      expect(response.status, 'pending_claim');
       expect(response.claimToken, isNotEmpty);
     });
 

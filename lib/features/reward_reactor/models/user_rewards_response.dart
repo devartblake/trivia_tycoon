@@ -17,8 +17,8 @@ class UserRewardsResponse {
   factory UserRewardsResponse.fromJson(Map<String, dynamic> json) {
     return UserRewardsResponse(
       pendingRewards: (json['pendingRewards'] as List? ?? const [])
-          .map((e) => ReactorSpinResponse.fromJson(
-              Map<String, dynamic>.from(e as Map)))
+          .map((e) =>
+              ReactorSpinResponse.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       recentRewards: (json['recentRewards'] as List? ?? const [])
           .map((e) => ReactorClaimResponse.fromJson(

@@ -99,5 +99,57 @@ void main() {
       expect(response.coinsGranted, 100);
       expect(response.newBalance, 1940);
     });
+
+    test('claimStartedReward posts token-based body without segmentId',
+        () async {
+      final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+      late String capturedPath;
+      Map<String, dynamic>? capturedBody;
+
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            capturedPath = options.path;
+            capturedBody = Map<String, dynamic>.from(options.data as Map);
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {
+                  'success': true,
+                  'coinsGranted': 75,
+                  'newBalance': 2015,
+                  'message': 'Reward claimed',
+                },
+              ),
+            );
+          },
+        ),
+      );
+
+      final api = ApiService(
+        baseUrl: 'https://example.test',
+        dio: dio,
+        initializeCache: false,
+      );
+      final service = SpinWheelApiService(api);
+
+      final response = await service.claimStartedReward(
+        spinId: 'spin-abc',
+        claimToken: 'claim-token',
+        idempotencyKey: 'spin-abc-claim-token',
+      );
+
+      expect(capturedPath, '/arcade/spin/claim');
+      expect(capturedBody, {
+        'spinId': 'spin-abc',
+        'claimToken': 'claim-token',
+        'idempotencyKey': 'spin-abc-claim-token',
+      });
+      expect(capturedBody, isNot(contains('segmentId')));
+      expect(response.success, isTrue);
+      expect(response.coinsGranted, 75);
+      expect(response.newBalance, 2015);
+    });
   });
 }

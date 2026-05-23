@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/reward_reactor_providers.dart';
@@ -18,7 +19,8 @@ class ArcadeRewardMachineWidget extends ConsumerWidget {
     final isSpinning = state.phase == ReactorPhase.spinning;
     final showBanner = state.phase == ReactorPhase.pendingClaim ||
         state.phase == ReactorPhase.applied ||
-        state.phase == ReactorPhase.claiming;
+        state.phase == ReactorPhase.claiming ||
+        state.phase == ReactorPhase.chaining;
 
     final animation = state.pendingReward?.animation;
     final symbols = animation?.symbols ?? const ['coin', 'gem', 'star'];
@@ -32,7 +34,12 @@ class ArcadeRewardMachineWidget extends ConsumerWidget {
           children: [
             _buildHeader(),
             const SizedBox(height: 24),
-            _buildReels(perReelSymbols, winningIndexes, isSpinning),
+            _buildReels(
+              perReelSymbols,
+              winningIndexes,
+              isSpinning,
+              state.pendingReward?.seasonKey,
+            ),
             const SizedBox(height: 16),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 350),
@@ -40,13 +47,24 @@ class ArcadeRewardMachineWidget extends ConsumerWidget {
                   ? ReactorRewardBanner(
                       key: ValueKey(state.pendingReward!.spinId),
                       preview: state.pendingReward!.rewardPreview,
+                      eventId: state.pendingReward!.eventId,
+                      eventMultiplier: state.pendingReward!.eventMultiplier,
+                      isChainBonus: state.phase == ReactorPhase.chaining ||
+                          state.chainedSpin?.spinId ==
+                              state.pendingReward!.spinId,
                     )
                   : const SizedBox(height: 80),
             ),
             const ReactorActionControls(),
           ],
         ),
-        ReactorParticleLayer(active: state.phase == ReactorPhase.applied),
+        Positioned.fill(
+          child: ReactorParticleLayer(
+            active: state.phase == ReactorPhase.applied,
+            rarity: animation?.rarity ?? 'common',
+            seasonKey: state.pendingReward?.seasonKey,
+          ),
+        ),
       ],
     );
   }
@@ -76,6 +94,7 @@ class ArcadeRewardMachineWidget extends ConsumerWidget {
     List<List<String>> perReelSymbols,
     List<int> winningIndexes,
     bool isSpinning,
+    String? seasonKey,
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -98,11 +117,18 @@ class ArcadeRewardMachineWidget extends ConsumerWidget {
               winningSymbolIndex: winIdx,
               isSpinning: isSpinning,
               stopDelay: Duration(milliseconds: i * 200),
+              seasonKey: seasonKey,
+              onStopped: _playReelStopFeedback,
             ),
           );
         }),
       ),
     );
+  }
+
+  static void _playReelStopFeedback() {
+    HapticFeedback.lightImpact();
+    SystemSound.play(SystemSoundType.click);
   }
 
   static List<List<String>> _splitSymbols(List<String> symbols, int reels) {

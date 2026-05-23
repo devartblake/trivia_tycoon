@@ -6,12 +6,14 @@ class ReactorClaimResponse {
   final String status;
   final ReactorRewardPreview? reward;
   final ReactorWalletSnapshot? walletSnapshot;
+  final String? chainedSpinId;
 
   const ReactorClaimResponse({
     required this.spinId,
     required this.status,
     this.reward,
     this.walletSnapshot,
+    this.chainedSpinId,
   });
 
   bool get isApplied => status == 'applied';
@@ -29,8 +31,10 @@ class ReactorClaimResponse {
           ? ReactorRewardPreview.fromJson(Map<String, dynamic>.from(rewardJson))
           : null,
       walletSnapshot: walletJson != null
-          ? ReactorWalletSnapshot.fromJson(Map<String, dynamic>.from(walletJson))
+          ? ReactorWalletSnapshot.fromJson(
+              Map<String, dynamic>.from(walletJson))
           : null,
+      chainedSpinId: json['chainedSpinId']?.toString(),
     );
   }
 
@@ -39,5 +43,6 @@ class ReactorClaimResponse {
         'status': status,
         if (reward != null) 'reward': reward!.toJson(),
         if (walletSnapshot != null) 'walletSnapshot': walletSnapshot!.toJson(),
+        if (chainedSpinId != null) 'chainedSpinId': chainedSpinId,
       };
 }

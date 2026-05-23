@@ -28,6 +28,9 @@ void main() {
         ],
       },
       'claimToken': 'token-abc',
+      'eventId': 'double-coins',
+      'eventMultiplier': 2.0,
+      'seasonKey': 'winter_2026',
     };
 
     test('fromJson round-trips with all fields', () {
@@ -42,6 +45,9 @@ void main() {
       expect(response.rewardPreview.displayName, 'Daily Login Reward');
       expect(response.rewardPreview.lines.first.amount, 50);
       expect(response.claimToken, 'token-abc');
+      expect(response.eventId, 'double-coins');
+      expect(response.eventMultiplier, 2.0);
+      expect(response.seasonKey, 'winter_2026');
     });
 
     test('fromJson handles missing optional fields', () {
@@ -59,6 +65,7 @@ void main() {
       };
       final response = ReactorSpinResponse.fromJson(minimal2);
       expect(response.cooldownUntilUtc, isNull);
+      expect(response.eventId, 'double-coins');
       expect(response.rewardPreview.lines.first.amount, isNull);
     });
 
@@ -67,6 +74,9 @@ void main() {
       final restored = ReactorSpinResponse.fromJson(original.toJson());
       expect(restored.spinId, original.spinId);
       expect(restored.claimToken, original.claimToken);
+      expect(restored.eventId, original.eventId);
+      expect(restored.eventMultiplier, original.eventMultiplier);
+      expect(restored.seasonKey, original.seasonKey);
       expect(restored.animation.winningSymbolIndexes,
           original.animation.winningSymbolIndexes);
     });
@@ -113,10 +123,32 @@ void main() {
     }
 
     test('isApplied / isDuplicate / isExpired / isCooldown flags', () {
-      expect(ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'applied'}).isApplied, isTrue);
-      expect(ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'duplicate'}).isDuplicate, isTrue);
-      expect(ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'expired'}).isExpired, isTrue);
-      expect(ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'cooldown'}).isCooldown, isTrue);
+      expect(
+          ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'applied'})
+              .isApplied,
+          isTrue);
+      expect(
+          ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'duplicate'})
+              .isDuplicate,
+          isTrue);
+      expect(
+          ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'expired'})
+              .isExpired,
+          isTrue);
+      expect(
+          ReactorClaimResponse.fromJson({'spinId': 's', 'status': 'cooldown'})
+              .isCooldown,
+          isTrue);
+    });
+
+    test('fromJson parses nullable chainedSpinId', () {
+      final response = ReactorClaimResponse.fromJson({
+        'spinId': 'spin-1',
+        'status': 'applied',
+        'chainedSpinId': 'chain-1',
+      });
+      expect(response.chainedSpinId, 'chain-1');
+      expect(response.toJson()['chainedSpinId'], 'chain-1');
     });
   });
 

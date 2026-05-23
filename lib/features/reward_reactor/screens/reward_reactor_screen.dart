@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/reward_reactor_providers.dart';
@@ -10,7 +11,16 @@ class RewardReactorScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<ReactorState>(reactorProvider, (previous, next) {
+      if (previous?.phase != next.phase && next.phase == ReactorPhase.applied) {
+        HapticFeedback.mediumImpact();
+        SystemSound.play(SystemSoundType.alert);
+      }
+      if (previous?.phase != next.phase &&
+          next.phase == ReactorPhase.cooldown) {
+        HapticFeedback.heavyImpact();
+      }
       if (next.phase == ReactorPhase.error && next.errorMessage != null) {
+        HapticFeedback.heavyImpact();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.errorMessage!),
@@ -18,8 +28,7 @@ class RewardReactorScreen extends ConsumerWidget {
             action: SnackBarAction(
               label: 'Dismiss',
               textColor: Colors.white70,
-              onPressed: () =>
-                  ref.read(reactorProvider.notifier).dismiss(),
+              onPressed: () => ref.read(reactorProvider.notifier).dismiss(),
             ),
           ),
         );

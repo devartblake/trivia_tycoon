@@ -4,8 +4,15 @@ import 'package:flutter/material.dart';
 
 class ReactorParticleLayer extends StatefulWidget {
   final bool active;
+  final String rarity;
+  final String? seasonKey;
 
-  const ReactorParticleLayer({super.key, required this.active});
+  const ReactorParticleLayer({
+    super.key,
+    required this.active,
+    this.rarity = 'common',
+    this.seasonKey,
+  });
 
   @override
   State<ReactorParticleLayer> createState() => _ReactorParticleLayerState();
@@ -14,22 +21,9 @@ class ReactorParticleLayer extends StatefulWidget {
 class _ReactorParticleLayerState extends State<ReactorParticleLayer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late List<_Particle> _particles;
 
   static final _rng = Random();
-  static final List<_Particle> _particles = List.generate(
-    20,
-    (_) => _Particle(
-      x: _rng.nextDouble(),
-      y: _rng.nextDouble(),
-      radius: 3 + _rng.nextDouble() * 4,
-      color: [
-        const Color(0xFFFFD700),
-        const Color(0xFF7C3AED),
-        const Color(0xFF00E5FF),
-      ][_rng.nextInt(3)],
-      phase: _rng.nextDouble() * 2 * pi,
-    ),
-  );
 
   @override
   void initState() {
@@ -38,18 +32,59 @@ class _ReactorParticleLayerState extends State<ReactorParticleLayer>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
+    _particles = _buildParticles(widget.rarity, widget.seasonKey);
     if (widget.active) _controller.repeat(reverse: true);
   }
 
   @override
   void didUpdateWidget(ReactorParticleLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.rarity != oldWidget.rarity ||
+        widget.seasonKey != oldWidget.seasonKey) {
+      _particles = _buildParticles(widget.rarity, widget.seasonKey);
+    }
     if (widget.active && !oldWidget.active) {
       _controller.repeat(reverse: true);
     } else if (!widget.active && oldWidget.active) {
       _controller.stop();
       _controller.value = 0;
     }
+  }
+
+  static List<_Particle> _buildParticles(String rarity, String? seasonKey) {
+    final colors = _paletteFor(seasonKey, rarity);
+    final count = switch (rarity) {
+      'legendary' => 42,
+      'rare' => 32,
+      'uncommon' => 26,
+      _ => 20,
+    };
+
+    return List.generate(
+      count,
+      (_) => _Particle(
+        x: _rng.nextDouble(),
+        y: _rng.nextDouble(),
+        radius: 3 + _rng.nextDouble() * 5,
+        color: colors[_rng.nextInt(colors.length)],
+        phase: _rng.nextDouble() * 2 * pi,
+      ),
+    );
+  }
+
+  static List<Color> _paletteFor(String? seasonKey, String rarity) {
+    if (seasonKey?.startsWith('halloween') == true) {
+      return const [Color(0xFFFF8A00), Color(0xFF8B5CF6), Color(0xFF39FF14)];
+    }
+    if (seasonKey?.startsWith('winter') == true) {
+      return const [Color(0xFFBDEBFF), Color(0xFFFFFFFF), Color(0xFF7DD3FC)];
+    }
+    if (seasonKey?.startsWith('spring') == true) {
+      return const [Color(0xFFFF7AB6), Color(0xFF64D96B), Color(0xFFFFE066)];
+    }
+    return rarity == 'legendary'
+        ? const [Color(0xFFFFD700), Color(0xFFFF7A00), Color(0xFFFFFFFF)]
+        : const [Color(0xFFFFD700), Color(0xFF7C3AED), Color(0xFF00E5FF)];
   }
 
   @override

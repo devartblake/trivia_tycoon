@@ -105,6 +105,28 @@ class SpinWheelApiService {
     return SpinClaimResponse.fromJson(json);
   }
 
+  /// Claims a server-started spin using the backend-issued claim token.
+  ///
+  /// This is the backend-authoritative Spin & Earn contract that should replace
+  /// [claimReward] once `POST /arcade/spin/start` is live in every environment.
+  Future<SpinClaimResponse> claimStartedReward({
+    required String spinId,
+    required String claimToken,
+    required String idempotencyKey,
+  }) async {
+    _log.info('Claiming server-started spin reward: spinId=$spinId');
+    final body = {
+      'spinId': spinId,
+      'claimToken': claimToken,
+      'idempotencyKey': idempotencyKey,
+    };
+    final json = _encryptedClient != null
+        ? await _encryptedClient!
+            .postEncrypted('/arcade/spin/claim', body: body)
+        : await _apiService.post('/arcade/spin/claim', body: body);
+    return SpinClaimResponse.fromJson(json);
+  }
+
   /// Requests a server-generated spin outcome.
   /// Falls back to a mock response while POST /arcade/spin/start is proposed/future.
   Future<SpinStartResponse> startSpin({String? playerId}) async {

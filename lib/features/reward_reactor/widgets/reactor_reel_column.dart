@@ -7,6 +7,8 @@ class ReactorReelColumn extends StatefulWidget {
   final int winningSymbolIndex;
   final bool isSpinning;
   final Duration stopDelay;
+  final VoidCallback? onStopped;
+  final String? seasonKey;
 
   const ReactorReelColumn({
     super.key,
@@ -14,6 +16,8 @@ class ReactorReelColumn extends StatefulWidget {
     required this.winningSymbolIndex,
     required this.isSpinning,
     this.stopDelay = Duration.zero,
+    this.onStopped,
+    this.seasonKey,
   });
 
   @override
@@ -39,6 +43,11 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
       parent: _controller,
       curve: Curves.easeOut,
     );
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        widget.onStopped?.call();
+      }
+    });
   }
 
   @override
@@ -84,13 +93,13 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
               offset: Offset(0, offset % _tileHeight),
               child: Column(
                 children: _displaySymbols.asMap().entries.map((entry) {
-                  final isWinning = !widget.isSpinning &&
-                      entry.key == 1;
+                  final isWinning = !widget.isSpinning && entry.key == 1;
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ReactorSymbolTile(
                       symbolKey: entry.value,
                       isWinning: isWinning,
+                      seasonKey: widget.seasonKey,
                     ),
                   );
                 }).toList(),

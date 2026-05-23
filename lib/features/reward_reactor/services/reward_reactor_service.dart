@@ -11,6 +11,7 @@ import '../models/user_rewards_response.dart';
 
 abstract class RewardReactorService {
   Future<ReactorSpinResponse> startSpin();
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId});
   Future<ReactorClaimResponse> claimReward({
     required String spinId,
     required String claimToken,
@@ -35,6 +36,26 @@ class BackendRewardReactorService implements RewardReactorService {
     } catch (e) {
       _log.warning('startSpin backend unavailable, using mock: $e');
       return _mockSpinResponse();
+    }
+  }
+
+  @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) async {
+    try {
+      final json = await _apiService.post(
+        '/arcade/reactor/chain',
+        body: {'chainedSpinId': chainedSpinId},
+      );
+      return ReactorSpinResponse.fromJson(json);
+    } catch (e) {
+      _log.warning('chainSpin backend unavailable, using mock: $e');
+      return _mockSpinResponse(
+        spinIdPrefix: 'mock-chain',
+        rewardId: 'chain-bonus',
+        displayName: 'Chain Bonus',
+        rarity: 'rare',
+        intensity: 'high',
+      );
     }
   }
 
@@ -75,25 +96,46 @@ class BackendRewardReactorService implements RewardReactorService {
     }
   }
 
-  static ReactorSpinResponse _mockSpinResponse() {
+  static ReactorSpinResponse _mockSpinResponse({
+    String spinIdPrefix = 'mock-alpha',
+    String rewardId = 'alpha-combined',
+    String displayName = 'Alpha Reward Bundle',
+    String rarity = 'rare',
+    String intensity = 'high',
+  }) {
     return ReactorSpinResponse(
-      spinId: 'mock-alpha-${DateTime.now().toUtc().millisecondsSinceEpoch}',
+      spinId: '$spinIdPrefix-${DateTime.now().toUtc().millisecondsSinceEpoch}',
       status: 'pending_claim',
       expiresAtUtc: DateTime.now().toUtc().add(const Duration(minutes: 5)),
-      animation: const ReactorAnimationHints(
+      animation: ReactorAnimationHints(
         layout: 'reel3',
-        symbols: ['coin', 'star', 'gem', 'coin', 'star', 'gem', 'coin', 'star', 'gem'],
-        winningSymbolIndexes: [0, 3, 6],
-        rarity: 'rare',
-        intensity: 'high',
+        symbols: const [
+          'coin',
+          'star',
+          'gem',
+          'coin',
+          'star',
+          'gem',
+          'coin',
+          'star',
+          'gem'
+        ],
+        winningSymbolIndexes: const [0, 3, 6],
+        rarity: rarity,
+        intensity: intensity,
       ),
       rewardPreview: ReactorRewardPreview(
-        rewardId: 'alpha-combined',
-        displayName: 'Alpha Reward Bundle',
+        rewardId: rewardId,
+        displayName: displayName,
         lines: const [
-          ReactorRewardLine(type: 'coins',  label: 'Daily Login — 50 Coins',          amount: 50),
-          ReactorRewardLine(type: 'xp',     label: 'Mission Complete — 100 XP',       amount: 100),
-          ReactorRewardLine(type: 'tokens', label: 'Arcade Challenge — 1 Skin Token', amount: 1),
+          ReactorRewardLine(
+              type: 'coins', label: 'Daily Login — 50 Coins', amount: 50),
+          ReactorRewardLine(
+              type: 'xp', label: 'Mission Complete — 100 XP', amount: 100),
+          ReactorRewardLine(
+              type: 'tokens',
+              label: 'Arcade Challenge — 1 Skin Token',
+              amount: 1),
         ],
       ),
       claimToken: 'mock-claim-token',

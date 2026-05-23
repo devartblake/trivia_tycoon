@@ -12,10 +12,11 @@ class ReactorActionControls extends ConsumerWidget {
     final notifier = ref.read(reactorProvider.notifier);
 
     final canSpin = state.phase == ReactorPhase.idle;
-    final canClaim = state.phase == ReactorPhase.pendingClaim &&
-        !state.isClaimInFlight;
+    final canClaim =
+        state.phase == ReactorPhase.pendingClaim && !state.isClaimInFlight;
     final showClaim = state.phase == ReactorPhase.pendingClaim ||
-        state.phase == ReactorPhase.claiming;
+        state.phase == ReactorPhase.claiming ||
+        state.phase == ReactorPhase.chaining;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -62,7 +63,8 @@ class ReactorActionControls extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: state.isClaimInFlight
+                  child: state.isClaimInFlight ||
+                          state.phase == ReactorPhase.chaining
                       ? const SizedBox(
                           width: 20,
                           height: 20,

@@ -16,7 +16,8 @@ class ReactorRewardPreview {
       rewardId: json['rewardId']?.toString() ?? '',
       displayName: json['displayName']?.toString() ?? '',
       lines: (json['lines'] as List? ?? const [])
-          .map((e) => ReactorRewardLine.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map((e) =>
+              ReactorRewardLine.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
     );
   }

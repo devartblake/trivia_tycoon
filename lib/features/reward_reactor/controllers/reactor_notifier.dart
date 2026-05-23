@@ -4,11 +4,21 @@ import '../models/reactor_claim_response.dart';
 import '../models/reactor_spin_response.dart';
 import '../services/reward_reactor_service.dart';
 
-enum ReactorPhase { idle, spinning, pendingClaim, claiming, applied, cooldown, error }
+enum ReactorPhase {
+  idle,
+  spinning,
+  pendingClaim,
+  claiming,
+  chaining,
+  applied,
+  cooldown,
+  error,
+}
 
 class ReactorState {
   final ReactorPhase phase;
   final ReactorSpinResponse? pendingReward;
+  final ReactorSpinResponse? chainedSpin;
   final ReactorClaimResponse? lastClaim;
   final DateTime? cooldownUntil;
   final bool isClaimInFlight;
@@ -17,6 +27,7 @@ class ReactorState {
   const ReactorState({
     this.phase = ReactorPhase.idle,
     this.pendingReward,
+    this.chainedSpin,
     this.lastClaim,
     this.cooldownUntil,
     this.isClaimInFlight = false,
@@ -26,6 +37,7 @@ class ReactorState {
   ReactorState copyWith({
     ReactorPhase? phase,
     ReactorSpinResponse? pendingReward,
+    ReactorSpinResponse? chainedSpin,
     ReactorClaimResponse? lastClaim,
     DateTime? cooldownUntil,
     bool? isClaimInFlight,
@@ -34,6 +46,7 @@ class ReactorState {
     return ReactorState(
       phase: phase ?? this.phase,
       pendingReward: pendingReward ?? this.pendingReward,
+      chainedSpin: chainedSpin ?? this.chainedSpin,
       lastClaim: lastClaim ?? this.lastClaim,
       cooldownUntil: cooldownUntil ?? this.cooldownUntil,
       isClaimInFlight: isClaimInFlight ?? this.isClaimInFlight,
@@ -91,6 +104,14 @@ class ReactorNotifier extends StateNotifier<ReactorState> {
 
       if (response.isCooldown) {
         state = ReactorState(phase: ReactorPhase.cooldown);
+      } else if (response.chainedSpinId != null &&
+          response.chainedSpinId!.isNotEmpty) {
+        state = ReactorState(
+          phase: ReactorPhase.chaining,
+          pendingReward: pending,
+          lastClaim: response,
+        );
+        await chain(response.chainedSpinId!);
       } else {
         state = ReactorState(
           phase: ReactorPhase.applied,
@@ -103,6 +124,38 @@ class ReactorNotifier extends StateNotifier<ReactorState> {
         phase: ReactorPhase.pendingClaim,
         isClaimInFlight: false,
         errorMessage: 'Claim failed. Please try again.',
+      );
+    }
+  }
+
+  Future<void> chain(String chainedSpinId) async {
+    if (chainedSpinId.isEmpty) return;
+    if (state.phase != ReactorPhase.chaining) {
+      state = state.copyWith(phase: ReactorPhase.chaining);
+    }
+
+    try {
+      final response = await _service.chainSpin(chainedSpinId: chainedSpinId);
+      if (response.status == 'cooldown') {
+        state = ReactorState(
+          phase: ReactorPhase.cooldown,
+          cooldownUntil: response.cooldownUntilUtc,
+          lastClaim: state.lastClaim,
+        );
+      } else {
+        state = ReactorState(
+          phase: ReactorPhase.pendingClaim,
+          pendingReward: response,
+          chainedSpin: response,
+          lastClaim: state.lastClaim,
+        );
+      }
+    } catch (e) {
+      state = ReactorState(
+        phase: ReactorPhase.error,
+        pendingReward: state.pendingReward,
+        lastClaim: state.lastClaim,
+        errorMessage: 'Could not start chain bonus. Please try again.',
       );
     }
   }

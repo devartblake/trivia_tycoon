@@ -41,7 +41,12 @@ ReactorSpinResponse _mockSpin() => ReactorSpinResponse.fromJson({
 
 class _NoOpService implements RewardReactorService {
   @override
-  Future<ReactorSpinResponse> startSpin() => Completer<ReactorSpinResponse>().future;
+  Future<ReactorSpinResponse> startSpin() =>
+      Completer<ReactorSpinResponse>().future;
+
+  @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      Completer<ReactorSpinResponse>().future;
 
   @override
   Future<ReactorClaimResponse> claimReward({
@@ -108,7 +113,7 @@ void main() {
         pendingReward: _mockSpin(),
       );
       await tester.pumpWidget(_buildWidget(state));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.text('SPIN'), findsOneWidget);
       expect(find.text('CLAIM'), findsOneWidget);
@@ -125,7 +130,7 @@ void main() {
         isClaimInFlight: true,
       );
       await tester.pumpWidget(_buildWidget(state));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(find.text('CLAIM'), findsNothing);
@@ -142,7 +147,7 @@ void main() {
         ),
       );
       await tester.pumpWidget(_buildWidget(state));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.byType(ArcadeRewardMachineWidget), findsOneWidget);
       expect(find.text('CLAIM'), findsNothing);

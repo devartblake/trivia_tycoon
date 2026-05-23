@@ -68,6 +68,11 @@ class _SpinSuccessService implements RewardReactorService {
   Future<ReactorSpinResponse> startSpin() async => _pendingSpinResponse();
 
   @override
+  Future<ReactorSpinResponse> chainSpin(
+          {required String chainedSpinId}) async =>
+      _pendingSpinResponse();
+
+  @override
   Future<ReactorClaimResponse> claimReward({
     required String spinId,
     required String claimToken,
@@ -83,6 +88,10 @@ class _SpinSuccessService implements RewardReactorService {
 class _SpinCooldownService implements RewardReactorService {
   @override
   Future<ReactorSpinResponse> startSpin() async => _cooldownSpinResponse();
+
+  @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      Future.error(Exception('should not be called'));
 
   @override
   Future<ReactorClaimResponse> claimReward({
@@ -103,6 +112,10 @@ class _SpinErrorService implements RewardReactorService {
       Future.error(Exception('network error'));
 
   @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      Future.error(Exception('should not be called'));
+
+  @override
   Future<ReactorClaimResponse> claimReward({
     required String spinId,
     required String claimToken,
@@ -120,6 +133,10 @@ class _ClaimCooldownService implements RewardReactorService {
   Future<ReactorSpinResponse> startSpin() async => _pendingSpinResponse();
 
   @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      Future.error(Exception('should not be called'));
+
+  @override
   Future<ReactorClaimResponse> claimReward({
     required String spinId,
     required String claimToken,
@@ -132,9 +149,46 @@ class _ClaimCooldownService implements RewardReactorService {
       const UserRewardsResponse.empty();
 }
 
+class _ClaimChainService implements RewardReactorService {
+  int chainCallCount = 0;
+
+  @override
+  Future<ReactorSpinResponse> startSpin() async => _pendingSpinResponse();
+
+  @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) async {
+    chainCallCount++;
+    return ReactorSpinResponse.fromJson({
+      ..._pendingSpinResponse().toJson(),
+      'spinId': 'chain-spin-1',
+      'claimToken': 'chain-token',
+    });
+  }
+
+  @override
+  Future<ReactorClaimResponse> claimReward({
+    required String spinId,
+    required String claimToken,
+    required String idempotencyKey,
+  }) async =>
+      ReactorClaimResponse.fromJson({
+        'spinId': spinId,
+        'status': 'applied',
+        'chainedSpinId': 'chain-1',
+      });
+
+  @override
+  Future<UserRewardsResponse> getUserRewards() async =>
+      const UserRewardsResponse.empty();
+}
+
 class _ClaimErrorService implements RewardReactorService {
   @override
   Future<ReactorSpinResponse> startSpin() async => _pendingSpinResponse();
+
+  @override
+  Future<ReactorSpinResponse> chainSpin({required String chainedSpinId}) =>
+      Future.error(Exception('should not be called'));
 
   @override
   Future<ReactorClaimResponse> claimReward({
@@ -156,6 +210,11 @@ class _SlowClaimService implements RewardReactorService {
   Future<ReactorSpinResponse> startSpin() async => _pendingSpinResponse();
 
   @override
+  Future<ReactorSpinResponse> chainSpin(
+          {required String chainedSpinId}) async =>
+      _pendingSpinResponse();
+
+  @override
   Future<ReactorClaimResponse> claimReward({
     required String spinId,
     required String claimToken,
@@ -163,7 +222,8 @@ class _SlowClaimService implements RewardReactorService {
   }) async {
     claimCallCount++;
     await Future.delayed(const Duration(milliseconds: 5));
-    return ReactorClaimResponse.fromJson({'spinId': spinId, 'status': 'applied'});
+    return ReactorClaimResponse.fromJson(
+        {'spinId': spinId, 'status': 'applied'});
   }
 
   @override
@@ -186,7 +246,8 @@ ProviderContainer _buildContainer(RewardReactorService svc) =>
 
 void main() {
   group('ReactorNotifier', () {
-    test('initial state — idle phase, all nullable fields null, isClaimInFlight false',
+    test(
+        'initial state — idle phase, all nullable fields null, isClaimInFlight false',
         () {
       final container = _buildContainer(_SpinSuccessService());
       addTearDown(container.dispose);
@@ -203,7 +264,8 @@ void main() {
     });
 
     group('spin()', () {
-      test('success — idle → pendingClaim; pendingReward set with correct status',
+      test(
+          'success — idle → pendingClaim; pendingReward set with correct status',
           () async {
         final container = _buildContainer(_SpinSuccessService());
         addTearDown(container.dispose);
@@ -220,7 +282,8 @@ void main() {
         expect(state.pendingReward!.claimToken, isNotEmpty);
       });
 
-      test('cooldown response — idle → cooldown; cooldownUntil set in the future',
+      test(
+          'cooldown response — idle → cooldown; cooldownUntil set in the future',
           () async {
         final container = _buildContainer(_SpinCooldownService());
         addTearDown(container.dispose);
@@ -249,7 +312,8 @@ void main() {
         expect(state.errorMessage, isNotEmpty);
       });
 
-      test('no-op when phase is not idle — second spin() leaves state unchanged',
+      test(
+          'no-op when phase is not idle — second spin() leaves state unchanged',
           () async {
         final container = _buildContainer(_SpinSuccessService());
         addTearDown(container.dispose);
@@ -258,7 +322,8 @@ void main() {
 
         final notifier = container.read(reactorProvider.notifier);
         await notifier.spin();
-        expect(container.read(reactorProvider).phase, ReactorPhase.pendingClaim);
+        expect(
+            container.read(reactorProvider).phase, ReactorPhase.pendingClaim);
 
         final spinIdBefore =
             container.read(reactorProvider).pendingReward!.spinId;
@@ -271,7 +336,8 @@ void main() {
     });
 
     group('claim()', () {
-      test('success — pendingClaim → applied; lastClaim.isApplied true; pendingReward preserved',
+      test(
+          'success — pendingClaim → applied; lastClaim.isApplied true; pendingReward preserved',
           () async {
         final container = _buildContainer(_SpinSuccessService());
         addTearDown(container.dispose);
@@ -303,7 +369,28 @@ void main() {
         expect(container.read(reactorProvider).phase, ReactorPhase.cooldown);
       });
 
-      test('error recovery — snaps back to pendingClaim; errorMessage set; isClaimInFlight reset',
+      test('chain response starts chain spin and returns to pendingClaim',
+          () async {
+        final svc = _ClaimChainService();
+        final container = _buildContainer(svc);
+        addTearDown(container.dispose);
+        final sub = container.listen(reactorProvider, (_, __) {});
+        addTearDown(sub.close);
+
+        final notifier = container.read(reactorProvider.notifier);
+        await notifier.spin();
+        await notifier.claim();
+
+        final state = container.read(reactorProvider);
+        expect(svc.chainCallCount, 1);
+        expect(state.phase, ReactorPhase.pendingClaim);
+        expect(state.pendingReward!.spinId, 'chain-spin-1');
+        expect(state.chainedSpin!.spinId, 'chain-spin-1');
+        expect(state.lastClaim!.chainedSpinId, 'chain-1');
+      });
+
+      test(
+          'error recovery — snaps back to pendingClaim; errorMessage set; isClaimInFlight reset',
           () async {
         final container = _buildContainer(_ClaimErrorService());
         addTearDown(container.dispose);
@@ -321,7 +408,8 @@ void main() {
         expect(state.pendingReward, isNotNull);
       });
 
-      test('double-tap guard — second concurrent claim() does not trigger a second service call',
+      test(
+          'double-tap guard — second concurrent claim() does not trigger a second service call',
           () async {
         final svc = _SlowClaimService();
         final container = _buildContainer(svc);
@@ -340,7 +428,8 @@ void main() {
       });
     });
 
-    test('dismiss() — resets any phase back to idle with cleared fields', () async {
+    test('dismiss() — resets any phase back to idle with cleared fields',
+        () async {
       final container = _buildContainer(_SpinErrorService());
       addTearDown(container.dispose);
       final sub = container.listen(reactorProvider, (_, __) {});
