@@ -309,21 +309,17 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
   void _bootstrapPersonalization(serviceManager) {
     unawaited(() async {
       try {
-        final playerId =
-            await serviceManager.playerProfileService.getUserId();
+        final playerId = await serviceManager.playerProfileService.getUserId();
         if (playerId == null || playerId.isEmpty) return;
-        await ref
-            .read(personalizationServiceProvider)
-            .initSession(playerId);
+        await ref.read(personalizationServiceProvider).initSession(playerId);
 
         // Seed personalization toggle from full profile (lazy fetch)
         try {
           final profile = await ref
               .read(personalizationServiceProvider)
               .getProfile(playerId);
-          ref
-              .read(personalizationEnabledProvider(playerId).notifier)
-              .state = profile.personalizationEnabled;
+          ref.read(personalizationEnabledProvider(playerId).notifier).state =
+              profile.personalizationEnabled;
         } catch (_) {}
 
         LogManager.debug(
@@ -345,11 +341,25 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
       final isLoggedIn = await serviceManager.authService.isLoggedIn();
       final hasOnboarded = await serviceManager.onboardingSettingsService
           .hasCompletedOnboarding();
+      await ref.read(playerIdentityProvider.notifier).initialize();
+      final hasFullAccountIdentity =
+          ref.read(playerIdentityProvider).kind == PlayerIdentityKind.fullAccount;
 
       // Update the provider state to match service state
       if (isLoggedIn) {
         ref.read(isLoggedInSyncProvider.notifier).state = true;
         _bootstrapPersonalization(serviceManager);
+      } else if (hasFullAccountIdentity) {
+        _bootstrapPersonalization(serviceManager);
+      }
+
+      try {
+        final profiles =
+            await ref.read(multiProfileServiceProvider).getAllProfiles();
+        ref.read(profileSelectedProvider.notifier).state =
+            !(isLoggedIn || hasFullAccountIdentity) || profiles.length <= 1;
+      } catch (_) {
+        ref.read(profileSelectedProvider.notifier).state = true;
       }
 
       if (isLoggedIn && hasOnboarded) {
@@ -522,8 +532,9 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              textScaleFactor:
-                  MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.4),
+              textScaler: TextScaler.linear(
+                MediaQuery.textScalerOf(context).scale(1.0).clamp(0.8, 1.4),
+              ),
             ),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import '../providers/quiz_results_provider.dart';
 import '../providers/riverpod_providers.dart';
 import '../providers/xp_provider.dart';
@@ -31,6 +34,7 @@ class QuizCompletionHandler {
 
       // Trigger achievement checks
       await _checkForNewAchievements(result);
+      await _recordMissionProgress(result);
 
       // Refresh providers to show updated data
       ref.invalidate(educationalStatsProvider);
@@ -40,6 +44,41 @@ class QuizCompletionHandler {
     } catch (e) {
       LogManager.debug('Error processing quiz completion: $e');
       // Don't throw - we don't want to break the quiz flow if stats fail
+    }
+  }
+
+  Future<void> _recordMissionProgress(QuizResults result) async {
+    try {
+      final playerId = await ref.read(currentPlayerIdProvider.future);
+      if (playerId == null || playerId.isEmpty) return;
+
+      final service = ref.read(backendMissionServiceProvider);
+      final isWin = result.totalQuestions > 0 &&
+          (result.score / result.totalQuestions) > 0.5;
+      final perfectRound =
+          result.totalQuestions > 0 && result.score >= result.totalQuestions;
+      final averageAnswerTimeMs = result.totalQuestions <= 0
+          ? 0
+          : (result.quizDuration.inMilliseconds / result.totalQuestions)
+              .round();
+
+      await service.recordMatchCompleted(
+        eventId: const Uuid().v4(),
+        playerId: playerId,
+        isWin: isWin,
+        correctAnswers: result.score,
+        totalQuestions: result.totalQuestions,
+        durationSeconds: result.quizDuration.inSeconds,
+      );
+
+      await service.recordRoundCompleted(
+        eventId: const Uuid().v4(),
+        playerId: playerId,
+        perfectRound: perfectRound,
+        averageAnswerTimeMs: averageAnswerTimeMs,
+      );
+    } catch (e) {
+      LogManager.debug('Mission progress submission skipped: $e');
     }
   }
 
@@ -255,8 +294,37 @@ class ProfileDataUpdater {
 
       LogManager.debug('Quiz completion processing finished successfully');
 
+      // Fire-and-forget: post solo quiz score to backend leaderboard.
+      // Same pattern as _reportPity: async chain, errors swallowed so the
+      // local completion flow is never blocked by a network failure.
+      unawaited(
+        ref.read(currentUserIdProvider.future).then((playerId) {
+          return ref
+              .read(leaderboardControllerProvider)
+              .submitScore(playerId, results.score);
+        }).catchError((_) {}),
+      );
+
+      // Fire-and-forget: authoritative server-side XP/coin grant with idempotency.
+      // Backend deduplicates via EventId unique index (CompleteQuizHandler).
+      unawaited(
+        ref.read(currentUserIdProvider.future).then((playerId) {
+          return ref.read(apiServiceProvider).submitQuizComplete(
+                eventId: const Uuid().v4(),
+                playerId: playerId,
+                score: results.score,
+                totalQuestions: results.totalQuestions,
+                category: results.category,
+              );
+        }).catchError((_) {}),
+      );
+
       // Report win/loss to pity system (non-blocking, fire-and-forget)
       _reportPity(ref, results);
+
+      // Invalidate cached wallet so walletSyncProvider re-fetches from backend.
+      // Picks up any server-side balance changes (rewards, purchases, etc.).
+      ref.invalidate(walletProvider);
     } catch (e) {
       LogManager.debug('Error in ProfileDataUpdater.updateAfterQuiz: $e');
       rethrow;

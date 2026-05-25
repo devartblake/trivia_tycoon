@@ -214,7 +214,7 @@ class _EnhancedMessageTileState extends State<EnhancedMessageTile> {
         decoration: BoxDecoration(
           color: widget.isFromCurrentUser
               ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.surfaceVariant,
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20).copyWith(
             bottomLeft: widget.isFromCurrentUser
                 ? const Radius.circular(20)

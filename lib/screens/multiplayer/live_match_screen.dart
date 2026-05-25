@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
@@ -70,7 +70,7 @@ class _LiveMatchScreenState extends ConsumerState<LiveMatchScreen>
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
           final ok = await showExitMatchConfirm(context);
           if (ok == true && context.mounted) {

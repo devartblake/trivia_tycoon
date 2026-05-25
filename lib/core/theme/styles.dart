@@ -72,34 +72,34 @@ class TextStyles {
     ],
   );
 
-  static TextStyle get T1 => faustina.bold.size(FontSizes.s14).letterSpace(.7);
+  static TextStyle get t1 => faustina.bold.size(FontSizes.s14).letterSpace(.7);
 
-  static TextStyle get T2 => opensans.bold.size(FontSizes.s12).letterSpace(.4);
+  static TextStyle get t2 => opensans.bold.size(FontSizes.s12).letterSpace(.4);
 
-  static TextStyle get H1 => opensans.bold.size(FontSizes.s14);
+  static TextStyle get h1 => opensans.bold.size(FontSizes.s14);
 
-  static TextStyle get H2 => opensans.bold.size(FontSizes.s12);
+  static TextStyle get h2 => opensans.bold.size(FontSizes.s12);
 
-  static TextStyle get Body1 => opensans.size(FontSizes.s14);
+  static TextStyle get body1 => opensans.size(FontSizes.s14);
 
-  static TextStyle get Body2 => opensans.size(FontSizes.s12);
+  static TextStyle get body2 => opensans.size(FontSizes.s12);
 
-  static TextStyle get Body3 => opensans.size(FontSizes.s11);
+  static TextStyle get body3 => opensans.size(FontSizes.s11);
 
-  static TextStyle get Callout =>
+  static TextStyle get callout =>
       faustina.size(FontSizes.s14).letterSpace(1.75);
 
-  static TextStyle get CalloutFocus => Callout.bold;
+  static TextStyle get calloutFocus => callout.bold;
 
-  static TextStyle get Btn =>
+  static TextStyle get btn =>
       faustina.bold.size(FontSizes.s14).letterSpace(1.75);
 
-  static TextStyle get BtnSelected =>
+  static TextStyle get btnSelected =>
       faustina.size(FontSizes.s14).letterSpace(1.75);
 
-  static TextStyle get Footnote => faustina.bold.size(FontSizes.s11);
+  static TextStyle get footnote => faustina.bold.size(FontSizes.s11);
 
-  static TextStyle get Caption => opensans.size(FontSizes.s11).letterSpace(.3);
+  static TextStyle get caption => opensans.size(FontSizes.s11).letterSpace(.3);
 }
 
 class Shadows {

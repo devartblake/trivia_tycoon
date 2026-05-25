@@ -9,13 +9,13 @@ class GroupMemberList extends StatelessWidget {
   final Function(GroupMember, GroupRole)? onChangeRole;
 
   const GroupMemberList({
-    Key? key,
+    super.key,
     required this.group,
     required this.currentUserId,
     this.onMemberTap,
     this.onKickMember,
     this.onChangeRole,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class GroupMemberList extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color:
-          Theme.of(context).colorScheme.surfaceVariant.withValues(alpha: 0.5),
+          Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
       child: Text(
         '$role ($count)',
         style: Theme.of(context).textTheme.titleSmall?.copyWith(

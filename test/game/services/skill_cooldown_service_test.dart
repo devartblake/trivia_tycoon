@@ -97,7 +97,8 @@ void main() {
       expect(service.isOnCooldown('s1'), isFalse);
     });
 
-    test('persistCooldowns saves active cooldowns; restoreCooldowns reloads them',
+    test(
+        'persistCooldowns saves active cooldowns; restoreCooldowns reloads them',
         () async {
       final storage = _FakeStorage();
 

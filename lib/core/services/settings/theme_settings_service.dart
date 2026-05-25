@@ -83,7 +83,7 @@ class ThemeSettingsService {
   /// Saves the primary color.
   Future<void> setPrimaryColor(Color color) async {
     final box = await Hive.openBox(_boxName);
-    await box.put('primary_color', color.value);
+    await box.put('primary_color', color.toARGB32());
     await _updateLastModified();
     _cachedPrimaryColor = color;
   }
@@ -101,7 +101,7 @@ class ThemeSettingsService {
   /// Saves the secondary color.
   Future<void> setSecondaryColor(Color color) async {
     final box = await Hive.openBox(_boxName);
-    await box.put('secondary_color', color.value);
+    await box.put('secondary_color', color.toARGB32());
     await _updateLastModified();
     _cachedSecondaryColor = color;
   }
@@ -122,8 +122,8 @@ class ThemeSettingsService {
     final box = await Hive.openBox(_presetsBoxName);
     await box.put(preset.themeName, {
       'name': preset.themeName,
-      'primaryColor': preset.primaryColor.value,
-      'secondaryColor': preset.secondaryColor.value,
+      'primaryColor': preset.primaryColor.toARGB32(),
+      'secondaryColor': preset.secondaryColor.toARGB32(),
       'brightness': preset.brightness == Brightness.dark ? 'dark' : 'light',
       'created': DateTime.now().toIso8601String(),
     });
@@ -187,8 +187,8 @@ class ThemeSettingsService {
       // Create a snapshot of current theme state
       final currentTheme = {
         'themeName': _cachedThemeName,
-        'primaryColor': _cachedPrimaryColor.value,
-        'secondaryColor': _cachedSecondaryColor.value,
+        'primaryColor': _cachedPrimaryColor.toARGB32(),
+        'secondaryColor': _cachedSecondaryColor.toARGB32(),
         'brightness': _cachedBrightness.name,
         'timestamp': DateTime.now().toIso8601String(),
       };
@@ -202,7 +202,7 @@ class ThemeSettingsService {
 
       if (kDebugMode) {
         LogManager.debug(
-            'Current theme saved successfully: ${_cachedThemeName}');
+            'Current theme saved successfully: $_cachedThemeName');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -228,14 +228,14 @@ class ThemeSettingsService {
 
       // Validate primary color
       if (primaryColor == null || primaryColor is! int) {
-        await box.put('primary_color', const Color(0xFF2196F3).value);
+        await box.put('primary_color', const Color(0xFF2196F3).toARGB32());
         _cachedPrimaryColor = const Color(0xFF2196F3);
         needsRepair = true;
       }
 
       // Validate secondary color
       if (secondaryColor == null || secondaryColor is! int) {
-        await box.put('secondary_color', const Color(0xFF03DAC6).value);
+        await box.put('secondary_color', const Color(0xFF03DAC6).toARGB32());
         _cachedSecondaryColor = const Color(0xFF03DAC6);
         needsRepair = true;
       }
@@ -282,8 +282,8 @@ class ThemeSettingsService {
   Future<void> _resetToDefaults() async {
     try {
       final box = await Hive.openBox(_boxName);
-      await box.put('primary_color', const Color(0xFF2196F3).value);
-      await box.put('secondary_color', const Color(0xFF03DAC6).value);
+      await box.put('primary_color', const Color(0xFF2196F3).toARGB32());
+      await box.put('secondary_color', const Color(0xFF03DAC6).toARGB32());
       await box.put('brightness', 'light');
       await box.put('theme_name', 'Default');
 
@@ -360,8 +360,8 @@ class ThemeSettingsService {
     final current = await getCurrentTheme();
     return {
       'name': current.themeName,
-      'primaryColor': current.primaryColor.value,
-      'secondaryColor': current.secondaryColor.value,
+      'primaryColor': current.primaryColor.toARGB32(),
+      'secondaryColor': current.secondaryColor.toARGB32(),
       'brightness': current.brightness.name,
       'exported': DateTime.now().toIso8601String(),
     };

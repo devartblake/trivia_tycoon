@@ -19,13 +19,13 @@ class FernetService {
 
   /// Ensure Fernet key exists and return it
   Future<String> _ensureFernetSecret() async {
-    final box = await secureStorage.getSecretBox();
-    if (!box.containsKey(_fernetSecretKey)) {
+    final existing = await secureStorage.getSecret(_fernetSecretKey);
+    if (existing == null || existing.isEmpty) {
       final newKey = _generateBase64Key();
-      await box.put(_fernetSecretKey, newKey);
+      await secureStorage.setSecret(_fernetSecretKey, newKey);
       return newKey;
     }
-    return box.get(_fernetSecretKey);
+    return existing;
   }
 
   /// Generate a 32-byte random key as Base64 string
@@ -37,21 +37,18 @@ class FernetService {
 
   /// Export the current Fernet key for backup or sync
   Future<String> exportKey() async {
-    final box = await secureStorage.getSecretBox();
-    return box.get(_fernetSecretKey);
+    return await _ensureFernetSecret();
   }
 
   /// Import and override Fernet key (use with caution)
   Future<void> importKey(String base64Key) async {
-    final box = await secureStorage.getSecretBox();
-    await box.put(_fernetSecretKey, base64Key);
+    await secureStorage.setSecret(_fernetSecretKey, base64Key);
   }
 
   /// Rotate Fernet key (generates a new one)
   Future<void> rotateKey() async {
-    final box = await secureStorage.getSecretBox();
     final newKey = _generateBase64Key();
-    await box.put(_fernetSecretKey, newKey);
+    await secureStorage.setSecret(_fernetSecretKey, newKey);
   }
 
   /// Encrypt string using current Fernet key
@@ -72,13 +69,12 @@ class FernetService {
       final decrypted = fernet.decrypt(base64.decode(token));
       return utf8.decode(decrypted);
     } catch (e) {
-      return '❌ Fernet decryption failed: ${e.toString()}';
+      return 'Fernet decryption failed: ${e.toString()}';
     }
   }
 
   /// Remove the Fernet key (e.g., on logout)
   Future<void> clearKey() async {
-    final box = await secureStorage.getSecretBox();
-    await box.delete(_fernetSecretKey);
+    await secureStorage.removeSecret(_fernetSecretKey);
   }
 }

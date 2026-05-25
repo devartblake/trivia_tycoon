@@ -1,6 +1,7 @@
 // Synaptix Phase 1: Route paths and GoRoute names are intentionally unchanged.
 // Display-facing label updates (e.g. "Arena", "Labs", "Pathways") are deferred
 // to FE-B2 (Phase 3). Do NOT rename route path constants here.
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,8 @@ import 'package:trivia_tycoon/admin/admin_dashboard.dart';
 import 'package:trivia_tycoon/admin/events_management/admin_event_queue_screen.dart';
 import 'package:trivia_tycoon/core/router/auth_guard.dart';
 import 'package:trivia_tycoon/core/router/enhanced_admin_guard.dart';
+import 'package:trivia_tycoon/core/router/feature_flag_guard.dart';
+import 'package:trivia_tycoon/core/models/app_config.dart';
 import 'package:trivia_tycoon/screens/invite_log_screen.dart';
 import 'package:trivia_tycoon/screens/leaderboard/tier_rank_screen.dart';
 import 'package:trivia_tycoon/screens/menu/game_menu_screen.dart';
@@ -67,6 +70,7 @@ import '../../screens/question/categories/monthly_quiz_screen.dart';
 import '../../screens/question/score_summary_screen_wrapper.dart';
 import '../../screens/question/transitional/how_to_play_screen.dart';
 import '../../screens/report_screen.dart';
+import '../../features/reward_reactor/screens/reward_reactor_screen.dart';
 import '../../screens/rewards/mission_screen.dart';
 import '../../screens/rewards/spin_earn_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
@@ -106,7 +110,10 @@ import '../../screens/study_hub/study_session_screen.dart';
 import '../../screens/study_hub/study_custom_set_screen.dart';
 import '../dto/study_dto.dart';
 import '../../screens/login_screen.dart';
+import '../../screens/login_screen_mobile.dart';
+import '../../screens/account/account_link_rewards_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
+import '../../screens/web_link/link_code_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
 import '../../screens/profile/friends_screen.dart';
 import '../../screens/help_screen.dart';
@@ -183,13 +190,33 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) =>
+            kIsWeb ? const LoginScreen() : const LoginScreenMobile(),
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => kIsWeb
+            ? const LoginScreen(startInSignUpMode: true)
+            : const LoginScreenMobile(startInSignUpMode: true),
       ),
 
       /// 📚 Onboarding Routes
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: '/account-link',
+        name: 'account-link',
+        builder: (context, state) => AccountLinkRewardsScreen(
+          fromOnboarding: state.uri.queryParameters['from'] == 'onboarding',
+        ),
+      ),
+      GoRoute(
+        path: '/link-code',
+        name: 'link-code',
+        builder: (context, state) => const LinkCodeScreen(),
       ),
 
       /// 🏠 Main App Routes
@@ -388,6 +415,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             name: 'admin-store-analytics',
             builder: (context, state) => const AdminStockAnalyticsScreen(),
           ),
+          GoRoute(
+            path: '/admin/reward-reactor',
+            name: 'admin-reward-reactor',
+            builder: (context, state) => const RewardReactorScreen(),
+          ),
         ],
       ),
 
@@ -469,6 +501,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 🏆 Reward Routes
       GoRoute(
+        path: '/rewards/reactor',
+        name: 'reward-reactor',
+        builder: (context, state) => const RewardReactorScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
         path: '/spin-earn',
         builder: (context, state) => const SpinEarnScreen(),
       ),
@@ -540,7 +578,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/store/crypto-wallet',
         name: 'crypto-wallet',
         builder: (context, state) => const CryptoWalletScreen(),
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.cryptoEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/store/payment-return',
@@ -725,19 +768,27 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
           path: '/multiplayer',
           name: 'multiplayer',
-          builder: (context, state) => MultiplayerHubScreen()),
+          builder: (context, state) => MultiplayerHubScreen(),
+          redirect: (context, state) => featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled)),
       GoRoute(
           path: '/multiplayer/find',
           name: 'find-match',
-          builder: (context, state) => MatchmakingScreen()),
+          builder: (context, state) => MatchmakingScreen(),
+          redirect: (context, state) => featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled)),
       GoRoute(
           path: '/multiplayer/rooms',
           name: 'find-room',
-          builder: (context, state) => RoomLobbyScreen()),
+          builder: (context, state) => RoomLobbyScreen(),
+          redirect: (context, state) => featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled)),
       GoRoute(
           path: '/multiplayer/match',
           name: 'live-match',
-          builder: (context, state) => LiveMatchScreen()),
+          builder: (context, state) => LiveMatchScreen(),
+          redirect: (context, state) => featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled)),
       GoRoute(
         path: '/multiplayer/matchmaking/:gameMode',
         name: 'multiplayer-matchmaking',
@@ -746,6 +797,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerGameMatchmakingScreen(gameMode: gameMode);
         },
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
       ),
 
       GoRoute(
@@ -756,6 +809,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerQuestionScreen(gameMode: gameMode);
         },
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
       ),
 
       GoRoute(
@@ -766,14 +821,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               normalizeGameModeName(state.pathParameters['gameMode']!);
           return MultiplayerResultsScreen(gameMode: gameMode);
         },
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
       ),
-      /*GoRoute(
-          path: '/multiplayer/rooms/:roomId',
-          builder: (context, state) {
-            final roomId = state.pathParameters['roomId']!;
-            return RoomLobbyScreen(roomId: roomId);
-          }
-      ),*/
+      GoRoute(
+        path: '/multiplayer/rooms/:roomId',
+        builder: (context, state) {
+          final roomId = state.pathParameters['roomId']!;
+          return RoomLobbyScreen(roomId: roomId);
+        },
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
+      ),
 
       /// 🎮 Mini Games
       GoRoute(
@@ -938,11 +997,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/friends',
         name: 'Friends',
         builder: (context, state) => const FriendsScreen(),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.socialEnabled),
       ),
       GoRoute(
         path: '/friends/add-username',
         name: 'Add Friend By Username',
         builder: (context, state) => const AddFriendByUsernameScreen(),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.socialEnabled),
       ),
       GoRoute(
         path: '/profile/enhanced/:userId',
@@ -986,13 +1049,23 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/multiplayer',
         name: 'Multiplayer',
         builder: (context, state) => const MultiplayerScreen(),
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages', // Circles
         name: 'Messages',
         builder: (context, state) => const MessagesScreen(),
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.socialEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages/detail/:conversationId',
@@ -1007,7 +1080,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             currentActivity: extra['currentActivity'] as String?,
           );
         },
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.socialEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages/search',
@@ -1016,7 +1094,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           fullscreenDialog: true,
           child: SearchDialog(),
         ),
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.socialEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages/add-friend',
@@ -1025,7 +1108,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           fullscreenDialog: true,
           child: AddFriendDialog(),
         ),
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.socialEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages/requests',
@@ -1041,7 +1129,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ),
           );
         },
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.socialEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages/new',
@@ -1050,7 +1143,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           fullscreenDialog: true,
           child: CreateDMDialog(),
         ),
-        redirect: onboardingGuard,
+        redirect: (context, state) async {
+          final r = featureFlagGuard(context, state,
+              isEnabled: (FeatureFlags f) => f.socialEnabled);
+          if (r != null) return r;
+          return onboardingGuard(context, state);
+        },
       ),
       GoRoute(
         path: '/messages/group/:groupId/settings',
@@ -1196,15 +1294,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/skills', // Pathways
         builder: (context, state) => const SkillTreeNavScreen(),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.skillTreeEnabled),
       ),
       GoRoute(
         path: '/skills-test',
         builder: (context, state) => const SkillTreeNavTestScreen(),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.skillTreeEnabled),
       ),
       GoRoute(
         path: '/skill-tree',
         name: 'skillTree',
         builder: (context, state) => const SkillTreeScreen(),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.skillTreeEnabled),
       ),
       GoRoute(
         path: '/skill-branch/:branchId',
@@ -1214,6 +1318,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           initialStep: int.tryParse(state.uri.queryParameters['step'] ?? ''),
           showPathInitially: state.uri.queryParameters['showPath'] == '1',
         ),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.skillTreeEnabled),
       ),
     ],
   );

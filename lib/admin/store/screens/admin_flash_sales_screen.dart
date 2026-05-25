@@ -12,8 +12,7 @@ class AdminFlashSalesScreen extends ConsumerStatefulWidget {
       _AdminFlashSalesScreenState();
 }
 
-class _AdminFlashSalesScreenState
-    extends ConsumerState<AdminFlashSalesScreen> {
+class _AdminFlashSalesScreenState extends ConsumerState<AdminFlashSalesScreen> {
   bool _showNewForm = false;
 
   @override
@@ -61,11 +60,15 @@ class _AdminFlashSalesScreenState
                 initial: FlashSaleFormModel(
                   title: '',
                   linkedSku: '',
-                  startTime: DateTime.now().toUtc().add(const Duration(hours: 1)),
-                  endTime: DateTime.now().toUtc().add(const Duration(hours: 25)),
+                  startTime:
+                      DateTime.now().toUtc().add(const Duration(hours: 1)),
+                  endTime:
+                      DateTime.now().toUtc().add(const Duration(hours: 25)),
                 ),
                 onSave: (model) async {
-                  await ref.read(adminStoreServiceProvider).createFlashSale(model);
+                  await ref
+                      .read(adminStoreServiceProvider)
+                      .createFlashSale(model);
                   ref.invalidate(adminFlashSalesProvider);
                   setState(() => _showNewForm = false);
                 },

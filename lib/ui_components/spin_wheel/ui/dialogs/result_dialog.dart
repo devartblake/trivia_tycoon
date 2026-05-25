@@ -33,8 +33,6 @@ class _ResultDialogState extends State<ResultDialog>
   late Animation<Offset> _slideAnimation;
   late Animation<double> _celebrationAnimation;
   late Animation<double> _bounceAnimation;
-  late Animation<Color?> _colorAnimation;
-
   bool _isVisible = false;
 
   @override
@@ -98,13 +96,6 @@ class _ResultDialogState extends State<ResultDialog>
       curve: Curves.elasticInOut,
     ));
 
-    _colorAnimation = ColorTween(
-      begin: _getRewardColor(),
-      end: _getRewardColor().withValues(alpha: 0.8),
-    ).animate(CurvedAnimation(
-      parent: _celebrationController,
-      curve: Curves.easeInOut,
-    ));
   }
 
   void _startEntranceAnimation() async {

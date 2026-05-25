@@ -690,9 +690,9 @@ class _StoreSpecialScreenState extends ConsumerState<StoreSpecialScreen>
       ),
     );
 
-    // Simulate purchase process
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pop(); // Close loading
+      if (!mounted) return;
+      Navigator.of(context).pop();
 
       // Show success
       ScaffoldMessenger.of(context).showSnackBar(
@@ -736,6 +736,7 @@ class _StoreSpecialScreenState extends ConsumerState<StoreSpecialScreen>
     final playerId = await ref.read(currentUserIdProvider.future);
     final storeService = ref.read(storeServiceProvider);
 
+    if (!mounted) return;
     showDialog(
       context: context,
       barrierDismissible: false,

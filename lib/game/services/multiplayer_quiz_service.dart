@@ -71,34 +71,7 @@ class MultiplayerQuizService {
       return fromRepository;
     }
 
-    try {
-      final category = _getCategoryForGameMode(normalizedGameMode);
-      final difficulty = _getDifficultyForGameMode(normalizedGameMode);
-      final count = _getQuestionCountForGameMode(normalizedGameMode);
-
-      final response = await _client.get(
-        Uri.parse('$baseUrl/api/questions').replace(queryParameters: {
-          'category': category,
-          'difficulty': difficulty,
-          'count': count.toString(),
-          'gameMode': normalizedGameMode,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final questionsData = data['questions'] as List;
-
-        return questionsData
-            .map((q) => QuestionModel.fromJson(q as Map<String, dynamic>))
-            .toList();
-      } else {
-        throw Exception('Failed to fetch questions: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Fallback to mock questions for development
-      return _generateMockQuestions(normalizedGameMode);
-    }
+    return _generateMockQuestions(normalizedGameMode);
   }
 
   Future<void> prefetchQuestionsForGameMode(String gameMode) async {
@@ -122,14 +95,12 @@ class MultiplayerQuizService {
     }
 
     try {
-      final category = _getCategoryForGameMode(gameMode);
       final count = _getQuestionCountForGameMode(gameMode);
 
       return await _questionRepository!.getQuestionsForMode(
         mode: mode,
         amount: count,
-        category: category == 'mixed' ? null : category,
-        difficulty: _getDifficultyLevelForGameMode(gameMode),
+        playerId: null,
       );
     } catch (_) {
       return const [];
@@ -239,17 +210,6 @@ class MultiplayerQuizService {
     }
   }
 
-  String _getCategoryForGameMode(String gameMode) {
-    switch (gameMode) {
-      case 'arena':
-        return 'mixed'; // Treasure Mine uses mixed categories
-      case 'teams':
-        return 'general'; // Survival Arena uses general knowledge
-      default:
-        return 'mixed';
-    }
-  }
-
   GameMode? _mapGameMode(String gameMode) {
     switch (gameMode) {
       case 'arena':
@@ -260,17 +220,6 @@ class MultiplayerQuizService {
         return GameMode.daily;
       default:
         return null;
-    }
-  }
-
-  String _getDifficultyForGameMode(String gameMode) {
-    switch (gameMode) {
-      case 'arena':
-        return 'medium'; // Treasure Mine: Moderate difficulty
-      case 'teams':
-        return 'hard'; // Survival Arena: High difficulty
-      default:
-        return 'easy';
     }
   }
 

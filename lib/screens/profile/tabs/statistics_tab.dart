@@ -170,8 +170,7 @@ class StatisticsTab extends ConsumerWidget {
                     subject['score'] as int,
                     subject['quizzes'] as int,
                     subject['color'] as Color,
-                  ))
-              .toList(),
+                  )),
         ],
       ),
     );

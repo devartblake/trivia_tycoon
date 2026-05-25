@@ -513,7 +513,7 @@ class _VideoQuestionWidgetStatefulState
   Future<void> _initializeVideo() async {
     if (widget.question.videoUrl?.isNotEmpty == true) {
       _videoController =
-          VideoPlayerController.network(widget.question.videoUrl!);
+          VideoPlayerController.networkUrl(Uri.parse(widget.question.videoUrl!));
       await _videoController!.initialize();
 
       _chewieController = ChewieController(

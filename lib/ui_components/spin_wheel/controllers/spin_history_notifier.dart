@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/settings/app_settings.dart';
+import '../../../game/providers/reward_backend_providers.dart';
 import '../models/spin_system_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -247,6 +248,18 @@ class EnhancedSpinHistoryNotifier extends AsyncNotifier<SpinHistoryState> {
 
   @override
   Future<SpinHistoryState> build() async {
+    try {
+      final serverEntries = await ref.watch(serverSpinHistoryProvider.future);
+      final serverState = SpinHistoryState(
+        entries: serverEntries,
+        analytics: SpinHistoryAnalytics.fromEntries(serverEntries),
+        lastUpdated: DateTime.now(),
+      );
+      _updateCache(serverState);
+      return serverState;
+    } catch (e) {
+      LogManager.debug('Server spin history unavailable, using local: $e');
+    }
     return await _loadHistoryState();
   }
 

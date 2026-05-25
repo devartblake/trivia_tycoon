@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../../admin/providers/admin_auth_providers.dart';
 import '../providers/admin_store_providers.dart';
 import '../widgets/stock_override_panel.dart';
-import '../models/stock_override_form_model.dart';
 
 /// Hub screen for all admin store controls.
 /// Requires admin access (guarded by [unifiedIsAdminProvider]).
@@ -16,8 +15,8 @@ class AdminStoreInventoryScreen extends ConsumerWidget {
     final isAdminAsync = ref.watch(unifiedIsAdminProvider);
 
     return isAdminAsync.when(
-      loading: () => const Scaffold(
-          body: Center(child: CircularProgressIndicator())),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (_, __) => _buildDenied(context),
       data: (isAdmin) {
         if (!isAdmin) return _buildDenied(context);
@@ -66,9 +65,7 @@ class AdminStoreInventoryScreen extends ConsumerWidget {
                         SizedBox(height: 4),
                         Text(
                           'Manage stock, sales, rewards, and overrides',
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.white70),
+                          style: TextStyle(fontSize: 13, color: Colors.white70),
                         ),
                         SizedBox(height: 16),
                       ],
@@ -153,8 +150,7 @@ class AdminStoreInventoryScreen extends ConsumerWidget {
               Icon(Icons.lock_outline, size: 40, color: Colors.grey),
               SizedBox(height: 12),
               Text('Admin access required.',
-                  style: TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -226,8 +222,7 @@ class _SectionCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 2),
                   Text(section.subtitle,
-                      style: TextStyle(
-                          fontSize: 11, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis),
                 ],
@@ -260,8 +255,7 @@ class _QuickOverrideSection extends ConsumerWidget {
           onSubmit: (model) async {
             await ref.read(adminStoreServiceProvider).createOverride(model);
             if (model.playerId != null) {
-              ref.invalidate(
-                  adminPlayerOverridesProvider(model.playerId!));
+              ref.invalidate(adminPlayerOverridesProvider(model.playerId!));
             }
           },
         ),

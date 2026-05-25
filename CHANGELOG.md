@@ -23,6 +23,137 @@ All 4 CI workflows confirmed already in place: `flutter_ci.yml` (analyze + test)
 
 ---
 
+### Added – Reward Reactor Alpha frontend (2026-05-22)
+
+Complete Flutter scaffold for the backend-authoritative Reward Reactor reward lifecycle. Backend selects all outcomes; Flutter renders animation hints and player feedback only.
+
+**New files — models (`lib/features/reward_reactor/models/`)**
+- `reward_mechanism.dart` — `RewardMechanism` enum with `fromString`/`toJsonString`
+- `reactor_animation_hints.dart` — layout, symbols, winningSymbolIndexes (`List<int>`), rarity, intensity
+- `reactor_reward_line.dart` — type, label, amount?, iconUrl?
+- `reactor_reward_preview.dart` — rewardId, displayName, lines (`List<ReactorRewardLine>`)
+- `reactor_wallet_snapshot.dart` — coins, gems, xp
+- `reactor_spin_response.dart` — full spin DTO from `POST /arcade/reactor/spin`; status, expiresAtUtc, cooldownUntilUtc?, animation, rewardPreview, claimToken
+- `reactor_claim_response.dart` — from `POST /arcade/reactor/claim`; `isApplied`/`isDuplicate`/`isExpired`/`isCooldown` getters
+- `user_rewards_response.dart` — pendingRewards, recentRewards; `const UserRewardsResponse.empty()` constructor
+
+**New files — service / state / providers**
+- `lib/features/reward_reactor/services/reward_reactor_service.dart` — abstract `RewardReactorService` + `BackendRewardReactorService`; `POST /arcade/reactor/spin` via `ApiService`, `POST /arcade/reactor/claim` via `EncryptedApiClient` (encrypted from day one), `GET /users/me/rewards`; all three methods fall back gracefully (daily-login mock, mock applied claim, empty response)
+- `lib/features/reward_reactor/controllers/reactor_notifier.dart` — `ReactorPhase` enum (idle/spinning/pendingClaim/claiming/applied/cooldown/error), immutable `ReactorState`, `ReactorNotifier`; spin no-ops unless idle; claim double-tap guard via `isClaimInFlight`
+- `lib/features/reward_reactor/providers/reward_reactor_providers.dart` — `reactorProvider` (autoDispose StateNotifierProvider), `reactorPhaseProvider`, `reactorCooldownProvider`
+
+**New files — widgets**
+- `reactor_symbol_tile.dart` — emoji-mapped reel symbol, `isWinning` glow via `BoxDecoration`/`BoxShadow`
+- `reactor_reel_column.dart` — staggered `AnimationController` + `CurvedAnimation(Curves.easeOut)`, `RepaintBoundary`
+- `reactor_reward_banner.dart` — `.slideY().fade()` via `flutter_animate`, overflow-safe
+- `reactor_action_controls.dart` — Spin (enabled when idle) / Claim (enabled when pendingClaim && !inFlight) buttons with `CircularProgressIndicator` guard
+- `reactor_particle_layer.dart` — `CustomPainter` with 20 sin-animated circles, `IgnorePointer`, `RepaintBoundary`
+- `arcade_reward_machine_widget.dart` — `Stack` shell: `Row` of 3 `ReactorReelColumn`s, `AnimatedSwitcher` for `ReactorRewardBanner`, `ReactorActionControls`, `ReactorParticleLayer` overlay; `_splitSymbols` helper distributes backend symbol list across reels
+
+**New files — screen**
+- `lib/features/reward_reactor/screens/reward_reactor_screen.dart` — dark neon `Scaffold`, `ref.listen` error `SnackBar` with Dismiss action
+
+**Modified files**
+- `lib/core/navigation/app_router.dart` — `/rewards/reactor` GoRoute (named `reward-reactor`) added before `/spin-earn`
+- `lib/game/providers/arcade_providers.dart` — `rewardReactorServiceProvider` added; injects `ApiService` + `EncryptedApiClient`
+- `lib/core/services/arcade/spin_wheel_api_service.dart` — `SpinStartResponse` model and `startSpin({String? playerId})` method added; falls back to mock response when `POST /arcade/spin/start` is unavailable; existing `claimReward` and `fetchSegments` unchanged
+
+**New tests**
+- `test/features/reward_reactor/models/reactor_dto_test.dart` — full round-trip, missing optional fields, all four claim status flags, `winningSymbolIndexes` as `List<int>`, empty symbol lists, `UserRewardsResponse.empty()`, multi-line reward preview
+- `test/features/reward_reactor/services/reward_reactor_service_test.dart` — `_AlwaysFailingReactorService` validates caller-handles-throw contract; mock payload shape assertions; `_SucceedingReactorService` validates live-path status values and non-throwing `getUserRewards`
+
+---
+
+### Fixed – Secure Channel AAD hardening (2026-05-22)
+
+Aligns the Flutter secure-channel implementation with the backend's strict 8-field AAD binding and request-context header enforcement. All five previously identified gaps are closed.
+
+**`lib/core/security/secure_channel_models.dart`**
+- Added `SecureRequestContext` — immutable value object carrying method, pathAndQuery, sessionId (dashes stripped), sequence, replayNonce (16-byte base64url), subjectId (empty string until backend provides stable value), and encryptedAtUtc (single source of truth shared between AAD and payload body).
+
+**`lib/core/security/secure_payload_codec.dart`**
+- `encryptJson` and `decryptJson` now accept `SecureRequestContext context` instead of `method + uri` string parameters.
+- Request AAD format: `syn-sec-v1|request|<METHOD>|<path+query>|<sessionId>|<seq>|<subject>|<encryptedAtUtc>`
+- Response AAD format: same with `response` direction token.
+- `EncryptedPayload.encryptedAtUtc` is sourced from `context.encryptedAtUtc` — same string in both AAD and payload body.
+- AES-GCM nonce remains a fresh random 12 bytes; `replayNonce` in context is a separate 16-byte value sent only as `X-Syn-Sec-Nonce`.
+
+**`lib/core/security/secure_channel_service.dart`**
+- Abstract interface: `encryptJson` now accepts `{body, keyBytes, context}` and does not persist sequence.
+- New abstract method `persistSequenceIncrement(SecureSession session)` — caller persists after headers are assembled.
+- `DefaultSecureChannelService.encryptJson` is a thin codec pass-through (no `_sessionStore.save` side-effect).
+- `startSession` advertises both suites (`X25519-HKDF-SHA256-AES256GCM`, `P256-HKDF-SHA256-AES256GCM`) and uses the backend-selected suite in the HKDF info string.
+- Key exchange always uses X25519 (client always sends an X25519 public key).
+
+**`lib/core/networking/encrypted_api_client.dart`**
+- `_sendEncrypted` owns the full context lifecycle: captures sequence, generates replayNonce and encryptedAtUtc, builds `pathAndQuery` (path + query string), constructs `SecureRequestContext`, encrypts, then calls `persistSequenceIncrement` — ensuring the header `X-Syn-Sec-Seq` always matches the sequence used in the cipher.
+- Retry on `SecureSessionExpiredException` calls `clearSession()` before starting a new session; each retry builds a brand-new context with a fresh sequence, nonce, and timestamp.
+
+**`test/core/security/secure_payload_codec_test.dart`**
+- All existing tests migrated to the new `SecureRequestContext` API via a `_ctx()` helper.
+- 6 new tests: full 8-field request AAD is built correctly; response AAD flips direction only; query string is included in AAD; different sequences produce different ciphertexts; replay nonce is independent of AES-GCM nonce; `encryptedAtUtc` mismatch in AAD causes decryption failure.
+
+---
+
+### Added – Reward Reactor admin entry point & route hardening (2026-05-22)
+
+Makes the Reward Reactor screen reachable for internal Alpha testing without requiring the backend to enable `rewardReactorEnabled`, and hardens the production route.
+
+**`lib/core/navigation/app_router.dart`**
+- `/admin/reward-reactor` GoRoute (named `admin-reward-reactor`) added inside the admin `ShellRoute`; protected automatically by the existing `enhancedAdminGuard` with no additional guard needed.
+- `onboardingGuard` added to the `/rewards/reactor` production route (was previously unguarded).
+
+**`lib/admin/admin_dashboard.dart`**
+- "Reward Reactor" tile added to `_getAdminActions()` (`Icons.flash_on_rounded`, `Colors.deepPurple`) — pushes to `/admin/reward-reactor`.
+
+**`lib/features/reward_reactor/services/reward_reactor_service.dart`**
+- Mock `_mockSpinResponse()` expanded from a single `daily-login-coins` line to an Alpha bundle covering all three planned reward sources:
+  - `daily-login-coins` — Daily Login: 50 Coins
+  - `mission-xp` — Mission Complete: 100 XP
+  - `arcade-token` — Arcade Challenge: 1 Skin Token
+- Animation rarity/intensity upgraded from `common`/`medium` to `rare`/`high` to exercise the full reel animation in testing.
+
+---
+
+### Added – Dev tester account system (2026-05-22)
+
+Backend-controlled dev tester accounts that bypass onboarding. The backend assigns the `tester` role and enables the feature flag; the Flutter guard checks both before applying any onboarding redirect.
+
+**`lib/core/models/app_config.dart`**
+- `devTesterEnabled: bool` added to `FeatureFlags` (default `false`). Backend sends `"devTesterEnabled": true` inside the `features` object of `GET /api/v1/app/config` to activate the system.
+
+**`lib/core/services/settings/player_profile_service.dart`**
+- `isDevTesterAccount()` added — checks both the legacy single-role field and the `userRoles` list for `'tester'`, consistent with the existing `isAdminUser()` pattern. The backend assigns this via `user_roles: ["tester"]` on `GET /users/me`, which `ProfileSyncService` already syncs automatically.
+
+**`lib/core/router/auth_guard.dart`**
+- `onboardingGuard` updated with a two-gate dev tester bypass:
+  1. If `devTesterEnabled` is `false` (default), the check is skipped entirely — zero overhead for non-tester builds.
+  2. If `devTesterEnabled` is `true`, checks `PlayerProfileService.isDevTesterAccount()`; if the account holds the `tester` role, the guard returns `null` and onboarding is skipped.
+- Both signals (`devTesterEnabled` flag AND `tester` role) must be present — a tester role alone has no effect if the flag is off, giving the backend a kill switch for the entire system.
+
+**Backend contract to enable a dev tester account:**
+```
+GET /api/v1/app/config  →  { "features": { "devTesterEnabled": true } }
+GET /users/me           →  { "user_roles": ["tester"] }
+```
+
+---
+
+### Fixed - Question gameplay backend contract alignment (2026-05-10)
+
+- `QuestionModel` now parses backend-safe `GameplayQuestionDto` payloads from `GET /questions/set`, including `text`, `options`, `mediaKey`, and backend difficulty enum values. Backend options are converted into selectable frontend answers without assuming embedded correctness.
+- `QuestionHubService` now sends canonical `/questions/set` query parameters (`count`, optional `category`, optional `difficulty`, `mode`, optional `playerId`) and uses `/questions/check` plus `/questions/check-batch` as the correctness source.
+- Answer validation now posts backend option ids through `selectedOptionId` and maps `correctOptionId` back to display text for the frontend result state.
+- Single-player/category/class flows now route through the backend gameplay contract with `mode=practice`; class gameplay uses frontend class-to-category mapping instead of nonexistent class gameplay endpoints.
+- Multiplayer question loading now uses the repository/hub path with `mode=ranked`, count-only, and no `playerId` personalization for fair matches. The stale direct `/api/questions` multiplayer fallback was removed.
+- Category and class quiz launch screens now request backend questions for selected subject/difficulty and retain local fallback behavior when backend filtering cannot produce a playable set.
+- `QuestionService.fetchQuestionsFromServer()` now reads `/questions/set` directly instead of using deprecated `ApiService.fetchQuestions()`.
+- Live smoke coverage now includes `/questions/set`, `/questions/check`, and `/questions/check-batch` alongside auth/wallet/Spin & Earn checks.
+
+**Verification note:** `git diff --check` passed with line-ending warnings only. Flutter/Dart tests were not run because neither `flutter` nor `dart` was available on PATH in this environment.
+
+---
+
 ### Added – dart:io web guards verified + secure channel Phase 2 (2026-05-09)
 
 #### dart:io web guards — COMPLETE

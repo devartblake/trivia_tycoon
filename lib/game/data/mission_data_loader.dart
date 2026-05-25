@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 import '../providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -28,8 +28,10 @@ class MissionDataLoader {
     }
 
     try {
-      final String jsonString =
-          await rootBundle.loadString(_assetPaths[ageGroup]!);
+      final assetPath = _assetPaths[ageGroup]!;
+      final String jsonString = await AssetResolver.instance.loadString(
+        assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+      );
       final List<dynamic> jsonList = json.decode(jsonString);
 
       final List<Map<String, dynamic>> missions = jsonList.map((json) {

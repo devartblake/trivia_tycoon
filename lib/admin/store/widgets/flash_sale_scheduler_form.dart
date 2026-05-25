@@ -103,11 +103,12 @@ class _FlashSaleSchedulerFormState extends State<FlashSaleSchedulerForm> {
                 padding: EdgeInsets.only(top: 6),
                 child: Row(
                   children: [
-                    Icon(Icons.warning_amber, color: Color(0xFFF59E0B), size: 14),
+                    Icon(Icons.warning_amber,
+                        color: Color(0xFFF59E0B), size: 14),
                     SizedBox(width: 6),
                     Text('End time is before start time.',
-                        style: TextStyle(
-                            color: Color(0xFFF59E0B), fontSize: 12)),
+                        style:
+                            TextStyle(color: Color(0xFFF59E0B), fontSize: 12)),
                   ],
                 ),
               ),
@@ -191,7 +192,7 @@ class _FlashSaleSchedulerFormState extends State<FlashSaleSchedulerForm> {
                   value: _model.isActive,
                   onChanged: (v) =>
                       setState(() => _model = _model.copyWith(isActive: v)),
-                  activeColor: const Color(0xFF6366F1),
+                  activeThumbColor: const Color(0xFF6366F1),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 const SizedBox(width: 6),
@@ -202,8 +203,8 @@ class _FlashSaleSchedulerFormState extends State<FlashSaleSchedulerForm> {
             if (_error != null) ...[
               const SizedBox(height: 8),
               Text(_error!,
-                  style: const TextStyle(
-                      color: Color(0xFFEF4444), fontSize: 12)),
+                  style:
+                      const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
             ],
             const SizedBox(height: 16),
             _buildActions(),
@@ -237,14 +238,16 @@ class _FlashSaleSchedulerFormState extends State<FlashSaleSchedulerForm> {
   Widget _buildTimeRow() {
     return Row(
       children: [
-        Expanded(child: _TimePickerField(
+        Expanded(
+            child: _TimePickerField(
           label: 'Start Time',
           value: _model.startTime,
           onChanged: (dt) =>
               setState(() => _model = _model.copyWith(startTime: dt)),
         )),
         const SizedBox(width: 12),
-        Expanded(child: _TimePickerField(
+        Expanded(
+            child: _TimePickerField(
           label: 'End Time',
           value: _model.endTime,
           onChanged: (dt) =>
@@ -390,7 +393,7 @@ class _TimePickerField extends StatelessWidget {
       initialTime: TimeOfDay.fromDateTime(value.toLocal()),
     );
     if (time == null) return;
-    onChanged(DateTime(
-        date.year, date.month, date.day, time.hour, time.minute));
+    onChanged(
+        DateTime(date.year, date.month, date.day, time.hour, time.minute));
   }
 }

@@ -98,7 +98,8 @@ class PersonalizationSettingsScreen extends ConsumerWidget {
               icon: Icons.restart_alt_rounded,
               iconColor: const Color(0xFFF59E0B),
               title: 'Reset recommendations',
-              subtitle: 'Clears local preference history — takes effect next session',
+              subtitle:
+                  'Clears local preference history — takes effect next session',
               onTap: () => _resetRecommendations(context, ref),
             ),
           ],
@@ -236,7 +237,7 @@ class _ToggleTile extends StatelessWidget {
           style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
         ),
         value: value,
-        activeColor: const Color(0xFF6366F1),
+        activeThumbColor: const Color(0xFF6366F1),
         onChanged: onChanged,
       ),
     );

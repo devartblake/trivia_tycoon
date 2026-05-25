@@ -199,7 +199,7 @@ class _AppDrawerState extends ConsumerState<AppDrawer>
               item: item,
               animationController: _itemControllers[index],
             );
-          }).toList(),
+          }),
         ],
       ),
     );

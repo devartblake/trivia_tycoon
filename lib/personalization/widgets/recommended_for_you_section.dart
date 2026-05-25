@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/dto/personalization_dto.dart';
 import '../../game/providers/personalization_providers.dart';
 import '../../game/providers/personalization_settings_provider.dart';
 import 'recommendation_card.dart';
@@ -29,8 +28,7 @@ class RecommendedForYouSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final enabled =
-        ref.watch(personalizationEnabledProvider(playerId));
+    final enabled = ref.watch(personalizationEnabledProvider(playerId));
     final settings = ref.watch(personalizationSettingsProvider);
 
     if (!enabled) return const SizedBox.shrink();
@@ -52,7 +50,9 @@ class RecommendedForYouSection extends ConsumerWidget {
         if (recs.isEmpty) return const SizedBox.shrink();
 
         final title = sectionTitle ??
-            (filterType == null ? 'Recommended for You' : _titleForType(filterType!));
+            (filterType == null
+                ? 'Recommended for You'
+                : _titleForType(filterType!));
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -293,7 +293,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         trailing: Switch.adaptive(
           value: value,
           onChanged: onChanged,
-          activeColor: color,
+          activeThumbColor: color,
         ),
       ),
     );
@@ -353,21 +353,30 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   void _showLanguageDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Select Language'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildLanguageOption('English'),
-            _buildLanguageOption('Spanish'),
-            _buildLanguageOption('French'),
-            _buildLanguageOption('German'),
-          ],
+        content: RadioGroup<String>(
+          groupValue: _selectedLanguage,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() => _selectedLanguage = value);
+              Navigator.pop(dialogCtx);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildLanguageOption('English'),
+              _buildLanguageOption('Spanish'),
+              _buildLanguageOption('French'),
+              _buildLanguageOption('German'),
+            ],
+          ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogCtx),
             child: const Text('Cancel'),
           ),
         ],
@@ -379,32 +388,36 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     return RadioListTile<String>(
       title: Text(language),
       value: language,
-      groupValue: _selectedLanguage,
-      onChanged: (value) {
-        setState(() => _selectedLanguage = value!);
-        Navigator.pop(context);
-      },
     );
   }
 
   void _showDifficultyDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Default Difficulty'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildDifficultyOption('Easy'),
-            _buildDifficultyOption('Medium'),
-            _buildDifficultyOption('Hard'),
-            _buildDifficultyOption('Adaptive'),
-          ],
+        content: RadioGroup<String>(
+          groupValue: _selectedDifficulty,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() => _selectedDifficulty = value);
+              Navigator.pop(dialogCtx);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDifficultyOption('Easy'),
+              _buildDifficultyOption('Medium'),
+              _buildDifficultyOption('Hard'),
+              _buildDifficultyOption('Adaptive'),
+            ],
+          ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogCtx),
             child: const Text('Cancel'),
           ),
         ],
@@ -419,11 +432,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           ? const Text('Adjusts based on your performance')
           : null,
       value: difficulty,
-      groupValue: _selectedDifficulty,
-      onChanged: (value) {
-        setState(() => _selectedDifficulty = value!);
-        Navigator.pop(context);
-      },
     );
   }
 }

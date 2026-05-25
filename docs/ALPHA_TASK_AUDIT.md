@@ -1,6 +1,8 @@
 # Synaptix Alpha Outstanding Task Audit
 
-_Date: 2026-03-31 | Last updated: 2026-04-14_
+_Date: 2026-03-31 | Last updated: 2026-05-10_
+
+> 2026-05-10 reconciliation: use [`CURRENT_TASKS.md`](CURRENT_TASKS.md) for the concise current backlog. This audit has been updated where newer code/PR status closed older gaps.
 
 ## 0) ProfileSyncService 404/backoff root cause (resolved) ✅
 
@@ -32,14 +34,10 @@ _Date: 2026-03-31 | Last updated: 2026-04-14_
 ## 2) Synaptix markdown docs: outstanding work
 
 ## `docs/synaptix_frontend_plan.md`
-Open checklists still indicate pending Phase 7 QA/stabilization work:
+Phase 7 QA/stabilization is marked complete in `synaptix_frontend_plan.md`, with one remaining cross-stack/readiness theme:
 
-- App launch, auth/bootstrap, onboarding, hub rendering, mode mapping, and all major surface navigation checks remain unchecked.
-- Consistency/brand checks remain unchecked, including:
-  - No remaining visible "Trivia Tycoon" labels
-  - No mixed old/new adjacent screen language
-  - Mode-specific rendering validation
-  - Frontend/backend label consistency verification
+- Runtime/device verification is still needed for app launch, auth/bootstrap, onboarding restore/handoff, mode rendering, and major surface navigation.
+- Frontend labels still need final verification against backend dashboards/docs.
 
 > **Status:** Blocked — requires a running device and live backend. Curl CONNECT
 > tunnel failure prevents live smoke-checking in CI; Flutter SDK not on PATH in CI.
@@ -135,13 +133,14 @@ Progress update (2026-04-04 execution — complete):
   - `ArcadeRegistry` (all 3 game definitions, IDs, difficulties, ArcadeGameId completeness)
   - `LocalArcadeLeaderboardService` (recordRun, top sort order/limit, best, wouldBeNewBest, clearBoard, clearAll, persistence, topForGame)
 
-**Remaining coverage gaps** (tracked in [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)):
+**Remaining coverage gaps** (tracked in [`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md), with detail/history in [`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)):
 
 | Gap | File(s) | Key methods to cover |
 |-----|---------|----------------------|
-| `RichPresenceService` | `lib/core/services/presence/rich_presence_service.dart` | `initialize()`, `updateCurrentUserPresence()`, `setGameActivity()`, `canUserJoinGame()`, `watchUserPresence()` |
 | Auth edge cases | `lib/core/services/auth_service.dart` | Social login, concurrent 401 refresh, offline login, logout clears tokens |
 | Widget tree tests | Various screens | `ArcadeGameShell`, `DailyBonusScreen`, `ArcadeMissionsScreen` |
+
+`RichPresenceService` is no longer a remaining coverage gap; `test/core/services/presence/rich_presence_service_test.dart` now covers initialization, presence updates, game activity, joinability, watched streams, and dispose.
 
 ### Phase 2 — UnimplementedError stubs ✅ RESOLVED
 - `core_providers.dart` (`serviceManagerProvider`) — documented as intentional design-time guard
@@ -227,15 +226,19 @@ Progress update (2026-04-04 execution — complete):
   - backend loadout `GET`/`PUT` wiring added for enhanced profile data + profile edit save
   - backend `DELETE /friends` wiring added for unfriend
 - Question gameplay handoff wiring is now implemented:
-  - quiz retrieval prefers `GET /questions/set`
+  - quiz retrieval uses `GET /questions/set`
+  - backend-safe `GameplayQuestionDto` parsing is implemented for `text`, `options`, `mediaKey`, and enum difficulty values
+  - single-player/category/class flows use `mode=practice`
+  - multiplayer uses `mode=ranked`, count-only, with no `playerId` personalization
   - per-question validation uses `POST /questions/check`
   - end-of-quiz reconciliation uses `POST /questions/check-batch`
+  - stale direct multiplayer `/api/questions` fallback was removed
 - This closes the previously partial store/profile slices from
   `docs/frontend_backend_handoff_alpha_2026-04-04.md`.
 - The larger handoff items for crypto surfaces and ML UX usage
   remain separate work items.
-- The canonical remaining-work tracker for those open handoff items is now
-  `docs/REMAINING_TASKS.md`.
+- The concise canonical remaining-work tracker for those open handoff items is now
+  `docs/CURRENT_TASKS.md`; `docs/REMAINING_TASKS.md` remains the detailed backlog/history reference.
 
 ### Remaining operational validation
 - Hosted-domain verification still requires production deployment of:
@@ -249,7 +252,7 @@ Progress update (2026-04-04 execution — complete):
 
 ## 8) Outstanding work — full backlog
 
-See **[`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)** for the prioritized, detailed backlog
+See **[`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md)** for the concise current backlog and **[`docs/REMAINING_TASKS.md`](REMAINING_TASKS.md)** for detailed history
 covering all remaining work across:
 
 - Frontend/backend alpha handoff remaining work (crypto surfaces, ML UX consumption)
@@ -291,9 +294,15 @@ covering all remaining work across:
     falling back to local Hive
   - queued profile sync retries are now triggered during bootstrap
 
-### Remaining profile-storage gap ⚠️ STILL OPEN
+### Profile-storage gap status - CODE COMPLETE; runtime verification remaining
 - Picked avatar image files are still only local-device file paths unless they
   already resolve to an asset path or backend-served URL.
 - Full portable avatar persistence requires an upload flow backed by object
   storage (MinIO or equivalent), returning a stable object URL or object key
   that can be stored in both backend profile data and Hive.
+
+**2026-05-10 update:** portable avatar upload is now wired in the frontend:
+`AvatarUploadService`, `ProfileAvatarController`, providers, progress/error UI,
+and upload/controller tests exist. Remaining validation is runtime-only: pick,
+crop, upload on device, wipe local emulator data, log in again, and confirm
+avatar hydration from the backend URL.

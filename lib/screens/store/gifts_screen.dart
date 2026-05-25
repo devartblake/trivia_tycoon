@@ -458,7 +458,7 @@ class _GiftsScreenState extends ConsumerState<GiftsScreen>
               );
             },
           );
-        }).toList(),
+        }),
       ],
     );
   }

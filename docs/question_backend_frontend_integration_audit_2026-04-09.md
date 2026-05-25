@@ -25,10 +25,13 @@ This audit reviews question-related backend connectivity and frontend subsystem 
 
 ### 1) Question data flow is backend-first with local fallback
 - `QuestionRepositoryImpl` delegates to `QuestionHubService` for mode/category/daily/mixed access, centralizing question fetch behavior.
-- `QuestionHubService` calls backend endpoints (`/quiz/*`, fallback `/questions/*`) and falls back to local loaders on API/contract errors.
-- `QuestionService` still provides server+local fallback behavior for legacy paths.
+- `QuestionHubService` calls canonical backend `/questions/*` endpoints and falls back to local loaders on API/contract errors.
+- `QuestionService.fetchQuestionsFromServer()` now calls `/questions/set` directly instead of deprecated `ApiService.fetchQuestions()`.
 - `QuestionHubService` now records whether each operation resolved from backend or local fallback and emits explicit source logs.
 - `QuestionScreen` now surfaces a visible backend/local fallback status banner through provider-backed question source reporting.
+- `QuestionModel` now parses backend answer-safe `GameplayQuestionDto` payloads (`text`, `options`, `mediaKey`, no embedded correctness).
+- Category/class/single-player flows use `/questions/set` with `mode=practice`; multiplayer uses `mode=ranked`, count-only, and no `playerId`.
+- Backend answer validation uses `/questions/check` and `/questions/check-batch` with option ids.
 
 **Impact:** the app can keep serving question content even when backend endpoints partially fail.
 
@@ -59,12 +62,15 @@ This audit reviews question-related backend connectivity and frontend subsystem 
 
 **Fix in this patch:** `QuestionApiService` now reads `API_BASE_URL` from environment configuration and supports both list and `{ items: [...] }` responses.
 
+**2026-05-10 update:** gameplay question flows no longer depend on this service or direct `/api/questions` calls. Multiplayer now uses the repository/hub path and local mock fallback only after repository failure.
+
 ## Integration Readiness Matrix
 
 | Capability | Backend-connected now | Frontend-ready now | Notes |
 |---|---:|---:|---|
 | Question catalog & play payloads | Yes | Yes | Backend-first + local fallback in `QuestionHubService`. |
-| Daily/mixed/category quiz retrieval | Yes | Yes | Uses `QuestionRepositoryImpl` -> `QuestionHubService`. |
+| Daily/mixed/category/class quiz retrieval | Yes | Yes | Uses `QuestionRepositoryImpl` -> `QuestionHubService` -> `/questions/set`; class remains frontend category+difficulty mapping. |
+| Multiplayer gameplay questions | Yes | Yes | Uses `/questions/set?mode=ranked&count=n` without `playerId` personalization. |
 | Power-up effects | Partial | Yes | Applied locally in `QuestionController`; no authoritative backend consume/audit write. |
 | XP progression | No (authoritative) | Yes | Local accumulation in `XPService`; needs server profile progression sync. |
 | Coins/gems economy | No (authoritative) | Partial | Main menu display now syncs backend wallet balances, but ledger/transaction authority is still not backend-driven. |

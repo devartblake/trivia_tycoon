@@ -3,6 +3,8 @@
 /// Represents the client’s connection lifecycle to the multiplayer backend.
 /// Keep this state **UI-agnostic** so it can be consumed by controllers, services,
 /// and widgets alike.
+library;
+
 class MultiplayerState {
   /// True when the socket/session is open and authenticated (if applicable).
   final bool connected;
@@ -32,9 +34,8 @@ class MultiplayerState {
         error = null;
 
   /// Connected with an optional latency snapshot.
-  const MultiplayerState.connected({int latencyMs = 0})
+  const MultiplayerState.connected({this.latencyMs = 0})
       : connected = true,
-        latencyMs = latencyMs,
         error = null;
 
   /// Error state (disconnected).

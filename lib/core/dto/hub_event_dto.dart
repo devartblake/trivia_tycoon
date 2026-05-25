@@ -1,4 +1,5 @@
 /// DTOs for server-push events received from SignalR hubs.
+library;
 
 class PlayerNotificationDto {
   final String type;
@@ -176,8 +177,7 @@ class DirectMessagesUpdatedDto {
         conversationId: j['conversationId'] as String? ?? '',
         unreadCount: j['unreadCount'] as int? ?? 0,
         reason: j['reason'] as String? ?? '',
-        occurredAtUtc:
-            DateTime.tryParse(j['occurredAtUtc'] as String? ?? '') ??
-                DateTime.now(),
+        occurredAtUtc: DateTime.tryParse(j['occurredAtUtc'] as String? ?? '') ??
+            DateTime.now(),
       );
 }

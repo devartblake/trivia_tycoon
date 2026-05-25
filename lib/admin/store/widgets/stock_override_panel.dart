@@ -100,8 +100,8 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
             if (_error != null) ...[
               const SizedBox(height: 8),
               Text(_error!,
-                  style: const TextStyle(
-                      color: Color(0xFFEF4444), fontSize: 12)),
+                  style:
+                      const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
             ],
             const SizedBox(height: 16),
             Align(
@@ -150,8 +150,7 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('User Override',
-                style:
-                    TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             Text('All overrides are audit-logged.',
                 style: TextStyle(fontSize: 11, color: Color(0xFF94A3B8))),
           ],
@@ -186,8 +185,7 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             ),
-            onChanged: (v) =>
-                setState(() => _model = _model.copyWith(sku: v)),
+            onChanged: (v) => setState(() => _model = _model.copyWith(sku: v)),
           ),
         ),
       ],
@@ -220,8 +218,8 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
             value: _model.overrideExpiresAt,
             onChanged: (dt) =>
                 setState(() => _model = _model.copyWith(overrideExpiresAt: dt)),
-            onClear: () => setState(
-                () => _model = _model.copyWith(clearExpiry: true)),
+            onClear: () =>
+                setState(() => _model = _model.copyWith(clearExpiry: true)),
           ),
         ),
       ],
@@ -254,12 +252,11 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
 
   Widget _buildReasonRow() {
     return DropdownButtonFormField<String>(
-      value: _model.reasonCode,
+      initialValue: _model.reasonCode,
       decoration: const InputDecoration(
         labelText: 'Reason Code',
         border: OutlineInputBorder(),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       ),
       items: _reasonCodes
           .map((code) => DropdownMenuItem(
@@ -267,8 +264,7 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
               child: Text(_formatCode(code),
                   style: const TextStyle(fontSize: 13))))
           .toList(),
-      onChanged: (v) =>
-          setState(() => _model = _model.copyWith(reasonCode: v)),
+      onChanged: (v) => setState(() => _model = _model.copyWith(reasonCode: v)),
     );
   }
 
@@ -277,8 +273,7 @@ class _StockOverridePanelState extends State<StockOverridePanel> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Active Overrides',
-            style:
-                TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         ...widget.existingOverrides.map((o) {
           final id = o['id']?.toString() ?? o['overrideId']?.toString() ?? '';
@@ -374,8 +369,7 @@ class _ActionToggle extends StatelessWidget {
         decoration: BoxDecoration(
           color: value ? color.withValues(alpha: 0.1) : Colors.grey[100],
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: value ? color : Colors.grey.shade300),
+          border: Border.all(color: value ? color : Colors.grey.shade300),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -386,8 +380,7 @@ class _ActionToggle extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 12,
                     color: value ? color : Colors.grey[600],
-                    fontWeight:
-                        value ? FontWeight.bold : FontWeight.normal)),
+                    fontWeight: value ? FontWeight.bold : FontWeight.normal)),
           ],
         ),
       ),
@@ -425,16 +418,14 @@ class _ExpiryField extends StatelessWidget {
                     : 'Not set',
                 style: TextStyle(
                     fontSize: 13,
-                    color:
-                        value != null ? Colors.black87 : Colors.grey[400]),
+                    color: value != null ? Colors.black87 : Colors.grey[400]),
               ),
             ),
           ),
         ),
         if (value != null)
           IconButton(
-              icon: const Icon(Icons.clear, size: 16),
-              onPressed: onClear),
+              icon: const Icon(Icons.clear, size: 16), onPressed: onClear),
       ],
     );
   }
@@ -442,8 +433,8 @@ class _ExpiryField extends StatelessWidget {
   Future<void> _pick(BuildContext context) async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: value?.toLocal() ??
-          DateTime.now().add(const Duration(days: 7)),
+      initialDate:
+          value?.toLocal() ?? DateTime.now().add(const Duration(days: 7)),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );

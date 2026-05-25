@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/dto/study_dto.dart';
-import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../../game/providers/learning_providers.dart'
+    show currentPlayerIdProvider;
 import '../../game/providers/study_providers.dart';
 import '../../personalization/widgets/recommended_for_you_section.dart';
 
@@ -217,12 +218,10 @@ class _CategoryChips extends StatelessWidget {
       children: categories
           .map((cat) => ActionChip(
                 label: Text(cat),
-                labelStyle:
-                    const TextStyle(color: Colors.white, fontSize: 13),
+                labelStyle: const TextStyle(color: Colors.white, fontSize: 13),
                 backgroundColor: const Color(0xFF1E293B),
                 side: const BorderSide(color: Color(0xFF8B5CF6), width: 0.8),
-                onPressed: () =>
-                    context.push('/study/set/category:$cat'),
+                onPressed: () => context.push('/study/set/category:$cat'),
               ))
           .toList(),
     );
@@ -247,8 +246,8 @@ class _ResumeCard extends ConsumerWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-              color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
+          border:
+              Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
         ),
         child: Row(
           children: [
@@ -271,8 +270,7 @@ class _ResumeCard extends ConsumerWidget {
                     'Set: $setId',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        color: Colors.white54, fontSize: 12),
+                    style: const TextStyle(color: Colors.white54, fontSize: 12),
                   ),
                 ],
               ),

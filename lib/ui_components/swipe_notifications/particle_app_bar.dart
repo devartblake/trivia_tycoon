@@ -1,6 +1,5 @@
 import 'package:trivia_tycoon/screens/app_shell/app_shell.dart';
 
-import '../../main.dart';
 import 'package:flutter/material.dart';
 
 class ParticleAppBar extends StatelessWidget {

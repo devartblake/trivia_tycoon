@@ -126,13 +126,11 @@ class _HexSpiderSkillTreeViewState
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenSize = Size(constraints.maxWidth, constraints.maxHeight);
-        final screenPositions =
-            _computeScreenPositions(hexOf, screenSize);
+        final screenPositions = _computeScreenPositions(hexOf, screenSize);
 
         // Derive selected node axial coord for axis painter
-        final selectedCoord = state.selectedId != null
-            ? hexOf[state.selectedId]
-            : null;
+        final selectedCoord =
+            state.selectedId != null ? hexOf[state.selectedId] : null;
 
         return Stack(children: [
           // 1. Background guide grid
@@ -169,8 +167,7 @@ class _HexSpiderSkillTreeViewState
                       ref.read(skillCooldownServiceProvider);
 
                   return GestureDetector(
-                    onTap: () => _onNodeTap(
-                        id, state.graph, screenPositions),
+                    onTap: () => _onNodeTap(id, state.graph, screenPositions),
                     onDoubleTap: () =>
                         ref.read(skillTreeProvider.notifier).unlockSkill(id),
                     child: SkillNodeWidget(
@@ -178,12 +175,11 @@ class _HexSpiderSkillTreeViewState
                       isUnlocked: node.unlocked,
                       isSelected: state.selectedId == id,
                       radius: _hexSize,
-                      categoryColor:
-                          SkillTreeCategoryColors.categoryColors[node.category] ??
-                              Colors.grey,
+                      categoryColor: SkillTreeCategoryColors
+                              .categoryColors[node.category] ??
+                          Colors.grey,
                       cooldownService: cooldownService,
-                      onTap: () => _onNodeTap(
-                          id, state.graph, screenPositions),
+                      onTap: () => _onNodeTap(id, state.graph, screenPositions),
                     ),
                   );
                 },

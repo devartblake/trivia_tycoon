@@ -69,16 +69,16 @@ class _ConfirmRecoverCardState extends ConsumerState<_ConfirmRecoverCard>
     );
 
     if (error != null) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorToast(context, messages.toastTitleError, error);
       }
       setState(() => _isSubmitting = false);
-      if (context.mounted) {
+      if (mounted) {
         await _submitController.reverse();
       }
       return false;
     } else {
-      if (context.mounted) {
+      if (mounted) {
         showSuccessToast(
           context,
           messages.toastTitleSuccess,

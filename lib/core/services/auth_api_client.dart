@@ -53,6 +53,8 @@ class AuthApiClient {
   static const String signupPath = '/auth/signup';
   static const String refreshPath = '/auth/refresh';
   static const String logoutPath = '/auth/logout';
+  static const String deviceBootstrapPath = '/auth/device/bootstrap';
+  static const String accountUpgradePath = '/auth/account/upgrade';
 
   void _logRequest(String method, String path, {Object? body}) {
     if (!kDebugMode) return;
@@ -216,6 +218,71 @@ class AuthApiClient {
     );
   }
 
+  /// Upgrade a device/platform session into a full email account.
+  ///
+  /// Backend: `POST /auth/account/upgrade`
+  /// body: `{ email, password, username?, country?, deviceId, deviceType }`
+  /// returns the same session JSON as login/signup.
+  Future<AuthSession> upgradeAccount({
+    required String email,
+    required String password,
+    String? username,
+    String? country,
+    String? accessToken,
+  }) async {
+    final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
+    final headers = <String, String>{'Content-Type': 'application/json'};
+    if (accessToken != null && accessToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $accessToken';
+    }
+    final payload = {
+      'email': email,
+      'password': password,
+      ...deviceIdentity,
+      if (username != null && username.isNotEmpty) 'username': username,
+      if (username != null && username.isNotEmpty) 'handle': username,
+      if (country != null && country.isNotEmpty) 'country': country,
+    };
+
+    _logRequest('POST', accountUpgradePath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(accountUpgradePath),
+        headers: headers,
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Account upgrade failed before receiving a response.',
+        path: accountUpgradePath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', accountUpgradePath, response);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final data = _decodeBodyMap(response.body, context: 'account-upgrade');
+      final session = _parseSession(data);
+      final metadata = _extractMetadata(data);
+      return session.copyWith(metadata: metadata);
+    }
+
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Account upgrade failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: accountUpgradePath,
+      method: 'POST',
+      responseBody: response.body,
+    );
+  }
+
   /// Extract metadata from backend response
   /// This includes user info, role, premium status, tier, etc.
   Map<String, dynamic> _extractMetadata(Map<String, dynamic> response) {
@@ -232,10 +299,12 @@ class AuthApiClient {
       if (user.containsKey('role')) metadata['role'] = user['role'];
       if (user.containsKey('roles')) metadata['roles'] = user['roles'];
       if (user.containsKey('tier')) metadata['tier'] = user['tier'];
-      if (user.containsKey('isPremium'))
+      if (user.containsKey('isPremium')) {
         metadata['isPremium'] = user['isPremium'];
-      if (user.containsKey('is_premium'))
+      }
+      if (user.containsKey('is_premium')) {
         metadata['is_premium'] = user['is_premium'];
+      }
       if (user.containsKey('premium')) metadata['premium'] = user['premium'];
       if (user.containsKey('subscriptionStatus')) {
         metadata['subscriptionStatus'] = user['subscriptionStatus'];
@@ -249,10 +318,12 @@ class AuthApiClient {
     if (response.containsKey('role')) metadata['role'] = response['role'];
     if (response.containsKey('roles')) metadata['roles'] = response['roles'];
     if (response.containsKey('tier')) metadata['tier'] = response['tier'];
-    if (response.containsKey('isPremium'))
+    if (response.containsKey('isPremium')) {
       metadata['isPremium'] = response['isPremium'];
-    if (response.containsKey('is_premium'))
+    }
+    if (response.containsKey('is_premium')) {
       metadata['is_premium'] = response['is_premium'];
+    }
 
     return metadata;
   }
@@ -363,6 +434,181 @@ class AuthApiClient {
         responseBody: res.body,
       );
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // Mobile game platform auth
+  // -------------------------------------------------------------------------
+
+  /// Bootstrap a lightweight device-first session.
+  ///
+  /// Backend contract:
+  /// `POST /auth/device/bootstrap`
+  /// body: `{ deviceId, deviceType, platform?, platformPlayerId?, displayName? }`
+  /// returns the same session JSON as login/signup when the backend is ready.
+  Future<AuthSession> bootstrapDevice({
+    String? platform,
+    String? platformPlayerId,
+    String? displayName,
+  }) async {
+    final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
+    final payload = {
+      ...deviceIdentity,
+      if (platform != null) 'platform': platform,
+      if (platformPlayerId != null) 'platformPlayerId': platformPlayerId,
+      if (displayName != null) 'displayName': displayName,
+    };
+
+    _logRequest('POST', deviceBootstrapPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(deviceBootstrapPath),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message: 'Device bootstrap failed before receiving a response.',
+        path: deviceBootstrapPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', deviceBootstrapPath, response);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final data = _decodeBodyMap(response.body, context: 'device-bootstrap');
+      final session = _parseSession(data);
+      final metadata = _extractMetadata(data);
+      return session.copyWith(metadata: metadata);
+    }
+
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Device bootstrap failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: deviceBootstrapPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
+  }
+
+  static const String mobileGameLoginPath = '/auth/mobile-game-login';
+  static const String linkGameAccountPath = '/auth/link-game-account';
+
+  /// Authenticate using a native game platform identity (Game Center / Play Games).
+  ///
+  /// The backend must implement `POST /auth/mobile-game-login` which accepts:
+  /// `{ platform, playerId, displayName }` and returns the same session JSON
+  /// as the regular login endpoint.
+  Future<AuthSession> loginWithGamePlatform({
+    required String platform,
+    required String playerId,
+    required String displayName,
+  }) async {
+    final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
+    final payload = {
+      'platform': platform,
+      'playerId': playerId,
+      'displayName': displayName,
+      ...deviceIdentity,
+    };
+
+    _logRequest('POST', mobileGameLoginPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(mobileGameLoginPath),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message:
+            'Mobile game login request failed before receiving a response.',
+        path: mobileGameLoginPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', mobileGameLoginPath, response);
+
+    if (response.statusCode == 200) {
+      final data = _decodeBodyMap(response.body, context: 'mobile-game-login');
+      final session = _parseSession(data);
+      final metadata = _extractMetadata(data);
+      return session.copyWith(metadata: metadata);
+    }
+
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Mobile game login failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: mobileGameLoginPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
+  }
+
+  /// Link a game platform identity to the currently authenticated account.
+  ///
+  /// Requires the caller to supply a valid Bearer access token in the request.
+  /// The backend must implement `POST /auth/link-game-account`.
+  Future<void> linkGameAccount({
+    required String platform,
+    required String playerId,
+    required String accessToken,
+  }) async {
+    final payload = {
+      'platform': platform,
+      'playerId': playerId,
+    };
+
+    _logRequest('POST', linkGameAccountPath, body: payload);
+
+    final http.Response response;
+    try {
+      response = await _http.post(
+        _u(linkGameAccountPath),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(payload),
+      );
+    } catch (e) {
+      throw AuthApiException(
+        message:
+            'Link game account request failed before receiving a response.',
+        path: linkGameAccountPath,
+        method: 'POST',
+        innerError: e,
+      );
+    }
+
+    _logResponse('POST', linkGameAccountPath, response);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) return;
+
+    throw AuthApiException(
+      message: _extractErrorMessage(
+        response,
+        fallback: 'Link game account failed (HTTP ${response.statusCode})',
+      ),
+      statusCode: response.statusCode,
+      path: linkGameAccountPath,
+      method: 'POST',
+      responseBody: response.body,
+    );
   }
 
   Future<String?> getOAuthUrl(String provider) async {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast.dart';
-import 'dart:math' as math;
 
 class SpinReadyToast {
   static Future<void> show({

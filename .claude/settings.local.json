@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter test *)",
+      "Bash(where flutter *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lmxbl\\\\StudioProjects\\\\trivia_tycoon\\\\lib\\\\core\\\\services\\\\arcade\" -Recurse)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lmxbl\\\\StudioProjects\\\\trivia_tycoon\\\\lib\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(~/fvm/default/bin/flutter analyze *)",
+      "Bash(cmd.exe /c \"where flutter\")",
+      "Bash(cmd.exe /c \"where dart\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lmxbl\\\\StudioProjects\\\\trivia_tycoon\\\\test\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(grep -E \"\\\\.dart$\")",
+      "Bash(xargs grep -l \"^const.*path\\\\|^class.*Route\\\\|^class.*Path\")"
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'color_slider_picker.dart';
 import 'color_wheel_picker.dart';
@@ -258,7 +258,7 @@ class _ColorPickerComponentState extends State<ColorPickerComponent>
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
-                "#${_colors.first.value.toRadixString(16).substring(2).toUpperCase()}",
+                "#${_colors.first.toARGB32().toRadixString(16).substring(2).toUpperCase()}",
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -431,7 +431,7 @@ class _ModernColorPickerDialogState extends State<_ModernColorPickerDialog>
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          "#${selectedColor.value.toRadixString(16).substring(2).toUpperCase()}",
+                          "#${selectedColor.toARGB32().toRadixString(16).substring(2).toUpperCase()}",
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

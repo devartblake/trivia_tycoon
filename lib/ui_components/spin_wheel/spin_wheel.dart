@@ -1,4 +1,4 @@
-library spin_wheel;
+library;
 
 export 'models/spin_system_models.dart';
 export 'services/segment_loader.dart';

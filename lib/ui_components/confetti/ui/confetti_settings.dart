@@ -517,7 +517,7 @@ class ConfettiSettings extends ConsumerWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF667EEA),
+            activeThumbColor: const Color(0xFF667EEA),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ],

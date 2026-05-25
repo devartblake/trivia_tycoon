@@ -88,15 +88,20 @@ class SkillSearchProvider implements SearchProvider {
     final titleLower = title.toLowerCase();
     final descLower = description.toLowerCase();
 
-    if (titleLower == query)
+    if (titleLower == query) {
       score += 100;
-    else if (titleLower.startsWith(query))
+    } else if (titleLower.startsWith(query)) {
       score += 80;
-    else if (titleLower.contains(query)) score += 60;
+    }
+    else if (titleLower.contains(query)) {
+      score += 60;
+    }
 
-    if (descLower.startsWith(query))
+    if (descLower.startsWith(query)) {
       score += 40;
-    else if (descLower.contains(query)) score += 20;
+    } else if (descLower.contains(query)) {
+      score += 20;
+    }
 
     return score;
   }
@@ -175,10 +180,16 @@ class NavigationSearchProvider implements SearchProvider {
     final titleLower = title.toLowerCase();
 
     if (titleLower == query)
-      score += 100;
+      {
+        score += 100;
+      }
     else if (titleLower.startsWith(query))
-      score += 80;
-    else if (titleLower.contains(query)) score += 60;
+      {
+        score += 80;
+      }
+    else if (titleLower.contains(query)) {
+      score += 60;
+    }
 
     return score;
   }

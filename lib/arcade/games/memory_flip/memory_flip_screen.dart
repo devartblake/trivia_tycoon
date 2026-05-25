@@ -161,8 +161,9 @@ class _MemoryFlipScreenState extends State<MemoryFlipScreen> {
 
   int _inferColumns(int totalCards) {
     // Keep it visually clean across different grid sizes
-    if (totalCards <= 12)
+    if (totalCards <= 12) {
       return 4; // 3x4 layout but 4 columns is good for compact tiles
+    }
     if (totalCards <= 16) return 4;
     if (totalCards <= 20) return 5;
     return 6;

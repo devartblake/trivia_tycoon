@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:ui' show Color;
 import 'package:flutter/services.dart' show rootBundle;
 import '../../../game/models/skill_tree_nav_models.dart';
@@ -21,7 +21,8 @@ class SkillTreeNavRepository {
     final groups = <SkillTreeGroupVM>[];
 
     if (decoded is Map && decoded['skill_tree_groups'] is Map) {
-      groups.addAll(_parseSkillTreeGroupsMap(decoded['skill_tree_groups'] as Map));
+      groups.addAll(
+          _parseSkillTreeGroupsMap(decoded['skill_tree_groups'] as Map));
     } else if (decoded is Map && decoded['groups'] is List) {
       for (final g in decoded['groups']) {
         groups.add(_parseGroupMap(g));
@@ -125,8 +126,7 @@ class SkillTreeNavRepository {
     SkillTreeGroupId groupId, {
     String fallbackBranchId = 'unknown',
   }) {
-    final branchId =
-        (b['branch_id'] ?? b['id'] ?? fallbackBranchId).toString();
+    final branchId = (b['branch_id'] ?? b['id'] ?? fallbackBranchId).toString();
     final title = (b['title'] ?? branchId).toString();
     final desc = (b['description'] ?? '').toString();
     final colorHex =
@@ -150,7 +150,7 @@ class SkillTreeNavRepository {
   }
 
   String _colorToHex(Color color) {
-    final value = color.value;
+    final value = color.toARGB32();
     return '#${(value & 0x00FFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
   }
 }

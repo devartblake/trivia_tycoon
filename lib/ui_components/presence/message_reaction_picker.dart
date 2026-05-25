@@ -290,12 +290,12 @@ class MessageReactionBar extends StatelessWidget {
   final VoidCallback? onReactionTapped;
 
   const MessageReactionBar({
-    Key? key,
+    super.key,
     required this.messageId,
     required this.currentUserId,
     this.onAddReaction,
     this.onReactionTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

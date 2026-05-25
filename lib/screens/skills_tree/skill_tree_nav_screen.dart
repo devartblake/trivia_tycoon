@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../game/analytics/providers/analytics_providers.dart';
-import '../../../game/controllers/skill_tree_controller.dart';
-import '../../../synaptix/mode/synaptix_mode_provider.dart';
-import '../../../ui_components/hex_grid/widgets/hex_nav_button.dart';
-import '../../../ui_components/hex_grid/math/hex_orientation.dart';
+import '../../game/analytics/providers/analytics_providers.dart';
+import '../../game/controllers/skill_tree_controller.dart';
+import '../../synaptix/mode/synaptix_mode_provider.dart';
+import '../../ui_components/hex_grid/hex_grid.dart';
 import '../../game/models/skill_tree_nav_models.dart';
 import '../../game/providers/skill_tree_nav_providers.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
-import '../../ui_components/hex_grid/widgets/mini_hex_preview.dart';
 
 class SkillTreeNavScreen extends ConsumerStatefulWidget {
   const SkillTreeNavScreen({super.key});
@@ -512,18 +510,23 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     int score = 0;
 
     // Exact title match gets highest score
-    if (title == query)
+    if (title == query) {
       score += 100;
-    // Title starts with query
-    else if (title.startsWith(query))
-      score += 80;
+    } else if (title.startsWith(query))
+      {
+        score += 80;
+      }
     // Title contains query
-    else if (title.contains(query)) score += 60;
+    else if (title.contains(query)) {
+      score += 60;
+    }
 
     // Description matches get lower scores
-    if (description.startsWith(query))
+    if (description.startsWith(query)) {
       score += 40;
-    else if (description.contains(query)) score += 20;
+    } else if (description.contains(query)) {
+      score += 20;
+    }
 
     return score;
   }
@@ -649,9 +652,8 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
   /// Compute live progress for a branch category from the skill tree state.
   _GroupProgress _liveProgress(String categoryId) {
     final graph = ref.read(skillTreeProvider).graph;
-    final nodes = graph.nodes
-        .where((n) => n.category.name == categoryId)
-        .toList();
+    final nodes =
+        graph.nodes.where((n) => n.category.name == categoryId).toList();
     final total = nodes.length;
     final unlocked = nodes.where((n) => n.unlocked).length;
     final available = nodes.where((n) => n.available && !n.unlocked).length;
@@ -742,7 +744,8 @@ class SkillSearchResult {
 class _GroupProgress {
   final int progressPercent;
   final int availableSkills;
-  const _GroupProgress({required this.progressPercent, required this.availableSkills});
+  const _GroupProgress(
+      {required this.progressPercent, required this.availableSkills});
 }
 
 extension _AutoPathSheet on _SkillTreeNavScreenState {
@@ -815,7 +818,7 @@ extension _AutoPathSheet on _SkillTreeNavScreenState {
                       Switch(
                         value: highlight,
                         onChanged: (v) => setSheetState(() => highlight = v),
-                        activeColor: Colors.cyanAccent,
+                        activeThumbColor: Colors.cyanAccent,
                       ),
                     ],
                   ),

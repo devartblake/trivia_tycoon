@@ -23,6 +23,7 @@ class QuestionModel {
   final bool isBoostedTime;
   final bool isShielded;
   final List<String>? tags;
+  final Map<String, String>? optionIdByText;
 
   QuestionModel({
     required this.id,
@@ -47,12 +48,25 @@ class QuestionModel {
     this.isBoostedTime = false,
     this.isShielded = false,
     this.tags,
+    this.optionIdByText,
   });
 
   bool checkAnswer(int selectedIndex) => selectedIndex == correctIndex;
 
   bool isCorrectAnswer(String selectedAnswer) {
     return selectedAnswer == correctAnswer;
+  }
+
+  String optionIdForAnswer(String selectedAnswer) {
+    return optionIdByText?[selectedAnswer] ?? selectedAnswer;
+  }
+
+  String answerTextForOptionId(String optionId) {
+    if (optionIdByText == null) return optionId;
+    for (final entry in optionIdByText!.entries) {
+      if (entry.value == optionId) return entry.key;
+    }
+    return optionId;
   }
 
   /// Check if this question has audio content
@@ -76,22 +90,70 @@ class QuestionModel {
   bool get isMultimedia => hasAudio || hasVideo || hasImage;
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
+    final rawAnswers = json['answers'];
+    final rawOptions = json['options'];
+    final optionIdByText = <String, String>{};
+    final serializedOptionIds = json['optionIdByText'];
+    if (serializedOptionIds is Map) {
+      serializedOptionIds.forEach((key, value) {
+        optionIdByText[key.toString()] = value.toString();
+      });
+    }
+    final answerMaps = rawAnswers is List
+        ? rawAnswers.whereType<Map>().map((answer) {
+            final map = Map<String, dynamic>.from(answer);
+            final text = map['text']?.toString() ?? '';
+            final optionId = (map['optionId'] ?? map['id'])?.toString();
+            if (text.isNotEmpty && optionId != null && optionId.isNotEmpty) {
+              optionIdByText[text] = optionId;
+            }
+            return map;
+          }).toList()
+        : rawOptions is List
+            ? rawOptions.map((option) {
+                if (option is Map) {
+                  final map = Map<String, dynamic>.from(option);
+                  final text =
+                      (map['text'] ?? map['label'] ?? map['optionText'] ?? '')
+                          .toString();
+                  final optionId =
+                      (map['optionId'] ?? map['id'] ?? text).toString();
+                  if (text.isNotEmpty) optionIdByText[text] = optionId;
+                  return {
+                    'text': text,
+                    'isCorrect': false,
+                    'optionId': optionId,
+                  };
+                }
+                return {
+                  'text': option.toString(),
+                  'isCorrect': false,
+                };
+              }).toList()
+            : <Map<String, dynamic>>[];
+    final options = answerMaps.map((a) => a['text'].toString()).toList();
+    final correctOption = (json['correctAnswer'] ??
+            json['correctOptionId'] ??
+            json['expectedAnswer'] ??
+            '')
+        .toString();
+    final correctIndex = answerMaps.indexWhere((a) {
+      if (a['isCorrect'] == true) return true;
+      final optionId = (a['optionId'] ?? a['id'] ?? a['text']).toString();
+      return correctOption.isNotEmpty && optionId == correctOption;
+    });
+
     return QuestionModel(
-      id: json['id'] ?? '',
+      id: (json['id'] ?? json['questionId'] ?? '').toString(),
       category: json['category'] ?? 'General',
-      question: json['question'] ?? '',
-      answers: (json['answers'] as List<dynamic>)
-          .map((a) => Answer.fromJson(a))
-          .toList(),
-      correctAnswer: json['correctAnswer'] ?? '',
+      question: (json['question'] ?? json['text'] ?? '').toString(),
+      answers: answerMaps.map(Answer.fromJson).toList(),
+      correctAnswer: correctOption,
       type: json['type'] ?? 'multiple_choice',
-      difficulty: json['difficulty'] ?? 1,
-      options: (json['answers'] as List<dynamic>)
-          .map((a) => a['text'].toString())
-          .toList(),
-      correctIndex: (json['answers'] as List<dynamic>)
-          .indexWhere((a) => a['isCorrect'] == true),
-      imageUrl: json['imageUrl'],
+      difficulty: _parseDifficulty(json['difficulty']),
+      options: options,
+      correctIndex: correctIndex,
+      imageUrl: json['imageUrl'] ?? json['mediaKey'],
       videoUrl: json['videoUrl'],
       audioUrl: json['audioUrl'],
       audioTranscript: json['audioTranscript'],
@@ -107,7 +169,29 @@ class QuestionModel {
       isBoostedTime: json['isBoostedTime'] ?? false,
       isShielded: json['isShielded'] ?? false,
       tags: json['tags'] != null ? List<String>.from(json['tags']) : null,
+      optionIdByText: optionIdByText.isEmpty ? null : optionIdByText,
     );
+  }
+
+  factory QuestionModel.fromGameplayDto(Map<String, dynamic> json) {
+    return QuestionModel.fromJson(json);
+  }
+
+  static int _parseDifficulty(Object? value) {
+    if (value is num) return value.toInt();
+
+    switch ((value ?? '').toString().toLowerCase()) {
+      case 'easy':
+        return 1;
+      case 'medium':
+        return 2;
+      case 'hard':
+        return 3;
+      case 'expert':
+        return 4;
+      default:
+        return int.tryParse((value ?? '').toString()) ?? 1;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -134,6 +218,7 @@ class QuestionModel {
       'isBoostedTime': isBoostedTime,
       'isShielded': isShielded,
       'tags': tags,
+      'optionIdByText': optionIdByText,
     };
   }
 
@@ -160,6 +245,7 @@ class QuestionModel {
     bool? isBoostedTime,
     bool? isShielded,
     List<String>? tags,
+    Map<String, String>? optionIdByText,
   }) {
     return QuestionModel(
       id: id ?? this.id,
@@ -184,6 +270,7 @@ class QuestionModel {
       isBoostedTime: isBoostedTime ?? this.isBoostedTime,
       isShielded: isShielded ?? this.isShielded,
       tags: tags ?? this.tags,
+      optionIdByText: optionIdByText ?? this.optionIdByText,
     );
   }
 }

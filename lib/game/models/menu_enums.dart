@@ -1,4 +1,5 @@
 /// Menu-related enumerations
+library;
 
 /// Age group for theme customization
 enum AgeGroup {

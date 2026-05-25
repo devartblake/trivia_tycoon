@@ -15,7 +15,7 @@ class Sprite extends StatefulWidget {
       this.frame = 0});
 
   @override
-  _SpriteState createState() => _SpriteState();
+  State<Sprite> createState() => _SpriteState();
 }
 
 class _SpriteState extends State<Sprite> {

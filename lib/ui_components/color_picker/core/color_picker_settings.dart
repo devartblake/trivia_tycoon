@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../utils/color_storage.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -112,12 +112,12 @@ class ColorPickerSettings {
   /// Convert to a Map for local storage - optimized
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'selectedColor': selectedColor.value,
+      'selectedColor': selectedColor.toARGB32(),
       'useCustomPalette': useCustomPalette,
       'customPalette':
-          customPalette.map((c) => c.value).toList(growable: false),
+          customPalette.map((c) => c.toARGB32()).toList(growable: false),
       'pickerMode': pickerMode,
-      'colors': colors.map((c) => c.value).toList(growable: false),
+      'colors': colors.map((c) => c.toARGB32()).toList(growable: false),
     };
   }
 

@@ -1,4 +1,4 @@
-library flip_card;
+library;
 
 import 'dart:async';
 import 'package:flutter/material.dart';

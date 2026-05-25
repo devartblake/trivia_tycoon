@@ -7,10 +7,11 @@ import 'package:trivia_tycoon/core/services/social/backend_profile_social_servic
 // Test helpers
 // ---------------------------------------------------------------------------
 
-ApiService _fakeApi({
-  required Map<String, dynamic> response,
+ApiService _fakeApi<T>({
+  required T response,
   String? capturePath,
-  void Function(String path, dynamic body, Map<String, dynamic> query)? onRequest,
+  void Function(String path, dynamic body, Map<String, dynamic> query)?
+      onRequest,
 }) {
   final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
   dio.interceptors.add(
@@ -29,7 +30,8 @@ ApiService _fakeApi({
       },
     ),
   );
-  return ApiService(baseUrl: 'https://example.test', dio: dio, initializeCache: false);
+  return ApiService(
+      baseUrl: 'https://example.test', dio: dio, initializeCache: false);
 }
 
 Map<String, dynamic> _friendItem({
@@ -77,7 +79,11 @@ void main() {
       _fakeApi(
         response: {
           'items': [
-            {'id': 'user-123', 'handle': 'alexj', 'displayName': 'Alex Johnson'},
+            {
+              'id': 'user-123',
+              'handle': 'alexj',
+              'displayName': 'Alex Johnson'
+            },
           ],
         },
         onRequest: (p, _, q) {
@@ -122,7 +128,8 @@ void main() {
       ),
     );
 
-    await service.saveLoadout({'username': 'alexj', 'favoriteSubject': 'Science'});
+    await service
+        .saveLoadout({'username': 'alexj', 'favoriteSubject': 'Science'});
     expect(path, '/users/me/preferences/loadout');
     expect((body as Map)['username'], 'alexj');
   });
@@ -152,7 +159,9 @@ void main() {
 
   test('getFriends parses paginated FriendListItemDto list', () async {
     final service = BackendProfileSocialService(
-      _fakeApi(response: _pageResponse([_friendItem(id: 'f1'), _friendItem(id: 'f2')])),
+      _fakeApi(
+          response:
+              _pageResponse([_friendItem(id: 'f1'), _friendItem(id: 'f2')])),
     );
 
     final result = await service.getFriends();
@@ -242,7 +251,12 @@ void main() {
   test('getFriendSuggestions parses hasMutualFriends getter', () async {
     final service = BackendProfileSocialService(
       _fakeApi(response: [
-        {'id': 's1', 'displayName': 'Sugg', 'mutualFriendCount': 3, 'reason': 'mutual'},
+        {
+          'id': 's1',
+          'displayName': 'Sugg',
+          'mutualFriendCount': 3,
+          'reason': 'mutual'
+        },
       ]),
     );
 
@@ -304,7 +318,8 @@ void main() {
       },
     ));
     final service = BackendProfileSocialService(
-      ApiService(baseUrl: 'https://example.test', dio: dio, initializeCache: false),
+      ApiService(
+          baseUrl: 'https://example.test', dio: dio, initializeCache: false),
     );
 
     final status = await service.getFriendshipStatus('target-abc');
@@ -313,7 +328,8 @@ void main() {
 
   test('getOnlineFriends filters by isOnline == true', () async {
     final service = BackendProfileSocialService(
-      _fakeApi(response: _pageResponse([
+      _fakeApi(
+          response: _pageResponse([
         _friendItem(id: 'online-1', isOnline: true),
         _friendItem(id: 'offline-1', isOnline: false),
         _friendItem(id: 'online-2', isOnline: true),

@@ -32,6 +32,45 @@ MissionType _parseMissionType(Object? v) {
   }
 }
 
+MissionStatus _parseMissionStatus(Object? v) {
+  final s = (v ?? '').toString().toLowerCase().trim();
+  switch (s) {
+    case 'completed':
+    case 'complete':
+      return MissionStatus.completed;
+    case 'expired':
+      return MissionStatus.expired;
+    case 'swapped':
+      return MissionStatus.swapped;
+    case 'active':
+    default:
+      return MissionStatus.active;
+  }
+}
+
+int _intFromJson(Map<String, dynamic> json, List<String> keys,
+    [int fallback = 0]) {
+  for (final key in keys) {
+    final value = json[key];
+    if (value is num) return value.toInt();
+    if (value != null) {
+      final parsed = int.tryParse(value.toString());
+      if (parsed != null) return parsed;
+    }
+  }
+  return fallback;
+}
+
+DateTime _dateFromJson(Map<String, dynamic> json, List<String> keys) {
+  for (final key in keys) {
+    final value = json[key];
+    if (value == null) continue;
+    final parsed = DateTime.tryParse(value.toString());
+    if (parsed != null) return parsed;
+  }
+  return DateTime.now();
+}
+
 class Mission {
   final String id;
   final String title;
@@ -73,42 +112,38 @@ class Mission {
 
   // Factory constructor for creating from API JSON
   factory Mission.fromJson(Map<String, dynamic> json) {
+    final metadata = json['metadata'] is Map
+        ? Map<String, dynamic>.from(json['metadata'] as Map)
+        : <String, dynamic>{};
+    final title = (json['title'] ?? json['key'] ?? json['missionKey'] ?? '')
+        .toString()
+        .replaceAll('_', ' ')
+        .trim();
+
     return Mission(
-      id: json['id'] as String,
-      title: json['title'] as String,
+      id: (json['id'] ?? json['missionId'] ?? '').toString(),
+      title: title.isEmpty ? 'Mission' : title,
       description: json['description'] as String?,
-      progress: json['progress'] as int,
-      total: json['total'] as int,
-      target: (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0)
-              is num
-          ? (json['target'] ?? json['goal'] ?? json['targetCount'] ?? 0).toInt()
-          : int.tryParse(
-                  (json['target'] ?? json['goal'] ?? json['targetCount'] ?? '0')
-                      .toString()) ??
-              0,
-      rewardXp: (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0)
-              is num
-          ? (json['rewardXp'] ?? json['reward_xp'] ?? json['xpReward'] ?? 0)
-              .toInt()
-          : int.tryParse((json['rewardXp'] ??
-                      json['reward_xp'] ??
-                      json['xpReward'] ??
-                      '0')
-                  .toString()) ??
-              0,
-      icon: _iconFromString(json['icon_name'] as String),
-      badge: json['badge'] as String,
+      progress: _intFromJson(json, const ['progress']),
+      total: _intFromJson(json, const ['total', 'goal', 'targetCount'], 1),
+      target: _intFromJson(json, const ['target', 'goal', 'targetCount']),
+      rewardXp: _intFromJson(json, const ['rewardXp', 'reward_xp', 'xpReward']),
+      icon: _iconFromString(
+          (json['icon_name'] ?? json['icon'] ?? 'assignment').toString()),
+      badge: (json['badge'] ?? json['type'] ?? 'mission').toString(),
       type: _parseMissionType(
           json['type'] ?? json['timeframe'] ?? json['missionType']),
-      status: MissionStatus.values.byName(json['status'] as String),
-      createdAt: DateTime.parse(json['created_at'] as String),
+      status: _parseMissionStatus(json['status']),
+      createdAt: _dateFromJson(json, const ['created_at', 'createdAt']),
       completedAt: json['completed_at'] != null
           ? DateTime.parse(json['completed_at'] as String)
           : null,
       expiresAt: json['expires_at'] != null
           ? DateTime.parse(json['expires_at'] as String)
           : null,
-      metadata: json['metadata'] as Map<String, dynamic>?,
+      metadata: metadata
+        ..putIfAbsent('backendKey', () => json['key'])
+        ..putIfAbsent('type', () => json['type']),
     );
   }
 
@@ -232,14 +267,33 @@ class UserMission {
   });
 
   factory UserMission.fromJson(Map<String, dynamic> json) {
+    final missionJson = json['mission'] is Map
+        ? Map<String, dynamic>.from(json['mission'] as Map)
+        : <String, dynamic>{
+            'id': json['mission_id'] ?? json['missionId'] ?? json['id'],
+            'missionId': json['missionId'],
+            'type': json['type'],
+            'key': json['key'] ?? json['missionKey'],
+            'goal': json['goal'],
+            'progress': json['progress'],
+            'rewardXp': json['rewardXp'],
+            'status': json['status'],
+          };
+    final completed = json['completed'] == true;
+    final claimed = json['claimed'] == true;
+
     return UserMission(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      missionId: json['mission_id'] as String,
-      mission: Mission.fromJson(json['mission'] as Map<String, dynamic>),
-      progress: json['progress'] as int,
-      status: MissionStatus.values.byName(json['status'] as String),
-      assignedAt: DateTime.parse(json['assigned_at'] as String),
+      id: (json['id'] ?? json['missionId'] ?? json['mission_id'] ?? '')
+          .toString(),
+      userId: (json['user_id'] ?? json['playerId'] ?? '').toString(),
+      missionId: (json['mission_id'] ?? json['missionId'] ?? json['id'] ?? '')
+          .toString(),
+      mission: Mission.fromJson(missionJson),
+      progress: _intFromJson(json, const ['progress']),
+      status: claimed || completed
+          ? MissionStatus.completed
+          : _parseMissionStatus(json['status']),
+      assignedAt: _dateFromJson(json, const ['assigned_at', 'assignedAt']),
       completedAt: json['completed_at'] != null
           ? DateTime.parse(json['completed_at'] as String)
           : null,

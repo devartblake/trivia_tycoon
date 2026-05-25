@@ -23,6 +23,7 @@ class _FakeWsClient extends WsClient {
   @override
   Stream<GameEvent> get events => _evtCtrl.stream;
 
+  @override
   void dispose() {
     _evtCtrl.close();
   }

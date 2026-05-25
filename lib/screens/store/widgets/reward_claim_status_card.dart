@@ -110,8 +110,7 @@ class RewardClaimStatusCard extends StatelessWidget {
               _ClaimDot(filled: claimedCount >= 1, isExhausted: isExhausted),
               for (int i = 1; i < maxClaims; i++) ...[
                 const SizedBox(width: 4),
-                _ClaimDot(
-                    filled: i < claimedCount, isExhausted: isExhausted),
+                _ClaimDot(filled: i < claimedCount, isExhausted: isExhausted),
               ],
               const SizedBox(width: 8),
               Text(

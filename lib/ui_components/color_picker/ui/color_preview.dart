@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ColorPreview extends StatefulWidget {
@@ -37,7 +37,7 @@ class _ColorPreviewState extends State<ColorPreview>
 
   void _copyColorToClipboard() {
     final hexColor =
-        "#${widget.selectedColor.value.toRadixString(16).substring(2).toUpperCase()}";
+        "#${widget.selectedColor.toARGB32().toRadixString(16).substring(2).toUpperCase()}";
     Clipboard.setData(ClipboardData(text: hexColor));
     HapticFeedback.lightImpact();
 
@@ -58,9 +58,9 @@ class _ColorPreviewState extends State<ColorPreview>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final hexColor =
-        "#${widget.selectedColor.value.toRadixString(16).substring(2).toUpperCase()}";
+        "#${widget.selectedColor.toARGB32().toRadixString(16).substring(2).toUpperCase()}";
     final rgbColor =
-        "RGB(${widget.selectedColor.red}, ${widget.selectedColor.green}, ${widget.selectedColor.blue})";
+        "RGB(${(widget.selectedColor.r * 255.0).round()}, ${(widget.selectedColor.g * 255.0).round()}, ${(widget.selectedColor.b * 255.0).round()})";
     final hslColor = HSLColor.fromColor(widget.selectedColor);
     final hslString =
         "HSL(${hslColor.hue.toInt()}°, ${(hslColor.saturation * 100).toInt()}%, ${(hslColor.lightness * 100).toInt()}%)";

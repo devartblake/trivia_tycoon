@@ -85,10 +85,13 @@ dependencies:
   share_plus: ^10.1.0
   equatable: ^2.0.7
   path_provider: ^2.1.5
+  package_info_plus: ^8.0.0
   in_app_purchase: ^3.2.3
   qr_flutter: ^4.1.0
   archive: ^4.0.7
   uuid: ^4.5.2
+  games_services: ^4.0.0
+  google_sign_in: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -119,92 +122,31 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - .env
-   - assets/3d/
+   - .env.example
    - assets/images/backgrounds/geometry_background.jpg
    - assets/images/backgrounds/versus_background.jpg
-   - assets/config/
-   - assets/data/
-   - assets/data/analytics/
-   - assets/data/events/
-   - assets/data/leaderboard/
-   - assets/data/mini-games/
-   - assets/data/mini-games/crossword_hard.json
-   - assets/data/missions/
-   - assets/data/snapple_facts/
-   - assets/data/skill_tree/skill_tree.json
-   - assets/icons/
-#   - assets/icons/badges/
-#   - assets/icons/categories/
-#   - assets/icons/store/
-   - assets/icons/store/avatars/
-   - assets/icons/store/themes/
-   - assets/images/
+   - assets/images/backgrounds/bg7.jpg
+   - assets/config/config.json
+   - assets/config/localization_strings.json
+   - assets/config/segments.json
+   - assets/data/mini-games/word_search_easy.json
+   - assets/icons/index.json
+   - assets/icons/store/coins_100.png
+   - assets/icons/store/diamonds_10.png
+   - assets/icons/store/power-up_hint.png
+   - assets/icons/store/power-up_xp.png
    - assets/images/avatars/
    - assets/images/quiz.png
    - assets/images/reward-quiz.png
-   - assets/images/backgrounds/
-#   - assets/images/confetti/
-#   - assets/images/events/
+   - assets/images/spinning_wheel.png
+   - assets/images/cta_banner.png
    - assets/images/logo/
-   - assets/images/notification_images/
-   - assets/images/overlays/
-#   - assets/images/power-ups/
-   - assets/images/quiz/
-   - assets/images/quiz/backgrounds/
    - assets/images/quiz/category/
-   - assets/images/rewards/
-   - assets/images/store/
-#   - assets/images/store/avatars/
-   - assets/images/store/themes/
    - assets/images/welcome_images/
-   - assets/models/
-   - assets/avatarPackages/
-   - assets/questions/
-   - assets/questions/architecture/
-   - assets/questions/art_history/
-   - assets/questions/arts/
-   - assets/questions/astronomy/
-   - assets/questions/bonus/
-   - assets/questions/business/
-   - assets/questions/civics_law/
-   - assets/questions/classes/
-   - assets/questions/comparative_religions/
-   - assets/questions/computer_science/
-   - assets/questions/cultures/
-   - assets/questions/current_events/
-   - assets/questions/economics/
-   - assets/questions/economics_finance/
-   - assets/questions/engineering_technology/
-   - assets/questions/entertainment/
-   - assets/questions/environment/
-   - assets/questions/environmental_science/
-   - assets/questions/general/
-   - assets/questions/geography/
-   - assets/questions/health/
-   - assets/questions/health_medicine/
-   - assets/questions/history/
-   - assets/questions/kids/
-   - assets/questions/law/
-   - assets/questions/literature/
-   - assets/questions/math/
-   - assets/questions/media/
-   - assets/questions/misc/
-   - assets/questions/modes/
-   - assets/questions/philosophy/
-   - assets/questions/politics/
-   - assets/questions/psychology/
-   - assets/questions/science/
-   - assets/questions/social/
-   - assets/questions/sports/
-   - assets/questions/statistics_data/
-   - assets/questions/technology/
-   - assets/questions/world/
-   - assets/questions/world_literature/
-   - assets/splash_previews/
-   - assets/songs/
+   - assets/questions/misc/questions_offline_pack.json
+   - assets/questions/question_paths_index.json
+   - assets/shaders/
    - assets/sounds/
-   - assets/zip/
    - fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see

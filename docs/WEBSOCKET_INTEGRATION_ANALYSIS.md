@@ -144,10 +144,13 @@ Your project has **TWO WebSocket implementations**:
 - Social activity feed
 
 **Files:**
-- `social/friend_discovery_service.dart`
+- `social/backend_profile_social_service.dart`
 - `social/challenge_coordination_service.dart`
 - `social/challenge_message_bridge.dart`
 - `social/profile_stats_service.dart`
+
+2026-05-10 note: `friend_discovery_service.dart` has been removed from `lib/`;
+social/friends production paths now use backend-backed social services.
 
 **Why High Priority:**
 - Social features drive retention

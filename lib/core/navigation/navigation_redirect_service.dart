@@ -4,7 +4,7 @@ import '../../game/providers/onboarding_providers.dart'
     show onboardingCompleteProvider;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
-/// Navigation redirect service that determines where users should be redirected
+/// Navigation redirect service that determines where users should be redirected.
 class NavigationRedirectService {
   final Ref ref;
 
@@ -13,40 +13,37 @@ class NavigationRedirectService {
   String? determineRedirect(String currentPath) {
     final isLoggedIn = ref.read(isLoggedInSyncProvider);
     final profileSelected = ref.read(profileSelectedProvider);
+    final identityState = ref.read(playerIdentityProvider);
     final isOnboardingComplete = ref.read(onboardingCompleteProvider);
 
     LogManager.debug(
-        'REDIRECT DEBUG: isLoggedIn=$isLoggedIn, profileSelected=$profileSelected, '
-        'onboardingComplete=$isOnboardingComplete, path=$currentPath');
+      'REDIRECT DEBUG: isLoggedIn=$isLoggedIn, profileSelected=$profileSelected, '
+      'identityReady=${identityState.isReady}, onboardingComplete=$isOnboardingComplete, path=$currentPath',
+    );
 
-    // 1) Always allow splash / root
     if (currentPath == '/') return null;
 
-    // 2) Not logged in → auth screens only
-    if (!isLoggedIn) {
-      if (currentPath == '/login' || currentPath == '/signup') return null;
-      return '/login';
+    final isAuthPath = currentPath == '/login' ||
+        currentPath == '/signup' ||
+        currentPath == '/register';
+
+    if (!identityState.hasPlayableIdentity) {
+      if (currentPath == '/onboarding') return null;
+      if (isAuthPath) return null;
+      return '/onboarding';
     }
 
-    // 3) Logged in but no profile chosen this session → profile selection gate.
-    //    This runs on every cold start / crash recovery because profileSelectedProvider
-    //    is runtime-only and always initialises to false.
-    if (!profileSelected) {
+    if (!isOnboardingComplete) {
+      if (currentPath == '/onboarding' || isAuthPath) return null;
+      return '/onboarding';
+    }
+
+    if (isLoggedIn && !profileSelected) {
       if (currentPath == '/profile-selection') return null;
       return '/profile-selection';
     }
 
-    // 4) Profile chosen but onboarding not done → gate to /onboarding
-    if (!isOnboardingComplete) {
-      if (currentPath == '/onboarding') return null;
-      return '/onboarding';
-    }
-
-    // 5) Fully onboarded → redirect away from auth/onboarding/profile-selection
-    if (currentPath == '/onboarding' ||
-        currentPath == '/login' ||
-        currentPath == '/signup' ||
-        currentPath == '/profile-selection') {
+    if (currentPath == '/onboarding' || currentPath == '/profile-selection') {
       return '/home';
     }
 
@@ -54,21 +51,22 @@ class NavigationRedirectService {
   }
 }
 
-/// Provider for the navigation redirect service
 final navigationRedirectServiceProvider =
     Provider<NavigationRedirectService>((ref) {
   return NavigationRedirectService(ref);
 });
 
-/// Provider that watches for navigation state changes and triggers router rebuilds.
 final navigationStateProvider = Provider<NavigationState>((ref) {
   final isLoggedIn = ref.watch(isLoggedInSyncProvider);
   final profileSelected = ref.watch(profileSelectedProvider);
+  final identityState = ref.watch(playerIdentityProvider);
   final isOnboardingComplete = ref.watch(onboardingCompleteProvider);
 
   return NavigationState(
     isLoggedIn: isLoggedIn,
     profileSelected: profileSelected,
+    identityReady: identityState.isReady,
+    identityKind: identityState.kind,
     isOnboardingComplete: isOnboardingComplete,
   );
 });
@@ -76,11 +74,15 @@ final navigationStateProvider = Provider<NavigationState>((ref) {
 class NavigationState {
   final bool isLoggedIn;
   final bool profileSelected;
+  final bool identityReady;
+  final PlayerIdentityKind identityKind;
   final bool isOnboardingComplete;
 
   const NavigationState({
     required this.isLoggedIn,
     required this.profileSelected,
+    required this.identityReady,
+    required this.identityKind,
     required this.isOnboardingComplete,
   });
 
@@ -91,9 +93,15 @@ class NavigationState {
           runtimeType == other.runtimeType &&
           isLoggedIn == other.isLoggedIn &&
           profileSelected == other.profileSelected &&
+          identityReady == other.identityReady &&
+          identityKind == other.identityKind &&
           isOnboardingComplete == other.isOnboardingComplete;
 
   @override
   int get hashCode =>
-      isLoggedIn.hashCode ^ profileSelected.hashCode ^ isOnboardingComplete.hashCode;
+      isLoggedIn.hashCode ^
+      profileSelected.hashCode ^
+      identityReady.hashCode ^
+      identityKind.hashCode ^
+      isOnboardingComplete.hashCode;
 }

@@ -307,8 +307,7 @@ class CollectionItemCard extends ConsumerWidget {
                                 ? Image.asset(
                                     'assets/images/avatar_placeholder.png',
                                     fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) {
+                                    errorBuilder: (context, error, stackTrace) {
                                       return _buildPlaceholder(
                                           theme, rarityColor);
                                     },
@@ -316,8 +315,7 @@ class CollectionItemCard extends ConsumerWidget {
                                 : Image.file(
                                     File(imagePath),
                                     fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) {
+                                    errorBuilder: (context, error, stackTrace) {
                                       return _buildPlaceholder(
                                           theme, rarityColor);
                                     },

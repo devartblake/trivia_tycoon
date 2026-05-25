@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/settings/multi_profile_service.dart';
@@ -165,10 +164,9 @@ class _EditProfileBottomSheetState
             loadoutSynced = false;
           }
 
-          // Refresh the profile data
           ref.read(profileManagerProvider.notifier).refreshProfiles();
 
-          // Show success message
+          if (!mounted) return;
           if (loadoutSynced) {
             _showSuccessSnackBar('Profile updated successfully!');
           } else {

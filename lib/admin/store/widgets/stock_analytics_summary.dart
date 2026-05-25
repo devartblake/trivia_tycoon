@@ -65,8 +65,7 @@ class StockAnalyticsSummary extends StatelessWidget {
   }
 
   Widget _buildTopItemsSection() {
-    final topSelling =
-        (data['topSellingItems'] as List<dynamic>?) ?? const [];
+    final topSelling = (data['topSellingItems'] as List<dynamic>?) ?? const [];
     final mostSoldOut =
         (data['mostFrequentlySoldOutItems'] as List<dynamic>?) ?? const [];
 
@@ -99,8 +98,8 @@ class StockAnalyticsSummary extends StatelessWidget {
     final entries = Map<String, dynamic>.from(breakdown).entries.toList();
     if (entries.isEmpty) return const SizedBox.shrink();
 
-    final total = entries.fold<num>(
-        0, (sum, e) => sum + ((e.value as num?) ?? 0));
+    final total =
+        entries.fold<num>(0, (sum, e) => sum + ((e.value as num?) ?? 0));
 
     return Card(
       margin: EdgeInsets.zero,
@@ -203,8 +202,7 @@ class _KpiCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-            color: kpi.color.withValues(alpha: 0.15)),
+        border: Border.all(color: kpi.color.withValues(alpha: 0.15)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -220,13 +218,10 @@ class _KpiCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(kpi.value,
               style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: kpi.color)),
+                  fontSize: 20, fontWeight: FontWeight.bold, color: kpi.color)),
           const SizedBox(height: 2),
           Text(kpi.label,
-              style:
-                  TextStyle(fontSize: 11, color: Colors.grey[600])),
+              style: TextStyle(fontSize: 11, color: Colors.grey[600])),
         ],
       ),
     );
@@ -269,11 +264,12 @@ class _ItemListCard extends StatelessWidget {
             const SizedBox(height: 8),
             if (items.isEmpty)
               Text('No data yet',
-                  style: TextStyle(
-                      fontSize: 11, color: Colors.grey[500]))
+                  style: TextStyle(fontSize: 11, color: Colors.grey[500]))
             else
               ...items.take(5).map((item) {
-                final m = item is Map ? Map<String, dynamic>.from(item) : <String, dynamic>{};
+                final m = item is Map
+                    ? Map<String, dynamic>.from(item)
+                    : <String, dynamic>{};
                 final sku = (m['sku'] ?? m['id'] ?? '').toString();
                 final count = m['count']?.toString() ?? '—';
                 return Padding(

@@ -204,7 +204,6 @@ class DepthOverlaySpec {
       };
 
   factory DepthOverlaySpec.fromJson(Map<String, dynamic> json) {
-    final rawProps = json['props'];
     return DepthOverlaySpec(
       type: (json['kind'] ?? json['type'] ?? '').toString(),
       slot: json['slot']?.toString(),

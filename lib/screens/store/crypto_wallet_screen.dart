@@ -34,6 +34,27 @@ class _CryptoWalletScreenState extends ConsumerState<CryptoWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final featureFlags = ref.watch(cryptoFeatureFlagsProvider);
+    if (!featureFlags.surfacesEnabled) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF0B1020),
+        body: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: _InfoCard(
+                title: 'Crypto unavailable',
+                subtitle:
+                    'Crypto wallet features are disabled in this environment.',
+                icon: Icons.account_balance_wallet_outlined,
+                accent: Color(0xFFF59E0B),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     final balanceAsync = ref.watch(currentUserCryptoBalanceProvider);
     final stakingAsync = ref.watch(currentUserCryptoStakingProvider);
     final historyAsync = ref.watch(currentUserCryptoHistoryProvider);
@@ -66,7 +87,9 @@ class _CryptoWalletScreenState extends ConsumerState<CryptoWalletScreen> {
           historyAsync.when(
             data: (history) => _WalletLinkStatusCard(
               state: _LinkedWalletState.fromHistory(history.items),
-              onLinkWallet: () => _showLinkWalletSheet(context, ref),
+              onLinkWallet: featureFlags.writesEnabled
+                  ? () => _showLinkWalletSheet(context, ref)
+                  : null,
             ),
             loading: () => const _LoadingCard(height: 136),
             error: (error, _) => _InfoCard(
@@ -75,24 +98,32 @@ class _CryptoWalletScreenState extends ConsumerState<CryptoWalletScreen> {
               icon: Icons.account_balance_wallet_outlined,
               accent: const Color(0xFFF59E0B),
               actionLabel: 'Link wallet',
-              onAction: () => _showLinkWalletSheet(context, ref),
+              onAction: featureFlags.writesEnabled
+                  ? () => _showLinkWalletSheet(context, ref)
+                  : null,
             ),
           ),
           const SizedBox(height: 16),
           historyAsync.when(
             data: (history) => _WalletActionsCard(
               state: _LinkedWalletState.fromHistory(history.items),
-              onLinkWallet: () => _showLinkWalletSheet(context, ref),
-              onWithdraw: () => _showWithdrawSheet(
-                context,
-                ref,
-                _LinkedWalletState.fromHistory(history.items),
-              ),
+              onLinkWallet: featureFlags.writesEnabled
+                  ? () => _showLinkWalletSheet(context, ref)
+                  : null,
+              onWithdraw: featureFlags.writesEnabled
+                  ? () => _showWithdrawSheet(
+                        context,
+                        ref,
+                        _LinkedWalletState.fromHistory(history.items),
+                      )
+                  : null,
             ),
             loading: () => const _LoadingCard(height: 110),
             error: (_, __) => _WalletActionsCard(
               state: const _LinkedWalletState(isLinked: false),
-              onLinkWallet: () => _showLinkWalletSheet(context, ref),
+              onLinkWallet: featureFlags.writesEnabled
+                  ? () => _showLinkWalletSheet(context, ref)
+                  : null,
               onWithdraw: null,
             ),
           ),
@@ -298,6 +329,12 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final featureFlags = ref.watch(cryptoFeatureFlagsProvider);
+    final networks = CryptoNetwork.phaseOneNetworks()
+        .where((network) => featureFlags.isNetworkEnabled(network.key))
+        .toList(growable: false);
+    final selectedNetwork =
+        networks.contains(_network) ? _network : networks.firstOrNull;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 20, 20, bottomInset + 20),
@@ -323,10 +360,10 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField<CryptoNetwork>(
-            value: _network,
+            initialValue: selectedNetwork,
             dropdownColor: const Color(0xFF1B2235),
             decoration: _inputDecoration('Network'),
-            items: CryptoNetwork.phaseOneNetworks()
+            items: networks
                 .map(
                   (network) => DropdownMenuItem<CryptoNetwork>(
                     value: network,
@@ -428,9 +465,24 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
   }
 
   Future<void> _submit() async {
+    final featureFlags = ref.read(cryptoFeatureFlagsProvider);
+    final network = featureFlags.isNetworkEnabled(_network.key)
+        ? _network
+        : CryptoNetwork.phaseOneNetworks()
+            .where((candidate) => featureFlags.isNetworkEnabled(candidate.key))
+            .firstOrNull;
+    if (network == null) {
+      setState(() {
+        _errorText = 'This network is disabled in the current environment.';
+      });
+      return;
+    }
+
     final address = _addressController.text.trim();
-    final validation =
-        CryptoAddressValidator.validationMessage(address, _network);
+    final validation = CryptoAddressValidator.validationMessage(
+      address,
+      network,
+    );
     if (validation != null) {
       setState(() {
         _errorText = validation;
@@ -447,7 +499,7 @@ class _LinkWalletSheetState extends ConsumerState<_LinkWalletSheet> {
         CryptoLinkWalletRequest(
           playerId: widget.playerId,
           walletAddress: address,
-          network: _network,
+          network: network,
         ),
       );
 
@@ -509,6 +561,12 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final featureFlags = ref.watch(cryptoFeatureFlagsProvider);
+    final networks = CryptoNetwork.phaseOneNetworks()
+        .where((network) => featureFlags.isNetworkEnabled(network.key))
+        .toList(growable: false);
+    final selectedNetwork =
+        networks.contains(_network) ? _network : networks.firstOrNull;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 20, 20, bottomInset + 20),
@@ -534,10 +592,10 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
           ),
           const SizedBox(height: 20),
           DropdownButtonFormField<CryptoNetwork>(
-            value: _network,
+            initialValue: selectedNetwork,
             dropdownColor: const Color(0xFF1B2235),
             decoration: _inputDecoration('Network'),
-            items: CryptoNetwork.phaseOneNetworks()
+            items: networks
                 .map(
                   (network) => DropdownMenuItem<CryptoNetwork>(
                     value: network,
@@ -649,9 +707,24 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
   }
 
   Future<void> _submit() async {
+    final featureFlags = ref.read(cryptoFeatureFlagsProvider);
+    final network = featureFlags.isNetworkEnabled(_network.key)
+        ? _network
+        : CryptoNetwork.phaseOneNetworks()
+            .where((candidate) => featureFlags.isNetworkEnabled(candidate.key))
+            .firstOrNull;
+    if (network == null) {
+      setState(() {
+        _errorText = 'This network is disabled in the current environment.';
+      });
+      return;
+    }
+
     final address = _addressController.text.trim();
-    final validation =
-        CryptoAddressValidator.validationMessage(address, _network);
+    final validation = CryptoAddressValidator.validationMessage(
+      address,
+      network,
+    );
     final units = int.tryParse(_unitsController.text.trim());
 
     if (units == null || units < 1) {
@@ -679,7 +752,7 @@ class _WithdrawSheetState extends ConsumerState<_WithdrawSheet> {
           playerId: widget.playerId,
           units: units,
           toWalletAddress: address,
-          network: _network,
+          network: network,
         ),
       );
 
@@ -749,7 +822,7 @@ class _WalletLinkStatusCard extends StatelessWidget {
   });
 
   final _LinkedWalletState state;
-  final VoidCallback onLinkWallet;
+  final VoidCallback? onLinkWallet;
 
   @override
   Widget build(BuildContext context) {
@@ -786,7 +859,7 @@ class _WalletActionsCard extends StatelessWidget {
   });
 
   final _LinkedWalletState state;
-  final VoidCallback onLinkWallet;
+  final VoidCallback? onLinkWallet;
   final VoidCallback? onWithdraw;
 
   @override

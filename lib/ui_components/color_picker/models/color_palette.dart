@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 /// **🎨 Represents a collection of colors as a palette**
 class ColorPalette {
@@ -22,7 +22,7 @@ class ColorPalette {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'colors': colors.map((color) => color.value).toList(),
+      'colors': colors.map((color) => color.toARGB32()).toList(),
     };
   }
 

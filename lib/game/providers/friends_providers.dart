@@ -32,13 +32,15 @@ final friendSuggestionsProvider =
 
 /// Reactive stream that re-emits the friends list whenever
 /// [friendsListProvider] is invalidated (e.g. after a mutation).
-final friendsListStreamProvider = StreamProvider<List<FriendListItemDto>>((ref) async* {
+final friendsListStreamProvider =
+    StreamProvider<List<FriendListItemDto>>((ref) async* {
   yield (await ref.watch(friendsListProvider.future)).items;
 });
 
 /// Reactive stream that re-emits pending requests whenever
 /// [incomingFriendRequestsProvider] is invalidated.
-final pendingRequestsStreamProvider = StreamProvider<List<FriendRequestDto>>((ref) async* {
+final pendingRequestsStreamProvider =
+    StreamProvider<List<FriendRequestDto>>((ref) async* {
   yield (await ref.watch(incomingFriendRequestsProvider.future)).items;
 });
 

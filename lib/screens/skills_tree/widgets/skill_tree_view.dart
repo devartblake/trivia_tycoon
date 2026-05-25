@@ -41,6 +41,7 @@ extension SkillNodeFilterModeLabel on SkillNodeFilterMode {
 
 class SkillTreeView extends ConsumerStatefulWidget {
   final SkillNodeFilterMode filterMode;
+
   /// When set, only nodes of this category are shown (e.g. 'scholar', 'xp').
   final String? categoryId;
 
@@ -76,8 +77,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
       final box = context.findRenderObject() as RenderBox?;
       final size = box?.size ?? const Size(400, 700);
       _transform.value = vmath.Matrix4.identity()
-        ..translate(size.width / 2.0, size.height / 2.0)
-        ..scale(0.5, 0.5);
+        ..translateByVector3(vmath.Vector3(size.width / 2.0, size.height / 2.0, 0.0))
+        ..scaleByVector3(vmath.Vector3(0.5, 0.5, 1.0));
     });
   }
 
@@ -99,9 +100,9 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     final cy = size.height / 2.0;
     // Scale around the current screen centre so the focal point never jumps.
     final m = vmath.Matrix4.identity()
-      ..translate(cx, cy)
-      ..scale(factor, factor)
-      ..translate(-cx, -cy);
+      ..translateByVector3(vmath.Vector3(cx, cy, 0.0))
+      ..scaleByVector3(vmath.Vector3(factor, factor, 1.0))
+      ..translateByVector3(vmath.Vector3(-cx, -cy, 0.0));
     _transform.value = m * _transform.value;
     // Rebuild triggered by _onTransformChange listener.
   }
@@ -110,8 +111,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     final box = context.findRenderObject() as RenderBox?;
     final size = box?.size ?? const Size(400, 700);
     _transform.value = vmath.Matrix4.identity()
-      ..translate(size.width / 2.0, size.height / 2.0)
-      ..scale(0.5, 0.5);
+      ..translateByVector3(vmath.Vector3(size.width / 2.0, size.height / 2.0, 0.0))
+      ..scaleByVector3(vmath.Vector3(0.5, 0.5, 1.0));
   }
 
   // Hit test for nodes — localPos is already in world space because the
@@ -309,8 +310,9 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                 final worldPos = entry.value;
                                 final node = state.graph.byId[nodeId];
 
-                                if (node == null)
+                                if (node == null) {
                                   return const SizedBox.shrink();
+                                }
 
                                 return Positioned(
                                   left: worldPos.dx - _nodeRadius,
@@ -337,7 +339,7 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
                                     },
                                   ),
                                 );
-                              }).toList(),
+                              }),
                           ],
                         ),
                       );

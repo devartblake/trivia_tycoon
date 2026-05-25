@@ -146,6 +146,7 @@ class ReadReceiptService extends ChangeNotifier {
     LogManager.debug('ReadReceiptService initialized');
   }
 
+  @override
   void dispose() {
     _cleanupTimer?.cancel();
     for (final controller in _receiptStreams.values) {

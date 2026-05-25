@@ -276,8 +276,8 @@ These items are complete in the Flutter codebase and are recorded in `docs/synap
 
 | Item | Priority | Notes |
 |---|---|---|
-| Secure channel: roll out to one non-critical endpoint | High | First milestone before phasing to refresh/match/economy/messages |
-| Secure channel: tests (wrong nonce/sequence, expiry, logout, perf) | High | From secure-channel checklist in handoff doc |
+| Secure channel: selected endpoint rollout | High | Phase 1/2/3 complete. `deleteEncrypted` now covers `removeFriend`, `cancelFriendRequest`, and `unblockUser`; later refresh/match/economy/messages expansion remains decision-gated |
+| Secure channel: remaining tests | High | Codec/session tests cover wrong nonce, session clear, and 1 KB/10 KB/100 KB payloads. Still need sequence/replay, expiry renewal, reinstall invalidation, and web fallback |
 | Secure channel: backend compatibility validation | High | Exact response schema + replay/sequence semantics against staging |
 | Personalization endpoint path reconciliation | Medium | `/personalization/{playerId}/...` (current) vs older plan shape — confirm with backend |
 | FE-D2: Frontend labels vs backend dashboard cross-check | Low | Deferred pending backend alignment |
@@ -351,7 +351,7 @@ Per `docs/synaptix_frontend_plan.md`, Packet E requires:
 |---|---|
 | Stable release candidate from Packet D | ⚠️ Functionally complete; formal soft launch declaration pending |
 | No major outstanding rebrand bugs | ✅ No functional regressions identified |
-| Build/test coverage acceptable | ⚠️ Secure channel tests outstanding |
+| Build/test coverage acceptable | Partial - secure payload codec tests exist; remaining lifecycle/backend-compat/perf tests outstanding |
 | Rollback strategy documented | ❌ Not yet documented for Packet E |
 
 **Frontend team decision (2026-05-06):** Proceed with both Workstream 1 and Workstream 2 once Packet A–D completion is formally confirmed. Workstream 1 (symbol cleanup) can begin immediately as it carries no store or backend risk. Workstream 2 (package root rename) must wait for the store transition plan to be finalised.

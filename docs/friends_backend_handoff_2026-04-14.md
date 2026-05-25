@@ -12,6 +12,11 @@ This note summarizes:
 
 ## Executive Summary
 
+> 2026-05-10 reconciliation: this handoff is historical. The Friends screen is
+> now backend-backed for the main friend/request/suggestion surfaces, and
+> `FriendDiscoveryService` has been removed from `lib/`. Remaining work is live
+> backend/two-device verification and final contract confirmation.
+
 The Friends screen is **mostly implemented on the frontend** from a UI and presence perspective:
 
 - real Friends screen exists
@@ -20,9 +25,9 @@ The Friends screen is **mostly implemented on the frontend** from a UI and prese
 - `DetailedPresenceCard` integration is wired
 - current-user activity updates for quiz/match are wired
 
-However, the screen is **not yet fully backendized for friend data**.
-
-Right now, the main Friends screen still loads its friend list, pending requests, and suggestions from the local/mock `friendDiscoveryServiceProvider` path instead of authoritative backend endpoints.
+The screen is now backendized for the main friend data surfaces. Older notes in
+this document that mention `friendDiscoveryServiceProvider` are preserved as
+historical context only.
 
 ### Current blocker
 
@@ -131,18 +136,12 @@ Completed/known backend-backed behavior:
 
 ---
 
-## What Is Still Using Placeholder / Local Data
+## Placeholder / Local Data Status
 
-Current Friends screen data loading still uses:
-
-- `friendDiscoveryServiceProvider`
-- `lib/core/services/social/friend_discovery_service.dart`
-
-Current local/mock usage in that service:
-
-- `_loadMockData()`
-- local in-memory friendships
-- local pending request storage
+2026-05-10 update: production Friends screen data loading no longer uses
+`friendDiscoveryServiceProvider`, and `lib/core/services/social/friend_discovery_service.dart`
+no longer exists in `lib/`. The remaining social work is live backend/two-device
+runtime verification, not mock-service cleanup.
 - local friend suggestions
 
 This means the following Friends screen areas are not yet authoritative against backend data:
@@ -531,14 +530,13 @@ please confirm that explicitly so the frontend can reduce the Friends screen sco
 
 ---
 
-## Proposed Frontend Next Step Once Backend Confirms
+## Current Frontend Next Step
 
-After backend confirmation, frontend will:
+The original replacement work listed here is complete. Current next steps are:
 
-1. replace `friendDiscoveryServiceProvider` in `FriendsScreen`
-2. switch friend list loading to backend source of truth
-3. switch pending request flows to backend
-4. optionally switch suggestions to backend or hide them behind capability checks
+1. run two-account/device verification against the live backend
+2. confirm final friends/search/unfriend response envelopes and error codes
+3. verify presence transitions over the shared `/ws?playerId=<guid>` path
 5. keep WebSocket presence layer unchanged unless payload contract differs
 
 ---
@@ -559,4 +557,3 @@ Files showing current partial backend/social wiring:
 - `lib/core/networking/tycoon_api_client.dart`
 - `docs/frontend_backend_handoff_alpha_2026-04-04.md`
 - `docs/synaptix_backend_plan.md`
-

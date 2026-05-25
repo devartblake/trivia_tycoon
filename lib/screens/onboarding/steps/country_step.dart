@@ -155,6 +155,24 @@ class _CountryStepState extends State<CountryStep> {
       ),
       title: 'Where are you from?',
       subtitle: 'Help us personalize your experience',
+      footer: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: _selectedCountry != null ? _continue : null,
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          child: Text(
+            'Continue',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
       child: Column(
         children: [
           TextField(
@@ -263,24 +281,6 @@ class _CountryStepState extends State<CountryStep> {
                   ),
           ),
         ],
-      ),
-      footer: SizedBox(
-        width: double.infinity,
-        child: FilledButton(
-          onPressed: _selectedCountry != null ? _continue : null,
-          style: FilledButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-          child: Text(
-            'Continue',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
       ),
     );
   }

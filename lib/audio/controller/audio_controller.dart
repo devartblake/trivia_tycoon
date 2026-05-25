@@ -89,8 +89,12 @@ class AudioController {
     for (var type in SfxType.values) {
       var paths = soundTypeToFilename(type);
       if (paths.isNotEmpty) {
-        var sound = await soloud!.loadFile('assets/sfx/${paths.first}');
-        _sfxCache[type] = sound as Handle;
+        try {
+          var sound = await soloud!.loadFile('assets/sfx/${paths.first}');
+          _sfxCache[type] = sound as Handle;
+        } catch (e) {
+          _log.warning('Bundled SFX unavailable for ${paths.first}: $e');
+        }
       }
     }
   }
@@ -212,9 +216,13 @@ class AudioController {
     }
 
     // Fallback: load from bundled assets via SoLoud.
-    _nextMusic =
-        (await soloud!.loadFile('assets/songs/${song.filename}')) as Handle?;
-    _crossfadeToNextSong();
+    try {
+      _nextMusic =
+          (await soloud!.loadFile('assets/songs/${song.filename}')) as Handle?;
+      _crossfadeToNextSong();
+    } catch (e) {
+      _log.warning('Bundled music unavailable for ${song.filename}: $e');
+    }
   }
 
   void _crossfadeToNextSong() {

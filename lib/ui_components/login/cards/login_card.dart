@@ -222,12 +222,12 @@ class _LoginCardState extends ConsumerState<_LoginCard>
       }
     });
 
-    if (context.mounted) {
+    if (mounted) {
       await _submitController.reverse();
     }
 
     if (!isNullOrEmpty(error)) {
-      if (context.mounted) {
+      if (mounted) {
         showErrorToast(context, messages.toastTitleError, error!);
       }
 
@@ -253,7 +253,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
         _switchAuthMode();
         return false;
       } else if (!widget.loginAfterSignUp) {
-        if (context.mounted) {
+        if (mounted) {
           showSuccessToast(
             context,
             messages.toastTitleSuccess,
@@ -284,7 +284,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
         // Only show error toast if error is not in exclusion list
         if (loginProvider.errorsToExcludeFromErrorMessage == null ||
             !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
-          if (context.mounted) {
+          if (mounted) {
             showErrorToast(context, messages.toastTitleError, error!);
           }
         }
@@ -317,7 +317,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
       // Only show error toast if error is not in exclusion list
       if (loginProvider.errorsToExcludeFromErrorMessage == null ||
           !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
-        if (context.mounted) {
+        if (mounted) {
           showErrorToast(context, messages.toastTitleError, error!);
         }
       }
@@ -348,7 +348,7 @@ class _LoginCardState extends ConsumerState<_LoginCard>
           // Only show error toast if error is not in exclusion list
           if (loginProvider.errorsToExcludeFromErrorMessage == null ||
               !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
-            if (context.mounted) {
+            if (mounted) {
               showErrorToast(context, messages.toastTitleError, error!);
             }
           }

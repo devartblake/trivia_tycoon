@@ -137,8 +137,8 @@ class _DailyItemsScreenState extends ConsumerState<DailyItemsScreen>
                 ),
               ],
             ),
-            child: const Icon(Icons.refresh,
-                color: Color(0xFF10B981), size: 20),
+            child:
+                const Icon(Icons.refresh, color: Color(0xFF10B981), size: 20),
           ),
           onPressed: () {
             HapticFeedback.lightImpact();
@@ -227,8 +227,7 @@ class _DailyItemsScreenState extends ConsumerState<DailyItemsScreen>
             ),
           ),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
@@ -253,13 +252,12 @@ class _DailyItemsScreenState extends ConsumerState<DailyItemsScreen>
       decoration: BoxDecoration(
         color: const Color(0xFF10B981).withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-            color: const Color(0xFF10B981).withValues(alpha: 0.2)),
+        border:
+            Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline,
-              color: Color(0xFF10B981), size: 16),
+          const Icon(Icons.info_outline, color: Color(0xFF10B981), size: 16),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -282,8 +280,7 @@ class _DailyItemsScreenState extends ConsumerState<DailyItemsScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline,
-                color: Color(0xFFEF4444), size: 48),
+            const Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 48),
             const SizedBox(height: 16),
             Text(
               'Could not load daily items.\n$error',
@@ -432,8 +429,7 @@ class _DailyItemCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   item.description,
-                  style: TextStyle(
-                      fontSize: 10, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -472,8 +468,7 @@ class _StockBar extends StatelessWidget {
     if (stock.maxQuantity == null || stock.maxQuantity == 0) {
       return const SizedBox.shrink();
     }
-    final pct =
-        (stock.remainingQuantity ?? 0) / stock.maxQuantity!;
+    final pct = (stock.remainingQuantity ?? 0) / stock.maxQuantity!;
     final barColor = pct <= 0.1
         ? const Color(0xFFEF4444)
         : pct <= 0.3
@@ -654,14 +649,11 @@ class _PurchaseSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Price',
-                    style: TextStyle(color: Color(0xFF64748B))),
+                const Text('Price', style: TextStyle(color: Color(0xFF64748B))),
                 Row(
                   children: [
                     Icon(
-                      item.isCoins
-                          ? Icons.monetization_on
-                          : Icons.credit_card,
+                      item.isCoins ? Icons.monetization_on : Icons.credit_card,
                       color: color,
                       size: 16,
                     ),
@@ -701,8 +693,8 @@ class _PurchaseSheet extends StatelessWidget {
                         : item.isFree
                             ? 'Claim Free'
                             : 'Buy Now',
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),

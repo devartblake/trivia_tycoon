@@ -281,6 +281,7 @@ class ServiceManager {
         ? Hive.box('auth_tokens')
         : await Hive.openBox('auth_tokens');
     final tokenStore = AuthTokenStore(authBox);
+    await tokenStore.initialize();
     final deviceIdSvc = DeviceIdService(secureStorage);
     final authApiClient = AuthApiClient(
       http.Client(),
@@ -311,7 +312,10 @@ class ServiceManager {
       authClient: authHttpClient,
       baseUrl: '$baseUrl/api/v1',
     );
-    final synaptixApi = SynaptixApiClient(httpClient: httpClient);
+    final synaptixApi = SynaptixApiClient(
+      httpClient: httpClient,
+      healthCheckUrl: EnvConfig.apiHealthUrl,
+    );
     final notifyHub = NotificationHub();
     final mHub = MatchHub();
 

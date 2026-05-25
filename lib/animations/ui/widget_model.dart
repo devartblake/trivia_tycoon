@@ -329,8 +329,9 @@ class OBJLoader {
     for (var line in mtlLines) {
       line = line.replaceAll("\r", "");
       if (line.startsWith('newmtl ')) {
-        if (currentMaterial != null)
+        if (currentMaterial != null) {
           _materials[currentMaterial.name!] = currentMaterial;
+        }
 
         currentMaterial = OBJLoaderMaterial();
         currentMaterial.name = line.split(' ')[1];
@@ -351,8 +352,9 @@ class OBJLoader {
       }
     }
 
-    if (currentMaterial != null)
+    if (currentMaterial != null) {
       _materials[currentMaterial.name!] = currentMaterial;
+    }
   }
 
   Future<void> _loadMTLTextures() async {
@@ -448,7 +450,7 @@ class OBJLoader {
 
     for (final face in faces) {
       final matColor =
-          _materials[face.materialName]?.diffuseColor?.value ?? 0xFFFFFFFF;
+          _materials[face.materialName]?.diffuseColor?.toARGB32() ?? 0xFFFFFFFF;
       final atlasRegion = atlas?.regions[face.materialName];
 
       for (int j = 0; j < 3; j++) {
@@ -484,10 +486,10 @@ class OBJLoader {
         // hard-edge corners are preserved.
         final String key;
         if (face.shadingGroup != 0) {
-          key = '${p.x},${p.y},${p.z}|${atlasU},${atlasV}|${face.materialName}';
+          key = '${p.x},${p.y},${p.z}|$atlasU,$atlasV|${face.materialName}';
         } else {
           key =
-              '${p.x},${p.y},${p.z}|${n.x},${n.y},${n.z}|${atlasU},${atlasV}|${face.materialName}';
+              '${p.x},${p.y},${p.z}|${n.x},${n.y},${n.z}|$atlasU,$atlasV|${face.materialName}';
         }
 
         if (!vertexMap.containsKey(key)) {
@@ -559,7 +561,7 @@ class OBJLoader {
     final atlasH = rows * cellSize;
 
     if (atlasW > _maxAtlasDim || atlasH > _maxAtlasDim) {
-      log('[OBJLoader] Warning: texture atlas ${atlasW}×${atlasH} exceeds '
+      log('[OBJLoader] Warning: texture atlas $atlasW×$atlasH exceeds '
           '$_maxAtlasDim×$_maxAtlasDim. Consider reducing texture count or '
           'resolution for low-end GPU compatibility.');
     }
@@ -792,9 +794,8 @@ class MultiMeshCustomPainter extends CustomPainter {
           instance.texture!,
           TileMode.clamp,
           TileMode.clamp,
-          Matrix4.identity()
-              .scaled(1 / instance.texture!.width, 1 / instance.texture!.height,
-                  1.0)
+          Matrix4.diagonal3Values(1 / instance.texture!.width,
+                  1 / instance.texture!.height, 1.0)
               .storage,
         );
       }
@@ -834,8 +835,7 @@ class MeshCustomPainter extends CustomPainter {
             _meshInstance!.texture!,
             TileMode.clamp,
             TileMode.clamp,
-            Matrix4.identity()
-                .scaled(1 / _meshInstance!.texture!.width,
+            Matrix4.diagonal3Values(1 / _meshInstance!.texture!.width,
                     1 / _meshInstance!.texture!.height, 1.0)
                 .storage);
       }

@@ -1,7 +1,7 @@
 # Question Flow Frontend/Backend Handoff
 
 **Date:** 2026-04-15  
-**Status Updated:** 2026-04-18  
+**Status Updated:** 2026-05-10
 **Audience:** Backend / Platform Team / Frontend Team  
 **Purpose:** Align the current Flutter question flow with the backend contracts after the option 2 migration decision: `/quiz/*` is retired from the backend API, `/questions/*` is the gameplay contract, and learning/training should use learning modules instead of legacy quiz-style endpoints.
 
@@ -16,6 +16,14 @@ Current backend contract reality:
 - `/questions/*` is the supported gameplay question API
 - `/modules/*` is the supported guided learning API
 - `/quiz/*` is **not** mapped in the backend API
+
+2026-05-10 frontend status:
+
+- `QuestionModel` now accepts backend `GameplayQuestionDto` payloads (`id`, `text`, `category`, `difficulty`, `options`, optional `mediaKey`) without requiring embedded correctness.
+- Single-player, category, and class/grade gameplay requests use `GET /questions/set` with `mode=practice`; class/grade remains a frontend mapping to category+difficulty.
+- Multiplayer arena/teams requests use `GET /questions/set` with `mode=ranked`, count-only, and no `playerId` personalization.
+- `POST /questions/check` and `POST /questions/check-batch` are the only backend correctness sources for backend questions; the client submits `selectedOptionId` and maps `correctOptionId` back to display text.
+- Local fallback remains enabled when backend question retrieval fails or returns no playable set, and source status remains visible through the existing question-source provider/banner path.
 
 Use [LEARNING_MODULES_API_HANDOFF.md](/c:/Users/lmxbl/Documents/TycoonTycoon_Backend/docs/LEARNING_MODULES_API_HANDOFF.md) as the source of truth for guided learning/module flows.
 Use [study_frontend_backend_handoff_2026-04-18.md](/C:/Users/lmxbl/Documents/TycoonTycoon_Backend/docs/study_frontend_backend_handoff_2026-04-18.md) as the source of truth for the dedicated Study surface.
@@ -174,6 +182,14 @@ Backend-supported gameplay fields are conceptually:
 - `difficulty`
 - `options`
 - optional `mediaKey`
+
+Frontend mapping is now implemented:
+
+- `text` maps to frontend `question`
+- `options[]` maps to frontend selectable answers with `isCorrect=false`
+- option ids are retained for later `/questions/check` requests
+- `mediaKey` maps into the existing media/image field path
+- `Easy`, `Medium`, `Hard`, and `Expert` map to frontend difficulty values `1`, `2`, `3`, and `4`
 
 Backend-supported gameplay discovery fields are conceptually:
 

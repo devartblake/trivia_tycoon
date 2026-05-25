@@ -1,15 +1,17 @@
 import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/storage/secure_secret_store.dart';
 
-/// Authentication session containing tokens and user metadata
+/// Authentication session containing tokens and user metadata.
 class AuthSession {
   final String accessToken;
   final String refreshToken;
   final DateTime? expiresAtUtc;
   final String? userId;
 
-  /// Additional metadata from backend (role, premium status, etc.)
+  /// Additional metadata from backend (role, premium status, etc.).
   final Map<String, dynamic>? metadata;
 
   AuthSession({
@@ -27,16 +29,13 @@ class AuthSession {
     return DateTime.now().toUtc().isAfter(expiresAtUtc!);
   }
 
-  /// Get role from metadata
   String? get role {
     if (metadata == null) return null;
 
-    // Check for single role
     if (metadata!.containsKey('role')) {
       return metadata!['role']?.toString();
     }
 
-    // Check for multiple roles (take first)
     if (metadata!.containsKey('roles') && metadata!['roles'] is List) {
       final roles = metadata!['roles'] as List;
       if (roles.isNotEmpty) {
@@ -47,7 +46,6 @@ class AuthSession {
     return null;
   }
 
-  /// Get all roles from metadata
   List<String> get roles {
     if (metadata == null) return [];
 
@@ -62,11 +60,9 @@ class AuthSession {
     return [];
   }
 
-  /// Get premium status from metadata
   bool get isPremium {
     if (metadata == null) return false;
 
-    // Check various premium status fields
     if (metadata!.containsKey('isPremium')) {
       return metadata!['isPremium'] == true;
     }
@@ -77,7 +73,6 @@ class AuthSession {
       return metadata!['premium'] == true;
     }
 
-    // Check subscription status
     if (metadata!.containsKey('subscriptionStatus')) {
       final status = metadata!['subscriptionStatus'].toString().toLowerCase();
       return status == 'active' || status == 'premium';
@@ -86,13 +81,11 @@ class AuthSession {
     return false;
   }
 
-  /// Get user tier from metadata
   String? get tier {
     if (metadata == null) return null;
     return metadata!['tier']?.toString();
   }
 
-  /// Copy with method for updating session
   AuthSession copyWith({
     String? accessToken,
     String? refreshToken,
@@ -109,7 +102,6 @@ class AuthSession {
     );
   }
 
-  /// Create from JSON
   factory AuthSession.fromJson(Map<String, dynamic> json) {
     return AuthSession(
       accessToken: json['accessToken'] ?? '',
@@ -118,11 +110,12 @@ class AuthSession {
           ? DateTime.parse(json['expiresAtUtc'])
           : null,
       userId: json['userId'],
-      metadata: json['metadata'] as Map<String, dynamic>?,
+      metadata: json['metadata'] == null
+          ? null
+          : Map<String, dynamic>.from(json['metadata'] as Map),
     );
   }
 
-  /// Convert to JSON
   Map<String, dynamic> toJson() {
     return {
       'accessToken': accessToken,
@@ -134,133 +127,113 @@ class AuthSession {
   }
 }
 
-/// Token store that persists auth tokens and metadata in Hive
+/// Auth tokens live in secure storage. Hive keeps only non-secret metadata for
+/// synchronous role/premium reads and migration from older app versions.
 class AuthTokenStore {
   final Box _box;
+  final SecretStore _secretStore;
 
+  static const _secureSessionKey = 'auth_session_v1';
   static const _accessTokenKey = 'auth_access_token';
   static const _refreshTokenKey = 'auth_refresh_token';
   static const _expiresAtKey = 'auth_expires_at_utc';
   static const _userIdKey = 'auth_user_id';
-  static const _metadataKey = 'auth_metadata'; // ← NEW: Store metadata
+  static const _metadataKey = 'auth_metadata';
 
-  AuthTokenStore(this._box);
+  AuthSession _cachedSession = AuthSession(accessToken: '', refreshToken: '');
+  bool _initialized = false;
 
-  /// Load session from storage
-  AuthSession load() {
-    final accessToken = _box.get(_accessTokenKey, defaultValue: '') as String;
-    final refreshToken = _box.get(_refreshTokenKey, defaultValue: '') as String;
-    final expiresAtMs = _box.get(_expiresAtKey) as int?;
-    final userId = _box.get(_userIdKey) as String?;
-    final metadataJson = _box.get(_metadataKey) as String?;
+  AuthTokenStore(this._box, {SecretStore? secretStore})
+      : _secretStore = secretStore ?? SecureSecretStore() {
+    _cachedSession = _loadLegacyFromHive();
+  }
 
-    DateTime? expiresAtUtc;
-    if (expiresAtMs != null) {
-      expiresAtUtc =
-          DateTime.fromMillisecondsSinceEpoch(expiresAtMs, isUtc: true);
-    }
+  bool get isInitialized => _initialized;
 
-    Map<String, dynamic>? metadata;
-    if (metadataJson != null && metadataJson.isNotEmpty) {
+  Future<void> initialize() async {
+    final secureJson = await _secretStore.get(_secureSessionKey);
+    if (secureJson != null && secureJson.isNotEmpty) {
       try {
-        metadata = jsonDecode(metadataJson) as Map<String, dynamic>;
+        _cachedSession = AuthSession.fromJson(
+            jsonDecode(secureJson) as Map<String, dynamic>);
+        await _deleteLegacyTokenValues();
+        await _persistNonSecretMetadata(_cachedSession);
+        _initialized = true;
+        return;
       } catch (e) {
-        LogManager.debug('[AuthTokenStore] Error parsing metadata: $e');
+        LogManager.debug('[AuthTokenStore] Error parsing secure session: $e');
       }
     }
 
-    return AuthSession(
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      expiresAtUtc: expiresAtUtc,
-      userId: userId,
-      metadata: metadata,
-    );
+    final legacySession = _loadLegacyFromHive();
+    _cachedSession = legacySession;
+    if (legacySession.hasTokens) {
+      await _persistSecureSession(legacySession);
+    }
+    await _deleteLegacyTokenValues();
+    _initialized = true;
   }
 
-  /// Save session to storage
+  AuthSession load() => _cachedSession;
+
   Future<void> save(AuthSession session) async {
-    await _box.put(_accessTokenKey, session.accessToken);
-    await _box.put(_refreshTokenKey, session.refreshToken);
-
-    if (session.expiresAtUtc != null) {
-      await _box.put(
-          _expiresAtKey, session.expiresAtUtc!.millisecondsSinceEpoch);
-    } else {
-      await _box.delete(_expiresAtKey);
-    }
-
-    if (session.userId != null && session.userId!.isNotEmpty) {
-      await _box.put(_userIdKey, session.userId);
-    } else {
-      await _box.delete(_userIdKey);
-    }
-
-    // Save metadata if present; clear stale metadata when omitted/empty.
-    if (session.metadata != null && session.metadata!.isNotEmpty) {
-      final metadataJson = jsonEncode(session.metadata);
-      await _box.put(_metadataKey, metadataJson);
-    } else {
-      await _box.delete(_metadataKey);
-    }
+    _cachedSession = session;
+    await _persistSecureSession(session);
+    await _deleteLegacyTokenValues();
+    await _persistNonSecretMetadata(session);
   }
 
-  /// Clear all stored tokens and metadata
   Future<void> clear() async {
-    await _box.delete(_accessTokenKey);
-    await _box.delete(_refreshTokenKey);
+    _cachedSession = AuthSession(accessToken: '', refreshToken: '');
+    await _secretStore.delete(_secureSessionKey);
+    await _deleteLegacyTokenValues();
     await _box.delete(_expiresAtKey);
     await _box.delete(_userIdKey);
-    await _box.delete(_metadataKey); // ← Clear metadata too
+    await _box.delete(_metadataKey);
   }
 
-  /// Update only the access token (used during refresh)
   Future<void> updateAccessToken(
-      String newAccessToken, DateTime expiresAtUtc) async {
-    await _box.put(_accessTokenKey, newAccessToken);
-    await _box.put(_expiresAtKey, expiresAtUtc.millisecondsSinceEpoch);
+    String newAccessToken,
+    DateTime expiresAtUtc,
+  ) async {
+    await save(_cachedSession.copyWith(
+      accessToken: newAccessToken,
+      expiresAtUtc: expiresAtUtc,
+    ));
   }
 
-  /// Check if tokens exist
-  bool hasTokens() {
-    final accessToken = _box.get(_accessTokenKey, defaultValue: '') as String;
-    final refreshToken = _box.get(_refreshTokenKey, defaultValue: '') as String;
-    return accessToken.isNotEmpty && refreshToken.isNotEmpty;
-  }
+  bool hasTokens() => _cachedSession.hasTokens;
 
-  /// Get role from stored metadata
   String? getRole() {
-    final metadataJson = _box.get(_metadataKey) as String?;
-    if (metadataJson == null || metadataJson.isEmpty) return null;
+    final role = _cachedSession.role;
+    if (role != null) return role;
 
-    try {
-      final metadata = jsonDecode(metadataJson) as Map<String, dynamic>;
+    final metadata = _metadataFromHive();
+    if (metadata == null) return null;
 
-      if (metadata.containsKey('role')) {
-        return metadata['role']?.toString();
+    if (metadata.containsKey('role')) {
+      return metadata['role']?.toString();
+    }
+
+    if (metadata.containsKey('roles') && metadata['roles'] is List) {
+      final roles = metadata['roles'] as List;
+      if (roles.isNotEmpty) {
+        return roles.first.toString();
       }
-
-      if (metadata.containsKey('roles') && metadata['roles'] is List) {
-        final roles = metadata['roles'] as List;
-        if (roles.isNotEmpty) {
-          return roles.first.toString();
-        }
-      }
-    } catch (e) {
-      LogManager.debug('[AuthTokenStore] Error getting role: $e');
     }
 
     return null;
   }
 
-  /// Get premium status from stored metadata
   bool isPremium() {
-    final metadataJson = _box.get(_metadataKey) as String?;
-    if (metadataJson == null || metadataJson.isEmpty) return false;
+    if (_cachedSession.metadata != null) {
+      return _cachedSession.isPremium;
+    }
+
+    final metadata = _metadataFromHive();
+    if (metadata == null) return false;
 
     try {
-      final metadata = jsonDecode(metadataJson) as Map<String, dynamic>;
-
       if (metadata.containsKey('isPremium')) {
         return metadata['isPremium'] == true;
       }
@@ -275,5 +248,75 @@ class AuthTokenStore {
     }
 
     return false;
+  }
+
+  AuthSession _loadLegacyFromHive() {
+    final accessToken = _box.get(_accessTokenKey, defaultValue: '') as String;
+    final refreshToken = _box.get(_refreshTokenKey, defaultValue: '') as String;
+    final expiresAtMs = _box.get(_expiresAtKey) as int?;
+    final userId = _box.get(_userIdKey) as String?;
+    final metadata = _metadataFromHive();
+
+    DateTime? expiresAtUtc;
+    if (expiresAtMs != null) {
+      expiresAtUtc =
+          DateTime.fromMillisecondsSinceEpoch(expiresAtMs, isUtc: true);
+    }
+
+    return AuthSession(
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      expiresAtUtc: expiresAtUtc,
+      userId: userId,
+      metadata: metadata,
+    );
+  }
+
+  Map<String, dynamic>? _metadataFromHive() {
+    final metadataJson = _box.get(_metadataKey) as String?;
+    if (metadataJson == null || metadataJson.isEmpty) return null;
+
+    try {
+      return jsonDecode(metadataJson) as Map<String, dynamic>;
+    } catch (e) {
+      LogManager.debug('[AuthTokenStore] Error parsing metadata: $e');
+      return null;
+    }
+  }
+
+  Future<void> _persistSecureSession(AuthSession session) async {
+    if (session.hasTokens) {
+      await _secretStore.set(_secureSessionKey, jsonEncode(session.toJson()));
+    } else {
+      await _secretStore.delete(_secureSessionKey);
+    }
+  }
+
+  Future<void> _persistNonSecretMetadata(AuthSession session) async {
+    if (session.expiresAtUtc != null) {
+      await _box.put(
+        _expiresAtKey,
+        session.expiresAtUtc!.millisecondsSinceEpoch,
+      );
+    } else {
+      await _box.delete(_expiresAtKey);
+    }
+
+    if (session.userId != null && session.userId!.isNotEmpty) {
+      await _box.put(_userIdKey, session.userId);
+    } else {
+      await _box.delete(_userIdKey);
+    }
+
+    if (session.metadata != null && session.metadata!.isNotEmpty) {
+      await _box.put(_metadataKey, jsonEncode(session.metadata));
+    } else {
+      await _box.delete(_metadataKey);
+    }
+  }
+
+  Future<void> _deleteLegacyTokenValues() async {
+    await _box.delete(_accessTokenKey);
+    await _box.delete(_refreshTokenKey);
   }
 }

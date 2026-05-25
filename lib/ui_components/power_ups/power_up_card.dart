@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/power_up.dart';
 import '../../game/models/store_item_model.dart';
-import '../../game/providers/power_up_timer_provider.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 class PowerUpCard extends ConsumerWidget {
@@ -78,7 +77,7 @@ class PowerUpCard extends ConsumerWidget {
 
             // Description
             Text(
-              powerUpItem.description ?? '',
+              powerUpItem.description,
               style: const TextStyle(fontSize: 12),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

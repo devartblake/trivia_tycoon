@@ -42,7 +42,10 @@ class AutoPathOverlayPainter extends CustomPainter {
     final fullPath = _buildPath(visiblePoints);
 
     // 1) Optionally draw a dim mask, then punch one combined hole along the path.
-    if (showFullPath && showDimMask && dimMaskColor.alpha > 0 && fullPath != null) {
+    if (showFullPath &&
+        showDimMask &&
+        dimMaskColor.a > 0 &&
+        fullPath != null) {
       final layerBounds = Offset.zero & size;
       final maskPaint = Paint()..color = dimMaskColor;
       final clearPaint = Paint()
@@ -54,7 +57,7 @@ class AutoPathOverlayPainter extends CustomPainter {
 
       canvas.saveLayer(layerBounds, Paint());
       canvas.drawRect(layerBounds, maskPaint);
-      canvas.drawPath(fullPath!, clearPaint);
+      canvas.drawPath(fullPath, clearPaint);
       canvas.restore();
     }
 

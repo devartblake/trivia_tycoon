@@ -17,11 +17,15 @@ class QuestionRepositoryImpl implements QuestionRepository {
     required String category,
     int amount = 10,
     int? difficulty,
+    String mode = 'practice',
+    String? playerId,
   }) {
     return _questionHubService.getQuestionsForCategory(
       category: category,
       amount: amount,
       difficulty: difficulty,
+      mode: mode,
+      playerId: playerId,
     );
   }
 
@@ -61,12 +65,16 @@ class QuestionRepositoryImpl implements QuestionRepository {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
+    String mode = 'practice',
+    String? playerId,
   }) {
     return _questionHubService.getMixedQuiz(
       questionCount: questionCount,
       categories: categories,
       difficulties: difficulties,
       balanceDifficulties: balanceDifficulties,
+      mode: mode,
+      playerId: playerId,
     );
   }
 
@@ -76,25 +84,29 @@ class QuestionRepositoryImpl implements QuestionRepository {
     int amount = 10,
     String? category,
     int? difficulty,
+    String? playerId,
   }) {
     switch (mode) {
       case GameMode.daily:
         return getDailyQuestions(count: amount);
       case GameMode.arena:
       case GameMode.teams:
-        return getMultiplayerQuestions(
-          amount: amount,
-          category: category,
-        );
+        return getMultiplayerQuestions(amount: amount);
       case GameMode.topicExplorer:
         return getQuestionsForCategory(
           category: category ?? 'general',
           amount: amount,
           difficulty: difficulty,
+          mode: 'practice',
+          playerId: playerId,
         );
       case GameMode.classic:
       case GameMode.survival:
-        return getMixedQuiz(questionCount: amount);
+        return getMixedQuiz(
+          questionCount: amount,
+          mode: 'practice',
+          playerId: playerId,
+        );
     }
   }
 
@@ -102,12 +114,13 @@ class QuestionRepositoryImpl implements QuestionRepository {
   Future<List<QuestionModel>> getMultiplayerQuestions({
     int amount = 10,
     String? category,
+    int? difficulty,
   }) {
-    final categories = category == null ? null : <String>[category];
     return getMixedQuiz(
       questionCount: amount,
-      categories: categories,
       balanceDifficulties: true,
+      mode: 'ranked',
+      playerId: null,
     );
   }
 

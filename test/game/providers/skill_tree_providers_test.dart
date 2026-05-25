@@ -49,7 +49,7 @@ void main() {
   // ── SkillTreeDtoMapper (unit) ─────────────────────────────────────────────
 
   group('SkillTreeDtoMapper.merge', () {
-    SkillTreeGraph _buildAssetGraph() {
+    SkillTreeGraph buildAssetGraph() {
       final root = SkillNode(
         id: 'sch_root',
         title: 'Study Habits',
@@ -79,7 +79,7 @@ void main() {
     }
 
     test('merges server unlock state onto asset definitions', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [
@@ -102,7 +102,7 @@ void main() {
     });
 
     test('preserves asset definition fields after merge', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [
@@ -128,7 +128,7 @@ void main() {
     });
 
     test('marks child as available when parent is unlocked', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [
@@ -151,7 +151,7 @@ void main() {
     });
 
     test('child remains unavailable when parent is locked', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [
@@ -174,7 +174,7 @@ void main() {
     });
 
     test('root node with no prerequisites is always available', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [],
@@ -188,7 +188,7 @@ void main() {
     });
 
     test('nodes absent from server DTO retain asset defaults', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [], // no server nodes
@@ -201,7 +201,7 @@ void main() {
     });
 
     test('server nodes absent from asset graph are ignored', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final serverDto = SkillTreeDto(
         playerId: 'player1',
         nodes: [
@@ -224,7 +224,7 @@ void main() {
     });
 
     test('preserves edges from asset graph', () {
-      final assetGraph = _buildAssetGraph();
+      final assetGraph = buildAssetGraph();
       final merged = SkillTreeDtoMapper.merge(
         assetGraph,
         SkillTreeDto(playerId: 'p', nodes: [], availablePoints: 0),

@@ -1,6 +1,6 @@
 # Rewards Module — Backend Integration Audit
 
-**Date:** 2026-05-08  
+**Date:** 2026-05-08 — Updated: 2026-05-12  
 **Branch:** `claude/fix-hexagon-alignment-CrQVu`  
 **Prepared for:** Backend / API Team  
 
@@ -9,6 +9,12 @@
 ## Overview
 
 This document covers every file in the rewards and spin-wheel subsystems, identifies what has already been wired to real providers, what still reads from local storage only, and what new API endpoints or providers are needed to complete server-side integration.
+
+**2026-05-10 frontend update:** Backend-confirmed Spin & Earn endpoints are limited to `GET /arcade/spin/segments` and `POST /arcade/spin/claim`. The Flutter app uses those endpoints where available, refreshes wallet state through `GET /users/me/wallet` after successful claims, and keeps local fallbacks for unconfirmed daily/weekly/server-stat/history/reward-step endpoints. Confirmed mission endpoints now used by the Flutter mission layer are `GET /missions`, `POST /missions/{missionId}/claim`, `POST /missions/progress/match-completed`, and `POST /missions/progress/round-completed`; swap/generate/delete mission replacement endpoints are still unconfirmed.
+
+**2026-05-10 completion update:** Rewards backend integration is now backend-first for daily config/claim status, weekly schedule/streak/claim, spin stats/history, configurable spin reward steps, and mission progress event submission. Local Hive/AppSettings behavior remains as offline fallback where backend calls fail or no authenticated player id is available.
+
+**2026-05-12 implementation update:** `lib/game/services/rewards_api_service.dart` and `lib/game/providers/reward_backend_providers.dart` were merged from `main` as of the 2026-05-12 merge. All 9 priority endpoints now have a service implementation. The `currentUserIdProvider` stub in `hybrid_mission_state.dart` was fixed to delegate to the real `profile_providers.currentUserIdProvider`.
 
 ---
 
@@ -31,8 +37,11 @@ This document covers every file in the rewards and spin-wheel subsystems, identi
 - Claiming calls `RewardSettingsService.claimDailyReward()` which records the date and adds coins.
 - Coin balance updated via `coinBalanceProvider` after each claim.
 - Spin statistics loaded via `spinStatisticsProvider` (wraps `EnhancedSpinTracker`).
+- 2026-05-10 completion: `reward_screen.dart` is backend-first for `GET /rewards/daily-config`, backend daily availability via the reward center card, and `POST /rewards/daily/claim`; Hive reward state remains offline fallback only.
 
 **Still local-only:**
+**2026-05-10 status:** Superseded for daily config/claim and spin stats. The rows below describe the pre-completion state and are retained as audit history.
+
 | Data | Current source | Needed API |
 |------|---------------|-----------|
 | Daily reward definitions (icon, amount, type) | Hardcoded in UI (`'Daily Mystery Box'`, 100 coins) | `GET /rewards/daily-config` — returns reward definition for the day |
@@ -88,17 +97,20 @@ final weeklyRewardScheduleProvider = FutureProvider<List<WeeklyRewardDay>>((ref)
 - Mission list now watches `liveMissionsProvider` from `HybridMissionNotifier`.
 - Daily tab shows active missions; Weekly tab shows completed missions.
 - Header XP is summed from real mission reward values.
+- 2026-05-10 update: `hybrid_mission_state.dart` now reads the real `profile_providers.currentUserIdProvider` instead of the hardcoded stub.
+- 2026-05-10 update: backend `MissionDto`/claim response parsing is supported, and mission claim UI calls `HybridMissionActions.claimMission()` with local fallback on failure.
 
 **Still local-only / gaps:**
+**2026-05-10 correction:** The confirmed backend mission routes are `GET /missions`, `POST /missions/{missionId}/claim`, `POST /missions/progress/match-completed`, and `POST /missions/progress/round-completed`. Older `{userId}` mission routes below are planning placeholders, not confirmed current API.
+
 | Data | Current source | Needed API |
 |------|---------------|-----------|
-| Mission list | `HybridMissionNotifier` — loads from JSON assets if backend fails | `GET /missions/{userId}` — server-authoritative active missions |
-| Mission progress | JSON local progress (reset on reinstall) | `PUT /missions/{userId}/{missionId}/progress` — persisted server-side |
-| Mission claim | No claim endpoint wired | `POST /missions/{userId}/{missionId}/claim` — awards XP/coins |
-| `currentUserIdProvider` in `hybrid_mission_state.dart` | Returns hardcoded `'current-user-id'` stub | **Fix this stub** — import `currentUserIdProvider` from `profile_providers.dart` |
-| Swap mission | `HybridMissionNotifier.swapMission()` has backend path | Confirm `DELETE /missions/{userId}/{missionId}` + `POST /missions/{userId}/generate` works |
+| Mission list | `HybridMissionNotifier` uses `GET /missions` where available and JSON fallback otherwise | Backend currently lists active mission definitions, not a player-specific mission ledger |
+| Mission progress | Local progress for direct UI increments; backend progress event endpoints exist | Wire real gameplay completion events to `POST /missions/progress/match-completed` and `POST /missions/progress/round-completed` |
+| Mission claim | Wired to `POST /missions/{missionId}/claim?playerId=...&type=...` with local fallback | Validate with a real backend GUID player id in live smoke testing |
+| Swap/generate/delete mission | Local fallback remains active; old guessed routes are non-authoritative | Confirm backend replacement endpoints before replacing local behavior |
 
-**Critical fix needed in `hybrid_mission_state.dart` (line 388):**
+**Resolved 2026-05-10:** `hybrid_mission_state.dart` now reads `profile_providers.currentUserIdProvider`; the old stub below is retained only as audit context.
 ```dart
 // CURRENT (broken stub):
 final currentUserIdProvider = Provider<String?>((ref) {
@@ -162,26 +174,22 @@ Purely presentational. Accepts `rewardSteps` as a constructor parameter from the
 
 ### `ui/screen/wheel_screen.dart`  🟡
 
-**What works:** Wheel physics, animation, result dialog.
+**What works:** Wheel physics, animation, result dialog, backend segment fetch through `SpinWheelApiService.fetchSegments()`, backend claim through `SpinWheelApiService.claimReward()`, and backend wallet refresh after claim.
 
-**Still local-only:**
+**Backend-confirmed and wired:**
+| Data | Current source | Status |
+|------|---------------|--------|
+| Segment list | `GET /arcade/spin/segments` | Wired with local segment fallback |
+| Claim/award | `POST /arcade/spin/claim` | Wired; frontend refreshes `/users/me/wallet` after claim |
+
+**Still local-only / planned:**
 | Data | Current source | Needed API |
 |------|---------------|-----------|
 | Spin result persistence | `AppSettings.addSpinToHistory()`, `AppSettings.updateSpinStatistics()` | `POST /spins/result` — persist outcome server-side |
 | Spin count increment | `AppSettings.incrementTodaySpinCount()` (3 separate calls) | Consolidate into `POST /spins/result` response |
-| Reward award | `coinBalanceProvider` updated locally | Server should award and return new balance in `POST /spins/result` response |
+| Spin stats/history | `EnhancedSpinTracker` / `AppSettings` local cache | Server stats/history endpoints once backend confirms them |
 
-**Recommended refactor:**
-```dart
-// After wheel lands, instead of 3 separate AppSettings calls:
-final response = await ref.read(storeServiceProvider).recordSpinResult(
-  userId: userId,
-  rewardType: result.reward.type,
-  rewardAmount: result.reward.amount,
-);
-ref.read(coinBalanceProvider.notifier).set(response.newCoinBalance);
-ref.invalidate(spinStatisticsProvider);
-```
+**Current frontend rule:** Do not replace local stats/history yet; only use the confirmed segment and claim endpoints.
 
 ---
 

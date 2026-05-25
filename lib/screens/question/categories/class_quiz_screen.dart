@@ -139,6 +139,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
         category: category.name,
         amount: (selectedQuestionCount * 4).clamp(20, 200),
         difficulty: difficulty,
+        mode: 'practice',
       );
       final curatedQuestions =
           questions.take(selectedQuestionCount).toList(growable: false);
@@ -386,8 +387,9 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
               onSelected: isDisabled
                   ? null
                   : (selected) {
-                      if (selected)
+                      if (selected) {
                         setState(() => selectedQuestionCount = count);
+                      }
                     },
             );
           }).toList(),
@@ -407,7 +409,7 @@ class _ClassQuizScreenState extends ConsumerState<ClassQuizScreen> {
       orElse: () => {'name': 'Unknown'},
     );
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 56,
       child: ElevatedButton(

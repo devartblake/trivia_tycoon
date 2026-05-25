@@ -140,7 +140,7 @@ class MultipleChoiceQuestionWidget extends BaseMultiplayerQuestionWidget {
                 isWrong,
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

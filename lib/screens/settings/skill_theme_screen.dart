@@ -321,7 +321,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
               final index = _themeData.keys.toList().indexOf(entry.key) + 1;
               return _buildThemeOption(
                   entry.key, entry.value, currentTheme, index);
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -550,7 +550,7 @@ class _SkillThemeScreenState extends ConsumerState<SkillThemeScreen>
                       value: snap,
                       onChanged: (v) =>
                           ref.read(hexSnapToNodesProvider.notifier).state = v,
-                      activeColor: const Color(0xFF10B981),
+                      activeThumbColor: const Color(0xFF10B981),
                     ),
                   ],
                 ),

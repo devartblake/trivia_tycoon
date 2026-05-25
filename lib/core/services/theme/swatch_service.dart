@@ -6,7 +6,7 @@ class SwatchService {
 
   /// Save custom swatches as a list of hex strings
   static Future<void> saveSwatches(List<Color> colors) async {
-    final hexList = colors.map((c) => c.value.toRadixString(16)).toList();
+    final hexList = colors.map((c) => c.toARGB32().toRadixString(16)).toList();
     await AppSettings.setStringList(_key, hexList);
   }
 
@@ -29,7 +29,7 @@ class SwatchService {
   }
 
   static Future<void> setCustomSwatches(List<Color> colors) async {
-    final hexList = colors.map((c) => c.value.toRadixString(16)).toList();
+    final hexList = colors.map((c) => c.toARGB32().toRadixString(16)).toList();
     await AppSettings.setStringList(_key, hexList);
   }
 

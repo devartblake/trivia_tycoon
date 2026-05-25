@@ -30,7 +30,7 @@ class GreetingUtils {
 
   /// Get greeting with user name
   static String getPersonalizedGreeting(String userName) {
-    return '${currentGreeting}, $userName!';
+    return '$currentGreeting, $userName!';
   }
 
   /// Get time period (morning, afternoon, evening, night)

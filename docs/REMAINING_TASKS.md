@@ -1,8 +1,10 @@
 # Remaining Tasks & Work Backlog
 
+_Reconciled update: 2026-05-10 - use [`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md) as the concise current task list. This file is the detailed backlog/history reference._
+
 _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue expansion to all 6 surfaces ✅; Study Hub gaps (hub entry points, favorites, custom set creation, session resume) ✅_
 
-> This file is the canonical "what is left to do" reference.
+> [`docs/CURRENT_TASKS.md`](CURRENT_TASKS.md) is the concise current task list. This file is the detailed backlog/history reference.
 > For completed work, see [`docs/ALPHA_TASK_AUDIT.md`](ALPHA_TASK_AUDIT.md).
 > For the frontend/backend handoff status, see
 > [`docs/frontend_backend_handoff_alpha_2026-04-04.md`](frontend_backend_handoff_alpha_2026-04-04.md).
@@ -29,7 +31,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | **Django DefaultPermissions fix** | Medium | **Complete — all 12 scopes now granted on login** | No |
 | Operator Dashboard Wave D (Cutover + Blazor decommission) | Low | Staging parallel-run pending (May 8–14); cutover May 15 | Depends on sign-off |
 | Phase 2 - Crash recovery stubs | High | Code complete; device validation pending | Yes — needs device |
-| Phase 3 - Test coverage (remaining gaps) | Medium | **In progress** — 66+ test files; `AudioSettingsService`, `PlayerProfileService`, `SettingsController` added this session | No |
+| Phase 3 - Test coverage (remaining gaps) | Medium | **In progress** — 66+ test files; `AudioSettingsService`, `PlayerProfileService`, `SettingsController` (2026-05-25); `ArcadeGameShell`, `CryptoWalletScreen`, secure channel, leaderboard widgets, `LoginManager`, `AuthTokenStore`, `AuthStateNotifier`, `LeaderboardController`, `QuestionController`, `UserWallet`, `CoinBalanceNotifier`, `EnergyNotifier`, `WalletService`, `currentUserIdProvider` (2026-05-12) | No |
 | Phase 4 - Dependency audit | Medium | Partial | No |
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | Yes — needs live server |
 | **Sprint 2 - Networking layer (Flutter)** | **High** | **Complete — `wsMessageStreamProvider`, `wsStateStreamProvider`, `encryptedApiClientProvider` added** | **No** |
@@ -38,14 +40,22 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | Packet E Workstream 2 (package root rename) | Deferred | Blocked — awaiting store plan | Yes — needs store/legal plan |
 | Backend Packet E (namespace rename) | Deferred | Not started | Intentional deferral |
 | **Spin wheel redesign** | **Medium** | **Complete** | **No** |
-| **Secure channel scaffolding** | **High** | **Complete (scaffolded); rollout pending** | **No** |
+| **Secure channel scaffolding** | **High** | **Complete (scaffolded); Phase 1/2/3 selected endpoint rollout also complete** | **No** |
 | **Secure channel Phase 1 endpoint rollout** | **High** | **Complete — `sendFriendRequest` + `acceptFriendRequest` wired to `EncryptedApiClient`** | **No** |
 | **Secure channel Phase 2 endpoint rollout** | **High** | **Complete — `declineFriendRequest`, `blockUser`, `saveLoadout`, `claimReward` encrypted** | **No** |
 | **dart:io web guards (all 19 files)** | **Medium** | **Complete — all files verified safe; 3 changed, 16 confirmed already guarded** | **No** |
 
 ---
 
+| **Secure channel Phase 3 encrypted DELETE rollout** | **High** | **Complete - `removeFriend`, `cancelFriendRequest`, `unblockUser` encrypted via `deleteEncrypted`** | **No** |
+
 ## 1. Frontend/Backend Alpha Handoff
+
+### 2026-05-10 reconciliation notes
+- Portable avatar upload frontend wiring is now complete in code: `AvatarUploadService` accepts `XFile`, controller/provider wiring exists, profile UI shows progress/error/retry, and upload/controller tests exist. Remaining work is live-device/backend verification after emulator wipe.
+- `RichPresenceService` test coverage now exists in `test/core/services/presence/rich_presence_service_test.dart`.
+- Skill-tree navigation cleanup items STN-001..004/007 are complete in code: branch routes normalize to `/skill-branch/:branchId`, branch detail uses `AutoPathOverlayPainter`, `branchWorldCentersProvider` documents world coordinates, build-time path mutation was removed, and `MiniHexBranchPreview.fromGraph` uses `graphOverride`.
+- For the short authoritative task list, use [`CURRENT_TASKS.md`](CURRENT_TASKS.md).
 
 ### 1a. Store / payments / subscriptions COMPLETE
 - Frontend wiring now covers backend catalog, purchase flows, inventory refresh, subscription
@@ -69,7 +79,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 ### 1b.ii Friends/social — Code-complete; runtime verification REMAINING
 
 #### ✅ Code-complete (this session)
-- `FriendDiscoveryService` absorbed into `BackendProfileSocialService` and deleted
+- `FriendDiscoveryService` cleanup/deprecation completed; no `friend_discovery` source file remains under `lib/`
 - New methods: `blockUser`, `unblockUser`, `getBlockedUserIds`, `cancelFriendRequest`
 - New local-preference helpers: `setFriendNickname`, `getFriendNickname`, `toggleFavourite`, `isFavourite`, `getFavouriteFriendIds`
 - New derived helpers: `getFriendshipStatus`, `getOnlineFriends`, `getSocialAnalytics`
@@ -103,6 +113,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 - `avatarUploadServiceProvider` and `profileSyncServiceProvider` added to `game_providers.dart`; `profileAvatarControllerProvider` updated
 - Progress overlay + error/retry chip added to `profile_character_section.dart`
 - Tests: `test/core/services/avatar_upload_service_test.dart` (6 cases), `test/game/controllers/profile_avatar_controller_upload_test.dart` (5 cases)
+
+#### 2026-05-10 status correction
+
+The implementation checklist below is retained for history, but its frontend
+implementation items are now complete. The remaining task is runtime QA against
+a live backend/device: pick, crop, upload, persist the returned backend URL,
+wipe local emulator data, log in again, and confirm avatar hydration from the
+backend URL.
 
 #### MinIO avatar upload integration checklist
 
@@ -221,14 +239,15 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 
 ### 1d. Crypto economy player surfaces REMAINING
 - Still needed:
-- Broader player-facing wallet balance integration beyond the main menu sync
-- Transaction/history integration
-- Wallet link / withdraw UX
-- Staking and unstaking UI
-- Feature-flag strategy for staged rollout
+- Staging crypto contract validation after staging base URL and credentials are supplied
+- Broader widget/UI smoke tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states
+- Optional profile/store polish after contract validation
 - Newly completed:
   - `main_menu_screen.dart` now syncs coin/gem display from backend player wallet data during economy refresh
   - duplicate green energy strip under the menu currency display was removed
+  - `CryptoService`, crypto models, Riverpod providers, and `crypto_wallet_screen.dart` now cover balance, history, link wallet, withdrawal, staking/unstaking, and prize pool flows
+  - `CRYPTO_SURFACES_ENABLED`, `CRYPTO_WRITES_ENABLED`, and `CRYPTO_ENABLED_NETWORKS` gate staged rollout and network availability
+  - local Docker crypto contract validation passed on 2026-05-10 for balance, history, staking, prize-pool, and secure-channel write guard
 - Backend endpoints available for consumption:
 - `POST /crypto/link-wallet`
 - `GET /crypto/balance/{playerId}`
@@ -358,11 +377,10 @@ dotnet ef database update \
 | `test/arcade/games/memory_flip_controller_test.dart` | `MemoryFlipController` - initial state, deck structure, `flip()` (first/match/miss/ignored), `allMatched -> isOver`, `toResult()`, `dispose()` |
 | `test/arcade/games/pattern_sprint_controller_test.dart` | `PatternSprintController` - initial state, `answer()` (correct/wrong/lock), streak multiplier, question generation across all difficulties, `toResult()`, `dispose()` |
 
-### 3b. Presence services (not yet tested)
+### 3b. Presence services COMPLETE
 
 #### `RichPresenceService` (`lib/core/services/presence/rich_presence_service.dart`, 357 lines)
-- **Dependency:** Singleton - test using `initialize(useWebSocket: false)` (legacy polling mode)
-  to avoid real WebSocket connections.
+- `test/core/services/presence/rich_presence_service_test.dart` now covers the key singleton scenarios using `initialize(useWebSocket: false)` to avoid real WebSocket connections.
 
 | Method / scenario | What to test |
 |---|---|
@@ -380,19 +398,37 @@ dotnet ef database update \
   `updateUserTypingStatus`, `handleTextInput`, `handleMessageSent`, `clearConversationTyping`,
   `getTypingText`, `getTypingStats`
 
-### 3c. Auth flow edge cases (not yet tested)
-- Social login flows (OAuth token injection, account linking)
-- Token refresh when `AuthHttpClient` encounters a 401 on a concurrent request
-- Offline login attempt (cached credentials vs. no cache)
-- Logout clears all stored tokens and in-memory state
+### 3c. Auth flow edge cases ✅ COMPLETE
+Added to `test/core/services/auth_service_test.dart` (branch `claude/fix-hexagon-alignment-CrQVu`):
+- `AuthService.login — offline`: SocketException on network down; no partial tokens saved
+- `AuthService.signup — edge cases`: 409 duplicate email, 400 validation, userId saved from response
+- `AuthService.logout — 401 best-effort`: 401 from backend still clears local tokens; metadata cleared on logout
+- `AuthService.refresh — concurrent calls`: two simultaneous calls complete; 401 rotated-token throws
+- `AuthSession — expiry detection`: isExpired true/false for past/future/absent expiry
+- `AuthSession — metadata extraction`: role, isPremium, subscriptionStatus=active
+- `AuthApiClient.getOAuthUrl — social login`: URL returned on success; null on empty body; throws on 404
 
-### 3d. Widget tree tests (not yet tested)
-- Leaderboard screen renders `AnimatedRankBadge` and `EnhancedScoreDisplay` correctly
-  (basic rendering exists in `test/widgets/leaderboard_widgets_test.dart` - extend with
-  interaction tests)
-- `ArcadeGameShell` mounts the correct game widget for each `ArcadeGameId`
-- `DailyBonusScreen` renders correct coins/gems/streak values from `ArcadeDailyBonusService`
-- `ArcadeMissionsScreen` renders claimed vs. unclaimed missions correctly
+### 3d. Widget tree tests (partial)
+- `DailyBonusScreen` ✅ — `test/arcade/screens/arcade_screens_widget_test.dart`: renders unclaimed/claimed, coin amount visible, streak increments, wallet counters
+- `ArcadeMissionsScreen` ✅ — same file: catalog non-empty, first mission title visible, progress ratio 0–1, wallet counters
+- Skill tree branch detail ✅ — extended `test/screens/skills_tree/skill_branch_detail_screen_test.dart`: `showPath=0` disables full-path highlight; step 0 shows correct label; out-of-bounds step clamps without crashing
+- `ArcadeGameShell` ✅ — `test/arcade/screens/arcade_game_shell_test.dart`: mounts correct widget per `ArcadeGameId` (`patternSprint`, `memoryFlip`, `quickMathRush`), `ArcadeRunApi.of()` accessible, difficulty passed to builder (5 tests)
+- `CryptoWalletScreen` ✅ — `test/screens/store/crypto_wallet_screen_test.dart`: disabled feature, unlinked/linked wallet, available balance, staked units, staking summary, pending withdrawal polling notice, empty history card (8 tests)
+- Leaderboard widgets ✅ — `test/widgets/leaderboard_widgets_test.dart` extended with 6 `AnimatedRankBadge` interaction tests (up/down arrow icons, no-arrow unchanged/null, animation pumpAndSettle) and 14 `EnhancedScoreDisplay` interaction tests (all 5 performance message tiers, percentage label, XP section visible/hidden, XP animation final value, category breakdown visible/hidden, power-up section visible/hidden, class level badge)
+
+### 3g. LoginManager unit tests ✅ COMPLETE (2026-05-12)
+Added to `test/core/manager/login_manager_test.dart` (16 tests, 5 groups):
+- **Role extraction**: from `role`/`roles` list/`tier` top-level metadata, default 'player', admin/moderator tier mapping, `isAdminUser()`
+- **Premium extraction**: from `isPremium`/`subscriptionStatus: active`/`tier: premium`, false by default, explicit false
+- **getNextRoute() routing**: no tokens → '/login'; after login (not onboarded) → '/onboarding'; after setHasCompletedOnboarding(true) → '/home'
+- **isLoggedIn()**: false before login, true after login
+- **userId persistence**: userId from response body saved to `profileService`
+
+### 3f. Secure channel tests ✅ COMPLETE (2026-05-12)
+Added to `test/core/security/secure_payload_codec_test.dart` (3 new groups, 15 new tests):
+- **SecurePayloadCodec — replay and sequence protection**: 50-nonce uniqueness, cross-nonce replay fails, cross-session key replay fails, AAD endpoint binding, AAD method binding
+- **SecureSession — expiry and sequence**: `isExpired` past/future, `copyWith(nextSequence)`, `toJson/fromJson` roundtrip
+- **SecureSessionStore — reinstall and web fallback**: null on empty storage, save/load roundtrip, clear simulates reinstall, second save overwrites (renewal), expired session preserved, cross-instance sharing via shared storage
 
 ### 3e. Other service gaps COMPLETE
 
@@ -442,15 +478,16 @@ Status is improved but still requires explicit live verification:
 - [ ] Auto-refresh (token renewal on 401) tested end-to-end with a live or stub backend
 - [ ] Backend profile hydration after login verified against a live backend endpoint
 - [ ] Backend profile hydration after emulator/data wipe verified end-to-end
-- [ ] Local web auth CORS/origin validation confirmed for Docker-hosted backend
+- [x] Local web auth CORS/origin validation confirmed for Docker-hosted backend; `OPTIONS /auth/login` now returns `Access-Control-Allow-Origin` for `http://localhost:63033` and `http://127.0.0.1:63033`
 
 ### 5a. Local web auth / Docker verification REMAINING
 - Frontend-side diagnosis is complete:
   - browser auth should target `http://localhost:5000` for local host access
   - stale `https://localhost:5000` local defaults were corrected in frontend config
+- Completed:
+  - backend CORS now returns `Access-Control-Allow-Origin` for `http://localhost:63033`
+  - backend CORS now returns `Access-Control-Allow-Origin` for `http://127.0.0.1:63033`
 - Still needed:
-  - verify Docker publishes the backend port to the host machine
-  - verify backend CORS allows the Flutter web dev origin
   - verify any social/OAuth local callback URLs use the same reachable origin/protocol
 
 ---
@@ -563,6 +600,11 @@ Intentionally deferred to after Alpha launch. No urgency.
 
 ## Release Readiness Checklist
 
+> 2026-05-10 note: The final row for "MinIO avatar upload (frontend)" may appear
+> stale in older rendered copies of this document. Current code status is:
+> service/controller/provider wiring, progress/error UI, and tests are complete;
+> only live runtime wipe/login verification remains.
+
 | Item | Status |
 |------|--------|
 | Alpha handoff core frontend wiring | Complete for store/profile/questions; crypto + ML remain |
@@ -582,7 +624,7 @@ Intentionally deferred to after Alpha launch. No urgency.
 | Packet E Workstream 1 (symbol cleanup) | ✅ Complete — `79bc788` (2026-05-08) |
 | Packet E Workstream 2 (package root rename) | ⏸️ Blocked — awaiting store/legal plan |
 | Spin wheel redesign (pie-chart renderer, fixed needle, gesture spin) | ✅ Complete |
-| Secure channel (scaffolding) | ✅ Scaffolded; rollout to endpoints pending |
+| Secure channel (scaffolding) | ✅ Scaffolded; Phase 1/2 endpoint rollout complete; remaining gap is encrypted DELETE/equivalent semantics + lifecycle/perf tests |
 | Secure channel (Phase 1 endpoint rollout + codec tests) | ✅ Complete — `sendFriendRequest` + `acceptFriendRequest` encrypted; `secure_payload_codec_test.dart` added |
 | Secure channel (Phase 2 endpoint rollout) | ✅ Complete — `declineFriendRequest`, `blockUser`, `saveLoadout` (social); `claimReward` (economy) encrypted |
 | Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |

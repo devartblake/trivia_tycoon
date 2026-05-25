@@ -165,8 +165,9 @@ class BranchPathOverlayPainter extends CustomPainter {
   }
 
   void _paintHalo(Canvas canvas) {
-    if (currentStep < 0 || currentStep >= path.length || haloColor == null)
+    if (currentStep < 0 || currentStep >= path.length || haloColor == null) {
       return;
+    }
     final id = path[currentStep];
     final world = positionsWorld[id];
     if (world == null) return;

@@ -2,7 +2,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/notification_service.dart';
-import '../../game/providers/notification_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/services/channel_prefs.dart';
 
@@ -217,9 +216,10 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                             tooltip: 'Remove draft',
                             icon: const Icon(Icons.delete_outline),
                             onPressed: () async {
+                              final messenger = ScaffoldMessenger.of(context);
                               await ChannelPrefs.instance.removeDraft(key);
                               if (mounted) setState(() {});
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              messenger.showSnackBar(
                                 const SnackBar(content: Text('Draft removed')),
                               );
                             },
@@ -276,7 +276,7 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<NotificationImportance>(
-                        value: _importance,
+                        initialValue: _importance,
                         decoration:
                             const InputDecoration(labelText: 'Importance'),
                         items: NotificationImportance.values.map((imp) {
@@ -306,9 +306,10 @@ class _ChannelManagerSheetState extends ConsumerState<ChannelManagerSheet> {
   }
 
   Future<void> _toggleChannel(String key, bool enabled) async {
+    final messenger = ScaffoldMessenger.of(context);
     await ChannelPrefs.instance.setEnabled(key, enabled);
     setState(() => _enabled[key] = enabled);
-    ScaffoldMessenger.of(context).showSnackBar(
+    messenger.showSnackBar(
       SnackBar(
           content: Text('Channel $key ${enabled ? 'enabled' : 'disabled'}')),
     );

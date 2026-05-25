@@ -311,6 +311,7 @@ class ProfileStatsService extends ChangeNotifier {
     LogManager.debug('ProfileStatsService initialized');
   }
 
+  @override
   void dispose() {
     for (final controller in _statsStreams.values) {
       controller.close();

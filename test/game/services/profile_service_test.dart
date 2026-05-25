@@ -258,7 +258,8 @@ void main() {
   });
 
   group('ProfileService — unlocked skill IDs', () {
-    test('saveUnlockedSkillIds persists IDs; loadUnlockedSkillIds restores them',
+    test(
+        'saveUnlockedSkillIds persists IDs; loadUnlockedSkillIds restores them',
         () async {
       final storage = _FakeStorage();
 

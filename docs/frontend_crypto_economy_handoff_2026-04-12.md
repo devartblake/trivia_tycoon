@@ -38,6 +38,17 @@ Still remaining for the crypto track:
 - portable avatar/object-storage work is separate from crypto and remains tracked
   in the main backlog
 
+## Status update (2026-05-10)
+
+The typed crypto service/model/provider layer is implemented and now has focused service/provider coverage for endpoint contracts, mutation invalidation, backend error envelope mapping, staged write disabling, and per-network availability.
+
+Current remaining crypto work:
+- run live contract validation against staging after staging base URL and credentials are supplied
+- add optional UI smoke/polish tests for linked/unlinked, pending withdrawal, disabled-feature, stake/unstake, and prize pool states
+- keep Phase 2 network enablement gated until backend/operators confirm `snx` and `shib`
+
+Local Docker validation completed on 2026-05-10 against `http://localhost:5000` with a disposable signup user. Verified contracts: `GET /crypto/balance/{playerId}`, `GET /crypto/history/{playerId}`, `GET /crypto/staking/{playerId}`, `GET /crypto/prize-pool/global`, and the secure-channel guard for `POST /crypto/link-wallet`.
+
 ---
 
 ## 1. System Overview
@@ -544,15 +555,15 @@ Global rules:
 
 ### Tier 1 - Fastest and lowest risk
 
-1. Add shared crypto enums/constants for active networks and transaction status/kind labels.
+1. [x] Add shared crypto enums/constants for active networks and transaction status/kind labels.
    Suggested file targets:
    - `lib/core/models/crypto/crypto_network.dart`
    - `lib/core/models/crypto/crypto_transaction_kind.dart`
-2. Add client-side wallet address validation helpers for `solana`, `xrp`, and gated placeholders for `snx` / `shib`.
+2. [x] Add client-side wallet address validation helpers for `solana`, `xrp`, and gated placeholders for `snx` / `shib`.
    Suggested file targets:
    - `lib/core/utils/crypto_address_validator.dart`
    - `test/core/utils/crypto_address_validator_test.dart`
-3. Add typed response/request models for balance, history, staking, link-wallet, withdraw, and prize-pool funding.
+3. [x] Add typed response/request models for balance, history, staking, link-wallet, withdraw, and prize-pool funding.
    Suggested file targets:
    - `lib/core/models/crypto/crypto_balance_model.dart`
    - `lib/core/models/crypto/crypto_history_response.dart`
@@ -564,21 +575,21 @@ Global rules:
 
 ### Tier 2 - Straightforward service-layer integration
 
-4. Add a `CryptoService` wrapper for all player-facing .NET endpoints.
+4. [x] Add a `CryptoService` wrapper for all player-facing .NET endpoints.
    Suggested file targets:
    - `lib/core/services/crypto/crypto_service.dart`
    - `lib/core/services/api_service.dart` only if small shared API helpers are needed
-5. Add structured crypto error parsing so the UI can branch on `error.code`.
+5. [x] Add structured crypto error parsing so the UI can branch on `error.code`.
    Suggested file targets:
    - `lib/core/models/crypto/crypto_api_error.dart`
    - `lib/core/services/crypto/crypto_service.dart`
-6. Add service tests covering happy paths and key backend error codes.
+6. [x] Add service tests covering happy paths and key backend error codes.
    Suggested file targets:
    - `test/core/services/crypto/crypto_service_test.dart`
 
 ### Tier 3 - Provider/state wiring
 
-7. Add Riverpod providers for:
+7. [x] Add Riverpod providers for:
    - balance
    - history pagination
    - staking position
@@ -589,14 +600,14 @@ Global rules:
    Suggested file targets:
    - `lib/game/providers/crypto_providers.dart`
    - `test/game/providers/crypto_providers_test.dart`
-8. Add screen-focus refresh and pending-history polling behavior.
+8. [x] Add screen-focus refresh and pending-history polling behavior.
    Suggested file targets:
    - `lib/game/providers/crypto_providers.dart`
    - whichever screen/controller owns the crypto surface
 
 ### Tier 4 - Core user-facing UI
 
-9. Build the base crypto wallet screen with:
+9. [x] Build the base crypto wallet screen with:
    - linked / unlinked states
    - balance card
    - staking summary
@@ -605,19 +616,19 @@ Global rules:
    - `lib/screens/store/crypto_wallet_screen.dart`
    - `lib/screens/store/widgets/crypto_balance_card.dart`
    - `lib/screens/store/widgets/crypto_feature_banner.dart`
-10. Build the link-wallet flow with network picker, inline validation, and backend submission.
+10. [x] Build the link-wallet flow with network picker, inline validation, and backend submission.
     Suggested file targets:
     - `lib/screens/store/widgets/crypto_link_wallet_sheet.dart`
     - `lib/screens/store/widgets/crypto_network_picker.dart`
-11. Build the transaction history list with status icons and pagination.
+11. [x] Build the transaction history list with status icons and pagination.
     Suggested file targets:
     - `lib/screens/store/widgets/crypto_history_list.dart`
     - `lib/screens/store/widgets/crypto_history_item_tile.dart`
-12. Build stake / unstake interactions.
+12. [x] Build stake / unstake interactions.
     Suggested file targets:
     - `lib/screens/store/widgets/crypto_stake_sheet.dart`
     - `lib/screens/store/widgets/crypto_unstake_sheet.dart`
-13. Build the withdrawal flow with:
+13. [x] Build the withdrawal flow with:
     - amount validation
     - destination address prefill
     - pending confirmation state
@@ -626,15 +637,16 @@ Global rules:
 
 ### Tier 5 - Extended UX and optional surfaces
 
-14. Add optional prize-pool read/fund UI if it belongs in Alpha scope.
+14. [x] Add optional prize-pool read/fund UI if it belongs in Alpha scope.
     Suggested file targets:
     - `lib/screens/store/widgets/crypto_prize_pool_card.dart`
     - `lib/screens/store/widgets/crypto_fund_pool_sheet.dart`
-15. Add feature gating for Phase 2 networks (`snx`, `shib`) so they can be enabled without redesigning the UI.
+15. [x] Add feature gating for Phase 2 networks (`snx`, `shib`) so they can be enabled without redesigning the UI.
     Suggested file targets:
-    - `lib/core/config/env.dart`
+    - `lib/core/env.dart`
     - `lib/core/models/crypto/crypto_network.dart`
-    - `lib/screens/store/widgets/crypto_network_picker.dart`
+    - `lib/game/providers/crypto_providers.dart`
+    - `lib/screens/store/crypto_wallet_screen.dart`
 
 ### Tier 6 - Highest effort / cross-cutting work
 

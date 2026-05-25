@@ -11,6 +11,7 @@ enum SegmentSource { local, remote }
 
 class SegmentLoader {
   final SegmentSource source;
+
   /// [apiService] is used for remote loading when [source] == [SegmentSource.remote].
   /// When null the loader falls back to the local asset bundle.
   final ApiService? apiService;
@@ -82,7 +83,7 @@ class SegmentLoader {
   Future<List<WheelSegment>> _filterUnlockedSegments(
       List<WheelSegment> all) async {
     final streak = await spinWheelService.getWinStreak();
-    final currency = await generalKeyStorage.getInt("exclusiveCurrency") ?? 0;
+    final currency = await generalKeyStorage.getInt("exclusiveCurrency");
 
     return all.where((seg) {
       if (!seg.isExclusive) return true;
@@ -93,5 +94,4 @@ class SegmentLoader {
       return streak >= unlockStreak && currency >= unlockCurrency;
     }).toList();
   }
-
 }

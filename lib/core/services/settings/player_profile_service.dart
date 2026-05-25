@@ -217,6 +217,14 @@ class PlayerProfileService {
     return legacy == 'admin' || roles.contains('admin');
   }
 
+  /// Checks if this account is a backend-designated dev tester.
+  /// The backend assigns the 'tester' role via user_roles on /users/me.
+  Future<bool> isDevTesterAccount() async {
+    final legacy = await getUserRole();
+    final roles = await getUserRoles();
+    return legacy == 'tester' || roles.contains('tester');
+  }
+
   /// Returns true if the user has one of the given roles
   Future<bool> hasRole(String role) async {
     final userRole = await getUserRole();

@@ -7,11 +7,11 @@ class GroupInfoHeader extends StatelessWidget {
   final VoidCallback? onTap;
 
   const GroupInfoHeader({
-    Key? key,
+    super.key,
     required this.group,
     this.compact = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

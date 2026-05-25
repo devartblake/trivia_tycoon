@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../models/spin_system_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -362,7 +361,11 @@ class _WheelImagePainter extends CustomPainter {
         ..color = Colors.black.withValues(alpha: 0.3)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
     );
-    canvas.drawPath(path, Paint()..color = Colors.red..style = PaintingStyle.fill);
+    canvas.drawPath(
+        path,
+        Paint()
+          ..color = Colors.red
+          ..style = PaintingStyle.fill);
     canvas.drawPath(
       path,
       Paint()

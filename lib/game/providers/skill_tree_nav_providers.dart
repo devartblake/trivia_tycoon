@@ -44,10 +44,7 @@ const _fallbackSections = <SkillTreeNavSectionMeta>[
     title: 'Combat',
     branches: [
       SkillTreeNavBranchCardMeta(
-          id: 'scholar',
-          title: 'Scholar',
-          colorHex: '#4A90E2',
-          branchCount: 3),
+          id: 'scholar', title: 'Scholar', colorHex: '#4A90E2', branchCount: 3),
       SkillTreeNavBranchCardMeta(
           id: 'strategist',
           title: 'Strategist',
@@ -62,10 +59,7 @@ const _fallbackSections = <SkillTreeNavSectionMeta>[
     title: 'Enhancement',
     branches: [
       SkillTreeNavBranchCardMeta(
-          id: 'xp',
-          title: 'XP Booster',
-          colorHex: '#27AE60',
-          branchCount: 4),
+          id: 'xp', title: 'XP Booster', colorHex: '#27AE60', branchCount: 4),
       SkillTreeNavBranchCardMeta(
           id: 'timer', title: 'Timer', colorHex: '#3498DB', branchCount: 3),
       SkillTreeNavBranchCardMeta(

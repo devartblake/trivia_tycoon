@@ -28,6 +28,12 @@ This guide explains how to properly handle user roles and premium subscriptions 
 - Premium: `true` (typically)
 - Access: Content moderation tools
 
+### 5. **Dev Tester** (Internal/Backend-Controlled)
+- Role: `'tester'`
+- Premium: not required
+- Access: All guarded routes — bypasses onboarding entirely when `devTesterEnabled` feature flag is active
+- Gate: backend must set both `"devTesterEnabled": true` in `GET /api/v1/app/config` **and** `"user_roles": ["tester"]` in `GET /users/me`; either signal alone has no effect
+
 ---
 
 ## Backend Response Format
@@ -375,6 +381,7 @@ The system automatically maps tiers to roles:
 | `moderator` | `moderator` | Usually true |
 | `premium`, `pro`, `vip` | `player` | true |
 | `free`, `basic`, `player` | `player` | false |
+| `tester` (via `user_roles`) | `tester` | not required |
 
 ---
 
@@ -403,6 +410,14 @@ The system checks all three and sets premium to `true` if any indicate premium s
 - [ ] SecureStorage has 'user_role' and 'is_premium'
 - [ ] App restart preserves role/premium (from Hive)
 - [ ] Logout clears role/premium
+
+### Dev Tester Checklist
+- [ ] Backend returns `user_roles: ["tester"]` in `GET /users/me` for test accounts
+- [ ] Backend returns `devTesterEnabled: true` in `GET /api/v1/app/config` features object
+- [ ] `PlayerProfileService.isDevTesterAccount()` returns `true` after profile sync
+- [ ] `onboardingGuard` allows tester accounts through without completing onboarding
+- [ ] Non-tester accounts are unaffected (normal onboarding check still applies)
+- [ ] Disabling `devTesterEnabled` on the backend immediately re-enforces onboarding on next cold start
 
 ---
 

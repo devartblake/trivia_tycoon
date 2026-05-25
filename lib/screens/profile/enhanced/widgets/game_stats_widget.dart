@@ -4,9 +4,9 @@ class GameStatsWidget extends StatelessWidget {
   final String userId;
 
   const GameStatsWidget({
-    Key? key,
+    super.key,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

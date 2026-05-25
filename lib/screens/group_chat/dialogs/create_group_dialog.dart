@@ -8,11 +8,11 @@ class CreateGroupDialog extends StatefulWidget {
   final List<String>? preselectedMemberIds;
 
   const CreateGroupDialog({
-    Key? key,
+    super.key,
     required this.currentUserId,
     required this.currentUserDisplayName,
     this.preselectedMemberIds,
-  }) : super(key: key);
+  });
 
   @override
   State<CreateGroupDialog> createState() => _CreateGroupDialogState();
@@ -132,7 +132,7 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
             height: 100,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               border: Border.all(
                 color: Theme.of(context)
                     .colorScheme
@@ -277,7 +277,7 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer
-              : Theme.of(context).colorScheme.surfaceVariant,
+              : Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
@@ -347,7 +347,7 @@ class _CreateGroupDialogState extends State<CreateGroupDialog> {
           decoration: BoxDecoration(
             color: Theme.of(context)
                 .colorScheme
-                .surfaceVariant
+                .surfaceContainerHighest
                 .withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(

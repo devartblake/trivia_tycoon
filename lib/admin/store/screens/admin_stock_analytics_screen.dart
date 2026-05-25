@@ -30,8 +30,7 @@ class AdminStockAnalyticsScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.bar_chart,
-                  color: Color(0xFF94A3B8), size: 40),
+              const Icon(Icons.bar_chart, color: Color(0xFF94A3B8), size: 40),
               const SizedBox(height: 12),
               Text('Analytics unavailable:\n$e',
                   textAlign: TextAlign.center,

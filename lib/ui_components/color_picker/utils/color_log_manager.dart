@@ -170,7 +170,6 @@ class ColorLogManager {
           content = _formatAsCsv(filteredLogs, includeMetadata);
           break;
         case ColorLogFormat.text:
-        default:
           content = _formatAsText(filteredLogs, includeMetadata);
           break;
       }

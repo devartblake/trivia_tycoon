@@ -4,6 +4,14 @@
 **Area reviewed:** Skill Tree / Pathways navigation, branch detail flow, auto-path planner, hex-grid mini previews, overlay painters, and routing.  
 **Review focus:** How the current GitHub implementation aligns with the Skill Tree Navigation Plan and what should be cleaned up next.
 
+> **2026-05-10 status update:** The primary cleanup recommendations in this
+> review have since been implemented in the repo/PR branch state and reconciled
+> into `origin/main`: route normalization, branch-detail overlay consolidation,
+> `branchWorldCentersProvider` documentation/aliasing, removal of build-time path
+> mutation, and `MiniHexBranchPreview.fromGraph` graph override. Treat the
+> detailed issue sections below as historical rationale unless an item is still
+> called out in [`CURRENT_TASKS.md`](CURRENT_TASKS.md).
+
 ---
 
 ## 1. Executive Summary
@@ -114,7 +122,11 @@ This aligns with the plan’s “compact branch mini-preview.”
 
 ## 3. Main Issues Found
 
-### Issue 1 — Route naming is inconsistent
+Current status: Issues 1 through 5 below are implemented. Remaining follow-up
+work is focused on debug overlay control policy, QA regression, cooldown UX,
+and future persistence/backend enhancements.
+
+### Issue 1 — Route naming is inconsistent (implemented)
 
 The current `SkillTreeNavScreen` has two different route families:
 
@@ -175,7 +187,7 @@ void _deepLinkToBranchStep(
 
 ---
 
-### Issue 2 — Branch Detail currently uses two overlay systems
+### Issue 2 — Branch Detail currently uses two overlay systems (implemented for Branch Detail)
 
 `SkillBranchDetailScreen` currently imports and renders both:
 
@@ -265,7 +277,7 @@ Positioned.fill(
 
 ---
 
-### Issue 3 — `branchCentersProvider` says screen-space but returns layout/world positions
+### Issue 3 — `branchCentersProvider` says screen-space but returns layout/world positions (implemented)
 
 The provider comment says:
 
@@ -332,7 +344,7 @@ branchWorldCentersProvider
 
 ---
 
-### Issue 4 — `SkillBranchDetailScreen` mutates derived path fields during build
+### Issue 4 — `SkillBranchDetailScreen` mutates derived path fields during build (implemented)
 
 The screen currently calls:
 
@@ -404,7 +416,7 @@ import 'package:flutter/foundation.dart';
 
 ---
 
-### Issue 5 — `MiniHexBranchPreview.fromGraph` accepts `graph` but does not use it
+### Issue 5 — `MiniHexBranchPreview.fromGraph` accepts `graph` but does not use it (implemented)
 
 The factory signature includes:
 

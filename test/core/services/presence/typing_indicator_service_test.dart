@@ -17,8 +17,8 @@ void main() {
   final svc = TypingIndicatorService();
 
   // Unique counter so each test gets its own conversationId
-  int _counter = 0;
-  String nextId() => 'conv-test-${_counter++}';
+  int counter = 0;
+  String nextId() => 'conv-test-${counter++}';
 
   // -------------------------------------------------------------------------
   // isAnyoneTyping — initial state
@@ -26,7 +26,7 @@ void main() {
 
   group('TypingIndicatorService.isAnyoneTyping — initial state', () {
     test('returns false for an unseen conversation', () {
-      expect(svc.isAnyoneTyping('conv-unseen-${_counter++}'), isFalse);
+      expect(svc.isAnyoneTyping('conv-unseen-${counter++}'), isFalse);
     });
   });
 
@@ -36,7 +36,7 @@ void main() {
 
   group('TypingIndicatorService.isCurrentUserTyping — initial state', () {
     test('returns false before startTyping has been called', () {
-      expect(svc.isCurrentUserTyping('conv-unseen-${_counter++}'), isFalse);
+      expect(svc.isCurrentUserTyping('conv-unseen-${counter++}'), isFalse);
     });
   });
 
@@ -237,7 +237,7 @@ void main() {
     });
 
     test('clearing a conversation that was never used does not throw', () {
-      expect(() => svc.clearConversationTyping('conv-never-used-${_counter++}'),
+      expect(() => svc.clearConversationTyping('conv-never-used-${counter++}'),
           returnsNormally);
     });
   });

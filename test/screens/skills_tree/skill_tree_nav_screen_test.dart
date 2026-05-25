@@ -17,9 +17,8 @@ import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_notifier.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
 
 class _StaticSkillTreeController extends SkillTreeController {
-  _StaticSkillTreeController(Ref ref, SkillTreeState initial)
+  _StaticSkillTreeController(super.ref, SkillTreeState initial)
       : super(
-          ref,
           initialGraph: initial.graph,
           startingPoints: initial.playerPoints,
         ) {
@@ -145,7 +144,8 @@ Widget _buildHarness() {
 }
 
 void main() {
-  testWidgets('route icon deep-links to branch detail with step=0 and showPath=1',
+  testWidgets(
+      'route icon deep-links to branch detail with step=0 and showPath=1',
       (tester) async {
     await tester.pumpWidget(_buildHarness());
     await tester.pumpAndSettle();
@@ -161,7 +161,8 @@ void main() {
     await tester.tap(deepLinkIconFinder);
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('/skill-branch/scholar?step=0&showPath=1'), findsOneWidget);
+    expect(find.textContaining('/skill-branch/scholar?step=0&showPath=1'),
+        findsOneWidget);
     expect(find.textContaining('step=0 showPath=1'), findsOneWidget);
   });
 
@@ -179,7 +180,8 @@ void main() {
     await tester.tap(find.text('Start Auto-Path'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('/skill-branch/scholar?step=0&showPath=0'), findsOneWidget);
+    expect(find.textContaining('/skill-branch/scholar?step=0&showPath=0'),
+        findsOneWidget);
     expect(find.textContaining('step=0 showPath=0'), findsOneWidget);
   });
 }

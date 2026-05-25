@@ -103,6 +103,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
   Future<void> _loadSpinData() async {
     try {
+      await _checkAndResetDailyCounts();
       final results = await Future.wait([
         ref.read(spinStatisticsProvider.future),
         AppSettings.getSpinRewardPoints(),
@@ -360,6 +361,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       leading: IconButton(
         onPressed: () async {
           await _trackUserAction('back_button_pressed');
+          if (!mounted) return;
           if (context.canPop()) {
             context.pop();
           } else {
@@ -372,6 +374,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         IconButton(
           onPressed: () async {
             await _trackUserAction('settings_button_pressed');
+            if (!mounted) return;
             _showSettingsDialog(theme);
           },
           icon: const Icon(Icons.settings, color: Colors.white),
@@ -557,43 +560,11 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 
   Widget _buildSpinPointsSlider(ThemeData theme) {
-    final List<RewardStep> rewardSteps = [
-      RewardStep(
-        pointValue: 5,
-        icon: Icons.inventory_2,
-        backgroundColor: Colors.brown,
-        quantity: 1,
-        description: 'Mystery Box',
-      ),
-      RewardStep(
-        pointValue: 20,
-        icon: Icons.card_giftcard,
-        backgroundColor: Colors.orange,
-        quantity: 1,
-        description: 'Gift Card',
-      ),
-      RewardStep(
-        pointValue: 50,
-        icon: Icons.monetization_on,
-        backgroundColor: Colors.amber,
-        quantity: 300,
-        description: 'Coins',
-      ),
-      RewardStep(
-        pointValue: 100,
-        icon: Icons.card_giftcard,
-        backgroundColor: Colors.orange,
-        quantity: 2,
-        description: 'Premium Gift',
-      ),
-      RewardStep(
-        pointValue: 200,
-        icon: Icons.monetization_on,
-        backgroundColor: Colors.amber,
-        quantity: 500,
-        description: 'Bonus Coins',
-      ),
-    ];
+    final rewardSteps = ref.watch(spinRewardStepsProvider).maybeWhen(
+          data: (steps) => steps,
+          orElse: () => const <RewardStep>[],
+        );
+    final maxPoints = rewardSteps.isEmpty ? 200 : rewardSteps.last.pointValue;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -653,7 +624,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  '${_currentSpinSliderValue.toInt()}/200',
+                  '${_currentSpinSliderValue.toInt()}/${maxPoints.toInt()}',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -663,28 +634,35 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
             ),
           ),
           const SizedBox(height: 20),
-          RewardStepperSlider(
-            value: _currentSpinSliderValue,
-            onChanged: (value) async {
-              final oldValue = _currentSpinSliderValue;
-              setState(() {
-                _currentSpinSliderValue = value;
-              });
+          if (rewardSteps.isEmpty)
+            const SizedBox(
+              height: 120,
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else
+            RewardStepperSlider(
+              value: _currentSpinSliderValue,
+              onChanged: (value) async {
+                final oldValue = _currentSpinSliderValue;
+                setState(() {
+                  _currentSpinSliderValue = value;
+                });
 
-              // Save to AppSettings
-              await AppSettings.setSpinRewardPoints(value);
+                // Save to AppSettings
+                await AppSettings.setSpinRewardPoints(value);
 
-              // Track slider interaction
-              await _trackUserAction('reward_slider_changed', additionalData: {
-                'old_value': oldValue,
-                'new_value': value,
-                'difference': value - oldValue,
-              });
-            },
-            rewardSteps: rewardSteps,
-            progressColor: Colors.orange,
-            height: 120,
-          ),
+                // Track slider interaction
+                await _trackUserAction('reward_slider_changed',
+                    additionalData: {
+                      'old_value': oldValue,
+                      'new_value': value,
+                      'difference': value - oldValue,
+                    });
+              },
+              rewardSteps: rewardSteps,
+              progressColor: Colors.orange,
+              height: 120,
+            ),
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -695,7 +673,9 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
               border: Border.all(color: Colors.grey[200]!),
             ),
             child: Text(
-              _getCurrentRewardDescription(rewardSteps),
+              rewardSteps.isEmpty
+                  ? 'Loading reward steps...'
+                  : _getCurrentRewardDescription(rewardSteps),
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey[700],
@@ -879,6 +859,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       'reward_points': _currentSpinSliderValue,
     });
 
+    if (!mounted) return;
     final result = await context.push('/spin-earn/wheel');
 
     await _trackUserAction('returned_from_wheel', additionalData: {

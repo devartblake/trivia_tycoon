@@ -164,10 +164,8 @@ class DetailedPresenceCard extends StatelessWidget {
               ),
             ],
           ),
-          if (activity.gameType != null) ...[
-            const SizedBox(height: 4),
-            Text('Game: ${activity.gameType}'),
-          ],
+          const SizedBox(height: 4),
+          Text('Game: ${activity.gameType}'),
           if (activity.gameMode != null) ...[
             const SizedBox(height: 4),
             Text('Mode: ${activity.gameMode}'),

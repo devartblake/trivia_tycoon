@@ -107,7 +107,7 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
                   value: _model.isActive,
                   onChanged: (v) =>
                       setState(() => _model = _model.copyWith(isActive: v)),
-                  activeColor: const Color(0xFF10B981),
+                  activeThumbColor: const Color(0xFF10B981),
                 ),
               ],
             ),
@@ -154,8 +154,8 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
 
             StockIntervalSelector(
               value: _model.interval,
-              onChanged: (v) =>
-                  setState(() => _model = _model.copyWith(interval: v ?? 'daily')),
+              onChanged: (v) => setState(
+                  () => _model = _model.copyWith(interval: v ?? 'daily')),
             ),
             const SizedBox(height: 16),
 
@@ -170,7 +170,7 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
                         value: _model.requiresAd,
                         onChanged: (v) => setState(
                             () => _model = _model.copyWith(requiresAd: v)),
-                        activeColor: const Color(0xFF6366F1),
+                        activeThumbColor: const Color(0xFF6366F1),
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       const SizedBox(width: 4),
@@ -201,8 +201,8 @@ class _RewardLimitEditorState extends State<RewardLimitEditor> {
             if (_error != null) ...[
               const SizedBox(height: 8),
               Text(_error!,
-                  style: const TextStyle(
-                      color: Color(0xFFEF4444), fontSize: 12)),
+                  style:
+                      const TextStyle(color: Color(0xFFEF4444), fontSize: 12)),
             ],
 
             const SizedBox(height: 16),

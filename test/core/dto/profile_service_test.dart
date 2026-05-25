@@ -8,33 +8,6 @@ import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 // Helpers
 // ---------------------------------------------------------------------------
 
-/// Runs [body] inside a ProviderScope with a real [Ref], so ProfileService
-/// (which accepts a Ref) can be constructed without mocking.
-///
-/// Returns the result of [body].
-Future<T> _withRef<T>(
-  Future<T> Function(Ref ref, XPService xpService) body, {
-  int startingXP = 0,
-}) async {
-  final xpService = XPService(startingPlayerXP: startingXP);
-  late T result;
-
-  final captureProvider = Provider<void>((ref) {
-    // schedule the body after the provider is mounted
-    Future.microtask(() async {
-      result = await body(ref, xpService);
-    });
-  });
-
-  final container = ProviderContainer(
-    overrides: [xpServiceProvider.overrideWithValue(xpService)],
-  );
-  addTearDown(container.dispose);
-  container.read(captureProvider); // triggers mounting
-  await Future.delayed(Duration.zero); // let microtask run
-  return result;
-}
-
 /// Simpler sync helper: creates a ProfileService using a ProviderContainer-backed
 /// approach for tests that only call synchronous methods.
 ProfileService _makeSyncService({

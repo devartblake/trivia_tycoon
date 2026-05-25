@@ -4,7 +4,8 @@ class StockPolicyFormModel {
   final String sku;
   final String itemTitle;
   final String itemType;
-  final String policyType; // unlimited | per_user | one_time_purchase | time_limited | event_limited
+  final String
+      policyType; // unlimited | per_user | one_time_purchase | time_limited | event_limited
   final int? maxQuantity;
   final String? resetInterval; // hourly | daily | weekly | seasonal | none
   final bool isOneTimePurchase;
@@ -56,12 +57,14 @@ class StockPolicyFormModel {
       itemType: itemType ?? this.itemType,
       policyType: policyType ?? this.policyType,
       maxQuantity: clearMaxQuantity ? null : (maxQuantity ?? this.maxQuantity),
-      resetInterval: clearResetInterval ? null : (resetInterval ?? this.resetInterval),
+      resetInterval:
+          clearResetInterval ? null : (resetInterval ?? this.resetInterval),
       isOneTimePurchase: isOneTimePurchase ?? this.isOneTimePurchase,
       isUnlimited: isUnlimited ?? this.isUnlimited,
       expiresAt: clearExpiresAt ? null : (expiresAt ?? this.expiresAt),
       requiresPremium: requiresPremium ?? this.requiresPremium,
-      minimumLevel: clearMinimumLevel ? null : (minimumLevel ?? this.minimumLevel),
+      minimumLevel:
+          clearMinimumLevel ? null : (minimumLevel ?? this.minimumLevel),
       isVisible: isVisible ?? this.isVisible,
       isPurchasable: isPurchasable ?? this.isPurchasable,
     );
@@ -89,7 +92,8 @@ class StockPolicyFormModel {
       requiresPremium: json['requiresPremium'] as bool? ?? false,
       minimumLevel: (json['minimumLevel'] as num?)?.toInt(),
       isVisible: json['isVisible'] as bool? ?? true,
-      isPurchasable: json['isActive'] as bool? ?? json['isPurchasable'] as bool? ?? true,
+      isPurchasable:
+          json['isActive'] as bool? ?? json['isPurchasable'] as bool? ?? true,
     );
   }
 
@@ -159,7 +163,8 @@ class RewardLimitFormModel {
       interval: interval ?? this.interval,
       coinPayout: coinPayout ?? this.coinPayout,
       requiresAd: requiresAd ?? this.requiresAd,
-      requiredStreak: clearStreak ? null : (requiredStreak ?? this.requiredStreak),
+      requiredStreak:
+          clearStreak ? null : (requiredStreak ?? this.requiredStreak),
       isActive: isActive ?? this.isActive,
     );
   }
@@ -167,7 +172,8 @@ class RewardLimitFormModel {
   factory RewardLimitFormModel.fromJson(Map<String, dynamic> json) {
     return RewardLimitFormModel(
       rewardId: (json['rewardId'] ?? json['id'] ?? '').toString(),
-      maxClaimsPerInterval: (json['maxClaimsPerInterval'] as num?)?.toInt() ?? 1,
+      maxClaimsPerInterval:
+          (json['maxClaimsPerInterval'] as num?)?.toInt() ?? 1,
       interval: (json['interval'] ?? 'daily').toString(),
       coinPayout: (json['coinPayout'] as num?)?.toInt() ?? 0,
       requiresAd: json['requiresAd'] as bool? ?? false,

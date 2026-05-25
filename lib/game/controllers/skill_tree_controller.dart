@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,60 +104,60 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
     // Each node's (q, r) axial coordinate on a pointy-top hex grid.
     // Ring-2 has exactly 12 cells — one per branch root.
     const nodeAxial = <String, Coordinates>{
-      'master_hub':        Coordinates(0,  0),
+      'master_hub': Coordinates(0, 0),
       // Scholar → NE (1,-1)
-      'sch_root':          Coordinates(2, -2),
-      'sch_faster_hint':   Coordinates(3, -3),
-      'sch_double_hint':   Coordinates(4, -4),
-      'sch_sage':          Coordinates(5, -5),
+      'sch_root': Coordinates(2, -2),
+      'sch_faster_hint': Coordinates(3, -3),
+      'sch_double_hint': Coordinates(4, -4),
+      'sch_sage': Coordinates(5, -5),
       // Strategist → E (1,0)
-      'str_root':          Coordinates(2, -1),
-      'str_combo':         Coordinates(3, -1),
+      'str_root': Coordinates(2, -1),
+      'str_combo': Coordinates(3, -1),
       'lifeline_cooldown': Coordinates(4, -1),
-      'str_master':        Coordinates(5, -1),
+      'str_master': Coordinates(5, -1),
       // Combat → E (1,0)
-      'combat_root':       Coordinates(2,  0),
-      'combat_eraser':     Coordinates(3,  0),
-      'combat_glitch':     Coordinates(4,  0),
+      'combat_root': Coordinates(2, 0),
+      'combat_eraser': Coordinates(3, 0),
+      'combat_glitch': Coordinates(4, 0),
       // XP → SE (0,1)
-      'xp_root':           Coordinates(1,  1),
-      'xp_boost_2':        Coordinates(1,  2),
-      'xp_burst':          Coordinates(1,  3),
-      'xp_grandmaster':    Coordinates(1,  4),
+      'xp_root': Coordinates(1, 1),
+      'xp_boost_2': Coordinates(1, 2),
+      'xp_burst': Coordinates(1, 3),
+      'xp_grandmaster': Coordinates(1, 4),
       // Timer → SE (0,1)
-      'timer_root':        Coordinates(0,  2),
-      'timer_freeze':      Coordinates(0,  3),
-      'timer_power_play':  Coordinates(0,  4),
+      'timer_root': Coordinates(0, 2),
+      'timer_freeze': Coordinates(0, 3),
+      'timer_power_play': Coordinates(0, 4),
       // Combo → SW (-1,1)
-      'combo_root':        Coordinates(-1,  2),
-      'combo_booster':     Coordinates(-2,  3),
-      'combo_gift':        Coordinates(-3,  4),
+      'combo_root': Coordinates(-1, 2),
+      'combo_booster': Coordinates(-2, 3),
+      'combo_gift': Coordinates(-3, 4),
       // Risk → SW (-1,1)
-      'risk_root':         Coordinates(-2,  2),
-      'risk_multiplier':   Coordinates(-3,  3),
-      'risk_supersonic':   Coordinates(-4,  4),
+      'risk_root': Coordinates(-2, 2),
+      'risk_multiplier': Coordinates(-3, 3),
+      'risk_supersonic': Coordinates(-4, 4),
       // Luck → W (-1,0)
-      'luck_root':         Coordinates(-2,  1),
-      'luck_immunity':     Coordinates(-3,  1),
-      'luck_streak_saver': Coordinates(-4,  1),
+      'luck_root': Coordinates(-2, 1),
+      'luck_immunity': Coordinates(-3, 1),
+      'luck_streak_saver': Coordinates(-4, 1),
       // Stealth → W (-1,0)
-      'stealth_root':      Coordinates(-2,  0),
-      'stealth_phantom':   Coordinates(-3,  0),
-      'stealth_decoy':     Coordinates(-4,  0),
+      'stealth_root': Coordinates(-2, 0),
+      'stealth_phantom': Coordinates(-3, 0),
+      'stealth_decoy': Coordinates(-4, 0),
       // Knowledge → NW (0,-1)
-      'know_root':         Coordinates(-1, -1),
-      'know_specialist':   Coordinates(-1, -2),
-      'know_polymath':     Coordinates(-1, -3),
+      'know_root': Coordinates(-1, -1),
+      'know_specialist': Coordinates(-1, -2),
+      'know_polymath': Coordinates(-1, -3),
       // Wildcard → NW (0,-1)
-      'wild_root':         Coordinates(0, -2),
-      'wild_chaos':        Coordinates(0, -3),
+      'wild_root': Coordinates(0, -2),
+      'wild_chaos': Coordinates(0, -3),
       // General → NE (1,-1)
-      'gen_root':          Coordinates(1, -2),
-      'gen_versatile':     Coordinates(2, -3),
+      'gen_root': Coordinates(1, -2),
+      'gen_versatile': Coordinates(2, -3),
       // Elite (cross-branch child of sch_sage + str_master) → continues NE
-      'elite_root':        Coordinates(6, -6),
-      'elite_scholar':     Coordinates(7, -7),
-      'elite_strategist':  Coordinates(7, -6),
+      'elite_root': Coordinates(6, -6),
+      'elite_scholar': Coordinates(7, -7),
+      'elite_strategist': Coordinates(7, -6),
     };
 
     const double hexSize = 100.0;

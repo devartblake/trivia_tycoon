@@ -241,10 +241,10 @@ class GroupChatService extends ChangeNotifier {
   Timer? _presenceUpdateTimer;
 
   // Settings
-  int _maxGroupSize = 50;
-  int _maxGroupsPerUser = 20;
-  bool _allowPublicGroups = true;
-  Duration _inactiveGroupCleanup = const Duration(days: 30);
+  final int _maxGroupSize = 50;
+  final int _maxGroupsPerUser = 20;
+  final bool _allowPublicGroups = true;
+  final Duration _inactiveGroupCleanup = const Duration(days: 30);
 
   // Getters
   Map<String, GroupChat> get allGroups => Map.unmodifiable(_groups);
@@ -256,6 +256,7 @@ class GroupChatService extends ChangeNotifier {
     LogManager.debug('GroupChatService initialized');
   }
 
+  @override
   void dispose() {
     _presenceUpdateTimer?.cancel();
     for (final controller in _groupStreams.values) {

@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:flutter/material.dart';
 
 /// Enhanced PrizeEntry with additional metadata and validation
@@ -501,10 +501,10 @@ class WheelSegment {
 
     final requirements = <String>[];
     if (requiredStreak > 0) {
-      requirements.add('${requiredStreak}+ streak');
+      requirements.add('$requiredStreak+ streak');
     }
     if (requiredCurrency > 0) {
-      requirements.add('${requiredCurrency}💎');
+      requirements.add('$requiredCurrency💎');
     }
 
     return requirements.isEmpty ? null : requirements.join(' & ');
@@ -516,7 +516,7 @@ class WheelSegment {
         'label': label,
         'rewardType': rewardType,
         'reward': reward,
-        'color': '#${color.value.toRadixString(16).padLeft(8, '0')}',
+        'color': '#${color.toARGB32().toRadixString(16).padLeft(8, '0')}',
         'imagePath': imagePath,
         'isExclusive': isExclusive,
         'requiredStreak': requiredStreak,

@@ -24,6 +24,7 @@ class CustomizationService extends ChangeNotifier {
     LogManager.debug('CustomizationService initialized');
   }
 
+  @override
   void dispose() {
     for (final controller in _themeStreams.values) {
       controller.close();

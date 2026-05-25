@@ -167,9 +167,8 @@ class _SkillNodePainter {
     );
 
     // Abbreviated title — small, muted white.
-    final abbrev = node.title.length > 8
-        ? '${node.title.substring(0, 7)}…'
-        : node.title;
+    final abbrev =
+        node.title.length > 8 ? '${node.title.substring(0, 7)}…' : node.title;
     final titlePainter = TextPainter(
       text: TextSpan(
         text: abbrev,
@@ -183,8 +182,7 @@ class _SkillNodePainter {
     )..layout(maxWidth: radius * 2);
     titlePainter.paint(
       canvas,
-      Offset(center.dx - titlePainter.width / 2,
-          center.dy + radius * 0.22),
+      Offset(center.dx - titlePainter.width / 2, center.dy + radius * 0.22),
     );
   }
 }

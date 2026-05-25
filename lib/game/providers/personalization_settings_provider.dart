@@ -36,8 +36,7 @@ class PersonalizationSettingsNotifier
   void setReduceSuggestions(bool value) =>
       state = state.copyWith(reduceSuggestions: value);
 
-  void setShowReasons(bool value) =>
-      state = state.copyWith(showReasons: value);
+  void setShowReasons(bool value) => state = state.copyWith(showReasons: value);
 
   void setAllowPersonalizedNotifications(bool value) =>
       state = state.copyWith(allowPersonalizedNotifications: value);

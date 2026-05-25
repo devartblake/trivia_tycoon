@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/providers/multiplayer_quiz_providers.dart';
@@ -175,7 +175,7 @@ class _MultiplayerResultsScreenState
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
         context.go('/multiplayer');
       },
@@ -479,7 +479,7 @@ class _MultiplayerResultsScreenState
               Expanded(
                 child: _buildStatItem(
                   'Questions',
-                  '${correctAnswers}/${quizState.totalQuestions}',
+                  '$correctAnswers/${quizState.totalQuestions}',
                   Icons.quiz,
                   Colors.blue,
                 ),

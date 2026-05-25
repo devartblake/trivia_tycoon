@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/ui_components/color_picker/core/color_picker_theme.dart';
@@ -29,7 +29,6 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
   late Animation<double> _fadeAnimation;
 
   List<Color> savedColors = [];
-  String _fpsCategory = "High";
   ColorPickerTheme _colorPickerTheme = ColorPickerTheme.light;
   int _selectedTabIndex = 0;
 
@@ -49,13 +48,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
       CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic),
     );
 
-    _performanceTracker.startTracking(onUpdated: () {
-      if (mounted) {
-        setState(() {
-          _fpsCategory = _performanceTracker.getPerformanceCategory();
-        });
-      }
-    });
+    _performanceTracker.startTracking(onUpdated: () {});
 
     _loadSavedColors();
     _loadTheme();
@@ -351,7 +344,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                             setState(() {
                               _controller.updateColor(color);
                               ColorLogManager.logColorSelection(
-                                color.value.toRadixString(16).toUpperCase(),
+                                color.toARGB32().toRadixString(16).toUpperCase(),
                               );
                             });
                           },
@@ -461,7 +454,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                                     setState(() {
                                       _controller.updateColor(color);
                                       ColorLogManager.logColorSelection(
-                                        color.value
+                                        color.toARGB32()
                                             .toRadixString(16)
                                             .toUpperCase(),
                                       );
@@ -476,7 +469,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                                     setState(() {
                                       _controller.updateColor(color);
                                       ColorLogManager.logColorSelection(
-                                        color.value
+                                        color.toARGB32()
                                             .toRadixString(16)
                                             .toUpperCase(),
                                       );

@@ -312,7 +312,7 @@ class _EnhancedRewardSectionState extends State<EnhancedRewardSection>
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

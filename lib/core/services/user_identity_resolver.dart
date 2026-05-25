@@ -150,7 +150,7 @@ class UserIdentityResolver {
         ? seedEmail.toLowerCase()
         : seedNowIso();
     final generatedLocalUserId =
-        'local_${const Uuid().v5(Uuid.NAMESPACE_URL, seed)}';
+        'local_${const Uuid().v5(Namespace.url.value, seed)}';
 
     await setSecureSecret(_generatedLocalUserIdKey, generatedLocalUserId);
     await saveProfileUserId(generatedLocalUserId);

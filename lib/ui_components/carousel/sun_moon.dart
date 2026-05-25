@@ -2,7 +2,6 @@ import 'dart:math';
 
 import '../../core/constants/image_strings.dart';
 import 'package:flutter/widgets.dart';
-import '../../../main.dart';
 import '../../screens/app_shell/app_shell.dart';
 
 class SunAndMoon extends StatefulWidget {

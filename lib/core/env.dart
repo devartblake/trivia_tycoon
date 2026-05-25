@@ -17,6 +17,10 @@ class EnvConfig {
   static String? _presenceHubUrl;
   static String? _notifyHubUrl;
   static String? _appRedirectBaseUrl;
+  static String? _apiHealthUrl;
+  static bool _cryptoSurfacesEnabled = true;
+  static bool _cryptoWritesEnabled = true;
+  static Set<String> _enabledCryptoNetworks = const {'solana', 'xrp'};
 
   /// Getter for the backend API Base URL.
   static String get apiBaseUrl {
@@ -52,6 +56,24 @@ class EnvConfig {
   /// Optional frontend/app base URL for payment return routing.
   static String? get appRedirectBaseUrl => _appRedirectBaseUrl;
 
+  /// Public backend health endpoint used by startup readiness checks.
+  static String get apiHealthUrl {
+    assert(_apiHealthUrl != null, 'API_HEALTH_URL is not loaded from .env');
+    return _apiHealthUrl!;
+  }
+
+  /// Enables player-facing crypto wallet surfaces.
+  static bool get cryptoSurfacesEnabled => _cryptoSurfacesEnabled;
+
+  /// Enables mutating crypto actions such as link wallet, withdraw, stake,
+  /// unstake, and prize-pool funding. Read-only crypto surfaces may remain
+  /// visible while writes are disabled.
+  static bool get cryptoWritesEnabled => _cryptoWritesEnabled;
+
+  /// Network keys enabled for frontend selection.
+  static Set<String> get enabledCryptoNetworks =>
+      Set.unmodifiable(_enabledCryptoNetworks);
+
   static String _joinWsPath(String baseUrl, String suffixPath) {
     final baseUri = Uri.parse(baseUrl);
     final baseSegments =
@@ -71,6 +93,29 @@ class EnvConfig {
     return baseUri
         .replace(pathSegments: mergedSegments, fragment: '')
         .toString();
+  }
+
+  static String _resolveApiHealthUrl({
+    required String apiBaseUrl,
+    String? configuredHealthUrl,
+    String? configuredHealthPath,
+  }) {
+    final healthUrl = configuredHealthUrl?.trim();
+    if (healthUrl != null && healthUrl.isNotEmpty) {
+      return _normalizeApiBaseUrlForRuntime(healthUrl);
+    }
+
+    final healthPath = configuredHealthPath?.trim();
+    final path = healthPath == null || healthPath.isEmpty
+        ? '/healthz'
+        : healthPath;
+
+    final parsedPath = Uri.tryParse(path);
+    if (parsedPath != null && parsedPath.hasScheme) {
+      return _normalizeApiBaseUrlForRuntime(path);
+    }
+
+    return _joinWsPath(apiBaseUrl, path);
   }
 
   static String _normalizeApiBaseUrlForRuntime(String rawUrl) {
@@ -131,19 +176,39 @@ class EnvConfig {
   /// that rely on these variables are created.
   static Future<void> load() async {
     try {
-      await dotenv.load(fileName: ".env");
+      const envFile =
+          String.fromEnvironment('ENV_FILE', defaultValue: '.env.example');
+      await dotenv.load(fileName: envFile);
 
       // Load variables from the environment
-      final rawApiBaseUrl =
-          dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
+      const dartDefinedApiBaseUrl = String.fromEnvironment('API_BASE_URL');
+      const dartDefinedApiHealthUrl = String.fromEnvironment('API_HEALTH_URL');
+      const dartDefinedApiHealthPath =
+          String.fromEnvironment('API_HEALTH_PATH');
+      const dartDefinedApiWsBaseUrl = String.fromEnvironment('API_WS_BASE_URL');
+
+      final rawApiBaseUrl = dartDefinedApiBaseUrl.isNotEmpty
+          ? dartDefinedApiBaseUrl
+          : dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
       _apiBaseUrl = _normalizeApiBaseUrlForRuntime(rawApiBaseUrl);
+      _apiHealthUrl = _resolveApiHealthUrl(
+        apiBaseUrl: apiBaseUrl,
+        configuredHealthUrl: dartDefinedApiHealthUrl.isNotEmpty
+            ? dartDefinedApiHealthUrl
+            : dotenv.env['API_HEALTH_URL'],
+        configuredHealthPath: dartDefinedApiHealthPath.isNotEmpty
+            ? dartDefinedApiHealthPath
+            : dotenv.env['API_HEALTH_PATH'],
+      );
 
       // Derive WebSocket URL from HTTP URL
       // Convert http:// to ws:// and https:// to wss://
-      _apiWsBaseUrl =
-          '${apiBaseUrl.replaceFirst('http://', 'ws://').replaceFirst('https://', 'wss://')}/ws';
+      _apiWsBaseUrl = dartDefinedApiWsBaseUrl.isNotEmpty
+          ? _normalizeApiBaseUrlForRuntime(dartDefinedApiWsBaseUrl)
+          : '${apiBaseUrl.replaceFirst('http://', 'ws://').replaceFirst('https://', 'wss://')}/ws';
 
       LogManager.debug('[EnvConfig] API Base: $apiBaseUrl');
+      LogManager.debug('[EnvConfig] API Health: $apiHealthUrl');
       LogManager.debug('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
       _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
@@ -159,10 +224,23 @@ class EnvConfig {
               ? null
               : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
       _appRedirectBaseUrl = _resolveAppRedirectBaseUrl();
+      _cryptoSurfacesEnabled = _parseBool(
+        dotenv.env['CRYPTO_SURFACES_ENABLED'],
+        fallback: true,
+      );
+      _cryptoWritesEnabled = _parseBool(
+        dotenv.env['CRYPTO_WRITES_ENABLED'],
+        fallback: true,
+      );
+      _enabledCryptoNetworks = _parseCsvSet(
+        dotenv.env['CRYPTO_ENABLED_NETWORKS'],
+        fallback: const {'solana', 'xrp'},
+      );
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||
           _apiWsBaseUrl == null ||
+          _apiHealthUrl == null ||
           _matchHubUrl == null ||
           _presenceHubUrl == null ||
           _notifyHubUrl == null) {
@@ -171,6 +249,7 @@ class EnvConfig {
         ERROR: One or more environment variables not found in .env file.
         Please ensure your .env file is in the root of your project.
         API_BASE_URL: $_apiBaseUrl
+        API_HEALTH_URL: $_apiHealthUrl
         API_WS_BASE_URL: $_apiWsBaseUrl
         API_MATCH_HUB_URL: $_matchHubUrl
         API_PRESENCE_HUB_URL: $_presenceHubUrl
@@ -208,5 +287,36 @@ class EnvConfig {
     }
 
     return null;
+  }
+
+  static bool _parseBool(String? value, {required bool fallback}) {
+    if (value == null || value.trim().isEmpty) return fallback;
+    switch (value.trim().toLowerCase()) {
+      case '1':
+      case 'true':
+      case 'yes':
+      case 'on':
+        return true;
+      case '0':
+      case 'false':
+      case 'no':
+      case 'off':
+        return false;
+      default:
+        return fallback;
+    }
+  }
+
+  static Set<String> _parseCsvSet(
+    String? value, {
+    required Set<String> fallback,
+  }) {
+    if (value == null || value.trim().isEmpty) return fallback;
+    final parsed = value
+        .split(',')
+        .map((item) => item.trim().toLowerCase())
+        .where((item) => item.isNotEmpty)
+        .toSet();
+    return parsed.isEmpty ? fallback : parsed;
   }
 }

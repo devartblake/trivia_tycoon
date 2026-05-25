@@ -152,7 +152,7 @@ class _ColorPresetSelectorState extends State<ColorPresetSelector>
                               splashColor: Colors.white.withValues(alpha: 0.3),
                               highlightColor:
                                   Colors.white.withValues(alpha: 0.1),
-                              child: Container(
+                              child: SizedBox(
                                 width: 64,
                                 height: 64,
                               ),

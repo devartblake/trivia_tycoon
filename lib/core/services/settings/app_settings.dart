@@ -635,7 +635,7 @@ class AppSettings {
   /// Saves the primary color as an integer.
   static Future<void> setPrimaryColor(Color color) async {
     final box = await Hive.openBox(_boxName);
-    await box.put('primary_color', color.value);
+    await box.put('primary_color', color.toARGB32());
   }
 
   /// Retrieves the primary color.
@@ -667,8 +667,8 @@ class AppSettings {
     final box = await Hive.openBox('theme_presets');
     await box.put(preset.themeName, {
       'name': preset.themeName,
-      'primaryColor': preset.primaryColor.value,
-      'secondaryColor': preset.secondaryColor.value,
+      'primaryColor': preset.primaryColor.toARGB32(),
+      'secondaryColor': preset.secondaryColor.toARGB32(),
       'brightness': preset.brightness == Brightness.dark ? 'dark' : 'light',
     });
   }
@@ -704,8 +704,8 @@ class AppSettings {
     final encoded = updated
         .map((t) => {
               'name': t.themeName,
-              'primary': t.primaryColor.value,
-              'secondary': t.secondaryColor.value,
+              'primary': t.primaryColor.toARGB32(),
+              'secondary': t.secondaryColor.toARGB32(),
               'brightness': t.brightness == Brightness.dark ? 'dark' : 'light',
             })
         .toList();
@@ -720,8 +720,8 @@ class AppSettings {
     final encoded = updated
         .map((t) => {
               'name': t.themeName,
-              'primary': t.primaryColor.value,
-              'secondary': t.secondaryColor.value,
+              'primary': t.primaryColor.toARGB32(),
+              'secondary': t.secondaryColor.toARGB32(),
               'brightness': t.brightness == Brightness.dark ? 'dark' : 'light',
             })
         .toList();
@@ -881,7 +881,7 @@ class AppSettings {
   /// Saves a Color value as int
   static Future<void> setColor(String key, Color color) async {
     final box = await Hive.openBox('settings');
-    await box.put(key, color.value);
+    await box.put(key, color.toARGB32());
   }
 
   /// Retrieves a bool value
@@ -910,13 +910,13 @@ class AppSettings {
     return v is String ? v : null;
   }
 
-  /// Save a List<String> as a single comma-separated string
+  /// Save a List<&ltString&gt> as a single comma-separated string
   static Future<void> setStringList(String key, List<String> values) async {
     final box = await Hive.openBox('preferences');
     await box.put(key, values.join(','));
   }
 
-  /// Retrieve a List<String> by splitting a comma-separated string
+  /// Retrieve a List<&ltString&gt> by splitting a comma-separated string
   static Future<List<String>?> getStringList(String key) async {
     final box = await Hive.openBox('preferences');
     final stored = box.get(key);

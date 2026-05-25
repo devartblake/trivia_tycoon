@@ -69,8 +69,8 @@ class _AdminSecurityAuditScreenState
           if (_statusFilter != null) 'status': _statusFilter!,
         },
       );
-      final envelope = api.parsePageEnvelope<Map<String, dynamic>>(
-          response, (j) => j);
+      final envelope =
+          api.parsePageEnvelope<Map<String, dynamic>>(response, (j) => j);
       if (!mounted) return;
       setState(() {
         _events = envelope.items;
@@ -123,8 +123,8 @@ class _AdminSecurityAuditScreenState
             child: _events.isEmpty && !_isLoading
                 ? _EmptyState(hasFilters: _hasFilters)
                 : ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8, horizontal: 16),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     itemCount: _events.length,
                     itemBuilder: (context, i) => _EventTile(
                       event: _events[i],
@@ -248,12 +248,10 @@ class _EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final code = (event['errorCode'] ??
-            event['code'] ??
-            event['status'] ??
-            'UNKNOWN')
-        .toString()
-        .toUpperCase();
+    final code =
+        (event['errorCode'] ?? event['code'] ?? event['status'] ?? 'UNKNOWN')
+            .toString()
+            .toUpperCase();
     final path = (event['path'] ?? event['endpoint'] ?? '-').toString();
     final rawTs = (event['occurredAtUtc'] ??
             event['timestamp'] ??
@@ -262,11 +260,9 @@ class _EventTile extends StatelessWidget {
             '')
         .toString();
     final ts = DateTime.tryParse(rawTs)?.toLocal();
-    final actor = (event['actorId'] ??
-            event['userId'] ??
-            event['playerId'] ??
-            '-')
-        .toString();
+    final actor =
+        (event['actorId'] ?? event['userId'] ?? event['playerId'] ?? '-')
+            .toString();
 
     final codeColor = _codeColor(code);
 
@@ -324,8 +320,8 @@ class _EventTile extends StatelessWidget {
               if (ts != null)
                 Text(
                   dateFormat.format(ts),
-                  style: const TextStyle(
-                      fontSize: 11, color: Color(0xFF9CA3AF)),
+                  style:
+                      const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
                 ),
             ],
           ),

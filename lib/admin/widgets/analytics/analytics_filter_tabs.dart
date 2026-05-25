@@ -87,22 +87,22 @@ class AnalyticsFilterTabs extends ConsumerWidget {
                 .read(userTypeFilterProvider.notifier)
                 .state = newSelection.first,
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return const Color(0xFF6366F1);
                 }
                 return const Color(0xFFF8FAFC);
               }),
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+              foregroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return const Color(0xFF6B7280);
               }),
-              side: MaterialStateProperty.all(
+              side: WidgetStateProperty.all(
                 BorderSide(color: Colors.grey[300]!),
               ),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
             ),
@@ -160,22 +160,22 @@ class AnalyticsFilterTabs extends ConsumerWidget {
                 .read(timeframeFilterProvider.notifier)
                 .state = newSelection.first,
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+              backgroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return const Color(0xFF10B981);
                 }
                 return const Color(0xFFF8FAFC);
               }),
-              foregroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+              foregroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return const Color(0xFF6B7280);
               }),
-              side: MaterialStateProperty.all(
+              side: WidgetStateProperty.all(
                 BorderSide(color: Colors.grey[300]!),
               ),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
             ),

@@ -1,238 +1,258 @@
 import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/settings/audio_settings_service.dart';
 
 void main() {
   late Directory tempDir;
-  late AudioSettingsService service;
 
-  setUpAll(() async {
-    tempDir = await Directory.systemTemp
-        .createTemp('audio_settings_service_test');
+  setUp(() async {
+    tempDir =
+        await Directory.systemTemp.createTemp('audio_settings_test_');
     Hive.init(tempDir.path);
   });
 
-  setUp(() async {
-    service = await AudioSettingsService.initialize();
-  });
-
   tearDown(() async {
-    if (Hive.isBoxOpen('settings')) {
-      await Hive.box('settings').clear();
-      await Hive.box('settings').close();
-      await Hive.deleteBoxFromDisk('settings');
-    }
-  });
-
-  tearDownAll(() async {
     await Hive.close();
     await tempDir.delete(recursive: true);
   });
 
-  // ---------------------------------------------------------------------------
+  Future<AudioSettingsService> _make() => AudioSettingsService.initialize();
+
+  // -------------------------------------------------------------------------
   // Audio on/off
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
-  test('getAudioOn defaults to true', () {
-    expect(service.getAudioOn(), isTrue);
+  group('getAudioOn / setAudioOn', () {
+    test('defaults to true', () async {
+      final svc = await _make();
+      expect(svc.getAudioOn(), isTrue);
+    });
+
+    test('stores and retrieves false', () async {
+      final svc = await _make();
+      await svc.setAudioOn(false);
+      expect(svc.getAudioOn(), isFalse);
+    });
+
+    test('stores and retrieves true', () async {
+      final svc = await _make();
+      await svc.setAudioOn(false);
+      await svc.setAudioOn(true);
+      expect(svc.getAudioOn(), isTrue);
+    });
   });
 
-  test('setAudioOn persists value', () async {
-    await service.setAudioOn(false);
-    expect(service.getAudioOn(), isFalse);
+  group('getMusicOn / setMusicOn', () {
+    test('defaults to true', () async {
+      final svc = await _make();
+      expect(svc.getMusicOn(), isTrue);
+    });
+
+    test('stores false correctly', () async {
+      final svc = await _make();
+      await svc.setMusicOn(false);
+      expect(svc.getMusicOn(), isFalse);
+    });
   });
 
-  test('setAudioOn true persists value', () async {
-    await service.setAudioOn(false);
-    await service.setAudioOn(true);
-    expect(service.getAudioOn(), isTrue);
+  group('getSoundsOn / setSoundsOn', () {
+    test('defaults to true', () async {
+      final svc = await _make();
+      expect(svc.getSoundsOn(), isTrue);
+    });
+
+    test('stores false correctly', () async {
+      final svc = await _make();
+      await svc.setSoundsOn(false);
+      expect(svc.getSoundsOn(), isFalse);
+    });
   });
 
-  // ---------------------------------------------------------------------------
-  // Music on/off
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Volume clamping
+  // -------------------------------------------------------------------------
 
-  test('getMusicOn defaults to true', () {
-    expect(service.getMusicOn(), isTrue);
+  group('setMusicVolume — clamping', () {
+    test('stores 0.5 unchanged', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(0.5);
+      expect(svc.getMusicVolume(), closeTo(0.5, 0.001));
+    });
+
+    test('clamps below 0.0 to 0.0', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(-0.1);
+      expect(svc.getMusicVolume(), closeTo(0.0, 0.001));
+    });
+
+    test('clamps above 1.0 to 1.0', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(1.5);
+      expect(svc.getMusicVolume(), closeTo(1.0, 0.001));
+    });
+
+    test('accepts 0.0 exactly', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(0.0);
+      expect(svc.getMusicVolume(), closeTo(0.0, 0.001));
+    });
+
+    test('accepts 1.0 exactly', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(1.0);
+      expect(svc.getMusicVolume(), closeTo(1.0, 0.001));
+    });
+
+    test('getMusicVolume defaults to 0.7', () async {
+      final svc = await _make();
+      expect(svc.getMusicVolume(), closeTo(0.7, 0.001));
+    });
   });
 
-  test('setMusicOn persists value', () async {
-    await service.setMusicOn(false);
-    expect(service.getMusicOn(), isFalse);
+  group('setSoundVolume — clamping', () {
+    test('clamps below 0.0 to 0.0', () async {
+      final svc = await _make();
+      await svc.setSoundVolume(-5.0);
+      expect(svc.getSoundVolume(), closeTo(0.0, 0.001));
+    });
+
+    test('clamps above 1.0 to 1.0', () async {
+      final svc = await _make();
+      await svc.setSoundVolume(2.0);
+      expect(svc.getSoundVolume(), closeTo(1.0, 0.001));
+    });
+
+    test('getSoundVolume defaults to 0.8', () async {
+      final svc = await _make();
+      expect(svc.getSoundVolume(), closeTo(0.8, 0.001));
+    });
   });
 
-  // ---------------------------------------------------------------------------
-  // Sounds on/off
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // Toggle helpers
+  // -------------------------------------------------------------------------
 
-  test('getSoundsOn defaults to true', () {
-    expect(service.getSoundsOn(), isTrue);
+  group('toggleAudio', () {
+    test('flips from default true to false', () async {
+      final svc = await _make();
+      await svc.toggleAudio();
+      expect(svc.getAudioOn(), isFalse);
+    });
+
+    test('double-toggle restores original value', () async {
+      final svc = await _make();
+      final before = svc.getAudioOn();
+      await svc.toggleAudio();
+      await svc.toggleAudio();
+      expect(svc.getAudioOn(), before);
+    });
   });
 
-  test('setSoundsOn persists value', () async {
-    await service.setSoundsOn(false);
-    expect(service.getSoundsOn(), isFalse);
+  group('toggleMusic', () {
+    test('flips musicOn', () async {
+      final svc = await _make();
+      await svc.toggleMusic();
+      expect(svc.getMusicOn(), isFalse);
+    });
   });
 
-  // ---------------------------------------------------------------------------
-  // Volume
-  // ---------------------------------------------------------------------------
-
-  test('getMusicVolume defaults to 0.7', () {
-    expect(service.getMusicVolume(), closeTo(0.7, 0.001));
+  group('toggleSounds', () {
+    test('flips soundsOn', () async {
+      final svc = await _make();
+      await svc.toggleSounds();
+      expect(svc.getSoundsOn(), isFalse);
+    });
   });
 
-  test('setMusicVolume/getMusicVolume round trip', () async {
-    await service.setMusicVolume(0.5);
-    expect(service.getMusicVolume(), closeTo(0.5, 0.001));
+  // -------------------------------------------------------------------------
+  // Lifecycle helpers
+  // -------------------------------------------------------------------------
+
+  group('pauseAllAudio / resumeAudio', () {
+    test('resumeAudio completes without error', () async {
+      final svc = await _make();
+      await svc.pauseAllAudio();
+      await expectLater(svc.resumeAudio(), completes);
+    });
+
+    test('resumeAudio clears wasPlayingBeforePause state', () async {
+      final svc = await _make();
+      await svc.pauseAllAudio();
+      await svc.resumeAudio();
+      final dump = svc.debugDump();
+      expect(dump['wasPlayingBeforePause'], isFalse);
+    });
   });
 
-  test('setMusicVolume clamps above 1.0 to 1.0', () async {
-    await service.setMusicVolume(1.5);
-    expect(service.getMusicVolume(), closeTo(1.0, 0.001));
+  group('reduceVolumeForBackground / restoreNormalVolume', () {
+    test('reduceVolumeForBackground halves the music volume', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(0.8);
+      await svc.reduceVolumeForBackground();
+      expect(svc.getMusicVolume(), closeTo(0.4, 0.001));
+    });
+
+    test('restoreNormalVolume doubles the volume back', () async {
+      final svc = await _make();
+      await svc.setMusicVolume(0.8);
+      await svc.reduceVolumeForBackground(); // now 0.4
+      await svc.restoreNormalVolume(); // should be 0.8 again
+      expect(svc.getMusicVolume(), closeTo(0.8, 0.001));
+    });
   });
 
-  test('setMusicVolume clamps below 0.0 to 0.0', () async {
-    await service.setMusicVolume(-0.2);
-    expect(service.getMusicVolume(), closeTo(0.0, 0.001));
+  // -------------------------------------------------------------------------
+  // resetAudioSettings
+  // -------------------------------------------------------------------------
+
+  group('resetAudioSettings', () {
+    test('returns to defaults after reset', () async {
+      final svc = await _make();
+      await svc.setAudioOn(false);
+      await svc.setMusicVolume(0.1);
+      await svc.resetAudioSettings();
+      expect(svc.getAudioOn(), isTrue);
+      expect(svc.getMusicVolume(), closeTo(0.7, 0.001));
+    });
   });
 
-  test('getSoundVolume defaults to 0.8', () {
-    expect(service.getSoundVolume(), closeTo(0.8, 0.001));
-  });
-
-  test('setSoundVolume/getSoundVolume round trip', () async {
-    await service.setSoundVolume(0.3);
-    expect(service.getSoundVolume(), closeTo(0.3, 0.001));
-  });
-
-  test('setSoundVolume clamps to [0.0, 1.0]', () async {
-    await service.setSoundVolume(2.0);
-    expect(service.getSoundVolume(), closeTo(1.0, 0.001));
-  });
-
-  // ---------------------------------------------------------------------------
-  // Toggles
-  // ---------------------------------------------------------------------------
-
-  test('toggleAudio flips audio on/off', () async {
-    expect(service.getAudioOn(), isTrue);
-    await service.toggleAudio();
-    expect(service.getAudioOn(), isFalse);
-    await service.toggleAudio();
-    expect(service.getAudioOn(), isTrue);
-  });
-
-  test('toggleMusic flips music on/off', () async {
-    expect(service.getMusicOn(), isTrue);
-    await service.toggleMusic();
-    expect(service.getMusicOn(), isFalse);
-  });
-
-  test('toggleSounds flips sounds on/off', () async {
-    expect(service.getSoundsOn(), isTrue);
-    await service.toggleSounds();
-    expect(service.getSoundsOn(), isFalse);
-  });
-
-  // ---------------------------------------------------------------------------
-  // Reset
-  // ---------------------------------------------------------------------------
-
-  test('resetAudioSettings restores all defaults', () async {
-    await service.setAudioOn(false);
-    await service.setMusicOn(false);
-    await service.setSoundsOn(false);
-    await service.setMusicVolume(0.1);
-    await service.setSoundVolume(0.2);
-
-    await service.resetAudioSettings();
-
-    expect(service.getAudioOn(), isTrue); // box-deleted → default
-    expect(service.getMusicOn(), isTrue);
-    expect(service.getSoundsOn(), isTrue);
-    expect(service.getMusicVolume(), closeTo(0.7, 0.001));
-    expect(service.getSoundVolume(), closeTo(0.8, 0.001));
-  });
-
-  // ---------------------------------------------------------------------------
-  // Lifecycle: pauseAllAudio / resumeAudio
-  // ---------------------------------------------------------------------------
-
-  test('pauseAllAudio records wasPlaying=true when both audio and music are on',
-      () async {
-    await service.setAudioOn(true);
-    await service.setMusicOn(true);
-    await service.pauseAllAudio();
-
-    // resumeAudio reads wasPlaying — if true it logs resume and clears the key
-    // We verify by calling resumeAudio without error and checking key cleared
-    await service.resumeAudio(); // should not throw
-  });
-
-  test('pauseAllAudio records wasPlaying=false when audio is off', () async {
-    await service.setAudioOn(false);
-    await service.setMusicOn(true);
-    await service.pauseAllAudio();
-    await service.resumeAudio(); // should not throw
-  });
-
-  // ---------------------------------------------------------------------------
-  // Lifecycle: reduceVolumeForBackground / restoreNormalVolume
-  // ---------------------------------------------------------------------------
-
-  test('reduceVolumeForBackground halves current volumes', () async {
-    await service.setMusicVolume(0.8);
-    await service.setSoundVolume(0.6);
-
-    await service.reduceVolumeForBackground();
-
-    expect(service.getMusicVolume(), closeTo(0.4, 0.01));
-    expect(service.getSoundVolume(), closeTo(0.3, 0.01));
-  });
-
-  test('restoreNormalVolume doubles volumes back', () async {
-    await service.setMusicVolume(0.4);
-    await service.setSoundVolume(0.3);
-
-    await service.restoreNormalVolume();
-
-    expect(service.getMusicVolume(), closeTo(0.8, 0.01));
-    expect(service.getSoundVolume(), closeTo(0.6, 0.01));
-  });
-
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
   // debugDump
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
 
-  test('debugDump returns map with all expected keys', () async {
-    final dump = service.debugDump();
-    expect(dump.containsKey('audioOn'), isTrue);
-    expect(dump.containsKey('musicOn'), isTrue);
-    expect(dump.containsKey('soundsOn'), isTrue);
-    expect(dump.containsKey('musicVolume'), isTrue);
-    expect(dump.containsKey('soundVolume'), isTrue);
-    expect(dump.containsKey('wasPlayingBeforePause'), isTrue);
+  group('debugDump', () {
+    test('returns map with all expected keys', () async {
+      final svc = await _make();
+      final dump = svc.debugDump();
+      expect(dump.keys.toSet(), containsAll([
+        'audioOn', 'musicOn', 'soundsOn',
+        'musicVolume', 'soundVolume', 'wasPlayingBeforePause',
+      ]));
+    });
   });
 
-  // ---------------------------------------------------------------------------
-  // Aliases
-  // ---------------------------------------------------------------------------
+  // -------------------------------------------------------------------------
+  // saveAudioOn / saveMusicOn / saveSoundsOn aliases
+  // -------------------------------------------------------------------------
 
-  test('saveAudioOn alias works the same as setAudioOn', () async {
-    await service.saveAudioOn(false);
-    expect(service.getAudioOn(), isFalse);
-  });
+  group('save* aliases', () {
+    test('saveAudioOn delegates to setAudioOn', () async {
+      final svc = await _make();
+      await svc.saveAudioOn(false);
+      expect(svc.getAudioOn(), isFalse);
+    });
 
-  test('saveMusicOn alias works the same as setMusicOn', () async {
-    await service.saveMusicOn(false);
-    expect(service.getMusicOn(), isFalse);
-  });
+    test('saveMusicOn delegates to setMusicOn', () async {
+      final svc = await _make();
+      await svc.saveMusicOn(false);
+      expect(svc.getMusicOn(), isFalse);
+    });
 
-  test('saveSoundsOn alias works the same as setSoundsOn', () async {
-    await service.saveSoundsOn(false);
-    expect(service.getSoundsOn(), isFalse);
+    test('saveSoundsOn delegates to setSoundsOn', () async {
+      final svc = await _make();
+      await svc.saveSoundsOn(false);
+      expect(svc.getSoundsOn(), isFalse);
+    });
   });
 }

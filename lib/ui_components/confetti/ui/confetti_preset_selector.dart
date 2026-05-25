@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 import '../core/confetti_theme.dart';
 import '../core/presets/confetti_presets.dart';
 
@@ -48,7 +49,7 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       transform: Matrix4.identity()
-                        ..scale(isHovered ? 1.05 : 1.0),
+                        ..scaleByVector3(Vector3(isHovered ? 1.05 : 1.0, isHovered ? 1.05 : 1.0, 1.0)),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),

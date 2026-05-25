@@ -1,5 +1,6 @@
 /// DTOs for the Study surface — /study-sets and /study-sessions endpoints.
 /// Study set detail intentionally exposes correctOptionId (rehearsal, not gameplay).
+library;
 
 // ── Study Sets ────────────────────────────────────────────────────────────────
 

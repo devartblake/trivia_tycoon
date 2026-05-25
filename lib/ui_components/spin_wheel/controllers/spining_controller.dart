@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../models/spin_system_models.dart';
-import '../physics/spin_physics_handler.dart';
 import '../physics/spin_velocity.dart';
 import '../services/rewards/reward_probability.dart';
 import '../ui/dialogs/result_dialog.dart';
@@ -105,7 +104,6 @@ class EnhancedSpinningController extends ChangeNotifier {
   // Enhanced physics system
   late final EnhancedSpinPhysics _physics;
   late final EnhancedSpinVelocity _velocityCalculator;
-  late final EnhancedSpinHandler _spinHandler;
 
   // State management
   SpinningState _state = const SpinningState();
@@ -155,12 +153,6 @@ class EnhancedSpinningController extends ChangeNotifier {
       enableGestureOptimization: true,
     );
 
-    _spinHandler = EnhancedSpinHandler(
-      physics: _physics,
-      velocityCalculator: _velocityCalculator,
-      enableHaptics: true,
-      enableSoundEffects: true,
-    );
   }
 
   void _startPeriodicTasks() {
@@ -280,6 +272,7 @@ class EnhancedSpinningController extends ChangeNotifier {
 
     // Check if can spin
     if (!await SpinTracker.canSpin()) {
+      if (!context.mounted) return null;
       _showCooldownMessage(context);
       return null;
     }
@@ -294,7 +287,6 @@ class EnhancedSpinningController extends ChangeNotifier {
 
       // Calculate physics
       final duration = _physics.calculateDuration(velocity);
-      final distance = _physics.calculateDistance(velocity, duration);
 
       // Create spin result
       final spinResult = _physics.calculateSpinResult(
@@ -304,16 +296,16 @@ class EnhancedSpinningController extends ChangeNotifier {
         spinId: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
-      // Simulate spin duration
       await Future.delayed(Duration(milliseconds: (duration * 1000).round()));
 
-      // Handle completion
+      if (!context.mounted) return null;
       await _handleSpinComplete(spinResult, context);
 
       return spinResult;
     } catch (e) {
       LogManager.debug('Spin failed: $e');
       _updateState(_state.copyWith(isSpinning: false));
+      if (!context.mounted) return null;
       _showErrorMessage(context, 'Spin failed. Please try again.');
       return null;
     }
@@ -415,13 +407,13 @@ class EnhancedSpinningController extends ChangeNotifier {
         case 'gems':
         case 'premium':
           // Handle premium currency
-          final currentGems = await AppSettings.getInt('gems') ?? 0;
+          final currentGems = await AppSettings.getInt('gems');
           await AppSettings.setInt('gems', currentGems + result.reward);
           break;
         case 'lives':
         case 'health':
           // Handle lives/health
-          final currentLives = await AppSettings.getInt('lives') ?? 3;
+          final currentLives = await AppSettings.getInt('lives');
           await AppSettings.setInt(
               'lives', math.min(currentLives + result.reward, 10));
           break;
@@ -471,8 +463,6 @@ class EnhancedSpinningController extends ChangeNotifier {
 
   /// Share spin result
   void _shareResult(SpinResult result) {
-    // Implement sharing logic
-    final shareText = 'I just won ${result.label} with ${result.reward} coins!';
     // Use share_plus package or similar
   }
 

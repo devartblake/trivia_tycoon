@@ -240,4 +240,3 @@ class ProfileAvatarController extends ChangeNotifier {
     return AvatarType.image;
   }
 }
-

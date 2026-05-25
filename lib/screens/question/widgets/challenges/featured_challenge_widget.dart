@@ -321,7 +321,7 @@ class FeaturedChallengeWidget extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    '${_formatParticipantCount(challenge.participantCount)}',
+                    _formatParticipantCount(challenge.participantCount),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 9,

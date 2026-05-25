@@ -95,7 +95,8 @@ class AdminStoreService {
   }
 
   /// `PUT /admin/store/reward-limits/{rewardId}` — create or update.
-  Future<RewardLimitFormModel> upsertRewardLimit(RewardLimitFormModel model) async {
+  Future<RewardLimitFormModel> upsertRewardLimit(
+      RewardLimitFormModel model) async {
     final json = await _api.put(
       '/admin/store/reward-limits/${model.rewardId}',
       body: {

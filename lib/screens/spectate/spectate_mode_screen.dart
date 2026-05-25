@@ -56,10 +56,10 @@ class _SpectateModeScreenState extends State<SpectateModeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        _showLeaveConfirmation();
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _showLeaveConfirmation();
       },
       child: Scaffold(
         backgroundColor: Colors.black,

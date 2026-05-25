@@ -1,6 +1,6 @@
 # Trivia Tycoon Update Checklist
 
-**Last updated:** 2026-04-17  
+**Last updated:** 2026-05-10
 **Purpose:** High-level project status snapshot for the latest frontend migration and verification work. This file replaces the older auth-only checklist, which is no longer an accurate picture of what remains.
 
 ---
@@ -16,10 +16,26 @@
 - Main menu currency display is improved:
   - backend wallet balances now sync into the menu coin/gem display
   - duplicate green energy strip below `CurrencyDisplay` was removed
+- Wallet/economy bridge is stronger:
+  - `GET /users/me/wallet` remains authoritative for coins, XP, and diamonds
+  - backend wallet refresh now updates coin, diamond, and XP provider state
+  - Spin & Earn claim, reward claim, avatar purchase, and payment-return reconciliation refresh backend wallet state
+- Crypto economy typed layer is in place:
+  - service/models/providers cover balance, history, staking, link wallet, withdrawal, and prize pool actions
+  - focused service/provider tests cover contracts, invalidation, and backend error envelope mapping
+  - staged rollout flags now cover full surface disable, write disable, and enabled network selection
+- Secure channel selected endpoint rollout is complete through Phase 3:
+  - encrypted DELETE support now covers remove friend, cancel friend request, and unblock
+  - codec/session tests now cover wrong nonce, session clear, and 1 KB/10 KB/100 KB payload coverage
+- Gated live backend smoke coverage was added for auth/CORS, `/users/me`, `/users/me/wallet`, and confirmed Spin & Earn endpoints.
 - Question gameplay is backend-first:
-  - retrieval prefers `GET /questions/set`
+  - retrieval uses `GET /questions/set` through `QuestionHubService`
+  - backend `GameplayQuestionDto` payloads now parse safely without embedded answers
+  - single-player/category/class flows use `mode=practice`
+  - multiplayer arena/teams use `mode=ranked`, count-only, without player personalization
   - per-answer validation uses `POST /questions/check`
   - end-of-quiz reconciliation uses `POST /questions/check-batch`
+  - live smoke coverage now includes question set retrieval and check/check-batch routes
 - Question source observability is in place:
   - visible backend-vs-local-fallback banner on `QuestionScreen`
   - stronger `QuestionHubService` logging for backend vs fallback source usage
@@ -38,17 +54,16 @@
 - Live verification that `/users/search` and `DELETE /friends` succeed with auth headers in target backend environments
 - Live verification that question gameplay remains on backend data in normal environments and only falls back locally when expected
 - Flutter-enabled formatter/analyzer/test pass
-- Backend confirmation of the intended question contracts, especially:
+- Live validation of the confirmed question contracts in local Docker/staging:
   - `/questions/set`
-  - `/quiz/categories`
-  - `/quiz/classes/{classId}/stats`
   - `/questions/check`
   - `/questions/check-batch`
 
 ### Broader backlog still remaining
 
-- Portable avatar/object-storage upload flow
-- Crypto economy player surfaces
+- Portable avatar/object-storage upload runtime verification after emulator wipe/login
+- Crypto economy live contract validation and optional UI smoke/polish
+- Secure channel staging validation for replay/sequence semantics, expiry renewal, reinstall invalidation, and web fallback
 - ML enhancement signal consumption
 - Runtime validation on device/simulator for the broader Synaptix surface
 
@@ -64,10 +79,15 @@
 - [x] Category quiz launch fixed
 - [x] Class quiz launch fixed
 - [x] Daily quiz launch fixed
+- [x] Backend gameplay DTO parsing fixed for `text`, `options`, `mediaKey`, and enum difficulty values
+- [x] Category/class gameplay routes now pass selected category/difficulty via `/questions/set`
+- [x] Multiplayer question routing now uses ranked, count-only backend requests with no `playerId`
+- [x] Stale direct multiplayer `/api/questions` fetch fallback removed
+- [x] `/questions/check` and `/questions/check-batch` now use option ids as the backend correctness contract
 - [x] Backend/frontend question handoff markdown created
-- [ ] Backend team confirms canonical question endpoint set
-- [ ] Backend team confirms class stats response always includes `availableCategories`
-- [ ] Backend team confirms answer validation response fields and envelope stability
+- [x] Canonical gameplay endpoint set reflected in frontend code: `/questions/set`, `/questions/check`, `/questions/check-batch`
+- [x] Class gameplay no longer depends on backend class-stats endpoints; frontend maps class/grade to categories and difficulty
+- [x] Answer validation response fields are handled through `isCorrect` + `correctOptionId`
 - [ ] Runtime QA verifies fallback banner only appears during actual endpoint failures
 
 ## 2. Friends / presence alignment
@@ -78,16 +98,44 @@
 - [x] WebSocket `playerId` query-string alignment completed
 - [ ] Two-account/device runtime verification completed
 - [ ] Backend team confirms final friends/search/unfriend contracts
-- [ ] Decision made on `FriendDiscoveryService` cleanup/deprecation
+- [x] `FriendDiscoveryService` cleanup/deprecation completed; no `friend_discovery` source file remains under `lib/`
+
+2026-05-10 note: production-path social consolidation is complete and
+`RichPresenceService` tests exist. The remaining friends/social items are live
+backend/two-device verification and the final `FriendDiscoveryService`
+deprecation/removal decision.
 
 ## 3. Economy / menu validation
 
 - [x] Main menu coin/gem display syncs from backend player wallet data
 - [x] Duplicate green energy HUD removed
+- [x] Backend wallet mapping covered for `credits -> coins`, `neuralXp -> xp`, and `synapseShards -> diamonds`
+- [x] Backend wallet refresh bridge updates legacy coin, diamond, and XP providers
+- [x] Spin/reward/avatar/payment-return success paths refresh authoritative wallet state
 - [ ] Runtime QA confirms displayed balances match backend balances after login/resume/refresh
 - [ ] Broader player wallet/history flows implemented
 
-## 4. Verification / release hygiene
+## 4. Auth, Spin & Earn, and crypto verification
+
+- [x] Gated live smoke tests added for local Docker/staging auth, CORS preflight, wallet, and confirmed Spin & Earn endpoints
+- [x] Spin & Earn frontend uses confirmed segment/claim endpoints with local fallback retained
+- [x] Crypto service/provider tests added for contract coverage and mutation invalidation
+- [x] Crypto rollout flags added for surface disable, write disable, and enabled networks
+- [x] Local Docker crypto contract smoke passed for balance, history, staking, prize pool, and secure-channel write guard
+- [ ] Run local Docker smoke tests with `SYNAPTIX_TEST_EMAIL`, `SYNAPTIX_TEST_PASSWORD`, and confirmed `SYNAPTIX_API_BASE_URL`, including question set/check/check-batch coverage
+- [ ] Run optional staging smoke tests with `SYNAPTIX_STAGING_API_BASE_URL`
+- [ ] Run staging crypto contract smoke once staging credentials are supplied
+- [ ] Add remaining crypto UI smoke tests
+
+## 4a. Secure channel rollout
+
+- [x] Add encrypted DELETE support to `EncryptedApiClient`
+- [x] Encrypt selected DELETE-sensitive social operations: remove friend, cancel friend request, unblock
+- [x] Add wrong-nonce, session-clear, and 1 KB/10 KB/100 KB payload coverage
+- [ ] Validate exact response schema, replay protection, and sequence semantics against staging
+- [ ] Add expiry renewal, reinstall invalidation, and web fallback tests
+
+## 5. Verification / release hygiene
 
 - [ ] Run `flutter analyze`
 - [ ] Run targeted Flutter tests for question flow
@@ -108,6 +156,7 @@
 ## Canonical Status References
 
 - [`CHANGELOG.md`](../CHANGELOG.md)
+- [`CURRENT_TASKS.md`](CURRENT_TASKS.md)
 - [`REMAINING_TASKS.md`](REMAINING_TASKS.md)
 - [`question_flow_frontend_backend_handoff_2026-04-15.md`](question_flow_frontend_backend_handoff_2026-04-15.md)
 - [`friends_social_presence_frontend_backend_verification_2026-04-15.md`](friends_social_presence_frontend_backend_verification_2026-04-15.md)

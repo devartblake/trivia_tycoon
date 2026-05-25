@@ -225,7 +225,8 @@ class StockPreviewCard extends StatelessWidget {
       isPurchasable: item.availability.isPurchasable &&
           (previewInput.isPremium || !item.availability.requiresPremium),
       requiresPremium: item.availability.requiresPremium,
-      isFlashSale: item.availability.isFlashSale || previewInput.isFlashSaleEligible,
+      isFlashSale:
+          item.availability.isFlashSale || previewInput.isFlashSaleEligible,
       saleEndsAt: item.availability.saleEndsAt,
     );
 
@@ -266,9 +267,7 @@ class _PreviewButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: canBuy
-            ? const Color(0xFF6366F1)
-            : Colors.grey.shade200,
+        color: canBuy ? const Color(0xFF6366F1) : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

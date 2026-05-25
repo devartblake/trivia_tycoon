@@ -584,12 +584,11 @@ class StoreService {
   Future<List<PlayerStoreItem>> fetchPlayerCatalog(String playerId) async {
     try {
       final response = await apiService.get('/store/catalog/$playerId');
-      final rawItems =
-          response['items'] as List<dynamic>? ?? const <dynamic>[];
+      final rawItems = response['items'] as List<dynamic>? ?? const <dynamic>[];
       return rawItems
           .whereType<Map>()
-          .map((raw) =>
-              PlayerStoreItem.fromJson(Map<String, dynamic>.from(raw)))
+          .map(
+              (raw) => PlayerStoreItem.fromJson(Map<String, dynamic>.from(raw)))
           .toList();
     } catch (e) {
       LogManager.debug('fetchPlayerCatalog failed, falling back: $e');

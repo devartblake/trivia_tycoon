@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/env.dart';
 import '../../core/repositories/mission_repository.dart';
 import '../data/mission_data_loader.dart';
+import '../models/mission_model.dart';
 import '../providers/riverpod_providers.dart';
+import '../providers/profile_providers.dart' as profile;
 import '../services/mission_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -12,7 +14,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
   final AgeGroup _ageGroup;
   final MissionService? _missionService; // Optional for backend integration
   List<Map<String, dynamic>> _allAvailableMissions = [];
-  String? _userId;
+  final String? _userId;
   bool _isBackendMode = false;
 
   HybridMissionNotifier(
@@ -68,6 +70,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
             'difficulty': userMission.mission.metadata?['difficulty'] ?? 1,
             'tags': userMission.mission.metadata?['tags'] ?? [],
             'status': userMission.status.name,
+            'mission_id': userMission.missionId,
+            'mission_type': userMission.mission.type,
             'backend_id': userMission.id, // Keep track of backend ID
           };
         }).toList();
@@ -109,6 +113,8 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
               'difficulty': userMission.mission.metadata?['difficulty'] ?? 1,
               'tags': userMission.mission.metadata?['tags'] ?? [],
               'status': userMission.status.name,
+              'mission_id': userMission.missionId,
+              'mission_type': userMission.mission.type,
               'backend_id': userMission.id,
             };
           }).toList();
@@ -222,7 +228,7 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
 
         if (backendId != null) {
           await _missionService!
-              .updateProgress(backendId, increment, userId: '');
+              .updateProgress(backendId, increment, userId: _userId!);
           // Reload from backend
           await _loadFromBackend();
           return;
@@ -235,6 +241,72 @@ class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {
 
     // Local update fallback
     _updateProgressLocally(missionId, increment);
+  }
+
+  Future<void> claimMission(String missionId) async {
+    if (_isBackendMode) {
+      try {
+        final mission = state.firstWhere((m) => m['id'] == missionId);
+        final backendMissionId =
+            (mission['mission_id'] ?? mission['backend_id'] ?? missionId)
+                .toString();
+        final missionType = mission['mission_type'] is MissionType
+            ? mission['mission_type'] as MissionType
+            : null;
+
+        final result = await _missionService!.claimMission(
+          playerId: _userId!,
+          missionId: backendMissionId,
+          type: missionType,
+        );
+
+        if (result.updatedMissions.isNotEmpty) {
+          state = result.updatedMissions.map((userMission) {
+            return {
+              'id': userMission.id,
+              'title': userMission.mission.title,
+              'progress': userMission.progress,
+              'total': userMission.mission.total,
+              'reward': userMission.mission.rewardXp,
+              'icon': userMission.mission.icon,
+              'badge': userMission.mission.badge,
+              'mode': userMission.mission.metadata?['mode'],
+              'category': userMission.mission.metadata?['category'],
+              'difficulty': userMission.mission.metadata?['difficulty'] ?? 1,
+              'tags': userMission.mission.metadata?['tags'] ?? [],
+              'status': userMission.status.name,
+              'mission_id': userMission.missionId,
+              'mission_type': userMission.mission.type,
+              'backend_id': userMission.id,
+              'claimed': result.claimed,
+            };
+          }).toList();
+          return;
+        }
+
+        state = state.map((m) {
+          if (m['id'] != missionId) return m;
+          return {
+            ...m,
+            'status': result.claimed ? 'completed' : m['status'],
+            'claimed': result.claimed,
+          };
+        }).toList();
+        return;
+      } catch (e) {
+        LogManager.debug('Backend mission claim failed, using local claim: $e');
+        _isBackendMode = false;
+      }
+    }
+
+    state = state.map((mission) {
+      if (mission['id'] != missionId) return mission;
+      return {
+        ...mission,
+        'status': 'completed',
+        'claimed': true,
+      };
+    }).toList();
   }
 
   void _updateProgressLocally(String missionId, int increment) {
@@ -386,8 +458,11 @@ final missionServiceProvider = Provider<MissionService?>((ref) {
 });
 
 final currentUserIdProvider = Provider<String?>((ref) {
-  // Return user ID if available, null for offline mode
-  return 'current-user-id'; // Replace with actual user ID logic
+  final userId = ref.watch(profile.currentUserIdProvider);
+  return userId.maybeWhen(
+    data: (value) => value.isEmpty || value == 'guest' ? null : value,
+    orElse: () => null,
+  );
 });
 
 // Hybrid mission providers
@@ -431,6 +506,10 @@ class HybridMissionActions {
     await _ref
         .read(liveMissionsProvider.notifier)
         .updateMissionProgress(missionId, increment);
+  }
+
+  Future<void> claimMission(String missionId) async {
+    await _ref.read(liveMissionsProvider.notifier).claimMission(missionId);
   }
 
   void trackUserAction(String actionType, Map<String, dynamic> metadata) {

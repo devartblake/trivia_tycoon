@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../confetti/utils/confetti_storage.dart';
@@ -198,7 +198,7 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
         'particleDensity': _particleDensity,
         'isRandomTheme': isRandomTheme,
         'currentTheme': currentTheme.name,
-        'customColors': customColors.map((c) => c.value).toList(),
+        'customColors': customColors.map((c) => c.toARGB32()).toList(),
         'timestamp': DateTime.now().toIso8601String(),
       };
 
@@ -252,12 +252,6 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       // Validate particle density
       if (!['Auto', 'Low', 'Medium', 'High'].contains(_particleDensity)) {
         _particleDensity = 'Auto';
-        needsRepair = true;
-      }
-
-      // Validate theme
-      if (currentTheme == null) {
-        currentTheme = ConfettiPresets.celebration;
         needsRepair = true;
       }
 
@@ -376,7 +370,7 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
       'particleDensity': _particleDensity,
       'currentTheme': currentTheme.name,
       'isRandomTheme': isRandomTheme,
-      'customColors': customColors.map((c) => c.value).toList(),
+      'customColors': customColors.map((c) => c.toARGB32()).toList(),
       'exported': DateTime.now().toIso8601String(),
     };
   }
@@ -385,12 +379,15 @@ class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
   Future<void> importConfettiSettings(Map<String, dynamic> data) async {
     try {
       if (data.containsKey('speed')) speed = data['speed'].toDouble();
-      if (data.containsKey('particleCount'))
+      if (data.containsKey('particleCount')) {
         particleCount = data['particleCount'];
-      if (data.containsKey('particleDensity'))
+      }
+      if (data.containsKey('particleDensity')) {
         _particleDensity = data['particleDensity'];
-      if (data.containsKey('isRandomTheme'))
+      }
+      if (data.containsKey('isRandomTheme')) {
         isRandomTheme = data['isRandomTheme'];
+      }
 
       if (data.containsKey('currentTheme')) {
         currentTheme = ConfettiPresets.getPresetByName(data['currentTheme']);

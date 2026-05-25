@@ -191,8 +191,9 @@ class LeaderboardController extends ChangeNotifier {
       final currentUser = _allEntries.firstWhere((e) => e.userId == userId);
       filtered = filtered.where((e) => e.tier == currentUser.tier).toList();
     } catch (e) {
-      if (kDebugMode)
+      if (kDebugMode) {
         LogManager.debug("⚠️ Tier restriction skipped (no matching user): $e");
+      }
     }
 
     filteredEntries = filtered;

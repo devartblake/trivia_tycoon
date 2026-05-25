@@ -14,8 +14,7 @@ final stockCountdownProvider = StreamProvider<DateTime>((ref) async* {
 /// Player-scoped catalog with stock state.
 /// Calls GET /store/catalog/{playerId}; falls back to generic catalog on error.
 final playerStoreCatalogProvider =
-    FutureProvider.family<List<PlayerStoreItem>, String>(
-        (ref, playerId) async {
+    FutureProvider.family<List<PlayerStoreItem>, String>((ref, playerId) async {
   final service = ref.watch(storeServiceProvider);
   return service.fetchPlayerCatalog(playerId);
 });

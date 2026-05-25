@@ -16,10 +16,12 @@ class QuestionSchemaValidator {
       if (!json.containsKey(field)) return false;
     }
 
-    if (json['answers'] is! List || (json['answers'] as List).isEmpty)
+    if (json['answers'] is! List || (json['answers'] as List).isEmpty) {
       return false;
-    if (!['text', 'image', 'video', 'audio'].contains(json['type']))
+    }
+    if (!['text', 'image', 'video', 'audio'].contains(json['type'])) {
       return false;
+    }
     if (![
       'multiple_choice',
       'true_false',

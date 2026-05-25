@@ -3,7 +3,7 @@
 
 ## Purpose
 
-This document reflects the **current state of the Friends screen implementation in the repo** as of 2026-04-15.
+This document reflects the **current state of the Friends screen implementation in the repo** as of 2026-05-10.
 
 It replaces the older migration-oriented wording that assumed several tasks were still pending locally. In reality, most of the UI and presence plumbing is already implemented. The main remaining work is backend alignment for authoritative friend data.
 
@@ -31,7 +31,7 @@ It replaces the older migration-oriented wording that assumed several tasks were
 ## Not yet complete end-to-end
 
 - Runtime validation for the full friend/presence flow is still needed against a live backend/WebSocket environment.
-- `FriendDiscoveryService` still exists in the repo and needs a final deprecation/removal decision.
+- `FriendDiscoveryService` cleanup is complete; no `friend_discovery` source file remains under `lib/`.
 - A Flutter-enabled formatter/analyzer/test pass is still needed.
 
 ---
@@ -120,10 +120,10 @@ Confirmed and now wired on the frontend:
 
 The main Friends, add-friend, and DM picker production paths are no longer using the local mock social service.
 
-The remaining placeholder concern is repository cleanup:
+Repository cleanup is complete:
 
-- [lib/core/services/social/friend_discovery_service.dart](/c:/Users/lmxbl/StudioProjects/trivia_tycoon/lib/core/services/social/friend_discovery_service.dart:1) still exists
-- a final decision is still needed on whether to deprecate it, keep it as dev-only fallback, or remove it from production paths entirely
+- `lib/core/services/social/friend_discovery_service.dart` no longer exists.
+- No `friend_discovery` source file remains under `lib/`.
 
 ---
 

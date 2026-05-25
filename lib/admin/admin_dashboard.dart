@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/providers/admin_auth_providers.dart';
-import 'analytics/analytics_screen.dart';
-import 'audit/admin_audit_log_screen.dart';
-import 'config/config_settings_screen.dart';
-import 'encryption/encryption_manager_screen.dart';
-import 'events_management/admin_event_queue_screen.dart';
-import 'notifications/admin_notifications_screen.dart';
-import 'questions/file_import_export_screen.dart';
-import 'questions/question_editor_screen.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
@@ -467,6 +459,13 @@ class AdminDashboardScreen extends ConsumerWidget {
         icon: Icons.inventory_2_outlined,
         color: const Color(0xFF6366F1),
         onTap: () => context.push('/admin/store'),
+      ),
+      _AdminAction(
+        title: 'Reward Reactor',
+        subtitle: 'Alpha test — spin, claim, and reward preview',
+        icon: Icons.flash_on_rounded,
+        color: Colors.deepPurple,
+        onTap: () => context.push('/admin/reward-reactor'),
       ),
     ];
   }

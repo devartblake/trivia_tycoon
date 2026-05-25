@@ -7,7 +7,7 @@ import '../../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
 import '../../providers/arcade_providers.dart';
-import 'arcade_game_shell.dart';
+import '../../../game/providers/feature_flag_providers.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
 
 class ArcadeHubScreen extends ConsumerWidget {
@@ -360,6 +360,23 @@ class ArcadeHubScreen extends ConsumerWidget {
             hasGlow: false,
             isFullWidth: true,
           ),
+          if (ref.watch(featureFlagsProvider).rewardReactorEnabled) ...[
+            const SizedBox(height: 12),
+            _buildActionCard(
+              context,
+              ref,
+              title: 'Reward Reactor',
+              subtitle: 'Claim your daily reward',
+              icon: Icons.flash_on_rounded,
+              gradient: const [
+                Color(0xFF7C3AED),
+                Color(0xFFFFD700),
+              ],
+              onTap: () => context.push('/rewards/reactor'),
+              hasGlow: true,
+              isFullWidth: true,
+            ),
+          ],
         ],
       ),
     );
@@ -804,8 +821,8 @@ class ArcadeHubScreen extends ConsumerWidget {
     );
 
     if (selected == null) return;
+    if (!context.mounted) return;
 
-    // ignore: use_build_context_synchronously
     await context
         .push('/arcade/play', extra: {'game': game, 'difficulty': selected});
   }

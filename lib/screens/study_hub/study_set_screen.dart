@@ -29,8 +29,8 @@ class StudySetScreen extends ConsumerWidget {
           if (isCustomSet)
             IconButton(
               icon: const Icon(Icons.edit_outlined),
-              onPressed: () => context.push(
-                  '/study/set/${Uri.encodeComponent(setId)}/edit'),
+              onPressed: () =>
+                  context.push('/study/set/${Uri.encodeComponent(setId)}/edit'),
             ),
         ],
       ),
@@ -261,8 +261,8 @@ class _QuestionPreviewTile extends ConsumerWidget {
                   const SizedBox(height: 6),
                   Text(
                     'Answer: ${question.correctOptionId}',
-                    style: const TextStyle(
-                        color: Color(0xFF10B981), fontSize: 12),
+                    style:
+                        const TextStyle(color: Color(0xFF10B981), fontSize: 12),
                   ),
                 ],
               ],
@@ -271,8 +271,7 @@ class _QuestionPreviewTile extends ConsumerWidget {
           // Favorite toggle
           GestureDetector(
             onTap: () {
-              final notifier =
-                  ref.read(favoritedQuestionIdsProvider.notifier);
+              final notifier = ref.read(favoritedQuestionIdsProvider.notifier);
               final service = ref.read(studyServiceProvider);
               if (favorited) {
                 notifier.update((s) => {...s}..remove(question.id));
@@ -286,9 +285,7 @@ class _QuestionPreviewTile extends ConsumerWidget {
               padding: const EdgeInsets.all(6),
               child: Icon(
                 favorited ? Icons.favorite : Icons.favorite_border,
-                color: favorited
-                    ? const Color(0xFFF59E0B)
-                    : Colors.white38,
+                color: favorited ? const Color(0xFFF59E0B) : Colors.white38,
                 size: 20,
               ),
             ),

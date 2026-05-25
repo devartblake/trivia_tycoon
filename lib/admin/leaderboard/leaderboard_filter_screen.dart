@@ -463,7 +463,7 @@ class AdminLeaderboardFilterScreen extends ConsumerWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: theme.primaryColor,
+            activeThumbColor: theme.primaryColor,
           ),
         ],
       ),

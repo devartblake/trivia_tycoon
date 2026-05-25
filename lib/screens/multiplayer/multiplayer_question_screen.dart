@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/question/widgets/adapted_question_widgets.dart';
@@ -288,7 +288,7 @@ class _MultiplayerQuestionScreenState
 
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
 
         showDialog(
@@ -689,18 +689,21 @@ class _MultiplayerFeedbackDialogState extends State<_MultiplayerFeedbackDialog>
   }
 
   String _getResultText() {
-    if (widget.isCorrect && !widget.isOpponentCorrect)
+    if (widget.isCorrect && !widget.isOpponentCorrect) {
       return 'You Win This Round!';
+    }
     if (!widget.isCorrect && widget.isOpponentCorrect) return 'Opponent Wins!';
     if (widget.isCorrect && widget.isOpponentCorrect) return 'Both Correct!';
     return 'Both Incorrect!';
   }
 
   IconData _getResultIcon() {
-    if (widget.isCorrect && !widget.isOpponentCorrect)
+    if (widget.isCorrect && !widget.isOpponentCorrect) {
       return Icons.emoji_events;
-    if (!widget.isCorrect && widget.isOpponentCorrect)
+    }
+    if (!widget.isCorrect && widget.isOpponentCorrect) {
       return Icons.sentiment_dissatisfied;
+    }
     if (widget.isCorrect && widget.isOpponentCorrect) return Icons.handshake;
     return Icons.help_outline;
   }

@@ -573,7 +573,7 @@ class _ThemeEditorScreenState extends ConsumerState<ThemeEditorScreen>
                     Switch.adaptive(
                       value: isDark,
                       onChanged: (_) => controller.toggleBrightness(),
-                      activeColor: const Color(0xFF6366F1),
+                      activeThumbColor: const Color(0xFF6366F1),
                     ),
                   ],
                 ),

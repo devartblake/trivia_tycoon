@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/helpers/mission_notification_helper.dart';
-import '../../game/state/hybrid_mission_state.dart'
-    hide currentUserIdProvider;
-import '../../game/providers/profile_providers.dart'
-    show currentUserIdProvider;
+import '../../game/state/hybrid_mission_state.dart' hide currentUserIdProvider;
+import '../../game/providers/profile_providers.dart' show currentUserIdProvider;
 
 class MissionsScreen extends ConsumerStatefulWidget {
   const MissionsScreen({super.key});
@@ -267,12 +265,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: _buildMissionCard(
-                  icon: _iconForMission(mission['icon'] as String?),
+                  missionId: mission['id'].toString(),
+                  icon: _iconForMission(mission['icon']),
                   title: mission['title'] as String? ?? 'Mission',
                   progress: (mission['progress'] as num?)?.toInt() ?? 0,
                   total: (mission['total'] as num?)?.toInt() ?? 1,
                   reward: (mission['reward'] as num?)?.toInt() ?? 0,
                   isCompleted: mission['status'] == 'completed',
+                  isClaimed: mission['claimed'] == true,
                   badge: mission['badge'] as String? ?? 'DAILY',
                 ),
               );
@@ -310,12 +310,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: _buildMissionCard(
-                  icon: _iconForMission(mission['icon'] as String?),
+                  missionId: mission['id'].toString(),
+                  icon: _iconForMission(mission['icon']),
                   title: mission['title'] as String? ?? 'Mission',
                   progress: (mission['total'] as num?)?.toInt() ?? 1,
                   total: (mission['total'] as num?)?.toInt() ?? 1,
                   reward: (mission['reward'] as num?)?.toInt() ?? 0,
                   isCompleted: true,
+                  isClaimed: mission['claimed'] == true,
                   badge: mission['badge'] as String? ?? 'DAILY',
                 ),
               );
@@ -325,8 +327,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
     );
   }
 
-  IconData _iconForMission(String? iconName) {
-    switch (iconName?.toLowerCase()) {
+  IconData _iconForMission(Object? iconValue) {
+    if (iconValue is IconData) {
+      return iconValue;
+    }
+    if (iconValue is! String) {
+      return Icons.assignment;
+    }
+    switch (iconValue.toLowerCase()) {
       case 'science':
         return Icons.science;
       case 'history':
@@ -423,12 +431,14 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
   }
 
   Widget _buildMissionCard({
+    required String missionId,
     required IconData icon,
     required String title,
     required int progress,
     required int total,
     required int reward,
     required bool isCompleted,
+    required bool isClaimed,
     required String badge,
   }) {
     final progressValue = (progress / total).clamp(0.0, 1.0);
@@ -544,20 +554,31 @@ class _MissionsScreenState extends ConsumerState<MissionsScreen>
               ),
               const SizedBox(width: 16),
               if (isCompleted)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF52B788),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Text(
-                    "Claim",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                ElevatedButton(
+                  onPressed: isClaimed
+                      ? null
+                      : () async {
+                          await ref
+                              .read(missionActionsProvider)
+                              .claimMission(missionId);
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF52B788),
+                    disabledBackgroundColor:
+                        Colors.white.withValues(alpha: 0.12),
+                    foregroundColor: Colors.white,
+                    disabledForegroundColor:
+                        Colors.white.withValues(alpha: 0.55),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                  ),
+                  child: Text(
+                    isClaimed ? "Claimed" : "Claim",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 )
               else

@@ -5,18 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vector_math/vector_math_64.dart' as vmath;
-import 'package:trivia_tycoon/screens/skills_tree/render/skill_tree_painter.dart';
-import '../../../ui_components/hex_grid/paint/hex_spider_background_painter.dart';
-import '../../../ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
+import 'render/skill_tree_painter.dart';
+import '../../ui_components/hex_grid/hex_grid.dart';
 import '../../core/theme/hex_spider_theme.dart';
-import '../../../game/models/skill_tree_graph.dart';
-import '../../../game/controllers/skill_tree_controller.dart';
+import '../../game/models/skill_tree_graph.dart';
+import '../../game/controllers/skill_tree_controller.dart';
 import '../../game/planning/skill_branch_path_planner.dart';
 import '../../game/providers/branch_path_providers.dart';
 import '../../game/providers/skill_cooldown_service_provider.dart';
 import '../../game/providers/skill_tree_provider.dart';
 import '../../game/providers/xp_provider.dart';
-import '../../ui_components/hex_grid/math/hex_orientation.dart';
 
 class SkillBranchDetailScreen extends ConsumerStatefulWidget {
   final String branchId;
@@ -41,6 +39,7 @@ class _SkillBranchDetailScreenState
   late final ScrollController _listCtrl;
   static const double _nodeRadius = 40;
   static const int _maxInitialStepIndex = 9999;
+
   /// Radius used for the fallback circle layout when node positions are absent.
   static const double _fallbackLayoutRadius = 260.0;
 
@@ -63,7 +62,7 @@ class _SkillBranchDetailScreenState
   @override
   void initState() {
     super.initState();
-    _transform.value = vmath.Matrix4.identity()..scale(0.9, 0.9);
+    _transform.value = vmath.Matrix4.identity()..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
     _showPath = widget.showPathInitially;
     if (widget.initialStep != null) {
       _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
@@ -80,6 +79,7 @@ class _SkillBranchDetailScreenState
     });
 
     Future.microtask(() {
+      if (!mounted) return;
       final args = GoRouterState.of(context).extra as BranchDetailArgs?;
       if (args?.initialStep != null) {
         _listCtrl.jumpTo((args!.initialStep!) * 88.0);
@@ -155,7 +155,8 @@ class _SkillBranchDetailScreenState
 
   int? _readQueryStep() {
     try {
-      return int.tryParse(GoRouterState.of(context).uri.queryParameters['step'] ?? '');
+      return int.tryParse(
+          GoRouterState.of(context).uri.queryParameters['step'] ?? '');
     } catch (_) {
       return null;
     }
@@ -184,7 +185,9 @@ class _SkillBranchDetailScreenState
   }
 
   void _hydrateInitialStepFromQueryOrSaved(List<String> pathIds) {
-    if (_initialStepHydrated || _initialStepHydrationPending || pathIds.isEmpty) {
+    if (_initialStepHydrated ||
+        _initialStepHydrationPending ||
+        pathIds.isEmpty) {
       return;
     }
     final branchId = widget.branchId;
@@ -198,7 +201,8 @@ class _SkillBranchDetailScreenState
           pathSnapshot.isEmpty ||
           hydrationToken != _initialStepHydrationToken ||
           widget.branchId != branchId ||
-          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+          !_pathIdsMatch(
+              ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
         return;
       }
       _initialStepHydrated = true;
@@ -218,7 +222,8 @@ class _SkillBranchDetailScreenState
           pathSnapshot.isEmpty ||
           hydrationToken != _initialStepHydrationToken ||
           widget.branchId != branchId ||
-          !_pathIdsMatch(ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
+          !_pathIdsMatch(
+              ref.read(branchAutoPathProvider(branchId)), pathSnapshot)) {
         return;
       }
 
@@ -507,8 +512,8 @@ class _SkillBranchDetailScreenState
                           cooldownLabel == null
                               ? 'Cost: ${node.cost} • Tier ${node.tier}'
                               : 'Cost: ${node.cost} • Tier ${node.tier} • $cooldownLabel',
-                          style:
-                              const TextStyle(color: Colors.white70, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 12),
                         ),
                         trailing: node.unlocked
                             ? cooldownChipLabel == null
@@ -641,8 +646,8 @@ class _SkillBranchDetailScreenState
                         'Cost: ${node.cost} XP • $status',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(color: Colors.white70, fontSize: 12),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 12),
                       ),
                     ],
                   ),
@@ -724,7 +729,9 @@ class _SkillBranchDetailScreenState
     final centers = _computeCenters(positions, filtered);
 
     // Clamp step index to current path length via a guarded post-frame callback.
-    if (pathIds.isNotEmpty && _pathIndex >= pathIds.length && !_stepClampPending) {
+    if (pathIds.isNotEmpty &&
+        _pathIndex >= pathIds.length &&
+        !_stepClampPending) {
       _stepClampPending = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _stepClampPending = false;
@@ -774,8 +781,8 @@ class _SkillBranchDetailScreenState
                 if (!mounted) return;
                 setState(() {
                   _transform.value = vmath.Matrix4.identity()
-                    ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
-                    ..scale(0.9, 0.9);
+                    ..translateByVector3(vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
+                    ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
                 });
               });
             }
@@ -860,13 +867,13 @@ class _SkillBranchDetailScreenState
                     bottom: 12,
                     child: _ZoomPad(
                       onIn: () => setState(() =>
-                          _transform.value = _transform.value.scaled(1.15)),
+                          _transform.value = _transform.value.scaledByDouble(1.15, 1.15, 1.0, 1.0)),
                       onOut: () => setState(() =>
-                          _transform.value = _transform.value.scaled(0.87)),
-                      onReset: () => setState(() => _transform.value =
-                          (vmath.Matrix4.identity()
-                            ..translate(c.maxWidth / 2.0, c.maxHeight / 2.0)
-                            ..scale(0.9, 0.9))),
+                          _transform.value = _transform.value.scaledByDouble(0.87, 0.87, 1.0, 1.0)),
+                      onReset: () => setState(
+                          () => _transform.value = (vmath.Matrix4.identity()
+                            ..translateByVector3(vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
+                            ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0)))),
                     ),
                   ),
                   // Add overlay controls for debugging (optional)

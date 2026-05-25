@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 class ColorPickerSettings {
   final String pickerMode; // "wheel", "grid", or "sliders"
@@ -34,7 +34,7 @@ class ColorPickerSettings {
     return {
       'pickerMode': pickerMode,
       'useCustomPalette': useCustomPalette,
-      'customPalette': customPalette.map((c) => c.value).toList(),
+      'customPalette': customPalette.map((c) => c.toARGB32()).toList(),
     };
   }
 

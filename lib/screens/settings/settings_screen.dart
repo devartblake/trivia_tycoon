@@ -4,10 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../game/controllers/settings_controller.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
-import '../../game/providers/auth_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import '../../game/providers/personalization_providers.dart';
-import '../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
 
 final settingsControllerProvider = Provider<SettingsController>((ref) {
   final manager = ref.read(serviceManagerProvider);
@@ -512,7 +510,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                     );
                   },
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),
@@ -694,7 +692,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             return Switch.adaptive(
               value: value,
               onChanged: (_) => item['toggleFunction'](),
-              activeColor: const Color(0xFF10B981),
+              activeThumbColor: const Color(0xFF10B981),
             );
           },
         ),
@@ -839,7 +837,9 @@ class _PersonalizationSection extends ConsumerWidget {
 
     return asyncId.when(
       data: (playerId) {
-        if (playerId == null || playerId.isEmpty) return const SizedBox.shrink();
+        if (playerId == null || playerId.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return _PersonalizationTile(playerId: playerId);
       },
       loading: () => const SizedBox.shrink(),
@@ -872,7 +872,7 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -888,7 +888,7 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF6366F1).withOpacity(0.1),
+                      color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(Icons.psychology_rounded,
@@ -923,11 +923,11 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                     : 'Showing default experience',
                 style: TextStyle(
                   fontSize: 12,
-                  color: const Color(0xFF64748B).withOpacity(0.85),
+                  color: const Color(0xFF64748B).withValues(alpha: 0.85),
                 ),
               ),
               value: enabled,
-              activeColor: const Color(0xFF6366F1),
+              activeThumbColor: const Color(0xFF6366F1),
               onChanged: _loading
                   ? null
                   : (value) async {
@@ -940,16 +940,16 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
                               enabled: value,
                             );
                         ref
-                            .read(personalizationEnabledProvider(
-                                    widget.playerId)
-                                .notifier)
+                            .read(
+                                personalizationEnabledProvider(widget.playerId)
+                                    .notifier)
                             .state = newState;
                       } catch (_) {
                         // Optimistically revert on error
                         ref
-                            .read(personalizationEnabledProvider(
-                                    widget.playerId)
-                                .notifier)
+                            .read(
+                                personalizationEnabledProvider(widget.playerId)
+                                    .notifier)
                             .state = enabled;
                       } finally {
                         if (mounted) setState(() => _loading = false);

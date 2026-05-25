@@ -10,8 +10,8 @@ import '../../../ui_components/qr_code/models/scan_history_item.dart';
 
 /// Offline-first cache service backed by Hive.
 /// Key goals:
-/// - Stable JSON typing (Map<String,dynamic> and List) when reading cached JSON.
-/// - Avoid brittle generic casts like get<Map<String,dynamic>>() (explicit helpers instead).
+/// - Stable JSON typing (Map<&ltString,dynamic&gt> and List) when reading cached JSON.
+/// - Avoid brittle generic casts like get<&ltMap<&ltString,dynamic&gt>&gt>() (explicit helpers instead).
 /// - Maintain lightweight expiration metadata per key.
 /// - Support existing app caching use-cases (leaderboards, questions, scan history, temp/session data).
 class AppCacheService {
@@ -51,8 +51,8 @@ class AppCacheService {
   /// Generic get with expiration check.
   ///
   /// IMPORTANT:
-  /// - Do NOT call get<Map<String, dynamic>>. Use getJsonMap().
-  /// - Do NOT call get<List<dynamic>> for JSON arrays. Use getJsonList() when you can.
+  /// - Do NOT call get<&ltMap<&ltString, dynamic&gt>&gt>. Use getJsonMap().
+  /// - Do NOT call get<&ltList<&ltdynamic&gt>&gt> for JSON arrays. Use getJsonList() when you can.
   T? get<T>(String key) {
     final raw = _box.get(key);
     if (raw == null) return null;
@@ -201,8 +201,9 @@ class AppCacheService {
     try {
       return raw.map((e) {
         if (e is Map<String, dynamic>) return LeaderboardEntry.fromJson(e);
-        if (e is Map)
+        if (e is Map) {
           return LeaderboardEntry.fromJson(Map<String, dynamic>.from(e));
+        }
         throw StateError('Invalid leaderboard entry type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -236,8 +237,9 @@ class AppCacheService {
     try {
       return raw.map((e) {
         if (e is Map<String, dynamic>) return QuestionModel.fromJson(e);
-        if (e is Map)
+        if (e is Map) {
           return QuestionModel.fromJson(Map<String, dynamic>.from(e));
+        }
         throw StateError('Invalid question type: ${e.runtimeType}');
       }).toList();
     } catch (e) {
@@ -270,8 +272,9 @@ class AppCacheService {
       if (raw is List) {
         return raw.map((q) {
           if (q is Map<String, dynamic>) return QuestionModel.fromJson(q);
-          if (q is Map)
+          if (q is Map) {
             return QuestionModel.fromJson(Map<String, dynamic>.from(q));
+          }
           throw StateError('Invalid saved question type: ${q.runtimeType}');
         }).toList();
       }
@@ -302,8 +305,9 @@ class AppCacheService {
       final raw = getJsonList('qr_scan_history') ?? const <dynamic>[];
       return raw.map((e) {
         if (e is Map<String, dynamic>) return ScanHistoryItem.fromJson(e);
-        if (e is Map)
+        if (e is Map) {
           return ScanHistoryItem.fromJson(Map<String, dynamic>.from(e));
+        }
         throw StateError('Invalid scan item type: ${e.runtimeType}');
       }).toList();
     } catch (e) {

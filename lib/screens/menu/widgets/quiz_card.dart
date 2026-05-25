@@ -367,11 +367,14 @@ class _QuizCardState extends State<QuizCard>
     final titleLower = title.toLowerCase();
     if (titleLower.contains('science')) return Icons.science;
     if (titleLower.contains('history')) return Icons.history_edu;
-    if (titleLower.contains('pop culture') || titleLower.contains('culture'))
+    if (titleLower.contains('pop culture') || titleLower.contains('culture')) {
       return Icons.trending_up;
+    }
     if (titleLower.contains('movie') ||
         titleLower.contains('film') ||
-        titleLower.contains('cinema')) return Icons.movie;
+        titleLower.contains('cinema')) {
+      return Icons.movie;
+    }
     if (titleLower.contains('sport')) return Icons.sports_soccer;
     if (titleLower.contains('music')) return Icons.music_note;
     if (titleLower.contains('art')) return Icons.palette;

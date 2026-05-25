@@ -35,7 +35,7 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: widget.height,
       child: Column(
         children: [
@@ -183,7 +183,7 @@ class RewardStepperSliderState extends State<RewardStepperSlider> {
   Widget _buildProgressSlider() {
     final maxValue = widget.rewardSteps.last.pointValue.toDouble();
 
-    return Container(
+    return SizedBox(
       height: 20,
       child: SliderTheme(
         data: SliderTheme.of(context).copyWith(

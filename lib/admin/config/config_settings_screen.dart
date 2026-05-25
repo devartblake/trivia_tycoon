@@ -351,7 +351,7 @@ class _ConfigSettingsScreenState extends ConsumerState<ConfigSettingsScreen> {
                 onChanged: (value) {
                   setState(() => _isLoggingEnabled = value);
                 },
-                activeColor: const Color(0xFF10B981),
+                activeThumbColor: const Color(0xFF10B981),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 8,

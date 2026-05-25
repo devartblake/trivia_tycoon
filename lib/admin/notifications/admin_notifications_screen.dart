@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:trivia_tycoon/admin/notifications/widgets/role_gate.dart';
 import '../../core/services/notification_service.dart';
-import '../../game/providers/notification_providers.dart';
 import '../../game/providers/riverpod_providers.dart';
 import 'channel_manager_screen.dart';
 import 'widgets/notification_form.dart';
@@ -319,16 +318,15 @@ class _AdminNotificationsScreenState
         IconButton(
           tooltip: 'Request Permission',
           onPressed: () async {
+            final messenger = ScaffoldMessenger.of(context);
             await NotificationService().requestPermission();
             _refresh();
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Permission requested'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('Permission requested'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           },
           icon: Container(
             padding: const EdgeInsets.all(8),
@@ -346,16 +344,15 @@ class _AdminNotificationsScreenState
         IconButton(
           tooltip: 'Cancel All',
           onPressed: () async {
+            final messenger = ScaffoldMessenger.of(context);
             await NotificationService().cancelAll();
             _refresh();
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('All notifications canceled'),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('All notifications canceled'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           },
           icon: Container(
             padding: const EdgeInsets.all(8),
@@ -613,7 +610,8 @@ class _AdminNotificationsScreenState
         if (_isDeadLetterLoading || _isReplaying)
           const LinearProgressIndicator(minHeight: 2),
         if (!_didLoadDeadLetter)
-          const SizedBox(height: 48, child: Center(child: CircularProgressIndicator()))
+          const SizedBox(
+              height: 48, child: Center(child: CircularProgressIndicator()))
         else if (_deadLetterItems.isEmpty)
           _buildDeadLetterEmptyState()
         else
@@ -635,9 +633,8 @@ class _AdminNotificationsScreenState
                         item['messageId'] ??
                         '')
                     .toString();
-                final title =
-                    (item['title'] ?? item['subject'] ?? '(untitled)')
-                        .toString();
+                final title = (item['title'] ?? item['subject'] ?? '(untitled)')
+                    .toString();
                 final channel =
                     (item['channelKey'] ?? item['channel_key'] ?? '-')
                         .toString();
@@ -652,8 +649,8 @@ class _AdminNotificationsScreenState
                 final ts = DateTime.tryParse(rawTs)?.toLocal();
 
                 return ListTile(
-                  leading: const Icon(Icons.error_outline,
-                      color: Color(0xFFEF4444)),
+                  leading:
+                      const Icon(Icons.error_outline, color: Color(0xFFEF4444)),
                   title: Text(title),
                   subtitle: Text(
                     'channel=$channel\n$reason'
@@ -661,8 +658,9 @@ class _AdminNotificationsScreenState
                   ),
                   isThreeLine: true,
                   trailing: TextButton.icon(
-                    onPressed:
-                        (_isReplaying || id.isEmpty) ? null : () => _replayDeadLetter(id),
+                    onPressed: (_isReplaying || id.isEmpty)
+                        ? null
+                        : () => _replayDeadLetter(id),
                     icon: const Icon(Icons.replay, size: 16),
                     label: const Text('Replay'),
                     style: TextButton.styleFrom(

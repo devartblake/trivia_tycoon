@@ -113,6 +113,10 @@ final authTokenBoxProvider = Provider<Box>((ref) {
 });
 
 final authTokenStoreProvider = Provider<AuthTokenStore>((ref) {
+  final initializedStore = AppInit.tokenStore;
+  if (initializedStore != null) {
+    return initializedStore;
+  }
   final box = ref.watch(authTokenBoxProvider);
   return AuthTokenStore(box);
 });
@@ -162,6 +166,7 @@ final httpClientProvider = Provider<HttpClient>((ref) {
 final synaptixApiClientProvider = Provider<SynaptixApiClient>((ref) {
   return SynaptixApiClient(
     httpClient: ref.watch(httpClientProvider),
+    healthCheckUrl: EnvConfig.apiHealthUrl,
   );
 });
 

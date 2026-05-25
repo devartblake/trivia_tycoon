@@ -784,7 +784,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<UserRole>(
-                  value: selectedRole,
+                  initialValue: selectedRole,
                   items: UserRole.values
                       .map((r) => DropdownMenuItem(
                           value: r, child: Text(getRoleText(r))))
@@ -796,7 +796,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<AgeGroup>(
-                  value: selectedAge,
+                  initialValue: selectedAge,
                   items: AgeGroup.values
                       .map((a) => DropdownMenuItem(
                           value: a, child: Text(getAgeGroupText(a))))
@@ -844,16 +844,16 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                     'isVerified': isVerified,
                     'temporaryPassword': tempPassword,
                   });
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   await _loadUsersFromBackend();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('User created successfully'),
                     behavior: SnackBarBehavior.floating,
                   ));
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Failed to create user: $e'),
                     behavior: SnackBarBehavior.floating,
@@ -881,7 +881,7 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<UserRole>(
-                value: selectedRole,
+                initialValue: selectedRole,
                 items: UserRole.values
                     .map((r) =>
                         DropdownMenuItem(value: r, child: Text(getRoleText(r))))
@@ -912,16 +912,16 @@ class _AdminUsersScreenState extends ConsumerState<AdminUsersScreen> {
                     'role': selectedRole.name,
                     'isVerified': verified,
                   });
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   Navigator.pop(context);
                   await _loadUsersFromBackend();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('User updated'),
                     behavior: SnackBarBehavior.floating,
                   ));
                 } catch (e) {
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Failed to update user: $e'),
                   ));

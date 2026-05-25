@@ -1,7 +1,6 @@
 import 'dart:math';
 import '../../../core/utils/math_types.dart';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart' show Matrix4;
 
 class SkillTreeBackgroundPainter extends CustomPainter {
   final Matrix4 worldToScreen;

@@ -343,8 +343,8 @@ class SkillTreeGraph {
         for (final nodeData in branchNodes) {
           // Inject the branch key as branchId since the JSON node objects
           // don't carry a branchId field — only a category field.
-          final nodeMap = Map<String, dynamic>.from(
-              nodeData as Map<String, dynamic>);
+          final nodeMap =
+              Map<String, dynamic>.from(nodeData as Map<String, dynamic>);
           nodeMap['branchId'] ??= branchId;
           nodes.add(SkillNode.fromJson(nodeMap));
         }

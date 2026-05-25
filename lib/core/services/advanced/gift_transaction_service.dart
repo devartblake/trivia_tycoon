@@ -115,6 +115,7 @@ class GiftTransactionService extends ChangeNotifier {
     LogManager.debug('GiftTransactionService initialized');
   }
 
+  @override
   void dispose() {
     for (final controller in _balanceStreams.values) {
       controller.close();

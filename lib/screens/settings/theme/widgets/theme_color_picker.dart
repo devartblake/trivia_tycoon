@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/theme/swatch_service.dart';
@@ -198,7 +198,7 @@ class _ThemeColorPickerState extends ConsumerState<ThemeColorPicker> {
 
         /// 🎯 Color Values
         Text(
-          'Hex: #${currentColor.value.toRadixString(16).padLeft(8, '0').toUpperCase()}',
+          'Hex: #${currentColor.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase()}',
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         Text(

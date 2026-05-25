@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
@@ -53,7 +53,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
 
     return PopScope(
         canPop: false, // Prevent default back behavior
-        onPopInvoked: (didPop) async {
+        onPopInvokedWithResult: (didPop, result) async {
           if (didPop) return;
 
           final ok =
@@ -497,6 +497,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
       await ref.read(roomControllerProvider.notifier).createRoom(roomName);
       _roomNameController.clear();
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to create room: $e'),
@@ -511,8 +512,7 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
     if (picked == null) return;
 
     await ref.read(roomControllerProvider.notifier).joinRoom(picked);
-    if (context.mounted) {
-      context.go('/multiplayer/rooms');
-    }
+    if (!mounted) return;
+    context.go('/multiplayer/rooms');
   }
 }

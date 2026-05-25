@@ -156,6 +156,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         });
         _updateConfig();
 
+        if (!mounted) return;
         HapticFeedback.lightImpact();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -177,6 +178,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -1305,7 +1307,7 @@ class _GradientEditorScreenState extends ConsumerState<GradientEditorScreen>
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: colorScheme.primary,
+            activeThumbColor: colorScheme.primary,
           ),
         ],
       ),

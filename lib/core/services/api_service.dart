@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 
 class ApiRequestException implements Exception {
   final String message;
@@ -32,6 +32,17 @@ class ApiRequestException implements Exception {
     final target = path != null ? ' [$path]' : '';
     return 'ApiRequestException$code$target: $message';
   }
+}
+
+class FeatureDisabledException implements Exception {
+  final String feature;
+  final String message;
+
+  const FeatureDisabledException(
+      {required this.feature, required this.message});
+
+  @override
+  String toString() => 'FeatureDisabledException[$feature]: $message';
 }
 
 class ApiPageEnvelope<T> {
@@ -141,7 +152,9 @@ class ApiService {
       final body = response.data;
       final items = body is List
           ? body
-          : (body is Map ? body['questions'] ?? body['items'] ?? const [] : const []);
+          : (body is Map
+              ? body['questions'] ?? body['items'] ?? const []
+              : const []);
       return List<Map<String, dynamic>>.from(items);
     });
   }
@@ -180,12 +193,38 @@ class ApiService {
     });
   }
 
+  Future<void> submitQuizComplete({
+    required String eventId,
+    required String playerId,
+    required int score,
+    required int totalQuestions,
+    required String category,
+  }) async {
+    await _handleRequest(() async {
+      await _dio.post('/quiz/complete', data: {
+        'eventId': eventId,
+        'playerId': playerId,
+        'score': score,
+        'totalQuestions': totalQuestions,
+        'category': category,
+      });
+    });
+  }
+
   Future<void> unlockAchievement(String playerName, String achievement) async {
     await _handleRequest(() async {
       await _dio.post('/achievements', data: {
         'playerName': playerName,
         'achievement': achievement,
       });
+    });
+  }
+
+  Future<Map<String, dynamic>> fetchAppConfig() async {
+    return _handleRequest(() async {
+      final response = await _dio.get('/api/v1/app/config');
+      final data = response.data;
+      return data is Map<String, dynamic> ? data : <String, dynamic>{};
     });
   }
 
@@ -248,6 +287,18 @@ class ApiService {
       var normalizedMessage =
           _extractErrorMessageFromResponse(e, envelope: envelope);
 
+      if (e.response?.statusCode == 403) {
+        final errorCode =
+            envelope['error']?.toString() ?? envelope['code']?.toString();
+        if (errorCode == 'FeatureDisabled') {
+          throw FeatureDisabledException(
+            feature: envelope['feature']?.toString() ?? 'unknown',
+            message: envelope['message']?.toString() ??
+                'This feature is not available in the current release.',
+          );
+        }
+      }
+
       if (_shouldAttemptRefresh(e, allowAuthRetry)) {
         final refreshed = await _refreshSessionToken();
         if (refreshed) {
@@ -280,6 +331,7 @@ class ApiService {
         LogManager.debug("API Error: $e");
       }
       if (e is ApiRequestException) rethrow;
+      if (e is FeatureDisabledException) rethrow;
       throw Exception("Unexpected Error: $e");
     }
   }
@@ -356,7 +408,7 @@ class ApiService {
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
     final String jsonString =
-        await rootBundle.loadString('assets/data/analytics/$filename');
+        await AssetResolver.instance.loadString('analytics/$filename');
     return jsonDecode(jsonString);
   }
 
@@ -538,17 +590,23 @@ class ApiService {
 
     if (path == '/store' || path.startsWith('/store/')) return true;
     if (path == '/crypto' || path.startsWith('/crypto/')) return true;
+    if (path == '/rewards' || path.startsWith('/rewards/')) return true;
+    if (path == '/spins' || path.startsWith('/spins/')) return true;
+    if (path == '/missions' || path.startsWith('/missions/')) return true;
 
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
-    if (path == '/users/search' || path.startsWith('/users/search/'))
+    if (path == '/users/search' || path.startsWith('/users/search/')) {
       return true;
+    }
     if (path == '/friends' || path.startsWith('/friends/')) return true;
     if (path == '/profile' || path.startsWith('/profile/')) return true;
-    if (path == '/auth/profile' || path.startsWith('/auth/profile/'))
+    if (path == '/auth/profile' || path.startsWith('/auth/profile/')) {
       return true;
-    if (path == '/user/profile' || path.startsWith('/user/profile/'))
+    }
+    if (path == '/user/profile' || path.startsWith('/user/profile/')) {
       return true;
+    }
 
     return false;
   }

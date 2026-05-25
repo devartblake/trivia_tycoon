@@ -527,7 +527,7 @@ class _PrizeLogScreenState extends ConsumerState<PrizeLogScreen>
                               Expanded(
                                 child: _StatsCard(
                                   title: 'Total Value',
-                                  value: '\${_calculateTotal(logs)}',
+                                  value: '${_calculateTotal(logs)}',
                                   icon: Icons.monetization_on,
                                   color: Colors.green,
                                   isDark: isDark,

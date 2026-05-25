@@ -20,16 +20,6 @@ QuickMathController _controller({
       rng: Random(seed),
     );
 
-/// Drives the controller through [n] answer cycles, using the correct answer
-/// each time. Returns the final state.
-QuickMathState _answerCorrectly(QuickMathController ctrl, int n) {
-  late QuickMathState last;
-  for (int i = 0; i < n; i++) {
-    ctrl.answer(ctrl.state.question.answer, (s) => last = s);
-  }
-  return last;
-}
-
 void main() {
   // ---------------------------------------------------------------------------
   // Initial state
@@ -151,26 +141,26 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('QuickMathController.answer — wrong', () {
-    int _wrongOption(QuickMathController ctrl) {
+    int wrongOption(QuickMathController ctrl) {
       final q = ctrl.state.question;
       return q.options.firstWhere((o) => o != q.answer);
     }
 
     test('increments wrong count', () {
       final ctrl = _controller();
-      ctrl.answer(_wrongOption(ctrl), (_) {});
+      ctrl.answer(wrongOption(ctrl), (_) {});
       expect(ctrl.state.wrong, 1);
     });
 
     test('increments answered count', () {
       final ctrl = _controller();
-      ctrl.answer(_wrongOption(ctrl), (_) {});
+      ctrl.answer(wrongOption(ctrl), (_) {});
       expect(ctrl.state.answered, 1);
     });
 
     test('does not increment correct count', () {
       final ctrl = _controller();
-      ctrl.answer(_wrongOption(ctrl), (_) {});
+      ctrl.answer(wrongOption(ctrl), (_) {});
       expect(ctrl.state.correct, 0);
     });
 
@@ -179,7 +169,7 @@ void main() {
       // Answer wrong many times
       for (int i = 0; i < 10; i++) {
         if (ctrl.state.isOver) break;
-        ctrl.answer(_wrongOption(ctrl), (_) {});
+        ctrl.answer(wrongOption(ctrl), (_) {});
       }
       expect(ctrl.state.score, greaterThanOrEqualTo(0));
     });
@@ -187,13 +177,13 @@ void main() {
     test('resets streak to 0', () {
       final ctrl = _controller();
       ctrl.answer(ctrl.state.question.answer, (_) {}); // correct → streak 1
-      ctrl.answer(_wrongOption(ctrl), (_) {}); // wrong → streak 0
+      ctrl.answer(wrongOption(ctrl), (_) {}); // wrong → streak 0
       expect(ctrl.state.streak, 0);
     });
 
     test('returns false for wrong answer', () {
       final ctrl = _controller();
-      final result = ctrl.answer(_wrongOption(ctrl), (_) {});
+      final result = ctrl.answer(wrongOption(ctrl), (_) {});
       expect(result, isFalse);
     });
   });

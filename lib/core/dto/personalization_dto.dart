@@ -2,6 +2,7 @@
 ///
 /// API contract: docs/flutter_personalization_experiments_handoff_2026-04-30.md
 /// Flutter is a pure renderer — no scoring or decision logic lives here.
+library;
 
 // ── Player Mind Profile ───────────────────────────────────────────────────────
 
@@ -47,30 +48,31 @@ class PlayerMindProfileDto {
   });
 
   factory PlayerMindProfileDto.fromJson(Map<String, dynamic> j) {
-    double _d(String key, [double fallback = 0.0]) =>
+    double d(String key, [double fallback = 0.0]) =>
         (j[key] as num?)?.toDouble() ?? fallback;
-    Map<String, double> _dmap(String key) {
+    Map<String, double> dmap(String key) {
       final raw = j[key];
       if (raw is! Map) return {};
-      return raw.map((k, v) => MapEntry(k.toString(), (v as num?)?.toDouble() ?? 0.0));
+      return raw.map(
+          (k, v) => MapEntry(k.toString(), (v as num?)?.toDouble() ?? 0.0));
     }
 
     return PlayerMindProfileDto(
       playerId: j['playerId']?.toString() ?? '',
-      confidenceLevel: _d('confidenceLevel', 0.5),
-      riskTolerance: _d('riskTolerance', 0.5),
+      confidenceLevel: d('confidenceLevel', 0.5),
+      riskTolerance: d('riskTolerance', 0.5),
       preferredPace: j['preferredPace']?.toString() ?? 'steady',
       learningStyle: j['learningStyle']?.toString() ?? 'visual',
       competitivePreference: j['competitivePreference']?.toString() ?? 'solo',
       socialPreference: j['socialPreference']?.toString() ?? 'low',
-      churnRiskScore: _d('churnRiskScore'),
-      frustrationRiskScore: _d('frustrationRiskScore'),
-      rewardSensitivityScore: _d('rewardSensitivityScore', 0.5),
-      storeAffinityScore: _d('storeAffinityScore', 0.5),
-      notificationFatigueScore: _d('notificationFatigueScore'),
+      churnRiskScore: d('churnRiskScore'),
+      frustrationRiskScore: d('frustrationRiskScore'),
+      rewardSensitivityScore: d('rewardSensitivityScore', 0.5),
+      storeAffinityScore: d('storeAffinityScore', 0.5),
+      notificationFatigueScore: d('notificationFatigueScore'),
       archetype: j['archetype']?.toString() ?? 'steady_learner',
-      categoryStrengths: _dmap('categoryStrengths'),
-      categoryWeaknesses: _dmap('categoryWeaknesses'),
+      categoryStrengths: dmap('categoryStrengths'),
+      categoryWeaknesses: dmap('categoryWeaknesses'),
       personalizationEnabled: j['personalizationEnabled'] as bool? ?? true,
       sidecarScoringEnabled: j['sidecarScoringEnabled'] as bool? ?? true,
       lastCalculatedAt: j['lastCalculatedAt']?.toString(),
@@ -190,7 +192,8 @@ class PlayerHomePersonalizationDto {
 
   /// Top 3 recommendations ordered by priority ASC (as per contract).
   List<PlayerRecommendationDto> get topRecommendations {
-    final sorted = [...recommendations]..sort((a, b) => a.priority.compareTo(b.priority));
+    final sorted = [...recommendations]
+      ..sort((a, b) => a.priority.compareTo(b.priority));
     return sorted.take(3).toList();
   }
 }

@@ -192,54 +192,57 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           _buildSectionHeader(
               'Answer Options', Icons.checklist, const Color(0xFF10B981)),
           const SizedBox(height: 12),
-          ...List.generate(_optionControllers.length, (index) {
-            final isCorrect = _correctAnswerIndex == index;
-            return Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: isCorrect
-                    ? const Color(0xFF10B981).withValues(alpha: 0.1)
-                    : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color:
-                      isCorrect ? const Color(0xFF10B981) : Colors.grey[200]!,
-                  width: isCorrect ? 2 : 1,
-                ),
-              ),
-              child: ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                leading: Radio<int>(
-                  value: index,
-                  groupValue: _correctAnswerIndex,
-                  activeColor: const Color(0xFF10B981),
-                  onChanged: (value) =>
-                      setState(() => _correctAnswerIndex = value!),
-                ),
-                title: TextFormField(
-                  controller: _optionControllers[index],
-                  decoration: InputDecoration(
-                    labelText: 'Option ${String.fromCharCode(65 + index)}',
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(
+          RadioGroup<int>(
+            groupValue: _correctAnswerIndex,
+            onChanged: (value) =>
+                setState(() => _correctAnswerIndex = value!),
+            child: Column(
+              children: List.generate(_optionControllers.length, (index) {
+                final isCorrect = _correctAnswerIndex == index;
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: isCorrect
+                        ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                        : const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
                       color: isCorrect
                           ? const Color(0xFF10B981)
-                          : Colors.grey[600],
-                      fontWeight:
-                          isCorrect ? FontWeight.bold : FontWeight.normal,
+                          : Colors.grey[200]!,
+                      width: isCorrect ? 2 : 1,
                     ),
                   ),
-                  validator: (value) => (value == null || value.isEmpty)
-                      ? 'Enter option ${index + 1}'
-                      : null,
-                ),
-                trailing: isCorrect
-                    ? const Icon(Icons.check_circle, color: Color(0xFF10B981))
-                    : null,
-              ),
-            );
-          }),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 4),
+                    leading: Radio<int>(value: index),
+                    title: TextFormField(
+                      controller: _optionControllers[index],
+                      decoration: InputDecoration(
+                        labelText: 'Option ${String.fromCharCode(65 + index)}',
+                        border: InputBorder.none,
+                        labelStyle: TextStyle(
+                          color: isCorrect
+                              ? const Color(0xFF10B981)
+                              : Colors.grey[600],
+                          fontWeight:
+                              isCorrect ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                      validator: (value) => (value == null || value.isEmpty)
+                          ? 'Enter option ${index + 1}'
+                          : null,
+                    ),
+                    trailing: isCorrect
+                        ? const Icon(Icons.check_circle,
+                            color: Color(0xFF10B981))
+                        : null,
+                  ),
+                );
+              }),
+            ),
+          ),
 
           const SizedBox(height: 24),
 
@@ -493,7 +496,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
         border: Border.all(color: Colors.grey[300]!),
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(icon, size: 20),
@@ -539,7 +542,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFFEF4444),
+            activeThumbColor: const Color(0xFFEF4444),
           ),
         ],
       ),

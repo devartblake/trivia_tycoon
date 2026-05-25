@@ -69,6 +69,8 @@ class QuestionHubService {
     required String category,
     int amount = 10,
     int? difficulty,
+    String mode = 'practice',
+    String? playerId,
   }) async {
     try {
       final response = await _apiService.get(
@@ -76,7 +78,9 @@ class QuestionHubService {
         queryParameters: {
           'category': category,
           'count': amount,
-          if (difficulty != null) 'difficulty': difficulty,
+          'mode': mode,
+          if (difficulty != null) 'difficulty': _difficultyQuery(difficulty),
+          if (playerId != null && playerId.isNotEmpty) 'playerId': playerId,
         },
       );
       final questions = _parseQuestionListResponse(
@@ -127,7 +131,7 @@ class QuestionHubService {
         '/questions/check',
         body: {
           'questionId': question.id,
-          'selectedOptionId': selectedAnswer,
+          'selectedOptionId': question.optionIdForAnswer(selectedAnswer),
         },
       );
       return _parseAnswerCheckResult(
@@ -173,7 +177,8 @@ class QuestionHubService {
           'answers': submissions
               .map((submission) => {
                     'questionId': submission.question.id,
-                    'selectedOptionId': submission.selectedAnswer,
+                    'selectedOptionId': submission.question
+                        .optionIdForAnswer(submission.selectedAnswer),
                   })
               .toList(growable: false),
         },
@@ -372,8 +377,8 @@ class QuestionHubService {
         );
         return {
           'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
-          'subjectCount': (response['subjectCount'] as num?)?.toInt() ??
-              categories.length,
+          'subjectCount':
+              (response['subjectCount'] as num?)?.toInt() ?? categories.length,
           'availableCategories': categories,
           'source': 'backend',
           'meta': envelope.meta,
@@ -434,16 +439,20 @@ class QuestionHubService {
     List<String>? categories,
     List<String>? difficulties,
     bool balanceDifficulties = false,
+    String mode = 'practice',
+    String? playerId,
   }) async {
     try {
       final response = await _apiService.get(
         '/questions/set',
         queryParameters: {
           'count': questionCount,
+          'mode': mode,
           if (categories != null && categories.length == 1)
             'category': categories.first,
           if (difficulties != null && difficulties.length == 1)
-            'difficulty': difficulties.first,
+            'difficulty': _difficultyQuery(difficulties.first),
+          if (playerId != null && playerId.isNotEmpty) 'playerId': playerId,
         },
       );
       final questions = _parseQuestionListResponse(
@@ -487,7 +496,10 @@ class QuestionHubService {
     try {
       final response = await _apiService.get(
         '/questions/set',
-        queryParameters: {'count': questionCount},
+        queryParameters: {
+          'count': questionCount,
+          'mode': 'practice',
+        },
       );
       final questions = _parseQuestionListResponse(
         response,
@@ -553,7 +565,8 @@ class QuestionHubService {
 
     if (value is Map) {
       final map = Map<String, dynamic>.from(value);
-      final candidate = map['name'] ?? map['slug'] ?? map['category'];
+      final candidate =
+          map['name'] ?? map['slug'] ?? map['category'] ?? map['key'];
       if (candidate is String) {
         return QuizCategoryManager.fromString(candidate);
       }
@@ -568,10 +581,12 @@ class QuestionHubService {
   }) {
     final rawItems = response is List
         ? response
-        : (response as Map<String, dynamic>)['items'] ??
-            response['questions'] ??
-            response['data'] ??
-            const <dynamic>[];
+        : response is Map
+            ? response['items'] ??
+                response['questions'] ??
+                response['data'] ??
+                const <dynamic>[]
+            : const <dynamic>[];
 
     if (rawItems is! List) {
       throw QuestionContractException(
@@ -583,8 +598,43 @@ class QuestionHubService {
     return rawItems
         .whereType<Map>()
         .map((item) => Map<String, dynamic>.from(item))
-        .map(QuestionModel.fromJson)
+        .map(QuestionModel.fromGameplayDto)
         .toList(growable: false);
+  }
+
+  Object _difficultyQuery(Object difficulty) {
+    if (difficulty is String) {
+      switch (difficulty.toLowerCase()) {
+        case '1':
+        case 'easy':
+          return 'Easy';
+        case '2':
+        case 'medium':
+          return 'Medium';
+        case '3':
+        case 'hard':
+          return 'Hard';
+        case '4':
+        case 'expert':
+          return 'Expert';
+      }
+      return difficulty;
+    }
+
+    if (difficulty is num) {
+      switch (difficulty.toInt()) {
+        case 1:
+          return 'Easy';
+        case 2:
+          return 'Medium';
+        case 3:
+          return 'Hard';
+        case 4:
+          return 'Expert';
+      }
+    }
+
+    return difficulty.toString();
   }
 
   QuestionAnswerCheckResult _parseAnswerCheckResult(
@@ -604,10 +654,11 @@ class QuestionHubService {
       );
     }
 
-    final correctAnswer = response['correctOptionId']?.toString() ??
+    final correctOptionId = response['correctOptionId']?.toString() ??
         response['correctAnswer']?.toString() ??
         response['expectedAnswer']?.toString() ??
         question.correctAnswer;
+    final correctAnswer = question.answerTextForOptionId(correctOptionId);
     final questionId = response['questionId']?.toString() ??
         response['id']?.toString() ??
         question.id;

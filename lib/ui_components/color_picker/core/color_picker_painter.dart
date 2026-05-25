@@ -20,7 +20,7 @@ class ColorPickerPainter extends CustomPainter {
 
   static String _generateCacheKey(
       List<Color> colors, double strokeWidth, bool isCircular) {
-    final colorHash = colors.map((c) => c.value).join('-');
+    final colorHash = colors.map((c) => c.toARGB32()).join('-');
     return '$colorHash-$strokeWidth-$isCircular';
   }
 
@@ -152,7 +152,7 @@ class ColorPickerPainter extends CustomPainter {
 
     // Only compare color values if lengths match
     for (int i = 0; i < colors.length; i++) {
-      if (oldDelegate.colors[i].value != colors[i].value) {
+      if (oldDelegate.colors[i].toARGB32() != colors[i].toARGB32()) {
         return true;
       }
     }

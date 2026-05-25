@@ -7,12 +7,12 @@ class SpectatorChat extends StatefulWidget {
   final int spectatorCount;
 
   const SpectatorChat({
-    Key? key,
+    super.key,
     required this.gameId,
     required this.currentUserId,
     required this.currentUserDisplayName,
     required this.spectatorCount,
-  }) : super(key: key);
+  });
 
   @override
   State<SpectatorChat> createState() => _SpectatorChatState();

@@ -311,7 +311,7 @@ class _ConfettiSettingsDialogState extends ConsumerState<ConfettiSettingsDialog>
         Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: const Color(0xFF9F7AEA),
+          activeThumbColor: const Color(0xFF9F7AEA),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       ],

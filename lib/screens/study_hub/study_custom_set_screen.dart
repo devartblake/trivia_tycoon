@@ -154,7 +154,8 @@ class _StudyCustomSetScreenState extends ConsumerState<StudyCustomSetScreen> {
         backgroundColor: const Color(0xFF15183A),
         title: Text(
           _isEdit ? 'Edit Study Set' : 'Create Study Set',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [

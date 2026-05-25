@@ -41,3 +41,6 @@ export 'power_up_timer_provider.dart';
 export 'notification_providers.dart';
 export 'player_notification_providers.dart';
 export 'learning_providers.dart';
+export 'reward_backend_providers.dart';
+export 'feature_flag_providers.dart';
+export 'account_rewards_provider.dart';

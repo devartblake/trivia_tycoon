@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/notification_service.dart';
-import '../../../game/providers/notification_providers.dart';
 import '../../../game/providers/notification_template_store.dart';
 import '../../../game/providers/riverpod_providers.dart';
 
@@ -47,6 +46,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
       initialDate: now,
     );
     if (date == null) return;
+    if (!mounted) return;
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(now.add(const Duration(minutes: 2))),
@@ -374,7 +374,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
               border: Border.all(color: const Color(0xFFE5E7EB)),
             ),
             child: DropdownButtonFormField<NotificationTemplate>(
-              value: null,
+              initialValue: null,
               hint: const Text(
                 'Load Template',
                 style: TextStyle(fontSize: 14, color: Color(0xFF9CA3AF)),
@@ -628,7 +628,7 @@ class _NotificationFormState extends ConsumerState<NotificationForm> {
         }
 
         return DropdownButtonFormField<String>(
-          value: selectedChannel,
+          initialValue: selectedChannel,
           decoration: InputDecoration(
             labelText: 'Channel',
             border: OutlineInputBorder(

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/game/providers/question_providers.dart';
 import 'package:trivia_tycoon/game/providers/game_bonus_providers.dart';
 import 'package:trivia_tycoon/game/providers/xp_provider.dart';
 import '../../core/repositories/question_repository.dart';

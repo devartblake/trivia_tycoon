@@ -64,7 +64,7 @@ class _CrosswordSettingsDialogState extends State<CrosswordSettingsDialog> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<CrosswordCategory>(
-            value: _selectedCategory,
+            initialValue: _selectedCategory,
             items: CrosswordCategory.values.map((category) {
               return DropdownMenuItem(
                 value: category,

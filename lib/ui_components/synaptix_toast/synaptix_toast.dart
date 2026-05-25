@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:just_audio/just_audio.dart';
 import 'synaptix_toast_route.dart' as route;
 import 'toast_theme_manager.dart';
 
 const String synaptixToastRouteName = '/synaptixToastRoute';
 
-typedef SynaptixToastStatusCallback = void Function(SynaptixToastStatus? status);
+typedef SynaptixToastStatusCallback = void Function(
+    SynaptixToastStatus? status);
 typedef OnSynaptixTap = void Function(SynaptixToast toast);
 
 enum SynaptixToastType { success, error, info, reward, custom }
@@ -81,7 +81,7 @@ class SynaptixToast<T> extends StatefulWidget {
     this.isDismissible = true,
   }) : onStatusChanged = onStatusChanged ?? ((_) {}) {
     // Apply modern gradient with glassmorphism effect
-    this.backgroundGradient ??=
+    backgroundGradient ??=
         SynaptixToastThemeManager.getGradientForEvent(themeEvent);
   }
 
@@ -148,6 +148,7 @@ class SynaptixToast<T> extends StatefulWidget {
       unawaited(player.play());
     }
 
+    if (!context.mounted) return null;
     final toastRoute = route.showSynaptixToast<T>(
       context: context,
       toast: this,
@@ -179,7 +180,8 @@ class SynaptixToast<T> extends StatefulWidget {
   bool isDismissed() =>
       _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.dismissed;
   bool isAppearing() =>
-      _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isAppearing;
+      _toastRouteNotifier.value?.currentStatus ==
+      SynaptixToastStatus.isAppearing;
   bool isHiding() =>
       _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isHiding;
 

@@ -1,25 +1,157 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/auth_error_messages.dart';
+import '../../core/services/game_platform_auth_service.dart';
 import '../../core/services/settings/profile_sync_service.dart';
 import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
 import 'core_providers.dart';
 import 'game_providers.dart';
-import 'onboarding_providers.dart';
+import 'multi_profile_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Main auth provider - initialized by AppInit, used by router
 final isLoggedInSyncProvider = StateProvider<bool>((ref) => false);
 
-/// Whether the user has selected a profile this process lifetime.
-/// Intentionally NOT persisted — resets to false on every cold start / crash,
-/// so the profile-selection gate always appears when the app relaunches.
+/// Whether the user has selected a profile for this session.
+/// Startup sets this to true for guests and single-profile users; returning
+/// full-account users with multiple profiles are routed to profile selection.
 final profileSelectedProvider = StateProvider<bool>((ref) => false);
+
+enum PlayerIdentityKind {
+  unresolved,
+  anonymousDevice,
+  platformLinked,
+  fullAccount,
+}
+
+class PlayerIdentityState {
+  final bool isReady;
+  final PlayerIdentityKind kind;
+  final String? deviceId;
+  final String? deviceType;
+  final GamePlatformIdentity? platformIdentity;
+  final String? error;
+
+  const PlayerIdentityState({
+    this.isReady = false,
+    this.kind = PlayerIdentityKind.unresolved,
+    this.deviceId,
+    this.deviceType,
+    this.platformIdentity,
+    this.error,
+  });
+
+  bool get hasPlayableIdentity =>
+      isReady && kind != PlayerIdentityKind.unresolved;
+
+  PlayerIdentityState copyWith({
+    bool? isReady,
+    PlayerIdentityKind? kind,
+    String? deviceId,
+    String? deviceType,
+    GamePlatformIdentity? platformIdentity,
+    String? error,
+  }) {
+    return PlayerIdentityState(
+      isReady: isReady ?? this.isReady,
+      kind: kind ?? this.kind,
+      deviceId: deviceId ?? this.deviceId,
+      deviceType: deviceType ?? this.deviceType,
+      platformIdentity: platformIdentity ?? this.platformIdentity,
+      error: error,
+    );
+  }
+}
+
+final playerIdentityProvider =
+    StateNotifierProvider<PlayerIdentityNotifier, PlayerIdentityState>((ref) {
+  return PlayerIdentityNotifier(ref);
+});
+
+class PlayerIdentityNotifier extends StateNotifier<PlayerIdentityState> {
+  final Ref ref;
+
+  PlayerIdentityNotifier(this.ref) : super(const PlayerIdentityState());
+
+  Future<void> initialize() async {
+    final deviceIdService = ref.read(deviceIdServiceProvider);
+    final deviceId = await deviceIdService.getOrCreate();
+    final deviceType = deviceIdService.getDeviceType();
+    final tokenStore = ref.read(authTokenStoreProvider);
+
+    if (tokenStore.hasTokens()) {
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+      state = PlayerIdentityState(
+        isReady: true,
+        kind: PlayerIdentityKind.fullAccount,
+        deviceId: deviceId,
+        deviceType: deviceType,
+      );
+      return;
+    }
+
+    final gamePlatformService = ref.read(gamePlatformAuthServiceProvider);
+    final platformIdentity = await gamePlatformService.signInSilently();
+    if (platformIdentity != null) {
+      try {
+        final session = await ref.read(authApiClientProvider).bootstrapDevice(
+              platform: platformIdentity.platform,
+              platformPlayerId: platformIdentity.playerId,
+              displayName: platformIdentity.displayName,
+            );
+        if (session.hasTokens) {
+          await tokenStore.save(session);
+          ref.read(isLoggedInSyncProvider.notifier).state = true;
+        }
+        state = PlayerIdentityState(
+          isReady: true,
+          kind: PlayerIdentityKind.platformLinked,
+          deviceId: deviceId,
+          deviceType: deviceType,
+          platformIdentity: platformIdentity,
+        );
+        return;
+      } catch (e) {
+        LogManager.debug('[PlayerIdentity] Platform bootstrap skipped: $e');
+      }
+    }
+
+    try {
+      final session = await ref.read(authApiClientProvider).bootstrapDevice();
+      if (session.hasTokens) {
+        await tokenStore.save(session);
+        ref.read(isLoggedInSyncProvider.notifier).state = true;
+      }
+    } catch (e) {
+      LogManager.debug('[PlayerIdentity] Device bootstrap skipped: $e');
+    }
+
+    state = PlayerIdentityState(
+      isReady: true,
+      kind: PlayerIdentityKind.anonymousDevice,
+      deviceId: deviceId,
+      deviceType: deviceType,
+    );
+  }
+
+  void markFullAccount() {
+    state = state.copyWith(
+      isReady: true,
+      kind: PlayerIdentityKind.fullAccount,
+    );
+  }
+}
 
 /// Auth operations provider for login/logout
 final authOperationsProvider = Provider<AuthOperations>((ref) {
   return AuthOperations(ref);
+});
+
+/// Provides the singleton GamePlatformAuthService (Game Center / Play Games).
+final gamePlatformAuthServiceProvider =
+    Provider<GamePlatformAuthService>((ref) {
+  return GamePlatformAuthService();
 });
 
 class AuthOperations {
@@ -39,6 +171,8 @@ class AuthOperations {
 
     // Update Riverpod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = true;
+    ref.read(playerIdentityProvider.notifier).markFullAccount();
+    await _refreshProfileSelectionGate();
   }
 
   /// Login user with password via backend (uses LoginManager)
@@ -56,6 +190,8 @@ class AuthOperations {
 
       // Update Riverpod state
       ref.read(isLoggedInSyncProvider.notifier).state = true;
+      ref.read(playerIdentityProvider.notifier).markFullAccount();
+      await _refreshProfileSelectionGate();
     } catch (e) {
       // Rethrow with user-friendly message
       final message = AuthErrorMessages.getLoginErrorMessage(e);
@@ -89,6 +225,8 @@ class AuthOperations {
 
       // Update Riverpod state
       ref.read(isLoggedInSyncProvider.notifier).state = true;
+      ref.read(playerIdentityProvider.notifier).markFullAccount();
+      await _refreshProfileSelectionGate();
     } catch (e) {
       // Rethrow with user-friendly message
       final message = AuthErrorMessages.getSignupErrorMessage(e);
@@ -96,7 +234,7 @@ class AuthOperations {
     }
   }
 
-  /// Convert Map<String, dynamic>? to Map<String, String>? for SignupData
+  /// Convert Map<&ltString, dynamic&gt>? to Map<&ltString, String&gt>? for SignupData
   Map<String, String>? _convertToStringMap(Map<String, dynamic>? input) {
     if (input == null) return null;
     return input.map((key, value) => MapEntry(key, value.toString()));
@@ -146,6 +284,60 @@ class AuthOperations {
     }
   }
 
+  Future<void> _refreshProfileSelectionGate() async {
+    try {
+      final profiles =
+          await ref.read(multiProfileServiceProvider).getAllProfiles();
+      ref.read(profileSelectedProvider.notifier).state = profiles.length <= 1;
+    } catch (_) {
+      ref.read(profileSelectedProvider.notifier).state = true;
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Mobile game platform auth
+  // -------------------------------------------------------------------------
+
+  /// Silently attempt to sign in using the native game platform.
+  ///
+  /// Call this early in the app lifecycle (e.g. from the root widget or a
+  /// splash screen) so the user skips the login form when Game Center /
+  /// Play Games is already active on the device.
+  ///
+  /// Returns `true` if silent login succeeded and the user is now logged in.
+  Future<bool> trySilentGameLogin() async {
+    final gamePlatformService = ref.read(gamePlatformAuthServiceProvider);
+    final identity = await gamePlatformService.signInSilently();
+    if (identity == null) return false;
+
+    try {
+      await loginWithGamePlatform(identity);
+      return true;
+    } catch (e) {
+      LogManager.debug('[AuthOperations] silent game login failed: $e');
+      return false;
+    }
+  }
+
+  /// Authenticate via a native game platform identity.
+  Future<void> loginWithGamePlatform(GamePlatformIdentity identity) async {
+    try {
+      final backendAuthService = ref.read(coreAuthServiceProvider);
+      final secureStorage = ref.read(secureStorageProvider);
+
+      await backendAuthService.loginWithGamePlatform(identity);
+      await _hydrateProfileFromBackend();
+      await _updateRoleAndPremiumStatus(secureStorage);
+
+      ref.read(isLoggedInSyncProvider.notifier).state = true;
+      ref.read(playerIdentityProvider.notifier).markFullAccount();
+      await _refreshProfileSelectionGate();
+    } catch (e) {
+      final message = AuthErrorMessages.getLoginErrorMessage(e);
+      throw Exception(message);
+    }
+  }
+
   /// Logout user and clear state
   Future<void> logout([BuildContext? context]) async {
     final loginManager = ref.read(loginManagerProvider);
@@ -173,8 +365,7 @@ class AuthOperations {
     ref.read(isLoggedInSyncProvider.notifier).state = false;
     ref.read(profileSelectedProvider.notifier).state = false;
 
-    // Also clear onboarding state
-    await ref.read(onboardingProgressProvider.notifier).reset();
+    await ref.read(playerIdentityProvider.notifier).initialize();
   }
 }
 

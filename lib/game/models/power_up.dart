@@ -116,7 +116,7 @@ class PowerUp {
 
   @override
   String toString() {
-    return 'PowerUp(id: $id, name: $name, type: $type, duration: ${formattedDuration})';
+    return 'PowerUp(id: $id, name: $name, type: $type, duration: $formattedDuration)';
   }
 
   @override

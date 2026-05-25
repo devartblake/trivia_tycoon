@@ -8,10 +8,10 @@ class GroupSettingsScreen extends StatefulWidget {
   final String currentUserId;
 
   const GroupSettingsScreen({
-    Key? key,
+    super.key,
     required this.groupId,
     required this.currentUserId,
-  }) : super(key: key);
+  });
 
   @override
   State<GroupSettingsScreen> createState() => _GroupSettingsScreenState();
@@ -576,7 +576,7 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -612,22 +612,22 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
   void _confirmLeaveGroup(BuildContext context, GroupChat group) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         title: const Text('Leave Group'),
         content: Text('Are you sure you want to leave "${group.name}"?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogCtx),
             child: const Text('Cancel'),
           ),
           FilledButton(
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.pop(dialogCtx);
               final success = await _groupService.leaveGroup(
                 widget.groupId,
                 widget.currentUserId,
               );
-              if (success && mounted) {
+              if (success && context.mounted) {
                 Navigator.of(context).popUntil((route) => route.isFirst);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Left group successfully')),
@@ -635,7 +635,7 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
               }
             },
             style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
+              backgroundColor: Theme.of(dialogCtx).colorScheme.error,
             ),
             child: const Text('Leave'),
           ),
@@ -647,7 +647,7 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
   void _confirmDeleteGroup(BuildContext context, GroupChat group) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         title: const Text('Delete Group'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -663,17 +663,17 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogCtx),
             child: const Text('Cancel'),
           ),
           FilledButton(
             onPressed: () async {
-              Navigator.pop(context);
+              Navigator.pop(dialogCtx);
               final success = await _groupService.deleteGroup(
                 widget.groupId,
                 widget.currentUserId,
               );
-              if (success && mounted) {
+              if (success && context.mounted) {
                 Navigator.of(context).popUntil((route) => route.isFirst);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Group deleted successfully')),
@@ -681,7 +681,7 @@ class _GroupSettingsScreenState extends State<GroupSettingsScreen>
               }
             },
             style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
+              backgroundColor: Theme.of(dialogCtx).colorScheme.error,
             ),
             child: const Text('Delete'),
           ),

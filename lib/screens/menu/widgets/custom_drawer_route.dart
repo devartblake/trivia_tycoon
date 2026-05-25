@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 class CustomDrawerRoute extends PageRouteBuilder {
   final Widget page;
@@ -177,7 +177,7 @@ class CustomDrawerRouteAdvanced extends PageRouteBuilder {
           animation: overlayAnimation,
           builder: (context, child) {
             return Container(
-              color: effectiveBackgroundColor.withOpacity(
+              color: effectiveBackgroundColor.withValues(alpha: 
                 overlayAnimation.value * 0.4,
               ),
             );

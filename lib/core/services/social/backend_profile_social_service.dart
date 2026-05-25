@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 
 import '../api_service.dart';
 import '../../models/social/friend_list_item_dto.dart';
@@ -11,8 +10,10 @@ import '../../networking/encrypted_api_client.dart';
 enum FriendshipStatus { notFriends, requestSent, requestReceived, friends }
 
 class BackendProfileSocialService {
-  BackendProfileSocialService(this._apiService, {EncryptedApiClient? encryptedClient})
-      : _encryptedClient = encryptedClient;
+  BackendProfileSocialService(
+    this._apiService, {
+    EncryptedApiClient? encryptedClient,
+  }) : _encryptedClient = encryptedClient;
 
   final ApiService _apiService;
   final EncryptedApiClient? _encryptedClient;
@@ -57,8 +58,15 @@ class BackendProfileSocialService {
 
   Future<Map<String, dynamic>> saveLoadout(Map<String, dynamic> loadout) async {
     final response = _encryptedClient != null
-        ? await _encryptedClient!.putEncrypted('/users/me/preferences/loadout', body: loadout)
-        : await _apiService.put('/users/me/preferences/loadout', body: loadout, timeout: _socialTimeout);
+        ? await _encryptedClient!.putEncrypted(
+            '/users/me/preferences/loadout',
+            body: loadout,
+          )
+        : await _apiService.put(
+            '/users/me/preferences/loadout',
+            body: loadout,
+            timeout: _socialTimeout,
+          );
     return response;
   }
 
@@ -146,24 +154,45 @@ class BackendProfileSocialService {
   Future<FriendRequestDto> sendFriendRequest(String targetUserId) async {
     final body = {'targetUserId': targetUserId};
     final response = _encryptedClient != null
-        ? await _encryptedClient!.postEncrypted('/users/me/friends/request', body: body)
-        : await _apiService.post('/users/me/friends/request', body: body, timeout: _socialTimeout);
+        ? await _encryptedClient!.postEncrypted(
+            '/users/me/friends/request',
+            body: body,
+          )
+        : await _apiService.post(
+            '/users/me/friends/request',
+            body: body,
+            timeout: _socialTimeout,
+          );
     return FriendRequestDto.fromJson(response);
   }
 
   Future<FriendRequestDto> acceptFriendRequest(String requestId) async {
     const body = <String, dynamic>{};
     final response = _encryptedClient != null
-        ? await _encryptedClient!.postEncrypted('/users/me/friends/requests/$requestId/accept', body: body)
-        : await _apiService.post('/users/me/friends/requests/$requestId/accept', body: body, timeout: _socialTimeout);
+        ? await _encryptedClient!.postEncrypted(
+            '/users/me/friends/requests/$requestId/accept',
+            body: body,
+          )
+        : await _apiService.post(
+            '/users/me/friends/requests/$requestId/accept',
+            body: body,
+            timeout: _socialTimeout,
+          );
     return FriendRequestDto.fromJson(response);
   }
 
   Future<FriendRequestDto> declineFriendRequest(String requestId) async {
     const body = <String, dynamic>{};
     final response = _encryptedClient != null
-        ? await _encryptedClient!.postEncrypted('/users/me/friends/requests/$requestId/decline', body: body)
-        : await _apiService.post('/users/me/friends/requests/$requestId/decline', body: body, timeout: _socialTimeout);
+        ? await _encryptedClient!.postEncrypted(
+            '/users/me/friends/requests/$requestId/decline',
+            body: body,
+          )
+        : await _apiService.post(
+            '/users/me/friends/requests/$requestId/decline',
+            body: body,
+            timeout: _socialTimeout,
+          );
     return FriendRequestDto.fromJson(response);
   }
 
@@ -178,38 +207,46 @@ class BackendProfileSocialService {
   Future<Map<String, dynamic>> removeFriend(
     String friendId, {
     String? playerId,
-  }) {
-    return _apiService.delete(
-      '/friends',
-      body: {
-        if (playerId != null && playerId.isNotEmpty) 'playerId': playerId,
-        // Send both common field names so the client remains compatible with
-        // either backend binder shape while alpha contracts settle.
-        'friendId': friendId,
-        'targetUserId': friendId,
-        'friendPlayerId': friendId,
-      },
-      timeout: _socialTimeout,
-    );
+  }) async {
+    final body = {
+      if (playerId != null && playerId.isNotEmpty) 'playerId': playerId,
+      // Send both common field names so the client remains compatible with
+      // either backend binder shape while alpha contracts settle.
+      'friendId': friendId,
+      'targetUserId': friendId,
+      'friendPlayerId': friendId,
+    };
+
+    return _encryptedClient != null
+        ? _encryptedClient!.deleteEncrypted('/friends', body: body)
+        : _apiService.delete('/friends', body: body, timeout: _socialTimeout);
   }
 
   // ---------------------------------------------------------------------------
   // Cancel sent request
   // ---------------------------------------------------------------------------
 
-  Future<void> cancelFriendRequest(String requestId) {
-    return _apiService.delete(
-      '/users/me/friends/requests/$requestId',
-      body: const <String, dynamic>{},
-      timeout: _socialTimeout,
-    );
+  Future<void> cancelFriendRequest(String requestId) async {
+    const body = <String, dynamic>{};
+    if (_encryptedClient != null) {
+      await _encryptedClient!.deleteEncrypted(
+        '/users/me/friends/requests/$requestId',
+        body: body,
+      );
+    } else {
+      await _apiService.delete(
+        '/users/me/friends/requests/$requestId',
+        body: body,
+        timeout: _socialTimeout,
+      );
+    }
   }
 
   // ---------------------------------------------------------------------------
   // Block / unblock
   // ---------------------------------------------------------------------------
 
-  // TODO(backend): These endpoints are not yet deployed.
+  // Backend endpoints are not yet deployed.
   // They will throw once called; stub provides the correct contract shape.
 
   Future<void> blockUser(String targetUserId) async {
@@ -217,21 +254,34 @@ class BackendProfileSocialService {
     if (_encryptedClient != null) {
       await _encryptedClient!.postEncrypted('/users/me/block', body: body);
     } else {
-      await _apiService.post('/users/me/block', body: body, timeout: _socialTimeout);
+      await _apiService.post(
+        '/users/me/block',
+        body: body,
+        timeout: _socialTimeout,
+      );
     }
   }
 
-  Future<void> unblockUser(String targetUserId) {
-    return _apiService.delete(
-      '/users/me/block/$targetUserId',
-      body: const <String, dynamic>{},
-      timeout: _socialTimeout,
-    );
+  Future<void> unblockUser(String targetUserId) async {
+    const body = <String, dynamic>{};
+    if (_encryptedClient != null) {
+      await _encryptedClient!.deleteEncrypted(
+        '/users/me/block/$targetUserId',
+        body: body,
+      );
+    } else {
+      await _apiService.delete(
+        '/users/me/block/$targetUserId',
+        body: body,
+        timeout: _socialTimeout,
+      );
+    }
   }
 
   Future<List<String>> getBlockedUserIds() async {
     if (kIsWeb) return const [];
-    final res = await _apiService.get('/users/me/block', timeout: _socialTimeout);
+    final res =
+        await _apiService.get('/users/me/block', timeout: _socialTimeout);
     final list = res['items'] as List? ?? [];
     return list
         .whereType<Map>()
