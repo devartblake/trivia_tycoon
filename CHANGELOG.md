@@ -8,6 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – Phase 3 test coverage: settings & profile services (2026-05-25)
+
+#### MinIO avatar upload — status update
+`AvatarUploadService` (XFile, presigned PUT, `fileName`/`contentLength`, `publicUrl`/`avatarUrl` normalisation), `ProfileAvatarController` upload state (`isUploading`, `uploadProgress`, `remoteAvatarUrl`, `uploadError`, `retryUpload`), `avatarUploadServiceProvider` + `profileSyncServiceProvider` in `game_providers.dart`, progress overlay + error/retry chip in `profile_character_section.dart`. Tests: `avatar_upload_service_test.dart` (6 cases), `profile_avatar_controller_upload_test.dart` (5 cases). **COMPLETE**.
+
+#### New test files — 73 additional test cases
+- `test/core/services/settings/player_profile_service_test.dart` (40 cases) — all save/load round-trips, `clearProfile`, `addXP` (no-level-up, level-up, multi-level-up, maxXP scaling), `saveProfileBatch`, `validateProfile`, `loadCompleteProfile`, `getProfile` (box open vs. closed), `_calculateRank` boundaries, Synaptix-mode prefs.
+- `test/core/services/settings/audio_settings_service_test.dart` (25 cases) — all boolean flags (defaults + set + alias), volume (default, set, clamp above/below), toggles, `resetAudioSettings`, `pauseAllAudio`/`resumeAudio`, `reduceVolumeForBackground`/`restoreNormalVolume`, `debugDump`.
+- `test/game/controllers/settings_controller_test.dart` (8 cases) — construction defaults, `toggleAudioOn/MusicOn/SoundsOn` (flip + persist), `setPlayerName` (update + persist), `purchaseSong` (add, idempotent, multiple distinct).
+
+#### CI pipeline — status update
+All 4 CI workflows confirmed already in place: `flutter_ci.yml` (analyze + test), `test-coverage.yml` (40% lcov threshold), `admin-release-checks.yml`, `pr-test-artifacts.yml`. No new CI config required.
+
+---
+
 ### Added – Reward Reactor Alpha frontend (2026-05-22)
 
 Complete Flutter scaffold for the backend-authoritative Reward Reactor reward lifecycle. Backend selects all outcomes; Flutter renders animation hints and player feedback only.

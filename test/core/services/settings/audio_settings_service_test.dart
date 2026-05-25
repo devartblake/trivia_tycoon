@@ -180,7 +180,6 @@ void main() {
       final svc = await _make();
       await svc.pauseAllAudio();
       await svc.resumeAudio();
-      // After resume, debugDump should not retain stale pause state
       final dump = svc.debugDump();
       expect(dump['wasPlayingBeforePause'], isFalse);
     });
@@ -213,8 +212,8 @@ void main() {
       await svc.setAudioOn(false);
       await svc.setMusicVolume(0.1);
       await svc.resetAudioSettings();
-      expect(svc.getAudioOn(), isTrue); // default
-      expect(svc.getMusicVolume(), closeTo(0.7, 0.001)); // default
+      expect(svc.getAudioOn(), isTrue);
+      expect(svc.getMusicVolume(), closeTo(0.7, 0.001));
     });
   });
 
