@@ -29,7 +29,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 | **Django DefaultPermissions fix** | Medium | **Complete — all 12 scopes now granted on login** | No |
 | Operator Dashboard Wave D (Cutover + Blazor decommission) | Low | Staging parallel-run pending (May 8–14); cutover May 15 | Depends on sign-off |
 | Phase 2 - Crash recovery stubs | High | Code complete; device validation pending | Yes — needs device |
-| Phase 3 - Test coverage (remaining gaps) | Medium | ~4.1% → 40% target | No |
+| Phase 3 - Test coverage (remaining gaps) | Medium | **In progress** — 66+ test files; `AudioSettingsService`, `PlayerProfileService`, `SettingsController` added this session | No |
 | Phase 4 - Dependency audit | Medium | Partial | No |
 | Sprint 1 - Auth/profile integration verification | Medium | Partially improved; live backend verification still needed | Yes — needs live server |
 | **Sprint 2 - Networking layer (Flutter)** | **High** | **Complete — `wsMessageStreamProvider`, `wsStateStreamProvider`, `encryptedApiClientProvider` added** | **No** |
@@ -95,23 +95,14 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
   - `presence.update` on quiz/match activity
   - offline transitions on disconnect
 
-### 1b.i Portable avatar/object-storage persistence — PLANNED (next batch)
+### 1b.i Portable avatar/object-storage persistence — ✅ COMPLETE
 
-#### ✅ Already in place
-- `lib/core/services/avatar_upload_service.dart` — 2-step presigned-URL upload service exists (POST for ticket → PUT bytes to MinIO) but is not yet wired
-- Backend contract confirmed: `POST /users/me/avatar/upload-url` → `{uploadUrl, objectKey, publicUrl}`
-- `ProfileSyncService.syncProfileFields(avatar: url)` can persist the returned URL
-
-#### 🔲 Still needed (implementation batch)
-- Update `AvatarUploadService` to accept `XFile` (cross-platform); add `fileName`/`contentLength` to request body; normalise `publicUrl`/`avatarUrl` response field
-- Inject `AvatarUploadService` + `ProfileSyncService` into `ProfileAvatarController`; add upload state (`isUploading`, `uploadProgress`, `remoteAvatarUrl`, `uploadError`, `retryUpload`)
-- Add `avatarUploadServiceProvider` and `profileSyncServiceProvider` to `game_providers.dart`; update `profileAvatarControllerProvider`
-- Progress overlay and error/retry UI in `profile_character_section.dart`
-- Tests: `test/core/services/avatar_upload_service_test.dart` (5 cases), `test/game/controllers/profile_avatar_controller_upload_test.dart` (5 cases)
-- Notes:
-  - Asset-path avatars and backend-served URLs are already safe to sync.
-  - Local emulator/device file paths are not portable across reinstalls and should
-    not be treated as authoritative backend profile values.
+#### ✅ Completed
+- `AvatarUploadService` updated: accepts `XFile` (cross-platform), `fileName`/`contentLength` in request body, normalises `publicUrl`/`avatarUrl` response field, injectable `http.Client` for testability
+- `ProfileAvatarController` updated: `AvatarUploadService` + `ProfileSyncService` injected; upload state (`isUploading`, `uploadProgress`, `remoteAvatarUrl`, `uploadError`), `_uploadAndSync()` (fire-and-forget), `retryUpload()`
+- `avatarUploadServiceProvider` and `profileSyncServiceProvider` added to `game_providers.dart`; `profileAvatarControllerProvider` updated
+- Progress overlay + error/retry chip added to `profile_character_section.dart`
+- Tests: `test/core/services/avatar_upload_service_test.dart` (6 cases), `test/game/controllers/profile_avatar_controller_upload_test.dart` (5 cases)
 
 #### MinIO avatar upload integration checklist
 
@@ -358,7 +349,7 @@ dotnet ef database update \
 
 ## 3. Phase 3 - Test Coverage Remaining Gaps
 
-**Current:** 45 test files / 1,088 source files ~= **4.1%** (target: **40%** on `lib/game/` and `lib/core/`)
+**Current:** 66+ test files (63 previously + 3 this session) / 1,088 source files — **Phase 3 in progress** (target: **40%** on `lib/game/` and `lib/core/`). CI enforcement already in place via `test-coverage.yml`.
 
 ### 3a. Arcade game controllers COMPLETE
 
@@ -410,6 +401,19 @@ dotnet ef database update \
 | `test/arcade/services/arcade_session_service_test.dart` | `startSession()`, `endSession()`, `attachDuration()` |
 | `test/arcade/services/arcade_registry_test.dart` | All 3 game definitions, IDs, titles, difficulties, `ArcadeGameId` completeness |
 | `test/arcade/leaderboards/local_arcade_leaderboard_service_test.dart` | `recordRun()`, `top()` (sort order, limit), `best()`, `wouldBeNewBest()`, `clearBoard()`, `clearAll()`, persistence, `topForGame()` |
+
+### 3f. Settings & profile services (this session) COMPLETE
+
+| File added | Cases | Coverage |
+|---|---|---|
+| `test/core/services/settings/player_profile_service_test.dart` | 40 | `savePlayerName/getPlayerName`, `saveUsername`, `saveUserId`, `saveUserRole`, `saveUserRoles`, `isAdminUser`, `hasRole`, `setPremiumStatus`, `saveCountry`, `saveAgeGroup`, `saveAvatar`, `savePreferredCategories`, Synaptix-mode prefs, `clearProfile`, `addXP` (level-up, multi-level), `saveProfileBatch`, `validateProfile`, `loadCompleteProfile`, `getProfile` (sync, box open/closed), `_calculateRank` |
+| `test/core/services/settings/audio_settings_service_test.dart` | 25 | All getter/setter pairs with defaults, volume clamping, `toggleAudio/Music/Sounds`, `resetAudioSettings`, `pauseAllAudio`, `resumeAudio`, `reduceVolumeForBackground`, `restoreNormalVolume`, `debugDump`, save-aliases |
+| `test/game/controllers/settings_controller_test.dart` | 8 | Initial defaults on construction, `toggleAudioOn/MusicOn/SoundsOn` (flip + persist), `setPlayerName` (update + persist), `purchaseSong` (add, idempotent, multiple) |
+
+**Remaining high-value untested files:**
+- `lib/game/controllers/question_controller.dart` (415 LOC) — requires `Ref` + multiple Riverpod providers; best tested via `ProviderContainer` with stubs
+- `lib/game/controllers/game_controller.dart` (215 LOC) — requires `GoRouter` mock; consider using `MockGoRouter` or `Navigator`-free factory
+- `lib/core/services/settings/quiz_progress_service.dart` (130+ LOC) — straightforward Hive-backed service, easy target
 
 ---
 
@@ -566,10 +570,10 @@ Intentionally deferred to after Alpha launch. No urgency.
 | Zero `UnimplementedError` in user-facing paths | Done - intentional design-time guards documented |
 | Web startup crash (`dart:io` cascade) | Fixed - `api_service.dart` + `auth_error_messages.dart` |
 | Crash recovery tested on iOS and Android | Not yet validated on device |
-| Test coverage >= 40% on `lib/game/` and `lib/core/` | Not yet, ~4.1% currently (45 test files) |
+| Test coverage >= 40% on `lib/game/` and `lib/core/` | In progress — 66+ test files; CI enforcement (`test-coverage.yml`) already configured with 40% lcov threshold |
 | No critical CVEs in dependency tree | Pending `flutter pub outdated` |
 | No single Dart file exceeds 1,700 lines | Done |
-| CI pipeline enforces coverage + lint + no raw prints | Not configured |
+| CI pipeline enforces coverage + lint + no raw prints | ✅ Complete — `flutter_ci.yml` (lint + test), `test-coverage.yml` (40% threshold), `pr-test-artifacts.yml` |
 | All source-code TODO/FIXME resolved | Done (0 remaining) |
 | Runtime validation of all Synaptix screens | Blocked (needs device) |
 | Sprint 2 networking layer | ✅ Complete — WS stream providers + encrypted client provider added |
@@ -582,4 +586,4 @@ Intentionally deferred to after Alpha launch. No urgency.
 | Secure channel (Phase 1 endpoint rollout + codec tests) | ✅ Complete — `sendFriendRequest` + `acceptFriendRequest` encrypted; `secure_payload_codec_test.dart` added |
 | Secure channel (Phase 2 endpoint rollout) | ✅ Complete — `declineFriendRequest`, `blockUser`, `saveLoadout` (social); `claimReward` (economy) encrypted |
 | Study Hub frontend (hub entry points, favorites, custom sets, session resume) | ✅ Complete — `7b18b03` (2026-05-09) |
-| MinIO avatar upload (frontend) | ⏳ Planned — `AvatarUploadService` exists; controller/provider wiring + progress UI next |
+| MinIO avatar upload (frontend) | ✅ Complete — `AvatarUploadService` (XFile, presigned PUT), `ProfileAvatarController` upload state, `avatarUploadServiceProvider`, progress overlay + retry UI, 11 tests |
