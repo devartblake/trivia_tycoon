@@ -281,6 +281,7 @@ class ServiceManager {
         ? Hive.box('auth_tokens')
         : await Hive.openBox('auth_tokens');
     final tokenStore = AuthTokenStore(authBox);
+    await tokenStore.initialize();
     final deviceIdSvc = DeviceIdService(secureStorage);
     final authApiClient = AuthApiClient(
       http.Client(),

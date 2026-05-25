@@ -1,7 +1,13 @@
 import 'package:hive/hive.dart';
+import 'package:trivia_tycoon/core/services/storage/secure_secret_store.dart';
 
 class SecureStorage {
   static const _boxName = 'secrets';
+
+  final SecureSecretStore _secretStore;
+
+  SecureStorage({SecureSecretStore? secretStore})
+      : _secretStore = secretStore ?? SecureSecretStore();
 
   Future<void> setLoggedIn(bool value) async {
     final box = await Hive.openBox('app');
@@ -29,25 +35,22 @@ class SecureStorage {
   }
 
   Future<void> setSecret(String key, String value) async {
-    final box = await Hive.openBox(_boxName);
-    await box.put(key, value);
+    await _secretStore.set(key, value);
   }
 
   Future<String?> getSecret(String key) async {
-    final box = await Hive.openBox(_boxName);
-    return box.get(key);
+    return _secretStore.get(key);
   }
 
   Future<void> removeSecret(String key) async {
-    final box = await Hive.openBox(_boxName);
-    await box.delete(key);
+    await _secretStore.delete(key);
   }
 
   Future<void> clearSecrets() async {
-    final box = await Hive.openBox(_boxName);
-    await box.clear();
+    await _secretStore.clear();
   }
 
+  @Deprecated('Use setSecret/getSecret/removeSecret instead.')
   Future<Box> getSecretBox() async {
     return await Hive.openBox('secrets');
   }

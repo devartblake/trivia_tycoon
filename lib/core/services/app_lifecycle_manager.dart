@@ -170,8 +170,9 @@ class AppLifecycleManager with WidgetsBindingObserver {
   /// Perform save with throttling
   Future<void> _performSave({required String reason}) async {
     // Throttle saves to prevent too frequent disk writes
+    final now = DateTime.now();
     if (_lastSaveTime != null) {
-      final timeSinceLastSave = DateTime.now().difference(_lastSaveTime!);
+      final timeSinceLastSave = now.difference(_lastSaveTime!);
       if (timeSinceLastSave < _minSaveInterval) {
         LogManager.debug(
             '[Lifecycle] Save throttled (too soon since last save)');
@@ -179,18 +180,21 @@ class AppLifecycleManager with WidgetsBindingObserver {
       }
     }
 
+    // Stamp before the async save so the next periodic tick measures
+    // from save-start, aligning with the 30s timer interval.
+    _lastSaveTime = now;
+
     try {
       LogManager.debug('[Lifecycle] Saving state (reason: $reason)...');
       final startTime = DateTime.now();
 
       await onSaveState?.call();
 
-      _lastSaveTime = DateTime.now();
-      final duration = _lastSaveTime!.difference(startTime);
-
+      final duration = DateTime.now().difference(startTime);
       LogManager.debug(
           '[Lifecycle] Save complete in ${duration.inMilliseconds}ms');
     } catch (e, stack) {
+      _lastSaveTime = null; // Allow immediate retry after a failed save
       LogManager.debug('[Lifecycle] Save failed: $e');
       LogManager.debug('[Lifecycle] Stack: $stack');
     }

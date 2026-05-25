@@ -7,6 +7,7 @@ import 'dart:math';
 import '../dialogs/crossword_settings_dialog.dart';
 import '../dialogs/game_result_dialog.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 
 class CrosswordScreen extends StatefulWidget {
   const CrosswordScreen({super.key});
@@ -410,7 +411,9 @@ class _CrosswordScreenState extends State<CrosswordScreen> {
 class CrosswordDataLoader {
   static Future<CrosswordData> loadCrossword(String assetPath) async {
     try {
-      final jsonString = await rootBundle.loadString(assetPath);
+      final jsonString = await AssetResolver.instance.loadString(
+        assetPath.replaceFirst(RegExp(r'^assets/data/'), 'puzzles/'),
+      );
       final jsonData = json.decode(jsonString);
 
       final puzzles = jsonData['puzzles'] as List;

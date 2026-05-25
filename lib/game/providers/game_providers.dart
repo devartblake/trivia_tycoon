@@ -5,7 +5,6 @@ library;
 
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/store/store_hub_model.dart';
@@ -15,6 +14,7 @@ import '../../core/models/store/daily_store_model.dart';
 import '../../core/models/store/store_offer_model.dart';
 import '../../game/state/premium_profile_state.dart';
 import '../../core/services/leaderboard_data_service.dart';
+import '../../core/services/asset_resolver.dart';
 import '../../core/services/question/question_service.dart';
 import '../../core/services/settings/admin_settings_service.dart';
 import '../../core/services/settings/audio_settings_service.dart';
@@ -173,8 +173,7 @@ final leaderboardDataServiceProvider = Provider<LeaderboardDataService>((ref) {
 
 final leaderboardAssetProvider =
     FutureProvider<List<LeaderboardEntry>>((ref) async {
-  final jsonStr =
-      await rootBundle.loadString('assets/data/leaderboard/leaderboard.json');
+  final jsonStr = await AssetResolver.instance.loadString('leaderboard/global');
   final List<dynamic> decoded = json.decode(jsonStr);
   return decoded.map((e) => LeaderboardEntry.fromJson(e)).toList();
 });

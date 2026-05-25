@@ -1,16 +1,13 @@
-import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/native_platform_service.dart';
 
 class NativeDialogs {
-  static const MethodChannel _channel = MethodChannel('trivia_native');
-
   static Future<String?> showInputDialog(String title, String message) async {
     try {
-      final String? response = await _channel.invokeMethod('showInputDialog', {
-        'title': title,
-        'message': message,
-      });
-      return response;
+      return await NativePlatformService.instance.showInputDialog(
+        title,
+        message,
+      );
     } catch (e) {
       LogManager.debug('Error showing input dialog: $e');
       return null;

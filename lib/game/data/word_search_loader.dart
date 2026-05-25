@@ -1,12 +1,16 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 
 class WordSearchDataLoader {
   static Future<List<String>> loadWords(String assetPath,
       {String? difficulty}) async {
     try {
-      final jsonString = await rootBundle.loadString(assetPath);
+      final jsonString = await AssetResolver.instance.loadString(
+        assetPath.replaceFirst(RegExp(r'^assets/data/'), 'puzzles/'),
+        bundledFallbackPath:
+            assetPath.endsWith('word_search_easy.json') ? assetPath : null,
+      );
       final jsonData = json.decode(jsonString);
 
       List<String> words = [];

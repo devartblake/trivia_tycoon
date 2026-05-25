@@ -17,6 +17,7 @@ import '../../game/services/referral_storage_service.dart';
 import '../env.dart';
 import '../networking/ws_client.dart';
 import '../services/app_lifecycle_manager.dart';
+import '../services/asset_resolver.dart';
 import '../services/auth_api_client.dart';
 import '../services/auth_service.dart';
 import '../services/auth_token_store.dart';
@@ -99,6 +100,7 @@ class AppInit {
 
     // Create AuthTokenStore with dedicated auth tokens box
     final tokenStore = AuthTokenStore(authTokenBox);
+    await tokenStore.initialize();
 
     // Store for after use
     _tokenStore = tokenStore;
@@ -377,6 +379,7 @@ class AppInit {
       // 1. Open secondary storage
       await Hive.openBox('cache');
       await Hive.openBox('question');
+      await AssetResolver.instance.syncInBackground();
 
       // 2. Notifications (Hive is ready now)
       await NotificationService().initialize();

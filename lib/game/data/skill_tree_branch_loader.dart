@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 import '../models/skill_tree_graph.dart';
 
 SkillCategory _parseCategory(String raw) {
@@ -12,7 +12,9 @@ SkillCategory _parseCategory(String raw) {
 
 /// Load branch-style JSON and convert to your existing SkillTreeGraph.
 Future<SkillTreeGraph> loadBranchSkillTreeFromAsset(String assetPath) async {
-  final txt = await rootBundle.loadString(assetPath);
+  final txt = await AssetResolver.instance.loadString(
+    assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+  );
   final data = json.decode(txt);
 
   // Accept either { "branches":[...] } or a bare List[...]

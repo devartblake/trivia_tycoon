@@ -45,7 +45,7 @@ class _RewardRevealStepState extends State<RewardRevealStep>
     );
     _animController.forward();
 
-    // Mark reward as seen
+    // Mark reward as seen.
     widget.controller.updateUserData({'hasSeenRewardReveal': true});
   }
 
@@ -88,122 +88,136 @@ class _RewardRevealStepState extends State<RewardRevealStep>
     final total =
         widget.controller.userData['firstChallengeTotal'] as int? ?? 3;
 
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: FadeTransition(
-        opacity: _fadeIn,
-        child: ScaleTransition(
-          scale: _scaleUp,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxHeight < 620;
+        final padding = isCompact ? 16.0 : 24.0;
+        final trophySize = isCompact ? 88.0 : 120.0;
+        final trophyIconSize = isCompact ? 44.0 : 60.0;
+        final sectionGap = isCompact ? 24.0 : 40.0;
+        final contentHeight = constraints.maxHeight > padding * 2
+            ? constraints.maxHeight - (padding * 2)
+            : 0.0;
 
-              // Trophy icon
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      theme.colorScheme.primary,
-                      theme.colorScheme.secondary,
-                    ],
-                  ),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 30,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Text('🏅', style: TextStyle(fontSize: 56)),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Headline
-              Text(
-                _modeHeadline(),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                'Challenge score: $score / $total',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              // Reward cards
-              _RewardRow(
-                icon: Icons.bolt,
-                iconColor: Colors.amber,
-                label: 'Starter XP',
-                value: '+100 XP',
-              ),
-              const SizedBox(height: 16),
-              _RewardRow(
-                icon: Icons.monetization_on_rounded,
-                iconColor: const Color(0xFFFFD700),
-                label: 'Starter Coins',
-                value: '+250',
-              ),
-              const SizedBox(height: 16),
-              _RewardRow(
-                icon: Icons.route_rounded,
-                iconColor: Colors.teal,
-                label: 'Pathway Unlocked',
-                value: 'Cognition',
-              ),
-
-              const Spacer(),
-
-              // CTA
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _continue,
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: Row(
+        return Padding(
+          padding: EdgeInsets.all(padding),
+          child: FadeTransition(
+            opacity: _fadeIn,
+            child: ScaleTransition(
+              scale: _scaleUp,
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: contentHeight),
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Enter Synaptix Hub',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                      Container(
+                        width: trophySize,
+                        height: trophySize,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              theme.colorScheme.primary,
+                              theme.colorScheme.secondary,
+                            ],
+                          ),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.colorScheme.primary
+                                  .withValues(alpha: 0.3),
+                              blurRadius: isCompact ? 20 : 30,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.emoji_events_rounded,
+                          color: Colors.white,
+                          size: trophyIconSize,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.arrow_forward, size: 20),
+                      SizedBox(height: isCompact ? 20 : 32),
+                      Text(
+                        _modeHeadline(),
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Challenge score: $score / $total',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      SizedBox(height: sectionGap),
+                      _RewardRow(
+                        icon: Icons.bolt,
+                        iconColor: Colors.amber,
+                        label: 'Starter XP',
+                        value: '+100 XP',
+                        dense: isCompact,
+                      ),
+                      SizedBox(height: isCompact ? 12 : 16),
+                      _RewardRow(
+                        icon: Icons.monetization_on_rounded,
+                        iconColor: const Color(0xFFFFD700),
+                        label: 'Starter Coins',
+                        value: '+250',
+                        dense: isCompact,
+                      ),
+                      SizedBox(height: isCompact ? 12 : 16),
+                      _RewardRow(
+                        icon: Icons.route_rounded,
+                        iconColor: Colors.teal,
+                        label: 'Pathway Unlocked',
+                        value: 'Cognition',
+                        dense: isCompact,
+                      ),
+                      SizedBox(height: sectionGap),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: _continue,
+                          style: FilledButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              vertical: isCompact ? 14 : 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'Enter Synaptix Hub',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.arrow_forward, size: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: isCompact ? 0 : 16),
                     ],
                   ),
                 ),
               ),
-
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -213,20 +227,26 @@ class _RewardRow extends StatelessWidget {
   final Color iconColor;
   final String label;
   final String value;
+  final bool dense;
 
   const _RewardRow({
     required this.icon,
     required this.iconColor,
     required this.label,
     required this.value,
+    this.dense = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final iconBoxSize = dense ? 40.0 : 44.0;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: EdgeInsets.symmetric(
+        horizontal: dense ? 16 : 20,
+        vertical: dense ? 12 : 16,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(16),
@@ -234,8 +254,8 @@ class _RewardRow extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: iconBoxSize,
+            height: iconBoxSize,
             decoration: BoxDecoration(
               color: iconColor.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),

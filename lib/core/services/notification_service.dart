@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:trivia_tycoon/core/services/native_platform_service.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 
 import '../../game/providers/notification_history_store.dart';
@@ -271,6 +272,10 @@ class NotificationService {
     } catch (e) {
       LogManager.debug('[NotificationService] requestPermission() failed: $e');
     }
+  }
+
+  Future<bool> openSystemNotificationSettings() {
+    return NativePlatformService.instance.openAndroidNotificationSettings();
   }
 
   // ---------------------------------------------------------------------------

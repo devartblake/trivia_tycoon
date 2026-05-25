@@ -6,13 +6,13 @@ library;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../arcade/leaderboards/local_arcade_leaderboard_service.dart';
 import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_mission_claim_service.dart';
 import '../../core/manager/tier_manager.dart';
+import '../../core/services/asset_resolver.dart';
 import '../../core/state/flow_connect_state_notifier.dart';
 import '../../game/data/mission_data_loader.dart';
 import '../../game/models/badge.dart';
@@ -70,7 +70,7 @@ final spinningControllerProvider =
 
 final badgeProvider = FutureProvider<List<GameBadge>>((ref) async {
   final jsonString =
-      await rootBundle.loadString('assets/data/badges_icons.json');
+      await AssetResolver.instance.loadString('game-config/badge-icons');
   final List<dynamic> jsonData = json.decode(jsonString);
   return jsonData.map((e) => GameBadge.fromJson(e)).toList();
 });

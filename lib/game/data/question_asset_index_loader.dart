@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/services.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -43,7 +43,10 @@ class QuestionAssetIndexLoader {
       return _cachedEntries!;
     }
 
-    final jsonString = await rootBundle.loadString(indexAssetPath);
+    final jsonString = await AssetResolver.instance.loadString(
+      'questions/index',
+      bundledFallbackPath: indexAssetPath,
+    );
     final raw = json.decode(jsonString);
     if (raw is! List) {
       throw const FormatException(
@@ -229,7 +232,12 @@ Future<List<QuestionModel>> loadIndexedQuestionAssets({
   }
 
   try {
-    final jsonString = await rootBundle.loadString(resolvedPath);
+    final jsonString = await AssetResolver.instance.loadString(
+      _serverKeyForAssetPath(resolvedPath),
+      bundledFallbackPath: resolvedPath.endsWith('questions_offline_pack.json')
+          ? resolvedPath
+          : null,
+    );
     final raw = json.decode(jsonString);
     if (raw is! List) {
       throw const FormatException(
@@ -248,4 +256,8 @@ Future<List<QuestionModel>> loadIndexedQuestionAssets({
     );
     return const <QuestionModel>[];
   }
+}
+
+String _serverKeyForAssetPath(String assetPath) {
+  return assetPath.replaceFirst(RegExp(r'^assets/'), '');
 }

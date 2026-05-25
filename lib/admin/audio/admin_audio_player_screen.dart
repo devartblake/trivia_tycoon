@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_soloud/flutter_soloud.dart' as soloud;
 import 'package:just_audio/just_audio.dart' as just_audio;
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 
 class AdminAudioPlayerScreen extends StatefulWidget {
@@ -80,7 +81,8 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   }
 
   Future<void> _loadCatalogsFromIndex() async {
-    final songsJson = await rootBundle.loadString('assets/songs/index.json');
+    final songsJson =
+        await AssetResolver.instance.loadString('media/audio/songs/index');
     final soundsJson = await rootBundle.loadString('assets/sounds/index.json');
 
     final songMap = jsonDecode(songsJson) as Map<String, dynamic>;

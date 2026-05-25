@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 import '../models/skill_tree_graph.dart';
 
 Future<SkillTreeGraph> loadSkillTreeFromAsset(String assetPath) async {
-  final jsonStr = await rootBundle.loadString(assetPath);
+  final jsonStr = await AssetResolver.instance.loadString(
+    assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+  );
   final map = json.decode(jsonStr) as Map<String, dynamic>;
 
   // Grouped format (skill_tree_groups key) — used by the current asset file.

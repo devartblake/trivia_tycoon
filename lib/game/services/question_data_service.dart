@@ -1,7 +1,7 @@
-﻿import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../../core/constants/question_paths.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 import '../models/question_model.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -14,7 +14,12 @@ Future<List<QuestionModel>> loadQuestionsFromAsset(
   final exactPath = _getExactPathFromConstants(category);
   if (exactPath != null) {
     try {
-      final jsonStr = await rootBundle.loadString(exactPath);
+      final jsonStr = await AssetResolver.instance.loadString(
+        _serverKeyForAssetPath(exactPath),
+        bundledFallbackPath: exactPath.endsWith('questions_offline_pack.json')
+            ? exactPath
+            : null,
+      );
       final List<dynamic> data = json.decode(jsonStr) as List<dynamic>;
       return data.map((e) => QuestionModel.fromJson(e)).toList();
     } catch (e) {
@@ -490,7 +495,11 @@ Future<List<QuestionModel>> _loadWithDynamicPaths(
   Object? lastErr;
   for (final path in ordered) {
     try {
-      final jsonStr = await rootBundle.loadString(path);
+      final jsonStr = await AssetResolver.instance.loadString(
+        _serverKeyForAssetPath(path),
+        bundledFallbackPath:
+            path.endsWith('questions_offline_pack.json') ? path : null,
+      );
       final List<dynamic> data = json.decode(jsonStr) as List<dynamic>;
       LogManager.debug('Successfully loaded questions from: $path');
       return data.map((e) => QuestionModel.fromJson(e)).toList();
@@ -509,13 +518,21 @@ Future<List<QuestionModel>> _loadWithDynamicPaths(
 /// Load questions from asset with full path (preferred method for constants)
 Future<List<QuestionModel>> loadQuestionsFromAssetPath(String fullPath) async {
   try {
-    final String jsonStr = await rootBundle.loadString(fullPath);
+    final String jsonStr = await AssetResolver.instance.loadString(
+      _serverKeyForAssetPath(fullPath),
+      bundledFallbackPath:
+          fullPath.endsWith('questions_offline_pack.json') ? fullPath : null,
+    );
     final List<dynamic> data = json.decode(jsonStr);
     return data.map((e) => QuestionModel.fromJson(e)).toList();
   } catch (e) {
     throw FlutterError(
         'Failed to load questions from path: $fullPath. Error: $e');
   }
+}
+
+String _serverKeyForAssetPath(String assetPath) {
+  return assetPath.replaceFirst(RegExp(r'^assets/'), '');
 }
 
 /// Helper method to load questions by category with automatic path resolution

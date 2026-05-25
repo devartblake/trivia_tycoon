@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/asset_resolver.dart';
 
 class ApiRequestException implements Exception {
   final String message;
@@ -408,7 +408,7 @@ class ApiService {
   /// Loads mock data from assets/json
   Future<dynamic> getMockData(String filename) async {
     final String jsonString =
-        await rootBundle.loadString('assets/data/analytics/$filename');
+        await AssetResolver.instance.loadString('analytics/$filename');
     return jsonDecode(jsonString);
   }
 

@@ -3,17 +3,39 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/services/auth_token_store.dart';
+import 'package:trivia_tycoon/core/services/storage/secure_secret_store.dart';
+
+class _MemorySecretStore implements SecretStore {
+  final Map<String, String> values = {};
+
+  @override
+  Future<void> clear() async => values.clear();
+
+  @override
+  Future<void> delete(String key) async => values.remove(key);
+
+  @override
+  Future<String?> get(String key) async => values[key];
+
+  @override
+  Future<void> set(String key, String value) async {
+    values[key] = value;
+  }
+}
 
 void main() {
   late Directory tempDir;
   late Box box;
   late AuthTokenStore store;
+  late _MemorySecretStore secretStore;
 
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('auth_token_store_test');
     Hive.init(tempDir.path);
     box = await Hive.openBox('auth_tokens');
-    store = AuthTokenStore(box);
+    secretStore = _MemorySecretStore();
+    store = AuthTokenStore(box, secretStore: secretStore);
+    await store.initialize();
   });
 
   tearDown(() async {
@@ -337,6 +359,9 @@ void main() {
       expect(loaded.expiresAtUtc, expiry);
       expect(loaded.userId, 'uid-saved');
       expect(loaded.metadata, {'role': 'admin', 'isPremium': true});
+      expect(box.get('auth_access_token'), isNull);
+      expect(box.get('auth_refresh_token'), isNull);
+      expect(secretStore.values['auth_session_v1'], isNotNull);
     });
 
     test('hasTokens() returns true after save', () async {
@@ -385,6 +410,33 @@ void main() {
       expect(loaded.userId, isNull);
       expect(loaded.metadata, isNull);
       expect(store.hasTokens(), isFalse);
+      expect(secretStore.values['auth_session_v1'], isNull);
+    });
+  });
+
+  group('AuthTokenStore migration', () {
+    test('imports legacy Hive tokens into secure storage and deletes tokens',
+        () async {
+      final migratingSecrets = _MemorySecretStore();
+      await box.put('auth_access_token', 'legacy-access');
+      await box.put('auth_refresh_token', 'legacy-refresh');
+      await box.put('auth_user_id', 'legacy-user');
+      await box.put('auth_metadata', '{"role":"player"}');
+
+      final migratingStore = AuthTokenStore(
+        box,
+        secretStore: migratingSecrets,
+      );
+      await migratingStore.initialize();
+
+      final loaded = migratingStore.load();
+      expect(loaded.accessToken, 'legacy-access');
+      expect(loaded.refreshToken, 'legacy-refresh');
+      expect(loaded.userId, 'legacy-user');
+      expect(loaded.metadata, {'role': 'player'});
+      expect(box.get('auth_access_token'), isNull);
+      expect(box.get('auth_refresh_token'), isNull);
+      expect(migratingSecrets.values['auth_session_v1'], isNotNull);
     });
   });
 
