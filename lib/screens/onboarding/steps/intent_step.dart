@@ -74,6 +74,7 @@ class _IntentStepState extends State<IntentStep> {
           child: Text('🎯', style: TextStyle(fontSize: 40)),
         ),
       ),
+      panelIllustration: const Text('🎯', style: TextStyle(fontSize: 120)),
       title: 'What brings you here?',
       subtitle: 'We\'ll tailor your experience to match your goal',
       footer: SizedBox(

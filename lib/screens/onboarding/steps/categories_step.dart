@@ -204,25 +204,32 @@ class _CategoriesStepState extends State<CategoriesStep> {
 
           const SizedBox(height: 24),
 
-          // Categories grid
+          // Categories grid — responsive columns
           Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.1,
-              ),
-              itemCount: _categories.length,
-              itemBuilder: (context, index) {
-                final category = _categories[index];
-                final isSelected = _selectedCategories.contains(category.id);
-
-                return _buildCategoryCard(
-                  context,
-                  category: category,
-                  isSelected: isSelected,
-                  onTap: () => _toggleCategory(category.id),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final w = constraints.maxWidth;
+                final cols = w >= 1024 ? 4 : (w >= 768 ? 3 : 2);
+                final ratio = w >= 768 ? 1.0 : 1.1;
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: cols,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: ratio,
+                  ),
+                  itemCount: _categories.length,
+                  itemBuilder: (context, index) {
+                    final category = _categories[index];
+                    final isSelected =
+                        _selectedCategories.contains(category.id);
+                    return _buildCategoryCard(
+                      context,
+                      category: category,
+                      isSelected: isSelected,
+                      onTap: () => _toggleCategory(category.id),
+                    );
+                  },
                 );
               },
             ),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
+import '../../../screens/menu/layouts/responsive_builder.dart';
+import '../widgets/onboarding_step_shell.dart';
 
 class AvatarStep extends StatefulWidget {
   final ModernOnboardingController controller;
 
-  const AvatarStep({
-    super.key,
-    required this.controller,
-  });
+  const AvatarStep({super.key, required this.controller});
 
   @override
   State<AvatarStep> createState() => _AvatarStepState();
@@ -21,63 +20,82 @@ class _AvatarStepState extends State<AvatarStep>
 
   final List<AvatarOption> avatars = [
     AvatarOption(
-        id: 'person', icon: Icons.person, color: Colors.blue, label: 'Classic'),
+      id: 'avatar-1',
+      imagePath: 'assets/images/avatars/avatar-1.png',
+      color: Colors.blue,
+      label: 'Explorer',
+    ),
     AvatarOption(
-        id: 'face', icon: Icons.face, color: Colors.green, label: 'Friendly'),
+      id: 'avatar-2',
+      imagePath: 'assets/images/avatars/avatar-2.png',
+      color: Colors.green,
+      label: 'Scholar',
+    ),
     AvatarOption(
-        id: 'account_circle',
-        icon: Icons.account_circle,
-        color: Colors.orange,
-        label: 'Circle'),
+      id: 'avatar-3',
+      imagePath: 'assets/images/avatars/avatar-3.png',
+      color: Colors.purple,
+      label: 'Champion',
+    ),
     AvatarOption(
-        id: 'sentiment_satisfied',
-        icon: Icons.sentiment_satisfied,
-        color: Colors.purple,
-        label: 'Happy'),
+      id: 'avatar-4',
+      imagePath: 'assets/images/avatars/avatar-4.png',
+      color: Colors.orange,
+      label: 'Adventurer',
+    ),
     AvatarOption(
-        id: 'child_care',
-        icon: Icons.child_care,
-        color: Colors.red,
-        label: 'Young'),
+      id: 'avatar-5',
+      imagePath: 'assets/images/avatars/avatar-5.png',
+      color: Colors.teal,
+      label: 'Brainy',
+    ),
     AvatarOption(
-        id: 'psychology',
-        icon: Icons.psychology,
-        color: Colors.teal,
-        label: 'Brainy'),
+      id: 'monster_1',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/monster_1.png',
+      color: Colors.red,
+      label: 'Monster',
+    ),
     AvatarOption(
-        id: 'sports_esports',
-        icon: Icons.sports_esports,
-        color: Colors.indigo,
-        label: 'Gamer'),
+      id: 'monster_2',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/monster_2.png',
+      color: Colors.deepOrange,
+      label: 'Brute',
+    ),
     AvatarOption(
-        id: 'school',
-        icon: Icons.school,
-        color: Colors.brown,
-        label: 'Scholar'),
+      id: 'monster_3',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/monster_3.png',
+      color: Colors.indigo,
+      label: 'Titan',
+    ),
     AvatarOption(
-        id: 'emoji_events',
-        icon: Icons.emoji_events,
-        color: Colors.amber,
-        label: 'Champion'),
+      id: 'monster_4',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/monster_4.png',
+      color: Colors.brown,
+      label: 'Golem',
+    ),
     AvatarOption(
-        id: 'star', icon: Icons.star, color: Colors.deepPurple, label: 'Star'),
+      id: 'monster_5',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/monster_5.png',
+      color: Colors.deepPurple,
+      label: 'Phantom',
+    ),
     AvatarOption(
-        id: 'favorite',
-        icon: Icons.favorite,
-        color: Colors.pink,
-        label: 'Heart'),
+      id: 'cyclops_1',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/cyclops_1.png',
+      color: Colors.cyan,
+      label: 'Cyclops',
+    ),
     AvatarOption(
-        id: 'rocket_launch',
-        icon: Icons.rocket_launch,
-        color: Colors.deepOrange,
-        label: 'Rocket'),
+      id: 'triclops_1',
+      imagePath: 'assets/avatarPackages/monster_avatars_1.0.0/triclops_1.png',
+      color: Colors.lime,
+      label: 'Triclops',
+    ),
   ];
 
   @override
   void initState() {
     super.initState();
-
-    // Pre-select if data exists
     if (widget.controller.userData['avatar'] != null) {
       _selectedAvatar = widget.controller.userData['avatar'];
     }
@@ -106,117 +124,141 @@ class _AvatarStepState extends State<AvatarStep>
     setState(() {
       _selectedAvatar = id;
     });
-    // Trigger scale animation
     _animationController.forward(from: 0);
   }
 
   void _continue() {
     if (_selectedAvatar != null) {
+      // Store the imagePath so it can be synced to the backend
+      final selected = avatars.firstWhere((a) => a.id == _selectedAvatar);
       widget.controller.updateUserData({
-        'avatar': _selectedAvatar,
+        'avatar': selected.imagePath,
       });
       widget.controller.nextStep();
     }
   }
 
+  AvatarOption? get _selectedOption =>
+      _selectedAvatar != null
+          ? avatars.firstWhere(
+              (a) => a.id == _selectedAvatar,
+              orElse: () => avatars.first,
+            )
+          : null;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isMobile = isMobileLayout(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Spacer(),
-
-          // Emoji hero
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Center(
-              child: Text(
-                '🎭',
-                style: TextStyle(fontSize: 40),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Title
-          Text(
-            'Choose your avatar',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          // Subtitle
-          Text(
-            'Pick an icon that represents you',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-
-          const SizedBox(height: 32),
-
-          // Avatar grid
-          Expanded(
-            child: GridView.builder(
-              itemCount: avatars.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 1.0,
-              ),
-              itemBuilder: (context, index) {
-                final avatar = avatars[index];
-                final isSelected = _selectedAvatar == avatar.id;
-
-                return _buildAvatarCard(
-                  context,
-                  avatar: avatar,
-                  isSelected: isSelected,
-                  onTap: () => _selectAvatar(avatar.id),
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Continue button
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _selectedAvatar != null ? _continue : null,
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: Text(
-                _selectedAvatar == null ? 'Select an avatar' : 'Continue',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-        ],
+    final hero = Container(
+      width: 80,
+      height: 80,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(20),
       ),
+      child: const Center(
+        child: Text('🎭', style: TextStyle(fontSize: 40)),
+      ),
+    );
+
+    final panelIllustration = _buildPanelPreview(context);
+
+    final grid = _buildGrid(context, isMobile);
+
+    final footer = SizedBox(
+      width: double.infinity,
+      child: FilledButton(
+        onPressed: _selectedAvatar != null ? _continue : null,
+        style: FilledButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        ),
+        child: Text(
+          _selectedAvatar == null ? 'Select an avatar' : 'Continue',
+          style: theme.textTheme.titleMedium
+              ?.copyWith(fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+
+    return OnboardingStepShell(
+      hero: hero,
+      title: 'Choose your avatar',
+      subtitle: 'Pick an image that represents you',
+      panelIllustration: panelIllustration,
+      footer: footer,
+      child: grid,
+    );
+  }
+
+  Widget _buildPanelPreview(BuildContext context) {
+    final theme = Theme.of(context);
+    final option = _selectedOption;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: option != null
+              ? ClipRRect(
+                  key: ValueKey(option.id),
+                  borderRadius: BorderRadius.circular(32),
+                  child: Image.asset(
+                    option.imagePath,
+                    width: 180,
+                    height: 180,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Icon(
+                      Icons.person,
+                      size: 120,
+                      color: theme.colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                )
+              : Icon(
+                  Icons.person,
+                  size: 120,
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
+        ),
+        if (option != null) ...[
+          const SizedBox(height: 16),
+          Text(
+            option.label,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildGrid(BuildContext context, bool isMobile) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final cols = w >= 1024 ? 5 : (w >= 768 ? 4 : 3);
+        return GridView.builder(
+          itemCount: avatars.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: cols,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1.0,
+          ),
+          itemBuilder: (context, index) {
+            final avatar = avatars[index];
+            final isSelected = _selectedAvatar == avatar.id;
+            return _buildAvatarCard(context, avatar: avatar, isSelected: isSelected);
+          },
+        );
+      },
     );
   }
 
@@ -224,12 +266,11 @@ class _AvatarStepState extends State<AvatarStep>
     BuildContext context, {
     required AvatarOption avatar,
     required bool isSelected,
-    required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => _selectAvatar(avatar.id),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
@@ -261,27 +302,34 @@ class _AvatarStepState extends State<AvatarStep>
         ),
         child: Stack(
           children: [
-            // Avatar icon and label
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AnimatedBuilder(
                     animation: _scaleAnimation,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: isSelected ? _scaleAnimation.value : 1.0,
-                        child: Icon(
-                          avatar.icon,
+                    builder: (context, child) => Transform.scale(
+                      scale: isSelected ? _scaleAnimation.value : 1.0,
+                      child: child,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        avatar.imagePath,
+                        width: 48,
+                        height: 48,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Icon(
+                          Icons.person,
                           size: 48,
                           color: isSelected
                               ? Colors.white
                               : theme.colorScheme.onSurfaceVariant,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   Text(
                     avatar.label,
                     style: theme.textTheme.labelSmall?.copyWith(
@@ -291,28 +339,23 @@ class _AvatarStepState extends State<AvatarStep>
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
-
-            // Check mark
             if (isSelected)
               Positioned(
-                top: 8,
-                right: 8,
+                top: 6,
+                right: 6,
                 child: Container(
-                  width: 24,
-                  height: 24,
+                  width: 22,
+                  height: 22,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    Icons.check,
-                    size: 16,
-                    color: avatar.color,
-                  ),
+                  child: Icon(Icons.check, size: 14, color: avatar.color),
                 ),
               ),
           ],
@@ -324,13 +367,13 @@ class _AvatarStepState extends State<AvatarStep>
 
 class AvatarOption {
   final String id;
-  final IconData icon;
+  final String imagePath;
   final Color color;
   final String label;
 
   const AvatarOption({
     required this.id,
-    required this.icon,
+    required this.imagePath,
     required this.color,
     required this.label,
   });

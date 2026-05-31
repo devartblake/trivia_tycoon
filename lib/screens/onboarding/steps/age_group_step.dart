@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
 import '../../../synaptix/mode/synaptix_mode_notifier.dart';
+import '../widgets/onboarding_step_shell.dart';
 
 class AgeGroupStep extends StatefulWidget {
   final ModernOnboardingController controller;
 
-  const AgeGroupStep({
-    super.key,
-    required this.controller,
-  });
+  const AgeGroupStep({super.key, required this.controller});
 
   @override
   State<AgeGroupStep> createState() => _AgeGroupStepState();
@@ -51,7 +49,6 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
   @override
   void initState() {
     super.initState();
-    // Pre-select if data exists
     if (widget.controller.userData['ageGroup'] != null) {
       _selectedAgeGroup = widget.controller.userData['ageGroup'];
     }
@@ -78,94 +75,52 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Spacer(),
-
-          // Emoji hero
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Center(
-              child: Text(
-                '🎂',
-                style: TextStyle(fontSize: 40),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Title
-          Text(
-            'Select your age group',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+    return OnboardingStepShell(
+      hero: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Center(
+          child: Text('🎂', style: TextStyle(fontSize: 40)),
+        ),
+      ),
+      panelIllustration: const Text('🎂', style: TextStyle(fontSize: 120)),
+      title: 'Select your age group',
+      subtitle: 'We\'ll tailor content to match your level',
+      footer: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: _selectedAgeGroup != null ? _continue : null,
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
           ),
-
-          const SizedBox(height: 8),
-
-          // Subtitle
-          Text(
-            'We\'ll tailor content to match your level',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
+          child: Text(
+            'Continue',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
             ),
           ),
-
-          const SizedBox(height: 32),
-
-          // Age group cards
-          Expanded(
-            child: ListView.separated(
-              itemCount: _ageGroups.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final option = _ageGroups[index];
-                final isSelected = _selectedAgeGroup == option.id;
-
-                return _buildAgeGroupCard(
-                  context,
-                  option: option,
-                  isSelected: isSelected,
-                  onTap: () => _selectAgeGroup(option.id),
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Continue button
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _selectedAgeGroup != null ? _continue : null,
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: Text(
-                'Continue',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-        ],
+        ),
+      ),
+      child: ListView.separated(
+        itemCount: _ageGroups.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final option = _ageGroups[index];
+          final isSelected = _selectedAgeGroup == option.id;
+          return _buildAgeGroupCard(
+            context,
+            option: option,
+            isSelected: isSelected,
+            onTap: () => _selectAgeGroup(option.id),
+          );
+        },
       ),
     );
   }
@@ -195,7 +150,6 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
         ),
         child: Row(
           children: [
-            // Emoji icon
             Container(
               width: 56,
               height: 56,
@@ -212,10 +166,7 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
                 ),
               ),
             ),
-
             const SizedBox(width: 16),
-
-            // Text content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,8 +188,6 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
                 ],
               ),
             ),
-
-            // Check icon
             if (isSelected)
               Icon(
                 Icons.check_circle,

@@ -73,6 +73,7 @@ class _PlayStyleStepState extends State<PlayStyleStep> {
           child: Text('🎲', style: TextStyle(fontSize: 40)),
         ),
       ),
+      panelIllustration: const Text('🎲', style: TextStyle(fontSize: 120)),
       title: 'How do you play?',
       subtitle: 'Pick the style that matches you best',
       footer: SizedBox(

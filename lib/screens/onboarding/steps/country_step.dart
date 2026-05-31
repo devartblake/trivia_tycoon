@@ -153,6 +153,7 @@ class _CountryStepState extends State<CountryStep> {
           ),
         ),
       ),
+      panelIllustration: const Text('🌍', style: TextStyle(fontSize: 120)),
       title: 'Where are you from?',
       subtitle: 'Help us personalize your experience',
       footer: SizedBox(

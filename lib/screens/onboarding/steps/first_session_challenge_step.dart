@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
+import '../../../screens/menu/layouts/responsive_builder.dart';
 
 /// A lightweight 3-question challenge embedded in onboarding.
 ///
@@ -101,7 +102,8 @@ class _FirstSessionChallengeStepState extends State<FirstSessionChallengeStep>
     final answers = q['answers'] as List<String>;
     final correctIndex = q['correctIndex'] as int;
 
-    return Padding(
+    final isMobile = isMobileLayout(context);
+    final content = Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,6 +269,14 @@ class _FirstSessionChallengeStepState extends State<FirstSessionChallengeStep>
 
           const SizedBox(height: 16),
         ],
+      ),
+    );
+
+    if (isMobile) return content;
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: content,
       ),
     );
   }

@@ -20,6 +20,7 @@ import 'steps/first_session_challenge_step.dart';
 import 'steps/reward_reveal_step.dart';
 import 'steps/completion_step.dart';
 import '../../game/providers/riverpod_providers.dart';
+import 'widgets/onboarding_phase_indicator.dart';
 
 // Confetti particle class
 class Confetti {
@@ -104,7 +105,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     with TickerProviderStateMixin {
   late final ModernOnboardingController _controller;
   late final PageController _pageController;
-  late final AnimationController _progressAnimationController;
   late final AnimationController _confettiAnimationController;
   late final List<Confetti> _confetti;
 
@@ -113,10 +113,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     super.initState();
     _controller = ModernOnboardingController(totalSteps: 11);
     _pageController = PageController();
-    _progressAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
     _confettiAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 16),
@@ -151,13 +147,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       _controller.currentStep,
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOutCubic,
-    );
-
-    // Animate progress bar
-    _progressAnimationController.animateTo(
-      _controller.progress,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
     );
 
     unawaited(_persistProgressSnapshot());
@@ -227,7 +216,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     _controller.removeListener(_onControllerChanged);
     _controller.dispose();
     _pageController.dispose();
-    _progressAnimationController.dispose();
     _confettiAnimationController.dispose();
     super.dispose();
   }
@@ -506,88 +494,38 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
 
   Widget _buildHeader(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
         children: [
-          // Skip button and progress indicator
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Back button (hidden on first step)
-              if (!_controller.isFirstStep)
-                IconButton(
-                  onPressed: _controller.previousStep,
-                  icon: const Icon(Icons.arrow_back),
-                  tooltip: 'Back',
-                )
-              else
-                const SizedBox(width: 48),
+          // Back button (hidden on first step)
+          if (!_controller.isFirstStep)
+            IconButton(
+              onPressed: _controller.previousStep,
+              icon: const Icon(Icons.arrow_back),
+              tooltip: 'Back',
+            )
+          else
+            const SizedBox(width: 48),
 
-              // Step indicator with tooltip
-              Tooltip(
-                message: 'Progress through onboarding',
-                child: Text(
-                  'Step ${_controller.currentStep + 1} of ${_controller.totalSteps}',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
+          // Phase indicator
+          Expanded(
+            child: ListenableBuilder(
+              listenable: _controller,
+              builder: (_, __) => OnboardingPhaseIndicator(
+                currentStep: _controller.currentStep,
               ),
-
-              // Skip button (hidden on last step)
-              if (!_controller.isLastStep)
-                TextButton(
-                  onPressed: _handleSkip,
-                  child: const Text('Skip'),
-                )
-              else
-                const SizedBox(width: 48),
-            ],
+            ),
           ),
 
-          const SizedBox(height: 12),
-
-          // Progress bar with glow effect
-          AnimatedBuilder(
-            animation: _progressAnimationController,
-            builder: (context, child) {
-              return Stack(
-                children: [
-                  // Glow effect
-                  Container(
-                    height: 8,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              theme.colorScheme.primary.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Progress bar
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: LinearProgressIndicator(
-                      value: _progressAnimationController.value,
-                      minHeight: 8,
-                      backgroundColor:
-                          theme.colorScheme.surfaceContainerHighest,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+          // Skip button (hidden on last step)
+          if (!_controller.isLastStep)
+            TextButton(
+              onPressed: _handleSkip,
+              child: const Text('Skip'),
+            )
+          else
+            const SizedBox(width: 48),
         ],
       ),
     );

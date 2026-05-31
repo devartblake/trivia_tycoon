@@ -137,6 +137,7 @@ flutter:
    - assets/icons/store/power-up_hint.png
    - assets/icons/store/power-up_xp.png
    - assets/images/avatars/
+   - assets/avatarPackages/
    - assets/images/quiz.png
    - assets/images/reward-quiz.png
    - assets/images/spinning_wheel.png

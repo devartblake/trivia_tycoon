@@ -91,6 +91,7 @@ class _RewardRevealStepState extends State<RewardRevealStep>
     return LayoutBuilder(
       builder: (context, constraints) {
         final isCompact = constraints.maxHeight < 620;
+        final isWide = constraints.maxWidth >= 768;
         final padding = isCompact ? 16.0 : 24.0;
         final trophySize = isCompact ? 88.0 : 120.0;
         final trophyIconSize = isCompact ? 44.0 : 60.0;
@@ -99,7 +100,7 @@ class _RewardRevealStepState extends State<RewardRevealStep>
             ? constraints.maxHeight - (padding * 2)
             : 0.0;
 
-        return Padding(
+        final inner = Padding(
           padding: EdgeInsets.all(padding),
           child: FadeTransition(
             opacity: _fadeIn,
@@ -215,6 +216,14 @@ class _RewardRevealStepState extends State<RewardRevealStep>
                 ),
               ),
             ),
+          ),
+        );
+
+        if (!isWide) return inner;
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: inner,
           ),
         );
       },

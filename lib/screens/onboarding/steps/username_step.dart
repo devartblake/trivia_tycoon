@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../game/controllers/onboarding_controller.dart';
+import '../widgets/onboarding_step_shell.dart';
 
 class UsernameStep extends StatefulWidget {
   final ModernOnboardingController controller;
 
-  const UsernameStep({
-    super.key,
-    required this.controller,
-  });
+  const UsernameStep({super.key, required this.controller});
 
   @override
   State<UsernameStep> createState() => _UsernameStepState();
@@ -22,7 +20,6 @@ class _UsernameStepState extends State<UsernameStep> {
   @override
   void initState() {
     super.initState();
-    // Pre-fill if data exists
     if (widget.controller.userData['username'] != null) {
       _usernameController.text = widget.controller.userData['username'];
       _validateUsername(_usernameController.text);
@@ -75,52 +72,42 @@ class _UsernameStepState extends State<UsernameStep> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(24),
+    return OnboardingStepShell(
+      hero: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Center(
+          child: Text('👋', style: TextStyle(fontSize: 40)),
+        ),
+      ),
+      panelIllustration: const Text('👋', style: TextStyle(fontSize: 120)),
+      title: 'What should we call you?',
+      subtitle: 'Choose a unique username for your profile',
+      footer: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: _isValid ? _continue : null,
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+          child: Text(
+            'Continue',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Spacer(),
-
-          // Emoji hero
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Text(
-                '👋',
-                style: const TextStyle(fontSize: 40),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Title
-          Text(
-            'What should we call you?',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          // Subtitle
-          Text(
-            'Choose a unique username for your profile',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-
-          const SizedBox(height: 32),
-
-          // Username input
           TextField(
             controller: _usernameController,
             focusNode: _focusNode,
@@ -171,10 +158,7 @@ class _UsernameStepState extends State<UsernameStep> {
               ),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Helper text
           Row(
             children: [
               Icon(
@@ -193,30 +177,6 @@ class _UsernameStepState extends State<UsernameStep> {
               ),
             ],
           ),
-
-          const Spacer(),
-
-          // Continue button
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _isValid ? _continue : null,
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: Text(
-                'Continue',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
         ],
       ),
     );
