@@ -8,6 +8,52 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added – Test coverage expansion: Batches 8–33 (2026-05-09 → 2026-05-31)
+
+Comprehensive test coverage expansion across 26 incremental batches on branch
+`claude/fix-hexagon-alignment-CrQVu`. Total test file count grew from **13 → 260**
+files. All tests are pure-Dart (`flutter_test`) with no platform channel dependencies
+except Hive-backed services (temp-dir isolated per test).
+
+#### Coverage by batch
+
+| Batch | Key areas covered |
+|-------|-------------------|
+| 8–9 | Core game models — `LeaderboardEntry`, `AdaptedQuizState`, `AvatarPackage*`, `QuestionModel`, `Mission`, `PVPChallenge`, `ReferralCode/Invite`, `UserPresence`, `AdminUserModel`, `RewardStep`, `StoreItemModel`, `Achievement` |
+| 10 | `AppSettings` (100+ tests), `ChallengeLivesNotifier`, `UserModel`, `GameMode` |
+| 11–12 | Hive-backed services — `QuizProgressService`, `RewardSettingsService`, `ThemeSettingsService`; service/controller layer |
+| 13–14 | `AppCacheService`, `EventQueueService`, `GiftTransactionService`, `MessageReactionService` |
+| 15–16 | `WordSearchController`, `QuizCategory` enum + manager, `GradientThemes`, `DrawerMenuConfig` |
+| 17 | `ThemeMapper`, `ThemeSettings.copyWith`, `ThemeUtils`, `LoginUserType` field helpers |
+| 18–19 | Game state and DTO models — `FlowConnect*`, `PowerUpEffectApplier`, `SkillCooldownHandler`, small game models, economy DTOs |
+| 20 | DTO sweep — `WalletDto`, `PlayerDto`, `GameEventDto`, `SeasonDto`, `GuardianDto`, territory/hub/vote DTOs, learning DTOs |
+| 21 | `GeneralKeyValueStorageService`, `ConfigStorageService`, provider Hive storage tests |
+| 22 | `WebLinkService`, `GamePlatformAuthService`, `AssetDownloadService`, web-link DTOs |
+| 23 | Multiplayer entity/DTO/mapper tests, conversation storage, search service, leaderboard, experiment store |
+| 24 | Multiplayer domain entities, events, exceptions, result type, and DTO/mapper tests |
+| 25 | Synaptix label/mode mapping, analytics models (`MissionAnalyticsEntry`, `EngagementEntry`, `RetentionEntry`, `UserAnalyticsAggregation`) |
+| 26 | Core helpers (`TierAssigner`, `ReferralCodeGen`, `QrPayload`, `DateFormatter`, `GreetingUtils`), `StudyDto`, `PersonalizationDto`, `GameBonusProviders` |
+| 27 | Multiplayer config/reliability/envelope/mapper/state, `AuthOperations` P3 integration |
+| 28 | Settings layer — `FlowConnectLevelData`, audio settings, onboarding, splash, QR, `AchievementService`, confetti, spin-wheel |
+| 29 | `ThemeSettingsService`, `ProfileStatsService`, `CustomizationService`, social bridge |
+| Phase-3 | `AudioSettingsService` (25 cases), `PlayerProfileService` (40 cases), `SettingsController` (8 cases), `AvatarUploadService`/`ProfileAvatarController` |
+| 30 | Game controllers — `OnboardingController`, `TransitionController`, `ThemeSettingsModel` |
+| 31 | `FlowConnectLevelGenerator`, `GameSessionController` (Mockito mocks); `mockito: ^5.4.4` added to dev_dependencies |
+| 32 | Core extensions (`RelativeTime`), helpers (`HexMath`, `QuizHelpers`, `LoginColorHelper`), Flutter models (`FavoriteCategory`, `FavoriteQuestion`, `WordPosition`, `SkillTreeCategoryColors`) |
+| 33 | `AnalyticsData`, `MultiplayerConstants`/`MultiplayerLogger`, `UserType` enum + provider, `AudioAssetResponse.fromJson`, `SampleStoreData`, `SkillCategoryColors`, `Styles`/`Durations`/`Fonts`/`Insets`/`Sizes`/`Corners` |
+
+#### Test patterns established
+- Manual Hive temp-dir isolation (`setUp`/`tearDown`) for all `Hive`-backed services
+- `ProviderContainer(overrides: [...])` + `addTearDown(container.dispose)` for Riverpod providers
+- Manual `Mock` classes (no code generation) with Mockito `when()`/`verify()`
+- Seeded `Random` for deterministic question/level generation tests
+- Import-based gap analysis (`comm -23` + `grep -rh`) to identify genuinely untested files vs. files already covered by combined test files
+
+#### SKIP rationale (explicitly excluded from test expansion)
+Controllers requiring `ApiService`/`SecureStorage`/`BuildContext`; multiplayer use-case delegates (10–16 lines); data loaders using `AssetResolver` (rootBundle); `path_util.dart` (requires `dart:ui` `Path.computeMetrics`); `question_cache`/`secure_question_cache` (Hive/SecureStorage platform deps).
+
+---
+
 ### Added – Phase 3 test coverage: settings & profile services (2026-05-25)
 
 #### MinIO avatar upload — status update
