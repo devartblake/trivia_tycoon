@@ -1,9 +1,37 @@
 # Current Tasks
 
 _Generated from the markdown files in `docs/` on 2026-05-10._
+_Last updated: 2026-05-31 — post Batch 33 completion. Test file count: **260** (was 13 at initial review)._
 _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote branches, and known merged PR metadata. No specific active PR number was supplied, so branch heads were also used as the working source of truth._
 
 > This file reconciles the current remaining work from the docs folder. Older completed or superseded checklist items are omitted where newer status docs mark them done.
+
+## Test Coverage Batch Tracker
+
+| Batch | Status | Key coverage |
+|-------|--------|--------------|
+| Batch 8–9 | ✅ Merged | Core game models (LeaderboardEntry, AdaptedQuizState, QuestionModel, Mission, PVPChallenge, etc.) |
+| Batch 10 | ✅ Merged | AppSettings (100+ tests), ChallengeLivesNotifier, UserModel |
+| Batch 11–12 | ✅ Merged | Hive services: QuizProgressService, RewardSettingsService, ThemeSettingsService |
+| Batch 13–14 | ✅ Merged | AppCacheService, EventQueueService, GiftTransactionService, MessageReactionService |
+| Batch 15–16 | ✅ Merged | WordSearchController, QuizCategory, GradientThemes, DrawerMenuConfig |
+| Batch 17 | ✅ Merged | ThemeMapper, ThemeSettings, ThemeUtils, LoginUserType |
+| Batch 18–19 | ✅ Merged | FlowConnect*, PowerUpEffectApplier, SkillCooldownHandler, economy DTOs |
+| Batch 20 | ✅ Merged | WalletDto, PlayerDto, GameEventDto, SeasonDto, GuardianDto, territory/hub DTOs, learning DTOs |
+| Batch 21 | ✅ Merged | GeneralKeyValueStorageService, ConfigStorageService, provider Hive storage |
+| Batch 22 | ✅ Merged | WebLinkService, GamePlatformAuthService, AssetDownloadService |
+| Batch 23 | ✅ Merged | Multiplayer entity/DTO/mapper, conversation storage, search, leaderboard, experiment store |
+| Batch 24 | ✅ Merged | Multiplayer domain entities, events, exceptions, result type |
+| Batch 25 | ✅ Merged | Synaptix labels, mode mapping, analytics models, UserAnalyticsAggregation |
+| Batch 26 | ✅ Merged | Core helpers (TierAssigner, ReferralCodeGen, QrPayload), StudyDto, PersonalizationDto, GameBonusProviders |
+| Batch 27 | ✅ Merged | Multiplayer config/reliability/envelope/mapper/state, AuthOperations P3 integration |
+| Batch 28 | ✅ Merged | Settings layer: FlowConnect, audio, onboarding, splash, QR, AchievementService, confetti, spin-wheel |
+| Batch 29 | ✅ Merged | ThemeSettingsService, ProfileStatsService, CustomizationService, social bridge |
+| Phase-3 | ✅ Merged | AudioSettingsService, PlayerProfileService, SettingsController, AvatarUpload* |
+| Batch 30 | ✅ Merged (PR #267) | OnboardingController, TransitionController, ThemeSettingsModel |
+| Batch 31 | ✅ Merged (PR #267) | FlowConnectLevelGenerator, GameSessionController (Mockito) |
+| Batch 32 | ✅ Pushed | Core extensions (RelativeTime), helpers (HexMath, QuizHelpers, LoginColorHelper), Flutter models |
+| Batch 33 | ✅ Pushed | AnalyticsData, MultiplayerConstants/Logger, UserType provider, AudioAssetResponse, SampleStoreData, SkillCategoryColors, Styles constants |
 
 ## P0 - Alpha / Release Blockers
 
@@ -213,7 +241,8 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [x] Web account linking (3 methods — QR code + Google Sign-In + one-time link code): added `google_sign_in: ^6.0.0` to pubspec.yaml; `WebLinkDto` models (QrTokenResponse/QrStatusResponse/QrLinkStatus enum/LinkCodeResponse/GoogleWebAuthResponse with fromJson); `WebLinkService` HTTP client (generateQrToken/pollQrStatus/consumeQrToken for QR; authenticateWithGoogleToken for Google; generateLinkCode/consumeLinkCode for codes; WebLinkException); `webLinkServiceProvider` (Riverpod, wired to EnvConfig.apiBaseUrl); `QrLinkWidget` (web: generates QR token, renders QrImageView, polls every 3s, onSuccess callback); `LinkCodeScreen` (mobile: generates 6-char code with countdown timer, copy-to-clipboard, regenerate); `LoginScreen` — web section with Google Sign-In button (_handleGoogleWebSignIn), link code input field (_handleLinkCodeSubmit), QR code toggle (show/hide QrLinkWidget). All 3 methods exchange backend session tokens and update isLoggedInSyncProvider. (`lib/core/dto/web_link_dto.dart`, `lib/core/services/web_link_service.dart`, `lib/game/providers/web_link_providers.dart`, `lib/screens/web_link/qr_link_widget.dart`, `lib/screens/web_link/link_code_screen.dart`, `lib/screens/login_screen.dart`) ✅ NEW
 - [x] Mobile device auth (Apple Game Center + Google Play Games Services): added `games_services: ^4.0.0` to pubspec.yaml; `GamePlatformIdentity` model (platform/playerId/displayName/toJson); `GamePlatformAuthService` (signInSilently→GamePlatformIdentity?/isSignedIn/currentPlatform; kIsWeb guard; catches exceptions); `AuthApiClient.loginWithGamePlatform` + `linkGameAccount` (new POST endpoints /auth/mobile-game-login + /auth/link-game-account); `BackendAuthService.loginWithGamePlatform` + `linkGameAccount`; `gamePlatformAuthServiceProvider` (Riverpod Provider); `AuthOperations.trySilentGameLogin` (returns bool, fires on initState) + `loginWithGamePlatform`; `LoginScreen` — `_trySilentGameLogin` called in initState when backend auth enabled on iOS/Android, `_handleGamePlatformLogin` method, `_buildNativeGameLoginButton` shown conditionally (iOS: "Continue with Game Center", Android: "Continue with Play Games"). (`lib/core/services/game_platform_auth_service.dart`, `lib/core/services/auth_api_client.dart`, `lib/core/services/auth_service.dart`, `lib/game/providers/auth_providers.dart`, `lib/screens/login_screen.dart`) ✅ NEW
 - [x] Server asset download service: `AssetManifestEntry` model (key/url/sha256/version/sizeBytes/fromJson/toJson); `DownloadedAssetRecord` model (key/version/sha256/downloadedAt/fromJson/toJson); `AssetDownloadService` (syncInBackground/checkForUpdates/downloadAsset with SHA-256 verify/loadAsset/loadAssetOrBundle-falls-back-to-rootBundle/clearDownloadedAssets; Hive box `asset_downloads`; baseDirOverride for testing; key sanitisation); test: 20+ tests covering model round-trips/checkForUpdates returns stale entries/HTTP error returns empty/downloadAsset writes file+verifies hash+throws on mismatch+throws on 404+skips empty hash/loadAsset null for missing+content after download/loadAssetOrBundle returns local when present/clearDownloadedAssets removes files+Hive records/key sanitisation for path separators. (`lib/core/models/asset_manifest_entry.dart`, `lib/core/services/asset_download_service.dart`, `test/core/services/asset_download_service_test.dart`) ✅ NEW
-- [ ] Move toward 90%+ coverage of `lib/game/` and `lib/core/` (widget tests, HTTP mocks, Hive services, provider integration tests).
+- [x] Batches 8–33 complete: **260 test files**, covering all major models, services, controllers, providers, DTOs, logic, and theme constants. Estimated coverage: ~60–70% on `lib/game/` and `lib/core/`.
+- [ ] Move toward 90%+ coverage of `lib/game/` and `lib/core/` — remaining gaps: widget tests for profile/admin/onboarding screens, HTTP-mock service tests, integration test for full game flow.
 
 ### Dependency and build health
 - [ ] Run `flutter pub outdated` and apply safe security/minor updates.
