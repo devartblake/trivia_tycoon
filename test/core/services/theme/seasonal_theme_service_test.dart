@@ -20,10 +20,10 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  SeasonalThemeService _make() =>
+  SeasonalThemeService makeService() =>
       SeasonalThemeService(GeneralKeyValueStorageService());
 
-  SeasonalTheme _activeTheme({
+  SeasonalTheme activeThemeFixture({
     String id = 'test_season',
     String name = 'Test Season',
     ThemeType themeType = ThemeType.allStar,
@@ -45,15 +45,15 @@ void main() {
 
   group('setUserThemeOverride / getUserThemeOverride / hasUserOverride', () {
     test('hasUserOverride returns false when nothing stored', () async {
-      expect(await _make().hasUserOverride(), isFalse);
+      expect(await makeService().hasUserOverride(), isFalse);
     });
 
     test('getUserThemeOverride returns null when nothing stored', () async {
-      expect(await _make().getUserThemeOverride(), isNull);
+      expect(await makeService().getUserThemeOverride(), isNull);
     });
 
     test('set and get round-trip preserves ThemeType', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setUserThemeOverride(ThemeType.allStar);
       expect(await svc.getUserThemeOverride(), ThemeType.allStar);
       expect(await svc.hasUserOverride(), isTrue);
@@ -61,7 +61,7 @@ void main() {
 
     test('round-trips all ThemeType values', () async {
       for (final type in ThemeType.values) {
-        final svc = _make();
+        final svc = makeService();
         await svc.setUserThemeOverride(type);
         expect(await svc.getUserThemeOverride(), type);
         await svc.setUserThemeOverride(null);
@@ -69,7 +69,7 @@ void main() {
     });
 
     test('setting null removes the override', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setUserThemeOverride(ThemeType.competition);
       await svc.setUserThemeOverride(null);
       expect(await svc.getUserThemeOverride(), isNull);
@@ -83,12 +83,12 @@ void main() {
 
   group('saveSeasonalTheme / getCurrentSeasonalTheme', () {
     test('returns null when nothing stored', () async {
-      expect(await _make().getCurrentSeasonalTheme(), isNull);
+      expect(await makeService().getCurrentSeasonalTheme(), isNull);
     });
 
     test('active theme with dates spanning now is returned', () async {
-      final svc = _make();
-      await svc.saveSeasonalTheme(_activeTheme(id: 'spring', themeType: ThemeType.allStar));
+      final svc = makeService();
+      await svc.saveSeasonalTheme(activeThemeFixture(id: 'spring', themeType: ThemeType.allStar));
       final retrieved = await svc.getCurrentSeasonalTheme();
       expect(retrieved, isNotNull);
       expect(retrieved!.id, 'spring');
@@ -96,7 +96,7 @@ void main() {
     });
 
     test('theme with isActive=false returns null', () async {
-      final svc = _make();
+      final svc = makeService();
       final now = DateTime.now();
       final inactive = SeasonalTheme(
         id: 'inactive',
@@ -111,7 +111,7 @@ void main() {
     });
 
     test('expired theme (endDate in past) returns null', () async {
-      final svc = _make();
+      final svc = makeService();
       final now = DateTime.now();
       final expired = SeasonalTheme(
         id: 'expired',
@@ -126,7 +126,7 @@ void main() {
     });
 
     test('future theme (startDate in future) returns null', () async {
-      final svc = _make();
+      final svc = makeService();
       final now = DateTime.now();
       final future = SeasonalTheme(
         id: 'future',
@@ -141,9 +141,9 @@ void main() {
     });
 
     test('overwriting with a new theme returns the latest one', () async {
-      final svc = _make();
-      await svc.saveSeasonalTheme(_activeTheme(id: 'first'));
-      await svc.saveSeasonalTheme(_activeTheme(id: 'second', themeType: ThemeType.competition));
+      final svc = makeService();
+      await svc.saveSeasonalTheme(activeThemeFixture(id: 'first'));
+      await svc.saveSeasonalTheme(activeThemeFixture(id: 'second', themeType: ThemeType.competition));
       final retrieved = await svc.getCurrentSeasonalTheme();
       expect(retrieved!.id, 'second');
       expect(retrieved.themeType, ThemeType.competition);
@@ -156,7 +156,7 @@ void main() {
 
   group('updateFromBackend', () {
     test('stores theme from a JSON-like map', () async {
-      final svc = _make();
+      final svc = makeService();
       final now = DateTime.now();
       final themeData = {
         'id': 'backend_season',
@@ -174,7 +174,7 @@ void main() {
     });
 
     test('invalid JSON map is silently ignored', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.updateFromBackend({'bad_key': 'bad_value'});
       expect(await svc.getCurrentSeasonalTheme(), isNull);
     });
@@ -186,24 +186,24 @@ void main() {
 
   group('getActiveTheme', () {
     test('returns default theme when nothing configured', () async {
-      expect(await _make().getActiveTheme(), AppTheme.defaultTheme);
+      expect(await makeService().getActiveTheme(), AppTheme.defaultTheme);
     });
 
     test('returns seasonal theme when no user override', () async {
-      final svc = _make();
-      await svc.saveSeasonalTheme(_activeTheme(themeType: ThemeType.competition));
+      final svc = makeService();
+      await svc.saveSeasonalTheme(activeThemeFixture(themeType: ThemeType.competition));
       expect(await svc.getActiveTheme(), ThemeType.competition);
     });
 
     test('user override takes precedence over active seasonal theme', () async {
-      final svc = _make();
-      await svc.saveSeasonalTheme(_activeTheme(themeType: ThemeType.competition));
+      final svc = makeService();
+      await svc.saveSeasonalTheme(activeThemeFixture(themeType: ThemeType.competition));
       await svc.setUserThemeOverride(ThemeType.allStar);
       expect(await svc.getActiveTheme(), ThemeType.allStar);
     });
 
     test('returns default when seasonal theme is inactive', () async {
-      final svc = _make();
+      final svc = makeService();
       final now = DateTime.now();
       final inactive = SeasonalTheme(
         id: 'i',
@@ -224,8 +224,8 @@ void main() {
 
   group('clear', () {
     test('removes both seasonal theme and user override', () async {
-      final svc = _make();
-      await svc.saveSeasonalTheme(_activeTheme());
+      final svc = makeService();
+      await svc.saveSeasonalTheme(activeThemeFixture());
       await svc.setUserThemeOverride(ThemeType.allStar);
       await svc.clear();
       expect(await svc.getCurrentSeasonalTheme(), isNull);

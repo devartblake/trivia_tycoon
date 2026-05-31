@@ -40,7 +40,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  SettingsController _makeController() => SettingsController(
+  SettingsController makeController() => SettingsController(
         audioService: audioService,
         profileService: profileService,
         purchaseService: purchaseService,
@@ -51,7 +51,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   test('initial ValueNotifier values reflect Hive defaults', () {
-    final controller = _makeController();
+    final controller = makeController();
     expect(controller.audioOn.value, isTrue);
     expect(controller.musicOn.value, isTrue);
     expect(controller.soundsOn.value, isTrue);
@@ -64,7 +64,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   test('toggleAudioOn flips audioOn.value and persists', () async {
-    final controller = _makeController();
+    final controller = makeController();
     expect(controller.audioOn.value, isTrue);
 
     await controller.toggleAudioOn();
@@ -81,7 +81,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   test('toggleMusicOn flips musicOn.value and persists', () async {
-    final controller = _makeController();
+    final controller = makeController();
     await controller.toggleMusicOn();
     expect(controller.musicOn.value, isFalse);
     expect(audioService.getMusicOn(), isFalse);
@@ -92,7 +92,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   test('toggleSoundsOn flips soundsOn.value and persists', () async {
-    final controller = _makeController();
+    final controller = makeController();
     await controller.toggleSoundsOn();
     expect(controller.soundsOn.value, isFalse);
     expect(audioService.getSoundsOn(), isFalse);
@@ -103,7 +103,7 @@ void main() {
   // ---------------------------------------------------------------------------
 
   test('setPlayerName updates playerName.value and persists', () async {
-    final controller = _makeController();
+    final controller = makeController();
     await controller.setPlayerName('Frank');
     expect(controller.playerName.value, 'Frank');
     expect(await profileService.getPlayerName(), 'Frank');
@@ -114,13 +114,13 @@ void main() {
   // ---------------------------------------------------------------------------
 
   test('purchaseSong adds song to purchasedSongs list', () async {
-    final controller = _makeController();
+    final controller = makeController();
     await controller.purchaseSong('rock_anthem.mp3');
     expect(controller.purchasedSongs.value, contains('rock_anthem.mp3'));
   });
 
   test('purchaseSong is idempotent — duplicate not added', () async {
-    final controller = _makeController();
+    final controller = makeController();
     await controller.purchaseSong('rock_anthem.mp3');
     await controller.purchaseSong('rock_anthem.mp3');
     expect(
@@ -132,7 +132,7 @@ void main() {
   });
 
   test('purchaseSong adds multiple distinct songs', () async {
-    final controller = _makeController();
+    final controller = makeController();
     await controller.purchaseSong('track_a.mp3');
     await controller.purchaseSong('track_b.mp3');
     expect(controller.purchasedSongs.value, containsAll(['track_a.mp3', 'track_b.mp3']));

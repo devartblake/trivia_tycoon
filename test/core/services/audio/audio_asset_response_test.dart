@@ -9,12 +9,13 @@ void main() {
   group('AudioAssetResponse constructor', () {
     test('stores all required fields', () {
       final expiry = DateTime(2024, 12, 31, 23, 59);
-      const response = AudioAssetResponse(
+      final response = AudioAssetResponse(
         presignedUrl: 'https://example.com/song.mp3',
-        expiresAt: DateTime.utc(2024, 12, 31, 23, 59),
+        expiresAt: expiry,
         contentType: 'audio/mpeg',
       );
       expect(response.presignedUrl, 'https://example.com/song.mp3');
+      expect(response.expiresAt, expiry);
       expect(response.contentType, 'audio/mpeg');
     });
 

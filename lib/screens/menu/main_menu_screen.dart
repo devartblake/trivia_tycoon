@@ -172,7 +172,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   }
 
   Future<void> _syncWalletBalances(String playerId) async {
-    if (playerId.isEmpty || playerId == 'guest') {
+    if (playerId.isEmpty ||
+        playerId == 'guest' ||
+        playerId.startsWith('local_')) {
       return;
     }
 

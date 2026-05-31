@@ -29,6 +29,8 @@ class ThemeSettings {
     this.textTheme,
   });
 
+  static List<ThemeSettings> get presets => ThemeSettingsController.presets;
+
   ThemeSettings copyWith({
     String? themeName,
     Color? primaryColor,

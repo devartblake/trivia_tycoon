@@ -17,7 +17,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  AchievementSettingsService _make() => AchievementSettingsService();
+  AchievementSettingsService makeService() => AchievementSettingsService();
 
   // -------------------------------------------------------------------------
   // getUnlockedBadges
@@ -25,12 +25,12 @@ void main() {
 
   group('getUnlockedBadges', () {
     test('returns empty list when nothing is stored', () async {
-      final svc = _make();
+      final svc = makeService();
       expect(await svc.getUnlockedBadges(), isEmpty);
     });
 
     test('returns stored badges after unlocking', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.unlockBadge('first_win');
       await svc.unlockBadge('speedster');
       final badges = await svc.getUnlockedBadges();
@@ -44,13 +44,13 @@ void main() {
 
   group('unlockBadge', () {
     test('adds a new badge to the list', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.unlockBadge('newcomer');
       expect(await svc.getUnlockedBadges(), contains('newcomer'));
     });
 
     test('does not duplicate an already-unlocked badge', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.unlockBadge('winner');
       await svc.unlockBadge('winner');
       final badges = await svc.getUnlockedBadges();
@@ -58,7 +58,7 @@ void main() {
     });
 
     test('unlocking multiple distinct badges stores all of them', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.unlockBadge('a');
       await svc.unlockBadge('b');
       await svc.unlockBadge('c');
@@ -67,15 +67,15 @@ void main() {
     });
 
     test('duplicate unlock does not change total badge count', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.unlockBadge('dup');
       await svc.unlockBadge('dup');
       expect((await svc.getUnlockedBadges()).length, 1);
     });
 
     test('persists across separate service instances', () async {
-      await _make().unlockBadge('persistent');
-      expect(await _make().getUnlockedBadges(), contains('persistent'));
+      await makeService().unlockBadge('persistent');
+      expect(await makeService().getUnlockedBadges(), contains('persistent'));
     });
   });
 }

@@ -17,7 +17,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  SplashSettingsService _make() => SplashSettingsService();
+  SplashSettingsService makeService() => SplashSettingsService();
 
   // -------------------------------------------------------------------------
   // getSplashType
@@ -25,11 +25,11 @@ void main() {
 
   group('getSplashType', () {
     test('defaults to SplashType.fortuneWheel when nothing stored', () async {
-      expect(await _make().getSplashType(), SplashType.fortuneWheel);
+      expect(await makeService().getSplashType(), SplashType.fortuneWheel);
     });
 
     test('returns stored splash type', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setSplashType(SplashType.mindMarket);
       expect(await svc.getSplashType(), SplashType.mindMarket);
     });
@@ -37,7 +37,7 @@ void main() {
     test('returns fortuneWheel fallback for unrecognized stored value', () async {
       final box = await Hive.openBox('settings');
       await box.put('splash_type', 'unknown_type_xyz');
-      expect(await _make().getSplashType(), SplashType.fortuneWheel);
+      expect(await makeService().getSplashType(), SplashType.fortuneWheel);
     });
   });
 
@@ -48,14 +48,14 @@ void main() {
   group('setSplashType', () {
     for (final type in SplashType.values) {
       test('stores and retrieves ${type.name}', () async {
-        final svc = _make();
+        final svc = makeService();
         await svc.setSplashType(type);
         expect(await svc.getSplashType(), type);
       });
     }
 
     test('overwrites previous value', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setSplashType(SplashType.hqTerminal);
       await svc.setSplashType(SplashType.empireRising);
       expect(await svc.getSplashType(), SplashType.empireRising);

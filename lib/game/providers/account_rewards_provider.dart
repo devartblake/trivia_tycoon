@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
 
+import 'auth_providers.dart';
 import 'core_providers.dart';
 import 'wallet_providers.dart';
 import 'xp_provider.dart';
@@ -129,12 +131,15 @@ class AccountRewardsNotifier extends StateNotifier<AsyncValue<Set<String>>> {
     if (current.contains(rewardKey)) return false;
 
     Map<String, dynamic>? serverState;
-    try {
-      serverState = await _claimOnBackend(rewardKey);
-      await _syncFromServerState(serverState);
-    } catch (e) {
-      LogManager.debug('[AccountRewards] Backend claim unavailable: $e');
-      if (!allowLocalFallback) return false;
+    final useLocalFallback = allowLocalFallback || _usesLocalRewardState();
+    if (!useLocalFallback) {
+      try {
+        serverState = await _claimOnBackend(rewardKey);
+        await _syncFromServerState(serverState);
+      } catch (e) {
+        LogManager.debug('[AccountRewards] Backend claim unavailable: $e');
+        return false;
+      }
     }
 
     if (serverState == null && definition.coins > 0) {
@@ -179,19 +184,29 @@ class AccountRewardsNotifier extends StateNotifier<AsyncValue<Set<String>>> {
   }
 
   Future<Set<String>?> _loadBackendClaims() async {
+    if (_usesLocalRewardState()) return null;
+
     try {
-      final response =
-          await ref.read(serviceManagerProvider).apiService.get(
-                '/account/rewards/status',
-              );
+      final response = await ref.read(serviceManagerProvider).apiService.get(
+            '/account/rewards/status',
+          );
       final raw = response['claimedRewardKeys'] ?? response['claimed'];
       if (raw is Iterable) {
         return raw.map((value) => value.toString()).toSet();
+      }
+    } on ApiRequestException catch (e) {
+      if (e.statusCode != 404) {
+        LogManager.debug('[AccountRewards] Backend status unavailable: $e');
       }
     } catch (e) {
       LogManager.debug('[AccountRewards] Backend status unavailable: $e');
     }
     return null;
+  }
+
+  bool _usesLocalRewardState() {
+    final identity = ref.read(playerIdentityProvider);
+    return identity.kind == PlayerIdentityKind.anonymousDevice;
   }
 
   bool _setEquals(Set<String> a, Set<String> b) {

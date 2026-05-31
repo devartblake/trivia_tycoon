@@ -17,7 +17,7 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  OnboardingSettingsService _make() => OnboardingSettingsService();
+  OnboardingSettingsService makeService() => OnboardingSettingsService();
 
   // -------------------------------------------------------------------------
   // OnboardingProgress — pure data model
@@ -94,14 +94,14 @@ void main() {
 
   group('getOnboardingProgress', () {
     test('returns default progress when nothing stored', () async {
-      final svc = _make();
+      final svc = makeService();
       final progress = await svc.getOnboardingProgress();
       expect(progress.completed, isFalse);
       expect(progress.currentStep, 0);
     });
 
     test('returns saved progress after save', () async {
-      final svc = _make();
+      final svc = makeService();
       const toSave = OnboardingProgress(
         currentStep: 3,
         username: 'player1',
@@ -124,7 +124,7 @@ void main() {
       final box = await Hive.openBox('settings');
       await box.put('onboarding_complete', true);
 
-      final svc = _make();
+      final svc = makeService();
       final progress = await svc.getOnboardingProgress();
       expect(progress.completed, isTrue);
       // legacy key should be removed
@@ -135,7 +135,7 @@ void main() {
       final box = await Hive.openBox('settings');
       await box.put('onboarding_complete', false);
 
-      final svc = _make();
+      final svc = makeService();
       await svc.getOnboardingProgress();
       expect(box.containsKey('onboarding_complete'), isFalse);
     });
@@ -147,7 +147,7 @@ void main() {
 
   group('setHasCompletedOnboarding', () {
     test('setting true marks all completion-related fields', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setHasCompletedOnboarding(true);
       final progress = await svc.getOnboardingProgress();
       expect(progress.completed, isTrue);
@@ -157,7 +157,7 @@ void main() {
     });
 
     test('setting false does not reset hasSeenIntro if already true', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setHasCompletedOnboarding(true);
       await svc.setHasCompletedOnboarding(false);
       final progress = await svc.getOnboardingProgress();
@@ -172,11 +172,11 @@ void main() {
 
   group('hasCompletedOnboarding', () {
     test('returns false by default', () async {
-      expect(await _make().hasCompletedOnboarding(), isFalse);
+      expect(await makeService().hasCompletedOnboarding(), isFalse);
     });
 
     test('returns true after setHasCompletedOnboarding(true)', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setHasCompletedOnboarding(true);
       expect(await svc.hasCompletedOnboarding(), isTrue);
     });
@@ -188,7 +188,7 @@ void main() {
 
   group('updateOnboardingProgress', () {
     test('partial update preserves existing fields', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.saveOnboardingProgress(
           const OnboardingProgress(username: 'charlie', currentStep: 2));
       await svc.updateOnboardingProgress(hasSeenIntro: true);
@@ -205,7 +205,7 @@ void main() {
 
   group('resetOnboardingProgress', () {
     test('resets all fields to defaults', () async {
-      final svc = _make();
+      final svc = makeService();
       await svc.setHasCompletedOnboarding(true);
       await svc.updateOnboardingProgress(username: 'reseeded');
       await svc.resetOnboardingProgress();

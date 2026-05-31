@@ -36,7 +36,7 @@ void main() {
       final loaded = await SwatchService.loadSwatches();
       expect(loaded.length, colors.length);
       for (var i = 0; i < colors.length; i++) {
-        expect(loaded[i].value, colors[i].value);
+        expect(loaded[i].toARGB32(), colors[i].toARGB32());
       }
     });
 
@@ -48,14 +48,14 @@ void main() {
       ]);
       final loaded = await SwatchService.loadSwatches();
       expect(loaded.length, 2);
-      expect(loaded[0].value, const Color(0xFF123456).value);
+      expect(loaded[0].toARGB32(), const Color(0xFF123456).toARGB32());
     });
 
     test('single color round-trip', () async {
       await SwatchService.saveSwatches([const Color(0xFFABCDEF)]);
       final loaded = await SwatchService.loadSwatches();
       expect(loaded.length, 1);
-      expect(loaded[0].value, const Color(0xFFABCDEF).value);
+      expect(loaded[0].toARGB32(), const Color(0xFFABCDEF).toARGB32());
     });
   });
 
@@ -112,15 +112,15 @@ void main() {
       await SwatchService.setCustomSwatches(colors);
       final loaded = await SwatchService.getCustomSwatches();
       expect(loaded.length, 2);
-      expect(loaded[0].value, colors[0].value);
-      expect(loaded[1].value, colors[1].value);
+      expect(loaded[0].toARGB32(), colors[0].toARGB32());
+      expect(loaded[1].toARGB32(), colors[1].toARGB32());
     });
 
     test('setCustomSwatches and saveSwatches share the same key', () async {
       await SwatchService.setCustomSwatches([const Color(0xFF010101)]);
       final viaLoad = await SwatchService.loadSwatches();
       expect(viaLoad.length, 1);
-      expect(viaLoad[0].value, const Color(0xFF010101).value);
+      expect(viaLoad[0].toARGB32(), const Color(0xFF010101).toARGB32());
     });
   });
 }

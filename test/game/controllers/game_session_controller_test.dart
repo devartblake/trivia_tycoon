@@ -11,7 +11,16 @@ import 'package:trivia_tycoon/game/services/game_session.dart';
 // ---------------------------------------------------------------------------
 
 // ignore: must_be_immutable
-class MockSkillEffectHandler extends Mock implements SkillEffectHandler {}
+class MockSkillEffectHandler extends Mock implements SkillEffectHandler {
+  bool nextTriggerResult = true;
+  final triggeredNodes = <SkillNode>[];
+
+  @override
+  bool triggerSkill(SkillNode node) {
+    triggeredNodes.add(node);
+    return nextTriggerResult;
+  }
+}
 
 // ignore: must_be_immutable
 class MockGameSession extends Mock implements GameSession {}
@@ -58,7 +67,7 @@ void main() {
     test('returns true when effectHandler.triggerSkill returns true', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      when(handler.triggerSkill(any)).thenReturn(true);
+      handler.nextTriggerResult = true;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);
@@ -70,7 +79,7 @@ void main() {
     test('returns false when effectHandler.triggerSkill returns false', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      when(handler.triggerSkill(any)).thenReturn(false);
+      handler.nextTriggerResult = false;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);
@@ -88,7 +97,7 @@ void main() {
     test('calls triggerSkill exactly once per useSkill call', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      when(handler.triggerSkill(any)).thenReturn(true);
+      handler.nextTriggerResult = true;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);
@@ -98,13 +107,14 @@ void main() {
 
       ctrl.useSkill(node);
 
-      verify(handler.triggerSkill(node)).called(1);
+      expect(handler.triggeredNodes, hasLength(1));
+      expect(handler.triggeredNodes.single, same(node));
     });
 
     test('calls triggerSkill twice when useSkill is called twice', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      when(handler.triggerSkill(any)).thenReturn(true);
+      handler.nextTriggerResult = true;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);
@@ -113,17 +123,13 @@ void main() {
       ctrl.useSkill(_node());
       ctrl.useSkill(_node());
 
-      verify(handler.triggerSkill(any)).called(2);
+      expect(handler.triggeredNodes, hasLength(2));
     });
 
     test('passes the exact SkillNode to triggerSkill', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      SkillNode? captured;
-      when(handler.triggerSkill(any)).thenAnswer((inv) {
-        captured = inv.positionalArguments[0] as SkillNode;
-        return true;
-      });
+      handler.nextTriggerResult = true;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);
@@ -132,17 +138,13 @@ void main() {
       final node = _node(id: 'specific_skill');
       ctrl.useSkill(node);
 
-      expect(captured?.id, 'specific_skill');
+      expect(handler.triggeredNodes.single.id, 'specific_skill');
     });
 
     test('different nodes are passed through correctly', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      final captured = <String>[];
-      when(handler.triggerSkill(any)).thenAnswer((inv) {
-        captured.add((inv.positionalArguments[0] as SkillNode).id);
-        return true;
-      });
+      handler.nextTriggerResult = true;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);
@@ -151,7 +153,10 @@ void main() {
       ctrl.useSkill(_node(id: 'skill_a'));
       ctrl.useSkill(_node(id: 'skill_b'));
 
-      expect(captured, ['skill_a', 'skill_b']);
+      expect(
+        handler.triggeredNodes.map((node) => node.id),
+        ['skill_a', 'skill_b'],
+      );
     });
   });
 
@@ -163,7 +168,7 @@ void main() {
     test('controller state equals the overridden gameSessionProvider value', () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
-      when(handler.triggerSkill(any)).thenReturn(true);
+      handler.nextTriggerResult = true;
 
       final container = _container(handler, session);
       addTearDown(container.dispose);

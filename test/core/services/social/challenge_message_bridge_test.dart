@@ -19,7 +19,7 @@ void main() {
     );
   });
 
-  PVPChallenge _challenge({
+  PVPChallenge challengeFixture({
     String id = 'challenge_1',
     String challengerId = 'user_a',
     String challengerName = 'Alice',
@@ -64,7 +64,7 @@ void main() {
 
   group('conversation ID generation', () {
     test('onChallengeCreated creates conversation with sorted-ID key', () async {
-      final challenge = _challenge(challengerId: 'user_b', opponentId: 'user_a');
+      final challenge = challengeFixture(challengerId: 'user_b', opponentId: 'user_a');
       await bridge.onChallengeCreated(challenge);
       // sorted: user_a < user_b → conv_user_a_user_b
       final conv = convStorage.getConversationById('conv_user_a_user_b');
@@ -72,8 +72,8 @@ void main() {
     });
 
     test('conversation ID is the same regardless of challenger/opponent order', () async {
-      final c1 = _challenge(challengerId: 'user_x', opponentId: 'user_z');
-      final c2 = _challenge(challengerId: 'user_z', opponentId: 'user_x');
+      final c1 = challengeFixture(challengerId: 'user_x', opponentId: 'user_z');
+      final c2 = challengeFixture(challengerId: 'user_z', opponentId: 'user_x');
       await bridge.onChallengeCreated(c1);
       await bridge.onChallengeCreated(c2);
       // Both use same conversation ID since sorted IDs are identical
@@ -88,7 +88,7 @@ void main() {
 
   group('onChallengeCreated', () {
     test('saves a message of type challengeRequest', () async {
-      final challenge = _challenge();
+      final challenge = challengeFixture();
       await bridge.onChallengeCreated(challenge);
       final convId = 'conv_user_a_user_b';
       final messages = msgStorage.getMessagesByType(convId, MessageType.challengeRequest);
@@ -96,7 +96,7 @@ void main() {
     });
 
     test('message senderId matches challengerId', () async {
-      final challenge = _challenge();
+      final challenge = challengeFixture();
       await bridge.onChallengeCreated(challenge);
       final messages = msgStorage.getMessagesByType(
           'conv_user_a_user_b', MessageType.challengeRequest);
@@ -105,7 +105,7 @@ void main() {
     });
 
     test('message content includes category', () async {
-      final challenge = _challenge(category: 'history', wager: 0);
+      final challenge = challengeFixture(category: 'history', wager: 0);
       await bridge.onChallengeCreated(challenge);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeRequest)
@@ -114,7 +114,7 @@ void main() {
     });
 
     test('message content includes wager when wager > 0', () async {
-      final challenge = _challenge(wager: 100);
+      final challenge = challengeFixture(wager: 100);
       await bridge.onChallengeCreated(challenge);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeRequest)
@@ -123,7 +123,7 @@ void main() {
     });
 
     test('message metadata contains challengeId', () async {
-      final challenge = _challenge(id: 'chall_42');
+      final challenge = challengeFixture(id: 'chall_42');
       await bridge.onChallengeCreated(challenge);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeRequest)
@@ -133,12 +133,12 @@ void main() {
 
     test('creates conversation automatically if it does not exist', () async {
       expect(convStorage.getConversationById('conv_user_a_user_b'), isNull);
-      await bridge.onChallengeCreated(_challenge());
+      await bridge.onChallengeCreated(challengeFixture());
       expect(convStorage.getConversationById('conv_user_a_user_b'), isNotNull);
     });
 
     test('updates conversation last message after creating message', () async {
-      await bridge.onChallengeCreated(_challenge());
+      await bridge.onChallengeCreated(challengeFixture());
       final conv = convStorage.getConversationById('conv_user_a_user_b')!;
       expect(conv.lastMessageId, isNotNull);
     });
@@ -150,8 +150,8 @@ void main() {
 
   group('onChallengeAccepted', () {
     test('saves a message of type challengeAccepted', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeAccepted(_challenge(
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeAccepted(challengeFixture(
         status: PVPChallengeStatus.accepted,
         acceptedAt: DateTime.now(),
       ));
@@ -161,8 +161,8 @@ void main() {
     });
 
     test('accepted message senderId is opponentId', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeAccepted(_challenge(
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeAccepted(challengeFixture(
         status: PVPChallengeStatus.accepted,
         acceptedAt: DateTime.now(),
       ));
@@ -174,8 +174,8 @@ void main() {
     });
 
     test('accepted message content is "Accepted your challenge!"', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeAccepted(_challenge(
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeAccepted(challengeFixture(
         status: PVPChallengeStatus.accepted,
         acceptedAt: DateTime.now(),
       ));
@@ -192,16 +192,16 @@ void main() {
 
   group('onChallengeCompleted', () {
     test('saves a message of type challengeResult', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeCompleted(_challenge(), 'user_a', 50);
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeCompleted(challengeFixture(), 'user_a', 50);
       final msgs = msgStorage.getMessagesByType(
           'conv_user_a_user_b', MessageType.challengeResult);
       expect(msgs, hasLength(1));
     });
 
     test('result message is delivered status', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeCompleted(_challenge(), 'user_a', 50);
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeCompleted(challengeFixture(), 'user_a', 50);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;
@@ -209,8 +209,8 @@ void main() {
     });
 
     test('result content names challenger as winner when winnerId=challengerId', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeCompleted(_challenge(), 'user_a', 75);
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeCompleted(challengeFixture(), 'user_a', 75);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;
@@ -219,8 +219,8 @@ void main() {
     });
 
     test('result content names opponent as winner when winnerId=opponentId', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeCompleted(_challenge(), 'user_b', 30);
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeCompleted(challengeFixture(), 'user_b', 30);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;
@@ -229,8 +229,8 @@ void main() {
     });
 
     test('draw result when winnerId is empty', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeCompleted(_challenge(), '', 0);
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeCompleted(challengeFixture(), '', 0);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;
@@ -238,8 +238,8 @@ void main() {
     });
 
     test('result metadata contains challengeId and winnerId', () async {
-      await bridge.onChallengeCreated(_challenge(id: 'chal_99'));
-      await bridge.onChallengeCompleted(_challenge(id: 'chal_99'), 'user_a', 100);
+      await bridge.onChallengeCreated(challengeFixture(id: 'chal_99'));
+      await bridge.onChallengeCompleted(challengeFixture(id: 'chal_99'), 'user_a', 100);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;
@@ -249,8 +249,8 @@ void main() {
     });
 
     test('result message senderId is "system"', () async {
-      await bridge.onChallengeCreated(_challenge());
-      await bridge.onChallengeCompleted(_challenge(), 'user_a', 10);
+      await bridge.onChallengeCreated(challengeFixture());
+      await bridge.onChallengeCompleted(challengeFixture(), 'user_a', 10);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;
