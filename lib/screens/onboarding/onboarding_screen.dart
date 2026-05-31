@@ -426,12 +426,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final serviceManager = ref.read(serviceManagerProvider);
     final onboardingService = serviceManager.onboardingSettingsService;
 
-    // Mark complete so the gate doesn't redirect back on next launch.
-    await onboardingService.setOnboardingCompleted(true);
-    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
-    await ref
-        .read(onboardingProgressProvider.notifier)
-        .markOnboardingCompleted(true);
+    // Mark the gate complete while keeping profile setup visibly unfinished.
+    await onboardingService.updateOnboardingProgress(
+      completed: true,
+      hasSeenIntro: true,
+      hasCompletedProfile: false,
+      currentStep: _controller.currentStep,
+    );
+    await _persistProgressSnapshot(completed: true, hasCompletedProfile: false);
+    await ref.read(onboardingProgressProvider.notifier).updateProgress(
+          completed: true,
+          hasSeenIntro: true,
+          hasCompletedProfile: false,
+          currentStep: _controller.currentStep,
+        );
 
     if (mounted) {
       context.go('/home');

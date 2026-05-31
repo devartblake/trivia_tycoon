@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/navigation/canonical_routes.dart';
 import '../models/drawer_menu_data.dart';
 
 /// Configuration for drawer menu items
@@ -8,7 +9,7 @@ class DrawerMenuConfig {
         const GradientMenuItem(
           icon: Icons.home_rounded,
           title: 'Home',
-          route: '/',
+          route: canonicalHomeRoute,
           gradient: LinearGradient(
             colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
           ),
@@ -32,7 +33,7 @@ class DrawerMenuConfig {
         const GradientMenuItem(
           icon: Icons.games_rounded,
           title: 'Labs Challenges',
-          route: '/mini-games',
+          route: canonicalLabsRoute,
           gradient: LinearGradient(
             colors: [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
           ),

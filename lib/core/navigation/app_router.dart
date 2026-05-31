@@ -18,6 +18,7 @@ import 'package:trivia_tycoon/screens/not_found_screen.dart';
 import 'package:trivia_tycoon/screens/question/categories/favorites_quiz_screen.dart';
 import 'package:trivia_tycoon/screens/question/question_screen.dart';
 import 'package:trivia_tycoon/screens/store/store_screen.dart';
+import 'package:trivia_tycoon/features/synaptix_home/screens/synaptix_home_screen.dart';
 import 'package:trivia_tycoon/screens/leaderboard/leaderboard_screen.dart';
 import 'package:trivia_tycoon/screens/settings/settings_screen.dart';
 import '../../admin/admin_dashboard_shell.dart';
@@ -84,7 +85,6 @@ import '../../screens/users/achievements_screen.dart';
 import '../../screens/browse/all_actions_screen.dart';
 import '../../screens/browse/all_categories_screen.dart';
 import '../../screens/browse/all_classes_screen.dart';
-import '../../screens/menu/main_menu_screen.dart';
 import '../../screens/question/categories/daily_quiz_screen.dart';
 import '../../screens/question/question_view_screen.dart';
 import '../../screens/settings/personalization_settings_screen.dart';
@@ -160,6 +160,7 @@ import '../../screens/spectate/spectate_mode_screen.dart';
 import '../../screens/store/crypto_wallet_screen.dart';
 import '../../screens/widgets/slimy_card_preview_screen.dart';
 import '../../ui_components/spin_wheel/ui/screen/wheel_screen.dart';
+import 'canonical_routes.dart';
 
 // Reactive router provider that rebuilds when navigation state changes
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -183,7 +184,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       /// 🌟 Root Entry Point
       GoRoute(
         path: '/',
-        redirect: (context, state) => '/home',
+        redirect: (context, state) => canonicalHomeRoute,
+      ),
+      ...canonicalRouteAliases.entries.map(
+        (entry) => GoRoute(
+          path: entry.key,
+          redirect: (context, state) => entry.value,
+        ),
       ),
 
       /// 🔐 Auth + Onboarding
@@ -221,9 +228,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 🏠 Main App Routes
       GoRoute(
-        path: '/home',
+        path: canonicalHomeRoute,
         name: 'home',
-        builder: (context, state) => const MainMenuScreen(),
+        builder: (context, state) => const SynaptixHomeScreen(),
       ),
 
       /// 🛡️ Admin Routes (Protected & Conditional)
@@ -443,6 +450,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ),
             GoRoute(
               path: '/store', // Exchange / Store
+              name: 'Store',
               builder: (context, state) => const StoreScreen(),
               redirect: onboardingGuard,
             ),
@@ -453,11 +461,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             ),
             GoRoute(
               path: '/leaderboard', // Arena
+              name: 'Leaderboard',
               builder: (context, state) => const LeaderboardScreen(),
               redirect: onboardingGuard,
             ),
             GoRoute(
               path: '/rewards', // Rewards / Unlocks
+              name: 'Rewards',
               builder: (context, state) => const RewardsScreen(),
               redirect: onboardingGuard,
             ),
@@ -479,6 +489,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/arcade/local-leaderboards',
         builder: (context, state) => const LocalArcadeLeaderboardScreen(),
+      ),
+      GoRoute(
+        path: '/arcade/local-scores',
+        redirect: (context, state) => '/arcade/local-leaderboards',
       ),
       GoRoute(
         path: '/arcade/play',
@@ -532,11 +546,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/invite-log',
         builder: (context, state) => const InviteLogScreen(),
       ),
-      GoRoute(path: '/rewards', builder: (context, state) => RewardsScreen()),
-      GoRoute(
-          path: '/leaderboard',
-          builder: (context, state) => LeaderboardScreen()),
-      GoRoute(path: '/settings', builder: (context, state) => SettingsScreen()),
       GoRoute(
         path: '/settings/personalization',
         name: 'personalization-settings',
@@ -570,10 +579,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           path: '/gifts',
           name: 'Gifts',
           builder: (context, state) => GiftsScreen()),
-      GoRoute(
-          path: '/store',
-          name: 'Store',
-          builder: (context, state) => StoreScreen()),
       GoRoute(
         path: '/store/crypto-wallet',
         name: 'crypto-wallet',
@@ -651,6 +656,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return CategoryQuizScreen(category: category);
         },
         redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/quiz/category/:category',
+        redirect: (context, state) {
+          final category = state.pathParameters['category'] ?? 'general';
+          return '/category-quiz/$category';
+        },
       ),
       GoRoute(
         path: '/all-categories',

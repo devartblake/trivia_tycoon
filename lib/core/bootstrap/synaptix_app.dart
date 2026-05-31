@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_init.dart';
@@ -93,6 +94,7 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       final apiClient = ref.read(serviceManagerProvider).synaptixApiClient;
       final isHealthy = await apiClient.healthCheck();
       if (!isHealthy) {
+        if (_allowOfflineStartup('health check returned unhealthy')) return;
         if (mounted) {
           setState(() {
             _backendUnreachable = true;
@@ -102,6 +104,7 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
         return;
       }
     } catch (_) {
+      if (_allowOfflineStartup('health check failed')) return;
       if (mounted) {
         setState(() {
           _backendUnreachable = true;
@@ -130,6 +133,24 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
     }
 
     if (mounted) setState(() => _startupChecked = true);
+  }
+
+  bool _allowOfflineStartup(String reason) {
+    const allowOfflineBoot =
+        bool.fromEnvironment('ALLOW_OFFLINE_BOOT', defaultValue: false);
+    if (!kDebugMode && !allowOfflineBoot) return false;
+
+    LogManager.warning(
+      '[Startup] Backend unavailable ($reason); continuing in local mode.',
+      source: '_SynaptixAppState',
+    );
+    if (mounted) {
+      setState(() {
+        _backendUnreachable = false;
+        _startupChecked = true;
+      });
+    }
+    return true;
   }
 
   bool _isVersionBelow(String current, String minimum) {

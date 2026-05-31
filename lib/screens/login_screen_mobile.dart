@@ -275,7 +275,7 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
 
       if (mounted) {
         final needsOnboarding = !(ref.read(hasCompletedProfileProvider));
-        context.go(needsOnboarding ? '/profile-setup' : '/home');
+        context.go(needsOnboarding ? '/onboarding' : '/home');
       }
     } catch (e) {
       final baseMessage = ConfigService.useBackendAuth

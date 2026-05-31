@@ -15,6 +15,7 @@ import '../question/widgets/main_sections/top_menu_section.dart';
 import '../question/widgets/main_sections/grid_menu_section.dart';
 import '../question/widgets/main_sections/cta_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
 
 class QuestionScreen extends ConsumerStatefulWidget {
   const QuestionScreen({super.key});
@@ -52,7 +53,7 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
     // Handle navigation based on index
     switch (index) {
       case 0: // Home - already here
-        context.push('/main');
+        context.push(canonicalHomeRoute);
         break;
       case 1: // History
         context.push('/history');

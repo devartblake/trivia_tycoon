@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
 import 'package:trivia_tycoon/ui_components/navigation/fluid_nav_bar.dart';
 import 'package:trivia_tycoon/ui_components/navigation/fluid_nav_bar_icon.dart';
 import 'package:trivia_tycoon/ui_components/navigation/fluid_nav_bar_style.dart';
@@ -9,13 +10,8 @@ class MainNavBar extends StatelessWidget {
 
   const MainNavBar({super.key, required this.child});
 
-  static const List<_NavItem> _navItems = [
-    _NavItem(label: 'Home', icon: Icons.home, route: '/store'),
-    _NavItem(label: 'Quiz', icon: Icons.quiz, route: '/quiz'),
-    _NavItem(label: 'Arena', icon: Icons.leaderboard, route: '/leaderboard'),
-    _NavItem(label: 'Profile', icon: Icons.person, route: '/profile'),
-    _NavItem(label: 'Settings', icon: Icons.settings, route: '/settings'),
-  ];
+  static const List<CanonicalNavDestination> _navItems =
+      canonicalPrimaryNavRoutes;
 
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
@@ -33,8 +29,10 @@ class MainNavBar extends StatelessWidget {
       bottomNavigationBar: FluidNavBar(
         body: const SizedBox.shrink(),
         icons: _navItems
-            .map((item) =>
-                FluidNavBarIcon(icon: item.icon, extras: {'label': item.label}))
+            .map(
+              (item) =>
+                  FluidNavBarIcon(icon: item.icon, extras: {'label': item.label}),
+            )
             .toList(),
         defaultIndex: currentIndex,
         onChange: (index) {
@@ -57,13 +55,4 @@ class MainNavBar extends StatelessWidget {
       ),
     );
   }
-}
-
-class _NavItem {
-  final String label;
-  final IconData icon;
-  final String route;
-
-  const _NavItem(
-      {required this.label, required this.icon, required this.route});
 }

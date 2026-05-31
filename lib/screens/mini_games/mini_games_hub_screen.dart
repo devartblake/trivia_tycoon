@@ -373,7 +373,7 @@ class MiniGamesHubScreen extends StatelessWidget {
         'gradient': const LinearGradient(
           colors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
         ),
-        'route': '/2048',
+        'route': '/game-2048',
         'difficulty': 'Medium',
         'comingSoon': false,
       },
@@ -385,7 +385,7 @@ class MiniGamesHubScreen extends StatelessWidget {
         'gradient': const LinearGradient(
           colors: [Color(0xFF10B981), Color(0xFF059669)],
         ),
-        'route': '/sudoku',
+        'route': '/sudoku-puzzle',
         'difficulty': 'Hard',
         'comingSoon': true,
       },

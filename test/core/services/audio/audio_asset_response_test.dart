@@ -20,7 +20,7 @@ void main() {
     });
 
     test('cacheDuration defaults to null', () {
-      const response = AudioAssetResponse(
+      final response = AudioAssetResponse(
         presignedUrl: 'https://example.com/a.mp3',
         expiresAt: DateTime.utc(2025, 1, 1),
         contentType: 'audio/mpeg',
@@ -29,11 +29,11 @@ void main() {
     });
 
     test('cacheDuration can be set', () {
-      const response = AudioAssetResponse(
+      final response = AudioAssetResponse(
         presignedUrl: 'https://example.com/a.mp3',
         expiresAt: DateTime.utc(2025, 1, 1),
         contentType: 'audio/ogg',
-        cacheDuration: Duration(seconds: 300),
+        cacheDuration: const Duration(seconds: 300),
       );
       expect(response.cacheDuration, const Duration(seconds: 300));
     });
