@@ -636,7 +636,17 @@ class StoreService {
   }
 
   Future<List<StoreItemModel>> _fetchCatalogItems() async {
-    final remote = await apiService.get('/store/catalog');
+    dynamic remote;
+    try {
+      remote = await apiService.get('/store/catalog');
+    } on ApiRequestException catch (e) {
+      if (e.statusCode == 404) {
+        // Endpoint not yet deployed — silently use local catalog.
+        LogManager.debug('[StoreService] /store/catalog not found (404), using local data');
+        return StoreDataService.loadStoreItems();
+      }
+      rethrow; // Let getAllItems() handle other failures (5xx, network errors)
+    }
     final localItems = await StoreDataService.loadStoreItems();
     final localById = {
       for (final item in localItems) item.id.toLowerCase(): item,

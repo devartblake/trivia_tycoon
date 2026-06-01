@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
+import '../../core/helpers/responsive_layout.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../game/providers/game_providers.dart'
     show rewardSettingsServiceProvider;
 import '../../game/providers/profile_providers.dart'
@@ -199,7 +201,7 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
 
   // Helper method to handle all back navigation with claim status
   void _handleBackNavigation() {
-    context.pop(_claimedDuringThisSession);
+    context.safeBackWithResult(_claimedDuringThisSession);
   }
 
   @override
@@ -337,8 +339,9 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   }
 
   Widget _buildContent(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
+    return AppResponsiveWidth(
+      desktopMaxWidth: 980,
+      tabletMaxWidth: 760,
       child: Column(
         mainAxisSize: MainAxisSize.min, // Added this to prevent overflow
         children: [

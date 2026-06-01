@@ -18,26 +18,81 @@ void main() {
     expect(find.text('SYNAPTIX\nARENA CUP'), findsOneWidget);
     expect(find.text('DAILY MISSIONS'), findsOneWidget);
     expect(find.text('LEADERBOARD'), findsOneWidget);
+    expect(find.text('FRIENDS ONLINE (2)'), findsOneWidget);
+    expect(find.text('SYNAPTIX NEWS'), findsOneWidget);
+    expect(find.text('DAILY REWARD'), findsOneWidget);
+    expect(find.byTooltip('Open navigation menu'), findsNothing);
   });
 
   testWidgets('medium layout renders stacked dashboard sections',
       (tester) async {
     await _pumpHome(tester, const Size(900, 900));
 
+    expect(find.byTooltip('Open navigation menu'), findsOneWidget);
+    expect(find.text('CURRENT RANK'), findsNothing);
     expect(find.text('FRIENDS ONLINE (2)'), findsOneWidget);
     expect(find.text('CHOOSE YOUR MODE'), findsOneWidget);
     expect(find.text('RECENT PLAY'), findsOneWidget);
     expect(find.text('LEADERBOARD'), findsOneWidget);
+    expect(find.text('SYNAPTIX NEWS'), findsOneWidget);
+    expect(find.text('DAILY REWARD'), findsOneWidget);
   });
 
   testWidgets('narrow layout renders compact single-column dashboard',
       (tester) async {
     await _pumpHome(tester, const Size(390, 900));
 
+    expect(find.byTooltip('Open navigation menu'), findsOneWidget);
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Play'), findsOneWidget);
     expect(find.text('SYNAPTIX\nARENA CUP'), findsOneWidget);
     expect(find.text('DAILY MISSIONS'), findsOneWidget);
+    expect(find.text('SYNAPTIX NEWS'), findsOneWidget);
+    expect(find.text('DAILY REWARD'), findsOneWidget);
+  });
+
+  testWidgets('medium drawer opens with Synaptix rail navigation',
+      (tester) async {
+    await _pumpHome(tester, const Size(900, 900));
+
+    await _openHomeDrawer(tester);
+
+    expect(find.text('DASHBOARD'), findsOneWidget);
+    expect(find.text('PROFILE'), findsOneWidget);
+    expect(find.text('STORE'), findsOneWidget);
+    expect(find.text('REWARDS'), findsOneWidget);
+    expect(find.text('SKILL TREE'), findsOneWidget);
+    expect(find.text('ARCADE'), findsOneWidget);
+    expect(find.text('SETTINGS'), findsOneWidget);
+    expect(find.text('CURRENT RANK'), findsOneWidget);
+  });
+
+  testWidgets('narrow drawer opens while compact quick nav remains',
+      (tester) async {
+    await _pumpHome(tester, const Size(390, 900));
+
+    expect(find.text('Home'), findsOneWidget);
+    expect(find.text('Play'), findsOneWidget);
+
+    await _openHomeDrawer(tester);
+
+    expect(find.text('DASHBOARD'), findsOneWidget);
+    expect(find.text('CURRENT RANK'), findsOneWidget);
+  });
+
+  testWidgets('wide footer stays fixed while the dashboard scrolls',
+      (tester) async {
+    await _pumpHome(tester, const Size(1280, 900));
+
+    final before = tester.getTopLeft(find.text('SYNAPTIX NEWS')).dy;
+    await tester.drag(
+      find.byKey(const Key('synaptix-main-scroll')),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+
+    final after = tester.getTopLeft(find.text('SYNAPTIX NEWS')).dy;
+    expect(after, closeTo(before, 1));
   });
 
   testWidgets('primary CTAs navigate to canonical routes', (tester) async {
@@ -68,6 +123,25 @@ void main() {
       'Settings',
       canonicalSettingsRoute,
     );
+    await _expectTapRoute(tester, router, 'SYNAPTIX NEWS', canonicalLabsRoute);
+    await _expectTapRoute(
+      tester,
+      router,
+      'DAILY REWARD',
+      canonicalRewardsRoute,
+    );
+  });
+
+  testWidgets('drawer CTAs navigate to canonical routes', (tester) async {
+    final router = await _pumpHome(tester, const Size(900, 900));
+
+    await _expectDrawerRoute(tester, router, 'DASHBOARD', canonicalHomeRoute);
+    await _expectDrawerRoute(tester, router, 'PROFILE', canonicalJourneyRoute);
+    await _expectDrawerRoute(tester, router, 'STORE', canonicalStoreRoute);
+    await _expectDrawerRoute(tester, router, 'REWARDS', canonicalRewardsRoute);
+    await _expectDrawerRoute(tester, router, 'SKILL TREE', '/skills');
+    await _expectDrawerRoute(tester, router, 'ARCADE', canonicalLabsRoute);
+    await _expectDrawerRoute(tester, router, 'SETTINGS', canonicalSettingsRoute);
   });
 }
 
@@ -178,6 +252,33 @@ Future<void> _expectTooltipRoute(
   expect(find.text('route:$route'), findsOneWidget);
   router.go(canonicalHomeRoute);
   await tester.pumpAndSettle();
+}
+
+Future<void> _openHomeDrawer(WidgetTester tester) async {
+  await tester.tap(find.byTooltip('Open navigation menu'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _expectDrawerRoute(
+  WidgetTester tester,
+  GoRouter router,
+  String label,
+  String route,
+) async {
+  await _openHomeDrawer(tester);
+  await tester.tap(find.text(label));
+  await tester.pumpAndSettle();
+
+  if (route == canonicalHomeRoute) {
+    expect(
+      router.routeInformationProvider.value.uri.path,
+      canonicalHomeRoute,
+    );
+  } else {
+    expect(find.text('route:$route'), findsOneWidget);
+    router.go(canonicalHomeRoute);
+    await tester.pumpAndSettle();
+  }
 }
 
 const _homeState = SynaptixHomeState(

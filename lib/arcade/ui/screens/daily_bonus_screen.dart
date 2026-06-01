@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 
 import '../../providers/arcade_providers.dart';
 import '../../../game/providers/wallet_providers.dart';
@@ -161,7 +162,7 @@ class DailyBonusScreen extends ConsumerWidget {
           ),
           child: IconButton(
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.safeBack(fallback: '/arcade'),
             padding: EdgeInsets.zero,
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
 
 import '../../../game/providers/riverpod_providers.dart';
@@ -194,7 +195,7 @@ class _LocalArcadeLeaderboardScreenState
           ),
           child: IconButton(
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.safeBack(fallback: '/arcade'),
             padding: EdgeInsets.zero,
           ),
         ),

@@ -12,8 +12,9 @@ class WelcomeStep extends StatefulWidget {
 }
 
 class _WelcomeStepState extends State<WelcomeStep>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _animationController;
+  late final AnimationController _breatheController;
   late final Animation<double> _fadeAnimation;
   late final Animation<Offset> _slideAnimation;
   late final Animation<double> _breatheAnimation;
@@ -40,14 +41,15 @@ class _WelcomeStepState extends State<WelcomeStep>
     ));
 
     // Subtle breathing effect for background (0.85 → 1.0 → 0.85)
+    _breatheController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat();
     _breatheAnimation = TweenSequence<double>([
       TweenSequenceItem(tween: Tween(begin: 0.85, end: 1.0), weight: 1),
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.85), weight: 1),
     ]).animate(CurvedAnimation(
-      parent: AnimationController(
-        vsync: this,
-        duration: const Duration(seconds: 3),
-      )..repeat(),
+      parent: _breatheController,
       curve: Curves.easeInOut,
     ));
 
@@ -57,6 +59,7 @@ class _WelcomeStepState extends State<WelcomeStep>
   @override
   void dispose() {
     _animationController.dispose();
+    _breatheController.dispose();
     super.dispose();
   }
 

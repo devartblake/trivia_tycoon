@@ -195,13 +195,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 🔐 Auth + Onboarding
       GoRoute(
-        path: '/login',
+        path: canonicalLoginRoute,
         name: 'login',
         builder: (context, state) =>
             kIsWeb ? const LoginScreen() : const LoginScreenMobile(),
       ),
       GoRoute(
-        path: '/register',
+        path: canonicalRegisterRoute,
         name: 'register',
         builder: (context, state) => kIsWeb
             ? const LoginScreen(startInSignUpMode: true)
@@ -210,11 +210,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// 📚 Onboarding Routes
       GoRoute(
-        path: '/onboarding',
+        path: canonicalOnboardingRoute,
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
-        path: '/account-link',
+        path: canonicalAccountLinkRoute,
         name: 'account-link',
         builder: (context, state) => AccountLinkRewardsScreen(
           fromOnboarding: state.uri.queryParameters['from'] == 'onboarding',
@@ -1262,9 +1262,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       /// ⚙️ SETTINGS & CONFIGURATION
       GoRoute(
-        path: '/settings',
+        path: canonicalSettingsRoute,
         builder: (context, state) => const SettingsScreen(),
-        redirect: authGuard,
+        redirect: onboardingGuard,
       ),
       GoRoute(
         path: '/user-settings',

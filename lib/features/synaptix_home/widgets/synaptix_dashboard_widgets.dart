@@ -77,11 +77,15 @@ class SynaptixProgressBar extends StatelessWidget {
 class SynaptixTopNavigationBar extends StatelessWidget {
   final SynaptixHomeState home;
   final bool isCompact;
+  final bool showMenuButton;
+  final VoidCallback? onMenuPressed;
 
   const SynaptixTopNavigationBar({
     super.key,
     required this.home,
     required this.isCompact,
+    this.showMenuButton = false,
+    this.onMenuPressed,
   });
 
   @override
@@ -99,6 +103,21 @@ class SynaptixTopNavigationBar extends StatelessWidget {
       ),
       child: Row(
         children: [
+          if (showMenuButton) ...[
+            Tooltip(
+              message: 'Open navigation menu',
+              child: IconButton.filledTonal(
+                onPressed: onMenuPressed,
+                icon: const Icon(Icons.menu_rounded),
+                color: Colors.white,
+                style: IconButton.styleFrom(
+                  backgroundColor: SynaptixHomeTheme.panelAlt.withOpacity(0.92),
+                  fixedSize: const Size.square(40),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+          ],
           const _LogoMark(),
           if (!isCompact) ...[
             const SizedBox(width: 12),
@@ -205,18 +224,168 @@ class SynaptixLeftRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          const _SideMenuCard(),
-          const SizedBox(height: 20),
-          _RankCard(player: home.player),
-          const SizedBox(height: 20),
-          _StreakCard(player: home.player),
-          const SizedBox(height: 20),
-          const _ReferCard(),
-          const SizedBox(height: 20),
-          FriendsOnlineCard(friends: home.friends),
-        ],
+      child: _SynaptixRailContent(home: home),
+    );
+  }
+}
+
+class SynaptixHomeDrawer extends StatelessWidget {
+  final SynaptixHomeState home;
+
+  const SynaptixHomeDrawer({super.key, required this.home});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final drawerWidth = screenWidth < 360 ? screenWidth * 0.90 : 320.0;
+
+    return Drawer(
+      width: drawerWidth,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(28),
+          bottomRight: Radius.circular(28),
+        ),
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: SynaptixHomeTheme.pageGradient,
+          border: Border(
+            right: BorderSide(
+              color: SynaptixHomeTheme.stroke.withOpacity(0.86),
+            ),
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const _LogoMark(),
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text(
+                        'SYNAPTIX',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ),
+                    Tooltip(
+                      message: 'Close navigation menu',
+                      child: IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                        color: SynaptixHomeTheme.text,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                _SynaptixRailContent(home: home),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SynaptixRailContent extends StatelessWidget {
+  final SynaptixHomeState home;
+
+  const _SynaptixRailContent({required this.home});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const _SideMenuCard(),
+        const SizedBox(height: 20),
+        _RankCard(player: home.player),
+        const SizedBox(height: 20),
+        _StreakCard(player: home.player),
+        const SizedBox(height: 20),
+        const _ReferCard(),
+      ],
+    );
+  }
+}
+
+class SynaptixDashboardFooter extends StatelessWidget {
+  final SynaptixHomeState home;
+  final bool isWide;
+  final bool isMedium;
+
+  const SynaptixDashboardFooter({
+    super.key,
+    required this.home,
+    required this.isWide,
+    required this.isMedium,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 8, 20, isWide ? 20 : 16),
+      decoration: BoxDecoration(
+        color: SynaptixHomeTheme.page.withOpacity(0.78),
+        border: Border(
+          top: BorderSide(color: SynaptixHomeTheme.stroke.withOpacity(0.72)),
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (isWide) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 240,
+                  child: FriendsOnlineCard(friends: home.friends),
+                ),
+                const SizedBox(width: 20),
+                Expanded(flex: 7, child: NewsCard(item: home.newsItem)),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 340,
+                  child: DailyRewardCard(prompt: home.dailyReward),
+                ),
+              ],
+            );
+          }
+
+          if (isMedium && constraints.maxWidth >= 760) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: FriendsOnlineCard(friends: home.friends)),
+                const SizedBox(width: 16),
+                Expanded(child: NewsCard(item: home.newsItem)),
+                const SizedBox(width: 16),
+                Expanded(child: DailyRewardCard(prompt: home.dailyReward)),
+              ],
+            );
+          }
+
+          return Column(
+            children: [
+              FriendsOnlineCard(friends: home.friends),
+              const SizedBox(height: 12),
+              NewsCard(item: home.newsItem),
+              const SizedBox(height: 12),
+              DailyRewardCard(prompt: home.dailyReward),
+            ],
+          );
+        },
       ),
     );
   }
@@ -1179,9 +1348,16 @@ class _SideNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = GoRouterState.of(context).uri.path == destination.route;
+    final router = GoRouter.of(context);
     return InkWell(
       borderRadius: BorderRadius.circular(14),
-      onTap: () => context.go(destination.route),
+      onTap: () {
+        final scaffold = Scaffold.maybeOf(context);
+        if (scaffold?.isDrawerOpen ?? false) {
+          Navigator.of(context).pop();
+        }
+        router.go(destination.route);
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),

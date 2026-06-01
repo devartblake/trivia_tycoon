@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/helpers/responsive_layout.dart';
 import '../models/synaptix_home_state.dart';
 import '../providers/synaptix_home_provider.dart';
 import '../theme/synaptix_home_theme.dart';
@@ -13,79 +14,85 @@ class SynaptixHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(synaptixHomeProvider);
 
-    return Scaffold(
-      backgroundColor: SynaptixHomeTheme.page,
-      body: SafeArea(
-        child: DecoratedBox(
-          decoration: const BoxDecoration(
-            gradient: SynaptixHomeTheme.pageGradient,
-          ),
-          child: state.when(
-            data: (home) => _HomeLayout(home: home),
-            loading: () => const _LoadingDashboard(),
-            error: (error, _) => _HomeError(message: error.toString()),
-          ),
-        ),
+    return state.when(
+      data: (home) => _SynaptixHomeAdaptiveShell(home: home),
+      loading: () => const Scaffold(
+        backgroundColor: SynaptixHomeTheme.page,
+        body: _HomeShell(child: _LoadingDashboard()),
+      ),
+      error: (error, _) => Scaffold(
+        backgroundColor: SynaptixHomeTheme.page,
+        body: _HomeShell(child: _HomeError(message: error.toString())),
       ),
     );
   }
 }
 
-class _HomeLayout extends StatelessWidget {
+class _HomeShell extends StatelessWidget {
+  final Widget child;
+
+  const _HomeShell({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: SynaptixHomeTheme.pageGradient,
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+class _SynaptixHomeAdaptiveShell extends StatelessWidget {
   final SynaptixHomeState home;
 
-  const _HomeLayout({required this.home});
+  const _SynaptixHomeAdaptiveShell({required this.home});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final isWide = width >= 1120;
+        final isWide = width >= AppBreakpoints.dashboardRail;
         final isMedium = width >= 760;
 
-        return Column(
-          children: [
-            SynaptixTopNavigationBar(home: home, isCompact: width < 760),
-            Expanded(
-              child: isWide
-                  ? _WideDashboard(home: home)
-                  : _StackedDashboard(home: home, isMedium: isMedium),
+        return AppAdaptiveScaffold(
+          backgroundColor: SynaptixHomeTheme.page,
+          decoration: const BoxDecoration(
+            gradient: SynaptixHomeTheme.pageGradient,
+          ),
+          drawer: SynaptixHomeDrawer(home: home),
+          rail: SynaptixLeftRail(home: home),
+          rightPanel: SingleChildScrollView(
+            child: SynaptixRightPanel(home: home),
+          ),
+          bodyPadding: isWide
+              ? const EdgeInsets.fromLTRB(20, 16, 20, 12)
+              : EdgeInsets.zero,
+          topBar: Builder(
+            builder: (context) => SynaptixTopNavigationBar(
+              home: home,
+              isCompact: width < 760,
+              showMenuButton: !isWide,
+              onMenuPressed: () => Scaffold.of(context).openDrawer(),
             ),
-          ],
+          ),
+          body: isWide
+              ? SingleChildScrollView(
+                  key: const Key('synaptix-main-scroll'),
+                  child: _MainDashboard(home: home),
+                )
+              : _StackedDashboard(home: home, isMedium: isMedium),
+          footer: SynaptixDashboardFooter(
+            home: home,
+            isWide: isWide,
+            isMedium: isMedium,
+          ),
         );
       },
-    );
-  }
-}
-
-class _WideDashboard extends StatelessWidget {
-  final SynaptixHomeState home;
-
-  const _WideDashboard({required this.home});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(width: 240, child: SynaptixLeftRail(home: home)),
-          const SizedBox(width: 20),
-          Expanded(
-            flex: 7,
-            child: SingleChildScrollView(child: _MainDashboard(home: home)),
-          ),
-          const SizedBox(width: 20),
-          SizedBox(
-            width: 340,
-            child: SingleChildScrollView(
-              child: SynaptixRightPanel(home: home),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -99,6 +106,7 @@ class _StackedDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      key: const Key('synaptix-main-scroll'),
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
@@ -106,12 +114,8 @@ class _StackedDashboard extends StatelessWidget {
             const SynaptixCompactNav(),
             const SizedBox(height: 16),
           ],
-          if (isMedium) ...[
-            FriendsOnlineCard(friends: home.friends),
-            const SizedBox(height: 16),
-          ],
           _MainDashboard(home: home),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           if (isMedium)
             Column(
               children: [
@@ -213,10 +217,6 @@ class _MainDashboard extends StatelessWidget {
           },
         ),
         const SizedBox(height: 20),
-        NewsRewardRow(
-          newsItem: home.newsItem,
-          dailyReward: home.dailyReward,
-        ),
       ],
     );
   }

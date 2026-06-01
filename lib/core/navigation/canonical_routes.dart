@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 const canonicalHomeRoute = '/home';
+const canonicalLoginRoute = '/login';
+const canonicalRegisterRoute = '/register';
+const canonicalOnboardingRoute = '/onboarding';
+const canonicalAccountLinkRoute = '/account-link';
 const canonicalPlayRoute = '/quiz';
 const canonicalArenaRoute = '/leaderboard';
 const canonicalLabsRoute = '/arcade';
@@ -40,7 +44,9 @@ const canonicalPrimaryNavRoutes = <CanonicalNavDestination>[
 
 const canonicalRouteAliases = <String, String>{
   '/main': canonicalHomeRoute,
-  '/profile-setup': '/onboarding',
+  '/auth': canonicalLoginRoute,
+  '/signup': canonicalRegisterRoute,
+  '/profile-setup': canonicalOnboardingRoute,
   '/play': '/quiz/start/classic',
   '/2048': '/game-2048',
   '/sudoku': '/sudoku-puzzle',

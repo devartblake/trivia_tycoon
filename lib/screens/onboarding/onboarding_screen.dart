@@ -150,6 +150,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
 
     unawaited(_persistProgressSnapshot());
+
+    // Rebuild header (back/skip buttons + phase indicator) after the current
+    // build frame completes to avoid markNeedsBuild-during-build errors.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   Future<void> _restoreProgress() async {
@@ -438,59 +444,70 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header with progress and skip
-            _buildHeader(context),
+    return PopScope(
+      // Intercept system/browser back so it steps through onboarding rather
+      // than popping the entire route.  On step 0 back does nothing (users
+      // must tap Skip to exit).
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && !_controller.isFirstStep) {
+          _controller.previousStep();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: theme.colorScheme.surface,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Header with progress and skip
+              _buildHeader(context),
 
-            // Main content area
-            Expanded(
-              child: Stack(
-                children: [
-                  PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      WelcomeStep(controller: _controller), // 0
-                      UsernameStep(controller: _controller), // 1
-                      AgeGroupStep(controller: _controller), // 2
-                      IntentStep(controller: _controller), // 3
-                      PlayStyleStep(controller: _controller), // 4
-                      CountryStep(controller: _controller), // 5
-                      CategoriesStep(controller: _controller), // 6
-                      AvatarStep(controller: _controller), // 7
-                      FirstSessionChallengeStep(controller: _controller), // 8
-                      RewardRevealStep(controller: _controller), // 9
-                      CompletionStep(
-                        // 10
-                        controller: _controller,
-                        onComplete: _handleCompletion,
-                      ),
-                    ],
-                  ),
+              // Main content area
+              Expanded(
+                child: Stack(
+                  children: [
+                    PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        WelcomeStep(controller: _controller), // 0
+                        UsernameStep(controller: _controller), // 1
+                        AgeGroupStep(controller: _controller), // 2
+                        IntentStep(controller: _controller), // 3
+                        PlayStyleStep(controller: _controller), // 4
+                        CountryStep(controller: _controller), // 5
+                        CategoriesStep(controller: _controller), // 6
+                        AvatarStep(controller: _controller), // 7
+                        FirstSessionChallengeStep(controller: _controller), // 8
+                        RewardRevealStep(controller: _controller), // 9
+                        CompletionStep(
+                          // 10
+                          controller: _controller,
+                          onComplete: _handleCompletion,
+                        ),
+                      ],
+                    ),
 
-                  // Confetti overlay - only show on last step (completion)
-                  if (_controller.isLastStep)
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: AnimatedBuilder(
-                          animation: _confettiAnimationController,
-                          builder: (context, _) => CustomPaint(
-                            painter: ConfettiPainter(_confetti),
+                    // Confetti overlay - only show on last step (completion)
+                    if (_controller.isLastStep)
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          child: AnimatedBuilder(
+                            animation: _confettiAnimationController,
+                            builder: (context, _) => CustomPaint(
+                              painter: ConfettiPainter(_confetti),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    );
+    ); // PopScope
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -510,11 +527,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
           // Phase indicator
           Expanded(
-            child: ListenableBuilder(
-              listenable: _controller,
-              builder: (_, __) => OnboardingPhaseIndicator(
-                currentStep: _controller.currentStep,
-              ),
+            child: OnboardingPhaseIndicator(
+              currentStep: _controller.currentStep,
             ),
           ),
 

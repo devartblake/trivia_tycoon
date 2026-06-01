@@ -13,6 +13,12 @@
 			],
 			"gallery": "https://api.mcp.github.com",
 			"version": "0.33.0"
+		},
+		"com.figma.mcp/mcp": {
+			"type": "http",
+			"url": "https://mcp.figma.com/mcp",
+			"gallery": "https://api.mcp.github.com",
+			"version": "1.0.3"
 		}
 	},
 	"inputs": [

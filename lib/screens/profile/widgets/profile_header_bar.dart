@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/services/settings/multi_profile_service.dart';
 
 /// Glassmorphic app bar shown at the top of the profile screen.
@@ -54,7 +55,7 @@ class ProfileHeaderBar extends StatelessWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () => context.pop(),
+                      onTap: () => context.safeBack(),
                       borderRadius: BorderRadius.circular(14),
                       child: const Padding(
                         padding: EdgeInsets.all(10),

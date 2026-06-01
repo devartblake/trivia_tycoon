@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../game/controllers/settings_controller.dart';
+import '../../core/helpers/responsive_layout.dart';
+import '../../core/navigation/canonical_routes.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -175,6 +177,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
       }
     ]);
 
+    final identityKind = ref.read(playerIdentityProvider).kind;
+    final hasLinkedAccount = identityKind == PlayerIdentityKind.fullAccount ||
+        identityKind == PlayerIdentityKind.platformLinked;
+
     _privacy.addAll([
       {
         'title': 'Help & Feedback',
@@ -188,13 +194,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         'icon': Icons.info_outline_rounded,
         'color': const Color(0xFF64748B),
       },
-      {
-        'title': 'Sign Out',
-        'subtitle': 'End current session',
-        'icon': Icons.logout_rounded,
-        'color': const Color(0xFFEF4444),
-        'isDestructive': true,
-      },
+      if (hasLinkedAccount)
+        {
+          'title': 'Sign Out',
+          'subtitle': 'End current session',
+          'icon': Icons.logout_rounded,
+          'color': const Color(0xFFEF4444),
+          'isDestructive': true,
+        }
+      else
+        {
+          'title': 'Account & Social',
+          'subtitle': 'Link an account to save progress across devices',
+          'icon': Icons.link_rounded,
+          'route': '$canonicalAccountLinkRoute?from=settings',
+          'color': const Color(0xFF6366F1),
+        },
     ]);
   }
 
@@ -455,7 +470,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         _buildSection('Preferences', _preferences, 2, Icons.tune_rounded),
         _buildSection(
             'Privacy & Security', _privacy, 3, Icons.security_rounded),
-        const SliverToBoxAdapter(child: _PersonalizationSection()),
+        const SliverToBoxAdapter(
+          child: AppResponsiveWidth(
+            padding: EdgeInsets.zero,
+            child: _PersonalizationSection(),
+          ),
+        ),
         const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
     );
@@ -464,54 +484,57 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   Widget _buildSection(String title, List<Map<String, dynamic>> items,
       int sectionIndex, IconData sectionIcon) {
     return SliverToBoxAdapter(
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 0.5),
-          end: Offset.zero,
-        ).animate(CurvedAnimation(
-          parent: _sectionControllers[sectionIndex],
-          curve: Curves.easeOutBack,
-        )),
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF64748B).withValues(alpha: 0.08),
-                blurRadius: 25,
-                offset: const Offset(0, 8),
+      child: AppResponsiveWidth(
+        padding: EdgeInsets.zero,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 0.5),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(
+            parent: _sectionControllers[sectionIndex],
+            curve: Curves.easeOutBack,
+          )),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF64748B).withValues(alpha: 0.08),
+                  blurRadius: 25,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+              border: Border.all(
+                color: const Color(0xFF64748B).withValues(alpha: 0.1),
+                width: 1,
               ),
-            ],
-            border: Border.all(
-              color: const Color(0xFF64748B).withValues(alpha: 0.1),
-              width: 1,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionHeader(title, sectionIcon),
-              ...items.asMap().entries.map((entry) {
-                final index = entry.key;
-                final item = entry.value;
-                return TweenAnimationBuilder<double>(
-                  duration: Duration(milliseconds: 400 + (index * 100)),
-                  tween: Tween(begin: 0.0, end: 1.0),
-                  builder: (context, value, child) {
-                    return Transform.translate(
-                      offset: Offset(0, 20 * (1 - value)),
-                      child: Opacity(
-                        opacity: value,
-                        child:
-                            _buildSettingItem(item, index == items.length - 1),
-                      ),
-                    );
-                  },
-                );
-              }),
-            ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSectionHeader(title, sectionIcon),
+                ...items.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  return TweenAnimationBuilder<double>(
+                    duration: Duration(milliseconds: 400 + (index * 100)),
+                    tween: Tween(begin: 0.0, end: 1.0),
+                    builder: (context, value, child) {
+                      return Transform.translate(
+                        offset: Offset(0, 20 * (1 - value)),
+                        child: Opacity(
+                          opacity: value,
+                          child: _buildSettingItem(
+                              item, index == items.length - 1),
+                        ),
+                      );
+                    },
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),

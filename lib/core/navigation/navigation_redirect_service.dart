@@ -3,6 +3,7 @@ import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart'
     show onboardingCompleteProvider;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'canonical_routes.dart';
 
 /// Navigation redirect service that determines where users should be redirected.
 class NavigationRedirectService {
@@ -23,28 +24,33 @@ class NavigationRedirectService {
 
     if (currentPath == '/') return null;
 
-    final isAuthPath = currentPath == '/login' ||
-        currentPath == '/signup' ||
-        currentPath == '/register';
+    final isAuthPath = currentPath == canonicalLoginRoute ||
+        currentPath == canonicalRegisterRoute ||
+        currentPath == '/auth' ||
+        currentPath == '/signup';
+    final isOnboardingPath = currentPath == canonicalOnboardingRoute;
+    final hasAccountIdentity =
+        identityState.kind == PlayerIdentityKind.fullAccount ||
+            identityState.kind == PlayerIdentityKind.platformLinked;
 
     if (!identityState.hasPlayableIdentity) {
-      if (currentPath == '/onboarding') return null;
+      if (isOnboardingPath) return null;
       if (isAuthPath) return null;
-      return '/onboarding';
+      return canonicalLoginRoute;
     }
 
     if (!isOnboardingComplete) {
-      if (currentPath == '/onboarding' || isAuthPath) return null;
-      return '/onboarding';
+      if (isOnboardingPath || isAuthPath) return null;
+      return hasAccountIdentity ? canonicalOnboardingRoute : canonicalLoginRoute;
     }
 
-    if (isLoggedIn && !profileSelected) {
+    if (hasAccountIdentity && !profileSelected) {
       if (currentPath == '/profile-selection') return null;
       return '/profile-selection';
     }
 
-    if (currentPath == '/onboarding' || currentPath == '/profile-selection') {
-      return '/home';
+    if (isOnboardingPath || currentPath == '/profile-selection') {
+      return canonicalHomeRoute;
     }
 
     return null;

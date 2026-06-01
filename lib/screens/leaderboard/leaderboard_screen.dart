@@ -5,6 +5,8 @@ import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_w
 import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
 import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
 import '../../core/animations/animation_manager.dart';
+import '../../core/helpers/responsive_layout.dart';
+import '../../core/navigation/canonical_routes.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/models/seasonal_competition_model.dart';
@@ -119,6 +121,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     }
   }
 
+  void _handleBackNavigation() {
+    final router = GoRouter.of(context);
+    if (router.canPop()) {
+      router.pop();
+    } else {
+      router.go(canonicalHomeRoute);
+    }
+  }
+
   // ✅ ADD THIS - Cleanup
   void _cleanupLeaderboard() {
     try {
@@ -148,29 +159,19 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
   @override
   Widget build(BuildContext context) {
+    final layout = AppResponsive.layoutOf(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFF0F0F23),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          _buildSliverAppBar(),
+          _buildSliverAppBar(layout),
           SliverToBoxAdapter(
             child: AnimationManager.fadeSlideIn(
               animation: _animationController!,
               begin: const Offset(0, 0.3),
-              child: Column(
-                children: [
-                  _buildTierHeader(),
-                  const SizedBox(height: 24),
-                  MissionPanel(
-                    playerXP: playerXP,
-                    onXPAdded: _handleXPAdded,
-                  ),
-                  const SizedBox(height: 24),
-                  const SeasonalEventsWidget(),
-                  const SizedBox(height: 100), // Bottom padding
-                ],
-              ),
+              child: _buildResponsiveLeaderboardContent(layout),
             ),
           ),
         ],
@@ -178,9 +179,56 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     );
   }
 
-  Widget _buildSliverAppBar() {
+  Widget _buildResponsiveLeaderboardContent(AppLayoutClass layout) {
+    final maxWidth = AppResponsive.value<double>(
+      layout,
+      mobile: double.infinity,
+      tablet: 840,
+      desktop: 1180,
+    );
+    final padding = AppResponsive.pagePadding(layout).copyWith(bottom: 100);
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: Padding(
+          padding: padding,
+          child: Column(
+            children: [
+              _buildTierHeader(),
+              const SizedBox(height: 24),
+              if (layout.isDesktop)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: MissionPanel(
+                        playerXP: playerXP,
+                        onXPAdded: _handleXPAdded,
+                      ),
+                    ),
+                    const SizedBox(width: 24),
+                    const Expanded(child: SeasonalEventsWidget()),
+                  ],
+                )
+              else ...[
+                MissionPanel(
+                  playerXP: playerXP,
+                  onXPAdded: _handleXPAdded,
+                ),
+                const SizedBox(height: 24),
+                const SeasonalEventsWidget(),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSliverAppBar(AppLayoutClass layout) {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: layout.isMobile ? 96 : 120,
       floating: false,
       pinned: true,
       backgroundColor: const Color(0xFF0F0F23),
@@ -193,7 +241,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
         child: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: _handleBackNavigation,
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           splashRadius: 24,
         ),

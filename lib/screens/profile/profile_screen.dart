@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/helpers/responsive_layout.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import '../../game/providers/riverpod_providers.dart'
@@ -138,33 +139,38 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
                     Expanded(
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 8),
-                            ProfileGameCard(
-                              profile: activeProfile,
-                              isAdmin: _isAdmin,
-                              adminModeEnabled: _adminModeEnabled,
-                              onToggleAdmin: _toggleAdminMode,
-                            ),
-                            const SizedBox(height: 20),
-                            ProfileTabBar(controller: _tabController),
-                            const SizedBox(height: 16),
-                            SizedBox(
-                              height: 420,
-                              child: TabBarView(
-                                controller: _tabController,
-                                physics: const BouncingScrollPhysics(),
-                                children: const [
-                                  CollectionTab(),
-                                  StatisticsTab(),
-                                  AchievementsTab(),
-                                  CreatedQuestionsTab(),
-                                ],
+                        child: AppResponsiveWidth(
+                          padding: EdgeInsets.zero,
+                          desktopMaxWidth: 980,
+                          tabletMaxWidth: 760,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 8),
+                              ProfileGameCard(
+                                profile: activeProfile,
+                                isAdmin: _isAdmin,
+                                adminModeEnabled: _adminModeEnabled,
+                                onToggleAdmin: _toggleAdminMode,
                               ),
-                            ),
-                            const SizedBox(height: 24),
-                          ],
+                              const SizedBox(height: 20),
+                              ProfileTabBar(controller: _tabController),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                height: 420,
+                                child: TabBarView(
+                                  controller: _tabController,
+                                  physics: const BouncingScrollPhysics(),
+                                  children: const [
+                                    CollectionTab(),
+                                    StatisticsTab(),
+                                    AchievementsTab(),
+                                    CreatedQuestionsTab(),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                            ],
+                          ),
                         ),
                       ),
                     ),

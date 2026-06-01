@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../game/models/search.dart';
 import '../../game/providers/search_providers.dart';
 
@@ -59,7 +60,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFF1A1A1A)),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.safeBack(),
         ),
         title: Container(
           height: 44,

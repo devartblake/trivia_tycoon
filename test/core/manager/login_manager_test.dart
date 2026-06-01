@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/manager/login_manager.dart';
+import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
 import 'package:trivia_tycoon/core/services/auth_api_client.dart';
 import 'package:trivia_tycoon/core/services/auth_service.dart';
 import 'package:trivia_tycoon/core/services/auth_token_store.dart';
@@ -292,7 +293,21 @@ void main() {
       );
 
       // No login performed — tokenStore is empty
-      expect(await manager.getNextRoute(), '/login');
+      expect(await manager.getNextRoute(), canonicalLoginRoute);
+    });
+
+    test('completed guest session routes to home', () async {
+      final manager = _makeManager(
+        httpClient: _StubHttpClient((_) => _loginResponse({})),
+        tokenStore: tokenStore,
+        secureStorage: secureStorage,
+        profileService: profileService,
+        onboardingService: onboardingService,
+      );
+
+      await onboardingService.setHasCompletedOnboarding(true);
+
+      expect(await manager.getNextRoute(), canonicalHomeRoute);
     });
 
     test('logged in + onboarding not complete → /onboarding', () async {
@@ -306,7 +321,7 @@ void main() {
 
       await manager.login('user@example.test', 'password');
       // login sets hasCompletedOnboarding=false for new sessions
-      expect(await manager.getNextRoute(), '/onboarding');
+      expect(await manager.getNextRoute(), canonicalOnboardingRoute);
     });
 
     test('logged in + onboarding complete → /home', () async {
@@ -321,7 +336,7 @@ void main() {
       await manager.login('user@example.test', 'password');
       await onboardingService.setHasCompletedOnboarding(true);
 
-      expect(await manager.getNextRoute(), '/home');
+      expect(await manager.getNextRoute(), canonicalHomeRoute);
     });
   });
 

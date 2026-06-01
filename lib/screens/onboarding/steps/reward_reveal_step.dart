@@ -45,8 +45,12 @@ class _RewardRevealStepState extends State<RewardRevealStep>
     );
     _animController.forward();
 
-    // Mark reward as seen.
-    widget.controller.updateUserData({'hasSeenRewardReveal': true});
+    // Defer so we don't call notifyListeners during the build phase.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        widget.controller.updateUserData({'hasSeenRewardReveal': true});
+      }
+    });
   }
 
   @override

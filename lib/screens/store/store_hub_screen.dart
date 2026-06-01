@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/helpers/responsive_layout.dart';
 import '../../core/models/store/store_hub_model.dart';
 import '../../game/providers/game_providers.dart';
 
@@ -63,11 +64,19 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
-        SliverToBoxAdapter(child: _buildHeroBanner(hub.flashSaleMessage)),
-        SliverToBoxAdapter(child: _buildQuickStats(hub.stats)),
-        SliverToBoxAdapter(child: _buildStoreSections(hub.sections)),
-        if (hub.featured != null)
-          SliverToBoxAdapter(child: _buildFeaturedContent(hub.featured!)),
+        SliverToBoxAdapter(
+          child: AppResponsiveWidth(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _buildHeroBanner(hub.flashSaleMessage),
+                _buildQuickStats(hub.stats),
+                _buildStoreSections(hub.sections),
+                if (hub.featured != null) _buildFeaturedContent(hub.featured!),
+              ],
+            ),
+          ),
+        ),
         const SliverToBoxAdapter(child: SizedBox(height: 32)),
       ],
     );
@@ -377,6 +386,20 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
   }
 
   Widget _buildStoreSections(List<StoreSectionData> sections) {
+    final layout = AppResponsive.layoutOf(context);
+    final crossAxisCount = AppResponsive.value<int>(
+      layout,
+      mobile: 2,
+      tablet: 3,
+      desktop: 4,
+    );
+    final aspectRatio = AppResponsive.value<double>(
+      layout,
+      mobile: 0.85,
+      tablet: 0.95,
+      desktop: 1.02,
+    );
+
     return TweenAnimationBuilder<double>(
       duration: const Duration(milliseconds: 1000),
       tween: Tween(begin: 0.0, end: 1.0),
@@ -402,12 +425,11 @@ class _StoreHubScreenState extends ConsumerState<StoreHubScreen>
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
                       mainAxisSpacing: 16,
                       crossAxisSpacing: 16,
-                      childAspectRatio: 0.85,
+                      childAspectRatio: aspectRatio,
                     ),
                     itemCount: sections.length,
                     itemBuilder: (context, index) {

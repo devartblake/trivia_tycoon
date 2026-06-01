@@ -11,6 +11,8 @@ import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
+import '../core/helpers/responsive_layout.dart';
+import '../core/navigation/canonical_routes.dart';
 import '../core/services/auth_token_store.dart';
 import '../game/providers/multi_profile_providers.dart';
 import '../game/providers/web_link_providers.dart';
@@ -42,7 +44,7 @@ class MockUser {
 
 /// Modern game-inspired login screen
 class LoginScreen extends ConsumerStatefulWidget {
-  static const routeName = '/auth';
+  static const routeName = canonicalLoginRoute;
   const LoginScreen({super.key, this.startInSignUpMode = false});
 
   final bool startInSignUpMode;
@@ -449,6 +451,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     }
   }
 
+  Future<void> _handleContinueAsGuest() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+    try {
+      final identity = ref.read(playerIdentityProvider);
+      if (!identity.hasPlayableIdentity) {
+        await ref.read(playerIdentityProvider.notifier).initialize();
+      }
+
+      if (mounted) {
+        context.go(canonicalOnboardingRoute);
+      }
+    } catch (e) {
+      _showErrorSnackBar('Unable to start guest mode. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -462,83 +484,126 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isDesktop = size.width > 900;
-    final isTablet = size.width > 600 && size.width <= 900;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final spec = _LoginLayoutSpec.fromWidth(
+          constraints.maxWidth,
+          isWeb: kIsWeb,
+        );
 
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF1A1F3A),
-              Color(0xFF2D1B69),
-              Color(0xFF1E1B4B),
-            ],
+        return Scaffold(
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF1A1F3A),
+                  Color(0xFF2D1B69),
+                  Color(0xFF1E1B4B),
+                ],
+              ),
+            ),
+            child: SafeArea(
+              child: _buildResponsiveLayout(spec),
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: isDesktop || isTablet
-              ? _buildDesktopLayout()
-              : _buildMobileLayout(),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildDesktopLayout() {
+  Widget _buildResponsiveLayout(_LoginLayoutSpec spec) {
+    if (spec.isDesktop) {
+      return _buildDesktopLayout(spec);
+    }
+
+    if (spec.isTablet) {
+      return _buildTabletLayout(spec);
+    }
+
+    return _buildMobileLayout(spec);
+  }
+
+  Widget _buildDesktopLayout(_LoginLayoutSpec spec) {
     return Row(
       children: [
         // Left Panel - Form
-        Expanded(
-          flex: 5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF1F2937).withValues(alpha: 0.9),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  blurRadius: 30,
-                  offset: const Offset(10, 0),
-                ),
-              ],
-            ),
-            child: _buildLoginForm(),
+        Container(
+          width: spec.desktopFormPaneWidth,
+          constraints: const BoxConstraints(minWidth: 420, maxWidth: 560),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1F2937).withValues(alpha: 0.9),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 30,
+                offset: const Offset(10, 0),
+              ),
+            ],
           ),
+          child: _buildLoginForm(spec),
         ),
-
-        // Right Panel - Game Artwork
         Expanded(
-          flex: 7,
-          child: _buildGameArtwork(),
+          child: _buildGameArtwork(spec),
         ),
       ],
     );
   }
 
-  Widget _buildMobileLayout() {
-    return SingleChildScrollView(
-      child: Container(
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height,
+  Widget _buildTabletLayout(_LoginLayoutSpec spec) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: spec.outerPadding,
+        vertical: 24,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 620),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: const Color(0xFF111827).withValues(alpha: 0.76),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.10),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.28),
+                  blurRadius: 32,
+                  offset: const Offset(0, 18),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                _buildCompactBrandPanel(spec),
+                Expanded(child: _buildLoginForm(spec)),
+              ],
+            ),
+          ),
         ),
-        child: _buildLoginForm(),
       ),
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildMobileLayout(_LoginLayoutSpec spec) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: spec.outerPadding),
+      child: _buildLoginForm(spec),
+    );
+  }
+
+  Widget _buildLoginForm(_LoginLayoutSpec spec) {
     return FadeTransition(
       opacity: _fadeAnimation,
       child: SlideTransition(
         position: _slideAnimation,
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(40),
+            padding: spec.formPadding,
             child: Container(
-              constraints: const BoxConstraints(maxWidth: 450),
+              constraints: BoxConstraints(maxWidth: spec.formMaxWidth),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -548,10 +613,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     tag: Constants.logoTag,
                     child: Image.asset(
                       tSynaptixAppLogo,
-                      height: 80,
+                      height: spec.logoHeight,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: spec.logoGap),
 
                   // Welcome Text
                   Hero(
@@ -560,11 +625,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       color: Colors.transparent,
                       child: Text(
                         _isSignUpMode ? 'Create Account' : 'Welcome back',
-                        style: const TextStyle(
-                          fontSize: 32,
+                        style: TextStyle(
+                          fontSize: spec.titleSize,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
-                          letterSpacing: -0.5,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -576,12 +640,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         ? 'Sign up to start your trivia journey'
                         : 'Sign in to access your games and progress',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: spec.subtitleSize,
                       color: Colors.white.withValues(alpha: 0.7),
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: spec.sectionGap),
 
                   // Form
                   Form(
@@ -656,10 +720,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
                         // Remember Me & Forgot Password
                         if (!_isSignUpMode)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            runSpacing: 8,
+                            spacing: 12,
                             children: [
                               Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   SizedBox(
                                     height: 20,
@@ -734,6 +802,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                   ),
                                 ),
                         ),
+                        const SizedBox(height: 12),
+
+                        _buildGuestButton(),
                         const SizedBox(height: 24),
 
                         // Social Login Divider
@@ -767,24 +838,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         const SizedBox(height: 24),
 
                         // Social Login Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          runAlignment: WrapAlignment.center,
+                          spacing: 12,
+                          runSpacing: 12,
                           children: [
                             _buildSocialButton(
                               icon: FontAwesomeIcons.google,
                               onPressed: () => _handleSocialLogin('google'),
                             ),
-                            const SizedBox(width: 16),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.facebook,
                               onPressed: () => _handleSocialLogin('facebook'),
                             ),
-                            const SizedBox(width: 16),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.steam,
                               onPressed: () => _handleSocialLogin('steam'),
                             ),
-                            const SizedBox(width: 16),
                             _buildSocialButton(
                               icon: FontAwesomeIcons.apple,
                               onPressed: () => _handleSocialLogin('apple'),
@@ -806,8 +877,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           const SizedBox(height: 16),
 
                         // Sign Up Link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          runSpacing: 4,
                           children: [
                             Text(
                               _isSignUpMode
@@ -850,7 +923,55 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
-  Widget _buildGameArtwork() {
+  Widget _buildCompactBrandPanel(_LoginLayoutSpec spec) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(28, 28, 28, 22),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF6366F1).withValues(alpha: 0.32),
+            const Color(0xFF8B5CF6).withValues(alpha: 0.18),
+          ],
+        ),
+      ),
+      child: Row(
+        children: [
+          Image.asset(tSynaptixAppLogo, height: 58),
+          const SizedBox(width: 18),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Constants.appName.toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  spec.isWeb
+                      ? 'Continue your trivia run from any browser.'
+                      : 'Pick up your progress on this device.',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.72),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGameArtwork(_LoginLayoutSpec spec) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -879,8 +1000,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               children: [
                 // Game Character/Artwork Placeholder
                 Container(
-                  width: 400,
-                  height: 400,
+                  width: spec.artworkSize,
+                  height: spec.artworkSize,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
@@ -904,13 +1025,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 // Game Title
                 Text(
                   Constants.appName.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 48,
+                  style: TextStyle(
+                    fontSize: spec.artworkTitleSize,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     letterSpacing: 4,
                     shadows: [
-                      Shadow(
+                      const Shadow(
                         color: Color(0xFF6366F1),
                         blurRadius: 20,
                       ),
@@ -919,7 +1040,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Master every question, become the ultimate tycoon',
+                  spec.isWeb
+                      ? 'Play from your browser with synced progress'
+                      : 'Master every question, become the ultimate tycoon',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white.withValues(alpha: 0.8),
@@ -955,7 +1078,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '10M+ Players Worldwide',
+                    spec.isWeb
+                        ? 'Web-ready account access'
+                        : '10M+ Players Worldwide',
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.9),
                       fontSize: 13,
@@ -1077,6 +1202,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
   }
 
+  Widget _buildGuestButton() {
+    return SizedBox(
+      height: 50,
+      child: OutlinedButton.icon(
+        onPressed: _isLoading ? null : _handleContinueAsGuest,
+        icon: const Icon(Icons.person_outline_rounded, size: 20),
+        label: const Text(
+          'Continue as guest',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.white,
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          backgroundColor: Colors.white.withValues(alpha: 0.05),
+        ),
+      ),
+    );
+  }
+
   Widget _buildSocialButton({
     required IconData icon,
     required VoidCallback onPressed,
@@ -1185,48 +1332,44 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           const SizedBox(height: 12),
 
           // Method 2: One-time link code input
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _linkCodeController,
-                  decoration: InputDecoration(
-                    hintText: 'Enter 6-char code from app',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.4),
-                      fontSize: 13,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    filled: true,
-                    fillColor: Colors.white.withValues(alpha: 0.05),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.1),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Color(0xFF6366F1)),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isTight = constraints.maxWidth < 360;
+              final codeField = TextField(
+                controller: _linkCodeController,
+                decoration: InputDecoration(
+                  hintText: 'Enter 6-char code from app',
+                  hintStyle: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.4),
+                    fontSize: 13,
+                  ),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  filled: true,
+                  fillColor: Colors.white.withValues(alpha: 0.05),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.1),
                     ),
                   ),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 4,
-                    fontFamily: 'monospace',
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFF6366F1)),
                   ),
-                  maxLength: 6,
-                  textCapitalization: TextCapitalization.characters,
-                  buildCounter: (_,
-                          {required currentLength,
-                          required isFocused,
-                          maxLength}) =>
-                      null,
                 ),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton(
+                style: const TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 4,
+                  fontFamily: 'monospace',
+                ),
+                maxLength: 6,
+                textCapitalization: TextCapitalization.characters,
+                buildCounter: (_,
+                        {required currentLength, required isFocused, maxLength}) =>
+                    null,
+              );
+              final linkButton = ElevatedButton(
                 onPressed: _isLoading ? null : _handleLinkCodeSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6366F1),
@@ -1237,8 +1380,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       borderRadius: BorderRadius.circular(10)),
                 ),
                 child: const Text('Link'),
-              ),
-            ],
+              );
+
+              if (isTight) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    codeField,
+                    const SizedBox(height: 10),
+                    linkButton,
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  Expanded(child: codeField),
+                  const SizedBox(width: 10),
+                  linkButton,
+                ],
+              );
+            },
           ),
           const SizedBox(height: 12),
 
@@ -1307,6 +1469,107 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.08),
         ),
       ),
+    );
+  }
+}
+
+class _LoginLayoutSpec {
+  final bool isDesktop;
+  final bool isTablet;
+  final bool isWeb;
+  final double outerPadding;
+  final double formMaxWidth;
+  final double formHorizontalPadding;
+  final double formVerticalPadding;
+  final double logoHeight;
+  final double logoGap;
+  final double titleSize;
+  final double subtitleSize;
+  final double sectionGap;
+  final double desktopFormPaneWidth;
+  final double artworkSize;
+  final double artworkTitleSize;
+
+  const _LoginLayoutSpec({
+    required this.isDesktop,
+    required this.isTablet,
+    required this.isWeb,
+    required this.outerPadding,
+    required this.formMaxWidth,
+    required this.formHorizontalPadding,
+    required this.formVerticalPadding,
+    required this.logoHeight,
+    required this.logoGap,
+    required this.titleSize,
+    required this.subtitleSize,
+    required this.sectionGap,
+    required this.desktopFormPaneWidth,
+    required this.artworkSize,
+    required this.artworkTitleSize,
+  });
+
+  EdgeInsets get formPadding => EdgeInsets.symmetric(
+        horizontal: formHorizontalPadding,
+        vertical: formVerticalPadding,
+      );
+
+  factory _LoginLayoutSpec.fromWidth(double width, {required bool isWeb}) {
+    if (width >= AppBreakpoints.desktop) {
+      return _LoginLayoutSpec(
+        isDesktop: true,
+        isTablet: false,
+        isWeb: isWeb,
+        outerPadding: 0,
+        formMaxWidth: 460,
+        formHorizontalPadding: 40,
+        formVerticalPadding: 40,
+        logoHeight: 80,
+        logoGap: 32,
+        titleSize: 32,
+        subtitleSize: 14,
+        sectionGap: 40,
+        desktopFormPaneWidth: width >= AppBreakpoints.wideDesktop ? 540 : 500,
+        artworkSize: width >= AppBreakpoints.wideDesktop ? 420 : 340,
+        artworkTitleSize: width >= AppBreakpoints.wideDesktop ? 48 : 40,
+      );
+    }
+
+    if (width >= AppBreakpoints.tablet) {
+      return _LoginLayoutSpec(
+        isDesktop: false,
+        isTablet: true,
+        isWeb: isWeb,
+        outerPadding: 32,
+        formMaxWidth: 500,
+        formHorizontalPadding: 36,
+        formVerticalPadding: 34,
+        logoHeight: 72,
+        logoGap: 24,
+        titleSize: 30,
+        subtitleSize: 14,
+        sectionGap: 32,
+        desktopFormPaneWidth: 0,
+        artworkSize: 0,
+        artworkTitleSize: 0,
+      );
+    }
+
+    return _LoginLayoutSpec(
+      isDesktop: false,
+      isTablet: false,
+      isWeb: isWeb,
+      outerPadding: width < 360 ? 14 : 20,
+      formMaxWidth: 420,
+      formHorizontalPadding: width < 360 ? 6 : 12,
+      formVerticalPadding: 24,
+      logoHeight: width < 360 ? 56 : 64,
+      logoGap: 22,
+      titleSize: width < 360 ? 26 : 28,
+      subtitleSize: 13,
+      sectionGap: 30,
+      desktopFormPaneWidth: 0,
+      artworkSize: 0,
+      artworkTitleSize: 0,
     );
   }
 }

@@ -11,6 +11,7 @@ import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
+import '../core/navigation/canonical_routes.dart';
 import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/steps/constants.dart';
 
@@ -48,7 +49,7 @@ class MockUser {
 /// - Typed [MissingPluginException] / [PlatformException] catching so build
 ///   variants without games_services configured fail gracefully.
 class LoginScreenMobile extends ConsumerStatefulWidget {
-  static const routeName = '/auth';
+  static const routeName = canonicalLoginRoute;
   const LoginScreenMobile({super.key, this.startInSignUpMode = false});
 
   final bool startInSignUpMode;
@@ -374,6 +375,24 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
     }
   }
 
+  Future<void> _handleContinueAsGuest() async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+    try {
+      final identity = ref.read(playerIdentityProvider);
+      if (!identity.hasPlayableIdentity) {
+        await ref.read(playerIdentityProvider.notifier).initialize();
+      }
+
+      if (mounted) context.go(canonicalOnboardingRoute);
+    } catch (e) {
+      _showErrorSnackBar('Unable to start guest mode. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -640,6 +659,9 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
                                   ),
                                 ),
                         ),
+                        const SizedBox(height: 12),
+
+                        _buildGuestButton(),
                         const SizedBox(height: 24),
 
                         Row(
@@ -939,6 +961,28 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
           ),
         ),
         child: child,
+      ),
+    );
+  }
+
+  Widget _buildGuestButton() {
+    return SizedBox(
+      height: 50,
+      child: OutlinedButton.icon(
+        onPressed: _isLoading ? null : _handleContinueAsGuest,
+        icon: const Icon(Icons.person_outline_rounded, size: 20),
+        label: const Text(
+          'Continue as guest',
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.white,
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          backgroundColor: Colors.white.withValues(alpha: 0.05),
+        ),
       ),
     );
   }

@@ -90,10 +90,10 @@ class ApiService {
   })  : _dio = dio ??
             Dio(BaseOptions(
               baseUrl: baseUrl,
-              // Shorter timeouts for development to fail fast
               connectTimeout: const Duration(seconds: 3),
               receiveTimeout: const Duration(seconds: 3),
-              sendTimeout: const Duration(seconds: 3),
+              // sendTimeout is unsupported on web (Dio has no body to send for GET/DELETE)
+              sendTimeout: kIsWeb ? null : const Duration(seconds: 3),
             )),
         _refreshDio = refreshDio ??
             Dio(BaseOptions(
@@ -239,7 +239,8 @@ class ApiService {
   }) {
     return Options(
       headers: _buildJsonHeaders(path, headers),
-      sendTimeout: timeout,
+      // sendTimeout is unsupported on web
+      sendTimeout: kIsWeb ? null : timeout,
       receiveTimeout: timeout,
     );
   }

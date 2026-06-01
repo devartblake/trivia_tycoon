@@ -7,6 +7,7 @@ import 'package:trivia_tycoon/core/services/settings/onboarding_settings_service
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
 import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 import 'package:trivia_tycoon/ui_components/login/models/signup_data.dart';
+import '../navigation/canonical_routes.dart';
 import '../services/analytics/config_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -286,8 +287,9 @@ class LoginManager {
     final loggedIn = await isLoggedIn();
     final onboarded = await hasCompletedOnboarding();
 
-    if (!loggedIn) return '/login';
-    if (!onboarded) return '/onboarding';
+    if (!loggedIn && !onboarded) return canonicalLoginRoute;
+    if (!onboarded) return canonicalOnboardingRoute;
+    if (!loggedIn) return canonicalHomeRoute;
     return await _restorePreviousSession();
   }
 

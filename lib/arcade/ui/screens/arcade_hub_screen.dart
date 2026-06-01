@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/helpers/responsive_layout.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
 import '../../../game/analytics/providers/analytics_providers.dart';
 import '../../../synaptix/mode/synaptix_mode_provider.dart';
@@ -37,55 +39,56 @@ class ArcadeHubScreen extends ConsumerWidget {
 
           // Stats/Achievement Banner
           SliverToBoxAdapter(
-            child: _buildStatsBanner(context),
+            child: AppResponsiveWidth(
+              padding: EdgeInsets.zero,
+              child: _buildStatsBanner(context),
+            ),
           ),
 
           // Quick Actions Row (3 cards)
           SliverToBoxAdapter(
-            child: _buildQuickActionsRow(context, ref),
+            child: AppResponsiveWidth(
+              padding: EdgeInsets.zero,
+              child: _buildQuickActionsRow(context, ref),
+            ),
           ),
 
           // Featured Game Section
           if (games.isNotEmpty)
             SliverToBoxAdapter(
-              child: _buildFeaturedSection(context, games.first),
-            ),
-
-          // Section Header
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 32, 20, 16),
-              child: Row(
-                children: [
-                  Icon(Icons.games_rounded, color: Colors.white, size: 24),
-                  SizedBox(width: 12),
-                  Text(
-                    'All Games',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                ],
+              child: AppResponsiveWidth(
+                padding: EdgeInsets.zero,
+                child: _buildFeaturedSection(context, games.first),
               ),
             ),
-          ),
 
-          // Game List
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final game = games[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _buildModernGameCard(context, game),
-                  );
-                },
-                childCount: games.length,
+          SliverToBoxAdapter(
+            child: AppResponsiveWidth(
+              padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
+              child: Column(
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.games_rounded, color: Colors.white, size: 24),
+                      SizedBox(width: 12),
+                      Text(
+                        'All Games',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  for (final game in games)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _buildModernGameCard(context, game),
+                    ),
+                ],
               ),
             ),
           ),
@@ -189,7 +192,7 @@ class ArcadeHubScreen extends ConsumerWidget {
           ),
           child: IconButton(
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.safeBack(),
             padding: EdgeInsets.zero,
           ),
         ),
