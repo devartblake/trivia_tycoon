@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:trivia_tycoon/screens/messages/widgets/message_reactions_widget.dart';
+import '../../core/helpers/responsive_layout.dart';
 import '../../game/models/message_models.dart';
 import '../../game/providers/message_providers.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -148,22 +149,33 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       body: Column(
         children: [
           Expanded(
-            child: messagesAsync.when(
-              data: _buildMessagesList,
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, _) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    error.toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70),
+            child: AppResponsiveWidth(
+              tabletMaxWidth: 760,
+              desktopMaxWidth: 980,
+              padding: EdgeInsets.zero,
+              child: messagesAsync.when(
+                data: _buildMessagesList,
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, _) => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Text(
+                      error.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          if (_isOtherUserTyping) _buildTypingIndicator(),
+          if (_isOtherUserTyping)
+            AppResponsiveWidth(
+              tabletMaxWidth: 760,
+              desktopMaxWidth: 980,
+              padding: EdgeInsets.zero,
+              child: _buildTypingIndicator(),
+            ),
           _buildMessageInput(),
         ],
       ),
@@ -909,38 +921,43 @@ class _MessageDetailScreenState extends ConsumerState<MessageDetailScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
       color: const Color(0xFF40444B),
       child: SafeArea(
-        child: Row(
-          children: [
-            IconButton(
-              icon: const Icon(Icons.add, color: Colors.white70),
-              onPressed: _showAttachmentOptions,
-            ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2F3136),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: TextField(
-                  controller: _messageController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Message ${widget.contactName}',
-                    hintStyle: const TextStyle(color: Color(0xFF72767D)),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
+        child: AppResponsiveWidth(
+          tabletMaxWidth: 760,
+          desktopMaxWidth: 980,
+          padding: EdgeInsets.zero,
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white70),
+                onPressed: _showAttachmentOptions,
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2F3136),
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  onSubmitted: (text) => _sendMessage(),
-                  textInputAction: TextInputAction.send,
+                  child: TextField(
+                    controller: _messageController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Message ${widget.contactName}',
+                      hintStyle: const TextStyle(color: Color(0xFF72767D)),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                    ),
+                    onSubmitted: (text) => _sendMessage(),
+                    textInputAction: TextInputAction.send,
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.send, color: Color(0xFF5865F2)),
-              onPressed: _sendMessage,
-            ),
-          ],
+              IconButton(
+                icon: const Icon(Icons.send, color: Color(0xFF5865F2)),
+                onPressed: _sendMessage,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/helpers/responsive_layout.dart';
 import '../../core/manager/log_manager.dart';
 import '../../core/services/settings/multi_profile_service.dart';
 import '../../game/analytics/managers/profile_analytics_manager.dart';
@@ -59,34 +60,54 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
   Widget build(BuildContext context) {
     final profilesAsync = ref.watch(profilesProvider);
     ref.watch(activeProfileProvider);
+    final layout = AppResponsive.layoutOf(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFF1A1B3D), // Dark Netflix-style background
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: profilesAsync.when(
-                  data: (profiles) => _buildProfileGrid(profiles),
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
+          child: AppResponsiveWidth(
+            tabletMaxWidth: 760,
+            desktopMaxWidth: 1180,
+            padding: AppResponsive.pagePadding(layout),
+            child: Column(
+              children: [
+                _buildHeader(layout),
+                Expanded(
+                  child: profilesAsync.when(
+                    data: (profiles) => _buildProfileGrid(profiles),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
+                    error: (error, stack) => _buildErrorState(error),
                   ),
-                  error: (error, stack) => _buildErrorState(error),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(AppLayoutClass layout) {
+    final titleSize = AppResponsive.value<double>(
+      layout,
+      mobile: 30,
+      tablet: 34,
+      desktop: 42,
+    );
+    final headerGap = AppResponsive.value<double>(
+      layout,
+      mobile: 28,
+      tablet: 32,
+      desktop: 40,
+    );
+
     return Container(
-      padding: const EdgeInsets.all(24),
+      width: double.infinity,
+      padding: EdgeInsets.only(bottom: AppResponsive.gap(layout)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,12 +138,12 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
               ),
             ],
           ),
-          const SizedBox(height: 32),
-          const Text(
+          SizedBox(height: headerGap),
+          Text(
             "Who's playing?",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 32,
+              fontSize: titleSize,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -140,59 +161,81 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
   }
 
   Widget _buildProfileGrid(List<ProfileData> profiles) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          // Profile grid
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.8,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-            ),
-            itemCount: profiles.length +
-                (profiles.length < 5 ? 1 : 0), // Add button if under limit
-            itemBuilder: (context, index) {
-              if (index < profiles.length) {
-                return _buildProfileCard(profiles[index]);
-              } else {
-                return _buildAddProfileCard();
-              }
-            },
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = AppBreakpoints.classify(constraints.maxWidth);
+        final columns = AppResponsive.value<int>(
+          layout,
+          mobile: 2,
+          tablet: 3,
+          desktop: constraints.maxWidth >= 980 ? 5 : 4,
+        );
+        final gap = AppResponsive.value<double>(
+          layout,
+          mobile: 14,
+          tablet: 16,
+          desktop: 18,
+        );
+        final aspectRatio = AppResponsive.value<double>(
+          layout,
+          mobile: 0.76,
+          tablet: 0.82,
+          desktop: 0.86,
+        );
 
-          const SizedBox(height: 32),
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  childAspectRatio: aspectRatio,
+                  crossAxisSpacing: gap,
+                  mainAxisSpacing: gap,
+                ),
+                itemCount: profiles.length + (profiles.length < 5 ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index < profiles.length) {
+                    return _buildProfileCard(profiles[index]);
+                  }
+                  return _buildAddProfileCard();
+                },
+              ),
 
-          // Manage Profiles button
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 32),
-            child: OutlinedButton(
-              onPressed: () => _showManageProfilesDialog(),
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              SizedBox(height: AppResponsive.gap(layout)),
+
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 360),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () => _showManageProfilesDialog(),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.3)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      'Manage Profiles',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              child: Text(
-                'Manage Profiles',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
 
-          const SizedBox(height: 24),
-        ],
-      ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
     );
   }
 

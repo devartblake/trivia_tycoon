@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/helpers/responsive_layout.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
 import '../../game/providers/message_providers.dart';
@@ -18,6 +19,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   final TextEditingController _searchController = TextEditingController();
   final String _searchQuery = '';
   int _messageRequests = 5;
+  Conversation? _previewConversation;
 
   String get _currentUserId => ref.read(currentUserIdProvider);
 
@@ -75,19 +77,94 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             return title.toLowerCase().contains(_searchQuery.toLowerCase());
           }).toList();
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF2F3136),
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          _buildSearchAndAdd(unreadCount),
-          _buildOnlineGroupsSection(),
-          Expanded(
-            child: _buildMessageList(filteredConversations),
-          ),
-        ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = AppBreakpoints.classify(constraints.maxWidth);
+        final previewConversation = _previewConversation != null &&
+                filteredConversations
+                    .any((item) => item.id == _previewConversation!.id)
+            ? _previewConversation
+            : null;
+
+        return Scaffold(
+          backgroundColor: const Color(0xFF2F3136),
+          appBar: _buildAppBar(),
+          body: layout.isDesktop
+              ? _buildDesktopMessagesLayout(
+                  filteredConversations,
+                  unreadCount,
+                  previewConversation,
+                )
+              : AppResponsiveWidth(
+                  tabletMaxWidth: 760,
+                  desktopMaxWidth: 860,
+                  padding: EdgeInsets.zero,
+                  child: _buildMessagesColumn(
+                    filteredConversations,
+                    unreadCount,
+                  ),
+                ),
+          floatingActionButton: _buildCreateDMButton(),
+        );
+      },
+    );
+  }
+
+  Widget _buildMessagesColumn(
+    List<Conversation> conversations,
+    int unreadCount, {
+    bool framed = false,
+  }) {
+    final content = Column(
+      children: [
+        _buildSearchAndAdd(unreadCount),
+        _buildOnlineGroupsSection(),
+        Expanded(
+          child: _buildMessageList(conversations),
+        ),
+      ],
+    );
+
+    if (!framed) return content;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF36393F),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
-      floatingActionButton: _buildCreateDMButton(),
+      child: content,
+    );
+  }
+
+  Widget _buildDesktopMessagesLayout(
+    List<Conversation> conversations,
+    int unreadCount,
+    Conversation? previewConversation,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1280),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: 430,
+                child: _buildMessagesColumn(
+                  conversations,
+                  unreadCount,
+                  framed: true,
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: _buildConversationPreview(previewConversation),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -127,42 +204,70 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       color: const Color(0xFF202225),
-      child: Row(
-        children: [
-          _buildIconButton(Icons.search, () => _showSearchDialog()),
-          const SizedBox(width: 12),
-          _buildIconButton(
-              Icons.mail_outline, () => _showMessageRequestDialog(),
-              badgeCount: _messageRequests),
-          const SizedBox(width: 12),
-          Expanded(
-            child: GestureDetector(
-              onTap: () => _showAddFriendDialog(),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF40444B),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.person_add, color: Colors.white70, size: 20),
-                    SizedBox(width: 12),
-                    Text(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final stack = constraints.maxWidth < 360;
+          final actions = Row(
+            mainAxisSize: stack ? MainAxisSize.max : MainAxisSize.min,
+            children: [
+              _buildIconButton(Icons.search, () => _showSearchDialog()),
+              const SizedBox(width: 12),
+              _buildIconButton(
+                Icons.mail_outline,
+                () => _showMessageRequestDialog(),
+                badgeCount: _messageRequests,
+              ),
+            ],
+          );
+
+          final addFriend = GestureDetector(
+            onTap: () => _showAddFriendDialog(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF40444B),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.person_add, color: Colors.white70, size: 20),
+                  SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
                       'Add Friends',
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+          );
+
+          if (stack) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                actions,
+                const SizedBox(height: 12),
+                addFriend,
+              ],
+            );
+          }
+
+          return Row(
+            children: [
+              actions,
+              const SizedBox(width: 12),
+              Expanded(child: addFriend),
+            ],
+          );
+        },
       ),
     );
   }
@@ -295,9 +400,18 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     return InkWell(
       onTap: () {
         soundManager.playButtonClick();
-        _openConversationDetail(conversation);
+        if (AppResponsive.layoutOf(context).isDesktop) {
+          setState(() => _previewConversation = conversation);
+        } else {
+          _openConversationDetail(conversation);
+        }
       },
       child: Container(
+        decoration: BoxDecoration(
+          color: _previewConversation?.id == conversation.id
+              ? const Color(0xFF5865F2).withValues(alpha: 0.16)
+              : Colors.transparent,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
@@ -407,6 +521,100 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           fontSize: 10,
           fontWeight: FontWeight.bold,
         ),
+      ),
+    );
+  }
+
+  Widget _buildConversationPreview(Conversation? conversation) {
+    if (conversation == null) {
+      return Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF36393F),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        ),
+        child: const Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.forum_outlined, color: Color(0xFF72767D), size: 72),
+              SizedBox(height: 18),
+              Text(
+                'Select a conversation',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Messages open here on wider screens.',
+                style: TextStyle(color: Color(0xFFB9BBBE), fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: const Color(0xFF36393F),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _buildConversationAvatar(conversation),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      conversation.displayTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      conversation.lastMessagePreview,
+                      style: const TextStyle(
+                        color: Color(0xFFB9BBBE),
+                        fontSize: 14,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Align(
+            alignment: Alignment.centerRight,
+            child: ElevatedButton.icon(
+              onPressed: () => _openConversationDetail(conversation),
+              icon: const Icon(Icons.open_in_new_rounded),
+              label: const Text('Open conversation'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF5865F2),
+                foregroundColor: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

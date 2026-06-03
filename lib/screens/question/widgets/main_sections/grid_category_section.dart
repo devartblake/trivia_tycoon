@@ -113,30 +113,35 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
           data: (data) {
             final classStats =
                 data['classStats'] as Map<String, dynamic>? ?? const {};
-            return GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 2.2,
-              children: classLevels.map((classLevel) {
-                final classData =
-                    classStats[classLevel['id']] as Map<String, dynamic>?;
-                final questionCount =
-                    (classData?['questionCount'] as num?)?.toInt() ?? 0;
-                return _EducationalClassCard(
-                  title: classLevel['title'],
-                  subtitle: classLevel['subtitle'],
-                  description: classLevel['description'],
-                  questionCount: questionCount,
-                  color: classLevel['color'],
-                  icon: classLevel['icon'],
-                  onTap: () {
-                    context.push('/class-quiz/${classLevel['id']}');
-                  },
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final columns = _gridColumnsForWidth(constraints.maxWidth);
+                return GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: columns,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: columns == 1 ? 3.4 : 2.2,
+                  children: classLevels.map((classLevel) {
+                    final classData =
+                        classStats[classLevel['id']] as Map<String, dynamic>?;
+                    final questionCount =
+                        (classData?['questionCount'] as num?)?.toInt() ?? 0;
+                    return _EducationalClassCard(
+                      title: classLevel['title'],
+                      subtitle: classLevel['subtitle'],
+                      description: classLevel['description'],
+                      questionCount: questionCount,
+                      color: classLevel['color'],
+                      icon: classLevel['icon'],
+                      onTap: () {
+                        context.push('/class-quiz/${classLevel['id']}');
+                      },
+                    );
+                  }).toList(),
                 );
-              }).toList(),
+              },
             );
           },
           loading: () => _buildLoadingClassGrid(),
@@ -193,34 +198,39 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
         categoryStatsAsync.when(
           data: (categoriesData) {
             final categories = categoriesData.take(6).toList();
-            return GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.2,
-              children: categories.map((category) {
-                return Consumer(
-                  builder: (context, ref, child) {
-                    final categoryStats = ref
-                        .watch(question_data.categoryStatsProvider(category));
-                    final questionCount = categoryStats.maybeWhen(
-                      data: (stats) =>
-                          (stats['questionCount'] as num?)?.toInt() ?? 0,
-                      orElse: () => 0,
-                    );
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final columns = _gridColumnsForWidth(constraints.maxWidth);
+                return GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: columns,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: columns == 1 ? 2.2 : 1.2,
+                  children: categories.map((category) {
+                    return Consumer(
+                      builder: (context, ref, child) {
+                        final categoryStats = ref.watch(
+                            question_data.categoryStatsProvider(category));
+                        final questionCount = categoryStats.maybeWhen(
+                          data: (stats) =>
+                              (stats['questionCount'] as num?)?.toInt() ?? 0,
+                          orElse: () => 0,
+                        );
 
-                    return _EnhancedEducationalCategoryCard(
-                      category: category,
-                      questionCount: questionCount,
-                      onTap: () {
-                        context.push('/category-quiz/${category.name}');
+                        return _EnhancedEducationalCategoryCard(
+                          category: category,
+                          questionCount: questionCount,
+                          onTap: () {
+                            context.push('/category-quiz/${category.name}');
+                          },
+                        );
                       },
                     );
-                  },
+                  }).toList(),
                 );
-              }).toList(),
+              },
             );
           },
           loading: () => _buildLoadingCategoryGrid(),
@@ -231,27 +241,43 @@ class _GridCategorySectionState extends ConsumerState<GridCategorySection> {
   }
 
   Widget _buildLoadingClassGrid() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 2.2,
-      children: List.generate(4, (index) => _LoadingClassCard()),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = _gridColumnsForWidth(constraints.maxWidth);
+        return GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: columns,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: columns == 1 ? 3.4 : 2.2,
+          children: List.generate(4, (index) => _LoadingClassCard()),
+        );
+      },
     );
   }
 
   Widget _buildLoadingCategoryGrid() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1.2,
-      children: List.generate(6, (index) => _LoadingCategoryCard()),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = _gridColumnsForWidth(constraints.maxWidth);
+        return GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: columns,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: columns == 1 ? 2.2 : 1.2,
+          children: List.generate(6, (index) => _LoadingCategoryCard()),
+        );
+      },
     );
+  }
+
+  int _gridColumnsForWidth(double width) {
+    if (width >= 760) return 3;
+    if (width < 360) return 1;
+    return 2;
   }
 }
 

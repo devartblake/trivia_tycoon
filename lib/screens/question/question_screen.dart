@@ -10,12 +10,14 @@ import 'package:trivia_tycoon/screens/question/widgets/main_sections/grid_catego
 import 'package:trivia_tycoon/screens/question/widgets/quick_access/quick_access_section.dart';
 import 'package:trivia_tycoon/screens/question/widgets/stats/stats_loading_card.dart';
 import 'package:trivia_tycoon/screens/question/widgets/stats/stats_overview_card.dart';
+import '../../core/helpers/responsive_layout.dart';
 import '../../game/providers/question_providers.dart';
 import '../question/widgets/main_sections/top_menu_section.dart';
 import '../question/widgets/main_sections/grid_menu_section.dart';
 import '../question/widgets/main_sections/cta_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
+import 'package:trivia_tycoon/game/services/quiz_category.dart';
 
 class QuestionScreen extends ConsumerStatefulWidget {
   const QuestionScreen({super.key});
@@ -85,99 +87,155 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
     final categoriesAsync = ref.watch(quizCategoriesProvider);
     final sourceStatus = ref.watch(serviceStatusProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              // Top Menu Section with user info and main actions
-              const TopMenuSection(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = AppBreakpoints.classify(constraints.maxWidth);
 
-              const SizedBox(height: 16),
-
-              _buildQuestionSourceBanner(sourceStatus),
-
-              const SizedBox(height: 24),
-
-              // Carousel Challenge Quiz prominent section
-              const CarouselSection(),
-
-              const SizedBox(height: 24),
-
-              _buildPrimaryQuizLaunchPanel(context),
-
-              const SizedBox(height: 20),
-
-              // Quick Access Section with QuizCategory integration
-              QuickAccessSection(),
-
-              const SizedBox(height: 24),
-
-              // Grid Menu Section for classes and categories
-              const GridMenuSection(),
-
-              const SizedBox(height: 24),
-
-              // Stats Overview Card
-              Consumer(
-                builder: (context, ref, child) {
-                  return statsAsync.when(
-                    data: (stats) => StatsOverviewCard(stats: stats),
-                    loading: () => const StatsLoadingCard(),
-                    error: (error, stack) => const SizedBox(),
-                  );
-                },
+        return Scaffold(
+          backgroundColor: Colors.grey.shade50,
+          body: SafeArea(
+            child: AppResponsiveWidth(
+              tabletMaxWidth: 900,
+              desktopMaxWidth: 1280,
+              child: SingleChildScrollView(
+                child: layout.isDesktop
+                    ? _buildWideQuizContent(
+                        sourceStatus,
+                        statsAsync,
+                        categoriesAsync,
+                      )
+                    : _buildMobileQuizContent(
+                        sourceStatus,
+                        statsAsync,
+                        categoriesAsync,
+                      ),
               ),
-
-              const SizedBox(height: 24),
-
-              GridCategorySection(),
-
-              const SizedBox(height: 24),
-
-              // CTA Banner
-              CTAWidget(
-                title: "Premium Unlock!",
-                subtitle: "Get unlimited quizzes & remove ads",
-                buttonText: "Upgrade Now",
-                backgroundImage: 'assets/images/avatars/default-avatar.png',
-                onPressed: () {
-                  _showPremiumDialog();
-                },
-              ),
-
-              const SizedBox(height: 24),
-
-              // Featured Categories Section with QuizCategory
-              Consumer(
-                builder: (context, ref, child) {
-                  return categoriesAsync.when(
-                    data: (categories) =>
-                        FeaturedCategoriesSection(categories: categories),
-                    loading: () => const FeaturedCategoriesLoadingSection(),
-                    error: (error, stack) => const SizedBox(),
-                  );
-                },
-              ),
-
-              // Bottom padding for navigation
-              const SizedBox(height: 100),
-            ],
+            ),
           ),
+          bottomNavigationBar: QuestionScreenBottomNav(
+            currentIndex: _currentBottomNavIndex,
+            onTap: _onBottomNavTap,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _showCreateQuizBottomSheet(),
+            backgroundColor: Colors.purple,
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+        );
+      },
+    );
+  }
+
+  Widget _buildMobileQuizContent(
+    Map<String, dynamic> sourceStatus,
+    AsyncValue<Map<String, dynamic>> statsAsync,
+    AsyncValue<List<QuizCategory>> categoriesAsync,
+  ) {
+    return Column(
+      children: [
+        const TopMenuSection(),
+        const SizedBox(height: 16),
+        _buildQuestionSourceBanner(sourceStatus),
+        const SizedBox(height: 24),
+        const CarouselSection(),
+        const SizedBox(height: 24),
+        _buildPrimaryQuizLaunchPanel(context),
+        const SizedBox(height: 20),
+        const QuickAccessSection(),
+        const SizedBox(height: 24),
+        const GridMenuSection(),
+        const SizedBox(height: 24),
+        _buildStatsSection(statsAsync),
+        const SizedBox(height: 24),
+        GridCategorySection(),
+        const SizedBox(height: 24),
+        _buildPremiumCta(),
+        const SizedBox(height: 24),
+        _buildFeaturedCategoriesSection(categoriesAsync),
+        const SizedBox(height: 100),
+      ],
+    );
+  }
+
+  Widget _buildWideQuizContent(
+    Map<String, dynamic> sourceStatus,
+    AsyncValue<Map<String, dynamic>> statsAsync,
+    AsyncValue<List<QuizCategory>> categoriesAsync,
+  ) {
+    return Column(
+      children: [
+        const TopMenuSection(),
+        const SizedBox(height: 18),
+        _buildQuestionSourceBanner(sourceStatus),
+        const SizedBox(height: 24),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 7,
+              child: Column(
+                children: [
+                  const CarouselSection(),
+                  const SizedBox(height: 24),
+                  _buildPrimaryQuizLaunchPanel(context),
+                  const SizedBox(height: 24),
+                  const GridMenuSection(),
+                  const SizedBox(height: 24),
+                  GridCategorySection(),
+                ],
+              ),
+            ),
+            const SizedBox(width: 24),
+            SizedBox(
+              width: 360,
+              child: Column(
+                children: [
+                  const QuickAccessSection(),
+                  const SizedBox(height: 24),
+                  _buildStatsSection(statsAsync),
+                  const SizedBox(height: 24),
+                  _buildPremiumCta(),
+                  const SizedBox(height: 24),
+                  _buildFeaturedCategoriesSection(categoriesAsync),
+                ],
+              ),
+            ),
+          ],
         ),
-      ),
-      bottomNavigationBar: QuestionScreenBottomNav(
-        currentIndex: _currentBottomNavIndex,
-        onTap: _onBottomNavTap,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showCreateQuizBottomSheet(),
-        backgroundColor: Colors.purple,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        const SizedBox(height: 100),
+      ],
+    );
+  }
+
+  Widget _buildStatsSection(AsyncValue<Map<String, dynamic>> statsAsync) {
+    return statsAsync.when(
+      data: (stats) => StatsOverviewCard(stats: stats),
+      loading: () => const StatsLoadingCard(),
+      error: (error, stack) => const SizedBox(),
+    );
+  }
+
+  Widget _buildFeaturedCategoriesSection(
+    AsyncValue<List<QuizCategory>> categoriesAsync,
+  ) {
+    return categoriesAsync.when(
+      data: (categories) => FeaturedCategoriesSection(categories: categories),
+      loading: () => const FeaturedCategoriesLoadingSection(),
+      error: (error, stack) => const SizedBox(),
+    );
+  }
+
+  Widget _buildPremiumCta() {
+    return CTAWidget(
+      title: "Premium Unlock!",
+      subtitle: "Get unlimited quizzes & remove ads",
+      buttonText: "Upgrade Now",
+      backgroundImage: 'assets/images/avatars/default-avatar.png',
+      onPressed: () {
+        _showPremiumDialog();
+      },
     );
   }
 
@@ -284,38 +342,53 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
             style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _buildLaunchChip(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final stack = constraints.maxWidth < 430;
+              final chips = [
+                _buildLaunchChip(
                   context: context,
                   icon: Icons.person_outline,
                   label: 'Single Player',
                   route: '/quiz/play',
                   color: const Color(0xFF2563EB),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _buildLaunchChip(
+                _buildLaunchChip(
                   context: context,
                   icon: Icons.groups_outlined,
                   label: 'Multiplayer',
                   route: '/multiplayer',
                   color: const Color(0xFF7C3AED),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _buildLaunchChip(
+                _buildLaunchChip(
                   context: context,
                   icon: Icons.grid_view_rounded,
                   label: 'Categories',
                   route: '/all-categories',
                   color: const Color(0xFF059669),
                 ),
-              ),
-            ],
+              ];
+
+              if (stack) {
+                return Column(
+                  children: [
+                    for (final chip in chips) ...[
+                      chip,
+                      if (chip != chips.last) const SizedBox(height: 10),
+                    ],
+                  ],
+                );
+              }
+
+              return Row(
+                children: [
+                  for (final chip in chips) ...[
+                    Expanded(child: chip),
+                    if (chip != chips.last) const SizedBox(width: 10),
+                  ],
+                ],
+              );
+            },
           ),
         ],
       ),

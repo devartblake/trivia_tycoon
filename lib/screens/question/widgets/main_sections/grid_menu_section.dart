@@ -92,25 +92,35 @@ class GridMenuSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3.2, // Increased from 2.8 to give more height
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: menuItems.length,
-            itemBuilder: (context, index) {
-              final item = menuItems[index];
-              return _buildRectangularMenuItem(
-                context,
-                item["icon"],
-                item["label"],
-                item["color"],
-                item["route"],
-                item["description"],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = constraints.maxWidth >= 760
+                  ? 3
+                  : constraints.maxWidth < 360
+                      ? 1
+                      : 2;
+
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  childAspectRatio: columns == 1 ? 4.4 : 3.2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemCount: menuItems.length,
+                itemBuilder: (context, index) {
+                  final item = menuItems[index];
+                  return _buildRectangularMenuItem(
+                    context,
+                    item["icon"],
+                    item["label"],
+                    item["color"],
+                    item["route"],
+                    item["description"],
+                  );
+                },
               );
             },
           ),

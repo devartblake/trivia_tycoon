@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/navigation/navigation_extensions.dart';
+import '../../game/providers/feature_flag_providers.dart';
 import '../../game/providers/game_providers.dart'
     show rewardSettingsServiceProvider;
 import '../../game/providers/profile_providers.dart'
@@ -339,20 +340,25 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
   }
 
   Widget _buildContent(ThemeData theme) {
+    final flags = ref.watch(featureFlagsProvider);
     return AppResponsiveWidth(
       desktopMaxWidth: 980,
       tabletMaxWidth: 760,
       child: Column(
-        mainAxisSize: MainAxisSize.min, // Added this to prevent overflow
+        mainAxisSize: MainAxisSize.min,
         children: [
           _buildDailyClaimSection(theme),
-          SizedBox(height: 20), // Reduced from 24 to 20
-          WeeklyRewardsWidget(), // Add the weekly rewards widget
-          SizedBox(height: 20), // Reduced from 24 to 20
+          const SizedBox(height: 20),
+          WeeklyRewardsWidget(),
+          const SizedBox(height: 20),
           _buildSpinNavigationCard(theme),
-          SizedBox(height: 20), // Reduced from 24 to 20
+          if (flags.rewardReactorEnabled) ...[
+            const SizedBox(height: 20),
+            _buildReactorNavigationCard(theme),
+          ],
+          const SizedBox(height: 20),
           _buildStatsSection(theme),
-          SizedBox(height: 20), // Added bottom padding
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -490,6 +496,79 @@ class _EnhancedRewardsScreenState extends ConsumerState<RewardsScreen>
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildReactorNavigationCard(ThemeData theme) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF7C3AED), // Purple
+            Color(0xFFFFD700), // Gold
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF7C3AED).withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.flash_on_rounded, color: Colors.white, size: 28),
+              const SizedBox(width: 12),
+              Text(
+                'Reward Reactor',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Spin for bonus daily rewards!',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => context.push('/rewards/reactor'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: const Color(0xFF7C3AED),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 4,
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.flash_on_rounded, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  'Open Reactor',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
