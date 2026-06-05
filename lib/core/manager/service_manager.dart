@@ -45,6 +45,9 @@ import '../env.dart';
 import '../networking/encrypted_api_client.dart';
 import '../networking/http_client.dart';
 import '../networking/signalr/match_hub.dart';
+import '../networking/signalr/presence_hub.dart';
+import '../networking/signalr/leaderboard_hub.dart';
+import '../networking/signalr/matchmaking_hub.dart';
 import '../services/auth_http_client.dart';
 import '../networking/signalr/notification_hub.dart';
 import '../networking/synaptix_api_client.dart';
@@ -106,6 +109,9 @@ class ServiceManager {
   final EncryptedApiClient encryptedApiClient;
   final NotificationHub notificationHub;
   final MatchHub matchHub;
+  final PresenceHub presenceHub;
+  final LeaderboardHub leaderboardHub;
+  final MatchmakingHub matchmakingHub;
 
   ServiceManager({
     required this.apiService,
@@ -155,6 +161,9 @@ class ServiceManager {
     required this.encryptedApiClient,
     required this.notificationHub,
     required this.matchHub,
+    required this.presenceHub,
+    required this.leaderboardHub,
+    required this.matchmakingHub,
   });
 
   // ── Hub lifecycle helpers ────────────────────────────────────────────────
@@ -318,6 +327,9 @@ class ServiceManager {
     );
     final notifyHub = NotificationHub();
     final mHub = MatchHub();
+    final presHub = PresenceHub();
+    final lbHub = LeaderboardHub();
+    final mmHub = MatchmakingHub();
 
     // Save it globally here
     final manager = ServiceManager(
@@ -369,6 +381,9 @@ class ServiceManager {
       encryptedApiClient: encryptedApiClient,
       notificationHub: notifyHub,
       matchHub: mHub,
+      presenceHub: presHub,
+      leaderboardHub: lbHub,
+      matchmakingHub: mmHub,
     );
 
     instance = manager;

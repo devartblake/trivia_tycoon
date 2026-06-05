@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/networking/signalr/notification_hub.dart';
 import '../../core/networking/signalr/match_hub.dart';
+import '../../core/networking/signalr/presence_hub.dart';
+import '../../core/networking/signalr/leaderboard_hub.dart';
+import '../../core/networking/signalr/matchmaking_hub.dart';
 import '../../core/dto/hub_event_dto.dart';
 import '../../core/dto/game_event_dto.dart';
 import '../../core/dto/guardian_dto.dart';
@@ -21,6 +24,27 @@ final notificationHubProvider = Provider<NotificationHub>((ref) {
 /// The per-match [MatchHub] — connected at match start, disconnected at match end.
 final matchHubProvider = Provider<MatchHub>((ref) {
   final hub = ref.read(serviceManagerProvider).matchHub;
+  ref.onDispose(hub.stop);
+  return hub;
+});
+
+/// [PresenceHub] — connected on login; subscribe friends after friend list loads.
+final presenceHubProvider = Provider<PresenceHub>((ref) {
+  final hub = ref.read(serviceManagerProvider).presenceHub;
+  ref.onDispose(hub.stop);
+  return hub;
+});
+
+/// [LeaderboardHub] — connect when the leaderboard screen is open.
+final leaderboardHubProvider = Provider<LeaderboardHub>((ref) {
+  final hub = ref.read(serviceManagerProvider).leaderboardHub;
+  ref.onDispose(hub.stop);
+  return hub;
+});
+
+/// [MatchmakingHub] — connect when entering the matchmaking queue.
+final matchmakingHubProvider = Provider<MatchmakingHub>((ref) {
+  final hub = ref.read(serviceManagerProvider).matchmakingHub;
   ref.onDispose(hub.stop);
   return hub;
 });
@@ -63,6 +87,47 @@ final directMessagesUpdatedStreamProvider =
 
 final matchUpdateStreamProvider = StreamProvider<MatchUpdateDto>((ref) {
   return ref.watch(matchHubProvider).matchUpdates;
+});
+
+// ── PresenceHub stream providers ─────────────────────────────────────────────
+
+final presenceChangedStreamProvider =
+    StreamProvider<PlayerPresenceChangedDto>((ref) {
+  return ref.watch(presenceHubProvider).presenceChanged;
+});
+
+final presenceSnapshotStreamProvider =
+    StreamProvider<PlayerPresenceSnapshotDto>((ref) {
+  return ref.watch(presenceHubProvider).presenceSnapshot;
+});
+
+// ── LeaderboardHub stream providers ──────────────────────────────────────────
+
+final leaderboardRankChangedStreamProvider =
+    StreamProvider<LeaderboardRankChangedDto>((ref) {
+  return ref.watch(leaderboardHubProvider).rankChanged;
+});
+
+final leaderboardSnapshotStreamProvider =
+    StreamProvider<LeaderboardSnapshotDto>((ref) {
+  return ref.watch(leaderboardHubProvider).snapshot;
+});
+
+// ── MatchmakingHub stream providers ──────────────────────────────────────────
+
+final matchmakingQueuedStreamProvider =
+    StreamProvider<MatchmakingQueuedDto>((ref) {
+  return ref.watch(matchmakingHubProvider).queued;
+});
+
+final matchmakingMatchedStreamProvider =
+    StreamProvider<MatchmakingMatchedDto>((ref) {
+  return ref.watch(matchmakingHubProvider).matched;
+});
+
+final matchmakingCancelledStreamProvider =
+    StreamProvider<MatchmakingCancelledDto>((ref) {
+  return ref.watch(matchmakingHubProvider).cancelled;
 });
 
 // ── REST-backed feature providers ────────────────────────────────────────────
