@@ -1018,10 +1018,13 @@ class AdaptedQuestionLoaderService {
       orElse: () => _coreDatasets.first,
     );
 
-    // Find alternative datasets with overlapping categories
+    // Find alternative datasets with overlapping categories.
+    // Exclude any dataset already marked unavailable to prevent infinite cycles
+    // (e.g. Arts ↔ Literature mutual recursion when both files are missing).
     final alternatives = availableDatasets
         .where((ds) =>
             ds.name != datasetName &&
+            _datasetAvailability[ds.name] != false &&
             ds.categories.any((cat) => targetDataset.categories.contains(cat)))
         .toList();
 
@@ -1031,8 +1034,9 @@ class AdaptedQuestionLoaderService {
       return loadDataset(alternative.name);
     }
 
-    // Final fallback to General Knowledge
-    if (datasetName != 'General Knowledge') {
+    // Final fallback to General Knowledge — only if it hasn't already failed.
+    if (datasetName != 'General Knowledge' &&
+        _datasetAvailability['General Knowledge'] != false) {
       return loadDataset('General Knowledge');
     }
 
