@@ -43,7 +43,7 @@ class FeatureFlags {
     this.territoryEnabled = false,
     this.guardiansEnabled = false,
     this.experimentsEnabled = false,
-    this.rewardReactorEnabled = false,
+    this.rewardReactorEnabled = true,
     this.devTesterEnabled = false,
   });
 
@@ -69,7 +69,7 @@ class FeatureFlags {
       territoryEnabled: flag('territoryEnabled'),
       guardiansEnabled: flag('guardiansEnabled'),
       experimentsEnabled: flag('experimentsEnabled'),
-      rewardReactorEnabled: flag('rewardReactorEnabled'),
+      rewardReactorEnabled: flag('rewardReactorEnabled', fallback: true),
       devTesterEnabled: flag('devTesterEnabled'),
     );
   }

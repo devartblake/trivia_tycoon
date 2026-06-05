@@ -62,6 +62,33 @@ class EnvConfig {
     return _apiHealthUrl!;
   }
 
+  // ── gRPC configuration ────────────────────────────────────────────────────
+
+  /// Host for the backend gRPC service (MobileMatchService, port 5001).
+  /// Defaults to the same host as [apiBaseUrl] when not set.
+  static String get grpcHost {
+    final configured = dotenv.env['GRPC_HOST'];
+    if (configured != null && configured.isNotEmpty) return configured;
+    // Fall back to the API host (strip scheme and port).
+    return Uri.tryParse(_apiBaseUrl ?? '')?.host ?? 'localhost';
+  }
+
+  /// Port for the backend gRPC service (default: 5001).
+  static int get grpcPort {
+    final raw = dotenv.env['GRPC_PORT'];
+    if (raw != null && raw.isNotEmpty) {
+      return int.tryParse(raw) ?? 5001;
+    }
+    return 5001;
+  }
+
+  /// Whether to use TLS for the gRPC channel.
+  /// Defaults to false for local dev; set GRPC_USE_TLS=true for staging/prod.
+  static bool get grpcUseTls {
+    final raw = dotenv.env['GRPC_USE_TLS']?.toLowerCase();
+    return raw == 'true' || raw == '1';
+  }
+
   /// Enables player-facing crypto wallet surfaces.
   static bool get cryptoSurfacesEnabled => _cryptoSurfacesEnabled;
 

@@ -6,6 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2026-06-04] gRPC Client Infrastructure — MobileMatchService
+
+### Added
+
+- **gRPC transport layer** connecting to the backend `MobileMatchGrpcService` (port 5001, HTTP/2). Additive alongside existing REST + SignalR — does not replace notifications, DMs, or presence.
+- **Dependencies**: `grpc: ^4.0.0`, `protobuf: ^3.1.0`, `fixnum: ^1.1.0` (runtime); `protoc_plugin: ^21.1.2` (dev codegen).
+- **`protos/mobile.proto`** — local copy of the backend proto for Dart code generation.
+- **`scripts/generate_proto.sh`** + **`scripts/generate_proto.ps1`** — codegen scripts; run once after cloning or when proto changes.
+- **`lib/core/networking/grpc/grpc_channel_manager.dart`** — singleton `ClientChannel` (native) / `GrpcWebClientChannel` (web) with configurable host/port/TLS.
+- **`lib/core/networking/grpc/grpc_auth_interceptor.dart`** — `ClientInterceptor` that injects `authorization: Bearer <jwt>` on all calls including bidirectional streams.
+- **`lib/core/networking/grpc/grpc_match_client.dart`** — typed stub wrapper for all 6 RPCs (`startMatch`, `submitMatch`, `playMatch`, `watchLeaderboard`, `watchMatchmaking`, `cancelMatchmaking`).
+- **`lib/core/services/grpc_match_service.dart`** — business-logic façade with error wrapping and documentation for each RPC.
+- **`lib/game/providers/grpc_providers.dart`** — Riverpod providers: `grpcChannelProvider`, `grpcMatchClientProvider`, `grpcMatchServiceProvider`.
+- **`lib/core/env.dart`** — `grpcHost`, `grpcPort`, `grpcUseTls` getters (env keys: `GRPC_HOST`, `GRPC_PORT`, `GRPC_USE_TLS`).
+- **`docs/GRPC_INTEGRATION.md`** — setup guide with codegen instructions, env config, usage examples for all 6 RPCs.
+
+### RPCs available
+
+| RPC | Type | Use case |
+|-----|------|---------|
+| `startMatch` | Unary | Start a match; replaces REST `POST /mobile/matches/start` |
+| `submitMatch` | Unary | Submit results + collect awards |
+| `playMatch` | Bidi stream | Live match session (questions ↔ answers, scores, timer) |
+| `watchLeaderboard` | Server stream | Live rank neighbourhood; cancel to unsubscribe |
+| `watchMatchmaking` | Server stream | Queue subscription; emits until `Matched` or cancelled |
+| `cancelMatchmaking` | Unary | Explicit queue withdrawal |
+
+---
+
 ## [Unreleased]
 
 ### Added – Test coverage expansion: Batches 8–33 (2026-05-09 → 2026-05-31)
