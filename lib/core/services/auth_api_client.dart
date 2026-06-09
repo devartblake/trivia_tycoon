@@ -140,6 +140,9 @@ class AuthApiClient {
     required String password,
     String? username,
     String? country,
+    // COPPA/CCPA requirement: collect DOB at signup so the compliance service
+    // can gate prize and crypto features. Format: YYYY-MM-DD.
+    String? dateOfBirth,
   }) async {
     final deviceIdentity = await _deviceId.getDeviceIdentityPayload();
     final payload = {
@@ -149,6 +152,7 @@ class AuthApiClient {
       if (username != null && username.isNotEmpty) 'username': username,
       if (username != null && username.isNotEmpty) 'handle': username,
       if (country != null && country.isNotEmpty) 'country': country,
+      if (dateOfBirth != null && dateOfBirth.isNotEmpty) 'dateOfBirth': dateOfBirth,
     };
 
     _logRequest('POST', signupPath, body: payload);

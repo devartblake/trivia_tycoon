@@ -21,6 +21,8 @@ class EnvConfig {
   static bool _cryptoSurfacesEnabled = true;
   static bool _cryptoWritesEnabled = true;
   static Set<String> _enabledCryptoNetworks = const {'solana', 'xrp'};
+  static String? _complianceServiceUrl;
+  static String? _stripePublishableKey;
 
   /// Getter for the backend API Base URL.
   static String get apiBaseUrl {
@@ -88,6 +90,12 @@ class EnvConfig {
     final raw = dotenv.env['GRPC_USE_TLS']?.toLowerCase();
     return raw == 'true' || raw == '1';
   }
+
+  /// Base URL of the compliance microservice (optional; crypto + prize gates are disabled when absent).
+  static String? get complianceServiceUrl => _complianceServiceUrl;
+
+  /// Stripe Identity publishable key exposed to the Flutter client.
+  static String? get stripePublishableKey => _stripePublishableKey;
 
   /// Enables player-facing crypto wallet surfaces.
   static bool get cryptoSurfacesEnabled => _cryptoSurfacesEnabled;
@@ -263,6 +271,8 @@ class EnvConfig {
         dotenv.env['CRYPTO_ENABLED_NETWORKS'],
         fallback: const {'solana', 'xrp'},
       );
+      _complianceServiceUrl = dotenv.env['COMPLIANCE_SERVICE_URL']?.trim();
+      _stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']?.trim();
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||

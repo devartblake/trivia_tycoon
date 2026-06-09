@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import '../services/compliance/compliance_api_client.dart';
+import '../services/compliance/compliance_service.dart';
 import 'package:trivia_tycoon/core/services/event_queue_service.dart';
 import 'package:trivia_tycoon/core/services/settings/admin_settings_service.dart';
 import 'package:trivia_tycoon/core/services/settings/audio_settings_service.dart';
@@ -112,6 +114,8 @@ class ServiceManager {
   final PresenceHub presenceHub;
   final LeaderboardHub leaderboardHub;
   final MatchmakingHub matchmakingHub;
+  // null when COMPLIANCE_SERVICE_URL is not set (crypto/prize features gate to disabled)
+  final ComplianceService? complianceService;
 
   ServiceManager({
     required this.apiService,
@@ -164,6 +168,7 @@ class ServiceManager {
     required this.presenceHub,
     required this.leaderboardHub,
     required this.matchmakingHub,
+    this.complianceService,
   });
 
   // ── Hub lifecycle helpers ────────────────────────────────────────────────
@@ -331,6 +336,19 @@ class ServiceManager {
     final lbHub = LeaderboardHub();
     final mmHub = MatchmakingHub();
 
+    // Compliance service — optional; only created when COMPLIANCE_SERVICE_URL is set.
+    // When absent all crypto/prize gate calls fail closed (return false / block).
+    ComplianceService? complianceServiceInstance;
+    final complianceUrl = EnvConfig.complianceServiceUrl;
+    if (complianceUrl != null && complianceUrl.isNotEmpty) {
+      final complianceApiClient = ComplianceApiClient(
+        http.Client(),
+        baseUrl: complianceUrl,
+        accessTokenProvider: () => tokenStore.load().accessToken,
+      );
+      complianceServiceInstance = ComplianceService(complianceApiClient);
+    }
+
     // Save it globally here
     final manager = ServiceManager(
       apiService: api,
@@ -384,6 +402,7 @@ class ServiceManager {
       presenceHub: presHub,
       leaderboardHub: lbHub,
       matchmakingHub: mmHub,
+      complianceService: complianceServiceInstance,
     );
 
     instance = manager;
