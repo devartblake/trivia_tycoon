@@ -113,16 +113,27 @@ class ComplianceApiClient {
 
   Future<GeoCheckResult> checkGeo(String userId, String stateCode) async {
     const path = '/api/transaction/geo-check';
-    final res = await _http.post(
-      _u(path),
-      headers: _headers,
-      body: jsonEncode({'userId': userId, 'stateCode': stateCode}),
-    );
-    _log('POST', path, res.statusCode);
-    if (res.statusCode == 200) {
-      return GeoCheckResult.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    try {
+      final res = await _http.post(
+        _u(path),
+        headers: _headers,
+        body: jsonEncode({'userId': userId, 'stateCode': stateCode}),
+      );
+      _log('POST', path, res.statusCode);
+      if (res.statusCode == 200) {
+        return GeoCheckResult.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>,
+        );
+      }
+      throw ComplianceApiException(
+        message: 'Failed to check geo compliance',
+        path: path,
+        statusCode: res.statusCode,
+      );
+    } catch (e) {
+      if (e is ComplianceApiException) rethrow;
+      throw ComplianceApiException(message: '$e', path: path);
     }
-    throw ComplianceApiException(message: 'Failed to check geo compliance', path: path, statusCode: res.statusCode);
   }
 
   // ── AML transaction check ─────────────────────────────────────────────────
