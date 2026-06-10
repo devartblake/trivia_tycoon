@@ -271,7 +271,7 @@ class EnvConfig {
         dotenv.env['CRYPTO_ENABLED_NETWORKS'],
         fallback: const {'solana', 'xrp'},
       );
-      _complianceServiceUrl = dotenv.env['COMPLIANCE_SERVICE_URL']?.trim();
+      _complianceServiceUrl = dotenv.env['COMPLIANCE_SERVICE_URL'] == null ? null : _normalizeApiBaseUrlForRuntime(dotenv.env['COMPLIANCE_SERVICE_URL']!.trim());
       _stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']?.trim();
 
       // Perform checks to ensure essential variables are present
