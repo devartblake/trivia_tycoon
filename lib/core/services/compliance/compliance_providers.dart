@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'compliance_service.dart';
 import 'compliance_status_model.dart';
 
-// Overridden in ProviderScope after ServiceManager initializes
+// Must be overridden in a ProviderScope; defaults to null (compliance gates fail closed).
 final complianceServiceProvider = Provider<ComplianceService?>((ref) => null);
 
 // Per-user compliance status — drives UI gating for crypto and prize surfaces
