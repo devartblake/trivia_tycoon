@@ -187,12 +187,23 @@ class ComplianceApiClient {
 
   Future<DataSubjectRequestResult> requestDataDeletion(String userId) async {
     final path = '/api/privacy/$userId';
-    final res = await _http.delete(_u(path), headers: _headers);
-    _log('DELETE', path, res.statusCode);
-    if (res.statusCode == 200) {
-      return DataSubjectRequestResult.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    try {
+      final res = await _http.delete(_u(path), headers: _headers);
+      _log('DELETE', path, res.statusCode);
+      if (res.statusCode == 200) {
+        return DataSubjectRequestResult.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>,
+        );
+      }
+      throw ComplianceApiException(
+        message: 'Failed to request data deletion',
+        path: path,
+        statusCode: res.statusCode,
+      );
+    } catch (e) {
+      if (e is ComplianceApiException) rethrow;
+      throw ComplianceApiException(message: '$e', path: path);
     }
-    throw ComplianceApiException(message: 'Failed to request data deletion', path: path, statusCode: res.statusCode);
   }
 
   // ── Consent ───────────────────────────────────────────────────────────────
