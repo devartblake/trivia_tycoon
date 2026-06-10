@@ -134,21 +134,32 @@ class ComplianceApiClient {
     String transactionType,
   ) async {
     const path = '/api/transaction/check';
-    final res = await _http.post(
-      _u(path),
-      headers: _headers,
-      body: jsonEncode({
-        'userId': userId,
-        'amount': amount,
-        'network': network,
-        'transactionType': transactionType,
-      }),
-    );
-    _log('POST', path, res.statusCode);
-    if (res.statusCode == 200) {
-      return AmlCheckResult.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    try {
+      final res = await _http.post(
+        _u(path),
+        headers: _headers,
+        body: jsonEncode({
+          'userId': userId,
+          'amount': amount,
+          'network': network,
+          'transactionType': transactionType,
+        }),
+      );
+      _log('POST', path, res.statusCode);
+      if (res.statusCode == 200) {
+        return AmlCheckResult.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>,
+        );
+      }
+      throw ComplianceApiException(
+        message: 'Failed to run AML check',
+        path: path,
+        statusCode: res.statusCode,
+      );
+    } catch (e) {
+      if (e is ComplianceApiException) rethrow;
+      throw ComplianceApiException(message: '$e', path: path);
     }
-    throw ComplianceApiException(message: 'Failed to run AML check', path: path, statusCode: res.statusCode);
   }
 
   // ── CCPA data requests ────────────────────────────────────────────────────
