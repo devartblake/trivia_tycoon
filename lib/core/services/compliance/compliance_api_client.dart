@@ -166,12 +166,23 @@ class ComplianceApiClient {
 
   Future<DataSubjectRequestResult> requestDataExport(String userId) async {
     final path = '/api/privacy/export/$userId';
-    final res = await _http.post(_u(path), headers: _headers);
-    _log('POST', path, res.statusCode);
-    if (res.statusCode == 200) {
-      return DataSubjectRequestResult.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    try {
+      final res = await _http.post(_u(path), headers: _headers);
+      _log('POST', path, res.statusCode);
+      if (res.statusCode == 200) {
+        return DataSubjectRequestResult.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>,
+        );
+      }
+      throw ComplianceApiException(
+        message: 'Failed to request data export',
+        path: path,
+        statusCode: res.statusCode,
+      );
+    } catch (e) {
+      if (e is ComplianceApiException) rethrow;
+      throw ComplianceApiException(message: '$e', path: path);
     }
-    throw ComplianceApiException(message: 'Failed to request data export', path: path, statusCode: res.statusCode);
   }
 
   Future<DataSubjectRequestResult> requestDataDeletion(String userId) async {
