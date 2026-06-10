@@ -94,19 +94,30 @@ class ComplianceApiClient {
 
   Future<AgeVerificationResult> verifyAge(String userId, DateTime dateOfBirth) async {
     const path = '/api/transaction/age-verify';
-    final dob = '${dateOfBirth.year.toString().padLeft(4, '0')}-'
-        '${dateOfBirth.month.toString().padLeft(2, '0')}-'
-        '${dateOfBirth.day.toString().padLeft(2, '0')}';
-    final res = await _http.post(
-      _u(path),
-      headers: _headers,
-      body: jsonEncode({'userId': userId, 'dateOfBirth': dob}),
-    );
-    _log('POST', path, res.statusCode);
-    if (res.statusCode == 200) {
-      return AgeVerificationResult.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+    try {
+      final dob = '${dateOfBirth.year.toString().padLeft(4, '0')}-'
+          '${dateOfBirth.month.toString().padLeft(2, '0')}-'
+          '${dateOfBirth.day.toString().padLeft(2, '0')}';
+      final res = await _http.post(
+        _u(path),
+        headers: _headers,
+        body: jsonEncode({'userId': userId, 'dateOfBirth': dob}),
+      );
+      _log('POST', path, res.statusCode);
+      if (res.statusCode == 200) {
+        return AgeVerificationResult.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>,
+        );
+      }
+      throw ComplianceApiException(
+        message: 'Failed to verify age',
+        path: path,
+        statusCode: res.statusCode,
+      );
+    } catch (e) {
+      if (e is ComplianceApiException) rethrow;
+      throw ComplianceApiException(message: '$e', path: path);
     }
-    throw ComplianceApiException(message: 'Failed to verify age', path: path, statusCode: res.statusCode);
   }
 
   // ── Geo check ─────────────────────────────────────────────────────────────
