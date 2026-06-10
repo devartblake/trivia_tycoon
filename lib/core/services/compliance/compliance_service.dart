@@ -31,10 +31,13 @@ class ComplianceService {
       _cacheExpiry = DateTime.now().add(_cacheTtl);
       return status;
     } catch (_) {
-      // Fail closed: treat as fully non-compliant when the service is unreachable
-      return _cached?.userId == userId
-          ? _cached!
-          : _unknownStatus(userId);
+      // Fail closed when the service is unreachable (only reuse cached values while still within TTL).
+      if (_cached?.userId == userId &&
+          _cacheExpiry != null &&
+          DateTime.now().isBefore(_cacheExpiry!)) {
+        return _cached!;
+      }
+      return _unknownStatus(userId);
     }
   }
 
