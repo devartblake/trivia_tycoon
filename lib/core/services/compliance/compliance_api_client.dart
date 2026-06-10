@@ -203,14 +203,25 @@ class ComplianceApiClient {
     required bool granted,
   }) async {
     const path = '/api/privacy/consent';
-    final res = await _http.post(
-      _u(path),
-      headers: _headers,
-      body: jsonEncode({'userId': userId, 'consentType': consentType, 'granted': granted}),
-    );
-    _log('POST', path, res.statusCode);
-    if (res.statusCode != 200) {
-      throw ComplianceApiException(message: 'Failed to record consent', path: path, statusCode: res.statusCode);
+    try {
+      final res = await _http.post(
+        _u(path),
+        headers: _headers,
+        body: jsonEncode(
+          {'userId': userId, 'consentType': consentType, 'granted': granted},
+        ),
+      );
+      _log('POST', path, res.statusCode);
+      if (res.statusCode != 200) {
+        throw ComplianceApiException(
+          message: 'Failed to record consent',
+          path: path,
+          statusCode: res.statusCode,
+        );
+      }
+    } catch (e) {
+      if (e is ComplianceApiException) rethrow;
+      throw ComplianceApiException(message: '$e', path: path);
     }
   }
 }
