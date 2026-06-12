@@ -24,11 +24,18 @@ class EnvConfig {
   static String? _complianceServiceUrl;
   static String? _stripePublishableKey;
 
-  /// Getter for the backend API Base URL.
+  /// Getter for the backend API Base URL (bare host, no version prefix).
+  /// Use this for non-versioned surfaces: WebSocket/health URLs, gRPC host
+  /// derivation, asset resolution.
   static String get apiBaseUrl {
     assert(_apiBaseUrl != null, 'API_BASE_URL is not loaded from .env');
     return _apiBaseUrl!;
   }
+
+  /// Base URL for the versioned public REST API. The backend serves every
+  /// public client endpoint under /api/v1 (single source of truth), so every
+  /// REST client that talks to a feature/auth endpoint must build on this.
+  static String get apiV1BaseUrl => '$apiBaseUrl/api/v1';
 
   /// Getter for the backend WebSocket base URL.
   static String get apiWsBaseUrl {

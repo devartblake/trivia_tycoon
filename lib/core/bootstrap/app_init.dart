@@ -107,7 +107,7 @@ class AppInit {
 
     final httpClient = http.Client();
     final authApi = AuthApiClient(httpClient,
-        apiBaseUrl: EnvConfig.apiBaseUrl, deviceId: deviceIdService);
+        apiBaseUrl: EnvConfig.apiV1BaseUrl, deviceId: deviceIdService);
 
     final authService = BackendAuthService(
       deviceId: deviceIdService,

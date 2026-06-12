@@ -14,7 +14,7 @@ final webLinkServiceProvider = Provider<WebLinkService>((ref) {
 
   return WebLinkService(
     httpClient: http.Client(),
-    apiBaseUrl: EnvConfig.apiBaseUrl,
+    apiBaseUrl: EnvConfig.apiV1BaseUrl,
     accessTokenGetter: () => authService.accessToken,
   );
 });

@@ -129,7 +129,7 @@ final deviceIdServiceProvider = Provider<DeviceIdService>((ref) {
 final authApiClientProvider = Provider<AuthApiClient>((ref) {
   return AuthApiClient(
     http.Client(),
-    apiBaseUrl: EnvConfig.apiBaseUrl,
+    apiBaseUrl: EnvConfig.apiV1BaseUrl,
     deviceId: ref.watch(deviceIdServiceProvider),
   );
 });
@@ -159,7 +159,7 @@ final authHttpClientProvider = Provider<AuthHttpClient>((ref) {
 final httpClientProvider = Provider<HttpClient>((ref) {
   return HttpClient(
     authClient: ref.watch(authHttpClientProvider),
-    baseUrl: EnvConfig.apiBaseUrl,
+    baseUrl: EnvConfig.apiV1BaseUrl,
   );
 });
 
