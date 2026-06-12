@@ -163,8 +163,16 @@ class EnvConfig {
     // Local dev backends almost never have valid SSL certs, so https:// to
     // localhost / 10.0.2.2 / 127.0.0.1 fails with a handshake error on every
     // platform. Convert silently so a .env typo doesn't block development.
+    //
+    // Debug builds only: in profile/release we must NEVER rewrite the scheme.
+    // A misconfigured staging URL (e.g. API_BASE_URL=http(s)://localhost:5000,
+    // a tunnelled staging box, or a forwarded port) would otherwise send
+    // cleartext auth traffic while appearing to have TLS. Fail loud on a bad
+    // cert instead, so the misconfig is caught before tokens cross the wire.
     const localHosts = {'localhost', '10.0.2.2', '127.0.0.1'};
-    if (parsed.scheme == 'https' && localHosts.contains(parsed.host)) {
+    if (kDebugMode &&
+        parsed.scheme == 'https' &&
+        localHosts.contains(parsed.host)) {
       LogManager.debug(
         '[EnvConfig] Downgrading https→http for local dev address: $trimmed',
       );
