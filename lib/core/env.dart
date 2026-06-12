@@ -98,6 +98,19 @@ class EnvConfig {
     return raw == 'true' || raw == '1';
   }
 
+  /// Whether native game-platform (Game Center / Play Games) and OAuth/social
+  /// sign-in are exposed in the UI.
+  ///
+  /// Defaults to false: the backend registers these routes but returns 501
+  /// until provider credentials and server-side signature/token verification
+  /// are wired. Keeping the buttons hidden stops Alpha testers from hitting a
+  /// dead end. Set EXTERNAL_AUTH_PROVIDERS_ENABLED=true once verification is
+  /// configured on the server.
+  static bool get externalAuthProvidersEnabled {
+    final raw = dotenv.env['EXTERNAL_AUTH_PROVIDERS_ENABLED']?.toLowerCase();
+    return raw == 'true' || raw == '1';
+  }
+
   /// Base URL of the compliance microservice (optional; crypto + prize gates are disabled when absent).
   static String? get complianceServiceUrl => _complianceServiceUrl;
 

@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trivia_tycoon/core/env.dart';
 import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
@@ -138,7 +139,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     // Attempt silent game platform login (non-blocking).
     // If successful the user is navigated to home without needing to fill the form.
-    if (ConfigService.useBackendAuth && (_isIOS || _isAndroid)) {
+    // Skipped while external auth providers are gated off for Alpha — the
+    // backend game-login route returns 501 until verification is wired.
+    if (EnvConfig.externalAuthProvidersEnabled &&
+        ConfigService.useBackendAuth &&
+        (_isIOS || _isAndroid)) {
       _trySilentGameLogin();
     }
   }
@@ -807,68 +812,76 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         _buildGuestButton(),
                         const SizedBox(height: 24),
 
-                        // Social Login Divider
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                thickness: 1,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: Text(
-                                'or continue with',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.5),
-                                  fontSize: 13,
+                        // OAuth/social and native game-platform (Game Center /
+                        // Play Games) sign-in are gated off for Alpha: the
+                        // backend returns 501 until provider verification is
+                        // wired, so hide the buttons rather than send testers to
+                        // a dead end. Set EXTERNAL_AUTH_PROVIDERS_ENABLED=true to
+                        // re-enable once the server is configured.
+                        if (EnvConfig.externalAuthProvidersEnabled) ...[
+                          // Social Login Divider
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  thickness: 1,
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                thickness: 1,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  'or continue with',
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    fontSize: 13,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  thickness: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
 
-                        // Social Login Buttons
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          runAlignment: WrapAlignment.center,
-                          spacing: 12,
-                          runSpacing: 12,
-                          children: [
-                            _buildSocialButton(
-                              icon: FontAwesomeIcons.google,
-                              onPressed: () => _handleSocialLogin('google'),
-                            ),
-                            _buildSocialButton(
-                              icon: FontAwesomeIcons.facebook,
-                              onPressed: () => _handleSocialLogin('facebook'),
-                            ),
-                            _buildSocialButton(
-                              icon: FontAwesomeIcons.steam,
-                              onPressed: () => _handleSocialLogin('steam'),
-                            ),
-                            _buildSocialButton(
-                              icon: FontAwesomeIcons.apple,
-                              onPressed: () => _handleSocialLogin('apple'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
+                          // Social Login Buttons
+                          Wrap(
+                            alignment: WrapAlignment.center,
+                            runAlignment: WrapAlignment.center,
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: [
+                              _buildSocialButton(
+                                icon: FontAwesomeIcons.google,
+                                onPressed: () => _handleSocialLogin('google'),
+                              ),
+                              _buildSocialButton(
+                                icon: FontAwesomeIcons.facebook,
+                                onPressed: () => _handleSocialLogin('facebook'),
+                              ),
+                              _buildSocialButton(
+                                icon: FontAwesomeIcons.steam,
+                                onPressed: () => _handleSocialLogin('steam'),
+                              ),
+                              _buildSocialButton(
+                                icon: FontAwesomeIcons.apple,
+                                onPressed: () => _handleSocialLogin('apple'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
 
-                        // Native game platform login (iOS: Game Center, Android: Play Games)
-                        if ((_isIOS || _isAndroid) &&
-                            ConfigService.useBackendAuth)
-                          _buildNativeGameLoginButton(),
-                        const SizedBox(height: 16),
+                          // Native game platform login (iOS: Game Center, Android: Play Games)
+                          if ((_isIOS || _isAndroid) &&
+                              ConfigService.useBackendAuth)
+                            _buildNativeGameLoginButton(),
+                          const SizedBox(height: 16),
+                        ],
 
                         // Web account linking (web platform only)
                         if (kIsWeb && ConfigService.useBackendAuth)
