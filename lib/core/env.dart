@@ -24,11 +24,18 @@ class EnvConfig {
   static String? _complianceServiceUrl;
   static String? _stripePublishableKey;
 
-  /// Getter for the backend API Base URL.
+  /// Getter for the backend API Base URL (bare host, no version prefix).
+  /// Use this for non-versioned surfaces: WebSocket/health URLs, gRPC host
+  /// derivation, asset resolution.
   static String get apiBaseUrl {
     assert(_apiBaseUrl != null, 'API_BASE_URL is not loaded from .env');
     return _apiBaseUrl!;
   }
+
+  /// Base URL for the versioned public REST API. The backend serves every
+  /// public client endpoint under /api/v1 (single source of truth), so every
+  /// REST client that talks to a feature/auth endpoint must build on this.
+  static String get apiV1BaseUrl => '$apiBaseUrl/api/v1';
 
   /// Getter for the backend WebSocket base URL.
   static String get apiWsBaseUrl {
@@ -88,6 +95,19 @@ class EnvConfig {
   /// Defaults to false for local dev; set GRPC_USE_TLS=true for staging/prod.
   static bool get grpcUseTls {
     final raw = dotenv.env['GRPC_USE_TLS']?.toLowerCase();
+    return raw == 'true' || raw == '1';
+  }
+
+  /// Whether native game-platform (Game Center / Play Games) and OAuth/social
+  /// sign-in are exposed in the UI.
+  ///
+  /// Defaults to false: the backend registers these routes but returns 501
+  /// until provider credentials and server-side signature/token verification
+  /// are wired. Keeping the buttons hidden stops Alpha testers from hitting a
+  /// dead end. Set EXTERNAL_AUTH_PROVIDERS_ENABLED=true once verification is
+  /// configured on the server.
+  static bool get externalAuthProvidersEnabled {
+    final raw = dotenv.env['EXTERNAL_AUTH_PROVIDERS_ENABLED']?.toLowerCase();
     return raw == 'true' || raw == '1';
   }
 
@@ -163,8 +183,16 @@ class EnvConfig {
     // Local dev backends almost never have valid SSL certs, so https:// to
     // localhost / 10.0.2.2 / 127.0.0.1 fails with a handshake error on every
     // platform. Convert silently so a .env typo doesn't block development.
+    //
+    // Debug builds only: in profile/release we must NEVER rewrite the scheme.
+    // A misconfigured staging URL (e.g. API_BASE_URL=http(s)://localhost:5000,
+    // a tunnelled staging box, or a forwarded port) would otherwise send
+    // cleartext auth traffic while appearing to have TLS. Fail loud on a bad
+    // cert instead, so the misconfig is caught before tokens cross the wire.
     const localHosts = {'localhost', '10.0.2.2', '127.0.0.1'};
-    if (parsed.scheme == 'https' && localHosts.contains(parsed.host)) {
+    if (kDebugMode &&
+        parsed.scheme == 'https' &&
+        localHosts.contains(parsed.host)) {
       LogManager.debug(
         '[EnvConfig] Downgrading https→http for local dev address: $trimmed',
       );

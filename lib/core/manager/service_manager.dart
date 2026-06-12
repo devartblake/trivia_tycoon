@@ -206,7 +206,8 @@ class ServiceManager {
   /// Initialize all core services and return a ready ServiceManager
   static Future<ServiceManager> initialize() async {
     final String baseUrl = EnvConfig.apiBaseUrl;
-    final api = ApiService(baseUrl: '$baseUrl/api/v1');
+    final String apiV1BaseUrl = EnvConfig.apiV1BaseUrl;
+    final api = ApiService(baseUrl: apiV1BaseUrl);
 
     // Add async initialize methods
     final audio = await AudioSettingsService.initialize();
@@ -299,7 +300,7 @@ class ServiceManager {
     final deviceIdSvc = DeviceIdService(secureStorage);
     final authApiClient = AuthApiClient(
       http.Client(),
-      apiBaseUrl: baseUrl,
+      apiBaseUrl: apiV1BaseUrl,
       deviceId: deviceIdSvc,
     );
     final coreAuth = core_auth.BackendAuthService(
@@ -319,12 +320,12 @@ class ServiceManager {
       authClient: authHttpClient,
       secureChannel: secureChannel,
       tokenStore: tokenStore,
-      baseUrl: '$baseUrl/api/v1',
+      baseUrl: apiV1BaseUrl,
     );
     final history = QrHistoryService(cache: cache, settings: qrSettings);
     final httpClient = HttpClient(
       authClient: authHttpClient,
-      baseUrl: '$baseUrl/api/v1',
+      baseUrl: apiV1BaseUrl,
     );
     final synaptixApi = SynaptixApiClient(
       httpClient: httpClient,

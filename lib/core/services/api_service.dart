@@ -222,7 +222,7 @@ class ApiService {
 
   Future<Map<String, dynamic>> fetchAppConfig() async {
     return _handleRequest(() async {
-      final response = await _dio.get('/api/v1/app/config');
+      final response = await _dio.get('/app/config');
       final data = response.data;
       return data is Map<String, dynamic> ? data : <String, dynamic>{};
     });
