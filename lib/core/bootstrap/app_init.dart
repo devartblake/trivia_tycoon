@@ -379,6 +379,7 @@ class AppInit {
       // 1. Open secondary storage
       await Hive.openBox('cache');
       await Hive.openBox('question');
+      await _configureRemoteAssetManifest(serviceManager);
       await AssetResolver.instance.syncInBackground();
 
       // 2. Notifications (Hive is ready now)
@@ -556,6 +557,27 @@ class AppInit {
   static Future<void> _initializeReferralStorage() async {
     final referralStorage = ReferralStorageService();
     await referralStorage.initialize();
+  }
+
+  static Future<void> _configureRemoteAssetManifest(
+      ServiceManager serviceManager) async {
+    try {
+      final appConfig = await serviceManager.apiService.fetchAppConfig();
+      final assets = appConfig['assets'];
+      if (assets is! Map) return;
+
+      final remoteAssetsEnabled =
+          assets['remoteAssetsEnabled'] as bool? ?? true;
+      final manifestUrl = assets['manifestUrl']?.toString();
+      if (!remoteAssetsEnabled || manifestUrl == null || manifestUrl.isEmpty) {
+        return;
+      }
+
+      AssetResolver.configure(AssetResolver.fromManifestUrl(manifestUrl));
+      LogManager.debug('[AppInit] Remote asset manifest configured');
+    } catch (e) {
+      LogManager.debug('[AppInit] Remote asset manifest config skipped: $e');
+    }
   }
 
   // Force save (call before critical operations)

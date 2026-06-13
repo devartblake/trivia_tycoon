@@ -29,7 +29,7 @@ class AvatarAssetResponse {
 
 /// Fetches presigned MinIO URLs for 3D avatar archives from the backend.
 ///
-/// Endpoint: GET /v1/assets/avatars/{avatarId}
+/// Endpoint: GET /assets/avatars/{avatarId}
 /// Response: { presignedUrl, thumbnailUrl, expiresAt, sha256?, archiveFormat }
 ///
 /// Caches each URL until 2 minutes before expiry to avoid duplicate requests.
@@ -52,7 +52,7 @@ class AvatarAssetService {
     }
 
     _log.info('Fetching presigned URL for avatar $avatarId');
-    final json = await _client.getJson('/v1/assets/avatars/$avatarId');
+    final json = await _client.getJson('/assets/avatars/$avatarId');
     final response = AvatarAssetResponse.fromJson(json);
     _cache[avatarId] = _CachedEntry(response);
     return response;

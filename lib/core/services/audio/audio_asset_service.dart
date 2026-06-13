@@ -37,7 +37,7 @@ class AudioAssetService {
     }
 
     _log.info('Fetching presigned URL for $cacheKey');
-    final json = await _client.getJson('/v1/assets/audio/$category/$filename');
+    final json = await _client.getJson('/assets/audio/$category/$filename');
     final asset = AudioAssetResponse.fromJson(json);
 
     _cache[cacheKey] = _CachedUrl(asset.presignedUrl, asset.expiresAt);

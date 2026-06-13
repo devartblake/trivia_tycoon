@@ -1,7 +1,7 @@
 /// Response model for the backend audio-asset endpoint.
 ///
 /// Backend contract:
-///   GET /v1/assets/audio/songs/{filename}
+///   GET /assets/audio/songs/{filename}
 ///   → { presignedUrl, expiresAt, contentType?, cacheHints?: { maxAgeSeconds } }
 class AudioAssetResponse {
   final String presignedUrl;

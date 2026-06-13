@@ -23,6 +23,10 @@ class EnvConfig {
   static Set<String> _enabledCryptoNetworks = const {'solana', 'xrp'};
   static String? _complianceServiceUrl;
   static String? _stripePublishableKey;
+  static Duration _apiConnectTimeout = const Duration(seconds: 10);
+  static Duration _apiReceiveTimeout = const Duration(seconds: 30);
+  static Duration _apiSendTimeout = const Duration(seconds: 10);
+  static Duration _apiRefreshReceiveTimeout = const Duration(seconds: 20);
 
   /// Getter for the backend API Base URL (bare host, no version prefix).
   /// Use this for non-versioned surfaces: WebSocket/health URLs, gRPC host
@@ -36,6 +40,11 @@ class EnvConfig {
   /// public client endpoint under /api/v1 (single source of truth), so every
   /// REST client that talks to a feature/auth endpoint must build on this.
   static String get apiV1BaseUrl => '$apiBaseUrl/api/v1';
+
+  static Duration get apiConnectTimeout => _apiConnectTimeout;
+  static Duration get apiReceiveTimeout => _apiReceiveTimeout;
+  static Duration get apiSendTimeout => _apiSendTimeout;
+  static Duration get apiRefreshReceiveTimeout => _apiRefreshReceiveTimeout;
 
   /// Getter for the backend WebSocket base URL.
   static String get apiWsBaseUrl {
@@ -161,9 +170,8 @@ class EnvConfig {
     }
 
     final healthPath = configuredHealthPath?.trim();
-    final path = healthPath == null || healthPath.isEmpty
-        ? '/healthz'
-        : healthPath;
+    final path =
+        healthPath == null || healthPath.isEmpty ? '/healthz' : healthPath;
 
     final parsedPath = Uri.tryParse(path);
     if (parsedPath != null && parsedPath.hasScheme) {
@@ -299,8 +307,31 @@ class EnvConfig {
         dotenv.env['CRYPTO_ENABLED_NETWORKS'],
         fallback: const {'solana', 'xrp'},
       );
-      _complianceServiceUrl = dotenv.env['COMPLIANCE_SERVICE_URL'] == null ? null : _normalizeApiBaseUrlForRuntime(dotenv.env['COMPLIANCE_SERVICE_URL']!.trim());
+      _complianceServiceUrl = dotenv.env['COMPLIANCE_SERVICE_URL'] == null
+          ? null
+          : _normalizeApiBaseUrlForRuntime(
+              dotenv.env['COMPLIANCE_SERVICE_URL']!.trim());
       _stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']?.trim();
+      _apiConnectTimeout = _parseDurationSeconds(
+        dotenv.env['API_CONNECT_TIMEOUT_SECONDS'],
+        fallback: const Duration(seconds: 10),
+        min: const Duration(seconds: 2),
+      );
+      _apiReceiveTimeout = _parseDurationSeconds(
+        dotenv.env['API_RECEIVE_TIMEOUT_SECONDS'],
+        fallback: const Duration(seconds: 30),
+        min: const Duration(seconds: 5),
+      );
+      _apiSendTimeout = _parseDurationSeconds(
+        dotenv.env['API_SEND_TIMEOUT_SECONDS'],
+        fallback: const Duration(seconds: 10),
+        min: const Duration(seconds: 2),
+      );
+      _apiRefreshReceiveTimeout = _parseDurationSeconds(
+        dotenv.env['API_REFRESH_RECEIVE_TIMEOUT_SECONDS'],
+        fallback: const Duration(seconds: 20),
+        min: const Duration(seconds: 5),
+      );
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||
@@ -383,5 +414,16 @@ class EnvConfig {
         .where((item) => item.isNotEmpty)
         .toSet();
     return parsed.isEmpty ? fallback : parsed;
+  }
+
+  static Duration _parseDurationSeconds(
+    String? value, {
+    required Duration fallback,
+    required Duration min,
+  }) {
+    final seconds = int.tryParse(value?.trim() ?? '');
+    if (seconds == null) return fallback;
+    final parsed = Duration(seconds: seconds);
+    return parsed < min ? min : parsed;
   }
 }

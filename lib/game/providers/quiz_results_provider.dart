@@ -13,6 +13,7 @@ class QuizResults {
   final Map<String, int> categoryScores;
   final List<String> achievements;
   final Duration quizDuration;
+  final List<Map<String, dynamic>> answerSubmissions;
 
   QuizResults({
     required this.score,
@@ -26,6 +27,7 @@ class QuizResults {
     required this.categoryScores,
     required this.achievements,
     required this.quizDuration,
+    this.answerSubmissions = const <Map<String, dynamic>>[],
   });
 
   // Safe factory constructor for Hive data
@@ -44,6 +46,7 @@ class QuizResults {
       quizDuration: Duration(
         milliseconds: (data['quizDurationMs'] as num? ?? 300000).toInt(),
       ),
+      answerSubmissions: _safeCastMapList(data['answerSubmissions']),
     );
   }
 
@@ -63,6 +66,7 @@ class QuizResults {
       quizDuration: Duration(
         milliseconds: (json['quizDurationMs'] as num? ?? 300000).toInt(),
       ),
+      answerSubmissions: _safeCastMapList(json['answerSubmissions']),
     );
   }
 
@@ -100,6 +104,14 @@ class QuizResults {
     return <String>[];
   }
 
+  static List<Map<String, dynamic>> _safeCastMapList(dynamic data) {
+    if (data is! List) return const <Map<String, dynamic>>[];
+    return data
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList(growable: false);
+  }
+
   // Convert to Map for storage
   Map<String, dynamic> toMap() {
     return {
@@ -114,6 +126,7 @@ class QuizResults {
       'categoryScores': categoryScores,
       'achievements': achievements,
       'quizDurationMs': quizDuration.inMilliseconds,
+      'answerSubmissions': answerSubmissions,
       'timestamp': DateTime.now().toIso8601String(),
     };
   }

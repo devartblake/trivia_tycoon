@@ -189,10 +189,16 @@ class AssetDownloadService {
 
   List<AssetManifestEntry> _parseManifestJson(String raw) {
     final decoded = jsonDecode(raw);
-    if (decoded is! List) return const [];
-    return decoded
+    final items = decoded is List
+        ? decoded
+        : decoded is Map
+            ? decoded['items']
+            : null;
+    if (items is! List) return const [];
+    return items
         .whereType<Map>()
         .map((m) => AssetManifestEntry.fromJson(Map<String, dynamic>.from(m)))
+        .where((entry) => entry.key.isNotEmpty && entry.url.isNotEmpty)
         .toList();
   }
 

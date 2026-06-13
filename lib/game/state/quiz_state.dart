@@ -379,6 +379,10 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     }
 
     _stopTimer();
+    final answerTimeMs =
+        ((_getTimeLimitForClass(state.classLevel) - state.timeRemaining) * 1000)
+            .clamp(0, 1 << 31)
+            .toInt();
 
     final evaluation = await _repository.checkAnswer(
       question: currentQuestion,
@@ -439,6 +443,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         QuestionAnswerSubmission(
           question: reconciledQuestion,
           selectedAnswer: answer,
+          answerTimeMs: answerTimeMs,
         ),
       ],
     );

@@ -4,10 +4,12 @@ class QuestionAnswerSubmission {
   const QuestionAnswerSubmission({
     required this.question,
     required this.selectedAnswer,
+    this.answerTimeMs,
   });
 
   final QuestionModel question;
   final String selectedAnswer;
+  final int? answerTimeMs;
 }
 
 class QuestionAnswerCheckResult {

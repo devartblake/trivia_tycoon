@@ -315,6 +315,7 @@ class ProfileDataUpdater {
                 score: results.score,
                 totalQuestions: results.totalQuestions,
                 category: results.category,
+                answers: results.answerSubmissions,
               );
         }).catchError((_) {}),
       );

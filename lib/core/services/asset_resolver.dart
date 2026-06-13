@@ -12,6 +12,15 @@ class AssetResolver {
   AssetResolver({AssetDownloadService? downloadService})
       : _downloadService = downloadService;
 
+  factory AssetResolver.fromManifestUrl(String manifestUrl) {
+    return AssetResolver(
+      downloadService: AssetDownloadService(
+        httpClient: http.Client(),
+        manifestUrl: _resolveManifestUrl(manifestUrl),
+      ),
+    );
+  }
+
   static AssetResolver get instance {
     return _instance ??= AssetResolver(
         downloadService: AssetDownloadService(
@@ -61,14 +70,24 @@ class AssetResolver {
   }
 
   static String _defaultManifestUrl() {
+    return _resolveManifestUrl('/api/v1/assets/manifest');
+  }
+
+  static String _resolveManifestUrl(String manifestUrl) {
+    final trimmed = manifestUrl.trim();
+    final parsed = Uri.tryParse(trimmed);
+    if (parsed != null && parsed.hasScheme) {
+      return parsed.toString();
+    }
+
     final base = EnvConfig.apiBaseUrl;
     final uri = Uri.parse(base);
-    final segments = [
+    final manifestSegments = Uri.parse(
+      trimmed.isEmpty ? '/api/v1/assets/manifest' : trimmed,
+    ).pathSegments.where((segment) => segment.isNotEmpty);
+    final segments = <String>[
       ...uri.pathSegments.where((segment) => segment.isNotEmpty),
-      'api',
-      'v1',
-      'assets',
-      'manifest',
+      ...manifestSegments,
     ];
     return uri.replace(pathSegments: segments).toString();
   }

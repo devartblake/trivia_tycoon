@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2026-06-13] Alpha Audit Remediation — API contract alignment & release hygiene
+
+Client half of the platform-audit remediation (PRs **#269**, **#270**), aligning the app with the backend's new `/api/v1` contract.
+
+### Changed
+- **§1.2 — single `/api/v1` base.** Added `EnvConfig.apiV1BaseUrl` and routed every backend REST client (`AuthApiClient`, `HttpClient`/`SynaptixApiClient`, `EncryptedApiClient`, `ApiService`, `WebLinkService`) through it, replacing the previous mix of bare, double-prefixed, and ad-hoc `/api/v1` paths. `apiBaseUrl` (bare host) is retained for non-versioned surfaces (WS/health URLs, gRPC host, asset resolution).
+- **§3.2 — realistic mobile timeouts.** Replaced the fixed 3s connect/receive timeouts with env-configurable defaults (10s connect, 30s receive, 20s refresh-receive) via `API_CONNECT_TIMEOUT_SECONDS` / `API_RECEIVE_TIMEOUT_SECONDS` / `API_SEND_TIMEOUT_SECONDS` / `API_REFRESH_RECEIVE_TIMEOUT_SECONDS`.
+
+### Security
+- **§3.3 — no silent TLS downgrade in release.** `EnvConfig._normalizeApiBaseUrlForRuntime` only rewrites `https→http` for localhost/emulator hosts under `kDebugMode`; profile/release builds never rewrite the scheme, so a misconfigured staging URL fails loud instead of sending cleartext auth traffic.
+
+### Added
+- **§1.1 — provider sign-in gated for Alpha.** `EnvConfig.externalAuthProvidersEnabled` (default off; `EXTERNAL_AUTH_PROVIDERS_ENABLED=true` to enable). Hides the OAuth/social and Game Center / Play Games buttons — and skips the silent game-platform auto-login on launch — so testers don't hit the backend's fail-closed (501) provider routes. Email login/signup and the device-first guest button are unaffected.
+
+### Notes
+- The device-first guest flow (`bootstrapDevice` → `/api/v1/auth/device/bootstrap`) and guest→account upgrade now resolve to live backend endpoints.
+- Deferred (Before-Beta): drop the dual `refresh_token`/`refreshToken` (and `device_id`/`deviceId`) field hedging once the backend wire contract is pinned (§1.4/§3.6); off-bundle asset delivery (§3.1).
+
+---
+
 ## [2026-06-04] gRPC Client Infrastructure — MobileMatchService
 
 ### Added

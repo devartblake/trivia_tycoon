@@ -112,6 +112,18 @@ void main() {
       InterceptorsWrapper(
         onRequest: (options, handler) {
           if (options.path == '/admin/users') {
+            if (options.headers['Authorization'] ==
+                'Bearer fallback-access-token') {
+              handler.resolve(
+                Response(
+                  requestOptions: options,
+                  statusCode: 200,
+                  data: {'ok': true},
+                ),
+              );
+              return;
+            }
+
             handler.reject(
               DioException(
                 requestOptions: options,
@@ -168,11 +180,9 @@ void main() {
       initializeCache: false,
     );
 
-    await expectLater(
-      () => service.get('/admin/users'),
-      throwsA(isA<ApiRequestException>()),
-    );
+    final response = await service.get('/admin/users');
 
+    expect(response['ok'], isTrue);
     expect(authBox.get('auth_access_token'), 'fallback-access-token');
     expect(authBox.get('auth_refresh_token'), 'fallback-refresh-token');
     expect(refreshAttempts, 2);
@@ -552,5 +562,64 @@ void main() {
             ),
       ),
     );
+  });
+
+  test('submitQuizComplete posts answer evidence for server-side rewards',
+      () async {
+    Map<String, dynamic>? body;
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/quiz/complete') {
+            body = Map<String, dynamic>.from(options.data as Map);
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {'ok': true},
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    await service.submitQuizComplete(
+      eventId: 'event-1',
+      playerId: 'player-1',
+      score: 1,
+      totalQuestions: 1,
+      category: 'general',
+      answers: [
+        {
+          'questionId': 'question-1',
+          'selectedOptionId': 'A',
+          'answerTimeMs': 3200,
+        },
+      ],
+    );
+
+    expect(body?['eventId'], 'event-1');
+    expect(body?['playerId'], 'player-1');
+    expect(body?['answers'], [
+      {
+        'questionId': 'question-1',
+        'selectedOptionId': 'A',
+        'answerTimeMs': 3200,
+      },
+    ]);
+    expect(body, isNot(contains('xpEarned')));
+    expect(body, isNot(contains('coinsEarned')));
   });
 }

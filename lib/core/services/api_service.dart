@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
+import 'package:trivia_tycoon/core/env.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -90,16 +91,17 @@ class ApiService {
   })  : _dio = dio ??
             Dio(BaseOptions(
               baseUrl: baseUrl,
-              connectTimeout: const Duration(seconds: 3),
-              receiveTimeout: const Duration(seconds: 3),
+              connectTimeout: EnvConfig.apiConnectTimeout,
+              receiveTimeout: EnvConfig.apiReceiveTimeout,
               // sendTimeout is unsupported on web (Dio has no body to send for GET/DELETE)
-              sendTimeout: kIsWeb ? null : const Duration(seconds: 3),
+              sendTimeout: kIsWeb ? null : EnvConfig.apiSendTimeout,
             )),
         _refreshDio = refreshDio ??
+            dio ??
             Dio(BaseOptions(
               baseUrl: baseUrl,
-              connectTimeout: const Duration(seconds: 5),
-              receiveTimeout: const Duration(seconds: 5),
+              connectTimeout: EnvConfig.apiConnectTimeout,
+              receiveTimeout: EnvConfig.apiRefreshReceiveTimeout,
             )) {
     // Disable or reduce logging in release mode
     if (ConfigService.enableLogging && kDebugMode) {
@@ -199,6 +201,7 @@ class ApiService {
     required int score,
     required int totalQuestions,
     required String category,
+    required List<Map<String, dynamic>> answers,
   }) async {
     await _handleRequest(() async {
       await _dio.post('/quiz/complete', data: {
@@ -207,6 +210,7 @@ class ApiService {
         'score': score,
         'totalQuestions': totalQuestions,
         'category': category,
+        'answers': answers,
       });
     });
   }

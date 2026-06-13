@@ -501,6 +501,15 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
             ),
             achievements: List<String>.from(finalState.achievements ?? []),
             quizDuration: finalState.quizDuration,
+            answerSubmissions: reconciledState.answerSubmissions
+                .map((submission) => <String, dynamic>{
+                      'questionId': submission.question.id,
+                      'selectedOptionId': submission.question
+                          .optionIdForAnswer(submission.selectedAnswer),
+                      if (submission.answerTimeMs != null)
+                        'answerTimeMs': submission.answerTimeMs,
+                    })
+                .toList(growable: false),
           );
 
           // Store results in provider

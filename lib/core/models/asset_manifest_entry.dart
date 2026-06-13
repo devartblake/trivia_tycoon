@@ -31,8 +31,8 @@ class AssetManifestEntry {
 
   factory AssetManifestEntry.fromJson(Map<String, dynamic> j) {
     return AssetManifestEntry(
-      key: j['key'] as String? ?? '',
-      url: j['url'] as String? ?? '',
+      key: (j['key'] ?? j['id']) as String? ?? '',
+      url: (j['url'] ?? j['downloadUrl']) as String? ?? '',
       sha256: j['sha256'] as String? ?? '',
       version: j['version'] as String? ?? '',
       sizeBytes: j['sizeBytes'] as int? ?? 0,

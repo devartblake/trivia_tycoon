@@ -69,6 +69,18 @@ void main() {
       expect(e.sizeBytes, 1024);
     });
 
+    test('fromJson accepts backend id/downloadUrl fields', () {
+      final e = AssetManifestEntry.fromJson({
+        'id': 'env_arena_default',
+        'downloadUrl': 'https://cdn.example/arena.glb',
+        'sha256': 'abc123',
+        'version': 'v1',
+      });
+      expect(e.key, 'env_arena_default');
+      expect(e.url, 'https://cdn.example/arena.glb');
+      expect(e.version, 'v1');
+    });
+
     test('fromJson sizeBytes defaults 0 when absent', () {
       final e = AssetManifestEntry.fromJson({
         'key': 'k',
@@ -159,6 +171,30 @@ void main() {
         return http.Response('[]', 200);
       });
       expect(await svc.checkForUpdates(), isEmpty);
+    });
+
+    test('accepts backend manifest envelope with items', () async {
+      final manifest = jsonEncode({
+        'generatedAt': '2026-06-12T00:00:00.000Z',
+        'expiresAt': '2026-06-13T00:00:00.000Z',
+        'items': [
+          {
+            'id': 'env_arena_default',
+            'downloadUrl': 'https://cdn.example/arena.glb',
+            'sha256': '',
+            'version': '1.0.0',
+          },
+        ],
+      });
+
+      final svc = _svc(hiveDir, assetsDir, (_) async {
+        return http.Response(manifest, 200);
+      });
+
+      final stale = await svc.checkForUpdates();
+      expect(stale, hasLength(1));
+      expect(stale.single.key, 'env_arena_default');
+      expect(stale.single.url, 'https://cdn.example/arena.glb');
     });
   });
 
