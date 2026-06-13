@@ -1,21 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grpc/grpc.dart';
+import 'package:grpc/service_api.dart';
 import 'package:trivia_tycoon/core/networking/grpc/grpc_channel_manager.dart';
 import 'package:trivia_tycoon/core/networking/grpc/grpc_auth_interceptor.dart';
 import 'package:trivia_tycoon/core/networking/grpc/grpc_match_client.dart';
 import 'package:trivia_tycoon/core/services/grpc_match_service.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
+import 'package:trivia_tycoon/game/providers/core_providers.dart';
 
 // ---------------------------------------------------------------------------
 // Channel (singleton)
 // ---------------------------------------------------------------------------
 
 /// The gRPC channel connecting to the backend MobileMatchService (port 5001).
-/// Includes [GrpcAuthInterceptor] so every call carries the Bearer JWT.
-final grpcChannelProvider = Provider<ClientChannelBase>((ref) {
-  final tokenStore = ref.watch(authTokenStoreProvider);
-  final base = GrpcChannelManager.instance.channel;
-  return base.intercept(GrpcAuthInterceptor(tokenStore));
+final grpcChannelProvider = Provider<ClientChannel>((ref) {
+  return GrpcChannelManager.instance.channel;
 });
 
 // ---------------------------------------------------------------------------
@@ -26,7 +23,11 @@ final grpcChannelProvider = Provider<ClientChannelBase>((ref) {
 /// in application code.
 final grpcMatchClientProvider = Provider<GrpcMatchClient>((ref) {
   final channel = ref.watch(grpcChannelProvider);
-  return GrpcMatchClient(channel);
+  final tokenStore = ref.watch(authTokenStoreProvider);
+  return GrpcMatchClient(
+    channel,
+    interceptors: [GrpcAuthInterceptor(tokenStore)],
+  );
 });
 
 // ---------------------------------------------------------------------------

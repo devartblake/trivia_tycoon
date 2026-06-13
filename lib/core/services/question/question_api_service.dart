@@ -1,16 +1,11 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:trivia_tycoon/core/env.dart';
 import '../../../game/models/question_model.dart';
 
 class QuestionApiService {
   static String get _baseUrl {
-    final configuredBase = dotenv.env['API_BASE_URL']?.trim();
-    if (configuredBase == null || configuredBase.isEmpty) {
-      throw StateError(
-        'API_BASE_URL is not configured. Add API_BASE_URL to your .env file.',
-      );
-    }
+    final configuredBase = EnvConfig.apiV1BaseUrl;
     return configuredBase.endsWith('/')
         ? '${configuredBase}questions'
         : '$configuredBase/questions';

@@ -57,8 +57,7 @@ final routerProvider = FutureProvider<GoRouter>((ref) async {
 });
 
 final apiServiceProvider = Provider<ApiService>((ref) {
-  final config = ref.watch(configServiceProvider);
-  return ApiService(baseUrl: config.apiBaseUrl);
+  return ref.watch(serviceManagerProvider).apiService;
 });
 
 final globalWsClientProvider = Provider<WsClient?>((ref) {

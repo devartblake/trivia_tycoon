@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:trivia_tycoon/core/env.dart';
 import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import '../../../core/services/settings/qr_settings_service.dart';
@@ -68,9 +69,8 @@ class QrHistoryService {
       'scans': filteredScans.map((e) => e.toJson()).toList(),
     };
 
-    final base = await AppSettings.getString('API_BASE_URL');
     final qs = retentionDays != null ? '?days=$retentionDays' : '';
-    final uri = Uri.parse('$base/api/v1/referrals/sync$qs');
+    final uri = Uri.parse('${EnvConfig.apiV1BaseUrl}/referrals/sync$qs');
 
     final response = await http.post(
       uri,

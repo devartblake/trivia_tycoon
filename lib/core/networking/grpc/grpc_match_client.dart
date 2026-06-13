@@ -1,5 +1,4 @@
-import 'package:grpc/grpc.dart';
-import 'package:trivia_tycoon/core/networking/grpc/generated/mobile.pb.dart';
+import 'package:grpc/service_api.dart';
 import 'package:trivia_tycoon/core/networking/grpc/generated/mobile.pbgrpc.dart';
 
 /// Thin typed wrapper around [MobileMatchServiceClient].
@@ -9,8 +8,13 @@ import 'package:trivia_tycoon/core/networking/grpc/generated/mobile.pbgrpc.dart'
 class GrpcMatchClient {
   final MobileMatchServiceClient _stub;
 
-  GrpcMatchClient(ClientChannelBase channel)
-      : _stub = MobileMatchServiceClient(channel);
+  GrpcMatchClient(
+    ClientChannel channel, {
+    Iterable<ClientInterceptor> interceptors = const [],
+  }) : _stub = MobileMatchServiceClient(
+          channel,
+          interceptors: interceptors,
+        );
 
   // ── Unary ──────────────────────────────────────────────────────────────────
 

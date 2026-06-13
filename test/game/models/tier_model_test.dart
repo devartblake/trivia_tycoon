@@ -6,7 +6,7 @@ Map<String, dynamic> _baseJson({
   int id = 1,
   String name = 'Bronze',
   String description = 'Entry-level tier',
-  int icon = 0xe3af, // Icons.military_tech codePoint
+  Object icon = 0xe3af, // Icons.military_tech legacy codePoint
   int primaryColor = 0xFFCD7F32,
   int secondaryColor = 0xFF8B5E3C,
   int requiredXP = 0,
@@ -102,9 +102,14 @@ void main() {
       expect(tier.secondaryColor, const Color(0xFF8B5CF6));
     });
 
-    test('parses icon codePoint', () {
+    test('parses legacy icon codePoint', () {
       final tier =
           TierModel.fromJson(_baseJson(icon: Icons.military_tech.codePoint));
+      expect(tier.icon.codePoint, Icons.military_tech.codePoint);
+    });
+
+    test('parses icon key', () {
+      final tier = TierModel.fromJson(_baseJson(icon: 'military_tech'));
       expect(tier.icon.codePoint, Icons.military_tech.codePoint);
     });
   });
@@ -151,10 +156,10 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('TierModel.toJson', () {
-    test('serializes icon as codePoint int', () {
+    test('serializes icon as stable key', () {
       final tier =
           TierModel.fromJson(_baseJson(icon: Icons.military_tech.codePoint));
-      expect(tier.toJson()['icon'], isA<int>());
+      expect(tier.toJson()['icon'], 'military_tech');
     });
 
     test('serializes primaryColor as int', () {

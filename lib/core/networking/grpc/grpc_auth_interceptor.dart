@@ -1,4 +1,4 @@
-import 'package:grpc/grpc.dart';
+import 'package:grpc/service_api.dart';
 import 'package:trivia_tycoon/core/services/auth_token_store.dart';
 
 /// Injects the Bearer JWT into every gRPC call (both unary and streaming).

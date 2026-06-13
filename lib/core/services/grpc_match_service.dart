@@ -32,17 +32,26 @@ class GrpcMatchService {
       final res = await _client.startMatch(hostPlayerId, mode);
       return (matchId: res.matchId, startedAtMs: res.startedAt.toInt());
     } catch (e, st) {
-      LogManager.error('[GrpcMatchService] startMatch failed', e, st);
+      LogManager.error(
+        '[GrpcMatchService] startMatch failed',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
 
   /// Submit a completed match and retrieve XP/coin awards.
-  Future<GrpcSubmitMatchResponse> submitMatch(GrpcSubmitMatchRequest req) async {
+  Future<GrpcSubmitMatchResponse> submitMatch(
+      GrpcSubmitMatchRequest req) async {
     try {
       return await _client.submitMatch(req);
     } catch (e, st) {
-      LogManager.error('[GrpcMatchService] submitMatch failed', e, st);
+      LogManager.error(
+        '[GrpcMatchService] submitMatch failed',
+        error: e,
+        stackTrace: st,
+      );
       rethrow;
     }
   }
@@ -57,7 +66,7 @@ class GrpcMatchService {
   /// MatchEndEvent, ErrorEvent).
   Stream<MatchEvent> playMatch(Stream<PlayerAction> actionsOut) {
     return _client.playMatch(actionsOut).handleError((Object e) {
-      LogManager.error('[GrpcMatchService] playMatch stream error', e);
+      LogManager.error('[GrpcMatchService] playMatch stream error', error: e);
     });
   }
 
@@ -70,12 +79,17 @@ class GrpcMatchService {
     String mode = '',
     int windowSize = 5,
   }) {
-    return _client.watchLeaderboard(
+    return _client
+        .watchLeaderboard(
       playerId: playerId,
       mode: mode,
       windowSize: windowSize,
-    ).handleError((Object e) {
-      LogManager.error('[GrpcMatchService] watchLeaderboard stream error', e);
+    )
+        .handleError((Object e) {
+      LogManager.error(
+        '[GrpcMatchService] watchLeaderboard stream error',
+        error: e,
+      );
     });
   }
 
@@ -96,12 +110,17 @@ class GrpcMatchService {
     String mode = 'ranked',
     int tierId = 0,
   }) {
-    return _client.watchMatchmaking(
+    return _client
+        .watchMatchmaking(
       playerId: playerId,
       mode: mode,
       tierId: tierId,
-    ).handleError((Object e) {
-      LogManager.error('[GrpcMatchService] watchMatchmaking stream error', e);
+    )
+        .handleError((Object e) {
+      LogManager.error(
+        '[GrpcMatchService] watchMatchmaking stream error',
+        error: e,
+      );
     });
   }
 
@@ -111,7 +130,11 @@ class GrpcMatchService {
       final res = await _client.cancelMatchmaking(playerId, ticketId);
       return res.cancelled;
     } catch (e, st) {
-      LogManager.error('[GrpcMatchService] cancelMatchmaking failed', e, st);
+      LogManager.error(
+        '[GrpcMatchService] cancelMatchmaking failed',
+        error: e,
+        stackTrace: st,
+      );
       return false;
     }
   }

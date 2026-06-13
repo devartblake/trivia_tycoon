@@ -6,6 +6,9 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// This ensures that sensitive keys and configuration-specific URLs are not
 /// hardcoded in the application source code.
 class EnvConfig {
+  static const _releaseApiBaseUrlFallback = 'https://api.synaptixplay.com';
+  static const _debugApiBaseUrlFallback = 'http://10.0.2.2:5000';
+
   /// API Base URL
   static String? _apiBaseUrl = '';
 
@@ -85,7 +88,9 @@ class EnvConfig {
   /// Host for the backend gRPC service (MobileMatchService, port 5001).
   /// Defaults to the same host as [apiBaseUrl] when not set.
   static String get grpcHost {
-    final configured = dotenv.env['GRPC_HOST'];
+    const dartDefined = String.fromEnvironment('GRPC_HOST');
+    final configured =
+        dartDefined.isNotEmpty ? dartDefined : dotenv.env['GRPC_HOST'];
     if (configured != null && configured.isNotEmpty) return configured;
     // Fall back to the API host (strip scheme and port).
     return Uri.tryParse(_apiBaseUrl ?? '')?.host ?? 'localhost';
@@ -93,7 +98,8 @@ class EnvConfig {
 
   /// Port for the backend gRPC service (default: 5001).
   static int get grpcPort {
-    final raw = dotenv.env['GRPC_PORT'];
+    const dartDefined = String.fromEnvironment('GRPC_PORT');
+    final raw = dartDefined.isNotEmpty ? dartDefined : dotenv.env['GRPC_PORT'];
     if (raw != null && raw.isNotEmpty) {
       return int.tryParse(raw) ?? 5001;
     }
@@ -103,7 +109,10 @@ class EnvConfig {
   /// Whether to use TLS for the gRPC channel.
   /// Defaults to false for local dev; set GRPC_USE_TLS=true for staging/prod.
   static bool get grpcUseTls {
-    final raw = dotenv.env['GRPC_USE_TLS']?.toLowerCase();
+    const dartDefined = String.fromEnvironment('GRPC_USE_TLS');
+    final raw =
+        (dartDefined.isNotEmpty ? dartDefined : dotenv.env['GRPC_USE_TLS'])
+            ?.toLowerCase();
     return raw == 'true' || raw == '1';
   }
 
@@ -116,7 +125,12 @@ class EnvConfig {
   /// dead end. Set EXTERNAL_AUTH_PROVIDERS_ENABLED=true once verification is
   /// configured on the server.
   static bool get externalAuthProvidersEnabled {
-    final raw = dotenv.env['EXTERNAL_AUTH_PROVIDERS_ENABLED']?.toLowerCase();
+    const dartDefined =
+        String.fromEnvironment('EXTERNAL_AUTH_PROVIDERS_ENABLED');
+    final raw = (dartDefined.isNotEmpty
+            ? dartDefined
+            : dotenv.env['EXTERNAL_AUTH_PROVIDERS_ENABLED'])
+        ?.toLowerCase();
     return raw == 'true' || raw == '1';
   }
 
@@ -211,7 +225,7 @@ class EnvConfig {
     // • Web (Edge / Chrome): browsers cannot reach 10.0.2.2 — rewrite to localhost.
     // • Android native emulator: 10.0.2.2 is exactly right — leave it alone.
     // • iOS simulator / macOS / desktop: 10.0.2.2 is unreachable — rewrite to localhost.
-    if (parsed.host == '10.0.2.2') {
+    if (!kReleaseMode && parsed.host == '10.0.2.2') {
       if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
         final normalized = parsed.replace(host: 'localhost').toString();
         LogManager.debug(
@@ -226,9 +240,10 @@ class EnvConfig {
 
     // ── 3. Android emulator reverse mapping (localhost → 10.0.2.2).
     // On Android emulators, localhost / 127.0.0.1 resolves to the emulator
-    // itself, not the host machine running the dev server. Rewrite so a .env
-    // with API_BASE_URL=http://localhost:5000 still reaches the backend.
-    if (!kIsWeb &&
+    // itself, not the host machine running the dev server. Rewrite local API
+    // URLs so Android emulator builds can still reach the host backend.
+    if (!kReleaseMode &&
+        !kIsWeb &&
         defaultTargetPlatform == TargetPlatform.android &&
         (parsed.host == 'localhost' || parsed.host == '127.0.0.1')) {
       final normalized = parsed.replace(host: '10.0.2.2').toString();
@@ -246,21 +261,52 @@ class EnvConfig {
   /// This must be called once during app initialization before any services
   /// that rely on these variables are created.
   static Future<void> load() async {
+    const dartDefinedEnvFile = String.fromEnvironment('ENV_FILE');
+    final envFile = dartDefinedEnvFile.isNotEmpty
+        ? dartDefinedEnvFile
+        : kReleaseMode
+            ? 'assets/config/release.env'
+            : '.env.example';
     try {
-      const envFile =
-          String.fromEnvironment('ENV_FILE', defaultValue: '.env.example');
       await dotenv.load(fileName: envFile);
+    } catch (e) {
+      LogManager.debug(
+        '[EnvConfig] Optional env file "$envFile" was not loaded: $e',
+      );
+    }
 
+    try {
       // Load variables from the environment
       const dartDefinedApiBaseUrl = String.fromEnvironment('API_BASE_URL');
       const dartDefinedApiHealthUrl = String.fromEnvironment('API_HEALTH_URL');
       const dartDefinedApiHealthPath =
           String.fromEnvironment('API_HEALTH_PATH');
       const dartDefinedApiWsBaseUrl = String.fromEnvironment('API_WS_BASE_URL');
+      const dartDefinedMatchHubUrl =
+          String.fromEnvironment('API_MATCH_HUB_URL');
+      const dartDefinedPresenceHubUrl =
+          String.fromEnvironment('API_PRESENCE_HUB_URL');
+      const dartDefinedNotifyHubUrl =
+          String.fromEnvironment('API_NOTIFY_HUB_URL');
+      const dartDefinedCryptoSurfacesEnabled =
+          String.fromEnvironment('CRYPTO_SURFACES_ENABLED');
+      const dartDefinedCryptoWritesEnabled =
+          String.fromEnvironment('CRYPTO_WRITES_ENABLED');
+      const dartDefinedCryptoEnabledNetworks =
+          String.fromEnvironment('CRYPTO_ENABLED_NETWORKS');
+      const dartDefinedComplianceServiceUrl =
+          String.fromEnvironment('COMPLIANCE_SERVICE_URL');
+      const dartDefinedStripePublishableKey =
+          String.fromEnvironment('STRIPE_PUBLISHABLE_KEY');
 
       final rawApiBaseUrl = dartDefinedApiBaseUrl.isNotEmpty
           ? dartDefinedApiBaseUrl
-          : dotenv.get('API_BASE_URL', fallback: 'http://localhost:5000');
+          : dotenv.get(
+              'API_BASE_URL',
+              fallback: kReleaseMode
+                  ? _releaseApiBaseUrlFallback
+                  : _debugApiBaseUrlFallback,
+            );
       _apiBaseUrl = _normalizeApiBaseUrlForRuntime(rawApiBaseUrl);
       _apiHealthUrl = _resolveApiHealthUrl(
         apiBaseUrl: apiBaseUrl,
@@ -282,36 +328,52 @@ class EnvConfig {
       LogManager.debug('[EnvConfig] API Health: $apiHealthUrl');
       LogManager.debug('[EnvConfig] WebSocket: $apiWsBaseUrl');
 
-      _matchHubUrl = dotenv.env['API_MATCH_HUB_URL'] ??
-          (_apiWsBaseUrl == null
-              ? null
-              : _joinWsPath(_apiWsBaseUrl!, '/ws/match'));
-      _presenceHubUrl = dotenv.env['API_PRESENCE_HUB_URL'] ??
-          (_apiWsBaseUrl == null
-              ? null
-              : _joinWsPath(_apiWsBaseUrl!, '/ws/presence'));
-      _notifyHubUrl = dotenv.env['API_NOTIFY_HUB_URL'] ??
-          (_apiWsBaseUrl == null
-              ? null
-              : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
+      _matchHubUrl = dartDefinedMatchHubUrl.isNotEmpty
+          ? _normalizeApiBaseUrlForRuntime(dartDefinedMatchHubUrl)
+          : dotenv.env['API_MATCH_HUB_URL'] ??
+              (_apiWsBaseUrl == null
+                  ? null
+                  : _joinWsPath(_apiWsBaseUrl!, '/ws/match'));
+      _presenceHubUrl = dartDefinedPresenceHubUrl.isNotEmpty
+          ? _normalizeApiBaseUrlForRuntime(dartDefinedPresenceHubUrl)
+          : dotenv.env['API_PRESENCE_HUB_URL'] ??
+              (_apiWsBaseUrl == null
+                  ? null
+                  : _joinWsPath(_apiWsBaseUrl!, '/ws/presence'));
+      _notifyHubUrl = dartDefinedNotifyHubUrl.isNotEmpty
+          ? _normalizeApiBaseUrlForRuntime(dartDefinedNotifyHubUrl)
+          : dotenv.env['API_NOTIFY_HUB_URL'] ??
+              (_apiWsBaseUrl == null
+                  ? null
+                  : _joinWsPath(_apiWsBaseUrl!, '/ws/notify'));
       _appRedirectBaseUrl = _resolveAppRedirectBaseUrl();
       _cryptoSurfacesEnabled = _parseBool(
-        dotenv.env['CRYPTO_SURFACES_ENABLED'],
+        dartDefinedCryptoSurfacesEnabled.isNotEmpty
+            ? dartDefinedCryptoSurfacesEnabled
+            : dotenv.env['CRYPTO_SURFACES_ENABLED'],
         fallback: true,
       );
       _cryptoWritesEnabled = _parseBool(
-        dotenv.env['CRYPTO_WRITES_ENABLED'],
+        dartDefinedCryptoWritesEnabled.isNotEmpty
+            ? dartDefinedCryptoWritesEnabled
+            : dotenv.env['CRYPTO_WRITES_ENABLED'],
         fallback: true,
       );
       _enabledCryptoNetworks = _parseCsvSet(
-        dotenv.env['CRYPTO_ENABLED_NETWORKS'],
+        dartDefinedCryptoEnabledNetworks.isNotEmpty
+            ? dartDefinedCryptoEnabledNetworks
+            : dotenv.env['CRYPTO_ENABLED_NETWORKS'],
         fallback: const {'solana', 'xrp'},
       );
-      _complianceServiceUrl = dotenv.env['COMPLIANCE_SERVICE_URL'] == null
+      final rawComplianceServiceUrl = dartDefinedComplianceServiceUrl.isNotEmpty
+          ? dartDefinedComplianceServiceUrl
+          : dotenv.env['COMPLIANCE_SERVICE_URL'];
+      _complianceServiceUrl = rawComplianceServiceUrl == null
           ? null
-          : _normalizeApiBaseUrlForRuntime(
-              dotenv.env['COMPLIANCE_SERVICE_URL']!.trim());
-      _stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']?.trim();
+          : _normalizeApiBaseUrlForRuntime(rawComplianceServiceUrl.trim());
+      _stripePublishableKey = dartDefinedStripePublishableKey.isNotEmpty
+          ? dartDefinedStripePublishableKey.trim()
+          : dotenv.env['STRIPE_PUBLISHABLE_KEY']?.trim();
       _apiConnectTimeout = _parseDurationSeconds(
         dotenv.env['API_CONNECT_TIMEOUT_SECONDS'],
         fallback: const Duration(seconds: 10),
@@ -362,7 +424,10 @@ class EnvConfig {
   }
 
   static String? _resolveAppRedirectBaseUrl() {
-    final configured = dotenv.env['APP_REDIRECT_BASE_URL']?.trim();
+    const dartDefined = String.fromEnvironment('APP_REDIRECT_BASE_URL');
+    final configured = dartDefined.isNotEmpty
+        ? dartDefined.trim()
+        : dotenv.env['APP_REDIRECT_BASE_URL']?.trim();
     if (configured != null && configured.isNotEmpty) {
       return configured;
     }

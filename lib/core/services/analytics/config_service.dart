@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:trivia_tycoon/core/env.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'package:trivia_tycoon/core/manager/service_manager.dart';
 import '../storage/config_storage_service.dart';
@@ -128,7 +129,7 @@ class ConfigService extends ChangeNotifier {
     while (attempt < _maxRetries) {
       try {
         final response = await http.get(
-          Uri.parse("${_getBaseUrlSafely()}/config"),
+          Uri.parse("$apiBaseUrl/app/config"),
         );
 
         if (response.statusCode == 200) {
@@ -168,6 +169,13 @@ class ConfigService extends ChangeNotifier {
 
   /// Safely get base URL before fully loaded
   String _getBaseUrlSafely() {
+    try {
+      return EnvConfig.apiV1BaseUrl;
+    } catch (_) {
+      // Fall through to bundled config/defaults for tests that exercise this
+      // service without the app bootstrap environment.
+    }
+
     final directBaseUrl = _config['API_BASE_URL'];
     if (directBaseUrl is String && directBaseUrl.isNotEmpty) {
       return directBaseUrl;
@@ -212,12 +220,12 @@ class ConfigService extends ChangeNotifier {
   /// Default config fallback
   static const Map<String, dynamic> _defaultConfig = {
     "APP_ENV": "prod",
-    "API_BASE_URL_PROD": "http://localhost:5000",
+    "API_BASE_URL_PROD": "https://api.synaptixplay.com/api/v1",
     "ENABLE_LOGGING": "false",
     "GALLERY_MODE": false,
     "USE_BACKEND_AUTH": true,
   };
 
   /// Default fallback URL
-  static const String _defaultBaseUrl = "http://localhost:5000";
+  static const String _defaultBaseUrl = "https://api.synaptixplay.com/api/v1";
 }

@@ -176,6 +176,11 @@ class AuthTokenStore {
 
   AuthSession load() => _cachedSession;
 
+  String? get accessTokenSync {
+    final token = _cachedSession.accessToken;
+    return token.isEmpty ? null : token;
+  }
+
   Future<void> save(AuthSession session) async {
     _cachedSession = session;
     await _persistSecureSession(session);

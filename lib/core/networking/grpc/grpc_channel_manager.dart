@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:grpc/grpc.dart';
-import 'package:grpc/grpc_web.dart';
+import 'package:grpc/grpc.dart' as grpc;
+import 'package:grpc/grpc_web.dart' as grpc_web;
+import 'package:grpc/service_api.dart' as grpc_api;
 import 'package:trivia_tycoon/core/env.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -17,7 +18,7 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 ///   GRPC_USE_TLS    "true" to use TLS (default: false for local dev)
 class GrpcChannelManager {
   static GrpcChannelManager? _instance;
-  ClientChannelBase? _channel;
+  grpc_api.ClientChannel? _channel;
 
   GrpcChannelManager._();
 
@@ -25,7 +26,7 @@ class GrpcChannelManager {
       _instance ??= GrpcChannelManager._();
 
   /// Returns (or lazily creates) the gRPC channel.
-  ClientChannelBase get channel {
+  grpc_api.ClientChannel get channel {
     _channel ??= _buildChannel();
     return _channel!;
   }
@@ -40,9 +41,9 @@ class GrpcChannelManager {
     }
   }
 
-  ClientChannelBase _buildChannel() {
-    final host   = EnvConfig.grpcHost;
-    final port   = EnvConfig.grpcPort;
+  grpc_api.ClientChannel _buildChannel() {
+    final host = EnvConfig.grpcHost;
+    final port = EnvConfig.grpcPort;
     final useTls = EnvConfig.grpcUseTls;
 
     LogManager.info(
@@ -52,17 +53,19 @@ class GrpcChannelManager {
 
     if (kIsWeb) {
       final scheme = useTls ? 'https' : 'http';
-      return GrpcWebClientChannel.xhr(Uri.parse('$scheme://$host:$port'));
+      return grpc_web.GrpcWebClientChannel.xhr(
+        Uri.parse('$scheme://$host:$port'),
+      );
     }
 
-    return ClientChannel(
+    return grpc.ClientChannel(
       host,
       port: port,
-      options: ChannelOptions(
+      options: grpc.ChannelOptions(
         credentials: useTls
-            ? const ChannelCredentials.secure()
-            : const ChannelCredentials.insecure(),
-        idleTimeout: const Duration(minutes(5)),
+            ? const grpc.ChannelCredentials.secure()
+            : const grpc.ChannelCredentials.insecure(),
+        idleTimeout: const Duration(minutes: 5),
         connectionTimeout: const Duration(seconds: 10),
       ),
     );
