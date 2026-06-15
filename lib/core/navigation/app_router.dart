@@ -12,6 +12,8 @@ import 'package:trivia_tycoon/core/router/enhanced_admin_guard.dart';
 import 'package:trivia_tycoon/core/router/feature_flag_guard.dart';
 import 'package:trivia_tycoon/core/models/app_config.dart';
 import 'package:trivia_tycoon/screens/invite_log_screen.dart';
+import 'package:trivia_tycoon/screens/compliance/age_gate_screen.dart';
+import 'package:trivia_tycoon/screens/party/party_lobby_screen.dart';
 import 'package:trivia_tycoon/screens/leaderboard/tier_rank_screen.dart';
 import 'package:trivia_tycoon/screens/menu/game_menu_screen.dart';
 import 'package:trivia_tycoon/screens/not_found_screen.dart';
@@ -224,6 +226,18 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/link-code',
         name: 'link-code',
         builder: (context, state) => const LinkCodeScreen(),
+      ),
+      GoRoute(
+        path: '/age-gate',
+        name: 'age-gate',
+        builder: (context, state) => const AgeGateScreen(),
+      ),
+      GoRoute(
+        path: '/party',
+        name: 'party-lobby',
+        builder: (context, state) => const PartyLobbyScreen(),
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.socialEnabled),
       ),
 
       /// 🏠 Main App Routes

@@ -21,7 +21,7 @@ class CollectionItemsLoader {
 
   /// Load collection items from bundled JSON asset
   Future<List<CollectionItem>> loadFromAsset({
-    String assetPath = 'assets/data/collection_items.json',
+    String assetPath = 'assets/images/collections/collection_items.json',
   }) async {
     try {
       final jsonString = await rootBundle.loadString(assetPath);
@@ -109,6 +109,8 @@ class CollectionItemsLoader {
 
   /// Check if an image exists for a collection item
   Future<bool> hasImage(String itemId) async {
+    if (kIsWeb) return false;
+
     final dir = await _collectionImagesDir;
     final imageExtensions = ['png', 'jpg', 'jpeg', 'webp'];
 
@@ -124,6 +126,8 @@ class CollectionItemsLoader {
 
   /// Get image path for a collection item
   Future<String?> getImagePath(String itemId) async {
+    if (kIsWeb) return null;
+
     final dir = await _collectionImagesDir;
     final imageExtensions = ['png', 'jpg', 'jpeg', 'webp'];
 

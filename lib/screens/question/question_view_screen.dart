@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 import 'package:trivia_tycoon/screens/question/widgets/adapted_question_widgets.dart';
+import '../../core/dto/powerup_dto.dart';
 import '../../core/helpers/quiz_helpers.dart';
 import '../../game/models/question_model.dart';
 import '../../game/providers/quiz_providers.dart';
@@ -9,6 +11,7 @@ import '../../game/providers/quiz_results_provider.dart';
 import '../../game/providers/learning_providers.dart'
     show currentPlayerIdProvider;
 import '../../game/providers/personalization_providers.dart';
+import '../../game/providers/powerup_providers.dart';
 import '../../game/services/quiz_category.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
@@ -37,6 +40,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   late PageController _pageController;
   late AnimationController _animationController;
   QuizCategory? _resolvedCategory;
+
+  /// Idempotency/scoping key for server-side powerup consumption this session.
+  final String _powerupEventId = const Uuid().v4();
 
   @override
   void initState() {
@@ -1120,16 +1126,57 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           padding: const EdgeInsets.only(bottom: 8),
           child: FloatingActionButton.small(
             heroTag: powerUp['type'],
-            onPressed: () {
-              ref
-                  .read(adaptedQuizProvider.notifier)
-                  .applyPowerUp(powerUp['type']);
-            },
+            onPressed: () => _activatePowerUp(powerUp['type'] as String),
             backgroundColor: powerUp['color'],
             child: Icon(powerUp['icon'], color: Colors.white),
           ),
         );
       }).toList(),
     );
+  }
+
+  /// Maps a local quiz powerup type to the backend inventory type, or null when
+  /// the powerup has no server-tracked equivalent (e.g. hint, shield).
+  PowerupType? _mapToBackendPowerup(String type) {
+    switch (type) {
+      case 'eliminate':
+        return PowerupType.fiftyFifty;
+      case 'time_boost':
+        return PowerupType.extraTime;
+      default:
+        return null;
+    }
+  }
+
+  /// Consumes the powerup from the player's server inventory (when it has a
+  /// backend equivalent) before applying the local effect. Server denials
+  /// (out of stock / cooldown) block activation; offline/unmapped powerups fall
+  /// through to the existing local-only behaviour so solo play never breaks.
+  Future<void> _activatePowerUp(String type) async {
+    final backendType = _mapToBackendPowerup(type);
+    final playerId = ref.read(currentPlayerIdProvider).valueOrNull;
+
+    if (backendType != null && playerId != null && playerId.isNotEmpty) {
+      final result = await ref
+          .read(powerupInventoryProvider(playerId).notifier)
+          .use(eventId: _powerupEventId, type: backendType);
+
+      // result == null → request failed; don't punish the player, apply locally.
+      if (result != null &&
+          result.status != 'Used' &&
+          result.status != 'Duplicate') {
+        if (!mounted) return;
+        final msg = switch (result.status) {
+          'Insufficient' => 'Out of that powerup.',
+          'Cooldown' => 'That powerup is on cooldown.',
+          _ => 'Powerup unavailable.',
+        };
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(msg)));
+        return;
+      }
+    }
+
+    ref.read(adaptedQuizProvider.notifier).applyPowerUp(type);
   }
 }

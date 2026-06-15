@@ -6,9 +6,9 @@ class OnboardingPhaseIndicator extends StatelessWidget {
   const OnboardingPhaseIndicator({super.key, required this.currentStep});
 
   static const _phases = [
-    _PhaseData(label: 'Set Up', startStep: 0, endStep: 4),
-    _PhaseData(label: 'Personalize', startStep: 5, endStep: 7),
-    _PhaseData(label: 'Ready', startStep: 8, endStep: 10),
+    _PhaseData(label: 'Set Up', startStep: 0, endStep: 5),
+    _PhaseData(label: 'Personalize', startStep: 6, endStep: 8),
+    _PhaseData(label: 'Ready', startStep: 9, endStep: 11),
   ];
 
   int get _currentPhase => _phases.indexWhere(

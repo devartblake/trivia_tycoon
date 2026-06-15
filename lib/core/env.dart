@@ -25,6 +25,7 @@ class EnvConfig {
   static bool _cryptoWritesEnabled = true;
   static Set<String> _enabledCryptoNetworks = const {'solana', 'xrp'};
   static String? _complianceServiceUrl;
+  static String? _complianceConsentServiceUrl;
   static String? _stripePublishableKey;
   static Duration _apiConnectTimeout = const Duration(seconds: 10);
   static Duration _apiReceiveTimeout = const Duration(seconds: 30);
@@ -136,6 +137,12 @@ class EnvConfig {
 
   /// Base URL of the compliance microservice (optional; crypto + prize gates are disabled when absent).
   static String? get complianceServiceUrl => _complianceServiceUrl;
+
+  /// Base URL of the Synaptix.Compliance.Api service (age verification, consent,
+  /// parental consent, privacy requests). These routes live at `/compliance/...`,
+  /// so when no dedicated URL is configured we default to the main API host.
+  static String get complianceConsentServiceUrl =>
+      _complianceConsentServiceUrl ?? apiBaseUrl;
 
   /// Stripe Identity publishable key exposed to the Flutter client.
   static String? get stripePublishableKey => _stripePublishableKey;
@@ -371,6 +378,16 @@ class EnvConfig {
       _complianceServiceUrl = rawComplianceServiceUrl == null
           ? null
           : _normalizeApiBaseUrlForRuntime(rawComplianceServiceUrl.trim());
+      const dartDefinedComplianceConsentUrl =
+          String.fromEnvironment('COMPLIANCE_CONSENT_SERVICE_URL');
+      final rawComplianceConsentUrl =
+          dartDefinedComplianceConsentUrl.isNotEmpty
+              ? dartDefinedComplianceConsentUrl
+              : dotenv.env['COMPLIANCE_CONSENT_SERVICE_URL'];
+      _complianceConsentServiceUrl = rawComplianceConsentUrl == null ||
+              rawComplianceConsentUrl.trim().isEmpty
+          ? null
+          : _normalizeApiBaseUrlForRuntime(rawComplianceConsentUrl.trim());
       _stripePublishableKey = dartDefinedStripePublishableKey.isNotEmpty
           ? dartDefinedStripePublishableKey.trim()
           : dotenv.env['STRIPE_PUBLISHABLE_KEY']?.trim();

@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/connection_banner.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/room_card.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
+import '../../game/providers/feature_flag_providers.dart';
 
 class MultiplayerHubScreen extends ConsumerStatefulWidget {
   const MultiplayerHubScreen({super.key});
@@ -256,6 +257,21 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
             ),
           ],
         ),
+        if (ref.watch(featureFlagsProvider).socialEnabled) ...[
+          const SizedBox(height: 12),
+          _buildActionCard(
+            icon: Icons.groups_rounded,
+            title: 'Party',
+            subtitle: 'Play with friends',
+            gradient: const LinearGradient(
+              colors: [
+                MultiplayerPalette.secondary,
+                MultiplayerPalette.accent
+              ],
+            ),
+            onTap: () => context.push('/party'),
+          ),
+        ],
       ],
     );
   }

@@ -33,19 +33,8 @@ class ReferralService {
       return referral;
     }
 
-    // 2. Try to fetch from server
-    try {
-      referral = await _api.getReferral(_userId);
-      if (referral != null) {
-        // Save to local storage
-        await _storage.saveReferralCode(referral);
-        return referral;
-      }
-    } catch (e) {
-      // Server fetch failed, continue to create new
-    }
-
-    // 3. Create new referral code
+    // 2. Create new referral code. The backend create endpoint is idempotent
+    // per owner and returns the existing code when one already exists.
     final newCode = ReferralCodeGen.generate();
     referral = ReferralCode(
       code: newCode,

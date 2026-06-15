@@ -18,13 +18,12 @@ class ReferralRepository {
     try {
       // FIX: Ensure the API response is correctly cast to a Map.
       final serverResponse =
-          await api.post('/referrals', body: {'owner_user_id': ownerUserId});
+          await api.post('/referrals', body: {'ownerPlayerId': ownerUserId});
 
       final code = ReferralCode.fromJson({
         'code': serverResponse['code'],
-        'ownerUserId': ownerUserId,
-        'createdAt': serverResponse['created_at'],
-        'expiresAt': serverResponse['expires_at'],
+        'ownerUserId': serverResponse['ownerPlayerId'] ?? ownerUserId,
+        'createdAt': serverResponse['createdAtUtc'],
         'status': serverResponse['status'],
         'isSynced': true,
         'serverId': serverResponse['id']?.toString(),

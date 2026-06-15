@@ -362,8 +362,12 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
         ref.read(profileSelectedProvider.notifier).state = true;
       }
 
-      if (isLoggedIn && hasOnboarded) {
-        // User is returning and has completed onboarding
+      if (hasOnboarded) {
+        // Sync the in-memory onboarding-complete flag from persistence BEFORE
+        // the router is built, regardless of login state. The router's redirect
+        // reads onboardingCompleteProvider synchronously; without this a
+        // returning (or just-authenticated) user can hit the redirect before
+        // the notifier's async load() finishes and get sent back to onboarding.
         await ref
             .read(onboardingProgressProvider.notifier)
             .markOnboardingCompleted(true);

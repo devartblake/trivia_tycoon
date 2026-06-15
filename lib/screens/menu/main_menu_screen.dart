@@ -17,6 +17,7 @@ import '../../core/constants/app_constants.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/services/theme/seasonal_theme_service.dart';
 import '../../core/theme/themes.dart';
+import '../../core/dto/game_event_dto.dart';
 import '../../game/providers/economy_providers.dart';
 import '../../game/utils/gradient_themes.dart';
 import '../../game/utils/greeting_utils.dart';
@@ -518,9 +519,36 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
+  /// Live game events from GET /game-events/upcoming, or empty on loading/error.
+  List<GameEventDto> get _gameEvents =>
+      ref.watch(upcomingGameEventsProvider).asData?.value ?? const [];
+
+  /// Live event preferred, otherwise the next upcoming one; null when none.
+  GameEventDto? get _featuredEvent {
+    final events = _gameEvents;
+    for (final e in events) {
+      if (e.status == 'live') return e;
+    }
+    for (final e in events) {
+      if (e.status == 'upcoming') return e;
+    }
+    return null;
+  }
+
   Widget _buildLiveTickerBar() {
     final ageGroup = ref.watch(userAgeGroupProvider);
     final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
+
+    GameEventDto? live;
+    for (final e in _gameEvents) {
+      if (e.status == 'live') {
+        live = e;
+        break;
+      }
+    }
+    final tickerText = live != null
+        ? 'LIVE: ${live.name} • ${live.currentPlayers}/${live.maxPlayers} playing'
+        : 'LIVE: Weekend Trivia Rush is active • 2x XP for party matches';
 
     return Container(
       width: double.infinity,
@@ -539,12 +567,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         children: [
           Icon(Icons.show_chart_rounded, color: primaryAccent, size: 18),
           const SizedBox(width: 10),
-          const Expanded(
+          Expanded(
             child: Text(
-              'LIVE: Weekend Trivia Rush is active • 2x XP for party matches',
+              tickerText,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF2D3D63),
@@ -559,6 +587,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
   Widget _buildFeaturedModeCard() {
     final ageGroup = ref.watch(userAgeGroupProvider);
     final primaryAccent = GradientThemes.getAgeGroupColors(ageGroup).first;
+    final featured = _featuredEvent;
+    final featuredTitle = featured?.name ?? 'Gemini Clash Arena';
+    final featuredSubtitle = featured != null
+        ? '${featured.currentPlayers}/${featured.maxPlayers} players • '
+            '${featured.status == 'live' ? 'Live now' : 'Starting soon'}'
+        : 'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.';
     final pulse = Tween<double>(begin: 1, end: 1.06).animate(
       CurvedAnimation(
         parent: _pulseController,
@@ -605,9 +639,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Gemini Clash Arena',
-                style: TextStyle(
+              Text(
+                featuredTitle,
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF1D2A49),
@@ -615,9 +649,9 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
               ),
               const SizedBox(height: 6),
               Text(
-                'Fast 60-second rounds with reactive bonuses and global leaderboard spikes.',
-                style: TextStyle(
-                  color: const Color(0xFF2B3A5C),
+                featuredSubtitle,
+                style: const TextStyle(
+                  color: Color(0xFF2B3A5C),
                   height: 1.35,
                 ),
               ),

@@ -50,7 +50,8 @@ class SegmentLoader {
       rawSegments = await _loadFromLocalOrCache();
     }
 
-    return _filterUnlockedSegments(rawSegments);
+    final sanitizedSegments = await _stripUnavailableImagePaths(rawSegments);
+    return _filterUnlockedSegments(sanitizedSegments);
   }
 
   /// Load segments from local JSON config
@@ -77,6 +78,40 @@ class SegmentLoader {
       }
     } catch (_) {}
     return _loadFromLocal();
+  }
+
+  Future<List<WheelSegment>> _stripUnavailableImagePaths(
+    List<WheelSegment> segments,
+  ) async {
+    try {
+      final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+      final bundledAssets = manifest.listAssets().toSet();
+
+      return segments.map((segment) {
+        final imagePath = segment.imagePath;
+        if (imagePath == null || bundledAssets.contains(imagePath)) {
+          return segment;
+        }
+
+        return WheelSegment(
+          id: segment.id,
+          label: segment.label,
+          color: segment.color,
+          reward: segment.reward,
+          rewardType: segment.rewardType,
+          isExclusive: segment.isExclusive,
+          requiredStreak: segment.requiredStreak,
+          requiredCurrency: segment.requiredCurrency,
+          description: segment.description,
+          probability: segment.probability,
+          metadata: segment.metadata,
+          isEnabled: segment.isEnabled,
+          enabledUntil: segment.enabledUntil,
+        );
+      }).toList(growable: false);
+    } catch (_) {
+      return segments;
+    }
   }
 
   /// Filter segments based on streak & currency unlock requirements

@@ -10,6 +10,8 @@ import '../dto/territory_dto.dart';
 import '../dto/vote_dto.dart';
 import '../dto/economy_dto.dart';
 import '../dto/personalization_dto.dart';
+import '../dto/powerup_dto.dart';
+import '../dto/party_dto.dart';
 
 /// API client for Synaptix backend
 ///
@@ -866,6 +868,186 @@ class SynaptixApiClient {
     required String experimentKey,
   }) async {
     await _http.post('/experiments/player/$playerId/$experimentKey/outcome');
+  }
+
+  // ========================================
+  // Powerups  (GET/POST /powerups/*)
+  // ========================================
+
+  /// GET /powerups/state/{playerId} — current powerup balances + cooldowns.
+  Future<PowerupStateDto> getPowerupState({required String playerId}) async {
+    final j = await _http.getJson('/powerups/state/$playerId');
+    return PowerupStateDto.fromJson(j);
+  }
+
+  /// POST /powerups/use — consume one powerup of [type] within game [eventId].
+  ///
+  /// [eventId] ties the use to a specific match/game event and acts as the
+  /// idempotency key; the result `status` is one of
+  /// `Used | Duplicate | Insufficient | Cooldown`.
+  Future<UsePowerupResultDto> usePowerup({
+    required String eventId,
+    required String playerId,
+    required PowerupType type,
+  }) async {
+    final j = await _http.postJson(
+      '/powerups/use',
+      body: {
+        'eventId': eventId,
+        'playerId': playerId,
+        'type': type.wire,
+      },
+    );
+    return UsePowerupResultDto.fromJson(j);
+  }
+
+  // ========================================
+  // Season Rewards  (GET/POST /seasons/rewards/*)
+  // ========================================
+
+  /// GET /seasons/rewards/eligibility/{playerId} — claimable reward + state.
+  Future<RewardEligibilityDto> getSeasonRewardEligibility({
+    required String playerId,
+    String? seasonId,
+  }) async {
+    final j = await _http.getJson(
+      '/seasons/rewards/eligibility/$playerId',
+      query: {if (seasonId != null) 'seasonId': seasonId},
+    );
+    return RewardEligibilityDto.fromJson(j);
+  }
+
+  /// POST /seasons/rewards/claim/{playerId} — claim the player's season reward.
+  ///
+  /// [eventId] is the idempotency key (reuse the same value across retries);
+  /// the result `status` is one of `Applied | Duplicate | NotEligible`.
+  Future<ClaimSeasonRewardResultDto> claimSeasonReward({
+    required String playerId,
+    required String eventId,
+    String? seasonId,
+  }) async {
+    final j = await _http.postJson(
+      '/seasons/rewards/claim/$playerId',
+      body: {
+        'eventId': eventId,
+        if (seasonId != null) 'seasonId': seasonId,
+      },
+    );
+    return ClaimSeasonRewardResultDto.fromJson(j);
+  }
+
+  // ========================================
+  // Party / Group Play  (/party/*)
+  // ========================================
+  // NOTE: gated server-side behind the `social_enabled` feature flag; calls
+  // return 403 when disabled. Real-time party events arrive on MatchHub.
+
+  /// POST /party — create a party led by [leaderPlayerId].
+  Future<PartyRosterDto> createParty({required String leaderPlayerId}) async {
+    final j = await _http.postJson(
+      '/party',
+      body: {'leaderPlayerId': leaderPlayerId},
+    );
+    return PartyRosterDto.fromJson(j);
+  }
+
+  /// GET /party/{partyId} — current roster.
+  Future<PartyRosterDto> getPartyRoster(String partyId) async {
+    final j = await _http.getJson('/party/$partyId');
+    return PartyRosterDto.fromJson(j);
+  }
+
+  /// POST /party/{partyId}/invite — invite [toPlayerId] to the party.
+  Future<PartyInviteDto> inviteToParty({
+    required String partyId,
+    required String fromPlayerId,
+    required String toPlayerId,
+  }) async {
+    final j = await _http.postJson(
+      '/party/$partyId/invite',
+      body: {'fromPlayerId': fromPlayerId, 'toPlayerId': toPlayerId},
+    );
+    return PartyInviteDto.fromJson(j);
+  }
+
+  /// POST /party/invites/{inviteId}/accept
+  Future<PartyInviteDto> acceptPartyInvite({
+    required String inviteId,
+    required String playerId,
+  }) async {
+    final j = await _http.postJson(
+      '/party/invites/$inviteId/accept',
+      body: {'playerId': playerId},
+    );
+    return PartyInviteDto.fromJson(j);
+  }
+
+  /// POST /party/invites/{inviteId}/decline
+  Future<PartyInviteDto> declinePartyInvite({
+    required String inviteId,
+    required String playerId,
+  }) async {
+    final j = await _http.postJson(
+      '/party/invites/$inviteId/decline',
+      body: {'playerId': playerId},
+    );
+    return PartyInviteDto.fromJson(j);
+  }
+
+  /// POST /party/{partyId}/leave
+  Future<void> leaveParty({
+    required String partyId,
+    required String playerId,
+  }) async {
+    await _http.post(
+      '/party/$partyId/leave',
+      body: {'playerId': playerId},
+    );
+  }
+
+  /// GET /party/invites — invites for [playerId].
+  /// [box] is `incoming` | `outgoing` | `all`.
+  Future<PartyInvitesListDto> listPartyInvites({
+    required String playerId,
+    String box = 'incoming',
+    int page = 1,
+    int pageSize = 50,
+  }) async {
+    final j = await _http.getJson(
+      '/party/invites',
+      query: {
+        'playerId': playerId,
+        'box': box,
+        'page': page.toString(),
+        'pageSize': pageSize.toString(),
+      },
+    );
+    return PartyInvitesListDto.fromJson(j);
+  }
+
+  /// POST /party/{partyId}/enqueue — enter matchmaking as a party.
+  Future<PartyEnqueueResultDto> enqueueParty({
+    required String partyId,
+    required String leaderPlayerId,
+    required String mode,
+    required int tier,
+  }) async {
+    final j = await _http.postJson(
+      '/party/$partyId/enqueue',
+      body: {'leaderPlayerId': leaderPlayerId, 'mode': mode, 'tier': tier},
+    );
+    return PartyEnqueueResultDto.fromJson(j);
+  }
+
+  /// POST /party/{partyId}/queue/cancel
+  Future<void> cancelPartyQueue({
+    required String partyId,
+    required String leaderPlayerId,
+  }) async {
+    await _http.post(
+      '/party/$partyId/queue/cancel',
+      body: {'leaderPlayerId': leaderPlayerId},
+    );
   }
 
   /// Close HTTP client

@@ -134,6 +134,10 @@ flutter:
    - assets/config/config.json
    - assets/config/localization_strings.json
    - assets/config/segments.json
+   - assets/images/index.json
+   - assets/images/rewards/
+   - assets/images/collections/collection_items.json
+   - assets/3d/index.json
    - assets/data/mini-games/word_search_easy.json
    - assets/icons/index.json
    - assets/icons/store/coins_100.png

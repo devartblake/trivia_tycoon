@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 import '../../core/services/api_service.dart';
 import '../models/referral_models.dart';
 
@@ -13,23 +15,25 @@ class ReferralApiService {
       final response = await _apiService.post(
         '/referrals',
         body: {
-          'userId': userId,
-          'code': code,
-          'createdAt': DateTime.now().toUtc().toIso8601String(),
-          'status': 'active',
+          'ownerPlayerId': userId,
         },
       );
 
-      return ReferralCode.fromJson(response);
+      return ReferralCode.fromJson({
+        ...response,
+        'ownerUserId': response['ownerPlayerId'] ?? userId,
+        'createdAt': response['createdAtUtc'] ?? response['createdAt'],
+        'isSynced': true,
+      });
     } catch (e) {
       throw Exception('Failed to create referral: $e');
     }
   }
 
-  /// Get existing referral code from server
-  Future<ReferralCode?> getReferral(String userId) async {
+  /// Get existing referral code from server by referral code.
+  Future<ReferralCode?> getReferral(String code) async {
     try {
-      final response = await _apiService.getRequest('referrals/$userId');
+      final response = await _apiService.get('/referrals/$code');
       return ReferralCode.fromJson(response);
     } catch (e) {
       // Return null if not found (404) or other errors
@@ -40,9 +44,20 @@ class ReferralApiService {
   /// Track when someone scans a referral code
   Future<void> trackScanEvent(ReferralScanEvent event) async {
     try {
+      final scannerUserId = event.scannerUserId;
+      if (scannerUserId == null || scannerUserId.trim().isEmpty) {
+        return;
+      }
+
       await _apiService.post(
-        '/referrals/track',
-        body: event.toJson(),
+        '/qr/track-scan',
+        body: {
+          'eventId': const Uuid().v4(),
+          'playerId': scannerUserId,
+          'value': event.code,
+          'occurredAtUtc': event.scannedAt.toUtc().toIso8601String(),
+          'type': 2,
+        },
       );
     } catch (e) {
       throw Exception('Failed to track scan: $e');
@@ -50,20 +65,20 @@ class ReferralApiService {
   }
 
   /// Get referral statistics for a user
-  Future<Map<String, dynamic>> getReferralStats(String userId) async {
-    try {
-      final response = await _apiService.getRequest('referrals/$userId/stats');
-      return Map<String, dynamic>.from(response);
-    } catch (e) {
-      throw Exception('Failed to get referral stats: $e');
-    }
+  Future<Map<String, dynamic>> getReferralStats(String _) async {
+    return {
+      'totalReferrals': 0,
+      'successfulReferrals': 0,
+      'pendingReferrals': 0,
+      'rewards': 0,
+    };
   }
 
   /// Validate a referral code
   Future<bool> validateCode(String code) async {
     try {
-      final response = await _apiService.getRequest('referrals/validate/$code');
-      return response['valid'] == true;
+      final response = await _apiService.get('/referrals/$code');
+      return (response['code'] ?? '').toString().isNotEmpty;
     } catch (e) {
       return false;
     }
@@ -73,11 +88,10 @@ class ReferralApiService {
   Future<void> applyReferralCode(String code, String newUserId) async {
     try {
       await _apiService.post(
-        '/referrals/apply',
+        '/referrals/$code/redeem',
         body: {
-          'code': code,
-          'newUserId': newUserId,
-          'appliedAt': DateTime.now().toUtc().toIso8601String(),
+          'eventId': const Uuid().v4(),
+          'redeemerPlayerId': newUserId,
         },
       );
     } catch (e) {

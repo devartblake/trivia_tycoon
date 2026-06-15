@@ -10,6 +10,7 @@ import '../../game/controllers/onboarding_controller.dart';
 import '../../game/providers/multi_profile_providers.dart';
 import 'steps/welcome_step.dart';
 import 'steps/username_step.dart';
+import 'steps/age_verification_step.dart';
 import 'steps/age_group_step.dart';
 import 'steps/intent_step.dart';
 import 'steps/play_style_step.dart';
@@ -111,7 +112,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   @override
   void initState() {
     super.initState();
-    _controller = ModernOnboardingController(totalSteps: 11);
+    _controller = ModernOnboardingController(totalSteps: 12);
     _pageController = PageController();
     _confettiAnimationController = AnimationController(
       vsync: this,
@@ -286,6 +287,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     await profileService.savePreferredCategories(categories);
     if (avatar != null) {
       await profileService.saveAvatar(avatar);
+      // Bridge the onboarding avatar into the shared avatar controller so the
+      // drawer header and profile screen (both watch this provider) reflect it.
+      if (avatar.trim().isNotEmpty) {
+        await ref
+            .read(profileAvatarControllerProvider)
+            .selectAvatarFromAsset(avatar);
+      }
     }
     if (synaptixMode != null) {
       await profileService.saveSynaptixMode(synaptixMode);
@@ -472,16 +480,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       children: [
                         WelcomeStep(controller: _controller), // 0
                         UsernameStep(controller: _controller), // 1
-                        AgeGroupStep(controller: _controller), // 2
-                        IntentStep(controller: _controller), // 3
-                        PlayStyleStep(controller: _controller), // 4
-                        CountryStep(controller: _controller), // 5
-                        CategoriesStep(controller: _controller), // 6
-                        AvatarStep(controller: _controller), // 7
-                        FirstSessionChallengeStep(controller: _controller), // 8
-                        RewardRevealStep(controller: _controller), // 9
+                        AgeVerificationStep(controller: _controller), // 2
+                        AgeGroupStep(controller: _controller), // 3
+                        IntentStep(controller: _controller), // 4
+                        PlayStyleStep(controller: _controller), // 5
+                        CountryStep(controller: _controller), // 6
+                        CategoriesStep(controller: _controller), // 7
+                        AvatarStep(controller: _controller), // 8
+                        FirstSessionChallengeStep(controller: _controller), // 9
+                        RewardRevealStep(controller: _controller), // 10
                         CompletionStep(
-                          // 10
+                          // 11
                           controller: _controller,
                           onComplete: _handleCompletion,
                         ),

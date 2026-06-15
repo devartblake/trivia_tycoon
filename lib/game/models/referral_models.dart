@@ -54,18 +54,29 @@ class ReferralCode extends Equatable {
       };
 
   factory ReferralCode.fromJson(Map<String, dynamic> json) => ReferralCode(
-        code: json['code'] as String,
-        ownerUserId: json['ownerUserId'] as String,
-        createdAt: DateTime.parse(json['createdAt'] as String).toUtc(),
-        expiresAt: json['expiresAt'] != null
-            ? DateTime.parse(json['expiresAt'] as String).toUtc()
+        code: json['code']?.toString() ?? '',
+        ownerUserId: (json['ownerUserId'] ??
+                json['ownerPlayerId'] ??
+                json['owner_player_id'] ??
+                '')
+            .toString(),
+        createdAt: DateTime.parse((json['createdAt'] ??
+                    json['createdAtUtc'] ??
+                    json['created_at'] ??
+                    DateTime.now().toUtc().toIso8601String())
+                .toString())
+            .toUtc(),
+        expiresAt: (json['expiresAt'] ?? json['expires_at']) != null
+            ? DateTime.parse(
+                    (json['expiresAt'] ?? json['expires_at']).toString())
+                .toUtc()
             : null,
         status: ReferralCodeStatus.values.firstWhere(
-          (e) => e.name == (json['status'] as String? ?? 'active'),
+          (e) => e.name == (json['status']?.toString() ?? 'active'),
           orElse: () => ReferralCodeStatus.active,
         ),
         isSynced: (json['isSynced'] as bool?) ?? false,
-        serverId: json['serverId'] as String?,
+        serverId: (json['serverId'] ?? json['id'])?.toString(),
       );
 
   @override

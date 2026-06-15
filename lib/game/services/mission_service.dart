@@ -185,23 +185,21 @@ class MissionService {
   // ----------------------------
   Future<List<UserMission>> generateDailyMissions(String userId) async {
     try {
-      // Backend decides mission IDs based on behavior/segment
+      // Backend decides + persists the daily missions based on behavior/segment.
       final response = await _callFastAPI('/missions/generate-daily', {
         'user_id': userId,
       });
 
       final missionIds = List<String>.from(response['mission_ids'] ?? const []);
-      final assignedMissions = <UserMission>[];
 
-      for (final missionId in missionIds) {
-        try {
-          final assigned =
-              await _repository.assignMissionToUser(userId, missionId);
-          assignedMissions.add(assigned);
-        } catch (e) {
-          LogManager.debug('Failed to assign mission $missionId: $e');
-        }
-      }
+      // Generation persists server-side; there is no per-id assign endpoint
+      // (`/players/{id}/missions/assign` does not exist on the backend). Read
+      // the canonical set back from `/missions` and keep just the freshly
+      // generated ones.
+      final all = await _repository.getUserMissions(userId);
+      final assignedMissions = missionIds.isEmpty
+          ? all
+          : all.where((m) => missionIds.contains(m.missionId)).toList();
 
       if (assignedMissions.isNotEmpty) {
         await _notificationService.showBasicNotification(
