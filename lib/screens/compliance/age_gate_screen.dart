@@ -53,8 +53,10 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
     }
     setState(() => _submittingAge = true);
     try {
-      final isMinor = await _client.submitAge(age);
-      if (mounted) setState(() => _isMinor = isMinor);
+      final serverMinor = await _client.submitAge(age);
+      // Client-side check is the floor: server can promote to minor but cannot
+      // override a locally-detected age under 13 (COPPA fail-closed).
+      if (mounted) setState(() => _isMinor = (age < 13) || serverMinor);
     } on ComplianceConsentApiException catch (e) {
       if (mounted) _snack('Age verification failed: ${e.message}');
     } finally {

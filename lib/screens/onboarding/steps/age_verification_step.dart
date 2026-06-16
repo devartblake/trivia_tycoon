@@ -69,8 +69,9 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
     setState(() => _verifying = true);
     bool minor = age < AgeVerificationStep.minorThreshold;
     try {
-      // Best-effort: prefer the server's determination when reachable.
-      minor = await _client.submitAge(age);
+      // OR the server result so a jurisdictional minor flag can promote to
+      // minor, but a misconfigured server cannot demote a locally-detected minor.
+      minor = minor || await _client.submitAge(age);
     } on ComplianceConsentApiException catch (e) {
       LogManager.debug('[AgeVerificationStep] submitAge failed (fail-open): $e');
     } catch (e) {
