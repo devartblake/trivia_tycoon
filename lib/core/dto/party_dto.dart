@@ -17,7 +17,7 @@ class PartyMemberDto {
   });
 
   factory PartyMemberDto.fromJson(Map<String, dynamic> j) => PartyMemberDto(
-        playerId: (j['playerId'] ?? j['PlayerId']) as String,
+        playerId: (j['playerId'] ?? j['PlayerId']) as String? ?? '',
         role: (j['role'] ?? j['Role']) as String? ?? 'member',
         joinedAtUtc: DateTime.tryParse(
                 (j['joinedAtUtc'] ?? j['JoinedAtUtc']) as String? ?? '') ??
@@ -41,9 +41,9 @@ class PartyRosterDto {
   });
 
   factory PartyRosterDto.fromJson(Map<String, dynamic> j) => PartyRosterDto(
-        partyId: (j['partyId'] ?? j['PartyId']) as String,
+        partyId: (j['partyId'] ?? j['PartyId']) as String? ?? '',
         leaderPlayerId:
-            (j['leaderPlayerId'] ?? j['LeaderPlayerId']) as String,
+            (j['leaderPlayerId'] ?? j['LeaderPlayerId']) as String? ?? '',
         status: (j['status'] ?? j['Status']) as String? ?? 'Open',
         members: ((j['members'] ?? j['Members']) as List<dynamic>? ?? const [])
             .cast<Map<String, dynamic>>()
@@ -74,10 +74,10 @@ class PartyInviteDto {
   });
 
   factory PartyInviteDto.fromJson(Map<String, dynamic> j) => PartyInviteDto(
-        inviteId: (j['inviteId'] ?? j['InviteId']) as String,
-        partyId: (j['partyId'] ?? j['PartyId']) as String,
-        fromPlayerId: (j['fromPlayerId'] ?? j['FromPlayerId']) as String,
-        toPlayerId: (j['toPlayerId'] ?? j['ToPlayerId']) as String,
+        inviteId: (j['inviteId'] ?? j['InviteId']) as String? ?? '',
+        partyId: (j['partyId'] ?? j['PartyId']) as String? ?? '',
+        fromPlayerId: (j['fromPlayerId'] ?? j['FromPlayerId']) as String? ?? '',
+        toPlayerId: (j['toPlayerId'] ?? j['ToPlayerId']) as String? ?? '',
         status: (j['status'] ?? j['Status']) as String? ?? 'Pending',
         createdAtUtc: DateTime.tryParse(
                 (j['createdAtUtc'] ?? j['CreatedAtUtc']) as String? ?? '') ??

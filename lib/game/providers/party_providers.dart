@@ -65,16 +65,18 @@ class PartyController extends StateNotifier<PartyState> {
       : super(const PartyState()) {
     final hub = ref.read(matchHubProvider);
     _subs
-      ..add(hub.partyRosterUpdated.listen((e) {
-        state = state.copyWith(roster: e.roster);
-      }))
-      ..add(hub.partyMatched.listen((e) {
-        state = state.copyWith(matched: e, queueStatus: 'Matched');
-      }))
-      ..add(hub.partyClosed.listen((_) {
-        state = state.copyWith(
-            clearRoster: true, clearQueueStatus: true, incomingInvites: const []);
-      }));
+      ..add(hub.partyRosterUpdated.listen(
+        (e) { state = state.copyWith(roster: e.roster); },
+        onError: (e) => state = state.copyWith(error: e.toString()),
+      ))
+      ..add(hub.partyMatched.listen(
+        (e) { state = state.copyWith(matched: e, queueStatus: 'Matched'); },
+        onError: (e) => state = state.copyWith(error: e.toString()),
+      ))
+      ..add(hub.partyClosed.listen(
+        (_) { state = state.copyWith(clearRoster: true, clearQueueStatus: true, incomingInvites: const []); },
+        onError: (e) => state = state.copyWith(error: e.toString()),
+      ));
   }
 
   @override

@@ -144,11 +144,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (!mounted) return;
 
     // Animate to the new page
-    _pageController.animateToPage(
-      _controller.currentStep,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOutCubic,
-    );
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        _controller.currentStep,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOutCubic,
+      );
+    }
 
     unawaited(_persistProgressSnapshot());
 

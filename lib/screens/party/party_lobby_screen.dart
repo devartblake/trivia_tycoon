@@ -98,30 +98,34 @@ class _PartyBodyState extends ConsumerState<_PartyBody> {
   Future<void> _showInviteDialog(
       BuildContext context, PartyController controller) async {
     final ctrl = TextEditingController();
-    final id = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Invite player'),
-        content: TextField(
-          controller: ctrl,
-          autofocus: true,
-          decoration: const InputDecoration(
-            labelText: 'Player ID',
-            hintText: 'Paste the player\'s id',
+    try {
+      final id = await showDialog<String>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invite player'),
+          content: TextField(
+            controller: ctrl,
+            autofocus: true,
+            decoration: const InputDecoration(
+              labelText: 'Player ID',
+              hintText: 'Paste the player\'s id',
+            ),
           ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
+              child: const Text('Invite'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, ctrl.text.trim()),
-            child: const Text('Invite'),
-          ),
-        ],
-      ),
-    );
-    if (id != null && id.isNotEmpty) {
-      await controller.invite(id);
+      );
+      if (id != null && id.isNotEmpty) {
+        await controller.invite(id);
+      }
+    } finally {
+      ctrl.dispose();
     }
   }
 }

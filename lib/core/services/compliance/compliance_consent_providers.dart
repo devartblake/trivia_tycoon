@@ -11,10 +11,11 @@ import 'compliance_consent_api_client.dart';
 final complianceConsentApiClientProvider =
     Provider<ComplianceConsentApiClient>((ref) {
   final tokenStore = ref.watch(authTokenStoreProvider);
-  final client = ComplianceConsentApiClient(
-    http.Client(),
+  final httpClient = http.Client();
+  ref.onDispose(httpClient.close);
+  return ComplianceConsentApiClient(
+    httpClient,
     baseUrl: EnvConfig.complianceConsentServiceUrl,
     accessTokenProvider: () => tokenStore.load().accessToken,
   );
-  return client;
 });

@@ -54,9 +54,9 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
     setState(() => _submittingAge = true);
     try {
       final isMinor = await _client.submitAge(age);
-      setState(() => _isMinor = isMinor);
+      if (mounted) setState(() => _isMinor = isMinor);
     } on ComplianceConsentApiException catch (e) {
-      _snack('Age verification failed: ${e.message}');
+      if (mounted) _snack('Age verification failed: ${e.message}');
     } finally {
       if (mounted) setState(() => _submittingAge = false);
     }
@@ -71,10 +71,12 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
     setState(() => _sendingParent = true);
     try {
       await _client.initiateParentalConsent(email);
-      setState(() => _parentRequested = true);
-      _snack('Parental consent request sent to $email.');
+      if (mounted) {
+        setState(() => _parentRequested = true);
+        _snack('Parental consent request sent to $email.');
+      }
     } on ComplianceConsentApiException catch (e) {
-      _snack('Could not send request: ${e.message}');
+      if (mounted) _snack('Could not send request: ${e.message}');
     } finally {
       if (mounted) setState(() => _sendingParent = false);
     }
