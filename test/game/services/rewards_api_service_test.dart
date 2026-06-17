@@ -38,6 +38,25 @@ class _StubApiService extends ApiService {
   }
 }
 
+class _SpinStatsApiService extends ApiService {
+  _SpinStatsApiService(this.payload)
+      : super(baseUrl: 'http://stub.invalid', initializeCache: false);
+
+  final Map<String, dynamic> payload;
+  String? requestedPath;
+
+  @override
+  Future<Map<String, dynamic>> get(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+    Duration? timeout,
+  }) async {
+    requestedPath = path;
+    return payload;
+  }
+}
+
 void main() {
   // -------------------------------------------------------------------------
   // DailyRewardConfigModel
@@ -351,6 +370,46 @@ void main() {
   // -------------------------------------------------------------------------
   // RewardsApiService (stub — verifies error propagation)
   // -------------------------------------------------------------------------
+
+  group('RewardsApiService.getSpinStats', () {
+    test('parses camelCase backend fields', () async {
+      final api = _SpinStatsApiService({
+        'dailyCount': 2,
+        'weeklyCount': 8,
+        'totalCount': 31,
+        'dailyLimit': 5,
+        'remainingToday': 3,
+      });
+      final stats = await RewardsApiService(api).getSpinStats('player-1');
+
+      expect(api.requestedPath, '/spins/stats/player-1');
+      expect(stats.dailyCount, 2);
+      expect(stats.weeklyCount, 8);
+      expect(stats.totalSpins, 31);
+      expect(stats.maxSpinsPerDay, 5);
+      expect(stats.spinsRemainingToday, 3);
+      expect(stats.canSpin, isTrue);
+    });
+
+    test('parses snake_case backend fields used by web summaries', () async {
+      final api = _SpinStatsApiService({
+        'today_count': 4,
+        'weekly_count': 12,
+        'total_spins': 44,
+        'daily_limit': 5,
+        'spins_remaining': 1,
+        'can_spin': true,
+      });
+      final stats = await RewardsApiService(api).getSpinStats('player-2');
+
+      expect(stats.dailyCount, 4);
+      expect(stats.weeklyCount, 12);
+      expect(stats.totalSpins, 44);
+      expect(stats.maxSpinsPerDay, 5);
+      expect(stats.spinsRemainingToday, 1);
+      expect(stats.canSpin, isTrue);
+    });
+  });
 
   group('RewardsApiService (stub)', () {
     late RewardsApiService svc;

@@ -149,6 +149,19 @@ void main() {
       expect(captured?.path, '/auth/link/qr/status/mytoken');
     });
 
+    test('URL-encodes QR token path segment', () async {
+      Uri? captured;
+      final svc = _svc((req) async {
+        captured = req.url;
+        return _json({'status': 'pending'});
+      });
+      await svc.pollQrStatus('token/with spaces?and=plus+');
+      expect(
+        captured?.toString(),
+        'https://api.test/auth/link/qr/status/token%2Fwith%20spaces%3Fand%3Dplus%2B',
+      );
+    });
+
     test('throws WebLinkException on HTTP error', () {
       final svc = _svc((_) async => _error(404));
       expect(svc.pollQrStatus('t'), throwsA(isA<WebLinkException>()));

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../core/zxing/common/binary_bitmap.dart';
 import '../core/zxing/common/bit_matrix.dart';
@@ -29,12 +30,18 @@ class QrScannerController {
   }
 
   Future<void> initialize() async {
+    if (kIsWeb) return;
+
     // Avoid double-init if initialize gets called more than once.
     if (_cameraController != null) {
       if (_cameraController!.value.isInitialized) return;
     }
 
     final cameras = await availableCameras();
+    if (cameras.isEmpty) {
+      throw StateError('No cameras available for QR scanning.');
+    }
+
     final rearCamera = cameras.firstWhere(
       (cam) => cam.lensDirection == CameraLensDirection.back,
       orElse: () => cameras.first,

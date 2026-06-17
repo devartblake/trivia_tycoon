@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'synaptix_toast_route.dart' as route;
 import 'toast_theme_manager.dart';
 
@@ -137,17 +136,10 @@ class SynaptixToast<T> extends StatefulWidget {
   final String? soundEffect;
   final SynaptixThemeEvent themeEvent;
 
-  final ValueNotifier<route.SynaptixToastRoute<T?>?> _toastRouteNotifier =
-      ValueNotifier<route.SynaptixToastRoute<T?>?>(null);
+  final ValueNotifier<route.SynaptixToastRoute<T>?> _toastRouteNotifier =
+      ValueNotifier<route.SynaptixToastRoute<T>?>(null);
 
   Future<T?> show(BuildContext context) async {
-    onShow?.call();
-    if (soundEffect != null) {
-      final player = AudioPlayer();
-      await player.setAsset(soundEffect!);
-      unawaited(player.play());
-    }
-
     if (!context.mounted) return null;
     final toastRoute = route.showSynaptixToast<T>(
       context: context,
@@ -155,8 +147,7 @@ class SynaptixToast<T> extends StatefulWidget {
     );
     _toastRouteNotifier.value = toastRoute;
 
-    return await Navigator.of(context, rootNavigator: false)
-        .push(toastRoute as Route<T>);
+    return Navigator.of(context, rootNavigator: true).push<T>(toastRoute);
   }
 
   Future<T?> dismiss([T? result]) async {
@@ -170,6 +161,7 @@ class SynaptixToast<T> extends StatefulWidget {
       return toastRoute.completed;
     } else if (toastRoute.isActive) {
       toastRoute.navigator!.removeRoute(toastRoute);
+      return toastRoute.completed;
     }
 
     return null;
@@ -186,7 +178,7 @@ class SynaptixToast<T> extends StatefulWidget {
       _toastRouteNotifier.value?.currentStatus == SynaptixToastStatus.isHiding;
 
   @override
-  State<SynaptixToast> createState() => _SynaptixToastState<T?>();
+  State<SynaptixToast<T>> createState() => _SynaptixToastState<T>();
 }
 
 class _SynaptixToastState<K extends Object?> extends State<SynaptixToast<K>>

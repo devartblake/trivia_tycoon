@@ -69,16 +69,29 @@ class _LinkCodeScreenState extends ConsumerState<LinkCodeScreen> {
   }
 
   void _startCountdown() {
+    _countdownTimer?.cancel();
+    if (_secondsLeft <= 0) {
+      setState(() => _errorMessage = 'Code expired. Generate a new one.');
+      return;
+    }
+
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
       }
-      setState(() => _secondsLeft--);
-      if (_secondsLeft <= 0) {
+
+      final nextSeconds = _secondsLeft - 1;
+      if (nextSeconds <= 0) {
         timer.cancel();
-        setState(() => _errorMessage = 'Code expired. Generate a new one.');
+        setState(() {
+          _secondsLeft = 0;
+          _errorMessage = 'Code expired. Generate a new one.';
+        });
+        return;
       }
+
+      setState(() => _secondsLeft = nextSeconds);
     });
   }
 

@@ -7,10 +7,10 @@ import 'package:just_audio/just_audio.dart';
 import 'synaptix_toast.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
-class SynaptixToastRoute<T> extends OverlayRoute<T> {
-  final SynaptixToast tycoonToast;
+class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
+  final SynaptixToast<T> tycoonToast;
   final Builder _builder;
-  final Completer<T> _transitionCompleter = Completer<T>();
+  final Completer<T?> _transitionCompleter = Completer<T?>();
   final SynaptixToastStatusCallback? _onStatusChanged;
 
   Animation<double>? _filterBlurAnimation;
@@ -177,8 +177,11 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
               : DismissDirection.down),
       key: UniqueKey(),
       onDismissed: (_) {
-        navigator?.removeRoute(this);
         tycoonToast.onDismiss?.call();
+        _timer?.cancel();
+        if (isActive) {
+          navigator?.removeRoute(this);
+        }
       },
       dismissThresholds: const {
         DismissDirection.up: 0.3,
@@ -216,7 +219,7 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
 
     // Play sound effect
     if (tycoonToast.soundEffect != null) {
-      _playSound(tycoonToast.soundEffect!);
+      unawaited(_playSound(tycoonToast.soundEffect!));
     }
   }
 
@@ -329,9 +332,14 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
   void _configureTimer() {
     if (tycoonToast.duration != null) {
       _timer = Timer(tycoonToast.duration!, () {
-        if (navigator != null && navigator!.canPop()) {
-          tycoonToast.onAutoDismiss?.call();
-          navigator!.pop();
+        final routeNavigator = navigator;
+        if (routeNavigator == null || !isActive) return;
+
+        tycoonToast.onAutoDismiss?.call();
+        if (isCurrent) {
+          routeNavigator.pop();
+        } else {
+          routeNavigator.removeRoute(this);
         }
       });
     }
@@ -356,15 +364,15 @@ class SynaptixToastRoute<T> extends OverlayRoute<T> {
     super.dispose();
   }
 
-  Future<T> get completed => _transitionCompleter.future;
+  Future<T?> get completed => _transitionCompleter.future;
 }
 
-SynaptixToastRoute<T> showSynaptixToast<T>({
+SynaptixToastRoute<T> showSynaptixToast<T extends Object?>({
   required BuildContext context,
-  required SynaptixToast toast,
+  required SynaptixToast<T> toast,
 }) {
   return SynaptixToastRoute<T>(
     tycoonToast: toast,
-    settings: const RouteSettings(name: '/synaptixToastRoute'),
+    settings: const RouteSettings(name: synaptixToastRouteName),
   );
 }

@@ -1,15 +1,21 @@
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
-import 'package:trivia_tycoon/screens/rewards/widgets/reward_stepper_slider_widget.dart';
+import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast_service.dart';
+
 import '../../game/analytics/services/analytics_service.dart';
 import '../../game/models/reward_step_models.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/spin_providers.dart';
+import '../../ui_components/spin_wheel/models/spin_system_models.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart'
-    show SpinStatistics;
+    show SpinStatistics, SpinTracker;
 import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
+import '../../ui_components/spin_wheel/ui/widgets/wheel_widget.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class SpinEarnScreen extends ConsumerStatefulWidget {
@@ -21,26 +27,28 @@ class SpinEarnScreen extends ConsumerStatefulWidget {
 
 class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     with TickerProviderStateMixin {
-  late AnimationController _wheelController;
-  late AnimationController _headerController;
+  late final AnimationController _wheelController;
+  late final AnimationController _headerController;
 
-  late Animation<double> _wheelAnimation;
-  late Animation<double> _headerAnimation;
-  late Animation<Offset> _slideAnimation;
+  late final Animation<double> _wheelAnimation;
+  late final Animation<double> _headerAnimation;
+  late final Animation<Offset> _slideAnimation;
 
+  Timer? _clockTimer;
   bool _isLoading = true;
+  bool _segmentsLoading = true;
 
-  // Spin statistics
   int _todaySpinCount = 0;
   int _weeklySpinCount = 0;
   int _totalSpins = 0;
   int _spinsRemaining = 0;
   int _dailyLimit = 5;
 
-  // Reward progress
-  double _currentSpinSliderValue = 20.0;
+  double _currentSpinSliderValue = 0.0;
+  Duration _dailyResetRemaining = Duration.zero;
+  Duration _cooldownRemaining = Duration.zero;
+  List<WheelSegment> _segments = const [];
 
-  // Analytics
   AnalyticsService? _analytics;
   DateTime? _screenEnteredTime;
 
@@ -49,15 +57,22 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     super.initState();
     _screenEnteredTime = DateTime.now();
     _initAnimations();
-    _loadSpinData().then((_) {
-      // Show spin ready toast after data loads
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (mounted) {
-          _checkAndShowSpinReadyToast();
-        }
-      });
+    _startClock();
+    unawaited(_loadInitialData());
+    unawaited(_trackScreenView());
+  }
+
+  Future<void> _loadInitialData() async {
+    await Future.wait([
+      _loadSpinData(),
+      _loadSegments(),
+    ]);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        unawaited(_checkAndShowSpinReadyToast());
+      }
     });
-    _trackScreenView();
   }
 
   void _initAnimations() {
@@ -88,7 +103,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     ));
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.5),
+      begin: const Offset(0, 0.25),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _headerController,
@@ -98,6 +113,22 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     _headerController.forward();
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) _wheelController.forward();
+    });
+  }
+
+  void _startClock() {
+    _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      unawaited(_refreshTimers());
+    });
+    unawaited(_refreshTimers());
+  }
+
+  Future<void> _refreshTimers() async {
+    final cooldown = await SpinTracker.timeLeft();
+    if (!mounted) return;
+    setState(() {
+      _dailyResetRemaining = _timeUntilTomorrow();
+      _cooldownRemaining = cooldown;
     });
   }
 
@@ -119,6 +150,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
           _dailyLimit = stats.maxSpinsPerDay;
           _spinsRemaining = stats.spinsRemainingToday;
           _currentSpinSliderValue = results[1] as double;
+          _cooldownRemaining = stats.timeUntilNextSpin;
           _isLoading = false;
         });
 
@@ -135,29 +167,41 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     }
   }
 
-  Future<void> _checkAndShowSpinReadyToast() async {
-    final canSpin = await AppSettings.canSpinToday();
-    final spinsRemaining = await AppSettings.getRemainingSpinsToday();
-    final rewardPoints = await AppSettings.getSpinRewardPoints();
+  Future<void> _loadSegments() async {
+    try {
+      final segments = await ref.read(segmentLoaderProvider).loadSegments();
+      if (!mounted) return;
+      setState(() {
+        _segments = segments;
+        _segmentsLoading = false;
+      });
+    } catch (e) {
+      LogManager.debug('Failed to load spin segments: $e');
+      if (!mounted) return;
+      setState(() {
+        _segmentsLoading = false;
+      });
+      await _trackError('load_spin_segments_failed', e.toString());
+    }
+  }
 
-    if (canSpin && spinsRemaining > 0 && mounted) {
-      // Show premium toast
+  Future<void> _checkAndShowSpinReadyToast() async {
+    if (_spinsRemaining > 0 && mounted) {
       await PremiumSpinReadyToast.show(
         context: context,
         onSpinNow: _navigateToFullWheelScreen,
-        spinsRemaining: spinsRemaining,
-        rewardPoints: rewardPoints.toInt(),
-        bonusMessage: spinsRemaining == 5 ? '🎉 All spins available!' : null,
+        spinsRemaining: _spinsRemaining,
+        rewardPoints: _currentSpinSliderValue.toInt(),
+        bonusMessage:
+            _spinsRemaining >= _dailyLimit ? 'All free spins available!' : null,
       );
     }
   }
 
-  /// Checks and resets daily/weekly counts if needed
   Future<void> _checkAndResetDailyCounts() async {
     final lastSpinDate = await AppSettings.getLastSpinDate();
     final now = DateTime.now();
 
-    // Reset daily count if it's a new day
     if (lastSpinDate == null || !_isSameDay(lastSpinDate, now)) {
       await AppSettings.resetDailySpinCount();
       await _trackAnalyticsEvent('daily_spin_reset', {
@@ -166,7 +210,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       });
     }
 
-    // Reset weekly count if it's a new week
     final lastWeeklyReset = await AppSettings.getLastWeeklyResetDate();
     if (lastWeeklyReset == null || !_isSameWeek(lastWeeklyReset, now)) {
       await AppSettings.resetWeeklySpinCount();
@@ -185,15 +228,11 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   }
 
   bool _isSameWeek(DateTime date1, DateTime date2) {
-    // Week starts on Monday
     final startOfWeek1 = date1.subtract(Duration(days: date1.weekday - 1));
     final startOfWeek2 = date2.subtract(Duration(days: date2.weekday - 1));
     return _isSameDay(startOfWeek1, startOfWeek2);
   }
 
-  // ============ ANALYTICS METHODS ============
-
-  /// Track screen view
   Future<void> _trackScreenView() async {
     await _trackAnalyticsEvent('screen_view', {
       'screen_name': 'SpinEarnScreen',
@@ -203,7 +242,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     });
   }
 
-  /// Track when data is successfully loaded
   Future<void> _trackDataLoaded() async {
     await _trackAnalyticsEvent('spin_data_loaded', {
       'today_spin_count': _todaySpinCount,
@@ -214,9 +252,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     });
   }
 
-  /// Track analytics event
   Future<void> _trackAnalyticsEvent(
-      String eventName, Map<String, dynamic> data) async {
+    String eventName,
+    Map<String, dynamic> data,
+  ) async {
     try {
       _analytics ??= ref.read(analyticsServiceProvider);
       await _analytics?.trackEvent(eventName, data);
@@ -225,9 +264,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     }
   }
 
-  /// Track engagement
-  Future<void> _trackEngagement(String action,
-      {Map<String, dynamic>? properties}) async {
+  Future<void> _trackEngagement(
+    String action, {
+    Map<String, dynamic>? properties,
+  }) async {
     try {
       _analytics ??= ref.read(analyticsServiceProvider);
       await _analytics?.trackEngagement(
@@ -240,7 +280,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     }
   }
 
-  /// Track error
   Future<void> _trackError(String errorType, String errorMessage) async {
     await _trackAnalyticsEvent('spin_screen_error', {
       'error_type': errorType,
@@ -249,9 +288,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     });
   }
 
-  /// Track user interaction
-  Future<void> _trackUserAction(String action,
-      {Map<String, dynamic>? additionalData}) async {
+  Future<void> _trackUserAction(
+    String action, {
+    Map<String, dynamic>? additionalData,
+  }) async {
     await _trackEngagement('user_action', properties: {
       'action': action,
       'spins_remaining': _spinsRemaining,
@@ -263,12 +303,12 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
   @override
   void dispose() {
     _trackScreenExit();
+    _clockTimer?.cancel();
     _headerController.dispose();
     _wheelController.dispose();
     super.dispose();
   }
 
-  /// Track screen exit with duration
   Future<void> _trackScreenExit() async {
     if (_screenEnteredTime != null) {
       final duration = DateTime.now().difference(_screenEnteredTime!);
@@ -284,138 +324,65 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(theme),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: _isLoading ? _buildLoadingState() : _buildContent(theme),
+      backgroundColor: const Color(0xFF070725),
+      body: Stack(
+        children: [
+          const Positioned.fill(child: _ArcadeBackdrop()),
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: constraints.maxWidth >= 900 ? 28 : 16,
+                    vertical: 16,
+                  ),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight - 32,
+                    ),
+                    child: _isLoading
+                        ? _buildLoadingState()
+                        : _buildResponsiveContent(constraints.maxWidth),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAppBar(ThemeData theme) {
-    return SliverAppBar(
-      expandedHeight: 120,
-      floating: false,
-      pinned: true,
-      elevation: 0,
-      backgroundColor: theme.colorScheme.primary,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.primary.withValues(alpha: 0.8),
-              ],
-            ),
-          ),
-          child: SafeArea(
-            child: AnimatedBuilder(
-              animation: _headerAnimation,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: _headerAnimation.value,
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.casino,
-                          size: 32,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Spin & Earn',
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '$_spinsRemaining spins remaining today',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.9),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-      leading: IconButton(
-        onPressed: () async {
-          await _trackUserAction('back_button_pressed');
-          if (!mounted) return;
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/rewards');
-          }
-        },
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () async {
-            await _trackUserAction('settings_button_pressed');
-            if (!mounted) return;
-            _showSettingsDialog(theme);
-          },
-          icon: const Icon(Icons.settings, color: Colors.white),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildShowSpinToastButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton.icon(
-        onPressed: _checkAndShowSpinReadyToast,
-        icon: const Icon(Icons.casino),
-        label: const Text('Check Spin Status'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildLoadingState() {
     return SizedBox(
-      height: 400,
-      child: const Center(
+      height: 520,
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text(
-              'Loading spin wheel...',
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFFFD95A), width: 4),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(18),
+                child: CircularProgressIndicator(
+                  color: Color(0xFFFFD95A),
+                  strokeWidth: 4,
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            const Text(
+              'Loading spin rewards',
               style: TextStyle(
+                color: Colors.white,
                 fontSize: 16,
-                color: Colors.grey,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
@@ -424,263 +391,745 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     );
   }
 
-  Widget _buildContent(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildStatsSection(theme),
-          const SizedBox(height: 24),
-          _buildSpinPointsSlider(theme),
-          const SizedBox(height: 24),
-          Flexible(
-            child: _buildWheelSection(theme),
+  Widget _buildResponsiveContent(double maxWidth) {
+    final isWide = maxWidth >= 1060;
+    final rewardSteps = ref.watch(spinRewardStepsProvider).maybeWhen(
+          data: (steps) => steps,
+          orElse: () => const <RewardStep>[],
+        );
+    final nextReward = _nextRewardStep(rewardSteps);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildTopBar(),
+        const SizedBox(height: 18),
+        _buildScoreStrip(isWide: isWide),
+        const SizedBox(height: 20),
+        if (isWide)
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  width: 286,
+                  child: Column(
+                    children: [
+                      _buildCountdownPanel(),
+                      const SizedBox(height: 16),
+                      _buildStatusPanel(),
+                      const SizedBox(height: 16),
+                      _buildProgressPanel(nextReward),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 24),
+                Expanded(
+                  child: _buildWheelStage(maxWidth: 560),
+                ),
+                const SizedBox(width: 24),
+                SizedBox(
+                  width: 322,
+                  child: Column(
+                    children: [
+                      _buildGiveawayPanel(nextReward),
+                      const SizedBox(height: 16),
+                      _buildSpinControls(),
+                      const SizedBox(height: 16),
+                      _buildTargetPanel(nextReward),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        else ...[
+          _buildWheelStage(maxWidth: maxWidth),
+          const SizedBox(height: 18),
+          _buildSpinControls(),
+          const SizedBox(height: 16),
+          _buildCountdownPanel(),
+          const SizedBox(height: 16),
+          _buildGiveawayPanel(nextReward),
+          const SizedBox(height: 16),
+          _buildTargetPanel(nextReward),
+          const SizedBox(height: 16),
+          _buildStatusPanel(),
+          const SizedBox(height: 16),
+          _buildProgressPanel(nextReward),
+        ],
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildTopBar() {
+    return AnimatedBuilder(
+      animation: _headerAnimation,
+      builder: (context, child) {
+        return FadeTransition(
+          opacity: _headerAnimation,
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: child,
           ),
-          const SizedBox(height: 40),
+        );
+      },
+      child: Row(
+        children: [
+          _buildIconButton(
+            icon: Icons.arrow_back_rounded,
+            onPressed: () async {
+              await _trackUserAction('back_button_pressed');
+              if (!mounted) return;
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/rewards');
+              }
+            },
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Spin & Earn',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Color(0xFFFFD95A),
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Text(
+                  'Free cooldown spins with guaranteed virtual rewards',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Color(0xFFD8DBFF),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          _buildIconButton(
+            icon: Icons.history_rounded,
+            onPressed: () async {
+              await _trackUserAction('history_button_pressed');
+              if (!mounted) return;
+              _showHistoryDialog(Theme.of(context));
+            },
+          ),
+          const SizedBox(width: 8),
+          _buildIconButton(
+            icon: Icons.settings_rounded,
+            onPressed: () async {
+              await _trackUserAction('settings_button_pressed');
+              if (!mounted) return;
+              _showSettingsDialog(Theme.of(context));
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatsSection(ThemeData theme) {
+  Widget _buildIconButton({
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      width: 44,
+      height: 44,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: const Color(0xFF15104B).withValues(alpha: 0.92),
+          border: Border.all(color: const Color(0xFFFFD95A), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.22),
+              blurRadius: 14,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: IconButton(
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+          onPressed: onPressed,
+          icon: Icon(icon, color: Colors.white, size: 22),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildScoreStrip({required bool isWide}) {
+    final items = [
+      _ScoreItem(
+        label: 'Free Spins Left',
+        value: '$_spinsRemaining',
+        icon: Icons.casino_rounded,
+      ),
+      _ScoreItem(
+        label: 'Points Won',
+        value: _formatNumber(_currentSpinSliderValue.round()),
+        icon: Icons.stars_rounded,
+      ),
+      _ScoreItem(
+        label: 'Total Spins',
+        value: _formatNumber(_totalSpins),
+        icon: Icons.emoji_events_rounded,
+      ),
+    ];
+
+    if (!isWide) {
+      return Column(
+        children: [
+          for (int i = 0; i < items.length; i++) ...[
+            _buildScorePill(items[i]),
+            if (i != items.length - 1) const SizedBox(height: 10),
+          ],
+        ],
+      );
+    }
+
+    return Row(
+      children: [
+        for (int i = 0; i < items.length; i++) ...[
+          Expanded(child: _buildScorePill(items[i])),
+          if (i != items.length - 1) const SizedBox(width: 16),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildScorePill(_ScoreItem item) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      height: 58,
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFC50820), Color(0xFFFF3849), Color(0xFF8A0419)],
+        ),
+        border: Border.all(color: const Color(0xFFFFC83D), width: 1.2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withValues(alpha: 0.28),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Text(
-                'Your Spin Stats',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+          Icon(item.icon, color: const Color(0xFFFFE781), size: 22),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              item.label.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Color(0xFFFFE781),
+                fontSize: 13,
+                fontWeight: FontWeight.w900,
               ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () async {
-                  await _trackUserAction('history_button_pressed');
-                  _showHistoryDialog(theme);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.history,
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _buildStatItem(
-                  icon: Icons.today,
-                  label: 'Today',
-                  value: '$_todaySpinCount/$_dailyLimit',
-                  color: Colors.blue,
-                ),
-              ),
-              Expanded(
-                child: _buildStatItem(
-                  icon: Icons.date_range,
-                  label: 'This Week',
-                  value: '$_weeklySpinCount',
-                  color: Colors.green,
-                ),
-              ),
-              Expanded(
-                child: _buildStatItem(
-                  icon: Icons.timeline,
-                  label: 'Total',
-                  value: '$_totalSpins',
-                  color: Colors.purple,
-                ),
-              ),
-            ],
+          const SizedBox(width: 8),
+          Text(
+            item.value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStatItem({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-  }) {
+  Widget _buildWheelStage({required double maxWidth}) {
+    final wheelSize = maxWidth.clamp(320.0, 560.0);
+
+    return AnimatedBuilder(
+      animation: _wheelAnimation,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _wheelAnimation.value.clamp(0.0, 1.0),
+          child: child,
+        );
+      },
+      child: Container(
+        constraints: BoxConstraints(maxWidth: wheelSize + 72),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(28),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF7B310A), Color(0xFFFFC94E)],
+                ),
+                border: Border.all(color: const Color(0xFFFFF0A3), width: 2),
+              ),
+              child: const Text(
+                'SPIN TIL YOU WIN',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF401000),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: Container(
+                width: wheelSize,
+                height: wheelSize,
+                padding: const EdgeInsets.all(13),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const SweepGradient(
+                    colors: [
+                      Color(0xFFFFE98A),
+                      Color(0xFF9A550B),
+                      Color(0xFFFFC93D),
+                      Color(0xFFFFF1A8),
+                      Color(0xFFFFE98A),
+                    ],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFFD84D).withValues(alpha: 0.45),
+                      blurRadius: 28,
+                      spreadRadius: 2,
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.4),
+                      blurRadius: 24,
+                      offset: const Offset(0, 16),
+                    ),
+                  ],
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: const Color(0xFF1A0944),
+                    border: Border.all(
+                      color: const Color(0xFFFFF3A6),
+                      width: 3,
+                    ),
+                  ),
+                  child: _segmentsLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFFFFD95A),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: _spinsRemaining > 0
+                              ? _navigateToFullWheelScreen
+                              : _handleNoSpinsRemaining,
+                          child: WheelWidget(
+                            segments: _segments,
+                            size: wheelSize - 44,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSpinControls() {
+    final isReady = _spinsRemaining > 0;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color, size: 20),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey.shade600,
+        _buildBalanceBadge(),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          height: 72,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(36),
+              gradient: LinearGradient(
+                colors: isReady
+                    ? const [Color(0xFFFF5967), Color(0xFFC9001A)]
+                    : const [Color(0xFF7D7896), Color(0xFF4A4663)],
+              ),
+              border: Border.all(color: const Color(0xFFFFF2A0), width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.36),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: TextButton.icon(
+              onPressed: isReady
+                  ? _navigateToFullWheelScreen
+                  : _handleNoSpinsRemaining,
+              icon: const Icon(Icons.casino_rounded, size: 30),
+              label: Text(isReady ? 'SPIN' : 'COOLDOWN'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(36),
+                ),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSpinPointsSlider(ThemeData theme) {
-    final rewardSteps = ref.watch(spinRewardStepsProvider).maybeWhen(
-          data: (steps) => steps,
-          orElse: () => const <RewardStep>[],
-        );
-    final maxPoints = rewardSteps.isEmpty ? 200 : rewardSteps.last.pointValue;
+  Widget _buildBalanceBadge() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: [Color(0xFFFFEB67), Color(0xFFFFAF11)],
+            ),
+          ),
+          child: const Icon(
+            Icons.bolt_rounded,
+            color: Color(0xFF7A1A00),
+            size: 28,
+          ),
+        ),
+        const SizedBox(width: 10),
+        const Text(
+          'FREE SPINS',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Container(
+          width: 90,
+          height: 34,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: const Color(0xFF491075),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: const Color(0xFFFFD95A), width: 2),
+          ),
+          child: Text(
+            '$_spinsRemaining / $_dailyLimit',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+  Widget _buildCountdownPanel() {
+    final parts = _durationParts(_dailyResetRemaining);
+    return _ArcadePanel(
+      title: 'Daily Reset In',
+      icon: Icons.timer_rounded,
+      accent: const Color(0xFFFFD95A),
+      child: Row(
+        children: [
+          Expanded(child: _buildTimeBox(parts.days.toString(), 'Days')),
+          const SizedBox(width: 8),
+          Expanded(child: _buildTimeBox(parts.hours.toString(), 'Hrs')),
+          const SizedBox(width: 8),
+          Expanded(child: _buildTimeBox(parts.minutes.toString(), 'Mins')),
+          const SizedBox(width: 8),
+          Expanded(child: _buildTimeBox(parts.seconds.toString(), 'Sec')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeBox(String value, String label) {
+    return Column(
+      children: [
+        Container(
+          height: 50,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: const LinearGradient(
+              colors: [Color(0xFFB91727), Color(0xFF620721)],
+            ),
+            border: Border.all(color: const Color(0xFFFFD95A), width: 2.5),
+          ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value.padLeft(2, '0'),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label.toUpperCase(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatusPanel() {
+    return _ArcadePanel(
+      title: 'Spin Status',
+      icon: Icons.leaderboard_rounded,
+      accent: const Color(0xFF58E0FF),
+      child: Column(
+        children: [
+          _buildMeterRow('Today', '$_todaySpinCount / $_dailyLimit'),
+          const SizedBox(height: 10),
+          _buildMeterRow('This Week', _formatNumber(_weeklySpinCount)),
+          const SizedBox(height: 10),
+          _buildMeterRow('Lifetime', _formatNumber(_totalSpins)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMeterRow(String label, String value) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label.toUpperCase(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Color(0xFFEFEFFF),
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        Container(
+          constraints: const BoxConstraints(minWidth: 88),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            color: const Color(0xFFFFB917),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.16),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Color(0xFF4D1600),
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGiveawayPanel(RewardStep? nextReward) {
+    return _ArcadePanel(
+      title: 'Giveaway',
+      icon: Icons.card_giftcard_rounded,
+      accent: const Color(0xFFFFC83D),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 158,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFFF06C), Color(0xFFFFB012)],
+              ),
+              border: Border.all(color: const Color(0xFFFFF6A7), width: 2),
+            ),
+            child: Icon(
+              nextReward?.icon ?? Icons.card_giftcard_rounded,
+              size: 66,
+              color: const Color(0xFF7B2500),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            nextReward?.description ?? 'Loading next reward',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTargetPanel(RewardStep? nextReward) {
+    final target = _targetPoints(nextReward);
+    final progress =
+        target <= 0 ? 1.0 : (_currentSpinSliderValue / target).clamp(0.0, 1.0);
+
+    return _ArcadePanel(
+      title: 'Target Score',
+      icon: Icons.flag_rounded,
+      accent: const Color(0xFFFF9E25),
+      warm: true,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(
+            nextReward == null
+                ? 'All reward targets cleared'
+                : 'Reach ${_formatNumber(target.round())} points to unlock',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF1B103B),
+              fontSize: 16,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              minHeight: 18,
+              value: progress,
+              backgroundColor: const Color(0xFF6D1430),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color(0xFFFFF06C),
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
           Row(
             children: [
-              const Icon(
-                Icons.emoji_events,
-                color: Colors.amber,
-                size: 20,
+              Expanded(
+                child: _buildMiniStat(
+                  label: 'Current',
+                  value: _formatNumber(_currentSpinSliderValue.round()),
+                ),
               ),
-              const SizedBox(width: 8),
-              Text(
-                'Reward Progress',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+              const SizedBox(width: 10),
+              Expanded(
+                child: _buildMiniStat(
+                  label: 'Timer',
+                  value: _cooldownRemaining > Duration.zero
+                      ? _formatClock(_cooldownRemaining)
+                      : 'Ready',
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.cyan.withValues(alpha: 0.1),
-                  Colors.blue.withValues(alpha: 0.1)
-                ],
-              ),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.cyan.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                Text(
-                  'Points',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.cyan[700],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  '${_currentSpinSliderValue.toInt()}/${maxPoints.toInt()}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressPanel(RewardStep? nextReward) {
+    final target = _targetPoints(nextReward);
+    final progress =
+        target <= 0 ? 1.0 : (_currentSpinSliderValue / target).clamp(0.0, 1.0);
+
+    return _ArcadePanel(
+      title: 'Reward Progress',
+      icon: Icons.stars_rounded,
+      accent: const Color(0xFFB25CFF),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            nextReward?.description ?? 'All rewards unlocked',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 20),
-          if (rewardSteps.isEmpty)
-            const SizedBox(
-              height: 120,
-              child: Center(child: CircularProgressIndicator()),
-            )
-          else
-            RewardStepperSlider(
-              value: _currentSpinSliderValue,
-              onChanged: (value) async {
-                final oldValue = _currentSpinSliderValue;
-                setState(() {
-                  _currentSpinSliderValue = value;
-                });
-
-                // Save to AppSettings
-                await AppSettings.setSpinRewardPoints(value);
-
-                // Track slider interaction
-                await _trackUserAction('reward_slider_changed',
-                    additionalData: {
-                      'old_value': oldValue,
-                      'new_value': value,
-                      'difference': value - oldValue,
-                    });
-              },
-              rewardSteps: rewardSteps,
-              progressColor: Colors.orange,
-              height: 120,
-            ),
-          const SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey[50],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[200]!),
-            ),
-            child: Text(
-              rewardSteps.isEmpty
-                  ? 'Loading reward steps...'
-                  : _getCurrentRewardDescription(rewardSteps),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[700],
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              minHeight: 16,
+              value: progress,
+              backgroundColor: Colors.white.withValues(alpha: 0.18),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                Color(0xFFFFD95A),
               ),
-              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '${_formatNumber(_currentSpinSliderValue.round())} / ${_formatNumber(target.round())}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFFFFE781),
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
             ),
           ),
         ],
@@ -688,147 +1137,92 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
     );
   }
 
-  String _getCurrentRewardDescription(List<RewardStep> rewardSteps) {
-    for (int i = 0; i < rewardSteps.length; i++) {
-      if (_currentSpinSliderValue < rewardSteps[i].pointValue) {
-        final pointsNeeded =
-            rewardSteps[i].pointValue - _currentSpinSliderValue;
-        return 'Next: ${rewardSteps[i].description} (${pointsNeeded.toInt()} points needed)';
-      }
-    }
-    return 'All rewards unlocked!';
-  }
-
-  Widget _buildWheelSection(ThemeData theme) {
-    return AnimatedBuilder(
-      animation: _wheelAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _wheelAnimation.value,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
+  Widget _buildMiniStat({required String label, required String value}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF991525),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFFFD95A), width: 1.5),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.casino,
-                      color: theme.colorScheme.primary,
-                      size: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Try Your Luck!',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  height: 200,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.purple.shade200,
-                        Colors.blue.shade200,
-                        Colors.pink.shade200,
-                        Colors.orange.shade200,
-                      ],
-                      stops: const [0.0, 0.33, 0.66, 1.0],
-                    ),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.purple.withValues(alpha: 0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(100),
-                      onTap: _spinsRemaining > 0
-                          ? _navigateToFullWheelScreen
-                          : _handleNoSpinsRemaining,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 4,
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                _spinsRemaining > 0 ? Icons.casino : Icons.lock,
-                                size: 48,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                _spinsRemaining > 0
-                                    ? 'TAP TO SPIN'
-                                    : 'NO SPINS',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                              Text(
-                                '$_spinsRemaining left',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.9),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  _spinsRemaining > 0
-                      ? 'Tap the wheel to open the full spin experience!'
-                      : 'Come back tomorrow for more spins!',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+              fontSize: 15,
+              fontWeight: FontWeight.w900,
             ),
           ),
-        );
-      },
+          const SizedBox(height: 3),
+          Text(
+            label.toUpperCase(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: Color(0xFFFFE781),
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  RewardStep? _nextRewardStep(List<RewardStep> rewardSteps) {
+    if (rewardSteps.isEmpty) return null;
+    final sorted = [...rewardSteps]
+      ..sort((a, b) => a.pointValue.compareTo(b.pointValue));
+    for (final step in sorted) {
+      if (_currentSpinSliderValue < step.pointValue) return step;
+    }
+    return null;
+  }
+
+  double _targetPoints(RewardStep? nextReward) {
+    if (nextReward != null) return nextReward.pointValue;
+    return math.max(_currentSpinSliderValue, 1);
+  }
+
+  Duration _timeUntilTomorrow() {
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    return tomorrow.difference(now);
+  }
+
+  _DurationParts _durationParts(Duration duration) {
+    final safe = duration.isNegative ? Duration.zero : duration;
+    return _DurationParts(
+      days: safe.inDays,
+      hours: safe.inHours.remainder(24),
+      minutes: safe.inMinutes.remainder(60),
+      seconds: safe.inSeconds.remainder(60),
+    );
+  }
+
+  String _formatClock(Duration duration) {
+    final safe = duration.isNegative ? Duration.zero : duration;
+    final hours = safe.inHours;
+    final minutes = safe.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = safe.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
+  }
+
+  String _formatNumber(int value) {
+    final text = value.toString();
+    final buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      final fromEnd = text.length - i;
+      buffer.write(text[i]);
+      if (fromEnd > 1 && fromEnd % 3 == 1) {
+        buffer.write(',');
+      }
+    }
+    return buffer.toString();
   }
 
   void _handleNoSpinsRemaining() async {
@@ -840,16 +1234,11 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('No spins remaining today! Come back tomorrow.'),
-        backgroundColor: Colors.orange,
-        action: SnackBarAction(
-          label: 'OK',
-          textColor: Colors.white,
-          onPressed: () {},
-        ),
-      ),
+    await SynaptixToastService.info(
+      context: context,
+      title: 'Cooldown Active',
+      message: 'Your next free spin unlocks soon.',
+      duration: const Duration(seconds: 3),
     );
   }
 
@@ -866,10 +1255,10 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       'result': result?.toString(),
     });
 
-    // Invalidate cached provider so all watching widgets get fresh counts.
     if (mounted) {
       ref.invalidate(spinStatisticsProvider);
       await _loadSpinData();
+      unawaited(_refreshTimers());
     }
   }
 
@@ -933,7 +1322,7 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                           ),
                           title: Text(spin['rewardType'] ?? 'Unknown'),
                           subtitle: Text(
-                            'Value: ${spin['rewardValue']} • ${_formatDate(spin['timestamp'])}',
+                            'Value: ${spin['rewardValue']} - ${_formatDate(spin['timestamp'])}',
                           ),
                         );
                       },
@@ -998,11 +1387,13 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                       value: animationEnabled,
                       onChanged: (value) async {
                         await AppSettings.setSpinAnimationEnabled(value);
-                        await _trackUserAction('setting_changed',
-                            additionalData: {
-                              'setting': 'animations',
-                              'new_value': value,
-                            });
+                        await _trackUserAction(
+                          'setting_changed',
+                          additionalData: {
+                            'setting': 'animations',
+                            'new_value': value,
+                          },
+                        );
                         setDialogState(() {
                           animationEnabled = value;
                         });
@@ -1014,11 +1405,13 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                       value: soundEnabled,
                       onChanged: (value) async {
                         await AppSettings.setSpinSoundEnabled(value);
-                        await _trackUserAction('setting_changed',
-                            additionalData: {
-                              'setting': 'sound_effects',
-                              'new_value': value,
-                            });
+                        await _trackUserAction(
+                          'setting_changed',
+                          additionalData: {
+                            'setting': 'sound_effects',
+                            'new_value': value,
+                          },
+                        );
                         setDialogState(() {
                           soundEnabled = value;
                         });
@@ -1030,18 +1423,27 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                       value: hapticEnabled,
                       onChanged: (value) async {
                         await AppSettings.setSpinHapticEnabled(value);
-                        await _trackUserAction('setting_changed',
-                            additionalData: {
-                              'setting': 'haptic_feedback',
-                              'new_value': value,
-                            });
+                        await _trackUserAction(
+                          'setting_changed',
+                          additionalData: {
+                            'setting': 'haptic_feedback',
+                            'new_value': value,
+                          },
+                        );
                         setDialogState(() {
                           hapticEnabled = value;
                         });
                       },
                     ),
                     const SizedBox(height: 20),
-                    _buildShowSpinToastButton(),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _checkAndShowSpinReadyToast,
+                        icon: const Icon(Icons.casino),
+                        label: const Text('Check Spin Status'),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -1077,3 +1479,199 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
   return ref.watch(serviceManagerProvider).analyticsService;
 });
+
+class _ScoreItem {
+  const _ScoreItem({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+}
+
+class _DurationParts {
+  const _DurationParts({
+    required this.days,
+    required this.hours,
+    required this.minutes,
+    required this.seconds,
+  });
+
+  final int days;
+  final int hours;
+  final int minutes;
+  final int seconds;
+}
+
+class _ArcadePanel extends StatelessWidget {
+  const _ArcadePanel({
+    required this.title,
+    required this.icon,
+    required this.accent,
+    required this.child,
+    this.warm = false,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color accent;
+  final Widget child;
+  final bool warm;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: warm
+            ? const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFFFFD24C), Color(0xFFE48908)],
+              )
+            : const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF24105C), Color(0xFF5A1278)],
+              ),
+        border: Border.all(color: accent, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.26),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: accent, size: 22),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: warm ? const Color(0xFF4D1600) : accent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class _ArcadeBackdrop extends StatelessWidget {
+  const _ArcadeBackdrop();
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF12145A),
+            Color(0xFF2C126B),
+            Color(0xFF10012B),
+          ],
+        ),
+      ),
+      child: Stack(
+        children: const [
+          Positioned.fill(child: CustomPaint(painter: _StarfieldPainter())),
+          Positioned.fill(child: CustomPaint(painter: _ArcadeGridPainter())),
+        ],
+      ),
+    );
+  }
+}
+
+class _StarfieldPainter extends CustomPainter {
+  const _StarfieldPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final random = math.Random(11);
+    final paint = Paint()..style = PaintingStyle.fill;
+
+    for (int i = 0; i < 120; i++) {
+      final dx = random.nextDouble() * size.width;
+      final dy = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 1.7 + 0.4;
+      final colors = [
+        const Color(0xFF78E8FF),
+        const Color(0xFFFFF0A3),
+        const Color(0xFFD6B2FF),
+      ];
+      paint.color = colors[i % colors.length].withValues(alpha: 0.75);
+      canvas.drawCircle(Offset(dx, dy), radius, paint);
+    }
+
+    final streakPaint = Paint()
+      ..color = const Color(0xFFFF4BE1).withValues(alpha: 0.28)
+      ..strokeWidth = 2;
+    for (int i = 0; i < 10; i++) {
+      final y = size.height * (0.18 + i * 0.065);
+      canvas.drawLine(
+        Offset(size.width * 0.15, y),
+        Offset(size.width * 0.85, y + size.height * 0.24),
+        streakPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _ArcadeGridPainter extends CustomPainter {
+  const _ArcadeGridPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final horizon = size.height * 0.58;
+    final bottom = size.height;
+    final centerX = size.width / 2;
+    final paint = Paint()
+      ..color = const Color(0xFF5DE2FF).withValues(alpha: 0.16)
+      ..strokeWidth = 1;
+
+    for (int i = -9; i <= 9; i++) {
+      final x = centerX + i * size.width * 0.08;
+      canvas.drawLine(
+        Offset(centerX, horizon),
+        Offset(x, bottom),
+        paint,
+      );
+    }
+
+    for (int i = 0; i < 13; i++) {
+      final t = i / 12;
+      final y = horizon + math.pow(t, 1.8) * (bottom - horizon);
+      canvas.drawLine(
+          Offset(0, y.toDouble()), Offset(size.width, y.toDouble()), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}

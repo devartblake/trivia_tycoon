@@ -4,7 +4,7 @@ import 'toast_theme_manager.dart';
 
 class SynaptixToastHelper {
   /// Get a modern success notification toast
-  static SynaptixToast createSuccess({
+  static SynaptixToast<void> createSuccess({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 3),
@@ -39,7 +39,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a modern information notification toast
-  static SynaptixToast createInformation({
+  static SynaptixToast<void> createInformation({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 3),
@@ -74,7 +74,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a modern error notification toast
-  static SynaptixToast createError({
+  static SynaptixToast<void> createError({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 4),
@@ -109,7 +109,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a modern reward notification toast with special effects
-  static SynaptixToast createReward({
+  static SynaptixToast<void> createReward({
     required String message,
     String? title,
     Duration duration = const Duration(seconds: 4),
@@ -169,7 +169,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a weekly reward toast specifically for the RewardScreen
-  static SynaptixToast createWeeklyReward({
+  static SynaptixToast<void> createWeeklyReward({
     required int day,
     required String rewardType,
     required String rewardAmount,
@@ -289,7 +289,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a toast with custom action button
-  static SynaptixToast createAction({
+  static SynaptixToast<void> createAction({
     required String message,
     required Widget button,
     String? title,
@@ -315,7 +315,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a toast for loading states with progress
-  static SynaptixToast createLoading({
+  static SynaptixToast<void> createLoading({
     required String message,
     String? title,
     Duration? duration,
@@ -359,7 +359,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a toast for user input
-  static SynaptixToast createInputToast({
+  static SynaptixToast<void> createInputToast({
     required Form textForm,
     String? title,
   }) {
@@ -382,7 +382,7 @@ class SynaptixToastHelper {
   }
 
   /// Get a compact notification for quick feedback
-  static SynaptixToast createCompact({
+  static SynaptixToast<void> createCompact({
     required String message,
     IconData? icon,
     Color? color,

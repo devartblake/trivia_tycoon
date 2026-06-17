@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/qr_encoder.dart';
-import 'qr_painter.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class QrCodeWidget extends StatelessWidget {
   final String data;
@@ -19,62 +17,41 @@ class QrCodeWidget extends StatelessWidget {
     this.roundedDots = false,
     this.dotColor = Colors.black,
     this.backgroundColor = Colors.white,
-    this.version = 1,
+    this.version = QrVersions.auto,
     this.padding = 8.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    // DEBUG: Log input data
-    LogManager.debug('=== QrCodeWidget Debug ===');
-    LogManager.debug('Data: $data');
-    LogManager.debug('Data length: ${data.length}');
-    LogManager.debug('Size: $size');
-    LogManager.debug('Padding: $padding');
-
-    // Validate input
     if (data.isEmpty) {
-      LogManager.debug('ERROR: Empty QR data!');
       return _buildErrorWidget('No data provided');
     }
 
-    try {
-      final encoder = QrEncoder();
-      LogManager.debug('Encoder created');
-
-      final matrix = encoder.encode(data);
-      LogManager.debug('Matrix encoded');
-
-      // Check matrix size
-      LogManager.debug('Matrix size: ${matrix.size}');
-      if (matrix.size == 0) {
-        LogManager.debug('ERROR: Matrix size is 0!');
-        return _buildErrorWidget('Encoding failed: empty matrix');
-      }
-
-      LogManager.debug('QR Code ready to paint');
-      LogManager.debug('========================');
-
-      return SizedBox(
-        width: size,
-        height: size,
-        child: Padding(
-          padding: EdgeInsets.all(padding),
-          child: CustomPaint(
-            painter: QrPainter(
-              matrix: matrix,
-              dotColor: dotColor,
-              backgroundColor: backgroundColor,
-              gap: roundedDots ? 2.0 : 0.0,
-            ),
-          ),
+    return SizedBox(
+      width: size,
+      height: size,
+      child: QrImageView(
+        data: data,
+        version: version <= 0 ? QrVersions.auto : version,
+        size: size,
+        padding: EdgeInsets.all(padding),
+        backgroundColor: backgroundColor,
+        eyeStyle: QrEyeStyle(
+          eyeShape: roundedDots ? QrEyeShape.circle : QrEyeShape.square,
+          color: dotColor,
         ),
-      );
-    } catch (e, stackTrace) {
-      LogManager.debug('ERROR: Exception in QrCodeWidget: $e');
-      LogManager.debug('Stack trace: $stackTrace');
-      return _buildErrorWidget('Error: ${e.toString()}');
-    }
+        dataModuleStyle: QrDataModuleStyle(
+          dataModuleShape:
+              roundedDots ? QrDataModuleShape.circle : QrDataModuleShape.square,
+          color: dotColor,
+        ),
+        errorStateBuilder: (context, error) {
+          return _buildErrorWidget(
+            error?.toString() ?? 'Could not generate QR code',
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildErrorWidget(String message) {

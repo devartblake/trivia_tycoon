@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/ui_components/qr_code/services/qr_history_service.dart';
 import 'package:trivia_tycoon/ui_components/qr_code/widgets/qr_scan_preview_modal.dart';
@@ -24,11 +25,12 @@ class QrCameraScanner extends StatefulWidget {
 }
 
 class _QrCameraScannerState extends State<QrCameraScanner> {
-  late CameraController _controller;
+  CameraController? _controller;
   bool _isInitialized = false;
   bool _isProcessing = false;
   bool _torchOn = false;
   bool _isPaused = false;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -37,14 +39,38 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
   }
 
   Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    final rear =
-        cameras.firstWhere((c) => c.lensDirection == CameraLensDirection.back);
-    _controller =
-        CameraController(rear, ResolutionPreset.low, enableAudio: false);
-    await _controller.initialize();
-    await _controller.startImageStream(_processCameraImage);
-    setState(() => _isInitialized = true);
+    if (kIsWeb) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'QR scanning is available in the mobile app.';
+        });
+      }
+      return;
+    }
+
+    try {
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        throw StateError('No cameras available.');
+      }
+
+      final rear = cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.back,
+        orElse: () => cameras.first,
+      );
+      final controller =
+          CameraController(rear, ResolutionPreset.low, enableAudio: false);
+      _controller = controller;
+      await controller.initialize();
+      await controller.startImageStream(_processCameraImage);
+      if (mounted) setState(() => _isInitialized = true);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Camera unavailable: $e';
+        });
+      }
+    }
   }
 
   Future<void> pauseScan() async {
@@ -56,8 +82,11 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
   }
 
   void _toggleTorch() async {
+    final controller = _controller;
+    if (controller == null || !controller.value.isInitialized) return;
+
     _torchOn = !_torchOn;
-    await _controller.setFlashMode(_torchOn ? FlashMode.torch : FlashMode.off);
+    await controller.setFlashMode(_torchOn ? FlashMode.torch : FlashMode.off);
     setState(() {});
   }
 
@@ -121,20 +150,33 @@ class _QrCameraScannerState extends State<QrCameraScanner> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_isInitialized) {
+    if (_errorMessage != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            _errorMessage!,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+
+    final controller = _controller;
+    if (!_isInitialized || controller == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return Stack(
       alignment: Alignment.center,
       children: [
-        CameraPreview(_controller),
+        CameraPreview(controller),
         CustomPaint(
           size: Size(widget.scanBoxSize, widget.scanBoxSize),
           painter: _ScanBoxPainter(),

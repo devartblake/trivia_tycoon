@@ -32,6 +32,8 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
   QrTokenResponse? _token;
   bool _isLoading = false;
   bool _isExpired = false;
+  bool _isPolling = false;
+  bool _isComplete = false;
   String? _errorMessage;
   Timer? _pollTimer;
 
@@ -52,6 +54,8 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
     setState(() {
       _isLoading = true;
       _isExpired = false;
+      _isPolling = false;
+      _isComplete = false;
       _errorMessage = null;
       _token = null;
     });
@@ -75,20 +79,29 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
   }
 
   void _startPolling(String qrToken, int expiresIn) {
-    int elapsed = 0;
+    if (expiresIn <= 0) {
+      setState(() => _isExpired = true);
+      return;
+    }
+
+    final startedAt = DateTime.now();
+    final maxAge = Duration(seconds: expiresIn);
+
     _pollTimer = Timer.periodic(_pollInterval, (timer) async {
       if (!mounted) {
         timer.cancel();
         return;
       }
 
-      elapsed += _pollInterval.inSeconds;
-      if (elapsed >= expiresIn) {
+      if (_isPolling || _isComplete) return;
+
+      if (DateTime.now().difference(startedAt) >= maxAge) {
         timer.cancel();
         if (mounted) setState(() => _isExpired = true);
         return;
       }
 
+      _isPolling = true;
       try {
         final service = ref.read(webLinkServiceProvider);
         final status = await service.pollQrStatus(qrToken);
@@ -97,6 +110,7 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
 
         if (status.status == QrLinkStatus.consumed &&
             status.sessionToken != null) {
+          _isComplete = true;
           timer.cancel();
           widget.onSuccess(status.sessionToken!);
           return;
@@ -108,6 +122,8 @@ class _QrLinkWidgetState extends ConsumerState<QrLinkWidget> {
         }
       } catch (_) {
         // Poll failures are non-fatal; the next tick will retry.
+      } finally {
+        _isPolling = false;
       }
     });
   }

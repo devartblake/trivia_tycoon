@@ -211,16 +211,44 @@ class RewardsApiService {
 
   Future<SpinStatistics> getSpinStats(String playerId) async {
     final json = await _api.get('/spins/stats/$playerId');
-    final dailyCount = (json['dailyCount'] as num? ?? 0).toInt();
-    final dailyLimit = (json['dailyLimit'] as num? ?? 5).toInt();
-    final remaining = (json['remainingToday'] as num? ?? 0).toInt();
+    final dailyCount =
+        _intFromAny(json, const ['dailyCount', 'todayCount', 'today_count']);
+    final dailyLimit = _intFromAny(
+      json,
+      const [
+        'dailyLimit',
+        'daily_limit',
+        'maxSpinsPerDay',
+        'max_spins_per_day'
+      ],
+      fallback: 5,
+    );
+    final remaining = _intFromAny(
+      json,
+      const [
+        'remainingToday',
+        'remaining_today',
+        'spinsRemaining',
+        'spins_remaining'
+      ],
+      fallback: dailyLimit - dailyCount,
+    );
     return SpinStatistics(
       dailyCount: dailyCount,
-      weeklyCount: (json['weeklyCount'] as num? ?? 0).toInt(),
-      totalSpins: (json['totalCount'] as num? ?? 0).toInt(),
+      weeklyCount: _intFromAny(json, const ['weeklyCount', 'weekly_count']),
+      totalSpins: _intFromAny(
+        json,
+        const [
+          'totalCount',
+          'totalSpins',
+          'total_spins',
+          'total_lifetime_spins'
+        ],
+      ),
       maxSpinsPerDay: dailyLimit,
       timeUntilNextSpin: Duration.zero,
-      canSpin: remaining > 0,
+      canSpin:
+          _boolFromAny(json, const ['canSpin', 'can_spin']) ?? remaining > 0,
       cooldownDuration: Duration.zero,
       spinsRemainingToday: remaining.clamp(0, dailyLimit),
     );
@@ -262,6 +290,35 @@ class RewardsApiService {
       );
     }).toList(growable: false);
   }
+}
+
+int _intFromAny(
+  Map<String, dynamic> json,
+  List<String> keys, {
+  int fallback = 0,
+}) {
+  for (final key in keys) {
+    final value = json[key];
+    if (value is num) return value.toInt();
+    if (value is String) {
+      final parsed = num.tryParse(value);
+      if (parsed != null) return parsed.toInt();
+    }
+  }
+  return fallback;
+}
+
+bool? _boolFromAny(Map<String, dynamic> json, List<String> keys) {
+  for (final key in keys) {
+    final value = json[key];
+    if (value is bool) return value;
+    if (value is String) {
+      final normalized = value.toLowerCase();
+      if (normalized == 'true') return true;
+      if (normalized == 'false') return false;
+    }
+  }
+  return null;
 }
 
 RewardType _rewardType(Object? value) {

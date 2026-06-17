@@ -58,8 +58,9 @@ class WebLinkService {
   /// Backend: `GET /auth/link/qr/status/{qrToken}`
   /// → `{ status: 'pending'|'consumed'|'expired', sessionToken?: String }`
   Future<QrStatusResponse> pollQrStatus(String qrToken) async {
+    final encodedToken = Uri.encodeComponent(qrToken);
     final response = await _http.get(
-      _u('/auth/link/qr/status/$qrToken'),
+      _u('/auth/link/qr/status/$encodedToken'),
       headers: _publicHeaders,
     );
     _assertSuccess(response, '/auth/link/qr/status');

@@ -11,9 +11,11 @@ import 'core_providers.dart';
 /// so it always returns the current token without creating stale captures.
 final webLinkServiceProvider = Provider<WebLinkService>((ref) {
   final authService = ref.watch(coreAuthServiceProvider);
+  final client = http.Client();
+  ref.onDispose(client.close);
 
   return WebLinkService(
-    httpClient: http.Client(),
+    httpClient: client,
     apiBaseUrl: EnvConfig.apiV1BaseUrl,
     accessTokenGetter: () => authService.accessToken,
   );

@@ -101,6 +101,7 @@ import '../../ui_components/confetti/ui/confetti_settings.dart';
 import '../../ui_components/depth_card_3d/theme_editor/gradient_editor_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scan_settings_screen.dart';
 import '../../ui_components/qr_code/screens/qr_scanner_screen.dart';
+import '../../ui_components/synaptix_toast/synaptix_toast_service.dart';
 import '../dto/learning_dto.dart';
 import '../../screens/learn_hub/learn_hub_screen.dart';
 import '../../screens/learn_hub/lesson_screen.dart';
@@ -172,6 +173,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
   // Create a new router instance when state changes
   return GoRouter(
+    navigatorKey: SynaptixToastService.navigatorKey,
     initialLocation: '/home',
     errorBuilder: (context, state) => const NotFoundScreen(),
     debugLogDiagnostics: true,

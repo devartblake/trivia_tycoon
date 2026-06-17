@@ -22,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../ui_components/power_ups/power_up_hud_overlay.dart';
+import '../../ui_components/synaptix_toast/synaptix_toast_service.dart';
 import '../../widgets/app_logo.dart';
 import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
@@ -342,8 +343,8 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
       final hasOnboarded = await serviceManager.onboardingSettingsService
           .hasCompletedOnboarding();
       await ref.read(playerIdentityProvider.notifier).initialize();
-      final hasFullAccountIdentity =
-          ref.read(playerIdentityProvider).kind == PlayerIdentityKind.fullAccount;
+      final hasFullAccountIdentity = ref.read(playerIdentityProvider).kind ==
+          PlayerIdentityKind.fullAccount;
 
       // Update the provider state to match service state
       if (isLoggedIn) {
@@ -515,6 +516,7 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
     return AppLifecycleObserver(
       child: MaterialApp.router(
         title: 'Synaptix',
+        scaffoldMessengerKey: SynaptixToastService.scaffoldMessengerKey,
         showPerformanceOverlay: false,
         debugShowCheckedModeBanner: false,
         scrollBehavior: AppScrollBehavior(),
