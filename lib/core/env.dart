@@ -275,11 +275,14 @@ class EnvConfig {
             ? 'assets/config/release.env'
             : '.env.example';
     try {
-      await dotenv.load(fileName: envFile);
+      await dotenv.load(fileName: envFile, isOptional: true);
     } catch (e) {
       LogManager.debug(
         '[EnvConfig] Optional env file "$envFile" was not loaded: $e',
       );
+      // Ensure dotenv is initialized so downstream dotenv.get() calls
+      // return their fallback values instead of throwing NotInitializedError.
+      dotenv.loadFromString(isOptional: true);
     }
 
     try {
