@@ -176,7 +176,7 @@ class EnvConfig {
     }
 
     return baseUri
-        .replace(pathSegments: mergedSegments, fragment: '')
+        .replace(pathSegments: mergedSegments)
         .toString();
   }
 
@@ -264,10 +264,15 @@ class EnvConfig {
     return parsed.toString();
   }
 
+  static bool _loaded = false;
+
   /// Loads all environment variables from the .env file into memory.
   /// This must be called once during app initialization before any services
-  /// that rely on these variables are created.
+  /// that rely on these variables are created. Safe to call multiple times —
+  /// subsequent calls are no-ops.
   static Future<void> load() async {
+    if (_loaded) return;
+    _loaded = true;
     const dartDefinedEnvFile = String.fromEnvironment('ENV_FILE');
     final envFile = dartDefinedEnvFile.isNotEmpty
         ? dartDefinedEnvFile

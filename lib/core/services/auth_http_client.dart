@@ -25,6 +25,9 @@ class AuthHttpClient extends http.BaseClient {
   /// Optional callback when refresh fails (user needs to re-login)
   final void Function(Exception error)? onRefreshFailed;
 
+  // Serializes concurrent refresh attempts — all callers await the same future.
+  Future<void>? _pendingRefresh;
+
   AuthHttpClient(
     this._authService,
     this._tokenStore, {
@@ -39,14 +42,20 @@ class AuthHttpClient extends http.BaseClient {
     // Load current session
     final session = _tokenStore.load();
 
-    // Check if token is expired and auto-refresh is enabled
+    // Check if token is expired and auto-refresh is enabled.
+    // _pendingRefresh serializes concurrent requests so only one refresh
+    // call is issued even when multiple requests detect expiry simultaneously.
     if (autoRefresh && session.hasTokens && session.isExpired) {
       try {
         LogManager.debug('[AuthHttpClient] Token expired, refreshing...');
-        await _authService.refresh();
+        _pendingRefresh ??= _authService
+            .refresh()
+            .whenComplete(() => _pendingRefresh = null);
+        await _pendingRefresh;
         onTokenRefreshed?.call();
         LogManager.debug('[AuthHttpClient] Token refreshed successfully');
       } catch (e) {
+        _pendingRefresh = null;
         LogManager.debug('[AuthHttpClient] Token refresh failed: $e');
         onRefreshFailed?.call(e as Exception);
         // Continue with expired token - backend will reject and user will need to re-login
