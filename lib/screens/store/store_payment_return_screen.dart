@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/dto/store_dto.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 enum StoreReturnMode { purchase, subscription }
@@ -226,15 +227,7 @@ class _StorePaymentReturnScreenState
       try {
         final inventory =
             await ref.read(storeServiceProvider).getInventory(playerId);
-        final items = (inventory['items'] as List<dynamic>? ??
-                inventory['inventory'] as List<dynamic>? ??
-                const <dynamic>[])
-            .whereType<Map>()
-            .map((raw) => Map<String, dynamic>.from(raw));
-
-        final found = items.any(
-          (item) => item['sku']?.toString().toLowerCase() == sku.toLowerCase(),
-        );
+        final found = inventory.containsItem(sku);
         if (found) {
           return true;
         }

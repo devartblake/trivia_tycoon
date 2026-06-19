@@ -776,6 +776,25 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
           "Successfully purchased ${item.name}!",
           const Color(0xFF10B981),
         );
+      } on ApiRequestException catch (e) {
+        if (!mounted) return;
+        Navigator.of(context).pop();
+
+        if (e.statusCode == 403 &&
+            (e.errorCode == 'MINOR_PURCHASE_RESTRICTED' ||
+                e.errorCode == 'PARENTAL_CONTROLS_BLOCKED')) {
+          _showSnack(
+            e.errorCode == 'MINOR_PURCHASE_RESTRICTED'
+                ? 'Purchases are restricted for your account. Please ask a parent or guardian.'
+                : 'This purchase is blocked by parental controls.',
+            const Color(0xFFF59E0B),
+          );
+        } else {
+          _showSnack(
+            'Purchase failed. Please try again.',
+            const Color(0xFFEF4444),
+          );
+        }
       } catch (e) {
         if (!mounted) return;
         Navigator.of(context).pop();

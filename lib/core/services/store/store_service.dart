@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import '../../../game/services/store_data_service.dart';
 import '../../../game/models/store_item_model.dart';
 import '../api_service.dart';
+import '../../dto/store_dto.dart';
 import '../../manager/log_manager.dart';
 import '../../models/store/store_hub_model.dart';
 import '../../models/store/store_gift_model.dart';
@@ -144,8 +145,22 @@ class StoreService {
     return apiService.get('/store/system/status');
   }
 
-  Future<Map<String, dynamic>> getInventory(String playerId) {
-    return apiService.get('/store/inventory/$playerId');
+  Future<StoreItemDisclosureDto?> getItemDisclosure(String sku) async {
+    try {
+      final json = await apiService.get('/store/items/$sku/disclosure');
+      return StoreItemDisclosureDto.fromJson(json);
+    } on ApiRequestException catch (e) {
+      if (e.statusCode == 404) return null;
+      rethrow;
+    } catch (e) {
+      LogManager.debug('getItemDisclosure failed: $e');
+      return null;
+    }
+  }
+
+  Future<PlayerInventoryDto> getInventory(String playerId) async {
+    final json = await apiService.get('/store/inventory/$playerId');
+    return PlayerInventoryDto.fromJson(json);
   }
 
   Future<Map<String, dynamic>> purchaseAvatar({
@@ -689,15 +704,8 @@ class StoreService {
       }
 
       final inventory = await getInventory(playerId);
-      final rawItems = inventory['items'] as List<dynamic>? ??
-          inventory['inventory'] as List<dynamic>? ??
-          const <dynamic>[];
-
-      return rawItems
-          .whereType<Map>()
-          .map((raw) => Map<String, dynamic>.from(raw))
-          .map((item) => item['sku']?.toString().toLowerCase())
-          .whereType<String>()
+      return inventory.items
+          .map((item) => item.itemType.toLowerCase())
           .toSet();
     } catch (_) {
       return <String>{};
