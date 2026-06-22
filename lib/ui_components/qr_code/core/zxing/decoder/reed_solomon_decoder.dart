@@ -52,7 +52,7 @@ class ReedSolomonDecoder {
     var tLast = GFPoly(field, [0]);
     var t = GFPoly(field, [1]);
 
-    while (r.degree >= R ~/ 2) {
+    while (2 * r.degree >= R) {
       if (r.isZero) return null;
 
       var q = GFPoly(field, [0]);

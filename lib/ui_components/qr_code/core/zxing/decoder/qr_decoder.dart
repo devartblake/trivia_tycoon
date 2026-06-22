@@ -32,7 +32,7 @@ class QrDecoder {
     MaskUtil.unmask(matrix, formatInfo.maskPattern);
 
     // Step 4: Read codewords from matrix (basic snake pattern)
-    final codewords = _readCodewords(matrix);
+    final codewords = _readCodewords(matrix, version);
 
     // Step 5: Apply Reed-Solomon error correction using the version-specific
     // EC codeword count from the QR standard (ISO/IEC 18004 Table 9).
@@ -54,8 +54,8 @@ class QrDecoder {
     );
   }
 
-  /// Reads raw bytes from the matrix using a snake-like pattern
-  List<int> _readCodewords(BitMatrix matrix) {
+  /// Reads raw bytes from the matrix using a snake-like pattern, skipping reserved modules
+  List<int> _readCodewords(BitMatrix matrix, Version version) {
     final result = <int>[];
     final size = matrix.getWidth();
     int col = size - 1;
@@ -78,8 +78,9 @@ class QrDecoder {
         final r = upward ? (size - 1 - i) : i;
         for (int c = 0; c < 2; c++) {
           final x = col - c;
-          final y = r;
-          addBit(matrix.get(x, y));
+          if (!_isReserved(x, r, size, version.versionNumber)) {
+            addBit(matrix.get(x, r));
+          }
         }
       }
       col -= 2;
@@ -87,6 +88,39 @@ class QrDecoder {
     }
 
     return result;
+  }
+
+  bool _isReserved(int x, int y, int size, int version) {
+    // Finder patterns + separators (9×9 corners)
+    if (x < 9 && y < 9) return true;
+    if (x >= size - 8 && y < 9) return true;
+    if (x < 9 && y >= size - 8) return true;
+    // Timing patterns
+    if (x == 6 || y == 6) return true;
+    // Format information blocks (always present)
+    if ((x < 9 && y == 8) || (x == 8 && y < 9)) return true;
+    if ((x >= size - 8 && y == 8) || (x == 8 && y >= size - 8)) return true;
+    // Version info blocks (version >= 7)
+    if (version >= 7) {
+      if (y < 6 && x >= size - 11 && x < size - 8) return true;
+      if (x < 6 && y >= size - 11 && y < size - 8) return true;
+    }
+    // Alignment patterns (version >= 2)
+    if (version >= 2) {
+      final centers = Version.alignmentPatternCenters(version);
+      for (final cy in centers) {
+        for (final cx in centers) {
+          // Skip alignment patterns that overlap finder corners
+          if ((cy < 9 && cx < 9) ||
+              (cy < 9 && cx >= size - 8) ||
+              (cy >= size - 8 && cx < 9)) {
+            continue;
+          }
+          if ((y - cy).abs() <= 2 && (x - cx).abs() <= 2) return true;
+        }
+      }
+    }
+    return false;
   }
 
   /// Applies Reed-Solomon correction using the correct per-block EC codeword

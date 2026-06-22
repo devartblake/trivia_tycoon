@@ -8,13 +8,6 @@ class FormatInformation {
 
   static const _formatMask = 0x5412;
 
-  static final Map<int, String> _ecLevelMap = {
-    0: 'M', // 0b00
-    1: 'L', // 0b01
-    2: 'H', // 0b10
-    3: 'Q', // 0b11
-  };
-
   static FormatInformation decode(BitMatrix matrix) {
     final bits1 = _readFormatBits(matrix, true);
     final bits2 = _readFormatBits(matrix, false);
@@ -59,14 +52,9 @@ class FormatInformation {
     return bits;
   }
 
-  static FormatInformation? _decodeFormatBits(int bits) {
-    final ecBits = (bits >> 3) & 0x03; // 0x03 = binary 00000011
-    final maskBits = bits & 0x07; // 0x07 = binary 00000111
-
-    final level = _ecLevelMap[ecBits];
-    if (level == null || maskBits > 7) return null;
-
-    return FormatInformation(level, maskBits);
+  static FormatInformation? _decodeFormatBits(int unmaskedBits) {
+    final entry = _formatTable[unmaskedBits & 0x7FFF];
+    return entry == null ? null : FormatInformation(entry.ec, entry.mask);
   }
 
   static FormatInformation? _fallbackByHamming(int maskedBits) {
@@ -74,14 +62,12 @@ class FormatInformation {
     int minDist = 4;
     FormatInformation? best;
 
-    for (final code in _formatPatterns.keys) {
+    for (final code in _formatTable.keys) {
       final dist = _hamming(unm, code);
       if (dist < minDist) {
         minDist = dist;
-        final ecBits = (code >> 3) & 0x03;
-        final maskBits = code & 0x07;
-        final level = _ecLevelMap[ecBits];
-        if (level != null) best = FormatInformation(level, maskBits);
+        final entry = _formatTable[code];
+        if (entry != null) best = FormatInformation(entry.ec, entry.mask);
       }
     }
 
@@ -92,9 +78,32 @@ class FormatInformation {
     return (a ^ b).toRadixString(2).replaceAll('0', '').length;
   }
 
-  static final Map<int, String> _formatPatterns = {
-    0x77C4: 'L0', 0x72F3: 'L1', 0x7DAA: 'L2', 0x789D: 'L3',
-    0x662F: 'L4', 0x6318: 'L5', 0x6C41: 'L6', 0x6976: 'L7',
-    // ... other EC/mask combos
+  static final Map<int, _FmtEntry> _formatTable = {
+    // M (EC=00)
+    0x5412: _FmtEntry('M', 0), 0x5125: _FmtEntry('M', 1),
+    0x5E7C: _FmtEntry('M', 2), 0x5B4B: _FmtEntry('M', 3),
+    0x45F9: _FmtEntry('M', 4), 0x40CE: _FmtEntry('M', 5),
+    0x4F97: _FmtEntry('M', 6), 0x4AA0: _FmtEntry('M', 7),
+    // L (EC=01)
+    0x77C4: _FmtEntry('L', 0), 0x72F3: _FmtEntry('L', 1),
+    0x7DAA: _FmtEntry('L', 2), 0x789D: _FmtEntry('L', 3),
+    0x662F: _FmtEntry('L', 4), 0x6318: _FmtEntry('L', 5),
+    0x6C41: _FmtEntry('L', 6), 0x6976: _FmtEntry('L', 7),
+    // H (EC=10)
+    0x1689: _FmtEntry('H', 0), 0x13BE: _FmtEntry('H', 1),
+    0x1CE7: _FmtEntry('H', 2), 0x19D0: _FmtEntry('H', 3),
+    0x07C2: _FmtEntry('H', 4), 0x04B5: _FmtEntry('H', 5),
+    0x0B3C: _FmtEntry('H', 6), 0x0EE3: _FmtEntry('H', 7),
+    // Q (EC=11)
+    0x355F: _FmtEntry('Q', 0), 0x3068: _FmtEntry('Q', 1),
+    0x3B31: _FmtEntry('Q', 2), 0x3E06: _FmtEntry('Q', 3),
+    0x20B4: _FmtEntry('Q', 4), 0x25C3: _FmtEntry('Q', 5),
+    0x2AAA: _FmtEntry('Q', 6), 0x2F9D: _FmtEntry('Q', 7),
   };
+}
+
+class _FmtEntry {
+  final String ec;
+  final int mask;
+  _FmtEntry(this.ec, this.mask);
 }
