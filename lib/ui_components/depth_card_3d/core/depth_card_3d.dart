@@ -202,24 +202,15 @@ class _DepthCard3DState extends State<DepthCard3D> {
     }
 
     // Native: flutter_3d_controller
-    final isObj = path.toLowerCase().endsWith('.obj');
-    return isObj
-        ? Flutter3DViewer.obj(
-            controller: _controller,
-            src: path,
-            progressBarColor: Colors.white,
-            onProgress: (_) {},
-            onLoad: (_) {},
-            onError: (err) => _onModelError(err, path),
-          )
-        : Flutter3DViewer(
-            controller: _controller,
-            src: path,
-            progressBarColor: Colors.white,
-            onProgress: (_) {},
-            onLoad: (_) {},
-            onError: (err) => _onModelError(err, path),
-          );
+    // Flutter3DViewer handles both GLB/GLTF and OBJ automatically
+    return Flutter3DViewer(
+      controller: _controller,
+      src: path,
+      progressBarColor: Colors.white,
+      onProgress: (_) {},
+      onLoad: (_) {},
+      onError: (err) => _onModelError(err, path),
+    );
   }
 
   Widget _buildFallback() => const Center(
