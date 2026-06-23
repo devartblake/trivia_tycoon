@@ -22,6 +22,7 @@ import '../widgets/spin_cooldown_widget.dart';
 import '../../../confetti/ui/confetti_debug_overlay.dart';
 import '../../../confetti/ui/confetti_settings.dart';
 import '../../services/spin_tracker.dart';
+import '../../utils/wheel_responsive.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class WheelScreen extends ConsumerStatefulWidget {
@@ -309,6 +310,17 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     }
   }
 
+  double _getStatCardWidth(BuildContext context) {
+    final numColumns = WheelResponsive.getStatCardsColumns(context);
+    final padding = WheelResponsive.getResponsivePadding(context);
+    final availableWidth = MediaQuery.of(context).size.width -
+        (padding.left + padding.right);
+    final spacing = 8.0;
+    final totalSpacing = spacing * (numColumns - 1);
+
+    return (availableWidth - totalSpacing) / numColumns;
+  }
+
   void _handleSpinComplete() {
     final index = SpinTransitionUtils.getSegmentIndexFromAngle(
       _currentAngle,
@@ -591,71 +603,73 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                             child: IntrinsicHeight(
                               child: Column(
                                 children: [
-                                  // Wheel section
-                                  Expanded(
-                                    flex: 2,
-                                    child: Container(
-                                      margin: const EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                        color: isDark
-                                            ? const Color(0xFF1E1E2E)
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(24),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: isDark
-                                                ? Colors.black
-                                                    .withValues(alpha: 0.3)
-                                                : Colors.grey
-                                                    .withValues(alpha: 0.1),
-                                            blurRadius: 20,
-                                            offset: const Offset(0, 10),
-                                          ),
-                                        ],
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(24),
-                                        child: Stack(
-                                          children: [
-                                            // Wheel
-                                            Center(
-                                              child: AspectRatio(
-                                                aspectRatio: 1.0,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
-                                                  child: GestureDetector(
-                                                    onVerticalDragEnd: (d) =>
-                                                        _handleGestureSpin(d
-                                                            .velocity
-                                                            .pixelsPerSecond
-                                                            .dy),
-                                                    onHorizontalDragEnd: (d) =>
-                                                        _handleGestureSpin(d
-                                                            .velocity
-                                                            .pixelsPerSecond
-                                                            .dx),
-                                                    child: WheelWidget(
-                                                      segments: _segments,
-                                                      rotationAngle:
-                                                          _currentAngle,
-                                                      activeIndex: _activeIndex,
-                                                      size: 300,
-                                                    ),
+                                  // Wheel section - responsive
+                                  Container(
+                                    margin: WheelResponsive.getWheelContainerMargin(context),
+                                    constraints: BoxConstraints(
+                                      maxWidth: WheelResponsive.getMaxContentWidth(context),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: isDark
+                                          ? const Color(0xFF1E1E2E)
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(24),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: isDark
+                                              ? Colors.black
+                                                  .withValues(alpha: 0.3)
+                                              : Colors.grey
+                                                  .withValues(alpha: 0.1),
+                                          blurRadius: 20,
+                                          offset: const Offset(0, 10),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(24),
+                                      child: Stack(
+                                        children: [
+                                          // Wheel
+                                          Center(
+                                            child: AspectRatio(
+                                              aspectRatio: 1.0,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(16.0),
+                                                child: GestureDetector(
+                                                  onVerticalDragEnd: (d) =>
+                                                      _handleGestureSpin(d
+                                                          .velocity
+                                                          .pixelsPerSecond
+                                                          .dy),
+                                                  onHorizontalDragEnd: (d) =>
+                                                      _handleGestureSpin(d
+                                                          .velocity
+                                                          .pixelsPerSecond
+                                                          .dx),
+                                                  child: WheelWidget(
+                                                    segments: _segments,
+                                                    rotationAngle: _currentAngle,
+                                                    activeIndex: _activeIndex,
+                                                    size: WheelResponsive.getWheelSize(context),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
 
-                                  // Controls section
+                                  // Controls section - responsive
                                   Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        20, 0, 20, 20),
+                                    padding: EdgeInsets.fromLTRB(
+                                      WheelResponsive.getResponsivePadding(context).left,
+                                      0,
+                                      WheelResponsive.getResponsivePadding(context).right,
+                                      WheelResponsive.getResponsivePadding(context).bottom,
+                                    ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -684,13 +698,14 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
                                         const SizedBox(height: 16),
 
-                                        // Stats row
+                                        // Stats row - responsive
                                         if (!_isSpinning)
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
+                                          Wrap(
+                                            spacing: 8,
+                                            runSpacing: 8,
                                             children: [
-                                              Flexible(
+                                              SizedBox(
+                                                width: _getStatCardWidth(context),
                                                 child: StatCard(
                                                   icon: Icons.casino,
                                                   label: 'Spins Today',
@@ -699,8 +714,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                   color: Colors.blue,
                                                 ),
                                               ),
-                                              const SizedBox(width: 8),
-                                              Flexible(
+                                              SizedBox(
+                                                width: _getStatCardWidth(context),
                                                 child: StatCard(
                                                   icon: Icons.timer,
                                                   label: 'Cooldown',
@@ -709,8 +724,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                   color: Colors.orange,
                                                 ),
                                               ),
-                                              const SizedBox(width: 8),
-                                              Flexible(
+                                              SizedBox(
+                                                width: _getStatCardWidth(context),
                                                 child: StatCard(
                                                   icon: Icons.emoji_events,
                                                   label: 'Rewards',
