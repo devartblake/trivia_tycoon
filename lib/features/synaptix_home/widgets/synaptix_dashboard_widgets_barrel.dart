@@ -1,6 +1,7 @@
 // Layout
 export 'layout/synaptix_panel.dart';
 export 'layout/synaptix_dashboard_footer.dart';
+export 'layout/news_reward_row.dart';
 
 // Navigation
 export 'navigation/synaptix_top_navigation_bar.dart';
@@ -10,6 +11,8 @@ export 'navigation/synaptix_home_drawer.dart';
 export 'navigation/synaptix_rail_content.dart' show SynaptixRightPanel;
 
 // Cards
+export 'cards/hero_tournament_card.dart';
+export 'cards/game_mode_grid.dart';
 export 'cards/progression_card.dart';
 export 'cards/featured_event_card.dart';
 export 'cards/profile_summary_card.dart';
