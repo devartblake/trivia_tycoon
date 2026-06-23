@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-06-23T00:00:00Z",
+  "root": "assets/audio/ui",
+  "fileCount": 15,
+  "folders": [],
+  "files": [
+    {
+      "path": "big_win.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "button_click.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "button_hover.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "cha_ching.mp3",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "error.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "notification.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "prize_win.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "spin.mp3",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "spin_end.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "spin_loop.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "spin_start.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "success.wav",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "victory.mp3",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "wheel_tick.wav",
+      "modified": "2026-06-23"
+    }
+  ]
+}

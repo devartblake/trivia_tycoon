@@ -90,7 +90,7 @@ class AudioController {
       var paths = soundTypeToFilename(type);
       if (paths.isNotEmpty) {
         try {
-          var sound = await soloud!.loadFile('assets/sfx/${paths.first}');
+          var sound = await soloud!.loadFile('assets/audio/sfx/${paths.first}');
           _sfxCache[type] = sound as Handle;
         } catch (e) {
           _log.warning('Bundled SFX unavailable for ${paths.first}: $e');
@@ -218,7 +218,7 @@ class AudioController {
     // Fallback: load from bundled assets via SoLoud.
     try {
       _nextMusic =
-          (await soloud!.loadFile('assets/songs/${song.filename}')) as Handle?;
+          (await soloud!.loadFile('assets/audio/music/${song.filename}')) as Handle?;
       _crossfadeToNextSong();
     } catch (e) {
       _log.warning('Bundled music unavailable for ${song.filename}: $e');

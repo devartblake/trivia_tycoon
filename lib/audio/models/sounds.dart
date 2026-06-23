@@ -1,5 +1,5 @@
 /// Maps an SfxType to a list of potential audio filenames.
-/// These filenames should correspond to files placed under your assets/sfx/ directory.
+/// These filenames should correspond to files placed under your assets/audio/sfx/ directory.
 List<String> soundTypeToFilename(SfxType type) => switch (type) {
       SfxType.huhsh => const [
           'hash1.mp3',

@@ -24,17 +24,17 @@ class SoundManager {
   SoundManager._internal();
 
   final Map<SoundEffect, String> _soundPaths = {
-    SoundEffect.spinStart: 'assets/sounds/spin_start.wav',
-    SoundEffect.spinLoop: 'assets/sounds/spin_loop.wav',
-    SoundEffect.spinEnd: 'assets/sounds/spin_end.wav',
-    SoundEffect.wheelTick: 'assets/sounds/wheel_tick.wav',
-    SoundEffect.prizeWin: 'assets/sounds/prize_win.wav',
-    SoundEffect.bigWin: 'assets/sounds/big_win.wav',
-    SoundEffect.buttonClick: 'assets/sounds/button_click.wav',
-    SoundEffect.buttonHover: 'assets/sounds/button_hover.wav',
-    SoundEffect.notification: 'assets/sounds/notification.wav',
-    SoundEffect.error: 'assets/sounds/error.wav',
-    SoundEffect.success: 'assets/sounds/success.wav',
+    SoundEffect.spinStart: 'assets/audio/ui/spin_start.wav',
+    SoundEffect.spinLoop: 'assets/audio/ui/spin_loop.wav',
+    SoundEffect.spinEnd: 'assets/audio/ui/spin_end.wav',
+    SoundEffect.wheelTick: 'assets/audio/ui/wheel_tick.wav',
+    SoundEffect.prizeWin: 'assets/audio/ui/prize_win.wav',
+    SoundEffect.bigWin: 'assets/audio/ui/big_win.wav',
+    SoundEffect.buttonClick: 'assets/audio/ui/button_click.wav',
+    SoundEffect.buttonHover: 'assets/audio/ui/button_hover.wav',
+    SoundEffect.notification: 'assets/audio/ui/notification.wav',
+    SoundEffect.error: 'assets/audio/ui/error.wav',
+    SoundEffect.success: 'assets/audio/ui/success.wav',
   };
 
   // SoLoud instances for sound effects

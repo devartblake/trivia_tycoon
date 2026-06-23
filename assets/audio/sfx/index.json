@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "generatedAtUtc": "2026-06-23T00:00:00Z",
+  "root": "assets/audio/sfx",
+  "fileCount": 3,
+  "folders": [],
+  "files": [
+    {
+      "path": "supremetylewiss-message.mp3",
+      "description": "Message/notification SFX",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "universfield-level-up.mp3",
+      "description": "Level up achievement SFX",
+      "modified": "2026-06-23"
+    },
+    {
+      "path": "universfield-new-notification.mp3",
+      "description": "New notification SFX",
+      "modified": "2026-06-23"
+    }
+  ]
+}

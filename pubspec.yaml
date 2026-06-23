@@ -200,7 +200,7 @@ flutter:
    - assets/questions/world/
    - assets/questions/world_literature/
    - assets/shaders/
-   - assets/sounds/
+   - assets/audio/
    - fonts/
 
   # An image asset can refer to one or more resolution-specific "variants", see

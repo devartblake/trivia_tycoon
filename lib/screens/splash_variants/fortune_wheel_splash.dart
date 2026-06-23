@@ -48,7 +48,7 @@ class _FortuneWheelSplashState extends State<FortuneWheelSplash>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCirc))
       ..addStatusListener((status) async {
         if (status == AnimationStatus.completed) {
-          await _victoryPlayer.setAsset('assets/sounds/victory.mp3');
+          await _victoryPlayer.setAsset('assets/audio/ui/victory.mp3');
           await _victoryPlayer.play();
 
           setState(() {
@@ -62,7 +62,7 @@ class _FortuneWheelSplashState extends State<FortuneWheelSplash>
 
     _controller.forward();
 
-    _audioPlayer.setAsset('assets/sounds/spin.mp3').then((_) {
+    _audioPlayer.setAsset('assets/audio/ui/spin.mp3').then((_) {
       _audioPlayer.play();
     });
   }

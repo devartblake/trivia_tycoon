@@ -94,7 +94,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
         return;
       }
       await _audioPlayer.stop();
-      await _audioPlayer.setAsset('assets/songs/${song.filename}');
+      await _audioPlayer.setAsset('assets/audio/music/${song.filename}');
       await _audioPlayer.play();
       setState(() => _currentSong = song);
       LogManager.debug('[Music] Now playing: ${song.name}');

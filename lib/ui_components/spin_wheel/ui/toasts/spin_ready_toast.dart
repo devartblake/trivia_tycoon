@@ -23,7 +23,7 @@ class SpinReadyToast {
       animationDuration: const Duration(milliseconds: 800),
       forwardAnimationCurve: Curves.elasticOut,
       reverseAnimationCurve: Curves.easeInBack,
-      soundEffect: 'assets/sounds/spin_ready.mp3', // Optional
+      soundEffect: 'assets/audio/ui/notification.wav', // Optional
       mainButton: _buildSpinButton(onSpinNow, context),
       onTap: (toast) {
         toast.dismiss();

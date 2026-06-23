@@ -15,14 +15,14 @@ class AdminAudioPlayerScreen extends StatefulWidget {
 }
 
 class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
-  static const String _defaultSfxAsset = 'assets/sounds/cha_ching.mp3';
+  static const String _defaultSfxAsset = 'assets/audio/ui/cha_ching.mp3';
 
   final just_audio.AudioPlayer _musicPlayer = just_audio.AudioPlayer();
   final just_audio.AudioPlayer _sfxPlayer = just_audio.AudioPlayer();
   soloud.SoLoud? _soLoud;
   soloud.AudioSource? _previewSfx;
 
-  List<String> _musicTracks = const ['assets/songs/around_the_world.mp3'];
+  List<String> _musicTracks = const ['assets/audio/music/around_the_world.mp3'];
   List<String> _sfxAssets = const [_defaultSfxAsset];
   bool _loading = true;
   bool _musicOn = true;
@@ -31,7 +31,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   bool _trackLoaded = false;
   double _musicVolume = 0.7;
   double _sfxVolume = 0.8;
-  String _selectedTrack = 'assets/songs/around_the_world.mp3';
+  String _selectedTrack = 'assets/audio/music/around_the_world.mp3';
   String? _loadedTrack;
   String _selectedSfx = _defaultSfxAsset;
   String? _status;
@@ -83,7 +83,7 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   Future<void> _loadCatalogsFromIndex() async {
     final songsJson =
         await AssetResolver.instance.loadString('media/audio/songs/index');
-    final soundsJson = await rootBundle.loadString('assets/sounds/index.json');
+    final soundsJson = await rootBundle.loadString('assets/audio/ui/index.json');
 
     final songMap = jsonDecode(songsJson) as Map<String, dynamic>;
     final sfxMap = jsonDecode(soundsJson) as Map<String, dynamic>;
@@ -91,13 +91,13 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
     final songFiles = (songMap['files'] as List<dynamic>? ?? const [])
         .map((e) => (e as Map<String, dynamic>)['path']?.toString() ?? '')
         .where((p) => p.isNotEmpty)
-        .map((p) => 'assets/songs/$p')
+        .map((p) => 'assets/audio/music/$p')
         .toList();
 
     var sfxFiles = (sfxMap['files'] as List<dynamic>? ?? const [])
         .map((e) => (e as Map<String, dynamic>)['path']?.toString() ?? '')
         .where((p) => p.isNotEmpty)
-        .map((p) => 'assets/sounds/$p')
+        .map((p) => 'assets/audio/ui/$p')
         .toList();
 
     final validatedSfxFiles = <String>[];
