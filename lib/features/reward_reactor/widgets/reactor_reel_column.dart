@@ -37,11 +37,11 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 2000),
     );
     _scrollAnimation = CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOut,
+      curve: Curves.easeOutCubic,
     );
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -70,11 +70,13 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
 
   List<String> get _displaySymbols {
     final count = widget.symbols.length;
-    if (count == 0) return List.filled(_visibleTiles, 'coin');
-    return List.generate(_visibleTiles, (i) {
-      final idx = (widget.winningSymbolIndex + i) % count;
-      return widget.symbols[idx];
-    });
+    if (count == 0) return List.filled(_visibleTiles + 2, 'coin');
+
+    final extendedSymbols = <String>[];
+    for (int i = 0; i < (count + _visibleTiles); i++) {
+      extendedSymbols.add(widget.symbols[i % count]);
+    }
+    return extendedSymbols;
   }
 
   @override
@@ -86,14 +88,21 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
         child: AnimatedBuilder(
           animation: _scrollAnimation,
           builder: (context, _) {
+            final count = widget.symbols.isEmpty ? 1 : widget.symbols.length;
+            final totalScrollHeight = _tileHeight * (count + _visibleTiles);
+
             final offset = widget.isSpinning
-                ? _scrollAnimation.value * _tileHeight * 2
+                ? _scrollAnimation.value * totalScrollHeight
                 : 0.0;
+
             return Transform.translate(
-              offset: Offset(0, offset % _tileHeight),
+              offset: Offset(0, -offset),
               child: Column(
                 children: _displaySymbols.asMap().entries.map((entry) {
-                  final isWinning = !widget.isSpinning && entry.key == 1;
+                  final count = widget.symbols.isEmpty ? 1 : widget.symbols.length;
+                  final isWinning = !widget.isSpinning &&
+                      entry.key == 1 &&
+                      entry.value == widget.symbols[widget.winningSymbolIndex % count];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ReactorSymbolTile(
