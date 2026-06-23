@@ -9,6 +9,7 @@ import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/referral_models.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/ui_components/qr_code/widgets/qr_code_widget.dart';
+import '../../core/env.dart';
 
 class InviteScreen extends ConsumerStatefulWidget {
   const InviteScreen({super.key});
@@ -321,7 +322,8 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
 
   Widget _buildContentFallback(
       BuildContext context, ThemeData theme, ReferralCode referralCode) {
-    final link = 'https://synaptix.app/invite?code=${referralCode.code}';
+    final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
+    final link = '$baseUrl/register?inviteCode=${referralCode.code}';
     return _buildContent(context, theme, referralCode, link, link);
   }
 

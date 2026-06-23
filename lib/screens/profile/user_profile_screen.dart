@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/shimmer_avatar.dart';
 import '../../ui_components/qr_code/widgets/qr_code_widget.dart';
+import '../../core/env.dart';
 
 class UserProfileScreen extends StatelessWidget {
   final LeaderboardEntry entry;
@@ -389,7 +390,8 @@ class UserProfileScreen extends StatelessWidget {
 
   // Bottom sheet for QR/share
   Widget _buildShareModal(BuildContext context) {
-    final shareUrl = 'https://synaptix.app/user/${entry.userId}';
+    final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
+    final shareUrl = '$baseUrl/user/${entry.userId}';
 
     return Padding(
       padding: const EdgeInsets.all(24),

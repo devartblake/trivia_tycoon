@@ -178,7 +178,7 @@ class _CurrencyPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: SynaptixHomeTheme.panelAlt.withValues(alpha: 0.92),
         borderRadius: BorderRadius.circular(22),
-        border: const Border.all(color: SynaptixHomeTheme.stroke),
+        border: Border.all(color: SynaptixHomeTheme.stroke),
       ),
       child: Row(
         children: [

@@ -22,6 +22,7 @@ import '../../game/services/referral_invite_storage_service.dart';
 import '../../game/services/referral_service.dart';
 import '../../game/services/referral_storage_service.dart';
 import '../../core/services/social/backend_profile_social_service.dart';
+import '../../core/env.dart';
 import 'core_providers.dart'
     show
         apiServiceProvider,
@@ -234,11 +235,12 @@ final referralApiServiceProvider = Provider<ReferralApiService>((ref) {
 final referralServiceProvider = Provider<ReferralService>((ref) {
   final storage = ref.watch(referralStorageServiceProvider);
   final api = ref.watch(referralApiServiceProvider);
+  final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
   return ReferralService(
     storage: storage,
     api: api,
     userId: 'guest',
-    baseUrl: 'https://www.trivia.app',
+    baseUrl: baseUrl,
   );
 });
 
@@ -247,11 +249,12 @@ final asyncReferralServiceProvider =
   final storage = ref.watch(referralStorageServiceProvider);
   final api = ref.watch(referralApiServiceProvider);
   final userId = await ref.watch(currentUserIdProvider.future);
+  final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
   return ReferralService(
     storage: storage,
     api: api,
     userId: userId,
-    baseUrl: 'https://www.trivia.app',
+    baseUrl: baseUrl,
   );
 });
 

@@ -14,7 +14,7 @@ class ReferralService {
     required ReferralStorageService storage,
     required ReferralApiService api,
     required String userId,
-    String baseUrl = 'https://www.trivia.app',
+    String baseUrl = 'https://app.synapticplay.com',
   })  : _storage = storage,
         _api = api,
         _userId = userId,
