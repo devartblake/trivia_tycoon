@@ -154,7 +154,7 @@ final synaptixHomeProvider = FutureProvider<SynaptixHomeState>((ref) async {
         final next = unclaimedDefs.first;
         return SynaptixRewardPrompt(
           title: next.title,
-          body: 'Claim your reward: ${next.reward}',
+          body: 'Claim your reward: ${next.rewardText}',
           route: canonicalRewardsRoute,
           icon: Icons.redeem_rounded,
         );
