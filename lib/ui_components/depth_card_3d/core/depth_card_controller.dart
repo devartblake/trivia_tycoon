@@ -147,43 +147,22 @@ class DepthCardController extends ChangeNotifier {
   }
 
   /// Load the model using the actual 3D controller
+  /// Note: Model loading is driven by Flutter3DViewer.src parameter — nothing to call here.
+  /// Listen to _controller!.onModelLoaded if load status is needed.
   Future<void> _loadModel(String assetPath) async {
     if (_controller == null) {
       throw Exception('3D controller not attached');
     }
 
-    // Check supported formats
     if (!_isSupportedFormat(assetPath)) {
       throw Exception('Unsupported model format: $assetPath');
-    }
-
-    try {
-      // Use the actual flutter_3d_controller method
-      // Note: Replace this with the actual API method when available
-      // Trigger the load (replace with actual method)
-      // _controller!.loadModelFromAsset(assetPath);
-      await _simulateModelLoading(assetPath);
-    } catch (e) {
-      throw Exception('Failed to load 3D model: $e');
     }
   }
 
   /// Check if the model format is supported
   bool _isSupportedFormat(String assetPath) {
-    final supportedExtensions = ['.glb', '.gltf', '.obj', '.fbx'];
-    return supportedExtensions
-        .any((ext) => assetPath.toLowerCase().endsWith(ext));
-  }
-
-  /// Simulate model loading for demonstration
-  Future<void> _simulateModelLoading(String assetPath) async {
-    // Simulate loading time based on file complexity
-    final complexity = assetPath.contains('complex') ? 2000 : 500;
-    await Future.delayed(Duration(milliseconds: complexity));
-
-    if (kDebugMode) {
-      print('DepthCardController: Simulated loading of $assetPath');
-    }
+    const supported = ['.glb', '.gltf', '.obj'];
+    return supported.any((ext) => assetPath.toLowerCase().endsWith(ext));
   }
 
   /// Enable/disable glow effect with performance consideration

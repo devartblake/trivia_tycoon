@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 import '../extensions/flutter_3d_controller_dispose_extension.dart';
 import '../models/depth_card_config.dart';
@@ -53,11 +55,12 @@ class _DepthCard3DState extends State<DepthCard3D> {
                 child: Stack(
                   children: [
                     // Background layer
-                    BackgroundLayer(
-                      theme: config.theme,
-                      image: widget.config.backgroundImage!,
-                      tilt: tilt,
-                    ),
+                    if (widget.config.backgroundImage != null)
+                      BackgroundLayer(
+                        theme: config.theme,
+                        image: widget.config.backgroundImage!,
+                        tilt: tilt,
+                      ),
 
                     // Shadow layer (subtle depth)
                     ShadowLayer(
@@ -175,27 +178,61 @@ class _DepthCard3DState extends State<DepthCard3D> {
     final path = widget.config.modelAssetPath.trim();
     if (path.isEmpty) return const SizedBox.shrink();
 
-    if (_is3d(path)) {
-      return Flutter3DViewer(
-        controller: _controller,
+    if (_is3d(path)) return _build3DViewer(path);
+    if (_isImage(path)) return _imageFromPath(path);
+    return const SizedBox.shrink();
+  }
+
+  Widget _build3DViewer(String path) {
+    // Windows: no 3D support
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+      return _buildFallback();
+    }
+
+    // Web: model_viewer_plus
+    if (kIsWeb) {
+      return ModelViewer(
+        backgroundColor: Colors.transparent,
         src: path,
-        progressBarColor: Colors.white,
-        onProgress: (progressValue) {},
-        onLoad: (modelAddress) {},
+        alt: '3D model',
+        ar: false,
+        autoRotate: false,
+        cameraControls: false,
       );
     }
 
-    if (_isImage(path)) {
-      return _imageFromPath(path);
-    }
+    // Native: flutter_3d_controller
+    final isObj = path.toLowerCase().endsWith('.obj');
+    return isObj
+        ? Flutter3DViewer.obj(
+            controller: _controller,
+            src: path,
+            progressBarColor: Colors.white,
+            onProgress: (_) {},
+            onLoad: (_) {},
+            onError: (err) => _onModelError(err, path),
+          )
+        : Flutter3DViewer(
+            controller: _controller,
+            src: path,
+            progressBarColor: Colors.white,
+            onProgress: (_) {},
+            onLoad: (_) {},
+            onError: (err) => _onModelError(err, path),
+          );
+  }
 
-    // Unknown content type. Do not crash; just render nothing.
-    return const SizedBox.shrink();
+  Widget _buildFallback() => const Center(
+    child: Icon(Icons.view_in_ar_outlined, color: Colors.white54, size: 48),
+  );
+
+  void _onModelError(String err, String path) {
+    LogManager.debug('DepthCard3D: model load error for $path — $err');
   }
 
   bool _is3d(String p) {
     final l = p.toLowerCase();
-    return l.endsWith('.glb') || l.endsWith('.gltf');
+    return l.endsWith('.glb') || l.endsWith('.gltf') || l.endsWith('.obj');
   }
 
   bool _isImage(String p) {
