@@ -86,11 +86,6 @@ class _SynaptixHomeAdaptiveShell extends StatelessWidget {
                   child: _MainDashboard(home: home),
                 )
               : _StackedDashboard(home: home, isMedium: isMedium),
-          footer: SynaptixDashboardFooter(
-            home: home,
-            isWide: isWide,
-            isMedium: isMedium,
-          ),
         );
       },
     );
@@ -133,6 +128,9 @@ class _StackedDashboard extends StatelessWidget {
             )
           else
             SynaptixRightPanel(home: home),
+          const SizedBox(height: 16),
+          NewsRewardRow(newsItem: home.newsItem, dailyReward: home.dailyReward),
+          const SizedBox(height: 32),
         ],
       ),
     );
@@ -217,6 +215,8 @@ class _MainDashboard extends StatelessWidget {
           },
         ),
         const SizedBox(height: 20),
+        NewsRewardRow(newsItem: home.newsItem, dailyReward: home.dailyReward),
+        const SizedBox(height: 32),
       ],
     );
   }

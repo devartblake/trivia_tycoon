@@ -314,6 +314,8 @@ class _SynaptixRailContent extends StatelessWidget {
         const SizedBox(height: 20),
         _StreakCard(player: home.player),
         const SizedBox(height: 20),
+        FriendsOnlineCard(friends: home.friends),
+        const SizedBox(height: 20),
         const _ReferCard(),
       ],
     );
@@ -399,6 +401,11 @@ class HeroTournamentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showTrophy = MediaQuery.sizeOf(context).width >= 680;
+    final event = home.featuredEvent;
+    final titleWords = event.title.split(' ');
+    final titleLine1 = titleWords.take((titleWords.length / 2).ceil()).join(' ');
+    final titleLine2 = titleWords.skip((titleWords.length / 2).ceil()).join(' ');
+
     return SynaptixPanel(
       minHeight: 260,
       padding: EdgeInsets.zero,
@@ -418,15 +425,15 @@ class HeroTournamentCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(28),
                     gradient: RadialGradient(
                       colors: [
-                        SynaptixHomeTheme.purple.withOpacity(0.8),
-                        SynaptixHomeTheme.blue.withOpacity(0.18),
+                        SynaptixHomeTheme.purple.withValues(alpha: 0.8),
+                        SynaptixHomeTheme.blue.withValues(alpha: 0.18),
                         Colors.transparent,
                       ],
                     ),
                   ),
-                  child: const Center(
+                  child: Center(
                     child: Icon(
-                      Icons.emoji_events_rounded,
+                      event.icon,
                       color: SynaptixHomeTheme.gold,
                       size: 128,
                     ),
@@ -439,11 +446,11 @@ class HeroTournamentCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const _LiveBadge(),
+                    _LiveBadge(label: event.timeRemaining),
                     const SizedBox(height: 18),
-                    const Text(
-                      'SYNAPTIX\nARENA CUP',
-                      style: TextStyle(
+                    Text(
+                      titleLine2.isEmpty ? titleLine1 : '$titleLine1\n$titleLine2',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 42,
                         height: 0.95,
@@ -452,7 +459,7 @@ class HeroTournamentCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Welcome back, ${home.player.displayName}. Compete, train, and collect rewards from one command center.',
+                      'Welcome back, ${home.player.displayName}. ${event.subtitle}',
                       style: const TextStyle(
                         color: SynaptixHomeTheme.muted,
                         fontSize: 15,
@@ -465,10 +472,10 @@ class HeroTournamentCard extends StatelessWidget {
                       runSpacing: 12,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const _RewardMini(
+                        _RewardMini(
                           icon: Icons.monetization_on_rounded,
-                          title: '10,000',
-                          subtitle: 'Synap Coins',
+                          title: event.rewardLabel,
+                          subtitle: 'Prize Pool',
                         ),
                         _RewardMini(
                           icon: Icons.workspace_premium_rounded,
@@ -477,7 +484,7 @@ class HeroTournamentCard extends StatelessWidget {
                         ),
                         _PrimaryGlowButton(
                           label: 'Join Tournament',
-                          route: canonicalArenaRoute,
+                          route: event.route,
                         ),
                       ],
                     ),
@@ -1544,7 +1551,9 @@ class _ReferCard extends StatelessWidget {
 }
 
 class _LiveBadge extends StatelessWidget {
-  const _LiveBadge();
+  final String label;
+
+  const _LiveBadge({this.label = 'LIVE NOW'});
 
   @override
   Widget build(BuildContext context) {
@@ -1555,9 +1564,9 @@ class _LiveBadge extends StatelessWidget {
         color: SynaptixHomeTheme.blue.withOpacity(0.16),
         border: Border.all(color: SynaptixHomeTheme.blue),
       ),
-      child: const Text(
-        'LIVE NOW',
-        style: TextStyle(
+      child: Text(
+        label.toUpperCase(),
+        style: const TextStyle(
           color: SynaptixHomeTheme.cyan,
           fontSize: 12,
           fontWeight: FontWeight.w900,

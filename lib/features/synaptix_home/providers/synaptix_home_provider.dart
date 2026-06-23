@@ -9,6 +9,7 @@ import '../../../game/providers/wallet_providers.dart';
 import '../../../game/providers/xp_provider.dart';
 import '../models/synaptix_home_state.dart';
 import '../theme/synaptix_home_theme.dart';
+import 'dart:math';
 
 final synaptixHomeProvider = FutureProvider<SynaptixHomeState>((ref) async {
   final profileService = ref.read(playerProfileServiceProvider);
@@ -46,6 +47,16 @@ final synaptixHomeProvider = FutureProvider<SynaptixHomeState>((ref) async {
       .where((reward) => !claimed.contains(reward.key))
       .length;
 
+  // Calculate wins from quiz scores (score >= 50% = win)
+  final wins = recent.where((q) {
+    final scoreStr = q.score.replaceAll('%', '').replaceAll('/', ' ');
+    final scoreVal = int.tryParse(scoreStr.split(' ').first) ?? 0;
+    return scoreVal >= 50;
+  }).length;
+
+  final rating = 1200 + xp ~/ 8 + coins ~/ 25;
+  final rank = max(1, 500 - (rating ~/ 10));
+
   final player = SynaptixHomePlayer(
     displayName: displayName.trim().isEmpty ? 'Player' : displayName.trim(),
     handle: playerName.isEmpty ? 'player' : playerName,
@@ -55,12 +66,12 @@ final synaptixHomeProvider = FutureProvider<SynaptixHomeState>((ref) async {
     targetXp: targetXp,
     coins: coins,
     gems: gems,
-    wins: 0,
+    wins: wins,
     matches: recent.length,
-    rank: 24,
-    streak: recent.length,
-    bestStreak: 7,
-    rating: 1200 + xp ~/ 8 + coins ~/ 25,
+    rank: rank,
+    streak: wins,
+    bestStreak: max(wins, 7),
+    rating: rating,
     rankTier: _rankTierFor(level),
     preferredCategories: preferredCategories,
   );
@@ -111,25 +122,50 @@ final synaptixHomeProvider = FutureProvider<SynaptixHomeState>((ref) async {
       remainingRewards: remainingRewards,
     ),
     featuredEvent: const SynaptixFeaturedEvent(
-      icon: Icons.auto_awesome_rounded,
-      title: 'Weekend Showdown',
-      subtitle: 'Double XP and exclusive rewards this weekend only.',
-      timeRemaining: '1d 14h left',
+      icon: Icons.emoji_events_rounded,
+      title: 'Synaptix Arena Cup',
+      subtitle: 'Compete, train, and collect rewards from one command center.',
+      timeRemaining: 'Starts in 3 days',
       route: canonicalArenaRoute,
+      rewardLabel: '10,000 Coins',
     ),
-    newsItem: const SynaptixNewsItem(
-      title: 'Synaptix news',
-      body: 'New arcade challenges and dashboard upgrades are rolling out.',
-      route: canonicalLabsRoute,
-    ),
-    dailyReward: SynaptixRewardPrompt(
-      title: 'Daily reward',
-      body: remainingRewards > 0
-          ? '$remainingRewards account rewards waiting.'
-          : 'Come back tomorrow for more rewards.',
-      route: remainingRewards > 0 ? canonicalRewardsRoute : canonicalStoreRoute,
-      icon: Icons.card_giftcard_rounded,
-    ),
+    newsItem: remainingRewards > 0
+        ? SynaptixNewsItem(
+            title: 'Unclaimed Rewards',
+            body: 'You have $remainingRewards account rewards waiting. Claim them now!',
+            route: canonicalRewardsRoute,
+          )
+        : preferredCategories.isNotEmpty
+            ? SynaptixNewsItem(
+                title: '${preferredCategories.first} Challenge',
+                body: 'New ${preferredCategories.first.toLowerCase()} questions added this week!',
+                route: canonicalPlayRoute,
+              )
+            : const SynaptixNewsItem(
+                title: 'Double XP Weekend',
+                body: 'Earn double XP on all quizzes this weekend!',
+                route: canonicalPlayRoute,
+              ),
+    dailyReward: () {
+      final unclaimedDefs = accountRewardDefinitions
+          .where((d) => !claimed.contains(d.key))
+          .toList();
+      if (unclaimedDefs.isNotEmpty) {
+        final next = unclaimedDefs.first;
+        return SynaptixRewardPrompt(
+          title: next.title,
+          body: 'Claim your reward: ${next.reward}',
+          route: canonicalRewardsRoute,
+          icon: Icons.redeem_rounded,
+        );
+      }
+      return const SynaptixRewardPrompt(
+        title: 'Spin the Wheel',
+        body: 'Earn free coins with today\'s free spin!',
+        route: canonicalRewardsRoute,
+        icon: Icons.casino_rounded,
+      );
+    }(),
     friends: const [
       SynaptixFriendPreview(initials: 'A', color: SynaptixHomeTheme.purple),
       SynaptixFriendPreview(initials: 'B', color: SynaptixHomeTheme.blue),

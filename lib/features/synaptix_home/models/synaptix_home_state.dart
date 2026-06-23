@@ -177,6 +177,7 @@ class SynaptixFeaturedEvent {
   final String subtitle;
   final String timeRemaining;
   final String route;
+  final String rewardLabel;
 
   const SynaptixFeaturedEvent({
     required this.icon,
@@ -184,6 +185,7 @@ class SynaptixFeaturedEvent {
     required this.subtitle,
     required this.timeRemaining,
     required this.route,
+    this.rewardLabel = '',
   });
 }
 
