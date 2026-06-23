@@ -133,6 +133,8 @@ flutter:
    - assets/images/backgrounds/versus_background.jpg
    - assets/images/backgrounds/bg7.jpg
    - assets/config/config.json
+   - assets/config/.env.prod
+   - assets/config/.env.staging
    - assets/config/localization_strings.json
    - assets/config/segments.json
    - assets/images/index.json

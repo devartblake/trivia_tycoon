@@ -270,6 +270,16 @@ class EnvConfig {
   /// This must be called once during app initialization before any services
   /// that rely on these variables are created. Safe to call multiple times —
   /// subsequent calls are no-ops.
+  ///
+  /// Environment file selection (in order of precedence):
+  /// 1. ENV_FILE dart environment variable (if set)
+  /// 2. Release mode: assets/config/.env.prod (production)
+  /// 3. Debug mode: .env.local (local Docker), falls back to .env
+  ///
+  /// File locations:
+  /// - .env / .env.local: Local development with Docker
+  /// - .env.prod: Production/alpha/beta release (in assets/config/)
+  /// - .env.staging: Staging environment (in assets/config/)
   static Future<void> load() async {
     if (_loaded) return;
     _loaded = true;
@@ -277,8 +287,8 @@ class EnvConfig {
     final envFile = dartDefinedEnvFile.isNotEmpty
         ? dartDefinedEnvFile
         : kReleaseMode
-            ? 'assets/config/release.env'
-            : '.env.example';
+            ? 'assets/config/.env.prod'
+            : '.env.local';
     try {
       await dotenv.load(fileName: envFile, isOptional: true);
     } catch (e) {
