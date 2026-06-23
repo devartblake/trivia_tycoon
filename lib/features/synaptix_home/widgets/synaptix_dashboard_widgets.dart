@@ -314,8 +314,6 @@ class _SynaptixRailContent extends StatelessWidget {
         const SizedBox(height: 20),
         _StreakCard(player: home.player),
         const SizedBox(height: 20),
-        FriendsOnlineCard(friends: home.friends),
-        const SizedBox(height: 20),
         const _ReferCard(),
       ],
     );

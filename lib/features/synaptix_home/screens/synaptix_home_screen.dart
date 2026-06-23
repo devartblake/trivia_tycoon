@@ -83,7 +83,7 @@ class _SynaptixHomeAdaptiveShell extends StatelessWidget {
           body: isWide
               ? SingleChildScrollView(
                   key: const Key('synaptix-main-scroll'),
-                  child: _MainDashboard(home: home),
+                  child: _MainDashboard(home: home, isWide: isWide, isMedium: isMedium),
                 )
               : _StackedDashboard(home: home, isMedium: isMedium),
         );
@@ -109,7 +109,7 @@ class _StackedDashboard extends StatelessWidget {
             const SynaptixCompactNav(),
             const SizedBox(height: 16),
           ],
-          _MainDashboard(home: home),
+          _MainDashboard(home: home, isWide: false, isMedium: isMedium),
           const SizedBox(height: 12),
           if (isMedium)
             Column(
@@ -129,7 +129,11 @@ class _StackedDashboard extends StatelessWidget {
           else
             SynaptixRightPanel(home: home),
           const SizedBox(height: 16),
-          NewsRewardRow(newsItem: home.newsItem, dailyReward: home.dailyReward),
+          SynaptixDashboardFooter(
+            home: home,
+            isWide: false,
+            isMedium: isMedium,
+          ),
           const SizedBox(height: 32),
         ],
       ),
@@ -139,8 +143,14 @@ class _StackedDashboard extends StatelessWidget {
 
 class _MainDashboard extends StatelessWidget {
   final SynaptixHomeState home;
+  final bool isWide;
+  final bool isMedium;
 
-  const _MainDashboard({required this.home});
+  const _MainDashboard({
+    required this.home,
+    this.isWide = false,
+    this.isMedium = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -214,9 +224,12 @@ class _MainDashboard extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 20),
-        NewsRewardRow(newsItem: home.newsItem, dailyReward: home.dailyReward),
         const SizedBox(height: 32),
+        SynaptixDashboardFooter(
+          home: home,
+          isWide: isWide,
+          isMedium: isMedium,
+        ),
       ],
     );
   }
