@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
@@ -23,6 +24,9 @@ class AppLifecycleManager with WidgetsBindingObserver {
   DateTime? _lastSaveTime;
   Timer? _autoSaveTimer;
 
+  // Debug flag: set to true to see lifecycle logs
+  static const bool _debugLifecycleLogging = false;
+
   // Minimum time between auto-saves (prevent too frequent saves)
   static const Duration _minSaveInterval = Duration(seconds: 30);
 
@@ -35,6 +39,13 @@ class AppLifecycleManager with WidgetsBindingObserver {
     this.onClearTempData,
   });
 
+  /// Log debug message if debugging is enabled
+  void _logDebug(String message) {
+    if (_debugLifecycleLogging && kDebugMode) {
+      LogManager.debug(message);
+    }
+  }
+
   /// Initialize lifecycle management
   void initialize() {
     if (_isInitialized) return;
@@ -44,7 +55,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
     _startAutoSave();
     _isInitialized = true;
 
-    LogManager.debug('[Lifecycle] Initialized - graceful shutdown enabled');
+    _logDebug('[Lifecycle] Initialized - graceful shutdown enabled');
   }
 
   /// Dispose and cleanup
@@ -53,12 +64,12 @@ class AppLifecycleManager with WidgetsBindingObserver {
     _autoSaveTimer?.cancel();
     _isInitialized = false;
 
-    LogManager.debug('[Lifecycle] Disposed');
+    _logDebug('[Lifecycle] Disposed');
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    LogManager.debug('[Lifecycle] State changed: $state');
+    _logDebug('[Lifecycle] State changed: $state');
 
     switch (state) {
       case AppLifecycleState.resumed:
@@ -85,7 +96,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App resumed (came back to foreground)
   void _handleAppResumed() async {
-    LogManager.debug('[Lifecycle] App RESUMED - User returned');
+    _logDebug('[Lifecycle] App RESUMED - User returned');
     onAppResumed?.call();
 
     // Restart auto-save if it was stopped
@@ -96,7 +107,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App inactive (transitioning, overlays, etc.)
   void _handleAppInactive() async {
-    LogManager.debug('[Lifecycle] App INACTIVE - Quick save triggered');
+    _logDebug('[Lifecycle] App INACTIVE - Quick save triggered');
     onAppInactive?.call();
 
     // Quick save on inactive (user might be closing app)
@@ -105,7 +116,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// App paused (went to background)
   void _handleAppPaused() async {
-    LogManager.debug('[Lifecycle] App PAUSED - Saving state...');
+    _logDebug('[Lifecycle] App PAUSED - Saving state...');
     onAppPaused?.call();
 
     // Save everything when app goes to background
@@ -127,12 +138,12 @@ class AppLifecycleManager with WidgetsBindingObserver {
     // Clear temporary data
     await _clearTemporaryData();
 
-    LogManager.debug('[Lifecycle] Graceful shutdown complete');
+    _logDebug('[Lifecycle] Graceful shutdown complete');
   }
 
   /// App hidden (another app in foreground)
   void _handleAppHidden() async {
-    LogManager.debug('[Lifecycle] App HIDDEN - Quick save');
+    _logDebug('[Lifecycle] App HIDDEN - Quick save');
     await _performSave(reason: 'hidden');
   }
 
@@ -155,7 +166,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
     // Catch async errors outside Flutter
     PlatformDispatcher.instance.onError = (error, stack) {
-      LogManager.debug('[Lifecycle] Async Error Caught: $error');
+      _logDebug('[Lifecycle] Async Error Caught: $error');
 
       // Save state before crash
       _performSave(reason: 'async_crash');
@@ -185,7 +196,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
     _lastSaveTime = now;
 
     try {
-      LogManager.debug('[Lifecycle] Saving state (reason: $reason)...');
+      _logDebug('[Lifecycle] Saving state (reason: $reason)...');
       final startTime = DateTime.now();
 
       await onSaveState?.call();
@@ -195,8 +206,8 @@ class AppLifecycleManager with WidgetsBindingObserver {
           '[Lifecycle] Save complete in ${duration.inMilliseconds}ms');
     } catch (e, stack) {
       _lastSaveTime = null; // Allow immediate retry after a failed save
-      LogManager.debug('[Lifecycle] Save failed: $e');
-      LogManager.debug('[Lifecycle] Stack: $stack');
+      _logDebug('[Lifecycle] Save failed: $e');
+      _logDebug('[Lifecycle] Stack: $stack');
     }
   }
 
@@ -206,28 +217,28 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
     // Auto-save every 30 seconds during active gameplay
     _autoSaveTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
-      LogManager.debug('[Lifecycle] Auto-save triggered');
+      _logDebug('[Lifecycle] Auto-save triggered');
       _performSave(reason: 'auto');
     });
 
-    LogManager.debug('[Lifecycle] Auto-save started (every 30s)');
+    _logDebug('[Lifecycle] Auto-save started (every 30s)');
   }
 
   /// Clear temporary data on shutdown
   Future<void> _clearTemporaryData() async {
     try {
-      LogManager.debug('[Lifecycle] Clearing temporary data...');
+      _logDebug('[Lifecycle] Clearing temporary data...');
       await onClearTempData?.call();
-      LogManager.debug('[Lifecycle] Temporary data cleared');
+      _logDebug('[Lifecycle] Temporary data cleared');
     } catch (e) {
-      LogManager.debug('[Lifecycle] Failed to clear temp data: $e');
+      _logDebug('[Lifecycle] Failed to clear temp data: $e');
     }
   }
 
   /// Log crash for analytics/debugging
   void _logCrash(Object error, StackTrace? stack) {
     // In production, send to Firebase Crashlytics, Sentry, etc.
-    LogManager.debug('[Lifecycle] CRASH LOGGED:');
+    _logDebug('[Lifecycle] CRASH LOGGED:');
     LogManager.debug('  Error: $error');
     LogManager.debug('  Stack: $stack');
 
@@ -241,7 +252,7 @@ class AppLifecycleManager with WidgetsBindingObserver {
 
   /// Force save (call this before critical operations)
   Future<void> forceSave() async {
-    LogManager.debug('[Lifecycle] Force save requested');
+    _logDebug('[Lifecycle] Force save requested');
     _lastSaveTime = null; // Reset throttle
     await _performSave(reason: 'manual');
   }

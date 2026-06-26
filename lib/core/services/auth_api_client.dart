@@ -339,11 +339,8 @@ class AuthApiClient {
   }) async {
     final resolvedDeviceType = deviceType ?? _deviceId.getDeviceType();
     final payload = {
-      'refresh_token': refreshToken,
       'refreshToken': refreshToken,
-      'device_id': deviceId,
       'deviceId': deviceId,
-      'device_type': resolvedDeviceType,
       'deviceType': resolvedDeviceType,
     };
 

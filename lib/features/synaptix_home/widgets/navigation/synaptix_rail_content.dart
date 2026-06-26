@@ -50,9 +50,7 @@ class SynaptixRightPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Wrap(
-                spacing: 16,
-                runSpacing: 16,
+              Row(
                 children: [
                   Expanded(
                     child: Column(
@@ -76,6 +74,7 @@ class SynaptixRightPanel extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       children: [

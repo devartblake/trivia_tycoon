@@ -126,12 +126,24 @@ class LogEntry {
 class LogManager {
   static final List<LogEntry> _logs = [];
   static bool _useColors = true;
+  static bool _productionMode = kReleaseMode; // Auto-enable in release mode
 
   /// Stream of logs for real-time listening (UI debug tools)
   static final StreamController<LogEntry> _logStreamController =
       StreamController<LogEntry>.broadcast();
 
   static Stream<LogEntry> get logStream => _logStreamController.stream;
+
+  /// Enable production mode to suppress debug/info logs
+  static void setProductionMode(bool enabled) {
+    _productionMode = enabled;
+    if (enabled && kDebugMode) {
+      debugPrint('⚠️ LogManager: Production mode enabled - debug logs suppressed');
+    }
+  }
+
+  /// Check if production mode is active
+  static bool get isProductionMode => _productionMode;
 
   /// Enable or disable colored output
   static void setColorEnabled(bool enabled) {
@@ -149,6 +161,15 @@ class LogManager {
     bool forceLog = false,
   }) {
     final entry = LogEntry(level, message, source: source);
+
+    // In production mode, suppress debug and info logs (only show warnings and errors)
+    if (_productionMode && (level == LogLevel.debug || level == LogLevel.info)) {
+      // Don't log or print, but still store for analysis if forced
+      if (forceLog) {
+        _logs.add(entry);
+      }
+      return;
+    }
 
     if (kDebugMode || ConfigService.enableLogging || forceLog) {
       debugPrint(entry.toString(useColors: _useColors));

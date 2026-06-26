@@ -21,23 +21,6 @@ bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 bool get _isAndroid =>
     !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
-/// User data model for mock authentication (dev builds only).
-class MockUser {
-  final String email;
-  final String password;
-  final String role;
-  final bool isPremium;
-
-  const MockUser({
-    required this.email,
-    required this.password,
-    required this.role,
-    required this.isPremium,
-  });
-
-  bool get isAdmin => role == 'admin';
-  bool get isPlayer => role == 'player';
-}
 
 /// Mobile-only login screen.
 ///
@@ -61,44 +44,6 @@ class LoginScreenMobile extends ConsumerStatefulWidget {
 
 class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
     with SingleTickerProviderStateMixin {
-  static const mockUsers = <String, MockUser>{
-    'admin@gmail.com': MockUser(
-      email: 'admin@gmail.com',
-      password: 'admin123',
-      role: 'admin',
-      isPremium: true,
-    ),
-    'premium@gmail.com': MockUser(
-      email: 'premium@gmail.com',
-      password: 'premium',
-      role: 'player',
-      isPremium: true,
-    ),
-    'dribbble@gmail.com': MockUser(
-      email: 'dribbble@gmail.com',
-      password: '12345',
-      role: 'player',
-      isPremium: false,
-    ),
-    'hunter@gmail.com': MockUser(
-      email: 'hunter@gmail.com',
-      password: 'hunter',
-      role: 'admin',
-      isPremium: true,
-    ),
-    'near.huscarl@gmail.com': MockUser(
-      email: 'near.huscarl@gmail.com',
-      password: 'subscribe to pewdiepie',
-      role: 'player',
-      isPremium: false,
-    ),
-    '@.com': MockUser(
-      email: '@.com',
-      password: '.',
-      role: 'player',
-      isPremium: false,
-    ),
-  };
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -198,24 +143,10 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
           await authOps.loginWithPassword(email, password);
         }
       } else {
-        if (!mockUsers.containsKey(email)) {
-          _showErrorSnackBar('User does not exist');
-          setState(() => _isLoading = false);
-          return;
-        }
-
-        final mockUser = mockUsers[email]!;
-        if (mockUser.password != password) {
-          _showErrorSnackBar('Incorrect password');
-          setState(() => _isLoading = false);
-          return;
-        }
-
-        await authOps.login(email);
-        final authService = ref.read(authServiceProvider);
-        await authService.secureStorage.setSecret('user_role', mockUser.role);
-        await authService.secureStorage
-            .setSecret('is_premium', mockUser.isPremium.toString());
+        // Backend authentication required
+        _showErrorSnackBar('Backend authentication is required. Please configure backend API.');
+        setState(() => _isLoading = false);
+        return;
       }
 
       final existingProfiles = await multiProfileService.getAllProfiles();

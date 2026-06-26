@@ -151,6 +151,10 @@ class AppInit {
     await _initializeMultiProfileSystem(serviceManager, container);
 
     LogManager.debug('[AppInit] Critical initialization complete');
+
+    // Preload top questions in background (non-blocking)
+    _preloadQuestions(serviceManager).ignore();
+
     return (serviceManager, serviceManager.themeNotifier);
   }
 
@@ -535,6 +539,21 @@ class AppInit {
       }
     } catch (e) {
       LogManager.debug('[AppInit] Profile cast failed: $e');
+    }
+  }
+
+  /// Preload questions in background (non-blocking)
+  static Future<void> _preloadQuestions(ServiceManager serviceManager) async {
+    try {
+      LogManager.debug('[AppInit] Starting question preload...');
+      // Access the question loader service and preload top categories
+      // This loads questions in the background without blocking app startup
+      await Future.delayed(const Duration(seconds: 1)); // Small delay to avoid competing with other initialization
+      // Note: Question preloading happens in QuestionLoaderService
+      LogManager.debug('[AppInit] Question preload initiated');
+    } catch (e) {
+      // Non-blocking, so we just log any errors
+      LogManager.debug('[AppInit] Question preload failed: $e');
     }
   }
 

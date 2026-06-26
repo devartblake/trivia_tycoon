@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../core/constants/question_paths.dart';
+import '../../core/services/question_api_client.dart';
 import '../data/question_asset_index_loader.dart';
 import 'quiz_category.dart';
 import '../models/question_model.dart';
@@ -30,9 +31,12 @@ class QuestionDataset {
 class AdaptedQuestionLoaderService {
   AdaptedQuestionLoaderService({
     QuestionAssetIndexLoader? indexLoader,
-  }) : _indexLoader = indexLoader ?? QuestionAssetIndexLoader();
+    QuestionApiClient? apiClient,
+  })  : _indexLoader = indexLoader ?? QuestionAssetIndexLoader(),
+        _apiClient = apiClient ?? QuestionApiClient();
 
   final QuestionAssetIndexLoader _indexLoader;
+  final QuestionApiClient _apiClient;
 
   // Enhanced datasets using QuizCategory enum
   static const List<QuestionDataset> _coreDatasets = [
@@ -937,7 +941,7 @@ class AdaptedQuestionLoaderService {
     return balanced.take(count).toList();
   }
 
-  /// Load questions from a specific dataset by name with enhanced error handling
+  /// Load questions from a specific dataset by name with API fallback
   Future<List<QuestionModel>> loadDataset(String datasetName) async {
     // Check cache validity first
     if (_cachedDatasets.containsKey(datasetName) &&
@@ -965,8 +969,26 @@ class AdaptedQuestionLoaderService {
     final primaryPath = indexedPath ?? resolvedDataset.path;
 
     try {
-      // Try direct path loading first
-      final questions = await _loadFromPath(primaryPath, datasetName);
+      // Try API first for latest questions
+      List<QuestionModel> questions;
+      try {
+        LogManager.debug(
+          '[QuestionLoader] Attempting to fetch $datasetName from API',
+        );
+        questions = await _apiClient.getQuestionsByCategory(
+          datasetName,
+          count: 100, // Fetch more questions for better variety
+        );
+        LogManager.debug(
+          '[QuestionLoader] Successfully loaded $datasetName from API (${questions.length} questions)',
+        );
+      } catch (e) {
+        LogManager.debug(
+          '[QuestionLoader] API fetch failed for $datasetName: $e. Falling back to assets.',
+        );
+        // Fallback to asset loading if API fails
+        questions = await _loadFromPath(primaryPath, datasetName);
+      }
 
       // Cache the loaded questions
       _cachedDatasets[datasetName] = questions;
@@ -976,7 +998,7 @@ class AdaptedQuestionLoaderService {
       return questions;
     } catch (e) {
       LogManager.debug(
-        'Failed to load dataset $datasetName from path $primaryPath: $e',
+        '[QuestionLoader] Failed to load dataset $datasetName from any source: $e',
       );
       _datasetAvailability[datasetName] = false;
 
@@ -1938,5 +1960,68 @@ class AdaptedQuestionLoaderService {
     }
 
     LogManager.debug('=== End Comprehensive Test ===');
+  }
+
+  /// Preload questions for top categories on app startup
+  /// This ensures questions are cached and ready when the user starts playing
+  Future<void> preloadTopCategories({int count = 10}) async {
+    LogManager.info(
+      '[QuestionLoader] Starting preload of top $count categories',
+      source: 'preloadTopCategories',
+    );
+
+    final topCategories = _coreDatasets.take(count).toList();
+    int successful = 0;
+    int failed = 0;
+
+    for (final dataset in topCategories) {
+      try {
+        await loadDataset(dataset.name);
+        successful++;
+        LogManager.debug(
+          '[QuestionLoader] Preloaded: ${dataset.name}',
+        );
+      } catch (e) {
+        failed++;
+        LogManager.debug(
+          '[QuestionLoader] Failed to preload ${dataset.name}: $e',
+        );
+      }
+    }
+
+    LogManager.info(
+      '[QuestionLoader] Preload complete: $successful successful, $failed failed',
+      source: 'preloadTopCategories',
+    );
+  }
+
+  /// Preload questions for specific categories
+  Future<Map<String, List<QuestionModel>>> preloadCategories(
+    List<String> categoryNames,
+  ) async {
+    LogManager.info(
+      '[QuestionLoader] Preloading ${categoryNames.length} specific categories',
+      source: 'preloadCategories',
+    );
+
+    final result = <String, List<QuestionModel>>{};
+
+    for (final categoryName in categoryNames) {
+      try {
+        final questions = await loadDataset(categoryName);
+        result[categoryName] = questions;
+        LogManager.debug(
+          '[QuestionLoader] Preloaded $categoryName: ${questions.length} questions',
+        );
+      } catch (e) {
+        LogManager.warning(
+          '[QuestionLoader] Failed to preload $categoryName: $e',
+          source: 'preloadCategories',
+        );
+        result[categoryName] = [];
+      }
+    }
+
+    return result;
   }
 }
