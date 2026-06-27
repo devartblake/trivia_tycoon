@@ -6,6 +6,9 @@ import '../models/synaptix_home_state.dart';
 import '../providers/synaptix_home_provider.dart';
 import '../theme/synaptix_home_theme.dart';
 import '../widgets/synaptix_dashboard_widgets.dart';
+import '../widgets/cards/phase2_daily_bonus_card.dart';
+import '../widgets/cards/phase2_weekly_rewards_card.dart';
+import '../widgets/cards/phase2_tier_progress_card.dart';
 
 class SynaptixHomeScreen extends ConsumerWidget {
   const SynaptixHomeScreen({super.key});
@@ -164,6 +167,36 @@ class _MainDashboard extends StatelessWidget {
         const SizedBox(height: 20),
         GameModeGrid(modes: home.primaryActions),
         const SizedBox(height: 20),
+
+        // Phase 2: Daily Bonus, Weekly Rewards, Tier Progress
+        LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth < 720) {
+              return Column(
+                children: [
+                  Phase2DailyBonusCard(),
+                  const SizedBox(height: 16),
+                  Phase2WeeklyRewardsCard(),
+                  const SizedBox(height: 16),
+                  Phase2TierProgressCard(),
+                  const SizedBox(height: 20),
+                ],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: Phase2DailyBonusCard()),
+                const SizedBox(width: 16),
+                Expanded(child: Phase2WeeklyRewardsCard()),
+                const SizedBox(width: 16),
+                Expanded(child: Phase2TierProgressCard()),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 20),
+
         LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth < 720) {

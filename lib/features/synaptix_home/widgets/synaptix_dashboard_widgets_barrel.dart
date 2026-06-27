@@ -25,6 +25,11 @@ export 'cards/daily_reward_card.dart';
 export 'cards/friends_online_card.dart';
 export 'cards/complete_profile_card.dart';
 
+// Phase 2 Reward cards
+export 'cards/phase2_daily_bonus_card.dart';
+export 'cards/phase2_weekly_rewards_card.dart';
+export 'cards/phase2_tier_progress_card.dart';
+
 // Tiles
 export 'tiles/achievement_tile.dart';
 
