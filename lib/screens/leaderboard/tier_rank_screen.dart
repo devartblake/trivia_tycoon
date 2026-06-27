@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/game/controllers/leaderboard_controller.dart';
@@ -120,7 +121,7 @@ class _TierRankScreenState extends ConsumerState<TierRankScreen>
                   icon:
                       const Icon(Icons.arrow_back_rounded, color: Colors.white),
                   onPressed: () {
-                    context.pop(); // Navigate to home route
+                    context.safeBack(); // Navigate back safely
                   },
                 ),
               ),

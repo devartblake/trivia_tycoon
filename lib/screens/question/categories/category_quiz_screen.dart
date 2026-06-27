@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
 import '../../../game/services/quiz_category.dart';
@@ -85,7 +86,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
         title: Text('${_getCategoryLabel()} Quiz'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: categoryDataAsync.when(

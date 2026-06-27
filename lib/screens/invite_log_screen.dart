@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:intl/intl.dart';
 import '../game/models/referral_models.dart';
 import '../game/providers/riverpod_providers.dart';
@@ -74,7 +75,7 @@ class _InviteLogScreenState extends ConsumerState<InviteLogScreen>
           ),
           child: IconButton(
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-            onPressed: () => context.pop(),
+            onPressed: () => context.safeBack(),
           ),
         ),
       ),

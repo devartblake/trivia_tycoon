@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 class AlertsScreen extends StatelessWidget {
   const AlertsScreen({super.key});
@@ -13,7 +14,7 @@ class AlertsScreen extends StatelessWidget {
           // ✅ Back button to return to previous screen
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.pop(); // Navigate back
+            context.safeBack(); // Navigate back
           },
         ),
       ),

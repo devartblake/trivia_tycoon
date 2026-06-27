@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 class PreferencesScreen extends StatefulWidget {
   const PreferencesScreen({super.key});
@@ -152,7 +153,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
           ],
         ),
         child: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF1E293B),

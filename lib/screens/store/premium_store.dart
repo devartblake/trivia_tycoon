@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/core/models/store/premium_store_model.dart';
 import 'package:trivia_tycoon/game/state/premium_profile_state.dart';
 import 'package:trivia_tycoon/screens/store/widgets/ad_remove_options.dart';

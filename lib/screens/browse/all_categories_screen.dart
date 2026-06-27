@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../game/providers/question_providers.dart' as question_data;
 import '../../game/services/quiz_category.dart'; // Import QuizCategory
 
@@ -60,7 +61,7 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
         title: const Text('Learning Categories'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         elevation: 0,

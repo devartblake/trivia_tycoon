@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../../game/controllers/settings_controller.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/navigation/canonical_routes.dart';
@@ -441,7 +442,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ],
         ),
         child: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF1E293B),

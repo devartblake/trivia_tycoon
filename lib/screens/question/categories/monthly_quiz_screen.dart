@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
 
@@ -49,7 +50,7 @@ class MonthlyQuizScreen extends ConsumerWidget {
         title: Text('$currentMonth Challenge'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: monthlyQuizAsync.when(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/game/providers/auth_providers.dart';
 
@@ -125,7 +126,7 @@ class _UserSettingsScreenState extends ConsumerState<UserSettingsScreen>
           ],
         ),
         child: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF1E293B),

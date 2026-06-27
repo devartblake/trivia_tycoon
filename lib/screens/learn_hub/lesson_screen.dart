@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 import '../../core/dto/learning_dto.dart';
 import '../../game/providers/learning_providers.dart';
@@ -21,7 +22,7 @@ class LessonScreen extends ConsumerWidget {
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(Icons.close),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: lessonsAsync.when(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
@@ -180,7 +181,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
-            onPressed: () => context.pop(),
+            onPressed: () => context.safeBack(),
             icon: const Icon(
               Icons.arrow_back,
               color: Colors.white,

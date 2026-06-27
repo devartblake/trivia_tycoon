@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/controllers/skill_tree_controller.dart';
 import '../../synaptix/mode/synaptix_mode_provider.dart';

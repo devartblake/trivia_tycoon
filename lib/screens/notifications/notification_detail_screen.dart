@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/notifications/player_inbox_item.dart';
 import '../../game/providers/player_notification_providers.dart';

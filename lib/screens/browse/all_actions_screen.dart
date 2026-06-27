@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/navigation/navigation_extensions.dart';
+
 class AllActionsScreen extends StatelessWidget {
   const AllActionsScreen({super.key});
 
@@ -20,7 +22,7 @@ class AllActionsScreen extends StatelessWidget {
         title: const Text('All Actions'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: Padding(

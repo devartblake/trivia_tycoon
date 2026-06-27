@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../core/services/api_service.dart';
 import '../../core/models/social/friend_list_item_dto.dart';
 import '../../core/models/social/friend_request_dto.dart';
@@ -337,7 +338,7 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen>
             size: 18,
           ),
         ),
-        onPressed: () => context.pop(),
+        onPressed: () => context.safeBack(),
       ),
       title: Row(
         children: [

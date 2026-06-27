@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
@@ -82,7 +83,7 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
       backgroundColor: Colors.transparent,
       leading: _buildNavButton(
         icon: Icons.arrow_back_rounded,
-        onPressed: () => context.pop(),
+        onPressed: () => context.safeBack(),
         theme: theme,
       ),
       title: Text(

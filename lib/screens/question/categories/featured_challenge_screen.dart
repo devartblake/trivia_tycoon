@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 class FeaturedChallengeScreen extends StatelessWidget {
   const FeaturedChallengeScreen({super.key});
@@ -11,7 +12,7 @@ class FeaturedChallengeScreen extends StatelessWidget {
         title: const Text('Featured Challenge'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: const Center(

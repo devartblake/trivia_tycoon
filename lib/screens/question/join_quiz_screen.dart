@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 class JoinQuizScreen extends StatelessWidget {
   const JoinQuizScreen({super.key});
@@ -11,7 +12,7 @@ class JoinQuizScreen extends StatelessWidget {
         title: const Text('Join Quiz'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: const Center(

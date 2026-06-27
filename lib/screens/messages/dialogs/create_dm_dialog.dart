@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 import '../../../core/models/social/friend_list_item_dto.dart';
 import '../../../game/providers/friends_providers.dart';
@@ -49,7 +50,7 @@ class _CreateDMDialogState extends ConsumerState<CreateDMDialog> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
         title: const Text(
           'New Message',

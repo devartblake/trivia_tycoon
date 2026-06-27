@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/navigation/navigation_extensions.dart';
 import '../widgets/challenges/daily_quiz_widget.dart';
 
 class DailyQuizScreen extends ConsumerWidget {
@@ -17,7 +18,7 @@ class DailyQuizScreen extends ConsumerWidget {
         title: const Text('Daily Quiz'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: dailyQuizAsync.when(

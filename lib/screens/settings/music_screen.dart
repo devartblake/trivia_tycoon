@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:just_audio/just_audio.dart' as just_audio;
 import '../../core/services/settings/purchase_settings_service.dart';
 import '../../audio/models/songs.dart';
@@ -204,7 +205,7 @@ class _MusicScreenState extends ConsumerState<MusicScreen>
           ],
         ),
         child: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: Color(0xFF1E293B),

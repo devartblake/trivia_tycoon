@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 class MultiplayerScreen extends StatelessWidget {
   const MultiplayerScreen({super.key});
@@ -11,7 +12,7 @@ class MultiplayerScreen extends StatelessWidget {
         title: const Text('Multiplayer'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.safeBack(),
         ),
       ),
       body: const Center(

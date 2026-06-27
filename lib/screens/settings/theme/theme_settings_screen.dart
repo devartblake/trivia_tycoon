@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import '../../../core/services/theme/seasonal_theme_service.dart';
 import '../../../core/theme/styles.dart';
 import '../../../core/theme/themes.dart';
@@ -174,7 +175,7 @@ class _ThemeSettingsScreenState extends ConsumerState<ThemeSettingsScreen>
             boxShadow: Shadows.m(theme.greyWeak, 0.05),
           ),
           child: IconButton(
-            onPressed: () => context.pop(),
+            onPressed: () => context.safeBack(),
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: theme.txt,

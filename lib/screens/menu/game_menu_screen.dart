@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
 import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
@@ -71,7 +72,7 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
         leading: canPop
             ? IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: () => context.pop(),
+                onPressed: () => context.safeBack(),
               )
             : null,
         backgroundColor: Colors.transparent,

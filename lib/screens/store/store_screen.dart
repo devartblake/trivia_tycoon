@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../core/navigation/navigation_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../personalization/widgets/recommended_for_you_section.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
