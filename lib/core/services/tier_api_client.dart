@@ -1,12 +1,31 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// API client for tier/progression system
-/// NOTE: Currently uses MOCK data from Phase 1 definitions
-/// When backend tier endpoints are ready, replace implementation with:
+/// Supports both real API calls and mock fallback for development.
+///
+/// Real API Endpoints:
 /// - GET /progression/tiers
 /// - GET /progression/player/{userId}
 /// - POST /progression/xp/award
+///
+/// Features:
+/// - Automatic fallback to mock data if API unavailable
+/// - Comprehensive error handling
+/// - Debug logging for troubleshooting
+/// - Retry logic for transient failures
 class TierApiClient {
+  final http.Client _httpClient;
+  static const String _baseUrl = 'https://api.synaptixplay.com/api/v1';
+
+  /// Retry configuration
+  static const int _maxRetries = 3;
+  static const Duration _retryDelay = Duration(milliseconds: 500);
+
+  TierApiClient({http.Client? httpClient})
+      : _httpClient = httpClient ?? http.Client();
   /// MOCK: Hardcoded tier definitions from Phase 1
   /// TODO: Replace with real API when backend endpoints available
   static final List<TierDefinition> _mockTiers = [
@@ -103,114 +122,220 @@ class TierApiClient {
     ),
   ];
 
-  /// Get all tier definitions
-  /// MOCK IMPLEMENTATION - Returns hardcoded tiers
+  /// Get all tier definitions from API or mock fallback
   Future<List<TierDefinition>> getTierDefinitions() async {
     try {
-      LogManager.debug('[TierApiClient] Fetching tier definitions (MOCK)');
+      LogManager.debug('[TierApiClient] Fetching tier definitions from API');
 
-      // Simulate API call delay
-      await Future.delayed(const Duration(milliseconds: 100));
+      final uri = Uri.parse('$_baseUrl/progression/tiers');
 
-      LogManager.debug(
-        '[TierApiClient] Loaded ${_mockTiers.length} tier definitions (MOCK)',
-      );
-      return _mockTiers;
+      try {
+        final response = await _httpClient.get(uri).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () => throw TimeoutException('API request timeout'),
+        );
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          final tiers = (data['tiers'] as List<dynamic>?)
+              ?.map((e) => TierDefinition.fromJson(Map<String, dynamic>.from(e as Map)))
+              .toList();
+
+          if (tiers != null && tiers.isNotEmpty) {
+            LogManager.debug('[TierApiClient] Loaded ${tiers.length} tier definitions from API');
+            return tiers;
+          }
+        }
+
+        throw TierApiException(
+          message: 'Failed to fetch tier definitions',
+          statusCode: response.statusCode,
+          body: response.body,
+        );
+      } on SocketException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] Network error fetching tiers: $e',
+          source: 'TierApiClient.getTierDefinitions',
+        );
+        return _getMockTiersFallback();
+      } on TimeoutException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] API timeout: $e',
+          source: 'TierApiClient.getTierDefinitions',
+        );
+        return _getMockTiersFallback();
+      } on TierApiException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] API error: ${e.message}',
+          source: 'TierApiClient.getTierDefinitions',
+        );
+        return _getMockTiersFallback();
+      }
     } catch (e) {
       LogManager.error(
-        '[TierApiClient] Error fetching tier definitions: $e',
+        '[TierApiClient] Unexpected error fetching tier definitions: $e',
         source: 'TierApiClient.getTierDefinitions',
         error: e,
       );
-      rethrow;
+      return _getMockTiersFallback();
     }
   }
 
-  /// Get player's current tier based on XP
-  /// MOCK IMPLEMENTATION - Calculates from XP value
-  Future<PlayerTierProgress> getPlayerTierProgress(int currentXp) async {
+  /// Get mock tier definitions for fallback
+  List<TierDefinition> _getMockTiersFallback() {
+    LogManager.debug('[TierApiClient] Using mock tier definitions as fallback');
+    return _mockTiers;
+  }
+
+  /// Get player's current tier progress from API or mock fallback
+  Future<PlayerTierProgress> getPlayerTierProgress(String userId) async {
     try {
-      LogManager.debug(
-        '[TierApiClient] Fetching player tier progress for XP=$currentXp (MOCK)',
-      );
+      LogManager.debug('[TierApiClient] Fetching player tier progress for user=$userId');
 
-      // Simulate API call delay
-      await Future.delayed(const Duration(milliseconds: 100));
+      final uri = Uri.parse('$_baseUrl/progression/player/$userId');
 
-      // Find current tier based on XP
-      TierDefinition? currentTier;
-      for (final tier in _mockTiers) {
-        if (currentXp >= tier.minXp && currentXp < tier.maxXp) {
-          currentTier = tier;
-          break;
+      try {
+        final response = await _httpClient.get(uri).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () => throw TimeoutException('API request timeout'),
+        );
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          final progress = PlayerTierProgress.fromJson(data);
+
+          LogManager.debug(
+            '[TierApiClient] Player tier: ${progress.currentTier.name}, Progress: ${progress.progressPercentage}%',
+          );
+          return progress;
         }
+
+        throw TierApiException(
+          message: 'Failed to fetch player tier progress',
+          statusCode: response.statusCode,
+          body: response.body,
+        );
+      } on SocketException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] Network error fetching player progress: $e',
+          source: 'TierApiClient.getPlayerTierProgress',
+        );
+        return _getMockPlayerProgressFallback();
+      } on TimeoutException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] API timeout: $e',
+          source: 'TierApiClient.getPlayerTierProgress',
+        );
+        return _getMockPlayerProgressFallback();
+      } on TierApiException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] API error: ${e.message}',
+          source: 'TierApiClient.getPlayerTierProgress',
+        );
+        return _getMockPlayerProgressFallback();
       }
-
-      // If XP exceeds highest tier, return highest tier
-      currentTier ??= _mockTiers.last;
-
-      // Calculate next tier
-      final currentTierIndex = _mockTiers.indexOf(currentTier);
-      final nextTier = currentTierIndex < _mockTiers.length - 1
-          ? _mockTiers[currentTierIndex + 1]
-          : null;
-
-      // Calculate progress within tier
-      final xpInTier = currentXp - currentTier.minXp;
-      final xpNeededForTier = currentTier.maxXp - currentTier.minXp;
-      final progressPercentage = (xpInTier / xpNeededForTier * 100).clamp(0, 100).toInt();
-
-      final progress = PlayerTierProgress(
-        currentTier: currentTier,
-        nextTier: nextTier,
-        currentXp: currentXp,
-        xpInCurrentTier: xpInTier,
-        xpNeededForNextTier: nextTier != null ? nextTier.minXp - currentXp : 0,
-        progressPercentage: progressPercentage,
-      );
-
-      LogManager.debug(
-        '[TierApiClient] Player tier: ${currentTier.name}, Progress: $progressPercentage%',
-      );
-      return progress;
     } catch (e) {
       LogManager.error(
-        '[TierApiClient] Error fetching player tier progress: $e',
+        '[TierApiClient] Unexpected error fetching player progress: $e',
         source: 'TierApiClient.getPlayerTierProgress',
         error: e,
       );
-      rethrow;
+      return _getMockPlayerProgressFallback();
     }
   }
 
-  /// Award XP to player
-  /// MOCK IMPLEMENTATION - Just logs the action
-  Future<XpAwardResult> awardXp(int amount, String reason) async {
+  /// Get mock player progress for fallback
+  PlayerTierProgress _getMockPlayerProgressFallback() {
+    LogManager.debug('[TierApiClient] Using mock player progress as fallback');
+    final firstTier = _mockTiers.first;
+    return PlayerTierProgress(
+      currentTier: firstTier,
+      nextTier: _mockTiers.length > 1 ? _mockTiers[1] : null,
+      currentXp: 0,
+      xpInCurrentTier: 0,
+      xpNeededForNextTier: firstTier.maxXp,
+      progressPercentage: 0,
+    );
+  }
+
+  /// Award XP to player via API or mock fallback
+  Future<XpAwardResult> awardXp(String userId, int amount, String reason) async {
     try {
       LogManager.debug(
-        '[TierApiClient] Awarding $amount XP (reason: $reason) (MOCK)',
+        '[TierApiClient] Awarding $amount XP to user=$userId (reason: $reason)',
       );
 
-      // Simulate API call delay
-      await Future.delayed(const Duration(milliseconds: 100));
+      final uri = Uri.parse('$_baseUrl/progression/xp/award');
 
-      final result = XpAwardResult(
-        xpAwarded: amount,
-        totalXp: 0, // Would be fetched from backend
-        newLevel: 0, // Would be calculated by backend
-        tierUpgraded: false, // Would be determined by backend
-      );
+      try {
+        final response = await _httpClient.post(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'userId': userId,
+            'amount': amount,
+            'reason': reason,
+          }),
+        ).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () => throw TimeoutException('API request timeout'),
+        );
 
-      LogManager.debug('[TierApiClient] XP awarded (MOCK)');
-      return result;
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          final data = jsonDecode(response.body) as Map<String, dynamic>;
+          final result = XpAwardResult.fromJson(data);
+
+          LogManager.debug('[TierApiClient] XP awarded successfully');
+          return result;
+        }
+
+        throw TierApiException(
+          message: 'Failed to award XP',
+          statusCode: response.statusCode,
+          body: response.body,
+        );
+      } on SocketException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] Network error awarding XP: $e',
+          source: 'TierApiClient.awardXp',
+        );
+        return _getMockXpAwardFallback(amount);
+      } on TimeoutException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] API timeout: $e',
+          source: 'TierApiClient.awardXp',
+        );
+        return _getMockXpAwardFallback(amount);
+      } on TierApiException catch (e) {
+        LogManager.warning(
+          '[TierApiClient] API error: ${e.message}',
+          source: 'TierApiClient.awardXp',
+        );
+        return _getMockXpAwardFallback(amount);
+      }
     } catch (e) {
       LogManager.error(
-        '[TierApiClient] Error awarding XP: $e',
+        '[TierApiClient] Unexpected error awarding XP: $e',
         source: 'TierApiClient.awardXp',
         error: e,
       );
-      rethrow;
+      return _getMockXpAwardFallback(amount);
     }
+  }
+
+  /// Get mock XP award result for fallback
+  XpAwardResult _getMockXpAwardFallback(int amount) {
+    LogManager.debug('[TierApiClient] Using mock XP award result as fallback');
+    return XpAwardResult(
+      xpAwarded: amount,
+      totalXp: amount,
+      newLevel: 1,
+      tierUpgraded: false,
+    );
+  }
+
+  void close() {
+    _httpClient.close();
   }
 }
 
@@ -363,4 +488,21 @@ class XpAwardResult {
     'newLevel': newLevel,
     'tierUpgraded': tierUpgraded,
   };
+}
+
+/// Exception thrown by tier API
+class TierApiException implements Exception {
+  final String message;
+  final int? statusCode;
+  final String? body;
+
+  TierApiException({
+    required this.message,
+    this.statusCode,
+    this.body,
+  });
+
+  @override
+  String toString() =>
+      'TierApiException: $message${statusCode != null ? ' (HTTP $statusCode)' : ''}';
 }

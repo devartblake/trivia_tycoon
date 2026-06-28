@@ -152,10 +152,12 @@ final weeklyClaimProvider =
 /// Phase 2: Tier System Providers (MOCK - will be replaced with real API)
 /// ============================================================================
 
-/// Provides the TierApiClient instance (MOCK IMPLEMENTATION)
+/// Provides the TierApiClient instance
+/// Now supports real API with mock fallback
 final tierApiClientProvider = Provider<TierApiClient>((ref) {
-  LogManager.debug('[Phase2] Initializing TierApiClient (MOCK)');
-  return TierApiClient();
+  LogManager.debug('[Phase2] Initializing TierApiClient with real API support');
+  final httpClient = http.Client();
+  return TierApiClient(httpClient: httpClient);
 });
 
 /// Fetch all tier definitions (7-tier progression system)
@@ -177,15 +179,13 @@ final tierDefinitionsProvider = FutureProvider<List<TierDefinition>>((ref) async
 });
 
 /// Fetch player's current tier progress (current tier, progress %, next tier)
-/// Requires playerXpProvider to be available
+/// Takes userId as a parameter to fetch player-specific data from API
 final playerTierProgressProvider =
-    FutureProvider.autoDispose<PlayerTierProgress>((ref) async {
+    FutureProvider.autoDispose.family<PlayerTierProgress, String>((ref, userId) async {
   try {
-    LogManager.debug('[Phase2] Fetching player tier progress (MOCK)...');
-    // TODO: Get actual XP from player data provider when available
-    final currentXp = 0; // Placeholder - will get from game state
+    LogManager.debug('[Phase2] Fetching player tier progress for userId=$userId...');
     final client = ref.watch(tierApiClientProvider);
-    final progress = await client.getPlayerTierProgress(currentXp);
+    final progress = await client.getPlayerTierProgress(userId);
     LogManager.debug(
       '[Phase2] Player tier: ${progress.currentTier.name}, Progress: ${progress.progressPercentage}%',
     );
@@ -200,20 +200,21 @@ final playerTierProgressProvider =
   }
 });
 
-/// Award XP to player (MOCK - just logs for now)
+/// Award XP to player via API with real backend support
+/// Parameters: (userId, amount, reason)
 final awardXpProvider =
-    FutureProvider.family<XpAwardResult, (int amount, String reason)>((
+    FutureProvider.family<XpAwardResult, (String userId, int amount, String reason)>((
   ref,
   params,
 ) async {
   try {
-    final (amount, reason) = params;
-    LogManager.debug('[Phase2] Awarding $amount XP: $reason (MOCK)...');
+    final (userId, amount, reason) = params;
+    LogManager.debug('[Phase2] Awarding $amount XP to user=$userId: $reason...');
     final client = ref.watch(tierApiClientProvider);
-    final result = await client.awardXp(amount, reason);
-    LogManager.debug('[Phase2] XP awarded (MOCK)');
+    final result = await client.awardXp(userId, amount, reason);
+    LogManager.debug('[Phase2] XP awarded successfully');
     // Invalidate player progress to refresh
-    ref.invalidate(playerTierProgressProvider);
+    ref.invalidate(playerTierProgressProvider(userId));
     return result;
   } catch (e) {
     LogManager.error(
@@ -231,10 +232,14 @@ final awardXpProvider =
 
 /// Combined reward status including daily, weekly, and tier info
 /// Useful for dashboard or rewards home screen
+/// Takes userId as parameter to fetch player-specific tier data
 final combinedRewardStatusProvider =
-    FutureProvider.autoDispose<CombinedRewardStatus>((ref) async {
+    FutureProvider.autoDispose.family<CombinedRewardStatus, String>((
+  ref,
+  userId,
+) async {
   try {
-    LogManager.debug('[Phase2] Fetching combined reward status...');
+    LogManager.debug('[Phase2] Fetching combined reward status for user=$userId...');
 
     // Get API clients
     final dailyClient = ref.watch(dailyBonusApiClientProvider);
@@ -247,7 +252,7 @@ final combinedRewardStatusProvider =
       dailyClient.getAccountRewardStatus(),
       weeklyClient.getWeeklySchedule(),
       weeklyClient.getWeeklyStreak('current'),
-      tierClient.getPlayerTierProgress(0),
+      tierClient.getPlayerTierProgress(userId),
     ]);
 
     final status = CombinedRewardStatus(
