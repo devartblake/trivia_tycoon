@@ -10,6 +10,7 @@
 
 import 'dart:io';
 import 'package:args/args.dart';
+import 'package:flutter/foundation.dart';
 
 void main(List<String> args) {
   final parser = ArgParser()
@@ -25,8 +26,12 @@ void main(List<String> args) {
   final results = parser.parse(args);
   final verbose = results['verbose'] as bool;
 
-  print('🔍 Flutter Release Build Validator');
-  print('═' * 60);
+  if (kDebugMode) {
+    print('🔍 Flutter Release Build Validator');
+  }
+  if (kDebugMode) {
+    print('═' * 60);
+  }
 
   try {
     final validator = ReleaseValidator(verbose: verbose);
@@ -45,11 +50,15 @@ void main(List<String> args) {
     if (validator.hasErrors) {
       exit(1);
     } else {
-      print('\n✅ All checks passed!');
+      if (kDebugMode) {
+        print('\n✅ All checks passed!');
+      }
       exit(0);
     }
   } catch (e) {
-    print('\n❌ Validation failed: $e');
+    if (kDebugMode) {
+      print('\n❌ Validation failed: $e');
+    }
     exit(1);
   }
 }
@@ -81,10 +90,14 @@ class ReleaseValidator {
   void log(String message, {bool isError = false, bool isWarning = false}) {
     if (isError) {
       errors.add(message);
-      print('❌ ERROR: $message');
+      if (kDebugMode) {
+        print('❌ ERROR: $message');
+      }
     } else if (isWarning) {
       warnings.add(message);
-      print('⚠️  WARNING: $message');
+      if (kDebugMode) {
+        print('⚠️  WARNING: $message');
+      }
     } else {
       info.add(message);
       if (verbose) print('ℹ️  INFO: $message');
@@ -93,7 +106,9 @@ class ReleaseValidator {
 
   /// Validate source code before building
   void validateSourceCode() {
-    print('\n📝 Validating Dart source code...');
+    if (kDebugMode) {
+      print('\n📝 Validating Dart source code...');
+    }
     final libDir = Directory('lib');
 
     if (!libDir.existsSync()) {

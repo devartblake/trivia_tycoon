@@ -49,7 +49,7 @@ void main() {
 
       for (int i = 0; i < iterations; i++) {
         final segment = testSegments[i % uniqueShaders];
-        final rect = Rect.fromLTWH(0, 0, 100 + i, 100);
+        final rect = Rect.fromLTWH(0, 0, (100 + i).toDouble(), 100);
 
         cacheManager.getCachedRadialGradient(segment.color, rect);
       }
@@ -150,7 +150,7 @@ void main() {
         _simulateFramePaint(cacheManager, testSegments, i);
 
         // Record frame time
-        RenderingDiagnostics.recordFrame(13.5); // Expected optimized time
+        RenderingDiagnostics.recordFrame(14); // Expected optimized time (~14ms for 60 FPS)
       }
 
       final stats = RenderingDiagnostics.getStats();
@@ -165,7 +165,7 @@ void main() {
     test('FPS >= 60 (Frame Rate Target)', () {
       // Record 60 frames
       for (int i = 0; i < 60; i++) {
-        RenderingDiagnostics.recordFrame(13.5);
+        RenderingDiagnostics.recordFrame(14);
       }
 
       final stats = RenderingDiagnostics.getStats();

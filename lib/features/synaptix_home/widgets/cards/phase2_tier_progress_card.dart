@@ -12,7 +12,8 @@ class Phase2TierProgressCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progressAsync = ref.watch(playerTierProgressProvider);
+    final userId = ref.watch(currentUserIdProvider);
+    final progressAsync = ref.watch(playerTierProgressProvider(userId));
     final defsAsync = ref.watch(tierDefinitionsProvider);
 
     return Card(

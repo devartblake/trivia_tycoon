@@ -146,7 +146,7 @@ void main() {
     group('playerTierProgressProvider', () {
       test('provides player tier progress', () async {
         final progress =
-            await container.read(playerTierProgressProvider.future);
+            await container.read(playerTierProgressProvider('test-user').future);
         expect(progress, isNotNull);
         expect(progress.currentTier, isNotNull);
         expect(progress.currentXp, greaterThanOrEqualTo(0));
@@ -154,7 +154,7 @@ void main() {
 
       test('progress is within valid bounds', () async {
         final progress =
-            await container.read(playerTierProgressProvider.future);
+            await container.read(playerTierProgressProvider('test-user').future);
         expect(
           progress.currentTier.level,
           inInclusiveRange(1, 7),
@@ -164,7 +164,7 @@ void main() {
 
       test('calculates progress correctly', () async {
         final progress =
-            await container.read(playerTierProgressProvider.future);
+            await container.read(playerTierProgressProvider('test-user').future);
         if (!progress.isMaxTier) {
           expect(progress.nextTier, isNotNull);
           expect(
@@ -182,7 +182,7 @@ void main() {
     group('combinedRewardStatusProvider', () {
       test('combines all reward statuses', () async {
         final combined =
-            await container.read(combinedRewardStatusProvider.future);
+            await container.read(combinedRewardStatusProvider('test-user').future);
         expect(combined.dailyStatus, isNotNull);
         expect(combined.weeklySchedule, isNotEmpty);
         expect(combined.tierProgress, isNotNull);
@@ -190,7 +190,7 @@ void main() {
 
       test('provides complete reward snapshot', () async {
         final combined =
-            await container.read(combinedRewardStatusProvider.future);
+            await container.read(combinedRewardStatusProvider('test-user').future);
         expect(combined.dailyStatus.currentStreak, isNotNull);
         expect(combined.weeklySchedule.length, equals(7));
         expect(combined.tierProgress.currentXp, isNotNull);
@@ -198,13 +198,13 @@ void main() {
 
       test('canClaimDaily computed property works', () async {
         final combined =
-            await container.read(combinedRewardStatusProvider.future);
+            await container.read(combinedRewardStatusProvider('test-user').future);
         expect(combined.canClaimDaily, isA<bool>());
       });
 
       test('isMaxTier computed property works', () async {
         final combined =
-            await container.read(combinedRewardStatusProvider.future);
+            await container.read(combinedRewardStatusProvider('test-user').future);
         expect(combined.isMaxTier, isA<bool>());
       });
     });

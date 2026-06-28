@@ -152,6 +152,13 @@ final weeklyClaimProvider =
 /// Phase 2: Tier System Providers (MOCK - will be replaced with real API)
 /// ============================================================================
 
+/// Current user ID for tier progression - uses "current-user" as fallback
+/// TODO: Replace with actual user ID from auth provider
+final currentUserIdProvider = Provider<String>((ref) {
+  LogManager.debug('[Phase2] Using default user ID for tier progression');
+  return 'current-user';
+});
+
 /// Provides the TierApiClient instance
 /// Now supports real API with mock fallback
 final tierApiClientProvider = Provider<TierApiClient>((ref) {

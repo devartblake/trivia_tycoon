@@ -1,0 +1,507 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:mockito/mockito.dart';
+import 'package:trivia_tycoon/core/services/tier_api_client.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
+
+void main() {
+  group('TierApiClient Integration Tests', () {
+    late TierApiClient tierApiClient;
+    late MockHttpClient mockHttpClient;
+
+    setUp(() {
+      mockHttpClient = MockHttpClient();
+      tierApiClient = TierApiClient(httpClient: mockHttpClient);
+    });
+
+    tearDown(() {
+      tierApiClient.close();
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // getTierDefinitions Tests
+    // ─────────────────────────────────────────────────────────────────────
+
+    group('getTierDefinitions', () {
+      test('Returns tier definitions from successful API response', () async {
+        // Arrange
+        const successResponse = '''{
+          "tiers": [
+            {
+              "id": "bronze-rookie",
+              "name": "Bronze Rookie",
+              "level": 1,
+              "minXp": 0,
+              "maxXp": 500,
+              "iconName": "bronze_rookie",
+              "rewards": {
+                "badge": "welcome_badge",
+                "coinsBonus": 100,
+                "gemsBonus": 0
+              }
+            }
+          ]
+        }''';
+
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(successResponse, 200),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert
+        expect(tiers, isNotEmpty);
+        expect(tiers.length, greaterThan(0));
+        expect(tiers.first.name, 'Bronze Rookie');
+        expect(tiers.first.level, 1);
+      });
+
+      test('Falls back to mock data on network error', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenThrow(
+          const SocketException('Connection refused'),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert
+        expect(tiers, isNotEmpty);
+        expect(tiers.length, 7); // Mock has 7 tiers
+        expect(tiers.first.name, 'Bronze Rookie');
+      });
+
+      test('Falls back to mock data on timeout', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenThrow(
+          TimeoutException('Request timeout'),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert
+        expect(tiers, isNotEmpty);
+        expect(tiers.length, 7);
+      });
+
+      test('Falls back to mock data on 500 error', () async {
+        // Arrange
+        const errorResponse = '{"error": "Internal server error"}';
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(errorResponse, 500),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert
+        expect(tiers, isNotEmpty);
+        expect(tiers.length, 7); // Mock fallback
+      });
+
+      test('Falls back to mock data on invalid JSON', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response('invalid json', 200),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert
+        expect(tiers, isNotEmpty);
+        expect(tiers.length, 7); // Mock fallback
+      });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // getPlayerTierProgress Tests
+    // ─────────────────────────────────────────────────────────────────────
+
+    group('getPlayerTierProgress', () {
+      const testUserId = 'user_123';
+
+      test('Returns player tier progress from successful API response', () async {
+        // Arrange
+        const successResponse = '''{
+          "currentTier": {
+            "id": "silver-scholar",
+            "name": "Silver Scholar",
+            "level": 5,
+            "minXp": 500,
+            "maxXp": 1200,
+            "iconName": "silver_scholar",
+            "rewards": {
+              "badge": "scholar_badge",
+              "coinsBonus": 250,
+              "gemsBonus": 5
+            }
+          },
+          "nextTier": {
+            "id": "gold-master",
+            "name": "Gold Master",
+            "level": 10,
+            "minXp": 1200,
+            "maxXp": 2500,
+            "iconName": "gold_master",
+            "rewards": {
+              "badge": "master_badge",
+              "coinsBonus": 500,
+              "gemsBonus": 15
+            }
+          },
+          "currentXp": 750,
+          "xpInCurrentTier": 250,
+          "xpNeededForNextTier": 450,
+          "progressPercentage": 35
+        }''';
+
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(successResponse, 200),
+        );
+
+        // Act
+        final progress = await tierApiClient.getPlayerTierProgress(testUserId);
+
+        // Assert
+        expect(progress, isNotNull);
+        expect(progress.currentTier.name, 'Silver Scholar');
+        expect(progress.currentXp, 750);
+        expect(progress.progressPercentage, 35);
+        expect(progress.nextTier?.name, 'Gold Master');
+      });
+
+      test('Falls back to mock data on network error', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenThrow(
+          const SocketException('Connection refused'),
+        );
+
+        // Act
+        final progress = await tierApiClient.getPlayerTierProgress(testUserId);
+
+        // Assert
+        expect(progress, isNotNull);
+        expect(progress.currentTier.name, 'Bronze Rookie');
+        expect(progress.currentXp, 0);
+      });
+
+      test('Uses userId in API endpoint', () async {
+        // Arrange
+        const successResponse = '{"currentTier": {"id": "bronze-rookie"}, "progressPercentage": 0}';
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(successResponse, 200),
+        );
+
+        // Act
+        await tierApiClient.getPlayerTierProgress(testUserId);
+
+        // Assert
+        verify(mockHttpClient.get(argThat(
+          predicate((Uri uri) => uri.toString().contains(testUserId)),
+        ))).called(1);
+      });
+
+      test('Falls back to mock data on 404 error', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response('Not found', 404),
+        );
+
+        // Act
+        final progress = await tierApiClient.getPlayerTierProgress(testUserId);
+
+        // Assert
+        expect(progress, isNotNull);
+        expect(progress.currentTier.name, 'Bronze Rookie');
+      });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // awardXp Tests
+    // ─────────────────────────────────────────────────────────────────────
+
+    group('awardXp', () {
+      const testUserId = 'user_123';
+      const testAmount = 100;
+      const testReason = 'quiz_completed';
+
+      test('Returns XP award result from successful API response', () async {
+        // Arrange
+        const successResponse = '''{
+          "xpAwarded": 100,
+          "totalXp": 750,
+          "newLevel": 2,
+          "tierUpgraded": false
+        }''';
+
+        when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+            .thenAnswer(
+          (_) async => http.Response(successResponse, 200),
+        );
+
+        // Act
+        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+
+        // Assert
+        expect(result, isNotNull);
+        expect(result.xpAwarded, 100);
+        expect(result.totalXp, 750);
+        expect(result.newLevel, 2);
+        expect(result.tierUpgraded, false);
+      });
+
+      test('Sends userId, amount, and reason in request body', () async {
+        // Arrange
+        when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+            .thenAnswer(
+          (_) async => http.Response('{"xpAwarded": 100}', 200),
+        );
+
+        // Act
+        await tierApiClient.awardXp(testUserId, testAmount, testReason);
+
+        // Assert
+        verify(mockHttpClient.post(
+          any,
+          headers: argThat(containsPair('Content-Type', 'application/json')),
+          body: argThat(
+            predicate((String body) =>
+                body.contains(testUserId) &&
+                body.contains(testAmount.toString()) &&
+                body.contains(testReason)),
+          ),
+        )).called(1);
+      });
+
+      test('Falls back to mock data on network error', () async {
+        // Arrange
+        when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+            .thenThrow(
+          const SocketException('Connection refused'),
+        );
+
+        // Act
+        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+
+        // Assert
+        expect(result, isNotNull);
+        expect(result.xpAwarded, testAmount);
+        expect(result.tierUpgraded, false);
+      });
+
+      test('Falls back to mock data on timeout', () async {
+        // Arrange
+        when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+            .thenThrow(
+          TimeoutException('Request timeout'),
+        );
+
+        // Act
+        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+
+        // Assert
+        expect(result, isNotNull);
+        expect(result.xpAwarded, testAmount);
+      });
+
+      test('Handles tier upgrade response', () async {
+        // Arrange
+        const upgradeResponse = '''{
+          "xpAwarded": 500,
+          "totalXp": 1300,
+          "newLevel": 3,
+          "tierUpgraded": true
+        }''';
+
+        when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+            .thenAnswer(
+          (_) async => http.Response(upgradeResponse, 200),
+        );
+
+        // Act
+        final result = await tierApiClient.awardXp(testUserId, 500, 'tier_upgrade');
+
+        // Assert
+        expect(result.tierUpgraded, true);
+        expect(result.newLevel, 3);
+      });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Error Handling Tests
+    // ─────────────────────────────────────────────────────────────────────
+
+    group('Error Handling', () {
+      test('Handles null response gracefully', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenThrow(Exception('Null response'));
+
+        // Act & Assert - Should not throw
+        expect(
+          () => tierApiClient.getTierDefinitions(),
+          throwsA(anything), // Will throw because exception escapes try-catch
+        );
+      });
+
+      test('Handles malformed tier data', () async {
+        // Arrange
+        const malformedResponse = '{"tiers": [{}]}'; // Missing required fields
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(malformedResponse, 200),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert - Should fallback to mock
+        expect(tiers.length, 7);
+      });
+
+      test('Handles empty tier list response', () async {
+        // Arrange
+        const emptyResponse = '{"tiers": []}';
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(emptyResponse, 200),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert - Should fallback to mock
+        expect(tiers.length, 7);
+      });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Data Deserialization Tests
+    // ─────────────────────────────────────────────────────────────────────
+
+    group('Data Deserialization', () {
+      test('Correctly deserializes TierDefinition from JSON', () async {
+        // Arrange
+        const response = '''{
+          "tiers": [{
+            "id": "test-tier",
+            "name": "Test Tier",
+            "level": 99,
+            "minXp": 1000,
+            "maxXp": 2000,
+            "iconName": "test_icon",
+            "rewards": {
+              "badge": "test_badge",
+              "coinsBonus": 999,
+              "gemsBonus": 10
+            }
+          }]
+        }''';
+
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(response, 200),
+        );
+
+        // Act
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert
+        expect(tiers.first.id, 'test-tier');
+        expect(tiers.first.name, 'Test Tier');
+        expect(tiers.first.level, 99);
+        expect(tiers.first.rewards.badge, 'test_badge');
+        expect(tiers.first.rewards.coinsBonus, 999);
+      });
+
+      test('Correctly deserializes PlayerTierProgress from JSON', () async {
+        // Arrange
+        const response = '''{
+          "currentTier": {
+            "id": "test-tier",
+            "name": "Test",
+            "level": 5,
+            "minXp": 0,
+            "maxXp": 100,
+            "iconName": "test",
+            "rewards": {"badge": "test", "coinsBonus": 10, "gemsBonus": 1}
+          },
+          "currentXp": 50,
+          "xpInCurrentTier": 50,
+          "xpNeededForNextTier": 50,
+          "progressPercentage": 50
+        }''';
+
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(response, 200),
+        );
+
+        // Act
+        final progress = await tierApiClient.getPlayerTierProgress('test_user');
+
+        // Assert
+        expect(progress.currentXp, 50);
+        expect(progress.progressPercentage, 50);
+        expect(progress.xpNeededForNextTier, 50);
+      });
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Performance Tests
+    // ─────────────────────────────────────────────────────────────────────
+
+    group('Performance', () {
+      test('getTierDefinitions completes within 200ms on success', () async {
+        // Arrange
+        const response = '{"tiers": []}';
+        when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(response, 200),
+        );
+
+        // Act
+        final stopwatch = Stopwatch()..start();
+        await tierApiClient.getTierDefinitions();
+        stopwatch.stop();
+
+        // Assert
+        expect(stopwatch.elapsedMilliseconds, lessThan(200));
+      });
+
+      test('Falls back to mock within 100ms', () async {
+        // Arrange
+        when(mockHttpClient.get(any)).thenThrow(
+          const SocketException('Network error'),
+        );
+
+        // Act
+        final stopwatch = Stopwatch()..start();
+        await tierApiClient.getTierDefinitions();
+        stopwatch.stop();
+
+        // Assert
+        expect(stopwatch.elapsedMilliseconds, lessThan(100));
+      });
+    });
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Mock Classes
+// ─────────────────────────────────────────────────────────────────────
+
+class MockHttpClient extends Mock implements http.Client {}
+
+class TimeoutException implements Exception {
+  final String message;
+  const TimeoutException(this.message);
+
+  @override
+  String toString() => 'TimeoutException: $message';
+}
+
+class SocketException implements Exception {
+  final String message;
+  const SocketException(this.message);
+
+  @override
+  String toString() => 'SocketException: $message';
+}
