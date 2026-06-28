@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
+
 import '../../../game/models/game_mode.dart';
 
 class HowToPlayScreen extends StatefulWidget {

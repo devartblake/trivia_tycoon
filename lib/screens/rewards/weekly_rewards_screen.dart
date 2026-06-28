@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +21,8 @@ class WeeklyRewardsScreen extends ConsumerWidget {
         centerTitle: true,
       ),
       body: RefreshIndicator(
-        onRefresh: () {
-          return Future.wait([
+        onRefresh: () async {
+          await Future.wait([
             ref.refresh(weeklyScheduleProvider.future),
             ref.refresh(weeklyStreakProvider.future),
           ]);
@@ -42,7 +44,7 @@ class WeeklyRewardsScreen extends ConsumerWidget {
                     error: (error, stackTrace) => _ErrorState(
                       error: error.toString(),
                       onRetry: () {
-                        ref.refresh(weeklyStreakProvider);
+                        unawaited(ref.refresh(weeklyStreakProvider.future));
                       },
                     ),
                   ),
@@ -50,7 +52,7 @@ class WeeklyRewardsScreen extends ConsumerWidget {
                   error: (error, stackTrace) => _ErrorState(
                     error: error.toString(),
                     onRetry: () {
-                      ref.refresh(weeklyScheduleProvider);
+                      unawaited(ref.refresh(weeklyScheduleProvider.future));
                     },
                   ),
                 ),
@@ -311,7 +313,7 @@ class _ClaimButton extends ConsumerWidget {
                   'Success',
                   'Day ${day.day} reward claimed!',
                 );
-                ref.refresh(weeklyStreakProvider);
+                unawaited(ref.refresh(weeklyStreakProvider.future));
               }
             } catch (e) {
               if (context.mounted) {
@@ -353,7 +355,7 @@ class _ClaimButton extends ConsumerWidget {
                   'Success',
                   'Day ${day.day} reward claimed!',
                 );
-                ref.refresh(weeklyStreakProvider);
+                unawaited(ref.refresh(weeklyStreakProvider.future));
               }
             } catch (e) {
               if (context.mounted) {

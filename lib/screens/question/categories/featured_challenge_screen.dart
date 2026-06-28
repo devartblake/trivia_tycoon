@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 
 class FeaturedChallengeScreen extends StatelessWidget {
   const FeaturedChallengeScreen({super.key});

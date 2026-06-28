@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
 import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast_service.dart';
 

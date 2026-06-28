@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/game/providers/favorites_providers.dart';
 import '../../../core/delegates/sliver_appbar_delegate.dart';
 import '../../../game/models/favorite_category_models.dart';

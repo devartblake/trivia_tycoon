@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/services/quiz_category.dart';
 // import '../services/adapted_question_loader_service.dart';

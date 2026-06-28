@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/spin_system_models.dart';
+import 'rendering_cache.dart';
 
 class WheelPainter extends CustomPainter {
+  static final RenderingCacheManager _cacheManager = RenderingCacheManager();
   final List<WheelSegment> segments;
   final double rotationAngle;
   final int? activeIndex;
@@ -57,20 +59,21 @@ class WheelPainter extends CustomPainter {
     WheelSegment segment,
     bool isActive,
   ) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = segment.color;
+    // Use cached fill paint from pool
+    final paint = _cacheManager.getSegmentFillPaint(segment.color);
 
-    // Create gradient for active segment
+    // Create cached gradient for active segment
     if (isActive) {
-      paint.shader = RadialGradient(
+      paint.shader = _cacheManager.getCachedRadialGradient(
+        segment.color,
+        Rect.fromCircle(center: center, radius: radius),
         colors: [
           segment.color.withValues(alpha: 0.8),
           segment.color,
           segment.color.withValues(alpha: 0.9),
         ],
         stops: const [0.0, 0.7, 1.0],
-      ).createShader(Rect.fromCircle(center: center, radius: radius));
+      );
     }
 
     // Draw segment arc
@@ -86,12 +89,8 @@ class WheelPainter extends CustomPainter {
 
     canvas.drawPath(path, paint);
 
-    // Draw segment border
-    final borderPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = Colors.white.withValues(alpha: 0.3)
-      ..strokeWidth = strokeWidth;
-
+    // Use cached border paint from pool
+    final borderPaint = _cacheManager.getBorderPaint();
     canvas.drawPath(path, borderPaint);
 
     // Draw segment label if enabled
@@ -124,6 +123,7 @@ class WheelPainter extends CustomPainter {
       center.dy + sin(midAngle) * labelRadius,
     );
 
+    // Use cached text style
     final textStyle = TextStyle(
       color: Colors.white,
       fontSize: isActive ? 14 : 12,
@@ -137,14 +137,11 @@ class WheelPainter extends CustomPainter {
       ],
     );
 
-    final textSpan = TextSpan(text: label, style: textStyle);
-    final textPainter = TextPainter(
-      text: textSpan,
-      textAlign: TextAlign.center,
-      textDirection: TextDirection.ltr,
+    // Use cached text painter
+    final textPainter = _cacheManager.getCachedTextLabel(
+      label,
+      style: textStyle,
     );
-
-    textPainter.layout();
 
     // Rotate text if needed
     canvas.save();
@@ -165,42 +162,33 @@ class WheelPainter extends CustomPainter {
   }
 
   void _drawCenterCircle(Canvas canvas, Offset center, double radius) {
-    // Outer circle with gradient
+    // Outer circle with cached gradient
     final outerPaint = Paint()
-      ..shader = RadialGradient(
+      ..shader = _cacheManager.getCachedRadialGradient(
+        Colors.grey.shade500,
+        Rect.fromCircle(center: center, radius: radius),
         colors: [
           Colors.white,
           Colors.grey.shade300,
           Colors.grey.shade600,
         ],
         stops: const [0.0, 0.7, 1.0],
-      ).createShader(Rect.fromCircle(center: center, radius: radius));
+      );
 
     canvas.drawCircle(center, radius, outerPaint);
 
-    // Inner circle
-    final innerPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-
+    // Inner circle (reuse cached paint)
+    final innerPaint = _cacheManager.getSegmentFillPaint(Colors.white);
     canvas.drawCircle(center, radius * 0.6, innerPaint);
 
     // Center dot
-    final dotPaint = Paint()
-      ..color = Colors.grey.shade700
-      ..style = PaintingStyle.fill;
-
+    final dotPaint = _cacheManager.getSegmentFillPaint(Colors.grey.shade700);
     canvas.drawCircle(center, radius * 0.2, dotPaint);
   }
 
   void _drawPointer(Canvas canvas, Offset center, double radius) {
-    final pointerPaint = Paint()
-      ..color = Colors.red.shade600
-      ..style = PaintingStyle.fill;
-
-    final pointerShadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.3)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+    final pointerPaint = _cacheManager.getSegmentFillPaint(Colors.red.shade600);
+    final pointerShadowPaint = _cacheManager.getShadowPaint();
 
     final pointerLength = radius * 0.15;
     final pointerWidth = radius * 0.08;
@@ -222,12 +210,8 @@ class WheelPainter extends CustomPainter {
     // Draw pointer
     canvas.drawPath(pointerPath, pointerPaint);
 
-    // Pointer border
-    final pointerBorderPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-
+    // Pointer border (reuse stroke paint)
+    final pointerBorderPaint = _cacheManager.getSegmentStrokePaint();
     canvas.drawPath(pointerPath, pointerBorderPaint);
   }
 
@@ -242,6 +226,8 @@ class WheelPainter extends CustomPainter {
 }
 
 class WheelSegmentPainter extends CustomPainter {
+  static final RenderingCacheManager _cacheManager = RenderingCacheManager();
+
   final WheelSegment segment;
   final double startAngle;
   final double sweepAngle;
@@ -276,47 +262,39 @@ class WheelSegmentPainter extends CustomPainter {
   }
 
   void _drawShadow(Canvas canvas, Offset center, double radius) {
-    final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.2)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    final shadowPaint = _cacheManager.getShadowPaint();
 
     final shadowPath = _createSegmentPath(center, radius + 4);
     canvas.drawPath(shadowPath, shadowPaint);
   }
 
   void _drawSegment(Canvas canvas, Offset center, double radius) {
-    final paint = Paint()..style = PaintingStyle.fill;
+    final paint = _cacheManager.getSegmentFillPaint(segment.color);
 
-    // Create gradient
-    paint.shader = LinearGradient(
-      colors: [
+    // Use cached linear gradient
+    paint.shader = _cacheManager.getCachedLinearGradient(
+      Offset(center.dx, center.dy - radius),
+      Offset(center.dx, center.dy + radius),
+      [
         segment.color.withValues(alpha: 0.8),
         segment.color,
         segment.color.withValues(alpha: 0.9),
       ],
       stops: const [0.0, 0.5, 1.0],
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-    ).createShader(Rect.fromCircle(center: center, radius: radius));
+    );
 
     final path = _createSegmentPath(center, radius);
     canvas.drawPath(path, paint);
 
-    // Draw border
-    final borderPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = Colors.white.withValues(alpha: 0.5)
-      ..strokeWidth = 2.0;
-
+    // Use cached border paint
+    final borderPaint = _cacheManager.getBorderPaint();
     canvas.drawPath(path, borderPaint);
   }
 
   void _drawActiveHighlight(Canvas canvas, Offset center, double radius) {
-    final highlightPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = Colors.white.withValues(alpha: 0.8)
-      ..strokeWidth = 4.0
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+    final highlightPaint = _cacheManager.getHighlightPaint(
+      Colors.white.withValues(alpha: 0.8),
+    );
 
     final path = _createSegmentPath(center, radius - 2);
     canvas.drawPath(path, highlightPaint);

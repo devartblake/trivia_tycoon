@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 
 class MultiplayerScreen extends StatelessWidget {

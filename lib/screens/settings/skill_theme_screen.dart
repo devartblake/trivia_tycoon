@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import '../../core/theme/hex_spider_theme.dart';
 import '../../game/providers/hex_theme_providers.dart';

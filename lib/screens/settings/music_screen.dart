@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import 'package:just_audio/just_audio.dart' as just_audio;
 import '../../core/services/settings/purchase_settings_service.dart';

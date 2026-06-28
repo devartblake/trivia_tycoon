@@ -1,7 +1,6 @@
 ﻿import 'package:flutter/material.dart' hide Durations;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 import '../../../core/services/theme/seasonal_theme_service.dart';
 import '../../../core/theme/styles.dart';
 import '../../../core/theme/themes.dart';

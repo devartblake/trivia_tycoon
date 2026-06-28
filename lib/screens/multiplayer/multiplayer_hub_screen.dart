@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
 import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/connection_banner.dart';
 import 'package:trivia_tycoon/screens/multiplayer/widgets/room_card.dart';

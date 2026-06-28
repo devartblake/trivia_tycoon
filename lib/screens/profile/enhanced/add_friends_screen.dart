@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
+import '../../../core/navigation/navigation_extensions.dart';
 import 'package:hive/hive.dart';
 import '../../../core/services/api_service.dart';
 import '../../../game/providers/friends_providers.dart';

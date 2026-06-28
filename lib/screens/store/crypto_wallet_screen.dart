@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/navigation/navigation_extensions.dart';
 
 import '../../core/models/crypto/crypto_api_error.dart';
 import '../../core/models/crypto/crypto_history_item.dart';

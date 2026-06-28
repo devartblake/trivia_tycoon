@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,7 +46,7 @@ class DailyBonusScreen extends ConsumerWidget {
                     error: (error, stackTrace) => _ErrorState(
                       error: error.toString(),
                       onRetry: () {
-                        ref.refresh(dailyBonusConfigProvider);
+                        unawaited(ref.refresh(dailyBonusConfigProvider.future));
                       },
                     ),
                   ),
@@ -52,7 +54,7 @@ class DailyBonusScreen extends ConsumerWidget {
                   error: (error, stackTrace) => _ErrorState(
                     error: error.toString(),
                     onRetry: () {
-                      ref.refresh(dailyBonusStatusProvider);
+                      unawaited(ref.refresh(dailyBonusStatusProvider.future));
                     },
                   ),
                 ),
@@ -233,7 +235,7 @@ class _ClaimButton extends ConsumerWidget {
                           'Claimed ${config.coinsAmount} coins!',
                         );
                         // Refresh status after claim
-                        ref.refresh(dailyBonusStatusProvider);
+                        unawaited(ref.refresh(dailyBonusStatusProvider.future));
                       }
                     } catch (e) {
                       if (context.mounted) {

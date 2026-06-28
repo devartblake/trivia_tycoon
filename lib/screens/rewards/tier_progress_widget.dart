@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/services/tier_api_client.dart';
 import '../../game/providers/phase2_reward_providers.dart';
-import '../../ui_components/spin_wheel/ui/widgets/animations/segment_glow.dart';
 
 class TierProgressWidget extends ConsumerWidget {
   const TierProgressWidget({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class TierProgressWidget extends ConsumerWidget {
         error: (error, stackTrace) => _TierErrorState(
           error: error.toString(),
           onRetry: () {
-            ref.refresh(tierDefinitionsProvider);
+            unawaited(ref.refresh(tierDefinitionsProvider.future));
           },
         ),
       ),
@@ -31,7 +32,7 @@ class TierProgressWidget extends ConsumerWidget {
       error: (error, stackTrace) => _TierErrorState(
         error: error.toString(),
         onRetry: () {
-          ref.refresh(playerTierProgressProvider);
+          unawaited(ref.refresh(playerTierProgressProvider.future));
         },
       ),
     );
