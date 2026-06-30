@@ -5,6 +5,7 @@ import '../../../core/navigation/navigation_extensions.dart';
 import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
 import '../../../game/services/quiz_category.dart';
+import '../../../game/models/question_difficulty.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 // Provider for category quiz data
@@ -18,10 +19,10 @@ final categoryQuizProvider =
       amount: 200,
     );
 
-    final easyCount = categoryQuestions.where((q) => q.difficulty == 1).length;
+    final easyCount = categoryQuestions.where((q) => q.difficulty.value == 1).length;
     final mediumCount =
-        categoryQuestions.where((q) => q.difficulty == 2).length;
-    final hardCount = categoryQuestions.where((q) => q.difficulty == 3).length;
+        categoryQuestions.where((q) => q.difficulty.value == 2).length;
+    final hardCount = categoryQuestions.where((q) => q.difficulty.value == 3).length;
 
     final audioCount = categoryQuestions.where((q) => q.hasAudio).length;
     final videoCount = categoryQuestions.where((q) => q.hasVideo).length;
@@ -39,7 +40,7 @@ final categoryQuizProvider =
       sampleQuestions: categoryQuestions.take(3).toList(),
       averageDifficulty: categoryQuestions.isEmpty
           ? 1.0
-          : categoryQuestions.map((q) => q.difficulty).reduce((a, b) => a + b) /
+          : categoryQuestions.map((q) => q.difficulty.value).reduce((a, b) => a + b) /
               categoryQuestions.length,
       allQuestions: categoryQuestions,
     );
@@ -745,7 +746,7 @@ class _QuestionPreviewCard extends StatelessWidget {
   }
 
   Color _getDifficultyColor() {
-    switch (question.difficulty) {
+    switch (question.difficulty.value) {
       case 1:
         return Colors.green;
       case 2:
@@ -758,7 +759,7 @@ class _QuestionPreviewCard extends StatelessWidget {
   }
 
   IconData _getDifficultyIcon() {
-    switch (question.difficulty) {
+    switch (question.difficulty.value) {
       case 1:
         return Icons.star_outline;
       case 2:

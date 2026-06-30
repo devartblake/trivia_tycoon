@@ -100,7 +100,7 @@ class ReleaseValidator {
       }
     } else {
       info.add(message);
-      if (verbose) print('ℹ️  INFO: $message');
+      if (verbose && kDebugMode) print('ℹ️  INFO: $message');
     }
   }
 

@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import '../../core/models/question_validation_models.dart';
-import '../../screens/multiplayer/widgets/base_multiplayer_question_widget.dart';
 import '../../screens/question/widgets/adapted_question_widgets.dart';
 import '../models/answer.dart';
 import '../models/question_model.dart';
 import '../models/game_mode.dart';
+import '../models/question_type.dart';
+import '../models/question_difficulty.dart';
 import '../../core/repositories/question_repository.dart';
 import '../providers/multiplayer_quiz_providers.dart';
 import '../providers/question_providers.dart';
@@ -307,8 +308,8 @@ class MultiplayerQuizService {
       answers: answers, // List<Answer> objects
       correctAnswer: correctAnswer,
       options: options, // List<String> for compatibility
-      type: 'multiple_choice',
-      difficulty: _getDifficultyLevelForGameMode(gameMode),
+      type: QuestionType.multipleChoice,
+      difficulty: QuestionDifficultyExtension.fromInt(_getDifficultyLevelForGameMode(gameMode)),
       correctIndex: correctIndex,
       powerUpHint: sample['hint'],
     );
@@ -500,40 +501,12 @@ extension AdaptedQuestionWidgetMultiplayer on AdaptedQuestionWidget {
     String? selectedAnswer,
     bool isMultiplayer = false,
   }) {
-    // Create the appropriate question widget based on type
-    switch (question.type.toLowerCase()) {
-      case 'multiple_choice':
-        return MultipleChoiceQuestionWidget(
-          question: question,
-          onAnswerSelected: onAnswerSelected,
-          showFeedback: showFeedback,
-          selectedAnswer: selectedAnswer,
-          isMultiplayer: isMultiplayer,
-        );
-      case 'true_false':
-        return TrueFalseQuestionWidget(
-          question: question,
-          onAnswerSelected: onAnswerSelected,
-          showFeedback: showFeedback,
-          selectedAnswer: selectedAnswer,
-          isMultiplayer: isMultiplayer,
-        );
-      case 'fill_blank':
-        return FillBlankQuestionWidget(
-          question: question,
-          onAnswerSelected: onAnswerSelected,
-          showFeedback: showFeedback,
-          selectedAnswer: selectedAnswer,
-          isMultiplayer: isMultiplayer,
-        );
-      default:
-        return MultipleChoiceQuestionWidget(
-          question: question,
-          onAnswerSelected: onAnswerSelected,
-          showFeedback: showFeedback,
-          selectedAnswer: selectedAnswer,
-          isMultiplayer: isMultiplayer,
-        );
-    }
+    return AdaptedQuestionWidget.create(
+      question: question,
+      onAnswerSelected: onAnswerSelected,
+      showFeedback: showFeedback,
+      selectedAnswer: selectedAnswer,
+      isMultiplayer: isMultiplayer,
+    );
   }
 }

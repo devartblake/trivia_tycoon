@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
+import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
 
 // ---------------------------------------------------------------------------
 // Helper — minimal question via direct constructor
@@ -38,8 +40,8 @@ QuestionModel _q({
     answers: answers,
     correctAnswer: correctAnswer,
     options: options,
-    type: type,
-    difficulty: difficulty,
+    type: qtype.QuestionTypeExtension.fromString(type),
+    difficulty: qdiff.QuestionDifficultyExtension.fromInt(difficulty),
     correctIndex: correctIndex,
     imageUrl: imageUrl,
     videoUrl: videoUrl,
@@ -530,8 +532,8 @@ void main() {
     });
 
     test('copies difficulty', () {
-      final updated = _q(difficulty: 1).copyWith(difficulty: 4);
-      expect(updated.difficulty, 4);
+      final updated = _q(difficulty: 1).copyWith(difficulty: qdiff.QuestionDifficultyExtension.fromInt(4));
+      expect(updated.difficulty.value, 4);
     });
 
     test('copies showHint', () {
@@ -568,8 +570,8 @@ void main() {
       );
       final updated = original.copyWith(category: 'math');
       expect(updated.id, 'orig');
-      expect(updated.difficulty, 3);
-      expect(updated.type, 'true_false');
+      expect(updated.difficulty.value, 3);
+      expect(updated.type.value, 'true_false');
     });
   });
 

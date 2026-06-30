@@ -1,6 +1,7 @@
 import '../../core/services/api_service.dart';
 import '../../core/models/question_validation_models.dart';
 import '../models/question_model.dart';
+import '../models/question_difficulty.dart';
 import 'question_loader_service.dart';
 import 'question_response_contract.dart';
 import 'quiz_category.dart';
@@ -106,7 +107,7 @@ class QuestionHubService {
     final localQuestions = await _localLoader.getQuestionsByCategory(category);
     final filtered = difficulty == null
         ? localQuestions
-        : localQuestions.where((q) => q.difficulty == difficulty).toList();
+        : localQuestions.where((q) => q.difficulty.value == difficulty).toList();
     filtered.shuffle();
 
     _recordFallback(

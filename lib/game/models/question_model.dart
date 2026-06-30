@@ -1,4 +1,6 @@
 import 'package:trivia_tycoon/game/models/answer.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart';
+import 'package:trivia_tycoon/game/models/question_difficulty.dart';
 
 class QuestionModel {
   final String id;
@@ -7,8 +9,8 @@ class QuestionModel {
   final List<Answer> answers;
   final String correctAnswer;
   final List<String> options;
-  final String type;
-  final int difficulty; // Scale 1-3 or easy, medium, hard
+  final QuestionType type;
+  final QuestionDifficulty difficulty;
   final int correctIndex;
   final String? imageUrl;
   final String? videoUrl;
@@ -149,8 +151,8 @@ class QuestionModel {
       question: (json['question'] ?? json['text'] ?? '').toString(),
       answers: answerMaps.map(Answer.fromJson).toList(),
       correctAnswer: correctOption,
-      type: json['type'] ?? 'multiple_choice',
-      difficulty: _parseDifficulty(json['difficulty']),
+      type: QuestionTypeExtension.fromString(json['type'] as String?),
+      difficulty: QuestionDifficultyExtension.parse(json['difficulty']),
       options: options,
       correctIndex: correctIndex,
       imageUrl: json['imageUrl'] ?? json['mediaKey'],
@@ -177,23 +179,6 @@ class QuestionModel {
     return QuestionModel.fromJson(json);
   }
 
-  static int _parseDifficulty(Object? value) {
-    if (value is num) return value.toInt();
-
-    switch ((value ?? '').toString().toLowerCase()) {
-      case 'easy':
-        return 1;
-      case 'medium':
-        return 2;
-      case 'hard':
-        return 3;
-      case 'expert':
-        return 4;
-      default:
-        return int.tryParse((value ?? '').toString()) ?? 1;
-    }
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -201,8 +186,8 @@ class QuestionModel {
       'question': question,
       'answers': answers.map((a) => a.toJson()).toList(),
       'correctAnswer': correctAnswer,
-      'type': type,
-      'difficulty': difficulty,
+      'type': type.value,
+      'difficulty': difficulty.value,
       'options': options,
       'correctIndex': correctIndex,
       'imageUrl': imageUrl,
@@ -229,8 +214,8 @@ class QuestionModel {
     List<Answer>? answers,
     String? correctAnswer,
     List<String>? options,
-    String? type,
-    int? difficulty,
+    QuestionType? type,
+    QuestionDifficulty? difficulty,
     int? correctIndex,
     String? imageUrl,
     String? videoUrl,

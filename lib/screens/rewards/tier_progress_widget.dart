@@ -11,7 +11,8 @@ class TierProgressWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final progressAsync = ref.watch(playerTierProgressProvider);
+    final userId = ref.watch(currentUserIdProvider);
+    final progressAsync = ref.watch(playerTierProgressProvider(userId));
     final defsAsync = ref.watch(tierDefinitionsProvider);
 
     return progressAsync.when(
@@ -32,7 +33,8 @@ class TierProgressWidget extends ConsumerWidget {
       error: (error, stackTrace) => _TierErrorState(
         error: error.toString(),
         onRetry: () {
-          unawaited(ref.refresh(playerTierProgressProvider.future));
+          final userId = ref.read(currentUserIdProvider);
+          unawaited(ref.refresh(playerTierProgressProvider(userId).future));
         },
       ),
     );

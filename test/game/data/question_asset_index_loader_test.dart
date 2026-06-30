@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/game/data/question_asset_index_loader.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart';
+import 'package:trivia_tycoon/game/models/question_difficulty.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -45,8 +47,8 @@ void main() {
           Answer(text: 'Wrong 3', isCorrect: false),
         ],
         correctAnswer: 'Correct',
-        type: 'multiple_choice',
-        difficulty: 1,
+        type: QuestionType.multipleChoice,
+        difficulty: QuestionDifficulty.easy,
         options: const ['Correct', 'Wrong 1', 'Wrong 2', 'Wrong 3'],
         correctIndex: 0,
       );

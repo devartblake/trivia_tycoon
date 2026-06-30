@@ -3,17 +3,28 @@ import '../../game/models/tier_model.dart';
 import '../../game/state/tier_update_result.dart';
 import '../services/settings/general_key_value_storage_service.dart';
 import '../services/settings/player_profile_service.dart';
+import '../services/tier_api_client.dart';
+import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class TierManager {
   final GeneralKeyValueStorageService _storage;
   final PlayerProfileService _profileService;
+  final TierApiClient _tierApiClient;
 
   static const String _currentTierKey = 'current_tier';
   static const String _unlockedTiersKey = 'unlocked_tiers';
 
-  TierManager(this._storage, this._profileService);
+  List<TierDefinition>? _cachedTierDefinitions;
 
-  // Default tier definitions
+  TierManager(
+    this._storage,
+    this._profileService, {
+    TierApiClient? tierApiClient,
+  }) : _tierApiClient = tierApiClient ?? TierApiClient();
+
+  /// Tier definitions synced with backend TierApiClient
+  /// Updated to match backend tier system (8 tiers instead of 10)
+  /// XP thresholds must match between TierManager and TierApiClient
   static final List<TierModel> _defaultTiers = [
     TierModel(
       id: 0,
@@ -94,41 +105,14 @@ class TierManager {
     ),
     TierModel(
       id: 7,
-      name: 'Champion',
-      description: 'Ultimate trivia champion',
+      name: 'Ultimate Champion',
+      description: 'The ultimate trivia master',
       icon: Icons.emoji_events_outlined,
-      primaryColor: const Color(0xFFFF4500),
-      secondaryColor: const Color(0xFFFF6347),
-      requiredXP: 35000,
-      requiredLevel: 75,
-      rewards: ['Champion Badge', '20000 Coins', '500 Gems'],
-    ),
-    TierModel(
-      id: 8,
-      name: 'Elite Overlord',
-      description: 'Beyond mortal comprehension',
-      icon: Icons.workspace_premium_outlined,
-      primaryColor: const Color(0xFFFF1493),
-      secondaryColor: const Color(0xFFFF69B4),
+      primaryColor: const Color(0xFFFFD700),
+      secondaryColor: const Color(0xFFFFA500),
       requiredXP: 50000,
-      requiredLevel: 100,
-      rewards: ['Overlord Badge', '50000 Coins', '1000 Gems'],
-    ),
-    TierModel(
-      id: 9,
-      name: 'Synaptix Tycoon',
-      description: 'The ultimate Synaptix master',
-      icon: Icons.monetization_on_outlined,
-      primaryColor: const Color(0xFF008B8B),
-      secondaryColor: const Color(0xFF20B2AA),
-      requiredXP: 100000,
-      requiredLevel: 150,
-      rewards: [
-        'Synaptix Badge',
-        '100000 Coins',
-        '2000 Gems',
-        'Exclusive Avatar'
-      ],
+      requiredLevel: 75,
+      rewards: ['Ultimate Badge', '20000 Coins', '500 Gems'],
     ),
   ];
 
@@ -141,7 +125,10 @@ class TierManager {
     final unlockedTierIds = await _getUnlockedTierIds();
     final currentTierId = await getCurrentTierId();
 
-    return _defaultTiers.map((tier) {
+    // Load tier definitions from backend (with fallback to local)
+    final tiers = await _getTierDefinitions();
+
+    return tiers.map((tier) {
       final isUnlocked = _isTierUnlocked(tier, currentXP, currentLevel) ||
           unlockedTierIds.contains(tier.id);
       final isCurrent = tier.id == currentTierId;
@@ -239,19 +226,152 @@ class TierManager {
     return getTierById(currentId);
   }
 
+  /// Get tier definitions, preferring backend over local defaults
+  /// This ensures tier data is consistent with backend system
+  Future<List<TierModel>> _getTierDefinitions() async {
+    try {
+      // Try to load from backend via TierApiClient
+      final backendTiers = await _tierApiClient.getTierDefinitions();
+
+      if (backendTiers.isNotEmpty) {
+        LogManager.debug(
+          '[TierManager] Loaded ${backendTiers.length} tier definitions from backend',
+        );
+        // Convert backend tiers to local TierModel format and cache
+        return _convertTierDefinitions(backendTiers);
+      }
+    } catch (e) {
+      LogManager.warning(
+        '[TierManager] Failed to load tier definitions from backend: $e. Using local defaults.',
+      );
+    }
+
+    // Fall back to local default definitions
+    return _defaultTiers;
+  }
+
+  /// Convert TierDefinition (from backend) to TierModel (local format)
+  List<TierModel> _convertTierDefinitions(List<TierDefinition> backendTiers) {
+    return backendTiers.asMap().entries.map((entry) {
+      final index = entry.key;
+      final tier = entry.value;
+
+      // Map backend tier to local model
+      return TierModel(
+        id: index,
+        name: tier.name,
+        description: tier.name, // Use name as description fallback
+        icon: _getIconForTier(tier.name),
+        primaryColor: _getPrimaryColorForTier(tier.name),
+        secondaryColor: _getSecondaryColorForTier(tier.name),
+        requiredXP: tier.minXp,
+        requiredLevel: tier.level,
+        rewards: _buildRewardsFromTier(tier),
+      );
+    }).toList();
+  }
+
+  /// Build reward list from tier definition
+  List<String> _buildRewardsFromTier(TierDefinition tier) {
+    final rewards = <String>[];
+    if (tier.rewards.badge.isNotEmpty) {
+      rewards.add('${tier.rewards.badge} Badge');
+    }
+    if (tier.rewards.coinsBonus > 0) {
+      rewards.add('${tier.rewards.coinsBonus} Coins');
+    }
+    if (tier.rewards.gemsBonus > 0) {
+      rewards.add('${tier.rewards.gemsBonus} Gems');
+    }
+    return rewards.isNotEmpty ? rewards : ['Tier Badge'];
+  }
+
+  /// Get icon for tier based on name
+  IconData _getIconForTier(String tierName) {
+    final name = tierName.toLowerCase();
+    if (name.contains('platinum')) return Icons.diamond;
+    if (name.contains('gold')) return Icons.star;
+    if (name.contains('silver')) return Icons.star_border;
+    if (name.contains('diamond')) return Icons.diamond_outlined;
+    if (name.contains('master')) return Icons.workspace_premium;
+    if (name.contains('grand')) return Icons.military_tech;
+    if (name.contains('bronze')) return Icons.emoji_events;
+    return Icons.emoji_events;
+  }
+
+  /// Get primary color for tier based on name
+  Color _getPrimaryColorForTier(String tierName) {
+    final name = tierName.toLowerCase();
+    if (name.contains('platinum')) return const Color(0xFFE5E4E2);
+    if (name.contains('gold')) return const Color(0xFFFFD700);
+    if (name.contains('silver')) return const Color(0xFFC0C0C0);
+    if (name.contains('diamond')) return const Color(0xFFB9F2FF);
+    if (name.contains('master')) return const Color(0xFF6A0DAD);
+    if (name.contains('grand')) return const Color(0xFFDC143C);
+    if (name.contains('bronze')) return const Color(0xFFCD7F32);
+    return const Color(0xFFCD7F32);
+  }
+
+  /// Get secondary color for tier based on name
+  Color _getSecondaryColorForTier(String tierName) {
+    final name = tierName.toLowerCase();
+    if (name.contains('platinum')) return const Color(0xFFB8B8B8);
+    if (name.contains('gold')) return const Color(0xFFFFA500);
+    if (name.contains('silver')) return const Color(0xFF808080);
+    if (name.contains('diamond')) return const Color(0xFF87CEEB);
+    if (name.contains('master')) return const Color(0xFF4B0082);
+    if (name.contains('grand')) return const Color(0xFF8B0000);
+    if (name.contains('bronze')) return const Color(0xFFA0522D);
+    return const Color(0xFFA0522D);
+  }
+
   /// Reset tier progress (for testing/admin)
   Future<void> resetTierProgress() async {
     await _storage.remove(_currentTierKey);
     await _storage.remove(_unlockedTiersKey);
+    _cachedTierDefinitions = null; // Clear cache
   }
 
   /// Award tier rewards
+  /// TODO: Implement reward distribution logic
+  /// This would interact with currency manager, badge system, etc.
   Future<void> awardTierRewards(TierModel tier) async {
-    // Implement reward distribution logic here
-    // This would interact with your currency manager, badge system, etc.
+    try {
+      LogManager.debug(
+        '[TierManager] Awarding rewards for tier: ${tier.name}',
+      );
 
-    // Example:
-    // final currencyManager = ref.read(currencyManagerProvider);
-    // Parse and award rewards from tier.rewards list
+      // Award coins and gems if present in rewards list
+      // Parse reward list: ["500 Coins", "15 Gems", "Master Badge"]
+      for (final reward in tier.rewards) {
+        if (reward.contains('Coins')) {
+          final coins = _extractNumericValue(reward);
+          if (coins > 0) {
+            LogManager.debug('[TierManager] Would award $coins coins');
+            // TODO: Call currency manager to award coins
+          }
+        } else if (reward.contains('Gems')) {
+          final gems = _extractNumericValue(reward);
+          if (gems > 0) {
+            LogManager.debug('[TierManager] Would award $gems gems');
+            // TODO: Call currency manager to award gems
+          }
+        } else if (reward.contains('Badge')) {
+          LogManager.debug('[TierManager] Would unlock badge: $reward');
+          // TODO: Call badge system to unlock badge
+        }
+      }
+    } catch (e) {
+      LogManager.error(
+        '[TierManager] Error awarding tier rewards: $e',
+        error: e,
+      );
+    }
+  }
+
+  /// Extract numeric value from reward string (e.g., "500 Coins" -> 500)
+  int _extractNumericValue(String text) {
+    final match = RegExp(r'\d+').firstMatch(text);
+    return match != null ? int.parse(match.group(0)!) : 0;
   }
 }

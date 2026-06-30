@@ -8,6 +8,8 @@ import 'package:trivia_tycoon/core/repositories/question_repository.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart';
+import 'package:trivia_tycoon/game/models/question_difficulty.dart';
 import 'package:trivia_tycoon/game/providers/game_providers.dart';
 import 'package:trivia_tycoon/game/providers/question_providers.dart';
 import 'package:trivia_tycoon/game/services/quiz_category.dart';
@@ -124,8 +126,8 @@ QuestionModel _question({
       Answer(text: 'Rome', isCorrect: false),
     ],
     correctAnswer: correctAnswer,
-    type: 'multiple_choice',
-    difficulty: 1,
+    type: QuestionType.multipleChoice,
+    difficulty: QuestionDifficulty.easy,
     options: ['Paris', 'Berlin', 'Madrid', 'Rome'],
     correctIndex: 0,
     showHint: showHint,

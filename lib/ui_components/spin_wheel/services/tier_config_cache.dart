@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/tier_api_client.dart';
 
@@ -115,7 +113,6 @@ class TierConfigCache {
 
   /// Get cache statistics
   Map<String, dynamic> getCacheStats() {
-    final hitCount = _memoryCache.length;
     final ttlExpiredCount = _cacheTimestamps.entries
         .where((e) => _isExpired(e.value))
         .length;

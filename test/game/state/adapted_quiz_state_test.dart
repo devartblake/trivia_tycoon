@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/state/quiz_state.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
+import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -20,8 +22,8 @@ QuestionModel _question({
     question: question,
     answers: const [],
     correctAnswer: correctAnswer,
-    type: 'multiple_choice',
-    difficulty: 1,
+    type: qtype.QuestionTypeExtension.fromString('multiple_choice'),
+    difficulty: qdiff.QuestionDifficultyExtension.fromInt(1),
     options: const ['Water', 'Fire', 'Earth', 'Air'],
     correctIndex: correctIndex,
   );

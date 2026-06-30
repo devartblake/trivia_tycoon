@@ -177,7 +177,7 @@ class _DailyBonusContent extends ConsumerWidget {
           child: ElevatedButton.icon(
             onPressed: isClaimed
                 ? null
-                : () => context.go('/daily-bonus'),
+                : () => context.go('/arcade/daily-bonus'),
             icon: const Icon(Icons.card_giftcard),
             label: Text(isClaimed ? 'Come Back Tomorrow' : 'Claim Now'),
             style: ElevatedButton.styleFrom(

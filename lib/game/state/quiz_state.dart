@@ -4,6 +4,7 @@ import 'dart:async';
 import '../../core/models/question_validation_models.dart';
 import '../services/quiz_category.dart';
 import '../models/question_model.dart';
+import '../models/question_difficulty.dart';
 import '../../core/repositories/question_repository.dart';
 import '../providers/question_providers.dart';
 
@@ -406,14 +407,14 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       newScore++;
 
       // Calculate XP based on difficulty and time
-      xpGained = _calculateXP(currentQuestion.difficulty, state.timeRemaining);
+      xpGained = _calculateXP(currentQuestion.difficulty.value, state.timeRemaining);
 
       // Calculate rewards
-      coinsGained = _calculateCoins(currentQuestion.difficulty);
+      coinsGained = _calculateCoins(currentQuestion.difficulty.value);
       if (state.timeRemaining > 20) {
         diamondsGained = 1; // Time bonus
       }
-      if (currentQuestion.difficulty >= 3) {
+      if (currentQuestion.difficulty.value >= 3) {
         starsGained = 1; // Difficulty bonus
       }
 

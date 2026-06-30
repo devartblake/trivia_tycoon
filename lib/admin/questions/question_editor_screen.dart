@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../../game/models/answer.dart';
-import '../widgets/question_editor_form.dart';
 import '../../game/models/question_model.dart';
+import '../../game/models/question_type.dart';
+import '../../game/models/question_difficulty.dart';
+import '../widgets/question_editor_form.dart';
 
 class QuestionEditorScreen extends StatefulWidget {
   final QuestionModel? initialQuestion;
@@ -34,9 +36,9 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> {
           answers: List.generate(4, (i) => Answer(text: '', isCorrect: i == 0)),
           correctAnswer: '',
           correctIndex: 0,
-          difficulty: 1,
+          difficulty: QuestionDifficulty.medium,
           category: '',
-          type: 'multiple_choice',
+          type: QuestionType.multipleChoice,
         );
   }
 

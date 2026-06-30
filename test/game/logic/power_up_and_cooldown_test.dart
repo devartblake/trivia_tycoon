@@ -4,6 +4,8 @@ import 'package:trivia_tycoon/game/logic/skill_cooldown_handler.dart';
 import 'package:trivia_tycoon/game/models/power_up.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
+import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
 
 QuestionModel _baseQuestion({List<String>? options}) => QuestionModel(
       id: 'q1',
@@ -11,8 +13,8 @@ QuestionModel _baseQuestion({List<String>? options}) => QuestionModel(
       question: 'Which is correct?',
       answers: const <Answer>[],
       correctAnswer: 'A',
-      type: 'text',
-      difficulty: 1,
+      type: qtype.QuestionTypeExtension.fromString('text'),
+      difficulty: qdiff.QuestionDifficultyExtension.fromInt(1),
       options: options ?? const ['A', 'B', 'C', 'D'],
       correctIndex: 0,
     );

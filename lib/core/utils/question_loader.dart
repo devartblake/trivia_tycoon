@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import '../../game/models/question_model.dart';
+import '../../game/models/question_difficulty.dart';
 
 class QuestionLoader {
   /// Loads questions from a prioritized list of asset paths
@@ -21,7 +22,7 @@ class QuestionLoader {
         // Optional: filter by difficulty
         if (difficultyFilter != null) {
           questions =
-              questions.where((q) => q.difficulty == difficultyFilter).toList();
+              questions.where((q) => q.difficulty.value == difficultyFilter).toList();
         }
 
         if (shuffle) {

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:trivia_tycoon/core/services/settings/quiz_progress_service.dart';
 import 'package:trivia_tycoon/core/utils/question_cache.dart';
+import '../../../game/models/question_difficulty.dart';
 import '../../../game/models/question_model.dart';
 import '../api_service.dart';
 import '../../utils/question_loader.dart';
@@ -110,7 +111,7 @@ class QuestionService {
           final matchesCategory = category == null ||
               q.category.toLowerCase() == category.toLowerCase();
           final matchesDifficulty =
-              difficulty == null || q.difficulty == difficulty;
+              difficulty == null || q.difficulty.value == difficulty;
           return matchesCategory && matchesDifficulty;
         }).toList();
 

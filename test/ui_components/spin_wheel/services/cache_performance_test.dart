@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:trivia_tycoon/core/services/spin_wheel_api_client.dart';
 import 'package:trivia_tycoon/core/services/tier_api_client.dart';
+import 'package:trivia_tycoon/ui_components/spin_wheel/models/spin_system_models.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/services/spin_config_cache.dart';
 import 'package:trivia_tycoon/ui_components/spin_wheel/services/tier_config_cache.dart';
 
@@ -255,7 +256,7 @@ void main() {
         );
 
         when(mockApiClient.logSpinResult(any)).thenAnswer(
-          (_) async => null,
+          (_) async {},
         );
 
         // Prime cache
@@ -264,7 +265,12 @@ void main() {
 
         // Act: Log spin result (should invalidate analytics cache)
         await cache.logSpinResult(
-          SpinResult(id: 'test', segmentId: 'segment_1', timestamp: DateTime.now()),
+          SpinResult(
+            id: 'test',
+            label: 'Test Segment',
+            reward: 100,
+            timestamp: DateTime.now(),
+          ),
         );
 
         // Assert: Next call should fetch fresh data
@@ -395,20 +401,3 @@ class MockTierApiClient extends Mock implements TierApiClient {}
 class MockSpinWheelApiClient extends Mock implements SpinWheelApiClient {}
 
 /// Spin result for testing
-class SpinResult {
-  final String id;
-  final String segmentId;
-  final DateTime timestamp;
-
-  SpinResult({
-    required this.id,
-    required this.segmentId,
-    required this.timestamp,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'segmentId': segmentId,
-        'timestamp': timestamp.toIso8601String(),
-      };
-}

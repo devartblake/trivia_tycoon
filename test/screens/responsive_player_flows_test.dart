@@ -16,6 +16,8 @@ import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/conversation_models.dart';
 import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
+import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
 import 'package:trivia_tycoon/game/providers/message_providers.dart';
 import 'package:trivia_tycoon/game/providers/profile_providers.dart'
     as profile_data;
@@ -269,8 +271,8 @@ final _questions = [
       Answer(text: 'Carbon and iron', isCorrect: false),
     ],
     correctAnswer: 'Hydrogen and oxygen',
-    type: 'multiple_choice',
-    difficulty: 1,
+    type: qtype.QuestionTypeExtension.fromString('multiple_choice'),
+    difficulty: qdiff.QuestionDifficultyExtension.fromInt(1),
     options: const ['Hydrogen and oxygen', 'Carbon and iron'],
     correctIndex: 0,
   ),

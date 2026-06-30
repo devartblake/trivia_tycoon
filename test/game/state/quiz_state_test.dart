@@ -4,6 +4,8 @@ import 'package:trivia_tycoon/game/state/quiz_state.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/services/quiz_category.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
+import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
 
 QuestionModel _q({
   String id = 'q1',
@@ -22,8 +24,8 @@ QuestionModel _q({
         Answer(text: 'Air', isCorrect: false),
       ],
       correctAnswer: 'Water',
-      type: 'multiple_choice',
-      difficulty: difficulty,
+      type: qtype.QuestionTypeExtension.fromString('multiple_choice'),
+      difficulty: qdiff.QuestionDifficultyExtension.fromInt(difficulty),
       options: ['Water', 'Fire', 'Earth', 'Air'],
       correctIndex: 0,
     );

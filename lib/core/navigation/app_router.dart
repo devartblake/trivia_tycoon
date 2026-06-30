@@ -76,6 +76,7 @@ import '../../screens/report_screen.dart';
 import '../../features/reward_reactor/screens/reward_reactor_screen.dart';
 import '../../screens/rewards/mission_screen.dart';
 import '../../screens/rewards/spin_earn_screen.dart';
+import '../../screens/tier/player_tier_progression_screen.dart';
 import '../../screens/social/multiplayer_screen.dart';
 import '../../screens/store/gifts_screen.dart';
 import '../../screens/store/store_payment_return_screen.dart';
@@ -163,6 +164,9 @@ import '../../screens/spectate/spectate_mode_screen.dart';
 import '../../screens/store/crypto_wallet_screen.dart';
 import '../../screens/widgets/slimy_card_preview_screen.dart';
 import '../../ui_components/spin_wheel/ui/screen/wheel_screen.dart';
+import '../../screens/analytics/player_analytics_dashboard.dart';
+import '../../screens/analytics/category_performance_detail_page.dart';
+import '../../screens/skills/skill_tree_visualization.dart';
 import 'canonical_routes.dart';
 
 // Reactive router provider that rebuilds when navigation state changes
@@ -317,6 +321,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: '/admin',
             name: 'admin-dashboard',
             builder: (context, state) => const AdminDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/admin/content',
+            name: 'admin-content',
+            builder: (context, state) => const AdminDashboardScreen(), // Placeholder - redirects to main admin dashboard
           ),
           GoRoute(
             path: '/admin/analytics',
@@ -487,7 +496,29 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               builder: (context, state) => const RewardsScreen(),
               redirect: onboardingGuard,
             ),
+            GoRoute(
+              path: '/analytics',
+              name: 'Analytics',
+              builder: (context, state) => const PlayerAnalyticsDashboard(),
+              redirect: onboardingGuard,
+            ),
+            GoRoute(
+              path: '/skills',
+              name: 'Skills',
+              builder: (context, state) => const SkillTreeVisualization(),
+              redirect: onboardingGuard,
+            ),
           ]),
+
+      /// Analytics - Category Detail
+      GoRoute(
+        path: '/analytics/category/:categoryId',
+        name: 'category-analytics',
+        builder: (context, state) {
+          final categoryId = state.pathParameters['categoryId']!;
+          return CategoryPerformanceDetailPage(category: categoryId);
+        },
+      ),
 
       /// Arcade Hub → "Labs"
       GoRoute(
@@ -555,6 +586,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/challenges',
         name: 'Challenge',
         builder: (context, state) => const ChallengeScreen(),
+      ),
+      GoRoute(
+        path: '/tier-progress',
+        name: 'tier-progress',
+        builder: (context, state) => const PlayerTierProgressionScreen(),
+        redirect: onboardingGuard,
+      ),
+      GoRoute(
+        path: '/weekly-rewards',
+        name: 'weekly-rewards',
+        builder: (context, state) => const MissionsScreen(), // Placeholder - shows weekly rewards
       ),
       GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
       // Add this route to test:
@@ -858,6 +900,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           final roomId = state.pathParameters['roomId']!;
           return RoomLobbyScreen(roomId: roomId);
         },
+        redirect: (context, state) => featureFlagGuard(context, state,
+            isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
+      ),
+      GoRoute(
+        path: '/multiplayer/challenge/:id',
+        name: 'multiplayer-challenge',
+        builder: (context, state) => const ChallengeScreen(), // Placeholder - challenge details
         redirect: (context, state) => featureFlagGuard(context, state,
             isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
       ),
@@ -1293,6 +1342,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/confetti-settings',
         builder: (context, state) => const ConfettiSettings(),
+      ),
+      GoRoute(
+        path: '/confetti-theme-editor',
+        name: 'confetti-theme-editor',
+        builder: (context, state) => const ConfettiSettings(), // Placeholder - confetti theme customization
       ),
       GoRoute(
         path: '/color-settings',

@@ -5,6 +5,7 @@ import 'package:trivia_tycoon/screens/question/widgets/adapted_question_widgets.
 import '../../core/helpers/quiz_helpers.dart';
 import '../../game/models/game_mode.dart';
 import '../../game/models/question_model.dart';
+import '../../game/models/question_difficulty.dart';
 import '../../game/models/versus_models.dart';
 import '../../game/providers/multiplayer_quiz_providers.dart';
 import '../../ui_components/multiplayer/versus/versus_banner.dart';
@@ -546,12 +547,12 @@ class _MultiplayerQuestionScreenState
                             ),
                             QuizHelpers.buildMetadataChip(
                               QuizHelpers.getDifficultyText(
-                                      currentQuestion.difficulty)
+                                      currentQuestion.difficulty.value)
                                   .toUpperCase(),
                               QuizHelpers.getDifficultyColor(
-                                  currentQuestion.difficulty),
+                                  currentQuestion.difficulty.value),
                               QuizHelpers.getDifficultyIcon(
-                                  currentQuestion.difficulty),
+                                  currentQuestion.difficulty.value),
                             ),
                           ],
                         ),

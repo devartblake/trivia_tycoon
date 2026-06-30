@@ -21,10 +21,6 @@ class TierApiClient {
   final http.Client _httpClient;
   static const String _baseUrl = 'https://api.synaptixplay.com/api/v1';
 
-  /// Retry configuration
-  static const int _maxRetries = 3;
-  static const Duration _retryDelay = Duration(milliseconds: 500);
-
   TierApiClient({http.Client? httpClient})
       : _httpClient = httpClient ?? http.Client();
   /// MOCK: Hardcoded tier definitions from Phase 1

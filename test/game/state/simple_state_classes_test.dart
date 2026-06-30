@@ -7,6 +7,8 @@ import 'package:trivia_tycoon/game/state/question_state.dart';
 import 'package:trivia_tycoon/game/state/tier_progression_state.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/models/answer.dart';
+import 'package:trivia_tycoon/game/models/question_type.dart';
+import 'package:trivia_tycoon/game/models/question_difficulty.dart';
 
 QuestionModel _q({
   String id = 'q1',
@@ -20,8 +22,8 @@ QuestionModel _q({
       question: 'What?',
       answers: const <Answer>[],
       correctAnswer: correct,
-      type: 'text',
-      difficulty: 1,
+      type: QuestionType.multipleChoice,
+      difficulty: QuestionDifficulty.easy,
       options: options,
       correctIndex: correctIndex,
     );

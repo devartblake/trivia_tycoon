@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
-import 'package:trivia_tycoon/screens/question/widgets/adapted_question_widgets.dart';
 import '../../core/dto/powerup_dto.dart';
 import '../../core/helpers/quiz_helpers.dart';
 import '../../game/models/question_model.dart';
@@ -13,6 +12,9 @@ import '../../game/providers/learning_providers.dart'
 import '../../game/providers/personalization_providers.dart';
 import '../../game/providers/powerup_providers.dart';
 import '../../game/services/quiz_category.dart';
+// New question system components
+import 'widgets/question_renderer.dart';
+import 'widgets/question_metadata.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final String? classLevel;
@@ -970,24 +972,13 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          QuizHelpers.buildMetadataChip(
-                            QuizHelpers.getDisplayTypeName(currentQuestion),
-                            QuizHelpers.getDisplayTypeColor(currentQuestion),
-                            QuizHelpers.getMediaTypeIcon(currentQuestion),
-                          ),
-                          QuizHelpers.buildMetadataChip(
-                            _getCategoryDisplayName().toUpperCase(),
-                            _getCategoryColor(),
-                            _getCategoryIcon(),
-                          ),
-                          QuizHelpers.buildMetadataChip(
-                            QuizHelpers.getDifficultyText(
-                                    currentQuestion.difficulty)
-                                .toUpperCase(),
-                            QuizHelpers.getDifficultyColor(
-                                currentQuestion.difficulty),
-                            QuizHelpers.getDifficultyIcon(
-                                currentQuestion.difficulty),
+                          // Use new QuestionMetadata component with type-safe difficulty
+                          Expanded(
+                            child: QuestionMetadata(
+                              question: currentQuestion,
+                              showDifficultyBadge: true,
+                              showTags: true,
+                            ),
                           ),
                         ],
                       ),
@@ -1000,8 +991,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
                       const SizedBox(height: 8),
 
-                      // Dynamic question widget based on type
-                      AdaptedQuestionWidget.create(
+                      // Dynamic question widget based on type (using new type-safe renderer)
+                      QuestionRenderer(
                         question: currentQuestion,
                         onAnswerSelected: _handleAnswer,
                         showFeedback: quizState.showFeedback,

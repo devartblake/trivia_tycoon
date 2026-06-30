@@ -121,7 +121,7 @@ class AdminRouteWrapper extends ConsumerWidget {
                 onPressed: () {
                   ref.read(adminNavigationAttemptsProvider.notifier).state = 0;
                   ref.read(lockIconClicksProvider.notifier).state = 0;
-                  context.go('/main');
+                  context.go('/home');
                 },
                 icon: const Icon(Icons.home),
                 label: const Text('Go Home'),
@@ -366,7 +366,7 @@ class _AdminAccessPromptState extends ConsumerState<_AdminAccessPrompt> {
                       ref.read(adminNavigationAttemptsProvider.notifier).state =
                           0;
                       ref.read(lockIconClicksProvider.notifier).state = 0;
-                      context.go('/main');
+                      context.go('/home');
                     },
                     icon: const Icon(Icons.home),
                     label: const Text('Go Home'),

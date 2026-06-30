@@ -42,6 +42,41 @@ class SideMenuCard extends StatelessWidget {
         route: canonicalLabsRoute,
       ),
       CanonicalNavDestination(
+        label: 'Leaderboard',
+        icon: Icons.leaderboard_rounded,
+        route: '/ranking',
+      ),
+      CanonicalNavDestination(
+        label: 'Messages',
+        icon: Icons.mail_rounded,
+        route: '/messages',
+      ),
+      CanonicalNavDestination(
+        label: 'Multiplayer',
+        icon: Icons.people_rounded,
+        route: '/multiplayer',
+      ),
+      CanonicalNavDestination(
+        label: 'Mini Games',
+        icon: Icons.videogame_asset_rounded,
+        route: '/mini-games',
+      ),
+      CanonicalNavDestination(
+        label: 'Learn Hub',
+        icon: Icons.school_rounded,
+        route: '/learn-hub',
+      ),
+      CanonicalNavDestination(
+        label: 'Achievements',
+        icon: Icons.star_rounded,
+        route: '/achievements',
+      ),
+      CanonicalNavDestination(
+        label: 'Help & Support',
+        icon: Icons.help_rounded,
+        route: '/help',
+      ),
+      CanonicalNavDestination(
         label: 'Settings',
         icon: Icons.settings_rounded,
         route: canonicalSettingsRoute,

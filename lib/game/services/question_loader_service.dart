@@ -5,6 +5,8 @@ import '../../core/services/question_api_client.dart';
 import '../data/question_asset_index_loader.dart';
 import 'quiz_category.dart';
 import '../models/question_model.dart';
+import '../models/question_type.dart';
+import '../models/question_difficulty.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class QuestionDataset {
@@ -666,9 +668,9 @@ class AdaptedQuestionLoaderService {
       filteredQuestions = filteredQuestions.where((q) {
         return difficulties.any((diff) {
           if (diff is String) {
-            return q.difficulty == _stringToIntDifficulty(diff);
+            return q.difficulty.value == _stringToIntDifficulty(diff);
           } else if (diff is int) {
-            return q.difficulty == diff;
+            return q.difficulty.value == diff;
           }
           return false;
         });
@@ -679,7 +681,7 @@ class AdaptedQuestionLoaderService {
     if (types != null && types.isNotEmpty) {
       filteredQuestions = filteredQuestions
           .where((q) =>
-              types.any((type) => q.type.toLowerCase() == type.toLowerCase()))
+              types.any((type) => q.type.value.toLowerCase() == type.toLowerCase()))
           .toList();
     }
 
@@ -750,8 +752,8 @@ class AdaptedQuestionLoaderService {
       // Calculate difficulty distribution
       final difficultyCount = <int, int>{};
       for (final question in questions) {
-        difficultyCount[question.difficulty] =
-            (difficultyCount[question.difficulty] ?? 0) + 1;
+        difficultyCount[question.difficulty.value] =
+            (difficultyCount[question.difficulty.value] ?? 0) + 1;
       }
 
       // If only one difficulty level, return it
@@ -1348,9 +1350,9 @@ class AdaptedQuestionLoaderService {
       List<QuestionModel> questions, int count) {
     if (questions.length <= count) return questions;
 
-    final easyQuestions = questions.where((q) => q.difficulty == 1).toList();
-    final mediumQuestions = questions.where((q) => q.difficulty == 2).toList();
-    final hardQuestions = questions.where((q) => q.difficulty == 3).toList();
+    final easyQuestions = questions.where((q) => q.difficulty.value == 1).toList();
+    final mediumQuestions = questions.where((q) => q.difficulty.value == 2).toList();
+    final hardQuestions = questions.where((q) => q.difficulty.value == 3).toList();
 
     final balanced = <QuestionModel>[];
     final targetEach = count ~/ 3;
@@ -1425,8 +1427,8 @@ class AdaptedQuestionLoaderService {
       // Calculate difficulty distribution
       final difficultyCount = <int, int>{};
       for (final question in categoryQuestions) {
-        difficultyCount[question.difficulty] =
-            (difficultyCount[question.difficulty] ?? 0) + 1;
+        difficultyCount[question.difficulty.value] =
+            (difficultyCount[question.difficulty.value] ?? 0) + 1;
       }
 
       // If only one difficulty level, return it
@@ -1631,9 +1633,9 @@ class AdaptedQuestionLoaderService {
     for (final question in questions) {
       categoryCount[question.category] =
           (categoryCount[question.category] ?? 0) + 1;
-      difficultyCount[question.difficulty] =
-          (difficultyCount[question.difficulty] ?? 0) + 1;
-      typeCount[question.type] = (typeCount[question.type] ?? 0) + 1;
+      difficultyCount[question.difficulty.value] =
+          (difficultyCount[question.difficulty.value] ?? 0) + 1;
+      typeCount[question.type.value] = (typeCount[question.type.value] ?? 0) + 1;
 
       // Count media types
       mediaCount[question.mediaType] =

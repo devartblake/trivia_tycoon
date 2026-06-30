@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/navigation/navigation_extensions.dart';
 import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
+import '../../../game/models/question_difficulty.dart';
 
 // Provider for monthly quiz questions
 final monthlyQuizProvider = FutureProvider<List<QuestionModel>>((ref) async {
@@ -437,27 +438,29 @@ class _QuestionPreviewCard extends StatelessWidget {
 
   Color _getDifficultyColor() {
     switch (question.difficulty) {
-      case 1:
+      case QuestionDifficulty.easy:
         return Colors.green;
-      case 2:
+      case QuestionDifficulty.medium:
         return Colors.orange;
-      case 3:
+      case QuestionDifficulty.hard:
+      case QuestionDifficulty.expert:
         return Colors.red;
-      default:
-        return Colors.grey;
+      case QuestionDifficulty.boss:
+        return Colors.purple;
     }
   }
 
   IconData _getDifficultyIcon() {
     switch (question.difficulty) {
-      case 1:
+      case QuestionDifficulty.easy:
         return Icons.star_outline;
-      case 2:
+      case QuestionDifficulty.medium:
         return Icons.star_half;
-      case 3:
+      case QuestionDifficulty.hard:
+      case QuestionDifficulty.expert:
         return Icons.star;
-      default:
-        return Icons.help_outline;
+      case QuestionDifficulty.boss:
+        return Icons.grade;
     }
   }
 }

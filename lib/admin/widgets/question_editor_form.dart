@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import '../../game/models/answer.dart';
 import '../../game/models/question_model.dart';
+import '../../game/models/question_type.dart';
+import '../../game/models/question_difficulty.dart';
 
 class QuestionEditorForm extends StatefulWidget {
   final QuestionModel? initialQuestion;
@@ -122,7 +124,11 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
       });
 
       final correctAnswer = options[_correctAnswerIndex];
-      final difficultyMap = {'Easy': 1, 'Medium': 2, 'Hard': 3};
+      final difficultyMap = {
+        'Easy': QuestionDifficulty.easy,
+        'Medium': QuestionDifficulty.medium,
+        'Hard': QuestionDifficulty.hard,
+      };
 
       final newQuestion = QuestionModel(
         id: widget.initialQuestion?.id ?? const Uuid().v4(),
@@ -130,7 +136,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
         question: _questionController.text,
         answers: answers,
         correctAnswer: correctAnswer,
-        type: 'multiple_choice',
+        type: QuestionType.multipleChoice,
         difficulty: difficultyMap[_selectedDifficulty]!,
         correctIndex: _correctAnswerIndex,
         options: options,
