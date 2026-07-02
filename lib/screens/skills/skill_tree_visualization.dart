@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/skill_progression_model.dart';
-import '../../game/providers/skill_progression_provider.dart';
+import '../../game/providers/skill_progression_provider.dart' show allSkillsProvider;
 
 /// Visualization of player's skill tree progression
 class SkillTreeVisualization extends ConsumerWidget {
@@ -9,7 +9,7 @@ class SkillTreeVisualization extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final skillTree = ref.watch(skillProgressOverviewProvider);
+    final allSkills = ref.watch(allSkillsProvider);
 
     return DefaultTabController(
       length: 3,
@@ -29,19 +29,19 @@ class SkillTreeVisualization extends ConsumerWidget {
           children: [
             _SkillCategoryView(
               title: 'Mathematics',
-              skills: _getMathSkills(skillTree),
+              skills: _getMathSkills(allSkills),
               icon: Icons.calculate,
               color: Colors.blue,
             ),
             _SkillCategoryView(
               title: 'Science',
-              skills: _getScienceSkills(skillTree),
+              skills: _getScienceSkills(allSkills),
               icon: Icons.science,
               color: Colors.green,
             ),
             _SkillCategoryView(
               title: 'Logic',
-              skills: _getLogicSkills(skillTree),
+              skills: _getLogicSkills(allSkills),
               icon: Icons.psychology,
               color: Colors.purple,
             ),
@@ -51,22 +51,19 @@ class SkillTreeVisualization extends ConsumerWidget {
     );
   }
 
-  List<SkillNode> _getMathSkills(dynamic tree) {
-    final allSkills = tree.allSkills as List<SkillNode>;
+  List<SkillNode> _getMathSkills(List<SkillNode> allSkills) {
     return allSkills
         .where((s) => s.category.contains('math'))
         .toList();
   }
 
-  List<SkillNode> _getScienceSkills(dynamic tree) {
-    final allSkills = tree.allSkills as List<SkillNode>;
+  List<SkillNode> _getScienceSkills(List<SkillNode> allSkills) {
     return allSkills
         .where((s) => s.category.contains('science'))
         .toList();
   }
 
-  List<SkillNode> _getLogicSkills(dynamic tree) {
-    final allSkills = tree.allSkills as List<SkillNode>;
+  List<SkillNode> _getLogicSkills(List<SkillNode> allSkills) {
     return allSkills
         .where((s) => s.category.contains('logic'))
         .toList();

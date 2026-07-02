@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/models/answered_question_record.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/providers/xp_provider.dart';
 import '../../../game/providers/wallet_providers.dart'; // (added in Part B) incrementCoins/incrementGems
@@ -10,6 +13,7 @@ import '../../domain/arcade_game_definition.dart';
 import '../../domain/arcade_result.dart';
 import '../../providers/arcade_providers.dart';
 import 'arcade_results_modal.dart';
+import 'quiz_review_screen.dart';
 
 /// Public API exposed to Arcade games, so they can end a run cleanly.
 class ArcadeRunApi {
@@ -110,6 +114,16 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
     // record run into local leaderboards
     ref.read(localArcadeLeaderboardServiceProvider).recordRun(enrichedResult);
 
+    // submit score to backend (best-effort, non-blocking)
+    unawaited(
+      ref.read(arcadeLeaderboardApiServiceProvider).submitScore(
+            gameId: result.gameId.name,
+            difficulty: result.difficulty.name,
+            score: result.score,
+            durationMs: result.duration.inMilliseconds,
+          ).catchError((_) {}),
+    );
+
     // XP (your canonical write path)
     incrementXP(ref, rewards.xp);
 
@@ -122,6 +136,16 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
     ref.read(arcadeMissionServiceProvider).onArcadeRunCompleted(enrichedResult);
 
     if (!mounted) return;
+
+    // Parse answered questions if available
+    List<AnsweredQuestionRecord>? reviewRecords;
+    final answeredQuestionsData = enrichedResult.metadata['answeredQuestions'];
+    if (answeredQuestionsData is List) {
+      reviewRecords = answeredQuestionsData
+          .whereType<Map<String, dynamic>>()
+          .map((json) => AnsweredQuestionRecord.fromJson(json))
+          .toList();
+    }
 
     await showModalBottomSheet<void>(
       context: context,
@@ -141,6 +165,16 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
           // Example if you're using go_router:
           context.push('/arcade/local-scores');
         },
+        onViewReview: reviewRecords != null && reviewRecords.isNotEmpty
+            ? () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        QuizReviewScreen(records: reviewRecords!),
+                  ),
+                );
+              }
+            : null,
       ),
     );
 

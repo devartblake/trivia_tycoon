@@ -204,8 +204,6 @@ class _TimeAnalysis extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final performance = analyticsService.getCategoryPerformance(category);
-
     return Card(
       elevation: 2,
       child: Padding(

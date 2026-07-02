@@ -1,8 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/tier_api_client.dart';
 import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/game/state/tier_update_result.dart';
 
 /// Unified tier progression service
 /// Source of truth: TierApiClient (backend)

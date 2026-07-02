@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
 import 'package:trivia_tycoon/core/services/tier_api_client.dart';
-import '../models/currency_type.dart';
 import 'tier_progression_service.dart';
 
 /// Service for managing tier reward distribution
@@ -10,7 +9,6 @@ import 'tier_progression_service.dart';
 class TierRewardsService {
   final TierProgressionService _tierProgressionService;
   final GeneralKeyValueStorageService _storage;
-  final Ref _ref;
 
   static const String _claimedTiersKey = 'claimed_tier_rewards';
 
@@ -19,8 +17,7 @@ class TierRewardsService {
     required GeneralKeyValueStorageService storage,
     required Ref ref,
   })  : _tierProgressionService = tierProgressionService,
-        _storage = storage,
-        _ref = ref;
+        _storage = storage;
 
   /// Check for unclaimed tier rewards and award them
   /// Returns list of newly claimed tiers

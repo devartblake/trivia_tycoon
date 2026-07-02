@@ -28,13 +28,20 @@ import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
 import '../theme/themes.dart';
 import '../services/theme/seasonal_theme_service.dart';
+import '../platform/platform_config.dart';
 import 'app_init.dart';
 import '../../game/providers/personalization_providers.dart';
 
 /// AppLauncher handles config + service initialization and launches the app
 class AppLauncher extends ConsumerStatefulWidget {
   final (ServiceManager, ThemeNotifier) initialData;
-  const AppLauncher({super.key, required this.initialData});
+  final AppPlatform platform;
+
+  const AppLauncher({
+    super.key,
+    required this.initialData,
+    this.platform = AppPlatform.mobile,
+  });
 
   @override
   ConsumerState<AppLauncher> createState() => _AppLauncherState();

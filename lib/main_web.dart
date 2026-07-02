@@ -7,6 +7,7 @@ import 'core/bootstrap/app_init.dart';
 import 'core/bootstrap/synaptix_app.dart';
 import 'core/env.dart';
 import 'core/manager/log_manager.dart';
+import 'core/platform/platform_config.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
 import 'synaptix/mode/synaptix_mode_notifier.dart';
 import 'synaptix/mode/synaptix_mode_provider.dart';
@@ -41,7 +42,10 @@ Future<void> main() async {
             return notifier;
           }),
         ],
-        child: SynaptixApp(initialData: (manager, theme)),
+        child: SynaptixApp(
+          initialData: (manager, theme),
+          platform: AppPlatform.web,
+        ),
       ),
     );
   } catch (e) {

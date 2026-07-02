@@ -1,5 +1,5 @@
 name: trivia_tycoon
-description: "Synaptix — Train. Compete. Grow."
+description: "Synaptix Trivia Tycoon — The ultimate multiplayer trivia platform. Challenge friends, climb tiers, master quizzes, and become a Trivia Tycoon! Features real-time multiplayer battles, skill progression system, tier rankings, seasonal rewards, and hundreds of trivia questions across multiple categories."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -280,14 +280,14 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/logo/synaptix_logo.png"
-  image_path_android: "assets/images/logo/synaptix_logo.png"
-  image_path_ios: "assets/images/logo/synaptix_logo.png"
+  image_path: "assets/images/logo/synaptix_appLogo.png"
+  image_path_android: "assets/images/logo/synaptix_appLogo.png"
+  image_path_ios: "assets/images/logo/synaptix_appLogo.png"
   web:
     generate: true
-    image_path: "assets/images/logo/synaptix_logo.png"
-    background_color: "#0175C2"
-    theme_color: "#0175C2"
+    image_path: "assets/images/logo/synaptix_appLogo.png"
+    background_color: "#6C5CE7"
+    theme_color: "#6C5CE7"
   windows:
     generate: false
   macos:

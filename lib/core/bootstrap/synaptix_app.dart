@@ -13,14 +13,20 @@ import '../../widgets/app_logo.dart';
 import '../../offline_fallback_screen.dart';
 import '../../screens/splash_variants/main_splash.dart';
 import '../../screens/widgets/custom_alert_dialog.dart';
+import '../platform/platform_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// Root widget shared by all platform entry points (main.dart, main_mobile.dart,
 /// main_web.dart). Manages the splash → crash-recovery → init → app sequence.
 class SynaptixApp extends ConsumerStatefulWidget {
   final (ServiceManager, ThemeNotifier)? initialData;
+  final AppPlatform platform;
 
-  const SynaptixApp({super.key, this.initialData});
+  const SynaptixApp({
+    super.key,
+    this.initialData,
+    this.platform = AppPlatform.mobile,
+  });
 
   @override
   ConsumerState<SynaptixApp> createState() => _SynaptixAppState();
@@ -478,6 +484,16 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
       );
     }
 
-    return AppLauncher(initialData: _initialData!);
+    return ProviderScope(
+      overrides: [
+        platformConfigProvider.overrideWithValue(
+          PlatformConfig(platform: widget.platform),
+        ),
+      ],
+      child: AppLauncher(
+        initialData: _initialData!,
+        platform: widget.platform,
+      ),
+    );
   }
 }

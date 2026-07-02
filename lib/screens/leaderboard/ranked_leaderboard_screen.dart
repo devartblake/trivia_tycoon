@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/networking/synaptix_api_client.dart';
 import '../../game/models/ranked_leaderboard_models.dart';
+import 'widgets/ranked_leaderboard_web_table.dart';
 
 class RankedLeaderboardScreen extends StatefulWidget {
   final SynaptixApiClient api;
@@ -75,51 +76,74 @@ class _RankedLeaderboardScreenState extends State<RankedLeaderboardScreen> {
                 final data = snap.data!;
                 final items = data.items;
 
-                // Grid-friendly: uses SliverGrid on wide screens, list on narrow.
+                // Choose view based on screen width
                 final width = MediaQuery.of(context).size.width;
-                final isWide = width >= 700;
-                final crossAxisCount = isWide ? 2 : 1;
+                final isWideWeb = width >= 1000;
 
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      child: Row(
-                        children: [
-                          Text('Season: ${data.seasonId}',
-                              style: Theme.of(context).textTheme.bodySmall),
-                          const Spacer(),
-                          Text('Total: ${data.total}',
-                              style: Theme.of(context).textTheme.bodySmall),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: GridView.builder(
-                        padding: const EdgeInsets.all(12),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: isWide ? 2.6 : 3.2,
+                if (isWideWeb) {
+                  // Web-optimized table view
+                  return RankedLeaderboardWebTable(
+                    entries: items,
+                    currentPage: data.page,
+                    total: data.total,
+                    pageSize: data.pageSize,
+                    seasonId: data.seasonId,
+                    onPrevPage:
+                        data.page > 1 ? () => setState(() => _page--) : null,
+                    onNextPage: (data.page * data.pageSize) < data.total
+                        ? () => setState(() => _page++)
+                        : null,
+                  );
+                } else {
+                  // Mobile card-based view
+                  final isWide = width >= 700;
+                  final crossAxisCount = isWide ? 2 : 1;
+
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        child: Row(
+                          children: [
+                            Text('Season: ${data.seasonId}',
+                                style:
+                                    Theme.of(context).textTheme.bodySmall),
+                            const Spacer(),
+                            Text('Total: ${data.total}',
+                                style:
+                                    Theme.of(context).textTheme.bodySmall),
+                          ],
                         ),
-                        itemCount: items.length,
-                        itemBuilder: (_, idx) => _RankCard(e: items[idx]),
                       ),
-                    ),
-                    _Pager(
-                      page: data.page,
-                      pageSize: data.pageSize,
-                      total: data.total,
-                      onPrev:
-                          data.page > 1 ? () => setState(() => _page--) : null,
-                      onNext: (data.page * data.pageSize) < data.total
-                          ? () => setState(() => _page++)
-                          : null,
-                    ),
-                  ],
-                );
+                      Expanded(
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(12),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            childAspectRatio: isWide ? 2.6 : 3.2,
+                          ),
+                          itemCount: items.length,
+                          itemBuilder: (_, idx) => _RankCard(e: items[idx]),
+                        ),
+                      ),
+                      _Pager(
+                        page: data.page,
+                        pageSize: data.pageSize,
+                        total: data.total,
+                        onPrev: data.page > 1
+                            ? () => setState(() => _page--)
+                            : null,
+                        onNext: (data.page * data.pageSize) < data.total
+                            ? () => setState(() => _page++)
+                            : null,
+                      ),
+                    ],
+                  );
+                }
               },
             ),
           ),

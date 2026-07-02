@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/services/tier_api_client.dart';
-import '../../core/services/settings/player_profile_service.dart';
 import '../../game/providers/tier_progression_provider.dart';
 import '../../ui_components/tier/current_tier_card.dart';
 import '../../ui_components/tier/tier_progress_bar.dart';

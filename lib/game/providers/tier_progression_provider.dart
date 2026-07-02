@@ -2,8 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/tier_progression_service.dart';
 import '../services/tier_rewards_service.dart';
 import '../../core/services/tier_api_client.dart';
-import '../../core/services/settings/player_profile_service.dart';
-import '../../core/services/settings/general_key_value_storage_service.dart';
 import 'game_providers.dart';
 import 'core_providers.dart' show generalKeyValueStorageProvider;
 

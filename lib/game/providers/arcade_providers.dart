@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../arcade/leaderboards/local_arcade_leaderboard_service.dart';
+import '../../arcade/leaderboards/arcade_leaderboard_api_service.dart';
 import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_mission_claim_service.dart';
 import '../../core/manager/tier_manager.dart';
@@ -173,6 +174,12 @@ final arcadeMissionClaimServiceProvider =
     Provider<ArcadeMissionClaimService>((ref) {
   final cache = ref.read(appCacheServiceProvider);
   return ArcadeMissionClaimService(cache);
+});
+
+final arcadeLeaderboardApiServiceProvider =
+    Provider<ArcadeLeaderboardApiService>((ref) {
+  final apiClient = ref.read(synaptixApiClientProvider);
+  return ArcadeLeaderboardApiService(apiClient);
 });
 
 // ---------------------------------------------------------------------------

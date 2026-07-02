@@ -187,6 +187,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     bool? completed,
     bool? hasCompletedProfile,
   }) async {
+    if (!mounted) return;
+
     final serviceManager = ref.read(serviceManagerProvider);
     final onboardingService = serviceManager.onboardingSettingsService;
 
@@ -289,7 +291,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       await profileService.saveAvatar(avatar);
       // Bridge the onboarding avatar into the shared avatar controller so the
       // drawer header and profile screen (both watch this provider) reflect it.
-      if (avatar.trim().isNotEmpty) {
+      if (avatar.trim().isNotEmpty && mounted) {
         await ref
             .read(profileAvatarControllerProvider)
             .selectAvatarFromAsset(avatar);
@@ -299,21 +301,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       await profileService.saveSynaptixMode(synaptixMode);
     }
     await profileService.savePreferredHomeSurface(preferredSurface);
-    ref.read(profileSelectedProvider.notifier).state = true;
+    if (mounted) {
+      ref.read(profileSelectedProvider.notifier).state = true;
+    }
 
-    try {
-      final multiProfileService = ref.read(multiProfileServiceProvider);
-      final existingProfiles = await multiProfileService.getAllProfiles();
-      if (existingProfiles.isEmpty) {
-        await multiProfileService.createProfile(
-          name: username,
-          avatar: avatar,
-          country: country,
-          ageGroup: ageGroup,
-        );
+    if (mounted) {
+      try {
+        final multiProfileService = ref.read(multiProfileServiceProvider);
+        final existingProfiles = await multiProfileService.getAllProfiles();
+        if (existingProfiles.isEmpty) {
+          await multiProfileService.createProfile(
+            name: username,
+            avatar: avatar,
+            country: country,
+            ageGroup: ageGroup,
+          );
+        }
+      } catch (e) {
+        LogManager.debug('[Onboarding] First profile creation skipped: $e');
       }
-    } catch (e) {
-      LogManager.debug('[Onboarding] First profile creation skipped: $e');
     }
 
     final profileSyncService = ProfileSyncService(
@@ -362,27 +368,29 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     }
 
     // Seed starter economy rewards
-    try {
-      await ref
-          .read(accountRewardsProvider.notifier)
-          .claim('onboarding_complete', allowLocalFallback: true);
-    } catch (e) {
-      LogManager.debug('[Onboarding] Starter reward seeding failed: $e');
-    }
-
-    // Mark onboarding complete in persistence + provider before navigating
-    // so the router's redirect sees the new state immediately.
-    await onboardingService.setOnboardingCompleted(true);
-    await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
-    await ref
-        .read(onboardingProgressProvider.notifier)
-        .markOnboardingCompleted(true);
-
-    // Apply the selected age group theme for this session
-    ref.read(userAgeGroupProvider.notifier).state = ageGroup;
-
     if (mounted) {
-      context.go('/account-link?from=onboarding');
+      try {
+        await ref
+            .read(accountRewardsProvider.notifier)
+            .claim('onboarding_complete', allowLocalFallback: true);
+      } catch (e) {
+        LogManager.debug('[Onboarding] Starter reward seeding failed: $e');
+      }
+
+      // Mark onboarding complete in persistence + provider before navigating
+      // so the router's redirect sees the new state immediately.
+      await onboardingService.setOnboardingCompleted(true);
+      await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
+      await ref
+          .read(onboardingProgressProvider.notifier)
+          .markOnboardingCompleted(true);
+
+      // Apply the selected age group theme for this session
+      ref.read(userAgeGroupProvider.notifier).state = ageGroup;
+
+      if (mounted) {
+        context.go('/account-link?from=onboarding');
+      }
     }
   }
 

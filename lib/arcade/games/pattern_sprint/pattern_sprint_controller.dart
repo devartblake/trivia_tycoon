@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import '../../../core/models/answered_question_record.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_id.dart';
 import '../../domain/arcade_result.dart';
@@ -62,6 +63,9 @@ class PatternSprintController {
   late PatternSprintState _state;
   PatternSprintState get state => _state;
 
+  final List<AnsweredQuestionRecord> _history = [];
+  List<AnsweredQuestionRecord> get history => List.unmodifiable(_history);
+
   Timer? _timer;
   bool _locked = false;
 
@@ -112,6 +116,16 @@ class PatternSprintController {
     final isCorrect = selected == _state.question.answer;
 
     final nextQuestions = _state.questionsAnswered + 1;
+
+    // Record this answer before state changes
+    _history.add(
+      AnsweredQuestionRecord(
+        prompt: _state.question.sequence.join(', '),
+        yourAnswer: selected.toString(),
+        correctAnswer: _state.question.answer.toString(),
+        isCorrect: isCorrect,
+      ),
+    );
 
     if (isCorrect) {
       final nextStreak = _state.streak + 1;
@@ -172,6 +186,7 @@ class PatternSprintController {
         'questionsAnswered': _state.questionsAnswered,
         'maxStreak': _state.maxStreak,
         'accuracy': accuracy,
+        'answeredQuestions': _history.map((r) => r.toJson()).toList(),
       },
     );
   }

@@ -255,10 +255,7 @@ void main() {
           ),
         );
 
-        when(mockApiClient.logSpinResult(any)).thenAnswer(
-          (_) async {},
-        );
-
+        // Note: logSpinResult will be mocked dynamically when called
         // Prime cache
         await cache.getAnalytics();
         verify(mockApiClient.getAnalytics(period: '24h')).called(1);

@@ -7,9 +7,11 @@ import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart
 import '../../../game/providers/riverpod_providers.dart';
 import '../../../game/providers/wallet_providers.dart';
 import '../domain/arcade_game_id.dart';
+import '../domain/arcade_difficulty.dart';
 import '../providers/arcade_providers.dart';
 import 'local_arcade_leaderboard_models.dart';
 import 'local_arcade_leaderboard_service.dart';
+import 'arcade_global_leaderboard_view.dart';
 
 class LocalArcadeLeaderboardScreen extends ConsumerStatefulWidget {
   const LocalArcadeLeaderboardScreen({super.key});
@@ -23,6 +25,7 @@ class _LocalArcadeLeaderboardScreenState
     extends ConsumerState<LocalArcadeLeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  bool _showGlobal = false; // Local/Global toggle state
 
   final List<_GameData> _games = [
     _GameData(
@@ -70,6 +73,29 @@ class _LocalArcadeLeaderboardScreenState
             _buildDailyBonusCard(context),
             const SizedBox(height: 16),
             _buildTabBar(),
+            const SizedBox(height: 12),
+            // Local/Global Toggle
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SegmentedButton<bool>(
+                segments: const [
+                  ButtonSegment(
+                    value: false,
+                    label: Text('Local'),
+                    icon: Icon(Icons.phone_iphone),
+                  ),
+                  ButtonSegment(
+                    value: true,
+                    label: Text('Global'),
+                    icon: Icon(Icons.public),
+                  ),
+                ],
+                selected: {_showGlobal},
+                onSelectionChanged: (Set<bool> newSelection) {
+                  setState(() => _showGlobal = newSelection.first);
+                },
+              ),
+            ),
             const SizedBox(height: 20),
             Expanded(
               child: TabBarView(
@@ -476,6 +502,12 @@ class _LocalArcadeLeaderboardScreenState
   }
 
   Widget _buildGameLeaderboard(BuildContext context, _GameData game) {
+    // Show global leaderboard if toggle is on
+    if (_showGlobal) {
+      return _buildGlobalLeaderboard(game);
+    }
+
+    // Show local leaderboard
     final svc = ref.watch(localArcadeLeaderboardServiceProvider);
     final scores = svc.topForGame(game.id, limit: 10);
 
@@ -513,6 +545,13 @@ class _LocalArcadeLeaderboardScreenState
           const SizedBox(height: 40),
         ],
       ),
+    );
+  }
+
+  Widget _buildGlobalLeaderboard(_GameData game) {
+    return ArcadeGlobalLeaderboardView(
+      gameId: game.id,
+      difficulty: ArcadeDifficulty.normal, // Default to normal, could add another toggle for difficulty
     );
   }
 

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
 
+import '../../../core/models/answered_question_record.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../domain/arcade_game_id.dart';
 import '../../domain/arcade_result.dart';
+import 'quiz_review_screen.dart';
 
 class ArcadeResultsModal extends StatelessWidget {
   final ArcadeResult result;
@@ -13,6 +15,7 @@ class ArcadeResultsModal extends StatelessWidget {
   // Optional actions
   final VoidCallback? onPlayAgain;
   final VoidCallback? onViewAllLocalScores;
+  final VoidCallback? onViewReview;
 
   const ArcadeResultsModal({
     super.key,
@@ -20,6 +23,7 @@ class ArcadeResultsModal extends StatelessWidget {
     required this.rewards,
     this.onPlayAgain,
     this.onViewAllLocalScores,
+    this.onViewReview,
   });
 
   @override
@@ -178,9 +182,10 @@ class ArcadeResultsModal extends StatelessWidget {
   Widget _buildBottomActions(BuildContext context) {
     final hasPlayAgain = onPlayAgain != null;
     final hasViewScores = onViewAllLocalScores != null;
+    final hasReview = onViewReview != null;
 
     // Original behavior: only Continue if no optional actions are provided
-    if (!hasPlayAgain && !hasViewScores) {
+    if (!hasPlayAgain && !hasViewScores && !hasReview) {
       return SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -215,6 +220,29 @@ class ArcadeResultsModal extends StatelessWidget {
             ),
           ),
         if (hasPlayAgain) const SizedBox(height: 10),
+        if (hasReview)
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onViewReview?.call();
+              },
+              icon: const Icon(Icons.preview_rounded, color: Colors.white),
+              label: const Text(
+                'Review Answers',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.22)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14)),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        if (hasReview) const SizedBox(height: 10),
         if (hasViewScores)
           SizedBox(
             width: double.infinity,

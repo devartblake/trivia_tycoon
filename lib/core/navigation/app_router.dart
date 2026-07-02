@@ -166,6 +166,7 @@ import '../../screens/widgets/slimy_card_preview_screen.dart';
 import '../../ui_components/spin_wheel/ui/screen/wheel_screen.dart';
 import '../../screens/analytics/player_analytics_dashboard.dart';
 import '../../screens/analytics/category_performance_detail_page.dart';
+import '../../screens/analytics/performance_chart_screen.dart';
 import '../../screens/skills/skill_tree_visualization.dart';
 import 'canonical_routes.dart';
 
@@ -518,6 +519,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           final categoryId = state.pathParameters['categoryId']!;
           return CategoryPerformanceDetailPage(category: categoryId);
         },
+      ),
+
+      /// Analytics - Performance Charts
+      GoRoute(
+        path: '/analytics/performance',
+        name: 'performance-analytics',
+        builder: (context, state) => const PerformanceChartScreen(),
       ),
 
       /// Arcade Hub → "Labs"

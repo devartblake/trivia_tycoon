@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "YOUR_TEAM_ID.com.theoreticalmindstech.triviaTycoon",
+        "paths": [
+          "/store/payment-return",
+          "/store/payment-return/*",
+          "/store/subscription-return",
+          "/store/subscription-return/*"
+        ]
+      }
+    ]
+  }
+}
