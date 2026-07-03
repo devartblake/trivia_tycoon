@@ -1,334 +1,124 @@
-# CRITICAL DECISION: Tier System Backend Status
+﻿# Decision Record: Tier System Backend Status
 
-**Date:** June 27, 2026  
-**Priority:** HIGH - Blocks Phase 2 Planning  
-**Action Required:** TODAY
+**Original Date:** June 27, 2026
+**Updated:** July 3, 2026
+**Status:** Superseded by verified backend progression endpoints
+**Current Decision:** Use real backend progression endpoints with frontend fallback support
 
 ---
 
-## Verification Update - 2026-07-03
+## Current Status
 
-This decision record is now historical. The backend tier/progression blocker has been resolved in `TycoonTycoon_Backend`.
+The original blocker was that tier/progression endpoints were believed to be missing from `TycoonTycoon_Backend`. That is no longer true.
 
-Current mapped endpoints:
+Verified backend endpoints:
 
-```
+```text
 GET  /api/v1/progression/tiers
 GET  /api/v1/progression/player/{userId:guid}
 POST /api/v1/progression/xp/award
 ```
 
-Frontend Phase 2 integration has started against the real endpoints. The mock fallback remains useful for offline/error handling, but the backend is no longer missing the progression API.
+Backend source:
 
----
-
-## 🔍 What We Discovered
-
-### Audit Results
-After reviewing TycoonTycoon_Backend API:
-
-**Questions Endpoint** ✅
-- Location: `/Features/Questions/QuestionsEndpoints.cs`
-- Status: FULLY IMPLEMENTED
-- Ready to use: YES
-
-**Rewards Endpoints** ✅
-- Location: `/Features/Rewards/RewardsEndpoints.cs` + `/Account/AccountRewardsEndpoints.cs`
-- Status: FULLY IMPLEMENTED
-- Ready to use: YES
-
-**Missions Endpoints** ✅
-- Location: `/Features/Missions/MissionsEndpoints.cs`
-- Status: FULLY IMPLEMENTED
-- Ready to use: YES
-
-**Tier System** ❌
-- Location: `/Features/[MISSING]/TiersEndpoints.cs`
-- Status: **DOES NOT EXIST**
-- Ready to use: NO
-- Impact: Phase 2 Cannot Proceed As Planned
-
----
-
-## ⚠️ The Problem
-
-### What We Need
-For Phase 2, we planned to implement:
-```
-TierApiClient (to fetch tier definitions from backend)
-└─ GET /progression/tiers
-└─ GET /progression/player/{userId}
-└─ POST /progression/xp/award
+```text
+Synaptix.Backend.Api/Features/Progression/ProgressionEndpoints.cs
+Synaptix.Backend.Api/Program.cs
 ```
 
-### What Backend Has
-```
-(nothing - tier system doesn't exist)
-```
+Frontend source:
 
-### The Gap
-Cannot build frontend API client without backend endpoints.
-
----
-
-## 🤔 Three Options
-
-### OPTION A: Mock Tier System (RECOMMENDED)
-
-**What:** Build tier system using Phase 1 hardcoded definitions
-
-**Frontend Work:**
-1. Create `TierApiClient` (100 lines)
-   - Returns hardcoded tier definitions
-   - Marked as "MOCK" in comments
-2. Wire into TierManager
-3. Display tiers in UI
-4. Total time: ~2 hours
-
-**Backend Work:**
-- None needed immediately
-- Can build endpoints in parallel
-- Frontend ready to swap real API later
-
-**Advantages:**
-- ✅ Phase 2 has full scope
-- ✅ Unblocks other features
-- ✅ Easy to swap real API later
-- ✅ Can ship with mock, upgrade anytime
-
-**Disadvantages:**
-- ⚠️ Not real data
-- ⚠️ Duplicate work if backend changes format
-
-**Recommendation:** YES - DO THIS
-
----
-
-### OPTION B: Wait for Backend
-
-**What:** Skip tier system until backend ready
-
-**Frontend Work:**
-- None - wait for backend endpoints
-
-**Backend Work:**
-- Create tier system (2-3 days estimated)
-- Deploy endpoints
-- Then frontend can build API client
-
-**Advantages:**
-- ✅ Real data from day 1
-- ✅ No duplicate work
-
-**Disadvantages:**
-- ❌ Phase 2 scope reduced
-- ❌ Blocks downstream work (challenges, etc)
-- ❌ Timeline slips
-- ❌ Cannot ship tier feature on schedule
-
-**Recommendation:** NO - Not recommended
-
----
-
-### OPTION C: Parallel Development
-
-**What:** Frontend builds with mocks, backend builds real endpoints simultaneously
-
-**Frontend Work:**
-- Build TierApiClient with mocks (2 hours)
-- Full implementation
-- Swap real API endpoint later
-
-**Backend Work:**
-- Create tier endpoints simultaneously
-- No blocking/waiting
-
-**Advantages:**
-- ✅ Full scope in Phase 2
-- ✅ Real endpoints faster
-- ✅ Parallel work
-
-**Disadvantages:**
-- ⚠️ Risk of API contract mismatch
-- ⚠️ Rework if backend format differs
-- ⚠️ Requires coordination
-
-**Recommendation:** MAYBE - Good if backend is working on this
-
----
-
-## 🎯 RECOMMENDATION: Option A (Mock Tier System)
-
-### Why Mock?
-
-1. **Unblocks Development**
-   - Phase 2 stays on schedule
-   - No waiting for backend
-   - Other features can proceed
-
-2. **Low Risk**
-   - Mock client is 2 hours work
-   - Easy to replace with real API later
-   - Same interface either way
-
-3. **Validates Architecture**
-   - Proves tier system design works
-   - Tests UI/state management
-   - Backend can use as reference
-
-4. **Flexible Timeline**
-   - Backend can work independently
-   - When ready, swap API endpoint
-   - No coordination needed
-
-### Implementation Plan
-
-```
-TODAY (Jun 27)
-├─ Decision: Approve mock tier system
-└─ Start: Create TierApiClient with mocks
-
-WEEK 2 (Jul 1-5): Phase 2 Daily Bonuses + Weekly Rewards + Mock Tiers
-├─ Daily Bonus API (real, from /account/rewards)
-├─ Weekly Rewards API (real, from /rewards)
-├─ Mock Tier System (frontend only, from Phase 1 definitions)
-└─ Questions API (already done, from /questions)
-
-WEEK 4+: Tier System Backend Ready
-├─ Backend: Completes tier endpoints
-├─ Frontend: Swap mock API → real API (1 hour change)
-└─ Release: Real tier system goes live
+```text
+lib/core/services/tier_api_client.dart
+lib/game/providers/phase2_reward_providers.dart
+lib/game/providers/tier_progression_provider.dart
+lib/game/providers/arcade_providers.dart
 ```
 
 ---
 
-## 🚀 Quick Win: What We CAN Do Now
+## Original Decision
 
-While deciding on tiers, we can build these with **actual working backend endpoints**:
+The June 27 decision was:
 
-**Week 2 (Jul 1-5):**
-- ✅ Daily Bonus API (use `/account/rewards/status`, `/account/rewards/claim`)
-- ✅ Weekly Rewards API (use `/rewards/weekly-schedule`, `/rewards/weekly/claim`)
-- ✅ Questions Integration (already have Phase 1)
-- ✅ Mock Tier System (2 hour frontend work)
+- build the frontend tier system with mock/fallback data,
+- keep Phase 2 unblocked,
+- swap to real backend endpoints when available.
 
-**All real, all working, all on schedule.**
+That was the correct decision at the time because the audit could not verify progression endpoints.
 
 ---
 
-## 🔗 What Depends on This Decision
+## Superseding Decision
 
-### If We Mock Tiers (Option A):
-- ✅ Phase 2 fully complete (Jul 1-5)
-- ✅ Phase 3 Missions ready (Jul 6-12)
-- ✅ Phase 4 Challenges ready (Jul 13-19)
-- ✅ Phase 5 Tier swap (whenever backend ready)
+Use the real backend progression API as the primary source for Phase 2 tier/progression data.
 
-### If We Wait for Tiers (Option B):
-- ⚠️ Phase 2 scope: Only bonuses + questions
-- ⚠️ Phase 3 scope: Missions + Tiers
-- ⚠️ Timeline slips 1 week
-- ⚠️ Challenges pushed to Phase 5
+Keep fallback data for:
+
+- offline development,
+- transient backend failures,
+- invalid/empty API responses,
+- unauthenticated states where no user ID is available.
 
 ---
 
-## 📋 Decision Questions
+## Backend Contract
 
-**For Backend Team:**
-1. When will tier system endpoints be ready?
-   - [ ] Week 2 (Jul 1-5)
-   - [ ] Week 3 (Jul 6-12)
-   - [ ] Week 4+ (Jul 13+)
-   - [ ] Unknown
+### Tier Definitions
 
-2. Are you building tier system now?
-   - [ ] Yes, on schedule
-   - [ ] Planned but not started
-   - [ ] Not planned yet
-   - [ ] Unsure
+```text
+GET /api/v1/progression/tiers
+```
 
-3. Can frontend use mock tiers while you build real ones?
-   - [ ] Yes, perfect - go ahead
-   - [ ] Maybe - show us the design first
-   - [ ] No - wait for real endpoints
+Returns a raw array of tier definitions.
 
----
+### Player Progress
 
-## ⏰ Decision Deadline
+```text
+GET /api/v1/progression/player/{userId:guid}
+```
 
-**Need Answer By:** June 27, 2026 (TODAY)
+Requires authorization and returns a flat progress DTO.
 
-**If No Response:** Proceeding with Option A (Mock Tier System)
-- Frontend cannot wait indefinitely
-- Will build with mocks
-- Can swap real API later
+### XP Award
 
----
+```text
+POST /api/v1/progression/xp/award
+```
 
-## 📝 Next Steps
+Requires authorization and expects:
 
-### If Approving Mock Tiers:
-
-1. **TODAY**
-   - Create `lib/core/services/tier_api_client.dart` (mock)
-   - Use Phase 1 tier definitions
-   - Mark as "MOCK - replace with real API"
-
-2. **TOMORROW (Jul 1)**
-   - Start Phase 2 implementation
-   - Daily Bonuses (real API)
-   - Weekly Rewards (real API)
-   - Mock Tiers (frontend only)
-
-3. **When Backend Ready**
-   - Replace mock endpoint with real one
-   - No other changes needed
-   - Swap: 1 hour max
-
-### If Choosing Wait-for-Backend:
-
-1. **TODAY**
-   - Confirm timeline with backend
-   - Update Phase 2 plan
-   - Adjust schedule
-
-2. **WEEK 2**
-   - Build Daily Bonuses + Weekly Rewards only
-   - Skip tier system
-
-3. **WHEN READY**
-   - Implement tier system with real backend
+```json
+{
+  "userId": "00000000-0000-0000-0000-000000000000",
+  "xpAmount": 100,
+  "reason": "quiz_completed"
+}
+```
 
 ---
 
-## 🔐 Commitment
+## Frontend Integration Notes
 
-By implementing mock tier system:
-- We're NOT committing to permanent mock data
-- We CAN swap real API anytime
-- No rework needed for real endpoints
-- Flexible and professional approach
-
----
-
-## ✅ Approval Checklist
-
-- [ ] Backend team confirmed tier system status
-- [ ] Team agrees with mock approach (Option A)
-- [ ] Timeline confirmed for real endpoints
-- [ ] Phase 2 scope approved (bonuses + rewards + mock tiers)
+- Phase 2 providers should use `authHttpClientProvider`.
+- Clients should use `EnvConfig.apiV1BaseUrl`.
+- Do not send the old XP request field `amount`; backend expects `xpAmount`.
+- Player progress parsing must support the backend's flat DTO.
+- Tier definitions parsing must support the backend's raw array response.
+- Keep mock fallback behavior in `TierApiClient`.
 
 ---
 
-**Status:** AWAITING DECISION  
-**Impact:** Blocks Phase 2 Detailed Planning  
-**Risk Level:** HIGH if unaddressed  
+## Remaining Decisions
 
-**Recommendation:** Proceed with Option A (Mock Tiers)  
-**Authorization Needed:** Backend team + Project lead
+The tier backend is no longer blocking Phase 2. Remaining architectural decisions are separate:
+
+- whether realtime tier/config updates are needed now or later,
+- whether operator dashboard tier controls should be a Phase 3 backend/dashboard project,
+- whether tier analytics need dedicated endpoints or can start as client/server event logging.
 
 ---
 
-*Created: June 27, 2026*  
-*Decisions Made: Backend API Audit findings*  
-*Action: Review with team TODAY*
+## Outcome
+
+Phase 2 can proceed with real daily, weekly, and tier/progression APIs. The earlier "mock tiers until backend ready" plan is now historical context only.

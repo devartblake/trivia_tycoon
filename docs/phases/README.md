@@ -1,54 +1,74 @@
-# Phase Planning & Development Roadmaps
+﻿# Phase Planning & Development Roadmaps
 
-This directory contains all planning documentation for different development phases.
+This directory contains planning documentation for development phases.
 
-## 📋 Files
+## Files
 
-### Current Phase (Phase 2)
-- **PHASE_2_PROGRESS.md** - Daily implementation progress, API clients complete, UI in progress
-- **PHASE_2_REVISED_PLAN.md** - Detailed execution plan for Week 2 (Jul 1-5)
+### Current Phase 2 References
+
+- **PHASE2_PROGRESS.md** - Phase 2 API integration progress, including July 3 backend contract verification
+- **PHASE_2_PROGRESS.md** - Historical daily update from early Phase 2; now superseded by later verification
+- **PHASE_2_REVISED_PLAN.md** - Historical Week 2 execution plan with July 3 verification note
+- **PHASE2_TEST_GUIDE.md** - Phase 2 testing procedures
 
 ### Overall Planning
-- **IMPLEMENTATION_PLAN.md** - Master 5-phase strategy for replacing demo data with API
-- **CORE_CONTENT_PRIORITY_PLAN.md** - 6-week roadmap for all 13 demo data categories
-- **DEMO_DATA_INVENTORY.md** - Complete audit of hardcoded demo data across codebase
 
-## 🎯 Phase Overview
+- **IMPLEMENTATION_PLAN.md** - Master strategy for replacing demo data with API-backed flows
+- **CORE_CONTENT_PRIORITY_PLAN.md** - Roadmap for demo data replacement
+- **DEMO_DATA_INVENTORY.md** - Audit of hardcoded demo data across the codebase
 
+## Phase Overview
+
+```text
+Phase 1 COMPLETE
+â”œâ”€ Questions API
+â”œâ”€ Security fixes
+â””â”€ Infrastructure
+
+Phase 2 API/UI COMPLETE FOR DAILY, WEEKLY, AND TIER PROGRESSION
+â”œâ”€ Daily Bonus API
+â”œâ”€ Weekly Rewards API
+â”œâ”€ Tier/Progression API
+â”œâ”€ Phase 2 providers
+â”œâ”€ UI screens/cards
+â””â”€ Focused tests
+
+Phase 2 Optional / Deferred
+â””â”€ WebSocket realtime config updates
+
+Phase 3+ PLANNED
+â”œâ”€ Operator controls
+â”œâ”€ Analytics
+â””â”€ Additional enhancements
 ```
-Phase 1 ✅ COMPLETE
-├─ Questions API
-├─ Security fixes
-└─ Infrastructure
 
-Phase 2 🔄 IN PROGRESS (Week 2, Jul 1-5)
-├─ Daily Bonus API ✅
-├─ Weekly Rewards API ✅
-├─ Mock Tier System ✅
-├─ Providers ⏳
-├─ UI Screens ⏳
-└─ Testing ⏳
+## Current Backend Contract
 
-Phase 3 📋 PLANNED
-├─ Missions API
-└─ Categories API
-
-Phase 4+ 🔮 FUTURE
-└─ Challenges, Leaderboards, etc.
+```text
+GET  /api/v1/rewards/daily-config
+GET  /api/v1/account/rewards/status
+POST /api/v1/account/rewards/claim
+GET  /api/v1/rewards/weekly-schedule
+GET  /api/v1/rewards/weekly-streak/{userId:guid}
+POST /api/v1/rewards/weekly/claim
+GET  /api/v1/progression/tiers
+GET  /api/v1/progression/player/{userId:guid}
+POST /api/v1/progression/xp/award
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
-**To get started with Phase 2 implementation:**
-1. Read PHASE_2_REVISED_PLAN.md - Know what to build this week
-2. Read PHASE_2_PROGRESS.md - Understand API infrastructure ready
-3. Check ../api/ for API documentation
+To understand current Phase 2 status:
 
-**To understand long-term roadmap:**
-1. Read IMPLEMENTATION_PLAN.md - 5-phase strategy
-2. Read CORE_CONTENT_PRIORITY_PLAN.md - 6-week detail roadmap
-3. Check DEMO_DATA_INVENTORY.md - What needs to be replaced
+1. Read `PHASE2_PROGRESS.md` for the latest verified API status.
+2. Read `PHASE2_TEST_GUIDE.md` for test coverage and commands.
+3. Check `../api/BACKEND_API_AUDIT.md` for backend endpoint inventory.
+
+To understand older planning decisions:
+
+1. Read `PHASE_2_REVISED_PLAN.md` as historical context.
+2. Read `../architecture/CRITICAL_DECISION_TIER_SYSTEM.md` for the now-superseded mock-tier decision.
 
 ---
 
-**Last Updated:** June 27, 2026
+**Last Updated:** July 3, 2026

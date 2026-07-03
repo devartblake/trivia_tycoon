@@ -1,90 +1,75 @@
-# Progress & Session Summaries
+﻿# Progress & Session Summaries
 
 This directory tracks project progress through session summaries and milestone completion records.
 
-## 📋 Files
+## Files
 
-- **SESSION_3_SUMMARY.md** - Latest session summary (Phase 2 API infrastructure complete)
+- **SESSION_4_PHASE_2_COMPLETE.md** - Phase 2 UI completion record
+- **SESSION_4_IN_PROGRESS.md** - Historical in-progress Phase 2 UI session
+- **SESSION_3_SUMMARY.md** - Historical Phase 2 API infrastructure session; mock-tier notes are superseded by July 3 backend verification
 - **SESSION_2_COMPLETION.md** - Phase 1 completion summary
 - **PROGRESS_SUMMARY.md** - Comprehensive overall project progress
 
-## 📊 Project Status
+## Project Status
 
-**Current Phase:** 2 (Rewards System)  
-**Timeline:** Week 2 (Jul 1-5, 2026)  
-**Status:** API Complete ✅ | UI In Progress 🔄
+**Current Phase:** Post Phase 2 rewards/progression integration
+**Timeline:** July 2026
+**Status:** Daily, weekly, and tier/progression APIs verified; realtime updates deferred
 
 ### Phase Completion
 
 | Phase | Status | Completion | Key Deliverables |
 |-------|--------|------------|------------------|
-| 1 | ✅ COMPLETE | 100% | Questions API, Security fixes |
-| 2 | 🔄 IN PROGRESS | 40% | APIs ✅, UI ⏳, Testing ⏳ |
-| 3 | 📋 PLANNED | 0% | Missions API, Categories API |
-| 4+ | 🔮 FUTURE | 0% | Challenges, Leaderboards, etc. |
+| 1 | Complete | 100% | Questions API, security fixes |
+| 2 | Complete for API/UI | 100% core, optional realtime deferred | Daily bonus, weekly rewards, tier/progression API, providers, UI, focused tests |
+| 3 | Planned | 0% | Operator controls, analytics, broader enhancements |
 
-## 🎯 Latest Accomplishments
+## Latest Accomplishments
 
-### Session 3 (June 27, 2026)
-**Major Achievements:**
-- ✅ Backend API audit completed (6 endpoints verified, 1 missing)
-- ✅ Made critical tier system decision (Option 1: Mock)
-- ✅ Created Phase 2 API infrastructure (710 lines of code)
-- ✅ 3 API clients: Daily Bonus, Weekly Rewards, Mock Tier
+### July 3, 2026 Verification
 
-**Impact:**
-- Phase 2 remains on schedule
-- Zero risk to timeline
-- UI team can start immediately
+- Confirmed backend maps daily, weekly, and progression endpoints under `/api/v1`.
+- Updated frontend Phase 2 clients/providers to use authenticated HTTP transport and configured base URL.
+- Added backend DTO compatibility for current daily, weekly, and progression responses.
+- Added/updated focused Phase 2 contract and provider tests.
+- Updated stale docs that still described tier/progression as backend-blocked.
 
-### Session 2 (June 26, 2026)
-**Major Achievements:**
-- ✅ Phase 1 Questions API complete
-- ✅ Removed hardcoded credentials (security fix)
-- ✅ Fixed console noise (LogManager improvements)
-- ✅ Fixed compilation bugs (wrap→row, lifecycle logging)
+### Session 4
 
-## 📈 Weekly Progress Tracking
+- Phase 2 UI implementation completed for daily, weekly, and tier progression surfaces.
 
-**Week 1 (Jun 26-30):** Phase 1 Complete ✅
-- Questions API implemented
-- Security fixes applied
-- Infrastructure ready
+### Session 3
 
-**Week 2 (Jul 1-5):** Phase 2 UI Implementation 🔄
-- Create Riverpod providers (2h)
-- Build Daily Bonus UI (2h)
-- Build Weekly Rewards UI (2h)
-- Create tier progress widget (1h)
-- Integration testing (2h)
+- Built initial Phase 2 API infrastructure and mock fallback.
+- Historical note: the Session 3 mock-tier decision was correct at the time, but is superseded now that progression endpoints exist.
 
-**Week 3 (Jul 6-12):** Phase 2 Polish + Phase 3 Planning
-- Complete testing
-- Performance optimization
-- Plan Phase 3 (Missions, Categories)
+## Weekly Progress Tracking
 
-## 🔗 Finding What You Need
+**Week 1 (Jun 26-30):** Phase 1 complete
+**Week 2 (Jul 1-5):** Phase 2 UI/API integration complete for core reward flows
+**Remaining optional work:** WebSocket realtime updates and future operator/analytics work
 
-**To see what was completed:**
-1. Read SESSION_3_SUMMARY.md - Latest work
-2. Check PROGRESS_SUMMARY.md - Overall status
+## Finding What You Need
 
-**To understand the timeline:**
-1. Read ../phases/IMPLEMENTATION_PLAN.md - 5-phase roadmap
-2. Check ../phases/CORE_CONTENT_PRIORITY_PLAN.md - 6-week detail
+To see current Phase 2 status:
 
-**To continue last session's work:**
-1. Read SESSION_3_SUMMARY.md - What was done
-2. Check ../phases/PHASE_2_REVISED_PLAN.md - What's next
+1. Read `../phases/PHASE2_PROGRESS.md`.
+2. Read `../api/BACKEND_API_AUDIT.md`.
+3. Read `SESSION_4_PHASE_2_COMPLETE.md` for UI completion context.
 
-## 📝 How to Update
+To understand historical planning:
+
+1. Read `SESSION_3_SUMMARY.md`.
+2. Read `../architecture/CRITICAL_DECISION_TIER_SYSTEM.md`.
+
+## How to Update
 
 When starting a new session:
-1. Create SESSION_X_SUMMARY.md with current status
-2. Update PROGRESS_SUMMARY.md with latest metrics
-3. Reference these in the main docs/README.md
+
+1. Create `SESSION_X_SUMMARY.md` with current status.
+2. Update `PROGRESS_SUMMARY.md` with latest metrics.
+3. Reference these in the main docs README.
 
 ---
 
-**Last Updated:** June 27, 2026  
-**Next Update:** After Phase 2 UI implementation
+**Last Updated:** July 3, 2026

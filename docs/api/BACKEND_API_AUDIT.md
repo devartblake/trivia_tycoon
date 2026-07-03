@@ -1,115 +1,65 @@
-# Backend API Audit - Available Endpoints
+﻿# Backend API Audit - Available Endpoints
 
-**Date:** June 27, 2026  
-**Status:** Complete API Inventory  
-**Purpose:** Verify which endpoints exist and plan Phase 2 implementation
-
----
-
-## Verification Update - 2026-07-03
-
-The tier/progression status in the original June 27 audit is stale. The backend now includes `Synaptix.Backend.Api/Features/Progression/ProgressionEndpoints.cs`, and `Program.cs` maps it into `/api/v1`.
-
-Verified progression endpoints:
-
-```
-GET  /api/v1/progression/tiers
-GET  /api/v1/progression/player/{userId:guid}
-POST /api/v1/progression/xp/award
-```
-
-The daily and weekly reward endpoints listed in this audit are still present. Frontend Phase 2 clients have been updated to use the current backend DTO shapes and authenticated transport.
+**Date:** July 3, 2026
+**Status:** Current API Inventory
+**Purpose:** Verify which endpoints exist and identify any remaining Phase 2 blockers
 
 ---
 
-## 📊 Summary
+## Summary
 
 | Feature | Status | Endpoints | Notes |
 |---------|--------|-----------|-------|
-| Questions ✅ | Ready | 6 | Can fetch questions |
-| Rewards ✅ | Ready | 6 | Daily + Weekly + Spin rewards |
-| Missions ✅ | Ready | 3 | Daily/Weekly/Season support |
-| Account ✅ | Ready | 2 | Account-level rewards |
-| Tiers ❌ | Missing | 0 | **Need to create** |
-| Progression ❌ | Missing | 0 | **Need to create** |
-| Categories ⚠️ | Partial | Via Questions | Included in questions/categories |
+| Questions | Ready | 6+ | Question fetch, metadata, preview, answer checking |
+| Rewards | Ready | 6 | Daily, weekly, and spin reward configuration/claims |
+| Account Rewards | Ready | 2 | Account daily status and claim |
+| Missions | Ready | 4 | Daily/weekly/season support |
+| Tiers | Ready | 3 | Progression endpoints implemented |
+| Progression | Ready | 3 | Tier definitions, player progress, XP award |
+| Categories | Partial | Via Questions | Available through `/questions/categories`; dedicated metadata endpoint still optional |
+
+There are no known Phase 2 daily, weekly, or tier/progression endpoint blockers as of July 3, 2026.
 
 ---
 
-## ✅ VERIFIED: Questions Endpoints
+## Verified: Questions Endpoints
 
 **Location:** `Synaptix.Backend.Api/Features/Questions/QuestionsEndpoints.cs`
 
-### Available Endpoints
-
+```text
+GET  /api/v1/questions/set
+POST /api/v1/questions/mixed
+GET  /api/v1/questions/categories
+GET  /api/v1/questions/metadata
+POST /api/v1/questions/preview-set
+POST /api/v1/questions/check
+POST /api/v1/questions/check-batch
 ```
-GET  /questions/set
-     ?category={category}
-     &difficulty={difficulty}
-     &count={count}
-     &playerId={playerId}
-     &mode={mode}
-```
 
-**Parameters:**
-- `category` (optional) - Category name
-- `difficulty` (optional) - Easy, Medium, Hard, Expert
-- `count` (required) - Number of questions
-- `playerId` (optional) - For adaptive difficulty
-- `mode` (optional) - ranked, practice, etc
-- `gradeBand`, `ageGroup`, `audience`, `subject`, `topic`, `dataset`, `tags`
+Notes:
 
-**Response:**
-- Array of QuestionModel (without correct answers - separate /check endpoint)
-- Supports adaptive personalization based on player profile
+- `GET /questions/set` supports category, difficulty, count, personalization, and mode parameters.
+- `/questions/check` and `/questions/check-batch` keep grading server-side.
+- `/questions/categories` can continue powering frontend category selection.
 
 ---
 
-```
-POST /questions/mixed
-```
-
-**Purpose:** Mixed difficulty questions
-
----
-
-```
-GET  /questions/categories
-```
-
-**Returns:** List of available categories
-
----
-
-```
-GET  /questions/metadata
-```
-
-**Returns:** Question metadata and statistics
-
----
-
-```
-POST /questions/preview-set
-POST /questions/check
-POST /questions/check-batch
-```
-
-**Purpose:** Answer validation (server-side grading)
-
----
-
-## ✅ VERIFIED: Rewards Endpoints
+## Verified: Rewards Endpoints
 
 **Location:** `Synaptix.Backend.Api/Features/Rewards/RewardsEndpoints.cs`
 
-### Daily Rewards
-
+```text
+GET  /api/v1/rewards/daily-config
+POST /api/v1/rewards/daily/claim
+GET  /api/v1/rewards/weekly-schedule
+GET  /api/v1/rewards/weekly-streak/{userId:guid}
+POST /api/v1/rewards/weekly/claim
+POST /api/v1/rewards/weekly-streak/{userId:guid}/claim
+GET  /api/v1/rewards/spin-reward-steps
 ```
-GET  /rewards/daily-config
-```
 
-**Returns:**
+Daily config returns the daily reward definition:
+
 ```json
 {
   "rewardType": "coins",
@@ -119,382 +69,162 @@ GET  /rewards/daily-config
 }
 ```
 
----
+Weekly schedule returns a raw list of `WeeklyRewardDay` records using backend DTO names such as `rewardType` and `displayLabel`.
 
-```
-POST /rewards/daily/claim
-```
+Weekly claim expects a request body:
 
-**Purpose:** Claim daily reward  
-**Auth:** Required
-
----
-
-### Weekly Rewards
-
-```
-GET  /rewards/weekly-schedule
-```
-
-**Returns:** 7-day reward schedule
 ```json
-[
-  { "day": 1, "type": "coins", "coinsAmount": 100, "gems": 0 },
-  { "day": 2, "type": "gems", "coinsAmount": 0, "gems": 5 },
-  ...
-]
+{
+  "day": 3
+}
 ```
 
 ---
 
-```
-GET  /rewards/weekly-streak/{userId:guid}
-```
-
-**Purpose:** Get player's current week streak  
-**Auth:** Required
-
----
-
-```
-POST /rewards/weekly/claim
-```
-
-**Purpose:** Claim weekly reward  
-**Auth:** Required
-
----
-
-### Spin Rewards
-
-```
-GET  /rewards/spin-reward-steps
-```
-
-**Returns:** Reward progression for spin wheel
-```json
-[
-  { "type": "coins", "amount": 50, "displayName": "50 Credits" },
-  { "type": "coins", "amount": 100, "displayName": "100 Credits" },
-  ...
-]
-```
-
----
-
-## ✅ VERIFIED: Account Rewards Endpoints
+## Verified: Account Rewards Endpoints
 
 **Location:** `Synaptix.Backend.Api/Features/Account/AccountRewardsEndpoints.cs`
 
-```
-GET  /account/rewards/status
+```text
+GET  /api/v1/account/rewards/status
+POST /api/v1/account/rewards/claim
 ```
 
-**Auth:** Required  
-**Returns:**
-- Daily claim status
-- Weekly streak info
-- Next claim time
+Notes:
+
+- Both endpoints require authorization.
+- Status returns daily claim eligibility plus weekly day/schedule data.
+- Daily claim response uses backend DTO fields such as `coinsGranted` and `newBalance`.
 
 ---
 
-```
-POST /account/rewards/claim
+## Verified: Tier/Progression Endpoints
+
+**Location:** `Synaptix.Backend.Api/Features/Progression/ProgressionEndpoints.cs`
+
+```text
+GET  /api/v1/progression/tiers
+GET  /api/v1/progression/player/{userId:guid}
+POST /api/v1/progression/xp/award
 ```
 
-**Auth:** Required  
-**Purpose:** Claim daily reward for account
+Notes:
+
+- `GET /progression/tiers` returns a raw array of tier definitions.
+- `GET /progression/player/{userId:guid}` requires authorization and returns a flat `PlayerTierProgress` DTO:
+
+```json
+{
+  "currentTierId": "silver-scholar",
+  "currentTierName": "Silver Scholar",
+  "currentLevel": 2,
+  "currentXp": 750.0,
+  "xpInCurrentTier": 250.0,
+  "xpNeededForNextTier": 450.0,
+  "progressPercentage": 35.0
+}
+```
+
+- `POST /progression/xp/award` requires authorization and expects:
+
+```json
+{
+  "userId": "00000000-0000-0000-0000-000000000000",
+  "xpAmount": 100,
+  "reason": "quiz_completed"
+}
+```
+
+Frontend Phase 2 clients now support the current backend DTO shapes.
 
 ---
 
-## ✅ VERIFIED: Missions Endpoints
+## Verified: Missions Endpoints
 
 **Location:** `Synaptix.Backend.Api/Features/Missions/MissionsEndpoints.cs`
 
-```
-GET  /missions/
-     ?type={type}
+```text
+GET  /api/v1/missions?type={type}
+POST /api/v1/missions/progress/match-completed
+POST /api/v1/missions/progress/round-completed
+POST /api/v1/missions/{missionId:guid}/claim?playerId={playerId}&type={type}
 ```
 
-**Parameters:**
-- `type` (optional) - "daily", "weekly", "season"
+Notes:
 
-**Returns:** List of active missions for player
+- Mission types include daily, weekly, and season.
+- Progress endpoints are designed for match/round completion events.
 
 ---
 
-```
-POST /missions/progress/match-completed
+## Partial: Categories
+
+Categories are available through:
+
+```text
+GET /api/v1/questions/categories
 ```
 
-**Body:** MatchCompletedProgressDto  
-**Purpose:** Update mission progress after match
+A dedicated category metadata endpoint remains optional if the frontend needs server-provided icons, colors, or ordering beyond the current questions category list.
 
 ---
 
-```
-POST /missions/progress/round-completed
-```
+## Phase 2 Implementation Status
 
-**Body:** RoundCompletedProgressDto  
-**Purpose:** Update mission progress after round
+### Complete
+
+- Daily bonus API client and providers
+- Weekly rewards API client and providers
+- Tier/progression API client and providers
+- Authenticated HTTP transport for Phase 2 clients
+- Configured API base URL via `EnvConfig.apiV1BaseUrl`
+- Backend DTO compatibility for current daily, weekly, and progression contracts
+- Focused backend contract tests
+
+### Deferred / Optional
+
+- WebSocket realtime config updates
+- Dedicated category metadata endpoint
+- Operator dashboard tier controls
+- Tier/progression analytics endpoints
 
 ---
 
-```
-POST /missions/{missionId:guid}/claim
-     ?playerId={playerId}
-     &type={type}
-```
+## Frontend Files To Check
 
-**Purpose:** Claim mission reward  
-**Returns:** Updated mission list
-
----
-
-## ❌ MISSING: Tier/Progression Endpoints
-
-**Status:** NOT FOUND in backend
-
-### What We Need to Create
-
-```
-GET  /progression/tiers
-```
-
-**Should Return:**
-```json
-[
-  {
-    "id": "bronze-rookie",
-    "name": "Bronze Rookie",
-    "level": 1,
-    "minXp": 0,
-    "maxXp": 500,
-    "rewards": {
-      "badge": "welcome_badge",
-      "coins": 100
-    }
-  },
-  {
-    "id": "silver-scholar",
-    "name": "Silver Scholar",
-    "level": 5,
-    "minXp": 500,
-    "maxXp": 1200,
-    "rewards": {
-      "badge": "scholar_badge",
-      "coins": 250,
-      "gems": 5
-    }
-  },
-  ...
-]
+```text
+lib/core/services/daily_bonus_api_client.dart
+lib/core/services/weekly_rewards_api_client.dart
+lib/core/services/tier_api_client.dart
+lib/game/providers/phase2_reward_providers.dart
+lib/game/providers/tier_progression_provider.dart
+lib/game/providers/arcade_providers.dart
+test/core/services/phase2_backend_contract_clients_test.dart
+test/game/providers/phase2_reward_providers_test.dart
 ```
 
 ---
 
-```
-GET  /progression/player/{playerId:guid}
-```
+## Backend Files Reviewed
 
-**Returns:** Player's current tier/XP/level
-
----
-
-```
-POST /progression/xp/award
-```
-
-**Purpose:** Award XP to player (called after match completion)
-
----
-
-## ⚠️ PARTIAL: Categories
-
-**Location:** Via `/questions/categories`
-
-### Issue
-
-Categories are retrieved as part of questions endpoint, but no dedicated category management endpoint.
-
-### Recommendation
-
-- Can use existing `/questions/categories` for frontend dropdown
-- If we need category metadata (icons, colors), need new endpoint:
-  ```
-  GET  /categories/all
-  ```
-
----
-
-## 🏗️ Missing Infrastructure
-
-### NOT FOUND in Backend
-
-1. **Tier Definition Table**
-   - No `Tiers` or `Progression` entity found
-   - Need: Entity to define tier progression
-   - Need: Database migration to create tier data
-
-2. **Tier Completion Tracking**
-   - Need: Entity to track player tier progression
-   - Need: Endpoint to return player's current tier
-
-3. **Tier Rewards**
-   - Need: Reward calculation when tier up occurs
-   - Need: Endpoint to claim tier-up rewards
-
----
-
-## 🔄 Phase 2 Implementation Plan - REVISED
-
-### What EXISTS ✅
-- Questions API → Can use directly
-- Rewards API → Can use directly
-- Missions API → Can use directly
-- Account rewards → Can use directly
-
-### What NEEDS CREATION ❌
-1. **Tier/Progression Endpoints** (NEW WORK)
-   - GET /progression/tiers (get tier definitions)
-   - GET /progression/player/{id} (get player tier)
-   - POST /progression/xp/award (award XP to player)
-
-2. **Backend Entities & Database**
-   - Tier definition table
-   - Player progression tracking table
-   - Migration script
-
-3. **Tier Manager Service**
-   - Calculate tier from XP
-   - Award tier-up rewards
-   - Handle tier-down scenarios
-
----
-
-## 💡 Critical Discovery
-
-### Good News ✅
-- Questions API is **fully functional and flexible**
-- Rewards system is **production-ready**
-- Missions endpoint is **complete**
-- No need to build those from scratch!
-
-### Challenge ⚠️
-- **Tier/Progression system doesn't exist**
-- Cannot use existing backend endpoints
-- **Must create from scratch:**
-  1. Backend entities
-  2. Database schema
-  3. API endpoints
-  4. Business logic
-
----
-
-## 📋 What This Means for Phase 2
-
-### Original Plan (6 hours for Tier System)
-```
-Create TierApiClient → NOT APPLICABLE
-Update TierManager → Can do this part
-Implement tier caching → Can do this part
-Test tier progression → Need backend endpoints first
-```
-
-### REVISED Plan (Need Backend Work)
-
-**BLOCKER:** Cannot implement frontend TierApiClient until backend has:
-- ✅ Tier definitions (stored in DB)
-- ✅ Player progression tracking
-- ✅ API endpoints
-
-**OPTIONS:**
-
-**Option A: Wait for Backend Team**
-- Backend: Create tier system (2-3 days)
-- Frontend: Implement API client once ready
-
-**Option B: Create Mock API for Frontend**
-- Frontend: Build TierApiClient with hardcoded tier definitions
-- Later: Connect to real backend when ready
-- Timeline: ~2 hours frontend work
-
-**Option C: Parallel Development**
-- Frontend: Build TierApiClient using Phase 1 patterns
-- Backend: Create tier endpoints simultaneously
-- Risk: API contract mismatch
-
----
-
-## ✅ Recommended Next Steps
-
-### TODAY (June 27)
-1. Check TycoonTycoon_Backend CLAUDE.md for tier roadmap
-2. Determine if tier system is planned
-3. Ask backend team: **"When will tier system API be ready?"**
-
-### If Backend Not Ready
-1. Continue with other Phase 2 items:
-   - Daily Bonus API (use /rewards endpoints)
-   - Weekly Rewards API (use /rewards endpoints)
-   - Question Preload integration
-   - Category selection integration
-
-2. **Skip Tier System** until backend is ready
-   - Reorder Phase 2: Do bonuses/rewards first
-   - Tier system becomes Week 3 instead of Week 2
-
-### If Backend Ready
-1. Document tier API contract
-2. Build TierApiClient
-3. Implement in frontend
-
----
-
-## 📚 Backend Files to Review
-
-```
-Synaptix.Backend.Api/Features/
-├─ Questions/QuestionsEndpoints.cs ✅
-├─ Rewards/RewardsEndpoints.cs ✅
-├─ Account/AccountRewardsEndpoints.cs ✅
-├─ Missions/MissionsEndpoints.cs ✅
-└─ (Tiers/) ❌ MISSING
+```text
+Synaptix.Backend.Api/Features/Questions/QuestionsEndpoints.cs
+Synaptix.Backend.Api/Features/Rewards/RewardsEndpoints.cs
+Synaptix.Backend.Api/Features/Account/AccountRewardsEndpoints.cs
+Synaptix.Backend.Api/Features/Progression/ProgressionEndpoints.cs
+Synaptix.Backend.Api/Features/Missions/MissionsEndpoints.cs
+Synaptix.Backend.Api/Program.cs
 ```
 
 ---
 
-## 🎯 Decision Point
+## Next Steps
 
-**Question for Backend Team:**
-> Are tier/progression endpoints planned for Phase 2? If not, what's the timeline?
-
-**Pending:** Clarification on tier system roadmap
-
----
-
-## 📝 Summary for Frontend
-
-**We can proceed with:**
-- ✅ Daily Bonus API (use /account/rewards/status & /account/rewards/claim)
-- ✅ Weekly Rewards API (use /rewards/weekly-schedule & /rewards/weekly/claim)
-- ✅ Questions integration (already done in Phase 1)
-- ✅ Missions API (use /missions endpoints)
-
-**We're BLOCKED on:**
-- ❌ Tier System (backend endpoints don't exist yet)
-
-**Workaround:**
-- Create mock tier definitions for Phase 2
-- Connect to real backend in Phase 3 once endpoints exist
+1. Keep Phase 2 contract tests green as backend DTOs evolve.
+2. Run real-device/manual claim testing with an authenticated user.
+3. Decide whether optional realtime updates belong in Phase 2 or a later operator/config phase.
+4. Add a category metadata endpoint only if the UI needs richer category data than `/questions/categories` supplies.
 
 ---
 
-**Status:** Audit Complete  
-**Action Required:** Clarify tier system timeline with backend team
-
----
-
-*Document generated: June 27, 2026*  
-*Backend reviewed: Synaptix.Backend.Api commit latest*
+**Last Updated:** July 3, 2026
