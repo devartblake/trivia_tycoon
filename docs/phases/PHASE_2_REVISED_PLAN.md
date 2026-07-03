@@ -6,6 +6,24 @@
 
 ---
 
+## Verification Update - 2026-07-03
+
+The tier/progression backend blocker described below is now resolved in `TycoonTycoon_Backend`.
+
+Mapped backend endpoints:
+
+```
+GET  /api/v1/progression/tiers
+GET  /api/v1/progression/player/{userId:guid}
+POST /api/v1/progression/xp/award
+```
+
+Frontend integration has started against those real endpoints. The Phase 2 clients now use the configured API base URL and authenticated HTTP client, and the frontend parses the current backend DTOs for daily, weekly, and tier progression responses.
+
+The older "Tier System API waiting for backend endpoints" notes in this document should be treated as historical context.
+
+---
+
 ## 🔄 What Changed
 
 ### Original Phase 2 Plan

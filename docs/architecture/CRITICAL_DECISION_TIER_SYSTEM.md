@@ -6,6 +6,22 @@
 
 ---
 
+## Verification Update - 2026-07-03
+
+This decision record is now historical. The backend tier/progression blocker has been resolved in `TycoonTycoon_Backend`.
+
+Current mapped endpoints:
+
+```
+GET  /api/v1/progression/tiers
+GET  /api/v1/progression/player/{userId:guid}
+POST /api/v1/progression/xp/award
+```
+
+Frontend Phase 2 integration has started against the real endpoints. The mock fallback remains useful for offline/error handling, but the backend is no longer missing the progression API.
+
+---
+
 ## 🔍 What We Discovered
 
 ### Audit Results

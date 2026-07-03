@@ -7,6 +7,29 @@
 
 ---
 
+## Verification Update - 2026-07-03
+
+Phase 2 API integration has moved beyond the original mock-only tier plan:
+
+- Backend progression endpoints are implemented and mapped in `TycoonTycoon_Backend`:
+  - `GET /api/v1/progression/tiers`
+  - `GET /api/v1/progression/player/{userId:guid}`
+  - `POST /api/v1/progression/xp/award`
+- Daily/weekly reward endpoints are implemented and mapped:
+  - `GET /api/v1/rewards/daily-config`
+  - `GET /api/v1/account/rewards/status`
+  - `POST /api/v1/account/rewards/claim`
+  - `GET /api/v1/rewards/weekly-schedule`
+  - `GET /api/v1/rewards/weekly-streak/{userId:guid}`
+  - `POST /api/v1/rewards/weekly/claim`
+- Frontend clients/providers now use `EnvConfig.apiV1BaseUrl` plus the authenticated HTTP client.
+- Frontend contract fixes were added for backend DTO shapes: raw tier arrays, flat player progress, `xpAmount` XP award requests, daily `coinsGranted`/`newBalance`, weekly `rewardType`/`displayLabel`, and weekly claim `{ "day": currentDay }`.
+- Verification added in `test/core/services/phase2_backend_contract_clients_test.dart` and updated in `test/game/providers/phase2_reward_providers_test.dart`.
+
+Remaining optional Phase 2 work: WebSocket/realtime config updates remain deferred.
+
+---
+
 ## Summary
 
 Phase 2 is transitioning from mock data to real backend API integration. Task 2.1 (Real Backend Integration) has been started with initial API client and provider updates completed.
@@ -431,4 +454,3 @@ Phase 2 is transitioning from mock data to real backend API integration. Task 2.
 **Current Focus**: Task 2.1 (API Integration)  
 **Next Milestone**: Task 2.1 Testing (Starting Tomorrow)  
 **Expected Completion**: 2026-06-30
-

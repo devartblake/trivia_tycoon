@@ -6,6 +6,22 @@
 
 ---
 
+## Verification Update - 2026-07-03
+
+The tier/progression status in the original June 27 audit is stale. The backend now includes `Synaptix.Backend.Api/Features/Progression/ProgressionEndpoints.cs`, and `Program.cs` maps it into `/api/v1`.
+
+Verified progression endpoints:
+
+```
+GET  /api/v1/progression/tiers
+GET  /api/v1/progression/player/{userId:guid}
+POST /api/v1/progression/xp/award
+```
+
+The daily and weekly reward endpoints listed in this audit are still present. Frontend Phase 2 clients have been updated to use the current backend DTO shapes and authenticated transport.
+
+---
+
 ## 📊 Summary
 
 | Feature | Status | Endpoints | Notes |
