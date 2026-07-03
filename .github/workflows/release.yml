@@ -1,186 +1,78 @@
-name: Build and Release
+name: Release v4.0.0
 
 on:
-  push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Target environment'
+      target_platform:
+        description: 'Target platform(s) for release'
         required: true
-        default: 'staging'
         type: choice
         options:
-          - staging
-          - production
+          - all
+          - android
+          - ios
+          - web
+          - windows
+
+env:
+  FLUTTER_VERSION: '3.22.0'
 
 jobs:
-  build:
+  code_quality:
+    name: Code Quality Checks
     runs-on: ubuntu-latest
-
-    env:
-      FLUTTER_VERSION: '3.16.0'
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test --coverage
 
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Run analyzer
-        run: flutter analyze
-        continue-on-error: true
-
-      - name: Run tests
-        run: flutter test
-        continue-on-error: true
-
-      - name: Determine environment
-        id: env
-        run: |
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            echo "env=production" >> $GITHUB_OUTPUT
-            echo "API_URL=${{ secrets.PROD_API_URL }}" >> $GITHUB_ENV
-            echo "STRIPE_KEY=${{ secrets.PROD_STRIPE_KEY }}" >> $GITHUB_ENV
-            echo "COMPLIANCE_URL=${{ secrets.PROD_COMPLIANCE_URL }}" >> $GITHUB_ENV
-            echo "ENV_FILE=assets/config/.env.prod" >> $GITHUB_ENV
-            echo "GRPC_USE_TLS=true" >> $GITHUB_ENV
-          else
-            echo "env=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
-            if [[ "${{ github.event.inputs.environment }}" == "staging" ]]; then
-              echo "API_URL=${{ secrets.STAGING_API_URL }}" >> $GITHUB_ENV
-              echo "STRIPE_KEY=${{ secrets.STAGING_STRIPE_KEY }}" >> $GITHUB_ENV
-              echo "COMPLIANCE_URL=${{ secrets.STAGING_COMPLIANCE_URL }}" >> $GITHUB_ENV
-              echo "ENV_FILE=assets/config/.env.staging" >> $GITHUB_ENV
-              echo "GRPC_USE_TLS=true" >> $GITHUB_ENV
-            else
-              echo "API_URL=${{ secrets.PROD_API_URL }}" >> $GITHUB_ENV
-              echo "STRIPE_KEY=${{ secrets.PROD_STRIPE_KEY }}" >> $GITHUB_ENV
-              echo "COMPLIANCE_URL=${{ secrets.PROD_COMPLIANCE_URL }}" >> $GITHUB_ENV
-              echo "ENV_FILE=assets/config/.env.prod" >> $GITHUB_ENV
-              echo "GRPC_USE_TLS=true" >> $GITHUB_ENV
-            fi
-          fi
-
-      - name: Setup Android keystore
-        if: steps.env.outputs.env == 'production'
-        run: |
-          mkdir -p ~/.android
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > ~/.android/keystore.jks
-          echo "${{ secrets.ANDROID_KEY_PROPERTIES }}" > android/key.properties
-
-      - name: Build APK (Debug)
-        run: |
-          flutter build apk --debug \
-            --dart-define=ENV_FILE=.env.local
-
-      - name: Build APK (Release)
-        run: |
-          flutter build apk --release \
-            --dart-define=ENV_FILE=${{ env.ENV_FILE }} \
-            --dart-define=API_BASE_URL=${{ env.API_URL }} \
-            --dart-define=STRIPE_PUBLISHABLE_KEY=${{ env.STRIPE_KEY }} \
-            --dart-define=COMPLIANCE_SERVICE_URL=${{ env.COMPLIANCE_URL }} \
-            --dart-define=GRPC_USE_TLS=${{ env.GRPC_USE_TLS }}
-
-      - name: Build App Bundle (Release)
-        if: steps.env.outputs.env == 'production'
-        run: |
-          flutter build appbundle --release \
-            --dart-define=ENV_FILE=${{ env.ENV_FILE }} \
-            --dart-define=API_BASE_URL=${{ env.API_URL }} \
-            --dart-define=STRIPE_PUBLISHABLE_KEY=${{ env.STRIPE_KEY }} \
-            --dart-define=COMPLIANCE_SERVICE_URL=${{ env.COMPLIANCE_URL }} \
-            --dart-define=GRPC_USE_TLS=${{ env.GRPC_USE_TLS }}
-
-      - name: Upload APK to artifacts
-        uses: actions/upload-artifact@v3
+  build_android:
+    name: Build Android Release
+    runs-on: ubuntu-latest
+    needs: code_quality
+    if: github.event.inputs.target_platform == 'all' || github.event.inputs.target_platform == 'android'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
-          path: build/app/outputs/apk/release/app-release.apk
-          retention-days: 30
+          path: build/app/outputs/flutter-apk/app-release.apk
 
-      - name: Upload AAB to artifacts
-        if: steps.env.outputs.env == 'production'
-        uses: actions/upload-artifact@v3
+  build_web:
+    name: Build Web Release
+    runs-on: ubuntu-latest
+    needs: code_quality
+    if: github.event.inputs.target_platform == 'all' || github.event.inputs.target_platform == 'web'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
-          name: app-release.aab
-          path: build/app/outputs/bundle/release/app-release.aab
-          retention-days: 30
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: flutter build web --release
 
-      - name: Upload to Google Play (Staging)
-        if: steps.env.outputs.env == 'staging'
-        uses: r0adkll/upload-google-play@v1
+  build_windows:
+    name: Build Windows Release
+    runs-on: windows-latest
+    needs: code_quality
+    if: github.event.inputs.target_platform == 'all' || github.event.inputs.target_platform == 'windows'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT }}
-          packageName: com.synaptixplay.trivia_tycoon
-          releaseFiles: build/app/outputs/appbundle/release/app-release.aab
-          track: internal
-
-      - name: Upload to Google Play (Production)
-        if: steps.env.outputs.env == 'production'
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT }}
-          packageName: com.synaptixplay.trivia_tycoon
-          releaseFiles: build/app/outputs/appbundle/release/app-release.aab
-          track: beta
-
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            build/app/outputs/apk/release/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Notify Slack on failure
-        if: failure()
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          payload: |
-            {
-              "text": "❌ Build failed for ${{ github.repository }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Build Failed* 🚨\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Details>"
-                  }
-                }
-              ]
-            }
-
-      - name: Notify Slack on success
-        if: success()
-        uses: slackapi/slack-github-action@v1.24.0
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          payload: |
-            {
-              "text": "✅ Build succeeded for ${{ github.repository }}",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Build Succeeded* ✅\nEnvironment: ${{ steps.env.outputs.env }}\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Details>"
-                  }
-                }
-              ]
-            }
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: flutter build windows --release
