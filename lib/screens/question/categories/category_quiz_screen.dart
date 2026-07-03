@@ -19,10 +19,12 @@ final categoryQuizProvider =
       amount: 200,
     );
 
-    final easyCount = categoryQuestions.where((q) => q.difficulty.value == 1).length;
+    final easyCount =
+        categoryQuestions.where((q) => q.difficulty.value == 1).length;
     final mediumCount =
         categoryQuestions.where((q) => q.difficulty.value == 2).length;
-    final hardCount = categoryQuestions.where((q) => q.difficulty.value == 3).length;
+    final hardCount =
+        categoryQuestions.where((q) => q.difficulty.value == 3).length;
 
     final audioCount = categoryQuestions.where((q) => q.hasAudio).length;
     final videoCount = categoryQuestions.where((q) => q.hasVideo).length;
@@ -40,7 +42,9 @@ final categoryQuizProvider =
       sampleQuestions: categoryQuestions.take(3).toList(),
       averageDifficulty: categoryQuestions.isEmpty
           ? 1.0
-          : categoryQuestions.map((q) => q.difficulty.value).reduce((a, b) => a + b) /
+          : categoryQuestions
+                  .map((q) => q.difficulty.value)
+                  .reduce((a, b) => a + b) /
               categoryQuestions.length,
       allQuestions: categoryQuestions,
     );
@@ -523,7 +527,7 @@ class _CategoryQuizScreenState extends ConsumerState<CategoryQuizScreen> {
       }
       final filteredQuestions = questions.where((question) {
         final difficultyMatch = allowedDifficulties.isEmpty ||
-            allowedDifficulties.contains(question.difficulty);
+            allowedDifficulties.contains(question.difficulty.value);
         final audioMatch = includeAudio || !question.hasAudio;
         final videoMatch = includeVideo || !question.hasVideo;
         final imageMatch = includeImages || !question.hasImage;

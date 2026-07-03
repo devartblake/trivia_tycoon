@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:mockito/mockito.dart';
 import 'package:trivia_tycoon/core/services/tier_api_client.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 void main() {
   group('TierApiClient Integration Tests', () {
@@ -87,7 +85,8 @@ void main() {
       test('Falls back to mock data on 500 error', () async {
         // Arrange
         const errorResponse = '{"error": "Internal server error"}';
-        mockHttpClient.setResponse(http.Response(errorResponse, 500),
+        mockHttpClient.setResponse(
+          http.Response(errorResponse, 500),
         );
 
         // Act
@@ -100,7 +99,8 @@ void main() {
 
       test('Falls back to mock data on invalid JSON', () async {
         // Arrange
-        mockHttpClient.setResponse(http.Response('invalid json', 200),
+        mockHttpClient.setResponse(
+          http.Response('invalid json', 200),
         );
 
         // Act
@@ -119,7 +119,8 @@ void main() {
     group('getPlayerTierProgress', () {
       const testUserId = 'user_123';
 
-      test('Returns player tier progress from successful API response', () async {
+      test('Returns player tier progress from successful API response',
+          () async {
         // Arrange
         const successResponse = '''{
           "currentTier": {
@@ -184,7 +185,8 @@ void main() {
 
       test('Uses userId in API endpoint', () async {
         // Arrange
-        const successResponse = '{"currentTier": {"id": "bronze-rookie"}, "progressPercentage": 0}';
+        const successResponse =
+            '{"currentTier": {"id": "bronze-rookie"}, "progressPercentage": 0}';
         mockHttpClient.setResponse(http.Response(successResponse, 200));
 
         // Act
@@ -196,7 +198,8 @@ void main() {
 
       test('Falls back to mock data on 404 error', () async {
         // Arrange
-        mockHttpClient.setResponse(http.Response('Not found', 404),
+        mockHttpClient.setResponse(
+          http.Response('Not found', 404),
         );
 
         // Act
@@ -226,11 +229,13 @@ void main() {
           "tierUpgraded": false
         }''';
 
-        mockHttpClient.setResponse(http.Response(successResponse, 200),
+        mockHttpClient.setResponse(
+          http.Response(successResponse, 200),
         );
 
         // Act
-        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+        final result =
+            await tierApiClient.awardXp(testUserId, testAmount, testReason);
 
         // Assert
         expect(result, isNotNull);
@@ -242,11 +247,13 @@ void main() {
 
       test('Sends userId, amount, and reason in request body', () async {
         // Arrange
-        mockHttpClient.setResponse(http.Response('{"xpAwarded": 100}', 200),
+        mockHttpClient.setResponse(
+          http.Response('{"xpAwarded": 100}', 200),
         );
 
         // Act
-        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+        final result =
+            await tierApiClient.awardXp(testUserId, testAmount, testReason);
 
         // Assert - Verify response is parsed correctly
         expect(result.xpAwarded, 100);
@@ -259,7 +266,8 @@ void main() {
         );
 
         // Act
-        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+        final result =
+            await tierApiClient.awardXp(testUserId, testAmount, testReason);
 
         // Assert
         expect(result, isNotNull);
@@ -274,7 +282,8 @@ void main() {
         );
 
         // Act
-        final result = await tierApiClient.awardXp(testUserId, testAmount, testReason);
+        final result =
+            await tierApiClient.awardXp(testUserId, testAmount, testReason);
 
         // Assert
         expect(result, isNotNull);
@@ -290,11 +299,13 @@ void main() {
           "tierUpgraded": true
         }''';
 
-        mockHttpClient.setResponse(http.Response(upgradeResponse, 200),
+        mockHttpClient.setResponse(
+          http.Response(upgradeResponse, 200),
         );
 
         // Act
-        final result = await tierApiClient.awardXp(testUserId, 500, 'tier_upgrade');
+        final result =
+            await tierApiClient.awardXp(testUserId, 500, 'tier_upgrade');
 
         // Assert
         expect(result.tierUpgraded, true);
@@ -321,7 +332,8 @@ void main() {
       test('Handles malformed tier data', () async {
         // Arrange
         const malformedResponse = '{"tiers": [{}]}'; // Missing required fields
-        mockHttpClient.setResponse(http.Response(malformedResponse, 200),
+        mockHttpClient.setResponse(
+          http.Response(malformedResponse, 200),
         );
 
         // Act
@@ -334,7 +346,8 @@ void main() {
       test('Handles empty tier list response', () async {
         // Arrange
         const emptyResponse = '{"tiers": []}';
-        mockHttpClient.setResponse(http.Response(emptyResponse, 200),
+        mockHttpClient.setResponse(
+          http.Response(emptyResponse, 200),
         );
 
         // Act
@@ -368,7 +381,8 @@ void main() {
           }]
         }''';
 
-        mockHttpClient.setResponse(http.Response(response, 200),
+        mockHttpClient.setResponse(
+          http.Response(response, 200),
         );
 
         // Act
@@ -400,7 +414,8 @@ void main() {
           "progressPercentage": 50
         }''';
 
-        mockHttpClient.setResponse(http.Response(response, 200),
+        mockHttpClient.setResponse(
+          http.Response(response, 200),
         );
 
         // Act
@@ -421,7 +436,8 @@ void main() {
       test('getTierDefinitions completes within 200ms on success', () async {
         // Arrange
         const response = '{"tiers": []}';
-        mockHttpClient.setResponse(http.Response(response, 200),
+        mockHttpClient.setResponse(
+          http.Response(response, 200),
         );
 
         // Act

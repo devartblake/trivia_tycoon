@@ -62,7 +62,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 0});
 
         // Act
-        final progress = await tierProgressionService.getPlayerTierProgress('user1');
+        final progress =
+            await tierProgressionService.getPlayerTierProgress('user1');
 
         // Assert
         expect(progress.currentTier.name, 'Bronze Rookie');
@@ -75,7 +76,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 500});
 
         // Act
-        final progress = await tierProgressionService.getPlayerTierProgress('user1');
+        final progress =
+            await tierProgressionService.getPlayerTierProgress('user1');
 
         // Assert
         expect(progress.currentTier.name, 'Silver Scholar');
@@ -87,7 +89,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 750});
 
         // Act
-        final progress = await tierProgressionService.getPlayerTierProgress('user1');
+        final progress =
+            await tierProgressionService.getPlayerTierProgress('user1');
 
         // Assert
         expect(progress.xpInCurrentTier, 250); // 750 - 500
@@ -100,7 +103,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 600});
 
         // Act
-        final progress = await tierProgressionService.getPlayerTierProgress('user1');
+        final progress =
+            await tierProgressionService.getPlayerTierProgress('user1');
 
         // Assert
         expect(progress.nextTier?.name, 'Gold Master');
@@ -112,7 +116,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 100000});
 
         // Act
-        final progress = await tierProgressionService.getPlayerTierProgress('user1');
+        final progress =
+            await tierProgressionService.getPlayerTierProgress('user1');
 
         // Assert
         expect(progress.isMaxTier, true);
@@ -127,8 +132,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 400});
 
         // Act: Award 200 XP (brings to 600, moving to Silver)
-        final tierChanged =
-            await tierProgressionService.awardXP('user1', 200, 'quiz_completion');
+        final tierChanged = await tierProgressionService.awardXP(
+            'user1', 200, 'quiz_completion');
 
         // Assert
         expect(tierChanged, true);
@@ -139,8 +144,8 @@ void main() {
         mockProfileService.setProfile({'currentXP': 600});
 
         // Act: Award 100 XP (stays in Silver: 500-1200)
-        final tierChanged =
-            await tierProgressionService.awardXP('user1', 100, 'quiz_completion');
+        final tierChanged = await tierProgressionService.awardXP(
+            'user1', 100, 'quiz_completion');
 
         // Assert
         expect(tierChanged, false);
@@ -192,7 +197,7 @@ void main() {
 
       test('Continues with cached data on API error', () async {
         // Arrange: First successful load
-        final firstLoad = await tierProgressionService.getTierDefinitions();
+        await tierProgressionService.getTierDefinitions();
 
         // Now API fails
         mockTierApiClient.setFailure(true);
@@ -275,7 +280,8 @@ class MockTierApiClient implements TierApiClient {
   }
 
   @override
-  Future<XpAwardResult> awardXp(String userId, int amount, String reason) async {
+  Future<XpAwardResult> awardXp(
+      String userId, int amount, String reason) async {
     // Simulate XP award by updating the profile service
     final current = (_profileService._profile['currentXP'] as int?) ?? 0;
     final newXp = current + amount;
@@ -354,8 +360,8 @@ class MockTierApiClient implements TierApiClient {
           minXp: 20000,
           maxXp: 50000,
           iconName: 'grandmaster',
-          rewards:
-              TierReward(badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
+          rewards: TierReward(
+              badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
         ),
         if (count >= 8)
           TierDefinition(
@@ -365,8 +371,8 @@ class MockTierApiClient implements TierApiClient {
             minXp: 50000,
             maxXp: 100000,
             iconName: 'ultimate',
-            rewards:
-                TierReward(badge: 'champion', coinsBonus: 20000, gemsBonus: 500),
+            rewards: TierReward(
+                badge: 'champion', coinsBonus: 20000, gemsBonus: 500),
           ),
       ].take(count).toList();
 
@@ -392,8 +398,7 @@ class MockPlayerProfileService implements PlayerProfileService {
   }
 
   @override
-  Future<void> saveLevelData(
-      {int? level, int? currentXP, int? maxXP}) async {
+  Future<void> saveLevelData({int? level, int? currentXP, int? maxXP}) async {
     if (level != null) _profile['level'] = level;
     if (currentXP != null) _profile['currentXP'] = currentXP;
   }

@@ -45,8 +45,8 @@ class SynaptixHomeTheme {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        color.withOpacity(0.30),
-        panelAlt.withOpacity(0.92),
+        color.withValues(alpha: 0.30),
+        panelAlt.withValues(alpha: 0.92),
       ],
     );
   }

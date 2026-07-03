@@ -8,7 +8,7 @@ import '../../../../game/providers/phase2_reward_providers.dart';
 /// Dashboard card displaying player tier progress.
 /// Shows current tier and progress towards next tier.
 class Phase2TierProgressCard extends ConsumerWidget {
-  const Phase2TierProgressCard({Key? key}) : super(key: key);
+  const Phase2TierProgressCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,7 +75,7 @@ class _TierProgressContent extends StatelessWidget {
               'Tier Progress',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-              ),
+                  ),
             ),
             Icon(
               Icons.military_tech,
@@ -106,13 +106,13 @@ class _TierProgressContent extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: tierColor,
-                    ),
+                        ),
                   ),
                   Text(
                     'Level ${progress.currentTier.level}',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: tierColor,
-                    ),
+                        ),
                   ),
                 ],
               ),
@@ -121,7 +121,7 @@ class _TierProgressContent extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: tierColor,
-                ),
+                    ),
               ),
             ],
           ),
@@ -146,7 +146,7 @@ class _TierProgressContent extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.blue[600],
-                    ),
+                        ),
                   ),
                 ],
               ),
@@ -165,7 +165,7 @@ class _TierProgressContent extends StatelessWidget {
                 '${progress.xpNeededForNextTier} XP needed',
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: Colors.grey[600],
-                ),
+                    ),
               ),
             ],
           )
@@ -185,7 +185,7 @@ class _TierProgressContent extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Colors.orange[600],
                         fontWeight: FontWeight.w600,
-                  ),
+                      ),
                 ),
               ],
             ),
@@ -268,7 +268,7 @@ class _ErrorState extends StatelessWidget {
             'Failed to load tier progress',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.red[600],
-            ),
+                ),
           ),
         ),
       ],

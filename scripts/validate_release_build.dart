@@ -1,12 +1,12 @@
 #!/usr/bin/env dart
-/// Release Build Validator
-///
-/// This script validates that a Flutter release build doesn't contain
-/// development code, debug logging, or hardcoded localhost URLs.
-///
-/// Usage: dart scripts/validate_release_build.dart [--target android|ios|web]
-///        dart scripts/validate_release_build.dart --apk <path/to/app.apk>
-///        dart scripts/validate_release_build.dart --ipa <path/to/app.ipa>
+// Release Build Validator
+//
+// This script validates that a Flutter release build doesn't contain
+// development code, debug logging, or hardcoded localhost URLs.
+//
+// Usage: dart scripts/validate_release_build.dart [--target android|ios|web]
+//        dart scripts/validate_release_build.dart --apk <path/to/app.apk>
+//        dart scripts/validate_release_build.dart --ipa <path/to/app.ipa>
 
 import 'dart:io';
 import 'package:args/args.dart';
@@ -27,10 +27,10 @@ void main(List<String> args) {
   final verbose = results['verbose'] as bool;
 
   if (kDebugMode) {
-    print('🔍 Flutter Release Build Validator');
+    debugPrint('🔍 Flutter Release Build Validator');
   }
   if (kDebugMode) {
-    print('═' * 60);
+    debugPrint('═' * 60);
   }
 
   try {
@@ -51,13 +51,13 @@ void main(List<String> args) {
       exit(1);
     } else {
       if (kDebugMode) {
-        print('\n✅ All checks passed!');
+        debugPrint('\n✅ All checks passed!');
       }
       exit(0);
     }
   } catch (e) {
     if (kDebugMode) {
-      print('\n❌ Validation failed: $e');
+      debugPrint('\n❌ Validation failed: $e');
     }
     exit(1);
   }
@@ -80,7 +80,8 @@ class ReleaseValidator {
     'console.log': RegExp(r'console\.log\s*\('),
     '10.0.2.2': RegExp(r'10\.0\.2\.2'),
     'hardcoded IP': RegExp(r'http://\d+\.\d+\.\d+\.\d+'),
-    'development flag': RegExp(r'const\s+.*dev.*=\s*true', caseSensitive: false),
+    'development flag':
+        RegExp(r'const\s+.*dev.*=\s*true', caseSensitive: false),
   };
 
   ReleaseValidator({required this.verbose});
@@ -91,23 +92,23 @@ class ReleaseValidator {
     if (isError) {
       errors.add(message);
       if (kDebugMode) {
-        print('❌ ERROR: $message');
+        debugPrint('❌ ERROR: $message');
       }
     } else if (isWarning) {
       warnings.add(message);
       if (kDebugMode) {
-        print('⚠️  WARNING: $message');
+        debugPrint('⚠️  WARNING: $message');
       }
     } else {
       info.add(message);
-      if (verbose && kDebugMode) print('ℹ️  INFO: $message');
+      if (verbose && kDebugMode) debugPrint('ℹ️  INFO: $message');
     }
   }
 
   /// Validate source code before building
   void validateSourceCode() {
     if (kDebugMode) {
-      print('\n📝 Validating Dart source code...');
+      debugPrint('\n📝 Validating Dart source code...');
     }
     final libDir = Directory('lib');
 
@@ -127,13 +128,13 @@ class ReleaseValidator {
       _validateFileContent(file.path, content);
     }
 
-    print('   Scanned: $fileCount Dart files');
+    debugPrint('   Scanned: $fileCount Dart files');
     _printSummary();
   }
 
   /// Validate Android APK
   void validateApk(String apkPath) {
-    print('\n📦 Validating Android APK: $apkPath');
+    debugPrint('\n📦 Validating Android APK: $apkPath');
 
     final file = File(apkPath);
     if (!file.existsSync()) {
@@ -141,14 +142,15 @@ class ReleaseValidator {
       return;
     }
 
-    print('   File size: ${(file.lengthSync() / 1024 / 1024).toStringAsFixed(2)} MB');
+    debugPrint(
+        '   File size: ${(file.lengthSync() / 1024 / 1024).toStringAsFixed(2)} MB');
     _validateBinary(apkPath);
     _printSummary();
   }
 
   /// Validate iOS IPA
   void validateIpa(String ipaPath) {
-    print('\n📦 Validating iOS IPA: $ipaPath');
+    debugPrint('\n📦 Validating iOS IPA: $ipaPath');
 
     final file = File(ipaPath);
     if (!file.existsSync()) {
@@ -156,14 +158,15 @@ class ReleaseValidator {
       return;
     }
 
-    print('   File size: ${(file.lengthSync() / 1024 / 1024).toStringAsFixed(2)} MB');
+    debugPrint(
+        '   File size: ${(file.lengthSync() / 1024 / 1024).toStringAsFixed(2)} MB');
     _validateBinary(ipaPath);
     _printSummary();
   }
 
   /// Validate a build target
   void validateTarget(String target) {
-    print('\n🎯 Validating $target build...');
+    debugPrint('\n🎯 Validating $target build...');
 
     final buildDirs = {
       'android': 'build/app/outputs/flutter-apk/',
@@ -201,7 +204,8 @@ class ReleaseValidator {
       for (final entry in forbiddenPatterns.entries) {
         if (entry.value.hasMatch(line)) {
           // Skip env.dart and log_manager.dart as they're configuration files
-          if (filePath.contains('env.dart') || filePath.contains('log_manager.dart')) {
+          if (filePath.contains('env.dart') ||
+              filePath.contains('log_manager.dart')) {
             continue;
           }
 
@@ -223,33 +227,33 @@ class ReleaseValidator {
   }
 
   void _validateBinary(String path) {
-    print('   ✓ Binary file validation complete');
-    print('   ✓ No hardcoded URLs detected in configuration');
-    print('   ✓ Production mode verified');
+    debugPrint('   ✓ Binary file validation complete');
+    debugPrint('   ✓ No hardcoded URLs detected in configuration');
+    debugPrint('   ✓ Production mode verified');
   }
 
   void _printSummary() {
-    print('\n' + '═' * 60);
-    print('📊 Validation Summary:');
-    print('   ✅ Passed: ${info.length}');
+    debugPrint('\n${'═' * 60}');
+    debugPrint('📊 Validation Summary:');
+    debugPrint('   ✅ Passed: ${info.length}');
     if (warnings.isNotEmpty) {
-      print('   ⚠️  Warnings: ${warnings.length}');
+      debugPrint('   ⚠️  Warnings: ${warnings.length}');
     }
     if (errors.isNotEmpty) {
-      print('   ❌ Errors: ${errors.length}');
+      debugPrint('   ❌ Errors: ${errors.length}');
     }
 
     if (warnings.isNotEmpty) {
-      print('\nWarnings (fix before release):');
+      debugPrint('\nWarnings (fix before release):');
       for (final warning in warnings) {
-        print('  • $warning');
+        debugPrint('  • $warning');
       }
     }
 
     if (errors.isNotEmpty) {
-      print('\nErrors (MUST fix):');
+      debugPrint('\nErrors (MUST fix):');
       for (final error in errors) {
-        print('  • $error');
+        debugPrint('  • $error');
       }
     }
   }

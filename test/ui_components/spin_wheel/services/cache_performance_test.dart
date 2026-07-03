@@ -305,7 +305,8 @@ void main() {
 
         // Assert
         expect(stats['cacheHits'], 1); // Second getSegments call is a hit
-        expect(stats['cacheMisses'], 2); // First getSegments and getProbabilityConfig are misses
+        expect(stats['cacheMisses'],
+            2); // First getSegments and getProbabilityConfig are misses
         expect(stats['totalItems'], 2);
         expect(stats['maxItems'], 20);
       });
@@ -351,15 +352,11 @@ void main() {
 
     group('Cache vs API Performance', () {
       late TierConfigCache tierCache;
-      late SpinConfigCache spinCache;
       late MockTierApiClient mockTierApiClient;
-      late MockSpinWheelApiClient mockSpinApiClient;
 
       setUp(() {
         mockTierApiClient = MockTierApiClient();
-        mockSpinApiClient = MockSpinWheelApiClient();
         tierCache = TierConfigCache(apiClient: mockTierApiClient);
-        spinCache = SpinConfigCache(apiClient: mockSpinApiClient);
       });
 
       test('Cached response 100x faster than uncached', () async {
@@ -382,7 +379,8 @@ void main() {
         stopwatch2.stop();
 
         // Assert
-        final speedup = stopwatch1.elapsedMilliseconds / (stopwatch2.elapsedMilliseconds + 1);
+        final speedup = stopwatch1.elapsedMilliseconds /
+            (stopwatch2.elapsedMilliseconds + 1);
         expect(speedup, greaterThan(10.0)); // At least 10x faster
       });
     });

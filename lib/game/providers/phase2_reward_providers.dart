@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../../core/services/daily_bonus_api_client.dart';
 import '../../core/services/weekly_rewards_api_client.dart';
 import '../../core/services/tier_api_client.dart';
 import '../../core/manager/log_manager.dart';
+import '../../core/env.dart';
+import '../../ui_components/spin_wheel/services/tier_config_cache.dart';
+import 'core_providers.dart';
 
 /// ============================================================================
 /// Phase 2: Daily Bonus Providers
@@ -12,9 +14,11 @@ import '../../core/manager/log_manager.dart';
 
 /// Provides the DailyBonusApiClient instance
 final dailyBonusApiClientProvider = Provider<DailyBonusApiClient>((ref) {
-  final httpClient = http.Client();
   LogManager.debug('[Phase2] Initializing DailyBonusApiClient');
-  return DailyBonusApiClient(httpClient: httpClient);
+  return DailyBonusApiClient(
+    httpClient: ref.watch(authHttpClientProvider),
+    baseUrl: EnvConfig.apiV1BaseUrl,
+  );
 });
 
 /// Fetch daily bonus configuration (reward amount, type, display info)
@@ -42,7 +46,8 @@ final dailyBonusStatusProvider =
     LogManager.debug('[Phase2] Fetching daily bonus status...');
     final client = ref.watch(dailyBonusApiClientProvider);
     final status = await client.getAccountRewardStatus();
-    LogManager.debug('[Phase2] Daily bonus status: claimed=${status.claimedToday}');
+    LogManager.debug(
+        '[Phase2] Daily bonus status: claimed=${status.claimedToday}');
     return status;
   } catch (e) {
     LogManager.error(
@@ -61,7 +66,8 @@ final dailyBonusClaimProvider =
     LogManager.debug('[Phase2] Claiming daily bonus...');
     final client = ref.watch(dailyBonusApiClientProvider);
     final result = await client.claimDailyReward();
-    LogManager.debug('[Phase2] Daily bonus claimed: ${result.coinsAwarded} coins');
+    LogManager.debug(
+        '[Phase2] Daily bonus claimed: ${result.coinsAwarded} coins');
     // Invalidate status to refresh after claim
     ref.invalidate(dailyBonusStatusProvider);
     return result;
@@ -80,20 +86,23 @@ final dailyBonusClaimProvider =
 /// ============================================================================
 
 /// Provides the WeeklyRewardsApiClient instance
-final weeklyRewardsApiClientProvider =
-    Provider<WeeklyRewardsApiClient>((ref) {
-  final httpClient = http.Client();
+final weeklyRewardsApiClientProvider = Provider<WeeklyRewardsApiClient>((ref) {
   LogManager.debug('[Phase2] Initializing WeeklyRewardsApiClient');
-  return WeeklyRewardsApiClient(httpClient: httpClient);
+  return WeeklyRewardsApiClient(
+    httpClient: ref.watch(authHttpClientProvider),
+    baseUrl: EnvConfig.apiV1BaseUrl,
+  );
 });
 
 /// Fetch weekly reward schedule (7-day progression)
-final weeklyScheduleProvider = FutureProvider<List<WeeklyRewardDay>>((ref) async {
+final weeklyScheduleProvider =
+    FutureProvider<List<WeeklyRewardDay>>((ref) async {
   try {
     LogManager.debug('[Phase2] Fetching weekly reward schedule...');
     final client = ref.watch(weeklyRewardsApiClientProvider);
     final schedule = await client.getWeeklySchedule();
-    LogManager.debug('[Phase2] Weekly schedule loaded: ${schedule.length} days');
+    LogManager.debug(
+        '[Phase2] Weekly schedule loaded: ${schedule.length} days');
     return schedule;
   } catch (e) {
     LogManager.error(
@@ -111,8 +120,8 @@ final weeklyStreakProvider =
   try {
     LogManager.debug('[Phase2] Fetching weekly streak status...');
     final client = ref.watch(weeklyRewardsApiClientProvider);
-    // Note: API client handles user ID internally through auth token
-    final streak = await client.getWeeklyStreak('current');
+    final userId = ref.watch(currentUserIdProvider);
+    final streak = await client.getWeeklyStreak(userId);
     LogManager.debug(
       '[Phase2] Weekly streak: day ${streak.currentDay}/7, claimed ${streak.daysClaimedCount}',
     );
@@ -133,7 +142,9 @@ final weeklyClaimProvider =
   try {
     LogManager.debug('[Phase2] Claiming weekly reward...');
     final client = ref.watch(weeklyRewardsApiClientProvider);
-    final result = await client.claimWeeklyReward();
+    final userId = ref.watch(currentUserIdProvider);
+    final streak = await client.getWeeklyStreak(userId);
+    final result = await client.claimWeeklyReward(day: streak.currentDay);
     LogManager.debug('[Phase2] Weekly reward claimed: Day ${result.dayNumber}');
     // Invalidate streak to refresh after claim
     ref.invalidate(weeklyStreakProvider);
@@ -153,26 +164,37 @@ final weeklyClaimProvider =
 /// ============================================================================
 
 /// Current user ID for tier progression - uses "current-user" as fallback
-/// TODO: Replace with actual user ID from auth provider
 final currentUserIdProvider = Provider<String>((ref) {
-  LogManager.debug('[Phase2] Using default user ID for tier progression');
-  return 'current-user';
+  final userId = ref.watch(authTokenStoreProvider).load().userId;
+  if (userId == null || userId.isEmpty) {
+    LogManager.debug('[Phase2] No authenticated user ID for tier progression');
+    return '';
+  }
+
+  return userId;
 });
 
 /// Provides the TierApiClient instance
 /// Now supports real API with mock fallback
 final tierApiClientProvider = Provider<TierApiClient>((ref) {
   LogManager.debug('[Phase2] Initializing TierApiClient with real API support');
-  final httpClient = http.Client();
-  return TierApiClient(httpClient: httpClient);
+  return TierApiClient(
+    httpClient: ref.watch(authHttpClientProvider),
+    baseUrl: EnvConfig.apiV1BaseUrl,
+  );
+});
+
+final tierConfigCacheProvider = Provider<TierConfigCache>((ref) {
+  return TierConfigCache(apiClient: ref.watch(tierApiClientProvider));
 });
 
 /// Fetch all tier definitions (7-tier progression system)
-final tierDefinitionsProvider = FutureProvider<List<TierDefinition>>((ref) async {
+final tierDefinitionsProvider =
+    FutureProvider<List<TierDefinition>>((ref) async {
   try {
-    LogManager.debug('[Phase2] Fetching tier definitions (MOCK)...');
-    final client = ref.watch(tierApiClientProvider);
-    final tiers = await client.getTierDefinitions();
+    LogManager.debug('[Phase2] Fetching tier definitions...');
+    final cache = ref.watch(tierConfigCacheProvider);
+    final tiers = await cache.getTierDefinitions();
     LogManager.debug('[Phase2] Tier definitions loaded: ${tiers.length} tiers');
     return tiers;
   } catch (e) {
@@ -187,12 +209,13 @@ final tierDefinitionsProvider = FutureProvider<List<TierDefinition>>((ref) async
 
 /// Fetch player's current tier progress (current tier, progress %, next tier)
 /// Takes userId as a parameter to fetch player-specific data from API
-final playerTierProgressProvider =
-    FutureProvider.autoDispose.family<PlayerTierProgress, String>((ref, userId) async {
+final playerTierProgressProvider = FutureProvider.autoDispose
+    .family<PlayerTierProgress, String>((ref, userId) async {
   try {
-    LogManager.debug('[Phase2] Fetching player tier progress for userId=$userId...');
-    final client = ref.watch(tierApiClientProvider);
-    final progress = await client.getPlayerTierProgress(userId);
+    LogManager.debug(
+        '[Phase2] Fetching player tier progress for userId=$userId...');
+    final cache = ref.watch(tierConfigCacheProvider);
+    final progress = await cache.getPlayerTierProgress(userId);
     LogManager.debug(
       '[Phase2] Player tier: ${progress.currentTier.name}, Progress: ${progress.progressPercentage}%',
     );
@@ -209,16 +232,17 @@ final playerTierProgressProvider =
 
 /// Award XP to player via API with real backend support
 /// Parameters: (userId, amount, reason)
-final awardXpProvider =
-    FutureProvider.family<XpAwardResult, (String userId, int amount, String reason)>((
+final awardXpProvider = FutureProvider.family<XpAwardResult,
+    (String userId, int amount, String reason)>((
   ref,
   params,
 ) async {
   try {
     final (userId, amount, reason) = params;
-    LogManager.debug('[Phase2] Awarding $amount XP to user=$userId: $reason...');
-    final client = ref.watch(tierApiClientProvider);
-    final result = await client.awardXp(userId, amount, reason);
+    LogManager.debug(
+        '[Phase2] Awarding $amount XP to user=$userId: $reason...');
+    final cache = ref.watch(tierConfigCacheProvider);
+    final result = await cache.awardXp(userId, amount, reason);
     LogManager.debug('[Phase2] XP awarded successfully');
     // Invalidate player progress to refresh
     ref.invalidate(playerTierProgressProvider(userId));
@@ -246,20 +270,21 @@ final combinedRewardStatusProvider =
   userId,
 ) async {
   try {
-    LogManager.debug('[Phase2] Fetching combined reward status for user=$userId...');
+    LogManager.debug(
+        '[Phase2] Fetching combined reward status for user=$userId...');
 
     // Get API clients
     final dailyClient = ref.watch(dailyBonusApiClientProvider);
     final weeklyClient = ref.watch(weeklyRewardsApiClientProvider);
-    final tierClient = ref.watch(tierApiClientProvider);
+    final tierCache = ref.watch(tierConfigCacheProvider);
 
     // Fetch all reward data in parallel
     final results = await Future.wait([
       dailyClient.getDailyConfig(),
       dailyClient.getAccountRewardStatus(),
       weeklyClient.getWeeklySchedule(),
-      weeklyClient.getWeeklyStreak('current'),
-      tierClient.getPlayerTierProgress(userId),
+      weeklyClient.getWeeklyStreak(userId),
+      tierCache.getPlayerTierProgress(userId),
     ]);
 
     final status = CombinedRewardStatus(

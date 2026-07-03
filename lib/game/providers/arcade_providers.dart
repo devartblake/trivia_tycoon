@@ -12,8 +12,10 @@ import '../../arcade/leaderboards/local_arcade_leaderboard_service.dart';
 import '../../arcade/leaderboards/arcade_leaderboard_api_service.dart';
 import '../../arcade/missions/arcade_mission_service.dart';
 import '../../arcade/services/arcade_mission_claim_service.dart';
+import '../../core/env.dart';
 import '../../core/manager/tier_manager.dart';
 import '../../core/services/asset_resolver.dart';
+import '../../core/services/tier_api_client.dart';
 import '../../core/state/flow_connect_state_notifier.dart';
 import '../../game/data/mission_data_loader.dart';
 import '../../game/models/badge.dart';
@@ -189,7 +191,16 @@ final arcadeLeaderboardApiServiceProvider =
 final tierManagerProvider = Provider<TierManager>((ref) {
   final storage = ref.read(generalKeyValueStorageProvider);
   final profileService = ref.read(playerProfileServiceProvider);
-  return TierManager(storage, profileService);
+  final tierApiClient = TierApiClient(
+    httpClient: ref.watch(authHttpClientProvider),
+    baseUrl: EnvConfig.apiV1BaseUrl,
+  );
+
+  return TierManager(
+    storage,
+    profileService,
+    tierApiClient: tierApiClient,
+  );
 });
 
 final currentTierProvider = FutureProvider<TierModel?>((ref) async {

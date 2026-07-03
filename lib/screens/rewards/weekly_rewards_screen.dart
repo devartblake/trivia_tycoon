@@ -8,7 +8,7 @@ import '../../core/services/weekly_rewards_api_client.dart';
 import '../../game/providers/phase2_reward_providers.dart';
 
 class WeeklyRewardsScreen extends ConsumerWidget {
-  const WeeklyRewardsScreen({Key? key}) : super(key: key);
+  const WeeklyRewardsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,7 +70,8 @@ class WeeklyRewardsScreen extends ConsumerWidget {
 
                 // Week Reset Info
                 streakAsync.when(
-                  data: (streak) => _WeekResetInfo(resetDate: streak.weekResetDate),
+                  data: (streak) =>
+                      _WeekResetInfo(resetDate: streak.weekResetDate),
                   loading: () => const SizedBox.shrink(),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
@@ -183,7 +184,7 @@ class _DayCard extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w500,
-                    ),
+                        ),
                   ),
                   const SizedBox(height: 4),
                   if (isCurrentDay)
@@ -201,7 +202,7 @@ class _DayCard extends ConsumerWidget {
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                        ),
+                            ),
                       ),
                     ),
                 ],
@@ -222,13 +223,13 @@ class _DayCard extends ConsumerWidget {
                         : '${day.coinsAmount}',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                    ),
+                        ),
                   ),
                   Text(
                     day.type == 'gems' ? 'Gems' : 'Coins',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: Colors.grey[600],
-                    ),
+                        ),
                   ),
                 ],
               ),
@@ -257,7 +258,7 @@ class _DayCard extends ConsumerWidget {
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Colors.green[600],
                               fontWeight: FontWeight.bold,
-                        ),
+                            ),
                       ),
                     ],
                   ),
@@ -279,7 +280,7 @@ class _DayCard extends ConsumerWidget {
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: Colors.grey[600],
                           fontWeight: FontWeight.bold,
-                    ),
+                        ),
                   ),
                 ),
             ],
@@ -412,7 +413,7 @@ class _StreakBanner extends StatelessWidget {
                     'Weekly Streak',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.purple[700],
-                    ),
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -420,7 +421,7 @@ class _StreakBanner extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: Colors.purple[700],
                           fontWeight: FontWeight.bold,
-                    ),
+                        ),
                   ),
                 ],
               ),
@@ -488,7 +489,7 @@ class _WeekResetInfoState extends State<_WeekResetInfo> {
             'Week Resets In',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.grey[700],
-            ),
+                ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -496,7 +497,7 @@ class _WeekResetInfoState extends State<_WeekResetInfo> {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.grey[800],
-            ),
+                ),
           ),
         ],
       ),
@@ -571,7 +572,7 @@ class _ErrorState extends StatelessWidget {
               'Failed to Load',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.red[600],
-              ),
+                  ),
             ),
             const SizedBox(height: 8),
             Text(

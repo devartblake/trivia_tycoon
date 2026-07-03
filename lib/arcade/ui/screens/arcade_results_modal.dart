@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
 
-import '../../../core/models/answered_question_record.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../domain/arcade_game_id.dart';
 import '../../domain/arcade_result.dart';
-import 'quiz_review_screen.dart';
 
 class ArcadeResultsModal extends StatelessWidget {
   final ArcadeResult result;

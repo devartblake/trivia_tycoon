@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/repositories/question_result_repository.dart';
 import '../../game/providers/question_analytics_provider.dart';
@@ -6,7 +7,8 @@ import 'chart_selector.dart';
 
 /// Provider for performance chart data with real data
 final performanceChartDataProvider =
-    FutureProvider.family<List<PerformanceDataPoint>, TimeRange>((ref, timeRange) {
+    FutureProvider.family<List<PerformanceDataPoint>, TimeRange>(
+        (ref, timeRange) {
   final repository = ref.watch(questionResultRepositoryProvider);
   return _fetchPerformanceData(repository, timeRange);
 });
@@ -210,7 +212,7 @@ Future<List<PerformanceDataPoint>> _fetchPerformanceData(
     return dataPoints;
   } catch (e) {
     // Fallback to empty data on error
-    print('Error fetching performance data: $e');
+    debugPrint('Error fetching performance data: $e');
     return [];
   }
 }

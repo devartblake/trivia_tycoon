@@ -19,10 +19,23 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// - Retry logic for transient failures
 class TierApiClient {
   final http.Client _httpClient;
-  static const String _baseUrl = 'https://api.synaptixplay.com/api/v1';
+  final bool _ownsHttpClient;
+  final String _baseUrl;
+  static const String defaultBaseUrl = 'https://api.synaptixplay.com/api/v1';
 
-  TierApiClient({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client();
+  TierApiClient({
+    http.Client? httpClient,
+    String? baseUrl,
+  })  : _httpClient = httpClient ?? http.Client(),
+        _ownsHttpClient = httpClient == null,
+        _baseUrl = _normalizeBaseUrl(baseUrl ?? defaultBaseUrl);
+
+  static String _normalizeBaseUrl(String baseUrl) {
+    return baseUrl.endsWith('/')
+        ? baseUrl.substring(0, baseUrl.length - 1)
+        : baseUrl;
+  }
+
   /// MOCK: Hardcoded tier definitions from Phase 1
   /// TODO: Replace with real API when backend endpoints available
   static final List<TierDefinition> _mockTiers = [
@@ -42,7 +55,7 @@ class TierApiClient {
     TierDefinition(
       id: 'silver-scholar',
       name: 'Silver Scholar',
-      level: 5,
+      level: 2,
       minXp: 500,
       maxXp: 1200,
       iconName: 'silver_scholar',
@@ -55,7 +68,7 @@ class TierApiClient {
     TierDefinition(
       id: 'gold-master',
       name: 'Gold Master',
-      level: 10,
+      level: 3,
       minXp: 1200,
       maxXp: 2500,
       iconName: 'gold_master',
@@ -68,7 +81,7 @@ class TierApiClient {
     TierDefinition(
       id: 'platinum-elite',
       name: 'Platinum Elite',
-      level: 18,
+      level: 4,
       minXp: 2500,
       maxXp: 5000,
       iconName: 'platinum_elite',
@@ -81,7 +94,7 @@ class TierApiClient {
     TierDefinition(
       id: 'diamond-legend',
       name: 'Diamond Legend',
-      level: 25,
+      level: 5,
       minXp: 5000,
       maxXp: 10000,
       iconName: 'diamond_legend',
@@ -94,7 +107,7 @@ class TierApiClient {
     TierDefinition(
       id: 'master-sage',
       name: 'Master Sage',
-      level: 35,
+      level: 6,
       minXp: 10000,
       maxXp: 20000,
       iconName: 'master_sage',
@@ -105,16 +118,16 @@ class TierApiClient {
       ),
     ),
     TierDefinition(
-      id: 'grandmaster',
-      name: 'Grandmaster',
-      level: 50,
+      id: 'celestial-ascendant',
+      name: 'Celestial Ascendant',
+      level: 7,
       minXp: 20000,
-      maxXp: 50000,
-      iconName: 'grandmaster',
+      maxXp: 2147483647,
+      iconName: 'celestial_ascendant',
       rewards: TierReward(
-        badge: 'grandmaster_badge',
-        coinsBonus: 10000,
-        gemsBonus: 200,
+        badge: 'ascendant_badge',
+        coinsBonus: 5000,
+        gemsBonus: 100,
       ),
     ),
   ];
@@ -128,18 +141,27 @@ class TierApiClient {
 
       try {
         final response = await _httpClient.get(uri).timeout(
-          const Duration(seconds: 10),
-          onTimeout: () => throw TimeoutException('API request timeout'),
-        );
+              const Duration(seconds: 10),
+              onTimeout: () => throw TimeoutException('API request timeout'),
+            );
 
         if (response.statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
-          final tiers = (data['tiers'] as List<dynamic>?)
-              ?.map((e) => TierDefinition.fromJson(Map<String, dynamic>.from(e as Map)))
+          final data = jsonDecode(response.body);
+          final tiersJson = data is List
+              ? data
+              : data is Map<String, dynamic>
+                  ? data['tiers'] as List<dynamic>?
+                  : null;
+          final tiers = tiersJson
+              ?.map((e) => TierDefinition.fromJson(
+                    Map<String, dynamic>.from(e as Map),
+                  ))
               .toList();
 
           if (tiers != null && tiers.isNotEmpty) {
-            LogManager.debug('[TierApiClient] Loaded ${tiers.length} tier definitions from API');
+            LogManager.debug(
+              '[TierApiClient] Loaded ${tiers.length} tier definitions from API',
+            );
             return tiers;
           }
         }
@@ -187,19 +209,27 @@ class TierApiClient {
   /// Get player's current tier progress from API or mock fallback
   Future<PlayerTierProgress> getPlayerTierProgress(String userId) async {
     try {
-      LogManager.debug('[TierApiClient] Fetching player tier progress for user=$userId');
+      if (userId.isEmpty) {
+        LogManager.debug(
+          '[TierApiClient] Missing user ID, using mock player progress fallback',
+        );
+        return _getMockPlayerProgressFallback();
+      }
+
+      LogManager.debug(
+          '[TierApiClient] Fetching player tier progress for user=$userId');
 
       final uri = Uri.parse('$_baseUrl/progression/player/$userId');
 
       try {
         final response = await _httpClient.get(uri).timeout(
-          const Duration(seconds: 10),
-          onTimeout: () => throw TimeoutException('API request timeout'),
-        );
+              const Duration(seconds: 10),
+              onTimeout: () => throw TimeoutException('API request timeout'),
+            );
 
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body) as Map<String, dynamic>;
-          final progress = PlayerTierProgress.fromJson(data);
+          final progress = await _parsePlayerTierProgress(data);
 
           LogManager.debug(
             '[TierApiClient] Player tier: ${progress.currentTier.name}, Progress: ${progress.progressPercentage}%',
@@ -256,8 +286,16 @@ class TierApiClient {
   }
 
   /// Award XP to player via API or mock fallback
-  Future<XpAwardResult> awardXp(String userId, int amount, String reason) async {
+  Future<XpAwardResult> awardXp(
+      String userId, int amount, String reason) async {
     try {
+      if (userId.isEmpty) {
+        LogManager.debug(
+          '[TierApiClient] Missing user ID, using mock XP award fallback',
+        );
+        return _getMockXpAwardFallback(amount);
+      }
+
       LogManager.debug(
         '[TierApiClient] Awarding $amount XP to user=$userId (reason: $reason)',
       );
@@ -265,18 +303,20 @@ class TierApiClient {
       final uri = Uri.parse('$_baseUrl/progression/xp/award');
 
       try {
-        final response = await _httpClient.post(
-          uri,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'userId': userId,
-            'amount': amount,
-            'reason': reason,
-          }),
-        ).timeout(
-          const Duration(seconds: 10),
-          onTimeout: () => throw TimeoutException('API request timeout'),
-        );
+        final response = await _httpClient
+            .post(
+              uri,
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({
+                'userId': userId,
+                'xpAmount': amount,
+                'reason': reason,
+              }),
+            )
+            .timeout(
+              const Duration(seconds: 10),
+              onTimeout: () => throw TimeoutException('API request timeout'),
+            );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -331,8 +371,21 @@ class TierApiClient {
     );
   }
 
+  Future<PlayerTierProgress> _parsePlayerTierProgress(
+    Map<String, dynamic> json,
+  ) async {
+    if (json.containsKey('currentTier')) {
+      return PlayerTierProgress.fromJson(json);
+    }
+
+    final tiers = await getTierDefinitions();
+    return PlayerTierProgress.fromBackendJson(json, tiers);
+  }
+
   void close() {
-    _httpClient.close();
+    if (_ownsHttpClient) {
+      _httpClient.close();
+    }
   }
 }
 
@@ -360,29 +413,32 @@ class TierDefinition {
   int get xpRange => maxXp - minXp;
 
   /// Is this the final tier?
-  bool get isFinalTier => maxXp == double.maxFinite.toInt();
+  bool get isFinalTier => maxXp >= 2147483647;
 
   factory TierDefinition.fromJson(Map<String, dynamic> json) {
     return TierDefinition(
-      id: json['id'] ?? '',
-      name: json['name'] ?? 'Unknown Tier',
-      level: json['level'] ?? 1,
-      minXp: json['minXp'] ?? json['min_xp'] ?? 0,
-      maxXp: json['maxXp'] ?? json['max_xp'] ?? 999999,
-      iconName: json['iconName'] ?? json['icon_name'] ?? 'tier_icon',
-      rewards: TierReward.fromJson(json['rewards'] ?? {}),
+      id: _asString(json['id']),
+      name: _asString(json['name'], fallback: 'Unknown Tier'),
+      level: _asInt(json['level'], fallback: 1),
+      minXp: _asInt(json['minXp'] ?? json['min_xp']),
+      maxXp: _asInt(json['maxXp'] ?? json['max_xp'], fallback: 999999),
+      iconName: _asString(json['iconName'] ?? json['icon_name'],
+          fallback: 'tier_icon'),
+      rewards: TierReward.fromJson(
+        Map<String, dynamic>.from((json['rewards'] as Map?) ?? const {}),
+      ),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'level': level,
-    'minXp': minXp,
-    'maxXp': maxXp,
-    'iconName': iconName,
-    'rewards': rewards.toJson(),
-  };
+        'id': id,
+        'name': name,
+        'level': level,
+        'minXp': minXp,
+        'maxXp': maxXp,
+        'iconName': iconName,
+        'rewards': rewards.toJson(),
+      };
 }
 
 /// Rewards for reaching a tier
@@ -399,17 +455,21 @@ class TierReward {
 
   factory TierReward.fromJson(Map<String, dynamic> json) {
     return TierReward(
-      badge: json['badge'] ?? 'unknown_badge',
-      coinsBonus: json['coinsBonus'] ?? json['coins_bonus'] ?? 0,
-      gemsBonus: json['gemsBonus'] ?? json['gems_bonus'] ?? 0,
+      badge: _asString(json['badge'], fallback: 'unknown_badge'),
+      coinsBonus: _asInt(
+        json['coinsBonus'] ?? json['coins_bonus'] ?? json['coins'],
+      ),
+      gemsBonus: _asInt(
+        json['gemsBonus'] ?? json['gems_bonus'] ?? json['gems'],
+      ),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'badge': badge,
-    'coinsBonus': coinsBonus,
-    'gemsBonus': gemsBonus,
-  };
+        'badge': badge,
+        'coinsBonus': coinsBonus,
+        'gemsBonus': gemsBonus,
+      };
 }
 
 /// Player's current tier progress
@@ -435,25 +495,93 @@ class PlayerTierProgress {
 
   factory PlayerTierProgress.fromJson(Map<String, dynamic> json) {
     return PlayerTierProgress(
-      currentTier: TierDefinition.fromJson(json['currentTier'] ?? {}),
-      nextTier: json['nextTier'] != null
-          ? TierDefinition.fromJson(json['nextTier'])
+      currentTier: TierDefinition.fromJson(
+        Map<String, dynamic>.from((json['currentTier'] as Map?) ?? const {}),
+      ),
+      nextTier: json['nextTier'] is Map
+          ? TierDefinition.fromJson(
+              Map<String, dynamic>.from(json['nextTier'] as Map),
+            )
           : null,
-      currentXp: json['currentXp'] ?? json['current_xp'] ?? 0,
-      xpInCurrentTier: json['xpInCurrentTier'] ?? json['xp_in_current_tier'] ?? 0,
-      xpNeededForNextTier: json['xpNeededForNextTier'] ?? json['xp_needed_for_next_tier'] ?? 0,
-      progressPercentage: json['progressPercentage'] ?? json['progress_percentage'] ?? 0,
+      currentXp: _asInt(json['currentXp'] ?? json['current_xp']),
+      xpInCurrentTier: _asInt(
+        json['xpInCurrentTier'] ?? json['xp_in_current_tier'],
+      ),
+      xpNeededForNextTier: _asInt(
+        json['xpNeededForNextTier'] ?? json['xp_needed_for_next_tier'],
+      ),
+      progressPercentage: _asInt(
+        json['progressPercentage'] ?? json['progress_percentage'],
+      ),
+    );
+  }
+
+  factory PlayerTierProgress.fromBackendJson(
+    Map<String, dynamic> json,
+    List<TierDefinition> tiers,
+  ) {
+    final currentTierId =
+        _asString(json['currentTierId'] ?? json['current_tier_id']);
+    final currentTierName = _asString(
+      json['currentTierName'] ?? json['current_tier_name'],
+      fallback: 'Unknown Tier',
+    );
+    final currentXp = _asInt(json['currentXp'] ?? json['current_xp']);
+    final xpInCurrentTier = _asInt(
+      json['xpInCurrentTier'] ?? json['xp_in_current_tier'],
+    );
+    final xpNeededForNextTier = _asInt(
+      json['xpNeededForNextTier'] ?? json['xp_needed_for_next_tier'],
+    );
+    final progressPercentage = _asInt(
+      json['progressPercentage'] ?? json['progress_percentage'],
+    ).clamp(0, 100);
+
+    TierDefinition? currentTier;
+    for (final tier in tiers) {
+      if (tier.id == currentTierId || tier.name == currentTierName) {
+        currentTier = tier;
+        break;
+      }
+    }
+
+    currentTier ??= TierDefinition(
+      id: currentTierId,
+      name: currentTierName,
+      level: _asInt(json['currentLevel'] ?? json['current_level'], fallback: 1),
+      minXp: currentXp - xpInCurrentTier,
+      maxXp: currentXp - xpInCurrentTier + xpNeededForNextTier,
+      iconName: currentTierId.isNotEmpty ? currentTierId : 'tier_icon',
+      rewards: TierReward(badge: '', coinsBonus: 0, gemsBonus: 0),
+    );
+
+    final resolvedCurrentTier = currentTier;
+
+    TierDefinition? nextTier;
+    final currentIndex =
+        tiers.indexWhere((tier) => tier.id == resolvedCurrentTier.id);
+    if (currentIndex >= 0 && currentIndex + 1 < tiers.length) {
+      nextTier = tiers[currentIndex + 1];
+    }
+
+    return PlayerTierProgress(
+      currentTier: resolvedCurrentTier,
+      nextTier: nextTier,
+      currentXp: currentXp,
+      xpInCurrentTier: xpInCurrentTier,
+      xpNeededForNextTier: xpNeededForNextTier,
+      progressPercentage: progressPercentage,
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'currentTier': currentTier.toJson(),
-    'nextTier': nextTier?.toJson(),
-    'currentXp': currentXp,
-    'xpInCurrentTier': xpInCurrentTier,
-    'xpNeededForNextTier': xpNeededForNextTier,
-    'progressPercentage': progressPercentage,
-  };
+        'currentTier': currentTier.toJson(),
+        'nextTier': nextTier?.toJson(),
+        'currentXp': currentXp,
+        'xpInCurrentTier': xpInCurrentTier,
+        'xpNeededForNextTier': xpNeededForNextTier,
+        'progressPercentage': progressPercentage,
+      };
 }
 
 /// Result of awarding XP
@@ -472,19 +600,41 @@ class XpAwardResult {
 
   factory XpAwardResult.fromJson(Map<String, dynamic> json) {
     return XpAwardResult(
-      xpAwarded: json['xpAwarded'] ?? json['xp_awarded'] ?? 0,
-      totalXp: json['totalXp'] ?? json['total_xp'] ?? 0,
-      newLevel: json['newLevel'] ?? json['new_level'] ?? 1,
-      tierUpgraded: json['tierUpgraded'] ?? json['tier_upgraded'] ?? false,
+      xpAwarded: _asInt(json['xpAwarded'] ?? json['xp_awarded']),
+      totalXp: _asInt(json['totalXp'] ?? json['total_xp']),
+      newLevel: _asInt(json['newLevel'] ?? json['new_level'], fallback: 1),
+      tierUpgraded: _asBool(json['tierUpgraded'] ?? json['tier_upgraded']),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'xpAwarded': xpAwarded,
-    'totalXp': totalXp,
-    'newLevel': newLevel,
-    'tierUpgraded': tierUpgraded,
-  };
+        'xpAwarded': xpAwarded,
+        'totalXp': totalXp,
+        'newLevel': newLevel,
+        'tierUpgraded': tierUpgraded,
+      };
+}
+
+String _asString(Object? value, {String fallback = ''}) {
+  if (value == null) return fallback;
+  final stringValue = value.toString();
+  return stringValue.isEmpty ? fallback : stringValue;
+}
+
+int _asInt(Object? value, {int fallback = 0}) {
+  if (value is int) return value;
+  if (value is double) return value.round();
+  if (value is num) return value.round();
+  if (value is String) {
+    return int.tryParse(value) ?? double.tryParse(value)?.round() ?? fallback;
+  }
+  return fallback;
+}
+
+bool _asBool(Object? value, {bool fallback = false}) {
+  if (value is bool) return value;
+  if (value is String) return value.toLowerCase() == 'true';
+  return fallback;
 }
 
 /// Exception thrown by tier API

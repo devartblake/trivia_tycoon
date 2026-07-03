@@ -7,7 +7,7 @@ import '../../core/services/tier_api_client.dart';
 import '../../game/providers/phase2_reward_providers.dart';
 
 class TierProgressWidget extends ConsumerWidget {
-  const TierProgressWidget({Key? key}) : super(key: key);
+  const TierProgressWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,7 +79,7 @@ class _TierProgressCard extends StatelessWidget {
                 'Your Tier Progress',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                ),
+                    ),
               ),
 
               const SizedBox(height: 24),
@@ -198,14 +198,14 @@ class _CurrentTierSection extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: _getTierColor(),
-                  ),
+                      ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Total XP: $xp',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[700],
-                  ),
+                      ),
                 ),
               ],
             ),
@@ -247,7 +247,7 @@ class _ProgressBarSection extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.orange[600],
                 fontWeight: FontWeight.w600,
-          ),
+              ),
         ),
       );
     }
@@ -263,14 +263,14 @@ class _ProgressBarSection extends StatelessWidget {
               'Progress to ${progress.nextTier?.name ?? 'Next Tier'}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-              ),
+                  ),
             ),
             Text(
               '${progress.progressPercentage}%',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.blue[600],
-              ),
+                  ),
             ),
           ],
         ),
@@ -327,13 +327,13 @@ class _ProgressBarSection extends StatelessWidget {
               '${progress.xpInCurrentTier} / ${progress.currentTier.xpRange} XP',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: Colors.grey[600],
-              ),
+                  ),
             ),
             Text(
               '${progress.xpNeededForNextTier} XP needed',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: Colors.grey[600],
-              ),
+                  ),
             ),
           ],
         ),
@@ -366,7 +366,7 @@ class _NextTierRewardsSection extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: Colors.blue[700],
-            ),
+                ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -384,7 +384,7 @@ class _NextTierRewardsSection extends StatelessWidget {
                       '${nextTier.rewards.coinsBonus} Coins',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
-                      ),
+                          ),
                     ),
                   ],
                 ),
@@ -402,7 +402,7 @@ class _NextTierRewardsSection extends StatelessWidget {
                       '${nextTier.rewards.gemsBonus} Gems',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
-                      ),
+                          ),
                     ),
                   ],
                 ),
@@ -448,14 +448,14 @@ class _MaxTierSection extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: Colors.orange[700],
-                  ),
+                      ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'You have reached the maximum tier',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.orange[600],
-                  ),
+                      ),
                 ),
               ],
             ),
@@ -480,7 +480,7 @@ class _TierBenefitsSection extends StatelessWidget {
           'Tier Benefits',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-          ),
+              ),
         ),
         const SizedBox(height: 12),
         _BenefitRow(
@@ -543,7 +543,7 @@ class _BenefitRow extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: color[600],
-            ),
+                ),
           ),
         ],
       ),
@@ -636,7 +636,7 @@ class _TierErrorState extends StatelessWidget {
               'Failed to Load Tier Progress',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.red[600],
-              ),
+                  ),
             ),
             const SizedBox(height: 8),
             Text(

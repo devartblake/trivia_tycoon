@@ -40,7 +40,8 @@ void main() {
       expect(service.determineRedirect(canonicalOnboardingRoute), isNull);
     });
 
-    test('anonymous incomplete users return to login unless entering onboarding',
+    test(
+        'anonymous incomplete users return to login unless entering onboarding',
         () {
       final container = _container(
         identity: _anonymousIdentity,
@@ -169,8 +170,7 @@ ProviderContainer _container({
 }
 
 class _FakePlayerIdentityNotifier extends PlayerIdentityNotifier {
-  _FakePlayerIdentityNotifier(Ref ref, PlayerIdentityState initial)
-      : super(ref) {
+  _FakePlayerIdentityNotifier(super.ref, PlayerIdentityState initial) {
     state = initial;
   }
 

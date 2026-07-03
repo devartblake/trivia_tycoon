@@ -12,7 +12,8 @@ import 'dart:math' as math;
 /// 5. Managing image memory efficiently
 
 class RenderingCacheManager {
-  static final RenderingCacheManager _instance = RenderingCacheManager._internal();
+  static final RenderingCacheManager _instance =
+      RenderingCacheManager._internal();
 
   factory RenderingCacheManager() {
     return _instance;
@@ -134,7 +135,8 @@ class RenderingCacheManager {
     double startAngle,
     double endAngle,
   ) {
-    final key = _generateGeometryKey(centerX, centerY, radius, startAngle, endAngle);
+    final key =
+        _generateGeometryKey(centerX, centerY, radius, startAngle, endAngle);
 
     return _geometryCache.putIfAbsent(
       key,
@@ -173,7 +175,7 @@ class RenderingCacheManager {
   }
 
   String _generateShaderKey(Color color, Rect bounds) {
-    return '${color.value}_${bounds.hashCode}';
+    return '${color.toARGB32()}_${bounds.hashCode}';
   }
 
   String _generateLinearGradientKey(
@@ -345,13 +347,16 @@ class WheelGeometryOptimizer {
 
     final angle = math.atan2(dy, dx);
     final normalizedAngle = angle < 0 ? angle + 2 * math.pi : angle;
-    final normalizedStart = startAngle < 0 ? startAngle + 2 * math.pi : startAngle;
+    final normalizedStart =
+        startAngle < 0 ? startAngle + 2 * math.pi : startAngle;
     final normalizedEnd = endAngle < 0 ? endAngle + 2 * math.pi : endAngle;
 
     if (normalizedStart <= normalizedEnd) {
-      return normalizedAngle >= normalizedStart && normalizedAngle <= normalizedEnd;
+      return normalizedAngle >= normalizedStart &&
+          normalizedAngle <= normalizedEnd;
     } else {
-      return normalizedAngle >= normalizedStart || normalizedAngle <= normalizedEnd;
+      return normalizedAngle >= normalizedStart ||
+          normalizedAngle <= normalizedEnd;
     }
   }
 

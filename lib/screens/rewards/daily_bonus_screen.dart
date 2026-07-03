@@ -8,7 +8,7 @@ import '../../core/services/daily_bonus_api_client.dart';
 import '../../game/providers/phase2_reward_providers.dart';
 
 class DailyBonusScreen extends ConsumerWidget {
-  const DailyBonusScreen({Key? key}) : super(key: key);
+  const DailyBonusScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -130,7 +130,7 @@ class _DailyBonusCard extends ConsumerWidget {
               '${config.coinsAmount} Coins',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-              ),
+                  ),
             ),
 
             if (config.gemsAmount != null && config.gemsAmount! > 0)
@@ -139,7 +139,7 @@ class _DailyBonusCard extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.purple[600],
                       fontWeight: FontWeight.w600,
-                ),
+                    ),
               ),
 
             const SizedBox(height: 24),
@@ -164,7 +164,7 @@ class _DailyBonusCard extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Colors.grey[700],
                           fontWeight: FontWeight.w600,
-                    ),
+                        ),
                   ),
                 ),
               ),
@@ -300,7 +300,7 @@ class _StreakInfo extends StatelessWidget {
             'Current Streak',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.blue[700],
-            ),
+                ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -308,7 +308,7 @@ class _StreakInfo extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: Colors.blue[700],
                   fontWeight: FontWeight.bold,
-            ),
+                ),
           ),
         ],
       ),
@@ -368,7 +368,7 @@ class _NextClaimTimeState extends State<_NextClaimTime> {
             getTimeString(),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-            ),
+                ),
           ),
         ],
       ),
@@ -460,7 +460,7 @@ class _ErrorState extends StatelessWidget {
               'Failed to Load',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: Colors.red[600],
-              ),
+                  ),
             ),
             const SizedBox(height: 8),
             Text(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/skill_progression_model.dart';
-import '../../ui_components/skill_tree/skill_node_card.dart';
 import '../../ui_components/skill_tree/skill_tier_section.dart';
 import '../../ui_components/skill_tree/skill_detail_popup.dart';
 

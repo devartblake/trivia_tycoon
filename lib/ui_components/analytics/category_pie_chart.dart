@@ -31,8 +31,7 @@ class CategoryPieChart extends StatelessWidget {
     // Sort by total questions (descending) and take top 5
     final topCategories = [...categories]
       ..sort((a, b) => b.totalQuestions.compareTo(a.totalQuestions))
-      ..take(5)
-      .toList();
+      ..take(5).toList();
 
     final colors = _generateColors(topCategories.length);
 
@@ -47,7 +46,7 @@ class CategoryPieChart extends StatelessWidget {
               'Performance by Category',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-              ),
+                  ),
             ),
             const SizedBox(height: 20),
             // Legend with bars
@@ -125,7 +124,7 @@ class CategoryPieChart extends StatelessWidget {
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

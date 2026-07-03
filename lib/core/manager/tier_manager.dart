@@ -14,8 +14,6 @@ class TierManager {
   static const String _currentTierKey = 'current_tier';
   static const String _unlockedTiersKey = 'unlocked_tiers';
 
-  List<TierDefinition>? _cachedTierDefinitions;
-
   TierManager(
     this._storage,
     this._profileService, {
@@ -329,7 +327,6 @@ class TierManager {
   Future<void> resetTierProgress() async {
     await _storage.remove(_currentTierKey);
     await _storage.remove(_unlockedTiersKey);
-    _cachedTierDefinitions = null; // Clear cache
   }
 
   /// Award tier rewards

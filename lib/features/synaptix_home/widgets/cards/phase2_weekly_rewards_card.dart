@@ -8,7 +8,7 @@ import '../../../../game/providers/phase2_reward_providers.dart';
 /// Dashboard card displaying weekly rewards progress.
 /// Shows current week day and streak progress at a glance.
 class Phase2WeeklyRewardsCard extends ConsumerWidget {
-  const Phase2WeeklyRewardsCard({Key? key}) : super(key: key);
+  const Phase2WeeklyRewardsCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,7 +71,7 @@ class _WeeklyRewardsContent extends StatelessWidget {
           'Weekly Rewards',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
-          ),
+              ),
         ),
 
         const SizedBox(height: 12),
@@ -93,7 +93,7 @@ class _WeeklyRewardsContent extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.purple[700],
-                  ),
+                      ),
                 ),
               ],
             ),
@@ -146,19 +146,19 @@ class _WeeklyRewardsContent extends StatelessWidget {
                     children: [
                       Text(
                         'D${day.day}',
-                        style:
-                            Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: isClaimed
-                                      ? Colors.green[700]
-                                      : Colors.grey[700],
-                                ),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: isClaimed
+                                  ? Colors.green[700]
+                                  : Colors.grey[700],
+                            ),
                       ),
                       const SizedBox(height: 4),
                       if (day.type == 'gems')
                         Icon(Icons.diamond, size: 16, color: Colors.purple)
                       else
-                        Icon(Icons.monetization_on, size: 16, color: Colors.green),
+                        Icon(Icons.monetization_on,
+                            size: 16, color: Colors.green),
                       if (isClaimed)
                         Icon(Icons.check_circle, size: 12, color: Colors.green)
                     ],
@@ -233,7 +233,7 @@ class _ErrorState extends StatelessWidget {
             'Failed to load weekly rewards',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.red[600],
-            ),
+                ),
           ),
         ),
       ],

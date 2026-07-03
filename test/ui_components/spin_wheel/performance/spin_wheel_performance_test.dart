@@ -24,7 +24,8 @@ void main() {
         return WheelSegment(
           id: 'segment_$i',
           label: 'Segment $i',
-          color: Color.fromARGB(255, (i * 30) % 256, (i * 50) % 256, (i * 70) % 256),
+          color: Color.fromARGB(
+              255, (i * 30) % 256, (i * 50) % 256, (i * 70) % 256),
           reward: 100 + (i * 50),
           rewardType: ['common', 'uncommon', 'rare', 'jackpot'][i % 4],
           isEnabled: true,
@@ -150,11 +151,12 @@ void main() {
         _simulateFramePaint(cacheManager, testSegments, i);
 
         // Record frame time
-        RenderingDiagnostics.recordFrame(14); // Expected optimized time (~14ms for 60 FPS)
+        RenderingDiagnostics.recordFrame(
+            14); // Expected optimized time (~14ms for 60 FPS)
       }
 
       final stats = RenderingDiagnostics.getStats();
-      final averageMs = stats['averageMs'] as double?;
+      final averageMs = stats['averageMs'];
 
       expect(averageMs, isNotNull, reason: 'Should have frame metrics');
       expect(averageMs! < 16.67, true,
@@ -169,11 +171,12 @@ void main() {
       }
 
       final stats = RenderingDiagnostics.getStats();
-      final fps = stats['fps'] as double?;
+      final fps = stats['fps'];
 
       expect(fps, isNotNull, reason: 'Should have FPS metrics');
       expect(fps! >= 60.0, true,
-          reason: 'FPS should be >= 60 (actual: ${fps.toStringAsFixed(1)} FPS)');
+          reason:
+              'FPS should be >= 60 (actual: ${fps.toStringAsFixed(1)} FPS)');
     });
 
     // ─────────────────────────────────────────────────────────────────────
@@ -246,8 +249,7 @@ void main() {
       final painter2 = cacheManager.getCachedTextLabel(text, style: style);
 
       expect(identical(painter1, painter2), true,
-          reason:
-              'Same text should return cached painter (same reference)');
+          reason: 'Same text should return cached painter (same reference)');
     });
 
     test('Geometry Cache Eliminates Calculations', () {
@@ -296,7 +298,8 @@ void _simulateFramePaint(
     final endAngle = startAngle + segmentAngle;
 
     // Simulate shader creation (cached)
-    final bounds = Rect.fromCircle(center: const Offset(centerX, centerY), radius: radius);
+    final bounds =
+        Rect.fromCircle(center: const Offset(centerX, centerY), radius: radius);
     cacheManager.getCachedRadialGradient(segment.color, bounds);
 
     // Simulate text label (cached)
@@ -319,4 +322,3 @@ void _simulateFramePaint(
     cacheManager.getBorderPaint();
   }
 }
-

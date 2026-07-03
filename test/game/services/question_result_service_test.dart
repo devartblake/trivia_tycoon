@@ -162,7 +162,6 @@ void main() {
 
     group('Time bonus calculation', () {
       test('Fast answer (≤50% time) gets 1.5x bonus', () async {
-        const timeLimit = 30;
         final result = QuestionResult(
           questionId: 'q1',
           category: 'Math',
@@ -181,7 +180,6 @@ void main() {
       });
 
       test('Normal speed (≤100% time) gets 1.0x bonus', () async {
-        const timeLimit = 30;
         final result = QuestionResult(
           questionId: 'q1',
           category: 'Math',
@@ -200,7 +198,6 @@ void main() {
       });
 
       test('Timeout (>100% time) gets 0.5x penalty', () async {
-        const timeLimit = 30;
         final result = QuestionResult(
           questionId: 'q1',
           category: 'Math',

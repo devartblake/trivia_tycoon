@@ -112,7 +112,7 @@ class QuestionApiClient {
         'categories': categories.join(','),
       };
 
-      final uri = Uri.parse(_baseUrl + _questionsPath + '/multiplayer')
+      final uri = Uri.parse('$_baseUrl$_questionsPath/multiplayer')
           .replace(queryParameters: params);
 
       LogManager.debug('[QuestionApiClient] GET $uri');

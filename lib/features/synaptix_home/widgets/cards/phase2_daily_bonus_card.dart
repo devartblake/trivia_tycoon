@@ -8,7 +8,7 @@ import '../../../../game/providers/phase2_reward_providers.dart';
 /// Dashboard card displaying daily bonus reward status.
 /// Provides quick access to claim daily rewards with streak display.
 class Phase2DailyBonusCard extends ConsumerWidget {
-  const Phase2DailyBonusCard({Key? key}) : super(key: key);
+  const Phase2DailyBonusCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -74,7 +74,7 @@ class _DailyBonusContent extends ConsumerWidget {
               'Daily Bonus',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-              ),
+                  ),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -116,7 +116,7 @@ class _DailyBonusContent extends ConsumerWidget {
                       '${config.coinsAmount}',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                      ),
+                          ),
                     ),
                   ],
                 ),
@@ -141,7 +141,7 @@ class _DailyBonusContent extends ConsumerWidget {
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Colors.purple[600],
-                        ),
+                            ),
                       ),
                     ],
                   ),
@@ -152,7 +152,8 @@ class _DailyBonusContent extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Icon(Icons.local_fire_department, size: 24, color: Colors.orange),
+                Icon(Icons.local_fire_department,
+                    size: 24, color: Colors.orange),
                 const SizedBox(height: 4),
                 Text(
                   '${status.currentStreak}',
@@ -175,9 +176,8 @@ class _DailyBonusContent extends ConsumerWidget {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
-            onPressed: isClaimed
-                ? null
-                : () => context.go('/arcade/daily-bonus'),
+            onPressed:
+                isClaimed ? null : () => context.go('/arcade/daily-bonus'),
             icon: const Icon(Icons.card_giftcard),
             label: Text(isClaimed ? 'Come Back Tomorrow' : 'Claim Now'),
             style: ElevatedButton.styleFrom(
@@ -236,7 +236,7 @@ class _ErrorState extends StatelessWidget {
             'Failed to load daily bonus',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Colors.red[600],
-            ),
+                ),
           ),
         ),
       ],

@@ -5,13 +5,25 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 /// API client for daily bonus rewards
 class DailyBonusApiClient {
   final http.Client _httpClient;
+  final bool _ownsHttpClient;
+  final String _baseUrl;
 
-  DailyBonusApiClient({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client();
+  DailyBonusApiClient({
+    http.Client? httpClient,
+    String? baseUrl,
+  })  : _httpClient = httpClient ?? http.Client(),
+        _ownsHttpClient = httpClient == null,
+        _baseUrl = _normalizeBaseUrl(baseUrl ?? defaultBaseUrl);
 
-  static const String _baseUrl = 'https://api.synaptixplay.com/api/v1';
+  static const String defaultBaseUrl = 'https://api.synaptixplay.com/api/v1';
   static const String _accountRewardsPath = '/account/rewards';
   static const String _rewardsPath = '/rewards';
+
+  static String _normalizeBaseUrl(String baseUrl) {
+    return baseUrl.endsWith('/')
+        ? baseUrl.substring(0, baseUrl.length - 1)
+        : baseUrl;
+  }
 
   /// Get daily reward configuration
   Future<DailyRewardConfig> getDailyConfig() async {
@@ -101,7 +113,7 @@ class DailyBonusApiClient {
           '[DailyBonusApiClient] Daily reward claimed: ${result.coinsAwarded} coins',
         );
         return result;
-      } else if (response.statusCode == 400) {
+      } else if (response.statusCode == 400 || response.statusCode == 409) {
         // Already claimed today
         throw AlreadyClaimedException('Daily reward already claimed today');
       } else if (response.statusCode == 401) {
@@ -127,7 +139,9 @@ class DailyBonusApiClient {
 
   /// Close the HTTP client
   void close() {
-    _httpClient.close();
+    if (_ownsHttpClient) {
+      _httpClient.close();
+    }
   }
 }
 
@@ -152,18 +166,19 @@ class DailyRewardConfig {
       rewardType: json['rewardType'] ?? json['reward_type'] ?? 'coins',
       coinsAmount: json['coinsAmount'] ?? json['coins_amount'] ?? 100,
       gemsAmount: json['gemsAmount'] ?? json['gems_amount'],
-      displayName: json['displayName'] ?? json['display_name'] ?? 'Daily Reward',
+      displayName:
+          json['displayName'] ?? json['display_name'] ?? 'Daily Reward',
       iconName: json['iconName'] ?? json['icon_name'] ?? 'daily_box',
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'rewardType': rewardType,
-    'coinsAmount': coinsAmount,
-    'gemsAmount': gemsAmount,
-    'displayName': displayName,
-    'iconName': iconName,
-  };
+        'rewardType': rewardType,
+        'coinsAmount': coinsAmount,
+        'gemsAmount': gemsAmount,
+        'displayName': displayName,
+        'iconName': iconName,
+      };
 }
 
 /// Account reward status
@@ -185,26 +200,38 @@ class AccountRewardStatus {
   });
 
   factory AccountRewardStatus.fromJson(Map<String, dynamic> json) {
+    final canClaimDaily = json['canClaimDaily'] ?? json['can_claim_daily'];
+    final weeklyClaimedDays =
+        json['weeklyClaimedDays'] ?? json['weekly_claimed_days'];
+
     return AccountRewardStatus(
-      claimedToday: json['claimedToday'] ?? json['claimed_today'] ?? false,
+      claimedToday: json['claimedToday'] ??
+          json['claimed_today'] ??
+          (canClaimDaily is bool ? !canClaimDaily : false),
       nextDailyClaimAt: json['nextDailyClaimAt'] != null
           ? DateTime.parse(json['nextDailyClaimAt'] as String)
           : null,
-      currentStreak: json['currentStreak'] ?? json['current_streak'] ?? 0,
+      currentStreak: json['currentStreak'] ??
+          json['current_streak'] ??
+          (weeklyClaimedDays is List ? weeklyClaimedDays.length : 0),
       rewardType: json['rewardType'] ?? json['reward_type'] ?? 'coins',
-      coinsAmount: json['coinsAmount'] ?? json['coins_amount'] ?? 100,
+      coinsAmount: json['coinsAmount'] ??
+          json['coins_amount'] ??
+          json['dailyCoins'] ??
+          json['daily_coins'] ??
+          100,
       gemsAmount: json['gemsAmount'] ?? json['gems_amount'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'claimedToday': claimedToday,
-    'nextDailyClaimAt': nextDailyClaimAt?.toIso8601String(),
-    'currentStreak': currentStreak,
-    'rewardType': rewardType,
-    'coinsAmount': coinsAmount,
-    'gemsAmount': gemsAmount,
-  };
+        'claimedToday': claimedToday,
+        'nextDailyClaimAt': nextDailyClaimAt?.toIso8601String(),
+        'currentStreak': currentStreak,
+        'rewardType': rewardType,
+        'coinsAmount': coinsAmount,
+        'gemsAmount': gemsAmount,
+      };
 
   /// Time until next claim is available
   Duration? get timeUntilNextClaim {
@@ -232,21 +259,29 @@ class RewardClaimResult {
 
   factory RewardClaimResult.fromJson(Map<String, dynamic> json) {
     return RewardClaimResult(
-      coinsAwarded: json['coinsAwarded'] ?? json['coins_awarded'] ?? 0,
+      coinsAwarded: json['coinsAwarded'] ??
+          json['coins_awarded'] ??
+          json['coinsGranted'] ??
+          json['coins_granted'] ??
+          0,
       gemsAwarded: json['gemsAwarded'] ?? json['gems_awarded'],
-      newTotalCoins: json['newTotalCoins'] ?? json['new_total_coins'] ?? 0,
+      newTotalCoins: json['newTotalCoins'] ??
+          json['new_total_coins'] ??
+          json['newBalance'] ??
+          json['new_balance'] ??
+          0,
       newTotalGems: json['newTotalGems'] ?? json['new_total_gems'] ?? 0,
       newStreak: json['newStreak'] ?? json['new_streak'] ?? 1,
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'coinsAwarded': coinsAwarded,
-    'gemsAwarded': gemsAwarded,
-    'newTotalCoins': newTotalCoins,
-    'newTotalGems': newTotalGems,
-    'newStreak': newStreak,
-  };
+        'coinsAwarded': coinsAwarded,
+        'gemsAwarded': gemsAwarded,
+        'newTotalCoins': newTotalCoins,
+        'newTotalGems': newTotalGems,
+        'newStreak': newStreak,
+      };
 }
 
 /// Exception for daily bonus operations
@@ -260,8 +295,7 @@ class DailyBonusException implements Exception {
   });
 
   @override
-  String toString() =>
-      'DailyBonusException: $message (status: $statusCode)';
+  String toString() => 'DailyBonusException: $message (status: $statusCode)';
 }
 
 /// Exception when reward already claimed

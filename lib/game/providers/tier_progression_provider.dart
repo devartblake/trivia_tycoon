@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/tier_progression_service.dart';
 import '../services/tier_rewards_service.dart';
+import '../../core/env.dart';
 import '../../core/services/tier_api_client.dart';
 import 'game_providers.dart';
-import 'core_providers.dart' show generalKeyValueStorageProvider;
+import 'core_providers.dart'
+    show authHttpClientProvider, generalKeyValueStorageProvider;
 
 // Export types for convenience
 export '../services/tier_progression_service.dart' show TierProgressionService;
@@ -14,7 +16,10 @@ export '../../core/services/tier_api_client.dart'
 /// Unified tier progression service provider
 /// Uses TierApiClient as source of truth with local caching
 final tierProgressionServiceProvider = Provider<TierProgressionService>((ref) {
-  final tierApiClient = TierApiClient();
+  final tierApiClient = TierApiClient(
+    httpClient: ref.watch(authHttpClientProvider),
+    baseUrl: EnvConfig.apiV1BaseUrl,
+  );
   final profileService = ref.read(playerProfileServiceProvider);
 
   return TierProgressionService(
