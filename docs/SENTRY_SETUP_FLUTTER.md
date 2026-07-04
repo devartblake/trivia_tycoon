@@ -15,11 +15,9 @@ Sentry integration has been added to the Trivia Tycoon Flutter client for centra
 ✅ Automatic exception capture  
 ✅ Performance monitoring (transaction tracing)  
 ✅ Breadcrumb tracking for debugging context  
-✅ User identification and tracking  
-✅ Configurable sampling rates by environment  
-✅ Custom tags and context  
-✅ Failed request tracking  
-✅ Release tracking  
+✅ Configurable sampling rates by environment (dev 100%, staging 50%, prod 10%)  
+✅ Release tracking (version + build number)  
+✅ Graceful fallback when DSN not configured  
 
 ---
 
@@ -144,16 +142,7 @@ import 'package:trivia_tycoon/core/services/sentry_service.dart';
 try {
   // Some code
 } catch (e, st) {
-  await SentryService.captureException(
-    e,
-    stackTrace: st,
-    message: 'User action failed',
-    extra: {
-      'userId': userId,
-      'action': 'leaderboard_submit',
-      'score': finalScore,
-    },
-  );
+  await SentryService.captureException(e, stackTrace: st);
 }
 ```
 
@@ -165,48 +154,16 @@ Breadcrumbs create a trail of events leading up to an error:
 SentryService.addBreadcrumb(
   message: 'Loaded user profile',
   category: 'user-action',
-  level: 'info',
   data: {'userId': userId},
 );
 
 SentryService.addBreadcrumb(
   message: 'Quiz started',
   category: 'game',
-  level: 'info',
   data: {'quizId': quizId, 'difficulty': difficulty},
 );
 
 // If an error occurs now, both breadcrumbs appear in Sentry
-```
-
-### Set User Context
-
-Track which user encountered the error:
-
-```dart
-// After login
-SentryService.setUser(
-  id: userId,
-  email: userEmail,
-  username: playerName,
-  extras: {
-    'age_group': ageGroup,
-    'synaptix_mode': mode,
-    'premium': isPremium.toString(),
-  },
-);
-
-// After logout
-SentryService.clearUser();
-```
-
-### Add Custom Tags
-
-Tags help filter and search issues in Sentry:
-
-```dart
-SentryService.setTag('quiz_mode', 'multiplayer');
-SentryService.setTag('game_type', 'battle-royale');
 ```
 
 ---
@@ -301,8 +258,7 @@ Add a test button to your debug menu:
 ```dart
 ElevatedButton(
   onPressed: () {
-    // This will appear in Sentry with 'test' tag
-    SentryService.setTag('test', 'manual');
+    // This will appear in Sentry
     throw Exception('Test Sentry integration');
   },
   child: Text('Test Sentry'),
@@ -310,10 +266,10 @@ ElevatedButton(
 ```
 
 Then:
-1. Run the app in debug mode
-2. Tap the test button
+1. Run the app in debug mode: `flutter run -t lib/main_with_sentry.dart`
+2. Tap the test button to trigger an exception
 3. Check Sentry dashboard within 30 seconds
-4. Verify error appears with test tag
+4. Verify error appears in the Sentry Issues list
 
 ### Disable for Testing
 
@@ -331,54 +287,36 @@ setUpAll(() {
 
 ## Best Practices
 
-### 1. Set User Context Early
-
-After user logs in:
-```dart
-SentryService.setUser(
-  id: userId,
-  email: userEmail,
-  username: playerName,
-);
-```
-
-### 2. Add Breadcrumbs for Important Actions
+### 1. Add Breadcrumbs for Important Actions
 
 ```dart
 // Before each user action
 SentryService.addBreadcrumb(
-  message: 'User tapped submit button',
+  message: 'User started quiz',
   category: 'user-interaction',
+  data: {'quizId': quizId, 'difficulty': difficulty},
 );
 ```
 
-### 3. Use Extra Data for Context
+### 2. Capture Exceptions with Context
 
 ```dart
-await SentryService.captureException(
-  error,
-  extra: {
-    'screen': 'quiz-detail',
-    'quizId': quizId,
-    'timeSpent': duration.inSeconds,
-  },
-);
+try {
+  await performCriticalOperation();
+} catch (e, st) {
+  // Breadcrumbs before the error are automatically included
+  await SentryService.captureException(e, stackTrace: st);
+}
 ```
 
-### 4. Don't Over-Sample Production
+### 3. Don't Over-Sample Production
 
 ```bash
 # Production should be 0.1 or lower
 SENTRY_TRACE_SAMPLE_RATE=0.1
 ```
 
-### 5. Clean Up on Logout
-
-```dart
-SentryService.clearUser();
-```
-
-### 6. Monitor Performance
+### 4. Monitor Performance
 
 Use Sentry's performance tab to identify slow screens:
 - Quiz loading time
@@ -386,33 +324,54 @@ Use Sentry's performance tab to identify slow screens:
 - Match initialization
 - Payment processing
 
+### 5. Add Initialization Breadcrumbs
+
+The `main_with_sentry.dart` automatically adds breadcrumbs during app initialization:
+```dart
+SentryService.addBreadcrumb(
+  message: 'App initialization completed',
+  category: 'app-lifecycle',
+  data: {
+    'isLoggedIn': isLoggedIn.toString(),
+    'ageGroup': savedAgeGroup,
+    'mode': initialMode.name,
+  },
+);
+```
+
 ---
 
 ## Common Issues
 
 ### Sentry Not Capturing Errors
 
-1. Verify DSN is set:
+1. Verify DSN is set and not empty:
    ```bash
-   echo $SENTRY_DSN
+   flutter run -t lib/main_with_sentry.dart --dart-define-from-file=.env.staging
+   # Check app console output
    ```
 
-2. Check environment file:
+2. Check environment file has a valid SENTRY_DSN:
    ```bash
-   cat .env | grep SENTRY
+   cat .env.staging | grep SENTRY_DSN
+   # Should show: SENTRY_DSN=https://xxx@domain.ingest.sentry.io/project-id
    ```
 
-3. View logs:
+3. View Sentry initialization logs:
    ```bash
-   flutter run -v 2>&1 | grep -i sentry
+   flutter run -t lib/main_with_sentry.dart --dart-define-from-file=.env.staging -v 2>&1 | grep -i sentry
    ```
 
 ### No Data in Sentry
 
-1. Ensure the app is built with the correct .env file
-2. Wait 30 seconds for events to appear
-3. Check Sentry dashboard filter (environment, release)
-4. Verify sample rate is > 0
+1. Ensure the app is built with the correct entry point:
+   ```bash
+   flutter run -t lib/main_with_sentry.dart  # Must use this, not lib/main.dart
+   ```
+2. Trigger a test error (see Testing section)
+3. Wait 30 seconds for events to appear in Sentry dashboard
+4. Check Sentry dashboard filter (environment, release, sampling)
+5. Verify sample rate is > 0 in `.env` file
 
 ### High Sentry Costs
 
@@ -520,15 +479,17 @@ SentryService.clearUser();
 
 1. ✅ Sentry package added to pubspec.yaml
 2. ✅ Environment configuration files created
-3. ✅ SentryService implemented
-4. → Create Sentry projects for dev/staging/prod
-5. → Add DSN to environment files
-6. → Test with main_with_sentry.dart
-7. → Integrate Slack alerts
-8. → Monitor issues in Sentry dashboard
+3. ✅ SentryService implemented with core APIs
+4. ✅ main_with_sentry.dart entry point created
+5. → Test locally: `flutter run -t lib/main_with_sentry.dart --dart-define-from-file=.env.staging`
+6. → Create Sentry projects for staging/prod at https://sentry.io
+7. → Add DSN values to `.env.staging` and `.env.prod`
+8. → Test error capture by triggering an exception
+9. → Integrate Slack alerts in Sentry dashboard
+10. → Monitor issues in Sentry and verify sampling rates
 
 ---
 
-**Status:** Ready for integration  
-**Last Updated:** 2026-07-03  
+**Status:** Ready for local testing  
+**Last Updated:** 2026-07-04  
 **Maintained By:** Mobile Team
