@@ -1,15 +1,44 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:trivia_tycoon/core/env.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 /// Service to initialize and configure Sentry for error tracking and
 /// performance monitoring on Flutter clients.
 class SentryService {
+  /// Get Sentry DSN from environment
+  static String? getSentryDsn() {
+    final dartDefined = String.fromEnvironment('SENTRY_DSN');
+    if (dartDefined.isNotEmpty) return dartDefined;
+    return dotenv.env['SENTRY_DSN'];
+  }
+
+  /// Get Sentry environment (development, staging, production)
+  static String getSentryEnvironment() {
+    final dartDefined = String.fromEnvironment('SENTRY_ENVIRONMENT');
+    if (dartDefined.isNotEmpty) return dartDefined;
+    return dotenv.env['SENTRY_ENVIRONMENT'] ?? 'development';
+  }
+
+  /// Get trace sample rate (what percentage of transactions to send to Sentry)
+  static double getTraceSampleRate() {
+    final dartDefined = String.fromEnvironment('SENTRY_TRACE_SAMPLE_RATE');
+    double rate = 1.0;
+
+    if (dartDefined.isNotEmpty) {
+      rate = double.tryParse(dartDefined) ?? 1.0;
+    } else {
+      final envValue = dotenv.env['SENTRY_TRACE_SAMPLE_RATE'];
+      rate = envValue != null ? (double.tryParse(envValue) ?? 1.0) : 1.0;
+    }
+
+    return rate.clamp(0.0, 1.0);
+  }
+
   /// Initialize Sentry with configuration from environment variables
   static Future<void> initialize() async {
-    final dsn = _getSentryDsn();
+    final dsn = getSentryDsn();
 
     if (dsn == null || dsn.isEmpty) {
       LogManager.info(
@@ -21,8 +50,8 @@ class SentryService {
 
     try {
       final packageInfo = await PackageInfo.fromPlatform();
-      final environment = _getSentryEnvironment();
-      final traceSampleRate = _getTraceSampleRate();
+      final environment = getSentryEnvironment();
+      final traceSampleRate = getTraceSampleRate();
 
       await SentryFlutter.init(
         (options) {
@@ -36,30 +65,11 @@ class SentryService {
           // Capture breadcrumbs for context
           options.maxBreadcrumbs = 200;
 
-          // Capture failed requests
-          options.captureFailedRequests = true;
-          options.failedRequestStatusCodes = [
-            SentryStatusCodeRange(400, 599),
-          ];
-
-          // Exclude health check and monitoring endpoints
-          options.shouldLogUrl = (url) {
-            return !url.contains('/health')
-                && !url.contains('/metrics')
-                && !url.contains('/alive')
-                && !url.contains('/ready');
-          };
-
           // Add custom tags
           options.tags = {
             'app': 'trivia-tycoon',
             'platform': defaultTargetPlatform.toString(),
             'version': packageInfo.version,
-          };
-
-          // Track user if authenticated
-          options.beforeSend = (event, hint) async {
-            return event;
           };
         },
       );
@@ -77,52 +87,25 @@ class SentryService {
     }
   }
 
-  /// Get Sentry DSN from environment or return null if not configured
-  static String? _getSentryDsn() {
-    // Try from environment variable first
-    final envDsn = EnvConfig.sentryDsn;
-    if (envDsn != null && envDsn.isNotEmpty) {
-      return envDsn;
-    }
-
-    // Fallback for development/testing
-    if (kDebugMode) {
-      return null; // Disabled in debug mode unless explicitly configured
-    }
-
-    return null;
-  }
-
-  /// Get Sentry environment (development, staging, production)
-  static String _getSentryEnvironment() {
-    return EnvConfig.sentryEnvironment ?? 'development';
-  }
-
-  /// Get trace sample rate (what percentage of transactions to send to Sentry)
-  /// - Development: 100% (1.0) for full debugging
-  /// - Production: 10% (0.1) to manage costs
-  static double _getTraceSampleRate() {
-    final rate = EnvConfig.sentryTraceSampleRate;
-    return rate.clamp(0.0, 1.0);
-  }
-
   /// Capture an exception with Sentry
-  static Future<String?> captureException(
+  static Future<void> captureException(
     dynamic exception, {
     StackTrace? stackTrace,
     String? message,
     Map<String, dynamic>? extra,
   }) async {
     try {
-      return await Sentry.captureException(
+      await Sentry.captureException(
         exception,
         stackTrace: stackTrace,
         withScope: (scope) {
           if (message != null) {
-            scope.message = SentryMessage(message);
+            scope.setTag('message', message);
           }
           if (extra != null) {
-            scope.setContexts('extra', extra);
+            for (final entry in extra.entries) {
+              scope.setExtra(entry.key, entry.value);
+            }
           }
         },
       );
@@ -131,7 +114,6 @@ class SentryService {
         'Failed to capture exception in Sentry: $e',
         source: 'SentryService',
       );
-      return null;
     }
   }
 
@@ -147,7 +129,7 @@ class SentryService {
         SentryBreadcrumb(
           message: message,
           category: category,
-          level: SentryLevel.values.byName(level),
+          level: _parseSentryLevel(level),
           data: data,
         ),
       );
@@ -202,5 +184,17 @@ class SentryService {
     } catch (e) {
       LogManager.debug('Error closing Sentry: $e', source: 'SentryService');
     }
+  }
+
+  /// Parse string to SentryLevel
+  static SentryLevel _parseSentryLevel(String level) {
+    return switch (level.toLowerCase()) {
+      'debug' => SentryLevel.debug,
+      'info' => SentryLevel.info,
+      'warning' => SentryLevel.warning,
+      'error' => SentryLevel.error,
+      'fatal' => SentryLevel.fatal,
+      _ => SentryLevel.info,
+    };
   }
 }

@@ -4,7 +4,6 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/bootstrap/synaptix_app.dart';
 import 'package:trivia_tycoon/core/env.dart';
-import 'package:trivia_tycoon/core/env_sentry_extension.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 import 'package:trivia_tycoon/core/services/sentry_service.dart';
 import 'package:trivia_tycoon/game/providers/riverpod_providers.dart' hide themeNotifierProvider;
@@ -19,19 +18,25 @@ Future<void> main() async {
   await EnvConfig.load();
 
   // Initialize Sentry for error tracking
-  await SentryService.initialize();
+  final dsn = SentryService.getSentryDsn();
+  final environment = SentryService.getSentryEnvironment();
+  final traceSampleRate = SentryService.getTraceSampleRate();
 
-  // Run the app with Sentry's error handling wrapper
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = EnvConfig.sentryDsn;
-      options.environment = EnvConfig.sentryEnvironment ?? 'development';
-      options.tracesSampleRate = EnvConfig.sentryTraceSampleRate;
-      options.maxBreadcrumbs = 200;
-      options.captureFailedRequests = true;
-    },
-    appRunner: () => _runApp(),
-  );
+  if (dsn != null && dsn.isNotEmpty) {
+    // Run the app with Sentry's error handling wrapper
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = dsn;
+        options.environment = environment;
+        options.tracesSampleRate = traceSampleRate;
+        options.maxBreadcrumbs = 200;
+      },
+      appRunner: () => _runApp(),
+    );
+  } else {
+    // Run without Sentry if DSN not configured
+    await _runApp();
+  }
 }
 
 Future<void> _runApp() async {
@@ -52,12 +57,13 @@ Future<void> _runApp() async {
 
     // Set user context in Sentry if logged in
     if (isLoggedIn) {
-      final userProfile = await manager.playerProfileService.getUserProfile();
-      if (userProfile != null) {
+      final userId = await manager.playerProfileService.getUserId();
+      final playerName = await manager.playerProfileService.getPlayerName();
+
+      if (userId != null) {
         SentryService.setUser(
-          id: userProfile.userId ?? 'unknown',
-          username: userProfile.playerName,
-          email: userProfile.email,
+          id: userId,
+          username: playerName,
           extras: {
             'age_group': savedAgeGroup,
             'synaptix_mode': initialMode.name,
