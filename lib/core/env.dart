@@ -30,6 +30,9 @@ class EnvConfig {
   static Duration _apiConnectTimeout = const Duration(seconds: 10);
   static Duration _apiReceiveTimeout = const Duration(seconds: 30);
   static Duration _apiSendTimeout = const Duration(seconds: 10);
+  static String? _sentryDsn;
+  static String? _sentryEnvironment = 'development';
+  static double _sentryTraceSampleRate = 1.0;
   static Duration _apiRefreshReceiveTimeout = const Duration(seconds: 20);
 
   /// Getter for the backend API Base URL (bare host, no version prefix).
