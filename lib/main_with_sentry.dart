@@ -55,25 +55,16 @@ Future<void> _runApp() async {
       source: 'main',
     );
 
-    // Set user context in Sentry if logged in
-    if (isLoggedIn) {
-      try {
-        final userId = await manager.playerProfileService.getUserId();
-        final playerName = await manager.playerProfileService.getPlayerName();
-
-        if (userId != null) {
-          await SentryService.setUser(
-            id: userId,
-            username: playerName,
-          );
-
-          await SentryService.setTag('age_group', savedAgeGroup);
-          await SentryService.setTag('synaptix_mode', initialMode.name);
-        }
-      } catch (e) {
-        LogManager.debug('Failed to set Sentry user context: $e', source: 'main');
-      }
-    }
+    // Add breadcrumb for app initialization
+    SentryService.addBreadcrumb(
+      message: 'App initialization completed',
+      category: 'app-lifecycle',
+      data: {
+        'isLoggedIn': isLoggedIn.toString(),
+        'ageGroup': savedAgeGroup,
+        'mode': initialMode.name,
+      },
+    );
 
     runApp(
       ProviderScope(

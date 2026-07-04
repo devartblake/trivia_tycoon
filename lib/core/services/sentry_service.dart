@@ -109,47 +109,6 @@ class SentryService {
     }
   }
 
-  /// Set user context for error tracking via scope
-  static Future<void> setUser({
-    required String id,
-    String? email,
-    String? username,
-  }) async {
-    try {
-      await Sentry.configureScope((scope) {
-        scope.user = SentryUser(
-          id: id,
-          email: email,
-          username: username,
-        );
-      });
-    } catch (e) {
-      LogManager.debug('Failed to set user context: $e', source: 'SentryService');
-    }
-  }
-
-  /// Clear user context (e.g., on logout)
-  static Future<void> clearUser() async {
-    try {
-      await Sentry.configureScope((scope) {
-        scope.user = null;
-      });
-    } catch (e) {
-      LogManager.debug('Failed to clear user: $e', source: 'SentryService');
-    }
-  }
-
-  /// Set custom tag via scope
-  static Future<void> setTag(String key, String value) async {
-    try {
-      await Sentry.configureScope((scope) {
-        scope.setTag(key, value);
-      });
-    } catch (e) {
-      LogManager.debug('Failed to set tag: $e', source: 'SentryService');
-    }
-  }
-
   /// Close Sentry and flush pending events
   static Future<void> close() async {
     try {
