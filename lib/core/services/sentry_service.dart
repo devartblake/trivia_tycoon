@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -58,19 +57,8 @@ class SentryService {
           options.dsn = dsn;
           options.environment = environment;
           options.release = '${packageInfo.version}+${packageInfo.buildNumber}';
-
-          // Performance monitoring
           options.tracesSampleRate = traceSampleRate;
-
-          // Capture breadcrumbs for context
           options.maxBreadcrumbs = 200;
-
-          // Add custom tags
-          options.tags = {
-            'app': 'trivia-tycoon',
-            'platform': defaultTargetPlatform.toString(),
-            'version': packageInfo.version,
-          };
         },
       );
 
@@ -91,24 +79,9 @@ class SentryService {
   static Future<void> captureException(
     dynamic exception, {
     StackTrace? stackTrace,
-    String? message,
-    Map<String, dynamic>? extra,
   }) async {
     try {
-      await Sentry.captureException(
-        exception,
-        stackTrace: stackTrace,
-        withScope: (scope) {
-          if (message != null) {
-            scope.setTag('message', message);
-          }
-          if (extra != null) {
-            for (final entry in extra.entries) {
-              scope.setExtra(entry.key, entry.value);
-            }
-          }
-        },
-      );
+      await Sentry.captureException(exception, stackTrace: stackTrace);
     } catch (e) {
       LogManager.error(
         'Failed to capture exception in Sentry: $e',
@@ -121,15 +94,13 @@ class SentryService {
   static void addBreadcrumb({
     required String message,
     String category = 'debug',
-    String level = 'info',
     Map<String, dynamic>? data,
   }) {
     try {
       Sentry.addBreadcrumb(
-        SentryBreadcrumb(
+        Breadcrumb(
           message: message,
           category: category,
-          level: _parseSentryLevel(level),
           data: data,
         ),
       );
@@ -138,40 +109,42 @@ class SentryService {
     }
   }
 
-  /// Set user context for error tracking
-  static void setUser({
+  /// Set user context for error tracking via scope
+  static Future<void> setUser({
     required String id,
     String? email,
     String? username,
-    Map<String, String>? extras,
-  }) {
+  }) async {
     try {
-      Sentry.setUser(
-        SentryUser(
+      await Sentry.configureScope((scope) {
+        scope.user = SentryUser(
           id: id,
           email: email,
           username: username,
-          extras: extras,
-        ),
-      );
+        );
+      });
     } catch (e) {
       LogManager.debug('Failed to set user context: $e', source: 'SentryService');
     }
   }
 
   /// Clear user context (e.g., on logout)
-  static void clearUser() {
+  static Future<void> clearUser() async {
     try {
-      Sentry.setUser(null);
+      await Sentry.configureScope((scope) {
+        scope.user = null;
+      });
     } catch (e) {
       LogManager.debug('Failed to clear user: $e', source: 'SentryService');
     }
   }
 
-  /// Set custom tag for filtering
-  static void setTag(String key, String value) {
+  /// Set custom tag via scope
+  static Future<void> setTag(String key, String value) async {
     try {
-      Sentry.setTag(key, value);
+      await Sentry.configureScope((scope) {
+        scope.setTag(key, value);
+      });
     } catch (e) {
       LogManager.debug('Failed to set tag: $e', source: 'SentryService');
     }
@@ -184,17 +157,5 @@ class SentryService {
     } catch (e) {
       LogManager.debug('Error closing Sentry: $e', source: 'SentryService');
     }
-  }
-
-  /// Parse string to SentryLevel
-  static SentryLevel _parseSentryLevel(String level) {
-    return switch (level.toLowerCase()) {
-      'debug' => SentryLevel.debug,
-      'info' => SentryLevel.info,
-      'warning' => SentryLevel.warning,
-      'error' => SentryLevel.error,
-      'fatal' => SentryLevel.fatal,
-      _ => SentryLevel.info,
-    };
   }
 }

@@ -57,18 +57,21 @@ Future<void> _runApp() async {
 
     // Set user context in Sentry if logged in
     if (isLoggedIn) {
-      final userId = await manager.playerProfileService.getUserId();
-      final playerName = await manager.playerProfileService.getPlayerName();
+      try {
+        final userId = await manager.playerProfileService.getUserId();
+        final playerName = await manager.playerProfileService.getPlayerName();
 
-      if (userId != null) {
-        SentryService.setUser(
-          id: userId,
-          username: playerName,
-          extras: {
-            'age_group': savedAgeGroup,
-            'synaptix_mode': initialMode.name,
-          },
-        );
+        if (userId != null) {
+          await SentryService.setUser(
+            id: userId,
+            username: playerName,
+          );
+
+          await SentryService.setTag('age_group', savedAgeGroup);
+          await SentryService.setTag('synaptix_mode', initialMode.name);
+        }
+      } catch (e) {
+        LogManager.debug('Failed to set Sentry user context: $e', source: 'main');
       }
     }
 
@@ -91,11 +94,7 @@ Future<void> _runApp() async {
     LogManager.error('App initialization failed: $e', source: 'main', stackTrace: st);
 
     // Capture the initialization error in Sentry
-    await SentryService.captureException(
-      e,
-      stackTrace: st,
-      message: 'App initialization failed',
-    );
+    await SentryService.captureException(e, stackTrace: st);
 
     // Fallback - run app without pre-initialized state
     runApp(
