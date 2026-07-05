@@ -220,13 +220,14 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   /// and syncs the local coin balance from the response.
   Future<void> _claimSpinReward(WheelSegment segment) async {
     try {
-      final playerId = await ref.read(currentUserIdProvider.future);
-      final spinId = DateTime.now().millisecondsSinceEpoch.toString();
-      final response = await ref.read(spinWheelApiServiceProvider).claimReward(
-            playerId: playerId,
-            segmentId: segment.id,
-            spinId: spinId,
-          );
+      final spinService = ref.read(spinWheelApiServiceProvider);
+
+      // Start spin and get backend-issued claim token
+      final spinStart = await spinService.startSpin();
+
+      // Claim the reward using the backend-issued token
+      final response = await spinService.claimStartedSpin(spinStart);
+
       await refreshAuthoritativeWallet(
         ref,
         backendCoinBalance:

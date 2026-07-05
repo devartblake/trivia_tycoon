@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_tycoon/screens/challenge/widgets/challenge_panel_widget.dart';
+import 'package:trivia_tycoon/screens/challenge/widgets/match_history_widget.dart';
 import 'package:trivia_tycoon/screens/challenge/widgets/parallax_backdrop_widget.dart';
 import '../../game/models/challenge_models.dart';
 
@@ -23,7 +24,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -89,6 +90,10 @@ class _ChallengeScreenState extends State<ChallengeScreen>
             icon: Icon(Icons.public_rounded),
             text: 'Special',
           ),
+          Tab(
+            icon: Icon(Icons.history_rounded),
+            text: 'History',
+          ),
         ],
       ),
     );
@@ -112,6 +117,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
               ChallengePanel(type: ChallengeType.daily),
               ChallengePanel(type: ChallengeType.weekly),
               ChallengePanel(type: ChallengeType.special),
+              MatchHistoryWidget(),
             ],
           ),
         ),
