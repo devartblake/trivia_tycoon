@@ -1,14 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/skill_progression_model.dart';
+import '../../game/providers/core_providers.dart';
+import '../../game/providers/game_providers.dart';
 import '../../ui_components/skill_tree/skill_tier_section.dart';
 import '../../ui_components/skill_tree/skill_detail_popup.dart';
 
-// Temporary provider - will be replaced with real provider
-final skillProgressionProvider = FutureProvider<List<SkillNode>>((ref) async {
-  // TODO: Replace with actual API call or local storage
-  await Future.delayed(const Duration(milliseconds: 500));
-  return _getMockSkills();
+/// Loads the skill catalog (GET /skills/tree) merged with the player's unlock
+/// state (GET /skills/state/{playerId}) and maps it onto the visualization's
+/// [SkillNode] progression model. When no player is logged in, the catalog is
+/// shown with every node locked.
+final skillProgressionProvider =
+    FutureProvider.autoDispose<List<SkillNode>>((ref) async {
+  final api = ref.read(serviceManagerProvider).synaptixApiClient;
+
+  String? playerId;
+  try {
+    playerId = await ref.read(playerProfileServiceProvider).getUserId();
+  } catch (_) {
+    playerId = null; // profile service unavailable — show locked catalog
+  }
+
+  final catalogFuture = api.getSkillCatalog();
+  Set<String> unlockedKeys = const {};
+  if (playerId != null && playerId.isNotEmpty) {
+    try {
+      final state = await api.getPlayerSkillState(playerId: playerId);
+      unlockedKeys = state.unlockedKeys.toSet();
+    } catch (_) {
+      // State fetch failing shouldn't hide the catalog — render all locked.
+    }
+  }
+
+  final catalog = await catalogFuture;
+  return catalog.nodes.map((n) {
+    final unlocked = unlockedKeys.contains(n.key);
+    return SkillNode(
+      skillId: n.key,
+      name: n.title,
+      category: n.branch.toLowerCase(),
+      description: n.description,
+      // The server tracks binary unlocks, not per-skill levels: unlocked
+      // nodes render as level 1, locked ones as level 0.
+      level: unlocked ? 1 : 0,
+      totalXpRequired: n.coinCost,
+      currentXp: unlocked ? n.coinCost : 0,
+      prerequisites: n.prereqKeys,
+      tier: n.tier,
+    );
+  }).toList(growable: false);
 });
 
 /// Main skill tree visualization screen
@@ -143,8 +183,10 @@ class SkillTreeVisualization extends ConsumerWidget {
 
   /// Determine which tier a skill belongs to
   int _determineTierForSkill(SkillNode skill) {
-    // Simple tier determination based on level
-    // Tier 1: Foundation, Tier 2: Intermediate, Tier 3: Advanced
+    // Prefer the server-defined catalog tier (0-based) when available.
+    if (skill.tier != null) return skill.tier! + 1;
+
+    // Heuristic fallback for locally-sourced skills.
     if (skill.level == 0) {
       // Locked skills - determine by prerequisites
       if (skill.prerequisites.isEmpty) return 1;
@@ -251,101 +293,3 @@ class SkillTreeVisualization extends ConsumerWidget {
   }
 }
 
-/// Generate mock skills for testing
-List<SkillNode> _getMockSkills() {
-  return [
-    SkillNode(
-      skillId: 'skill_1',
-      name: 'Quick Learner',
-      category: 'knowledge',
-      description: 'Quickly absorb information',
-      level: 5,
-      totalXpRequired: 2500,
-      currentXp: 1250,
-      prerequisites: const [],
-    ),
-    SkillNode(
-      skillId: 'skill_2',
-      name: 'Scholar',
-      category: 'knowledge',
-      description: 'Deep knowledge seeker',
-      level: 0,
-      prerequisites: const ['skill_1'],
-    ),
-    SkillNode(
-      skillId: 'skill_3',
-      name: 'Time Master',
-      category: 'timer',
-      description: 'Master the clock',
-      level: 3,
-      totalXpRequired: 1500,
-      currentXp: 800,
-      prerequisites: const [],
-    ),
-    SkillNode(
-      skillId: 'skill_4',
-      name: 'Combo King',
-      category: 'combo',
-      description: 'Chain answers together',
-      level: 10,
-      totalXpRequired: 3000,
-      currentXp: 3000,
-      prerequisites: const [],
-      masteredAt: DateTime.now().subtract(const Duration(days: 5)),
-    ),
-    SkillNode(
-      skillId: 'skill_5',
-      name: 'Strategist',
-      category: 'strategist',
-      description: 'Plan your moves',
-      level: 0,
-      prerequisites: const ['skill_3', 'skill_1'],
-    ),
-    SkillNode(
-      skillId: 'skill_6',
-      name: 'XP Booster',
-      category: 'xp',
-      description: 'Earn more XP',
-      level: 7,
-      totalXpRequired: 3500,
-      currentXp: 2100,
-      prerequisites: const ['skill_4'],
-    ),
-    SkillNode(
-      skillId: 'skill_7',
-      name: 'Lucky Strike',
-      category: 'luck',
-      description: 'Increase your luck',
-      level: 2,
-      totalXpRequired: 1200,
-      currentXp: 600,
-      prerequisites: const [],
-    ),
-    SkillNode(
-      skillId: 'skill_8',
-      name: 'Shadow Master',
-      category: 'stealth',
-      description: 'Master stealth tactics',
-      level: 0,
-      prerequisites: const ['skill_2'],
-    ),
-    SkillNode(
-      skillId: 'skill_9',
-      name: 'Risk Taker',
-      category: 'risk',
-      description: 'Take calculated risks',
-      level: 4,
-      totalXpRequired: 2000,
-      currentXp: 1000,
-      prerequisites: const [],
-    ),
-    SkillNode(
-      skillId: 'skill_10',
-      name: 'Elite Mastery',
-      category: 'elite',
-      description: 'Reach elite status',
-      level: 0,
-      prerequisites: const ['skill_4', 'skill_6'],
-    ),
-  ];
-}

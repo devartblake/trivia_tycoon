@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/api_service.dart' show ApiRequestException;
+import '../../../../core/services/arcade/spin_wheel_api_service.dart';
 import '../../../../game/analytics/providers/analytics_providers.dart';
 import '../../../../game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
-import '../core/services/matches_api_client.dart';
+import '../../core/services/matches_api_client.dart';
 
 class MatchesService {
   final MatchesApiClient _apiClient;

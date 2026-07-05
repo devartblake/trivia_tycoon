@@ -454,10 +454,50 @@ class SynaptixApiClient {
   // Skills
   // ========================================
 
+  /// Fetches the skill catalog (node definitions).
+  /// Backend: GET /skills/tree → SkillTreeCatalogDto {nodes: [...]}.
+  Future<SkillCatalogDto> getSkillCatalog() async {
+    final j = await _http.getJson('/skills/tree');
+    return SkillCatalogDto.fromJson(j);
+  }
+
+  /// Fetches which skill nodes [playerId] has unlocked.
+  /// Backend: GET /skills/state/{playerId} → {playerId, unlockedKeys}.
+  Future<PlayerSkillStateDto> getPlayerSkillState({
+    required String playerId,
+  }) async {
+    final j = await _http.getJson('/skills/state/$playerId');
+    return PlayerSkillStateDto.fromJson(j);
+  }
+
+  /// Legacy combined view: composes the catalog + the player's unlock state
+  /// into the client-side [SkillTreeDto] shape that older callers
+  /// (skill_tree_provider / SkillTreeDtoMapper) consume. The backend has no
+  /// endpoint returning this shape; availablePoints is not server-tracked and
+  /// is always 0 here.
   Future<SkillTreeDto> getSkillTree({required String playerId}) async {
-    final j =
-        await _http.getJson('/skills/tree', query: {'playerId': playerId});
-    return SkillTreeDto.fromJson(j);
+    final results = await Future.wait([
+      getSkillCatalog(),
+      getPlayerSkillState(playerId: playerId),
+    ]);
+    final catalog = results[0] as SkillCatalogDto;
+    final state = results[1] as PlayerSkillStateDto;
+    final unlocked = state.unlockedKeys.toSet();
+
+    return SkillTreeDto(
+      playerId: playerId,
+      availablePoints: 0,
+      nodes: catalog.nodes
+          .map((n) => SkillNodeDto(
+                id: n.key,
+                name: n.title,
+                description: n.description,
+                unlocked: unlocked.contains(n.key),
+                cost: n.coinCost,
+                requires: n.prereqKeys,
+              ))
+          .toList(growable: false),
+    );
   }
 
   /// Unlocks skill node [nodeId] for [playerId].

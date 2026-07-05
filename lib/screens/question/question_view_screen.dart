@@ -15,6 +15,9 @@ import '../../game/services/quiz_category.dart';
 // New question system components
 import 'widgets/question_renderer.dart';
 import 'widgets/question_metadata.dart';
+import 'widgets/category_header_bar.dart';
+import 'widgets/segmented_progress_strip.dart';
+import 'widgets/powerup_tray.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final String? classLevel;
@@ -141,11 +144,17 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     return QuizHelpers.getClassColor(widget.classLevel ?? '1');
   }
 
+  /// Dark neutral canvas (Trivia-Crack style): makes the white question card
+  /// and answer pills pop, with a whisper of the category color blended in.
   Color _getCategoryBackgroundColor() {
+    const canvas = Color(0xFF3E4348);
     if (_resolvedCategory != null) {
-      return _resolvedCategory!.primaryColor.withValues(alpha: 0.1);
+      return Color.alphaBlend(
+        _resolvedCategory!.primaryColor.withValues(alpha: 0.06),
+        canvas,
+      );
     }
-    return Colors.grey.shade50;
+    return canvas;
   }
 
   String _getCategoryDisplayName() {
@@ -548,13 +557,13 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircularProgressIndicator(color: _getCategoryColor()),
+              const CircularProgressIndicator(color: Colors.white),
               const SizedBox(height: 16),
               Text(
                 'Loading ${_getCategoryDisplayName()} questions for Class ${quizState.classLevel}...',
                 style: TextStyle(
                   fontSize: 16,
-                  color: _getCategoryColor(),
+                  color: Colors.white.withValues(alpha: 0.85),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -571,14 +580,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.error, size: 64, color: Colors.red.shade400),
+              Icon(Icons.error, size: 64, color: Colors.red.shade300),
               const SizedBox(height: 16),
               Text(
                 'Error loading questions',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.red.shade600,
+                  color: Colors.red.shade300,
                 ),
               ),
               const SizedBox(height: 8),
@@ -587,7 +596,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                 child: Text(
                   quizState.error!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey.shade600),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 ),
               ),
               const SizedBox(height: 24),
@@ -629,13 +638,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(_getCategoryIcon(), size: 64, color: Colors.grey.shade400),
+              Icon(_getCategoryIcon(),
+                  size: 64, color: Colors.white.withValues(alpha: 0.4)),
               const SizedBox(height: 16),
               Text(
                 'No questions available',
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.grey.shade600,
+                  color: Colors.white.withValues(alpha: 0.85),
                 ),
               ),
               const SizedBox(height: 8),
@@ -643,7 +653,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                 'for ${_getCategoryDisplayName()} - Class ${quizState.classLevel}',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey.shade500,
+                  color: Colors.white.withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -656,300 +666,26 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
     return Scaffold(
       backgroundColor: _getCategoryBackgroundColor(),
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Icon(_getCategoryIcon(), size: 20, color: _getCategoryColor()),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                "${_getCategoryDisplayName()} - Class ${quizState.classLevel}",
-                style: TextStyle(color: _getCategoryColor()),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        elevation: 2,
-        shadowColor: _getCategoryColor().withValues(alpha: 0.2),
-        actions: [
-          // Enhanced Score Display in AppBar
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Center(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade100,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  'Score: ${quizState.score}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green.shade700,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // XP display with category color
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Center(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: _getCategoryColor().withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  '${quizState.totalXP} XP',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: _getCategoryColor(),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+      appBar: CategoryHeaderBar(
+        color: _getCategoryColor(),
+        icon: _getCategoryIcon(),
+        title: _getCategoryDisplayName(),
+        subtitle: 'Class ${quizState.classLevel}',
+        timeRemaining: quizState.timeRemaining,
+        timerExpired: quizState.isTimerExpired,
+        isPaused: quizState.isPaused,
+        score: quizState.score,
+        xp: quizState.totalXP,
       ),
       body: Column(
         children: [
-          // Enhanced Progress Indicator with category theming
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // Header Info with category badge
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Question ${quizState.currentIndex + 1} of ${quizState.totalQuestions}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: _getCategoryColor().withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _getCategoryColor().withValues(alpha: 0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(_getCategoryIcon(),
-                              size: 12, color: _getCategoryColor()),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Class ${quizState.classLevel}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: _getCategoryColor(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-
-                // Enhanced Progress Bar with category gradient
-                Container(
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor:
-                        (quizState.currentIndex + 1) / quizState.totalQuestions,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: _resolvedCategory?.gradientColors ??
-                              [
-                                _getCategoryColor(),
-                                _getCategoryColor().withValues(alpha: 0.7)
-                              ],
-                        ),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                // Progress Stats
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${((quizState.currentIndex + 1) / quizState.totalQuestions * 100).round()}% Complete',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                    if (quizState.score > 0)
-                      Text(
-                        'Score: ${quizState.scorePercentage.round()}%',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: _getCategoryColor(),
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // Enhanced Timer with category theming
+          // Segmented per-question progress strip
           Padding(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: QuizHelpers.getTimerColor(quizState.timeRemaining)
-                          .withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Progress Ring with category color
-                    SizedBox(
-                      width: 70,
-                      height: 70,
-                      child: CircularProgressIndicator(
-                        value: quizState.timeRemaining /
-                            QuizHelpers.getTimeLimitForClass(
-                                quizState.classLevel),
-                        strokeWidth: 6,
-                        color:
-                            QuizHelpers.getTimerColor(quizState.timeRemaining),
-                        backgroundColor:
-                            _getCategoryColor().withValues(alpha: 0.2),
-                      ),
-                    ),
-
-                    // Time Display
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          quizState.timeRemaining.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: QuizHelpers.getTimerColor(
-                                quizState.timeRemaining),
-                          ),
-                        ),
-                        Text(
-                          'sec',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // Status indicators with enhanced styling
-                    if (quizState.isTimerExpired)
-                      Positioned(
-                        top: 4,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            'TIME UP!',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                    if (quizState.isPaused && !quizState.isTimerExpired)
-                      Positioned(
-                        bottom: 8,
-                        child: Icon(
-                          Icons.pause_circle_filled,
-                          color: Colors.orange,
-                          size: 16,
-                        ),
-                      ),
-
-                    if (quizState.hasUsedExtraTime)
-                      Positioned(
-                        bottom: 4,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4, vertical: 1),
-                          decoration: BoxDecoration(
-                            color: _getCategoryColor(),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: const Text(
-                            'BONUS',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 6,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: SegmentedProgressStrip(
+              total: quizState.totalQuestions,
+              currentIndex: quizState.currentIndex,
+              activeColor: _getCategoryColor(),
             ),
           ),
 
@@ -1007,12 +743,15 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
         ],
       ),
 
-      // Enhanced power-up buttons with category theming
-      floatingActionButton: quizState.showFeedback ||
-              quizState.hasUsedPowerUp ||
-              quizState.isTimerExpired
-          ? null
-          : _buildPowerUpButtons(currentQuestion, quizState.classLevel),
+      // Fixed bottom power-up tray (Trivia-Crack style)
+      bottomNavigationBar: PowerupTray(
+        powerUps:
+            QuizHelpers.getAvailablePowerUps(currentQuestion, quizState.classLevel),
+        enabled: !(quizState.showFeedback ||
+            quizState.hasUsedPowerUp ||
+            quizState.isTimerExpired),
+        onActivate: _activatePowerUp,
+      ),
     );
   }
 
@@ -1101,28 +840,6 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           ],
         ],
       ),
-    );
-  }
-
-  Widget? _buildPowerUpButtons(QuestionModel question, String classLevel) {
-    final availablePowerUps =
-        QuizHelpers.getAvailablePowerUps(question, classLevel);
-
-    if (availablePowerUps.isEmpty) return null;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: availablePowerUps.map((powerUp) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: FloatingActionButton.small(
-            heroTag: powerUp['type'],
-            onPressed: () => _activatePowerUp(powerUp['type'] as String),
-            backgroundColor: powerUp['color'],
-            child: Icon(powerUp['icon'], color: Colors.white),
-          ),
-        );
-      }).toList(),
     );
   }
 

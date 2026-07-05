@@ -290,7 +290,7 @@ extension LegacyMatchesSupport on MatchesApiClient {
   /// Returns active (ongoing) matches for the current player.
   @Deprecated('Use listMatches(status: "ongoing") instead')
   Future<List<Map<String, dynamic>>> getActiveMatches() async {
-    _log.warning('DEPRECATED: getActiveMatches() called. Use listMatches(status: "ongoing") instead.');
+    MatchesApiClient._log.warning('DEPRECATED: getActiveMatches() called. Use listMatches(status: "ongoing") instead.');
     final response = await listMatches(status: 'ongoing');
     return response.matches
         .map((m) => {

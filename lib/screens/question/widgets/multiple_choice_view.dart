@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../game/models/question_model.dart';
 import 'answer_option_card.dart';
+import 'question_card_stack.dart';
 import 'question_power_ups.dart';
 
 /// Multiple choice question renderer
@@ -28,24 +29,40 @@ class MultipleChoiceView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isMultiplayer) const MultiplayerBadge(),
-        Text(
-          question.question,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+        QuestionCardStack(
+          key: ValueKey('mc-${question.id}'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                question.question,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF2F353B),
+                  height: 1.3,
+                ),
+              ),
+              if (question.isBoostedTime ||
+                  question.isShielded ||
+                  question.multiplier != null) ...[
+                const SizedBox(height: 16),
+                PowerUpIndicators(
+                  isBoostedTime: question.isBoostedTime,
+                  isShielded: question.isShielded,
+                  multiplier: question.multiplier,
+                ),
+              ],
+              if (question.showHint &&
+                  question.powerUpHint?.isNotEmpty == true) ...[
+                const SizedBox(height: 12),
+                HintPanel(hint: question.powerUpHint!),
+              ],
+            ],
           ),
         ),
-        const SizedBox(height: 24),
-        if (question.isBoostedTime ||
-            question.isShielded ||
-            question.multiplier != null)
-          PowerUpIndicators(
-            isBoostedTime: question.isBoostedTime,
-            isShielded: question.isShielded,
-            multiplier: question.multiplier,
-          ),
-        if (question.showHint && question.powerUpHint?.isNotEmpty == true)
-          HintPanel(hint: question.powerUpHint!),
+        const SizedBox(height: 28),
         ...displayOptions.map(
           (option) => AnswerOptionCard(
             text: option,

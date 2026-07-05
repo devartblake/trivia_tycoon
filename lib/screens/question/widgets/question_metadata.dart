@@ -42,7 +42,8 @@ class QuestionMetadata extends StatelessWidget {
               question.category,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey.shade600,
+                // Rendered on the dark quiz canvas — keep it light.
+                color: Colors.white.withValues(alpha: 0.65),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -53,9 +54,10 @@ class QuestionMetadata extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: _getDifficultyColor(question.difficulty).withValues(alpha: 0.1),
+                  // Slightly stronger fill so the badge reads on the dark canvas.
+                  color: _getDifficultyColor(question.difficulty).withValues(alpha: 0.18),
                   border: Border.all(
-                    color: _getDifficultyColor(question.difficulty).withValues(alpha: 0.3),
+                    color: _getDifficultyColor(question.difficulty).withValues(alpha: 0.55),
                   ),
                   borderRadius: BorderRadius.circular(6),
                 ),

@@ -13,6 +13,10 @@ class SkillNode {
   final DateTime? unlockedAt;
   final DateTime? masteredAt;
 
+  /// Server-defined tier (from the skills catalog), when known. Screens that
+  /// group skills by tier prefer this over heuristics.
+  final int? tier;
+
   SkillNode({
     required this.skillId,
     required this.name,
@@ -24,6 +28,7 @@ class SkillNode {
     this.prerequisites = const [],
     this.unlockedAt,
     this.masteredAt,
+    this.tier,
   });
 
   /// Check if this skill is fully mastered
@@ -57,6 +62,7 @@ class SkillNode {
     List<String>? prerequisites,
     DateTime? unlockedAt,
     DateTime? masteredAt,
+    int? tier,
   }) {
     return SkillNode(
       skillId: skillId ?? this.skillId,
@@ -69,6 +75,7 @@ class SkillNode {
       prerequisites: prerequisites ?? this.prerequisites,
       unlockedAt: unlockedAt ?? this.unlockedAt,
       masteredAt: masteredAt ?? this.masteredAt,
+      tier: tier ?? this.tier,
     );
   }
 
@@ -85,6 +92,7 @@ class SkillNode {
       'prerequisites': prerequisites,
       'unlockedAt': unlockedAt?.toIso8601String(),
       'masteredAt': masteredAt?.toIso8601String(),
+      'tier': tier,
     };
   }
 
@@ -105,6 +113,7 @@ class SkillNode {
       masteredAt: json['masteredAt'] != null
           ? DateTime.parse(json['masteredAt'] as String)
           : null,
+      tier: json['tier'] as int?,
     );
   }
 
