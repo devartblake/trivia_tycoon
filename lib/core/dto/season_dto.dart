@@ -106,43 +106,56 @@ class ClaimSeasonRewardResultDto {
       );
 }
 
+/// Mirrors backend PlayerSeasonStateDto (GET /seasons/state/{playerId}).
 class PlayerSeasonStateDto {
   final String playerId;
   final String seasonId;
+  final int rankPoints;
+  final int wins;
+  final int losses;
+  final int draws;
+  final int matchesPlayed;
   final int tier;
-  final int xp;
-  final int rank;
-  final int guardiansDefeated;
-  final int tilesControlled;
+  final int tierRank;
+  final int seasonRank;
 
   const PlayerSeasonStateDto({
     required this.playerId,
     required this.seasonId,
+    required this.rankPoints,
+    required this.wins,
+    required this.losses,
+    required this.draws,
+    required this.matchesPlayed,
     required this.tier,
-    required this.xp,
-    required this.rank,
-    required this.guardiansDefeated,
-    required this.tilesControlled,
+    required this.tierRank,
+    required this.seasonRank,
   });
 
   factory PlayerSeasonStateDto.fromJson(Map<String, dynamic> j) =>
       PlayerSeasonStateDto(
         playerId: j['playerId'] as String,
         seasonId: j['seasonId'] as String,
+        rankPoints: j['rankPoints'] as int? ?? 0,
+        wins: j['wins'] as int? ?? 0,
+        losses: j['losses'] as int? ?? 0,
+        draws: j['draws'] as int? ?? 0,
+        matchesPlayed: j['matchesPlayed'] as int? ?? 0,
         tier: j['tier'] as int? ?? 1,
-        xp: j['xp'] as int? ?? 0,
-        rank: j['rank'] as int? ?? 0,
-        guardiansDefeated: j['guardiansDefeated'] as int? ?? 0,
-        tilesControlled: j['tilesControlled'] as int? ?? 0,
+        tierRank: j['tierRank'] as int? ?? 0,
+        seasonRank: j['seasonRank'] as int? ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
         'playerId': playerId,
         'seasonId': seasonId,
+        'rankPoints': rankPoints,
+        'wins': wins,
+        'losses': losses,
+        'draws': draws,
+        'matchesPlayed': matchesPlayed,
         'tier': tier,
-        'xp': xp,
-        'rank': rank,
-        'guardiansDefeated': guardiansDefeated,
-        'tilesControlled': tilesControlled,
+        'tierRank': tierRank,
+        'seasonRank': seasonRank,
       };
 }

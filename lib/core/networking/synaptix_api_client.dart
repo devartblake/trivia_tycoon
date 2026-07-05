@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 import 'http_client.dart';
 import '../dto/player_dto.dart';
@@ -18,6 +19,8 @@ import '../dto/party_dto.dart';
 /// Provides high-level methods for common API operations with
 /// automatic authentication and error handling.
 class SynaptixApiClient {
+  static const _uuid = Uuid();
+
   final HttpClient _http;
   final String? _healthCheckUrl;
 
@@ -95,45 +98,38 @@ class SynaptixApiClient {
   // Leaderboard
   // ========================================
 
-  /// Get global leaderboard
-  Future<List<Map<String, dynamic>>> getLeaderboard({
-    int limit = 100,
-    int offset = 0,
-    String? category,
-  }) async {
+  /// Get global leaderboard.
+  /// Backend: legacy GET /leaderboard?limit= (server caps at 500).
+  Future<List<Map<String, dynamic>>> getLeaderboard({int limit = 100}) async {
     final data = await _http.getJsonList(
       '/leaderboard',
-      query: {
-        'limit': limit.toString(),
-        'offset': offset.toString(),
-        if (category != null) 'category': category,
-      },
+      query: {'limit': limit.toString()},
     );
 
     return data.cast<Map<String, dynamic>>();
   }
 
-  /// Get user rank
+  /// Get a player's leaderboard entry (rank, tier, score).
+  /// Backend: GET /leaderboards/me/{playerId}
   Future<Map<String, dynamic>> getUserRank(String userId) async {
-    return await _http.getJson('/leaderboard/user/$userId');
+    return await _http.getJson('/leaderboards/me/$userId');
   }
 
   // ========================================
-  // User Profile
+  // User Profile (self-scoped — the backend only exposes /users/me)
   // ========================================
 
-  /// Get user profile
-  Future<Map<String, dynamic>> getUserProfile(String userId) async {
-    return await _http.getJson('/users/$userId');
+  /// Get the authenticated user's profile.
+  Future<Map<String, dynamic>> getMyProfile() async {
+    return await _http.getJson('/users/me');
   }
 
-  /// Update user profile
-  Future<Map<String, dynamic>> updateUserProfile({
-    required String userId,
+  /// Update the authenticated user's profile.
+  Future<Map<String, dynamic>> updateMyProfile({
     Map<String, dynamic>? updates,
   }) async {
     return await _http.patchJson(
-      '/users/$userId',
+      '/users/me',
       body: updates,
     );
   }
@@ -142,51 +138,66 @@ class SynaptixApiClient {
   // Achievements
   // ========================================
 
-  /// Get user achievements
-  Future<List<Map<String, dynamic>>> getUserAchievements(String userId) async {
-    final data = await _http.getJsonList('/users/$userId/achievements');
-    return data.cast<Map<String, dynamic>>();
+  /// Get the achievement catalog.
+  /// Backend: GET /achievements → {achievements: [...]}
+  Future<List<Map<String, dynamic>>> getAchievementCatalog() async {
+    final j = await _http.getJson('/achievements');
+    return (j['achievements'] as List<dynamic>? ?? const [])
+        .cast<Map<String, dynamic>>();
   }
 
-  /// Unlock achievement
+  /// Get a player's unlocked achievements.
+  /// Backend: GET /achievements/player/{playerId} → {playerId, unlocked: [...]}
+  Future<List<Map<String, dynamic>>> getUserAchievements(String userId) async {
+    final j = await _http.getJson('/achievements/player/$userId');
+    return (j['unlocked'] as List<dynamic>? ?? const [])
+        .cast<Map<String, dynamic>>();
+  }
+
+  /// Unlock an achievement by its stable key.
+  /// Backend: POST /achievements/unlock; status is
+  /// "Unlocked" | "Duplicate" | "NotFound".
   Future<Map<String, dynamic>> unlockAchievement({
     required String userId,
-    required String achievementId,
+    required String achievementKey,
   }) async {
     return await _http.postJson(
-      '/users/$userId/achievements/$achievementId',
+      '/achievements/unlock',
+      body: {'playerId': userId, 'achievementKey': achievementKey},
     );
   }
 
   // ========================================
-  // Friends/Social
+  // Friends/Social (self-scoped under /users/me/friends)
   // ========================================
 
-  /// Get user's friends
-  Future<List<Map<String, dynamic>>> getFriends(String userId) async {
-    final data = await _http.getJsonList('/users/$userId/friends');
-    return data.cast<Map<String, dynamic>>();
+  /// Get the authenticated user's friends (paged response).
+  Future<Map<String, dynamic>> getFriends({
+    int page = 1,
+    int pageSize = 50,
+  }) async {
+    return await _http.getJson(
+      '/users/me/friends',
+      query: {'page': page.toString(), 'pageSize': pageSize.toString()},
+    );
   }
 
   /// Send friend request
   Future<Map<String, dynamic>> sendFriendRequest({
-    required String userId,
     required String targetUserId,
   }) async {
     return await _http.postJson(
-      '/users/$userId/friends/request',
+      '/users/me/friends/request',
       body: {'targetUserId': targetUserId},
     );
   }
 
   /// Accept friend request
   Future<Map<String, dynamic>> acceptFriendRequest({
-    required String userId,
     required String requestId,
   }) async {
     return await _http.postJson(
-      '/users/$userId/friends/accept',
-      body: {'requestId': requestId},
+      '/users/me/friends/requests/$requestId/accept',
     );
   }
 
@@ -194,41 +205,19 @@ class SynaptixApiClient {
   // Matches/PvP
   // ========================================
 
-  /// Create match
+  /// Create (start) a match.
+  /// Backend: POST /matches/start with StartMatchRequest {hostPlayerId, mode};
+  /// returns {matchId, startedAt}.
   Future<Map<String, dynamic>> createMatch({
     required String userId,
     required String mode,
-    Map<String, dynamic>? settings,
   }) async {
     return await _http.postJson(
-      '/matches',
+      '/matches/start',
       body: {
-        'userId': userId,
+        'hostPlayerId': userId,
         'mode': mode,
-        if (settings != null) 'settings': settings,
       },
-    );
-  }
-
-  /// Join match
-  Future<Map<String, dynamic>> joinMatch({
-    required String matchId,
-    required String userId,
-  }) async {
-    return await _http.postJson(
-      '/matches/$matchId/join',
-      body: {'userId': userId},
-    );
-  }
-
-  /// Leave match
-  Future<void> leaveMatch({
-    required String matchId,
-    required String userId,
-  }) async {
-    await _http.post(
-      '/matches/$matchId/leave',
-      body: {'userId': userId},
     );
   }
 
@@ -241,32 +230,40 @@ class SynaptixApiClient {
   // Store/Shop
   // ========================================
 
-  /// Get store items
+  /// Get store catalog items.
+  /// Backend: GET /store/catalog?itemType=&category=
   Future<List<Map<String, dynamic>>> getStoreItems({
     String? category,
+    String? itemType,
   }) async {
     final data = await _http.getJsonList(
-      '/store/items',
+      '/store/catalog',
       query: {
         if (category != null) 'category': category,
+        if (itemType != null) 'itemType': itemType,
       },
     );
 
     return data.cast<Map<String, dynamic>>();
   }
 
-  /// Purchase item
+  /// Purchase a catalog item with soft currency.
+  /// Backend: POST /store/purchase with StorePurchaseRequest
+  /// {playerId, sku, quantity, currency}. Note: this endpoint requires the
+  /// secure channel (security-session handshake), not just a JWT.
   Future<Map<String, dynamic>> purchaseItem({
     required String userId,
-    required String itemId,
+    required String sku,
     int quantity = 1,
+    String currency = 'Coins',
   }) async {
     return await _http.postJson(
       '/store/purchase',
       body: {
-        'userId': userId,
-        'itemId': itemId,
+        'playerId': userId,
+        'sku': sku,
         'quantity': quantity,
+        'currency': currency,
       },
     );
   }
@@ -296,50 +293,29 @@ class SynaptixApiClient {
   // Seasons/Competitions
   // ========================================
 
-  /// Get current season
+  /// Get current season as a raw map. Same endpoint as [getActiveSeason];
+  /// prefer that method when you want a typed [SeasonDto].
   Future<Map<String, dynamic>> getCurrentSeason() async {
-    return await _http.getJson('/seasons/current');
+    return await _http.getJson('/seasons/active');
   }
 
-  /// Get season leaderboard
+  /// Get season leaderboard.
+  /// Backend: GET /game-events/season-leaderboard?seasonId=&page=&pageSize=
   Future<List<Map<String, dynamic>>> getSeasonLeaderboard({
     required String seasonId,
-    int limit = 100,
-    int offset = 0,
+    int page = 1,
+    int pageSize = 100,
   }) async {
     final data = await _http.getJsonList(
-      '/seasons/$seasonId/leaderboard',
+      '/game-events/season-leaderboard',
       query: {
-        'limit': limit.toString(),
-        'offset': offset.toString(),
+        'seasonId': seasonId,
+        'page': page.toString(),
+        'pageSize': pageSize.toString(),
       },
     );
 
     return data.cast<Map<String, dynamic>>();
-  }
-
-  // ========================================
-  // Admin (if user has admin role)
-  // ========================================
-
-  /// Get admin stats
-  Future<Map<String, dynamic>> getAdminStats() async {
-    return await _http.getJson('/admin/stats');
-  }
-
-  /// Ban user
-  Future<void> banUser({
-    required String userId,
-    required String reason,
-    DateTime? until,
-  }) async {
-    await _http.post(
-      '/admin/users/$userId/ban',
-      body: {
-        'reason': reason,
-        if (until != null) 'until': until.toIso8601String(),
-      },
-    );
   }
 
   // ========================================
@@ -373,49 +349,88 @@ class SynaptixApiClient {
   // Matchmaking
   // ========================================
 
+  /// Backend: POST /matchmaking/enqueue {playerId, mode, tier}.
   Future<void> joinMatchmakingQueue({
     required String playerId,
     required String mode,
+    required int tier,
   }) async {
     await _http.postJson(
-      '/matchmaking/queue',
-      body: {'playerId': playerId, 'mode': mode},
+      '/matchmaking/enqueue',
+      body: {'playerId': playerId, 'mode': mode, 'tier': tier},
     );
   }
 
+  /// Backend: POST /matchmaking/cancel {playerId}.
   Future<void> cancelMatchmakingQueue({required String playerId}) async {
-    await _http.deleteJson('/matchmaking/queue/$playerId');
+    await _http.postJson(
+      '/matchmaking/cancel',
+      body: {'playerId': playerId},
+    );
+  }
+
+  /// Backend: GET /matchmaking/status/{playerId}.
+  Future<Map<String, dynamic>> getMatchmakingStatus({
+    required String playerId,
+  }) async {
+    return await _http.getJson('/matchmaking/status/$playerId');
   }
 
   // ========================================
   // Matches — list
   // ========================================
 
+  /// Player match history (most recent first).
+  /// Backend: GET /matches?playerId=&page=&pageSize= →
+  /// {page, pageSize, total, items: [...]}.
   Future<List<Map<String, dynamic>>> listMatches({
     required String playerId,
-    int limit = 20,
-    int offset = 0,
+    int page = 1,
+    int pageSize = 20,
   }) async {
-    final data = await _http.getJsonList(
+    final j = await _http.getJson(
       '/matches',
       query: {
         'playerId': playerId,
-        'limit': limit.toString(),
-        'offset': offset.toString(),
+        'page': page.toString(),
+        'pageSize': pageSize.toString(),
       },
     );
-    return data.cast<Map<String, dynamic>>();
+    return (j['items'] as List<dynamic>? ?? const [])
+        .cast<Map<String, dynamic>>();
   }
 
+  /// Submit a completed match.
+  /// Backend: POST /matches/submit with SubmitMatchRequest; eventId is an
+  /// idempotency key. Each participant map must carry
+  /// {playerId, score, correct, wrong, avgAnswerTimeMs}; each answer map
+  /// {playerId, questionId, selectedOptionId, answerTimeMs}.
+  /// Returns SubmitMatchResponse {eventId, matchId, status, awards}.
   Future<Map<String, dynamic>> submitMatch({
     required String matchId,
-    required String playerId,
-    required List<Map<String, dynamic>> answers,
-    required int score,
+    required String mode,
+    required String category,
+    required int questionCount,
+    required DateTime startedAtUtc,
+    required DateTime endedAtUtc,
+    required List<Map<String, dynamic>> participants,
+    List<Map<String, dynamic>>? answers,
+    String status = 'Completed', // "Completed" | "Aborted"
   }) async {
     return await _http.postJson(
-      '/matches/$matchId/submit',
-      body: {'playerId': playerId, 'answers': answers, 'score': score},
+      '/matches/submit',
+      body: {
+        'eventId': _uuid.v4(),
+        'matchId': matchId,
+        'mode': mode,
+        'category': category,
+        'questionCount': questionCount,
+        'startedAtUtc': startedAtUtc.toUtc().toIso8601String(),
+        'endedAtUtc': endedAtUtc.toUtc().toIso8601String(),
+        'status': status,
+        'participants': participants,
+        if (answers != null) 'answers': answers,
+      },
     );
   }
 
@@ -431,7 +446,7 @@ class SynaptixApiClient {
   Future<PlayerSeasonStateDto> getPlayerSeasonState({
     required String playerId,
   }) async {
-    final j = await _http.getJson('/seasons/player-state/$playerId');
+    final j = await _http.getJson('/seasons/state/$playerId');
     return PlayerSeasonStateDto.fromJson(j);
   }
 
@@ -445,33 +460,50 @@ class SynaptixApiClient {
     return SkillTreeDto.fromJson(j);
   }
 
-  Future<SkillNodeDto> unlockSkillNode({
+  /// Unlocks skill node [nodeId] for [playerId].
+  /// Backend contract: POST /skills/unlock with UnlockSkillRequest
+  /// {eventId, playerId, nodeKey}; eventId is an idempotency key.
+  Future<void> unlockSkillNode({
     required String playerId,
     required String nodeId,
   }) async {
-    final j = await _http.postJson(
-      '/skills/$nodeId/unlock',
-      body: {'playerId': playerId},
+    await _http.postJson(
+      '/skills/unlock',
+      body: {
+        'eventId': _uuid.v4(),
+        'playerId': playerId,
+        'nodeKey': nodeId,
+      },
     );
-    return SkillNodeDto.fromJson(j);
   }
 
   /// Resets all unlocked nodes for [playerId] and refunds spent points.
+  /// refundPercent mirrors the client-side respec, which refunds 100%.
   Future<void> respecSkillTree({required String playerId}) async {
     await _http.postJson(
-      '/skills/tree/respec',
-      body: {'playerId': playerId},
+      '/skills/respec',
+      body: {
+        'eventId': _uuid.v4(),
+        'playerId': playerId,
+        'refundPercent': 100,
+      },
     );
   }
 
   /// Records that [playerId] activated the active skill [nodeId].
+  /// Backend contract: POST /skills/use with UseSkillRequest
+  /// {eventId, playerId, nodeKey}; eventId is an idempotency key.
   Future<void> useSkillNode({
     required String playerId,
     required String nodeId,
   }) async {
     await _http.postJson(
-      '/skills/$nodeId/use',
-      body: {'playerId': playerId},
+      '/skills/use',
+      body: {
+        'eventId': _uuid.v4(),
+        'playerId': playerId,
+        'nodeKey': nodeId,
+      },
     );
   }
 
@@ -490,7 +522,7 @@ class SynaptixApiClient {
   Future<GameEventDto> getGameEventStatus({
     required String gameEventId,
   }) async {
-    final j = await _http.getJson('/game-events/$gameEventId/status');
+    final j = await _http.getJson('/game-events/$gameEventId');
     return GameEventDto.fromJson(j);
   }
 
@@ -546,31 +578,48 @@ class SynaptixApiClient {
   // Guardians
   // ========================================
 
+  /// Backend: GET /guardians/{tierNumber}?seasonId=
   Future<List<GuardianDto>> getGuardians({
     required String seasonId,
     required int tierNumber,
   }) async {
-    final data = await _http.getJsonList('/guardians/$seasonId/$tierNumber');
+    final data = await _http
+        .getJsonList('/guardians/$tierNumber', query: {'seasonId': seasonId});
     return data.cast<Map<String, dynamic>>().map(GuardianDto.fromJson).toList();
   }
 
   /// Returns the matchId for the created guardian challenge match.
+  /// Backend: POST /guardians/challenge with ChallengeGuardianRequest
+  /// {eventId, seasonId, tierNumber, challengerId, guardianId}; guardianId is
+  /// the guardian *player's* id, eventId an idempotency key.
   Future<String> challengeGuardian({
+    required String seasonId,
+    required int tierNumber,
     required String guardianId,
     required String playerId,
   }) async {
     final j = await _http.postJson(
       '/guardians/challenge',
-      body: {'guardianId': guardianId, 'playerId': playerId},
+      body: {
+        'eventId': _uuid.v4(),
+        'seasonId': seasonId,
+        'tierNumber': tierNumber,
+        'challengerId': playerId,
+        'guardianId': guardianId,
+      },
     );
     return j['matchId'] as String;
   }
 
+  /// Backend: GET /guardians/my/{playerId}?seasonId=
   Future<MyGuardianStatusDto> getMyGuardianStatus({
     required String playerId,
+    String? seasonId,
   }) async {
-    final j =
-        await _http.getJson('/guardians/my', query: {'playerId': playerId});
+    final j = await _http.getJson(
+      '/guardians/my/$playerId',
+      query: {if (seasonId != null) 'seasonId': seasonId},
+    );
     return MyGuardianStatusDto.fromJson(j);
   }
 
@@ -586,45 +635,56 @@ class SynaptixApiClient {
     return TerritoryBoardDto.fromJson(j);
   }
 
-  /// Returns a [DuelResultDto] containing the matchId and the challenged tileId.
+  /// Starts a duel for the tile owning [category].
+  /// Backend: POST /territory/duel with StartTerritoryDuelRequest
+  /// {eventId, seasonId, tierNumber, category, challengerId} — territory tiles
+  /// are keyed by quiz category, not tile ids.
   Future<DuelResultDto> startTerritoryDuel({
     required String seasonId,
     required int tierNumber,
-    required String tileId,
+    required String category,
     required String playerId,
   }) async {
     final j = await _http.postJson(
       '/territory/duel',
       body: {
+        'eventId': _uuid.v4(),
         'seasonId': seasonId,
         'tierNumber': tierNumber,
-        'tileId': tileId,
-        'playerId': playerId,
+        'category': category,
+        'challengerId': playerId,
       },
     );
     return DuelResultDto.fromJson(j);
   }
 
-  Future<List<TileDto>> getTerritoryDominanceLeaderboard({
+  /// Backend: GET /territory/{seasonId}/{tierNumber}/dominance?top=
+  Future<List<TerritoryDominanceDto>> getTerritoryDominanceLeaderboard({
     required String seasonId,
     required int tierNumber,
+    int top = 20,
   }) async {
     final data = await _http.getJsonList(
       '/territory/$seasonId/$tierNumber/dominance',
+      query: {'top': top.toString()},
     );
-    return data.cast<Map<String, dynamic>>().map(TileDto.fromJson).toList();
+    return data
+        .cast<Map<String, dynamic>>()
+        .map(TerritoryDominanceDto.fromJson)
+        .toList();
   }
 
+  /// Backend: GET /territory/multiplier/{seasonId}/{tierNumber}/{playerId}
+  /// → {totalMultiplierBps}; converted here from basis points to a factor.
   Future<double> getPlayerTerritoryMultiplier({
     required String seasonId,
     required int tierNumber,
     required String playerId,
   }) async {
     final j = await _http.getJson(
-      '/territory/$seasonId/$tierNumber/multiplier',
-      query: {'playerId': playerId},
+      '/territory/multiplier/$seasonId/$tierNumber/$playerId',
     );
-    return (j['multiplier'] as num?)?.toDouble() ?? 1.0;
+    return ((j['totalMultiplierBps'] as num?) ?? 10000) / 10000.0;
   }
 
   // ========================================
@@ -771,44 +831,47 @@ class SynaptixApiClient {
   // PERSONALIZATION
   // ========================================
 
-  /// GET /personalization/{playerId}/profile
+  /// GET /personalization/profile/{playerId}
   Future<PlayerMindProfileDto> getPlayerMindProfile(
       {required String playerId}) async {
-    final j = await _http.getJson('/personalization/$playerId/profile');
+    final j = await _http.getJson('/personalization/profile/$playerId');
     return PlayerMindProfileDto.fromJson(j);
   }
 
-  /// GET /personalization/{playerId}/home
+  /// GET /personalization/home/{playerId}
   Future<PlayerHomePersonalizationDto> getHomePersonalization(
       {required String playerId}) async {
-    final j = await _http.getJson('/personalization/$playerId/home');
+    final j = await _http.getJson('/personalization/home/$playerId');
     return PlayerHomePersonalizationDto.fromJson(j);
   }
 
-  /// POST /personalization/{playerId}/events — fire-and-forget behaviour event.
+  /// POST /personalization/profile/{playerId}/event — fire-and-forget
+  /// behaviour event.
   Future<void> recordBehaviourEvent({
     required String playerId,
     required BehaviourEventDto event,
   }) async {
-    await _http.post('/personalization/$playerId/events', body: event.toJson());
+    await _http.post('/personalization/profile/$playerId/event',
+        body: event.toJson());
   }
 
-  /// GET /personalization/{playerId}/recommendations
+  /// GET /personalization/recommendations/{playerId}
   Future<List<PlayerRecommendationDto>> getRecommendations(
       {required String playerId}) async {
     final data =
-        await _http.getJsonList('/personalization/$playerId/recommendations');
+        await _http.getJsonList('/personalization/recommendations/$playerId');
     return data
         .whereType<Map<String, dynamic>>()
         .map(PlayerRecommendationDto.fromJson)
         .toList();
   }
 
-  /// POST /personalization/{playerId}/toggle
+  /// POST /personalization/profile/{playerId}/toggle
+  /// Returns the updated PlayerMindProfile's personalizationEnabled flag.
   Future<bool> togglePersonalization(
       {required String playerId, required bool enabled}) async {
     final j = await _http.postJson(
-      '/personalization/$playerId/toggle',
+      '/personalization/profile/$playerId/toggle',
       body: {'enabled': enabled},
     );
     return j['personalizationEnabled'] as bool? ?? enabled;

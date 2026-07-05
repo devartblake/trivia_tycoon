@@ -1,42 +1,49 @@
+/// Mirrors backend TierGuardianDto (GET /guardians/{tierNumber}?seasonId=).
 class GuardianDto {
   final String id;
+  final String seasonId;
+  final int tierNumber;
   final String playerId;
-  final String username;
-  final String? avatarUrl;
-  final int tier;
-  final int defenceCount;
-  final DateTime? lastChallengedAt;
+  final DateTime? assignedAtUtc;
+  final DateTime? expiresAtUtc;
+  final int defencesWon;
+  final int defencesLost;
 
   const GuardianDto({
     required this.id,
+    required this.seasonId,
+    required this.tierNumber,
     required this.playerId,
-    required this.username,
-    this.avatarUrl,
-    required this.tier,
-    required this.defenceCount,
-    this.lastChallengedAt,
+    this.assignedAtUtc,
+    this.expiresAtUtc,
+    required this.defencesWon,
+    required this.defencesLost,
   });
 
   factory GuardianDto.fromJson(Map<String, dynamic> j) => GuardianDto(
         id: j['id'] as String,
+        seasonId: j['seasonId'] as String,
+        tierNumber: j['tierNumber'] as int? ?? 1,
         playerId: j['playerId'] as String,
-        username: j['username'] as String,
-        avatarUrl: j['avatarUrl'] as String?,
-        tier: j['tier'] as int? ?? 1,
-        defenceCount: j['defenceCount'] as int? ?? 0,
-        lastChallengedAt: j['lastChallengedAt'] != null
-            ? DateTime.tryParse(j['lastChallengedAt'] as String)
+        assignedAtUtc: j['assignedAtUtc'] != null
+            ? DateTime.tryParse(j['assignedAtUtc'] as String)
             : null,
+        expiresAtUtc: j['expiresAtUtc'] != null
+            ? DateTime.tryParse(j['expiresAtUtc'] as String)
+            : null,
+        defencesWon: j['defencesWon'] as int? ?? 0,
+        defencesLost: j['defencesLost'] as int? ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'seasonId': seasonId,
+        'tierNumber': tierNumber,
         'playerId': playerId,
-        'username': username,
-        'avatarUrl': avatarUrl,
-        'tier': tier,
-        'defenceCount': defenceCount,
-        'lastChallengedAt': lastChallengedAt?.toIso8601String(),
+        'assignedAtUtc': assignedAtUtc?.toIso8601String(),
+        'expiresAtUtc': expiresAtUtc?.toIso8601String(),
+        'defencesWon': defencesWon,
+        'defencesLost': defencesLost,
       };
 }
 

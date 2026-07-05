@@ -1,36 +1,26 @@
+/// Mirrors backend TerritoryTileDto: tiles are keyed by quiz category, and the
+/// XP multiplier is transported in basis points (10000 bps = 1.0x).
 class TileDto {
-  final String id;
+  final String category;
   final String? ownerId;
-  final String? ownerUsername;
-  final int row;
-  final int col;
   final double xpMultiplier;
 
   const TileDto({
-    required this.id,
+    required this.category,
     this.ownerId,
-    this.ownerUsername,
-    required this.row,
-    required this.col,
     required this.xpMultiplier,
   });
 
   factory TileDto.fromJson(Map<String, dynamic> j) => TileDto(
-        id: j['id'] as String,
+        category: j['category'] as String,
         ownerId: j['ownerId'] as String?,
-        ownerUsername: j['ownerUsername'] as String?,
-        row: j['row'] as int? ?? 0,
-        col: j['col'] as int? ?? 0,
-        xpMultiplier: (j['xpMultiplier'] as num?)?.toDouble() ?? 1.0,
+        xpMultiplier: ((j['xpMultiplierBps'] as num?) ?? 10000) / 10000.0,
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'category': category,
         'ownerId': ownerId,
-        'ownerUsername': ownerUsername,
-        'row': row,
-        'col': col,
-        'xpMultiplier': xpMultiplier,
+        'xpMultiplierBps': (xpMultiplier * 10000).round(),
       };
 }
 
@@ -62,16 +52,49 @@ class TerritoryBoardDto {
       };
 }
 
+/// Mirrors backend StartTerritoryDuelResponse.
 class DuelResultDto {
   final String matchId;
-  final String tileId;
+  final String? tileOwnerId;
+  final String? status;
 
-  const DuelResultDto({required this.matchId, required this.tileId});
+  const DuelResultDto({required this.matchId, this.tileOwnerId, this.status});
 
   factory DuelResultDto.fromJson(Map<String, dynamic> j) => DuelResultDto(
         matchId: j['matchId'] as String,
-        tileId: j['tileId'] as String,
+        tileOwnerId: j['tileOwnerId'] as String?,
+        status: j['status'] as String?,
       );
 
-  Map<String, dynamic> toJson() => {'matchId': matchId, 'tileId': tileId};
+  Map<String, dynamic> toJson() => {
+        'matchId': matchId,
+        'tileOwnerId': tileOwnerId,
+        'status': status,
+      };
+}
+
+/// Mirrors backend TerritoryDominanceDto (dominance leaderboard rows).
+class TerritoryDominanceDto {
+  final String playerId;
+  final int tilesOwned;
+  final double totalXpMultiplier;
+
+  const TerritoryDominanceDto({
+    required this.playerId,
+    required this.tilesOwned,
+    required this.totalXpMultiplier,
+  });
+
+  factory TerritoryDominanceDto.fromJson(Map<String, dynamic> j) =>
+      TerritoryDominanceDto(
+        playerId: j['playerId'] as String,
+        tilesOwned: j['tilesOwned'] as int? ?? 0,
+        totalXpMultiplier: ((j['totalXpMultiplierBps'] as num?) ?? 0) / 10000.0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'playerId': playerId,
+        'tilesOwned': tilesOwned,
+        'totalXpMultiplierBps': (totalXpMultiplier * 10000).round(),
+      };
 }
