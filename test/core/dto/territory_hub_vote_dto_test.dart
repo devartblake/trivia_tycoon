@@ -9,49 +9,33 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('TileDto', () {
-    test('fromJson parses id, row, col', () {
+    // Mirrors backend TerritoryTileDto: {category, ownerId, xpMultiplierBps}.
+    test('fromJson parses category and converts bps to factor', () {
       final t = TileDto.fromJson(
-          {'id': 't1', 'row': 2, 'col': 3, 'xpMultiplier': 1.5});
-      expect(t.id, 't1');
-      expect(t.row, 2);
-      expect(t.col, 3);
+          {'category': 'science', 'ownerId': 'p1', 'xpMultiplierBps': 15000});
+      expect(t.category, 'science');
+      expect(t.ownerId, 'p1');
+      expect(t.xpMultiplier, 1.5);
     });
 
     test('fromJson ownerId null when absent', () {
-      final t = TileDto.fromJson(
-          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0});
+      final t =
+          TileDto.fromJson({'category': 'science', 'xpMultiplierBps': 10000});
       expect(t.ownerId, isNull);
     });
 
-    test('fromJson ownerUsername null when absent', () {
-      final t = TileDto.fromJson(
-          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0});
-      expect(t.ownerUsername, isNull);
-    });
-
-    test('fromJson row defaults 0 when absent', () {
-      final t = TileDto.fromJson({'id': 't1', 'xpMultiplier': 1.0});
-      expect(t.row, 0);
-    });
-
-    test('fromJson xpMultiplier defaults 1.0 when absent', () {
-      final t = TileDto.fromJson({'id': 't1'});
+    test('fromJson xpMultiplier defaults 1.0 when bps absent', () {
+      final t = TileDto.fromJson({'category': 'science'});
       expect(t.xpMultiplier, 1.0);
     });
 
-    test('toJson contains all 6 keys', () {
+    test('toJson round-trips multiplier back to basis points', () {
       final j = TileDto.fromJson(
-          {'id': 't1', 'row': 1, 'col': 2, 'xpMultiplier': 2.0}).toJson();
-      for (final key in [
-        'id',
-        'ownerId',
-        'ownerUsername',
-        'row',
-        'col',
-        'xpMultiplier'
-      ]) {
+          {'category': 'arts', 'xpMultiplierBps': 12500}).toJson();
+      for (final key in ['category', 'ownerId', 'xpMultiplierBps']) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
+      expect(j['xpMultiplierBps'], 12500);
     });
   });
 
@@ -84,13 +68,13 @@ void main() {
         'seasonId': 's1',
         'tierNumber': 1,
         'tiles': [
-          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0},
-          {'id': 't2', 'row': 0, 'col': 1, 'xpMultiplier': 1.5},
+          {'category': 'science', 'xpMultiplierBps': 10000},
+          {'category': 'history', 'xpMultiplierBps': 15000},
         ],
       });
       expect(b.tiles.length, 2);
       expect(b.tiles.first, isA<TileDto>());
-      expect(b.tiles.first.id, 't1');
+      expect(b.tiles.first.category, 'science');
     });
 
     test('toJson tiles as nested list of maps', () {
@@ -98,7 +82,7 @@ void main() {
         'seasonId': 's1',
         'tierNumber': 1,
         'tiles': [
-          {'id': 't1', 'row': 0, 'col': 0, 'xpMultiplier': 1.0}
+          {'category': 'science', 'xpMultiplierBps': 10000}
         ],
       });
       final j = b.toJson();
@@ -112,17 +96,26 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('DuelResultDto', () {
-    test('fromJson parses matchId and tileId', () {
-      final d = DuelResultDto.fromJson({'matchId': 'm1', 'tileId': 't1'});
+    // Mirrors backend StartTerritoryDuelResponse: {matchId, tileOwnerId?, status?}.
+    test('fromJson parses matchId, tileOwnerId, status', () {
+      final d = DuelResultDto.fromJson(
+          {'matchId': 'm1', 'tileOwnerId': 'p9', 'status': 'Started'});
       expect(d.matchId, 'm1');
-      expect(d.tileId, 't1');
+      expect(d.tileOwnerId, 'p9');
+      expect(d.status, 'Started');
     });
 
-    test('toJson contains matchId and tileId', () {
-      final j =
-          DuelResultDto.fromJson({'matchId': 'm2', 'tileId': 't2'}).toJson();
+    test('fromJson optional fields null when absent', () {
+      final d = DuelResultDto.fromJson({'matchId': 'm1'});
+      expect(d.tileOwnerId, isNull);
+      expect(d.status, isNull);
+    });
+
+    test('toJson contains matchId and tileOwnerId', () {
+      final j = DuelResultDto.fromJson(
+          {'matchId': 'm2', 'tileOwnerId': 'p2'}).toJson();
       expect(j['matchId'], 'm2');
-      expect(j['tileId'], 't2');
+      expect(j['tileOwnerId'], 'p2');
     });
   });
 

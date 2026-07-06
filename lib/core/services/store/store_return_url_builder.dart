@@ -84,7 +84,6 @@ class StoreReturnUrlBuilder {
         .replace(
           pathSegments: segments,
           queryParameters: queryParameters,
-          fragment: '',
         )
         .toString();
   }

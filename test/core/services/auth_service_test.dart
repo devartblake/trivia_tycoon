@@ -4,10 +4,14 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:trivia_tycoon/core/security/secure_channel_models.dart';
+import 'package:trivia_tycoon/core/security/secure_session_store.dart';
 import 'package:trivia_tycoon/core/services/auth_api_client.dart';
+import 'package:trivia_tycoon/core/services/auth_http_client.dart';
 import 'package:trivia_tycoon/core/services/auth_service.dart';
 import 'package:trivia_tycoon/core/services/auth_token_store.dart';
 import 'package:trivia_tycoon/core/services/device_id_service.dart';
+import 'package:trivia_tycoon/core/services/storage/secure_secret_store.dart';
 import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
 
 // ---------------------------------------------------------------------------
@@ -54,6 +58,43 @@ class _StubHttpClient extends http.BaseClient {
   }
 }
 
+class _MemorySecretStore implements SecretStore {
+  final Map<String, String> values = {};
+
+  @override
+  Future<void> clear() async => values.clear();
+
+  @override
+  Future<void> delete(String key) async => values.remove(key);
+
+  @override
+  Future<String?> get(String key) async => values[key];
+
+  @override
+  Future<void> set(String key, String value) async {
+    values[key] = value;
+  }
+}
+
+class _MemorySecureStorage extends SecureStorage {
+  final Map<String, String> _secrets = {};
+
+  @override
+  Future<void> setSecret(String key, String value) async {
+    _secrets[key] = value;
+  }
+
+  @override
+  Future<String?> getSecret(String key) async {
+    return _secrets[key];
+  }
+
+  @override
+  Future<void> removeSecret(String key) async {
+    _secrets.remove(key);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -94,12 +135,11 @@ void main() {
     tempDir = await Directory.systemTemp.createTemp('auth_service_test');
     Hive.init(tempDir.path);
     authBox = await Hive.openBox('auth_tokens');
-    tokenStore = AuthTokenStore(authBox);
+    tokenStore = AuthTokenStore(authBox, secretStore: _MemorySecretStore());
   });
 
   tearDown(() async {
-    await authBox.close();
-    await Hive.deleteBoxFromDisk('auth_tokens');
+    await Hive.close();
     await tempDir.delete(recursive: true);
   });
 
@@ -378,6 +418,42 @@ void main() {
     });
   });
 
+  group('AuthHttpClient.refresh failure handling', () {
+    test('clears tokens when refresh requires a missing secure session',
+        () async {
+      await tokenStore.save(AuthSession(
+        accessToken: 'old-access',
+        refreshToken: 'refresh-token',
+        expiresAtUtc: DateTime.now().toUtc().add(const Duration(hours: 1)),
+      ));
+
+      final authBackend = _StubHttpClient((request) {
+        expect(request.url.path, '/auth/refresh');
+        return _jsonResp({
+          'error': {
+            'code': 'secure_session_required',
+            'message': 'X-Syn-Sec-Session header is required on this endpoint.',
+            'details': <String, dynamic>{},
+          },
+        }, status: 400);
+      });
+      final resourceBackend = _StubHttpClient(
+          (_) => _jsonResp({'message': 'Unauthorized'}, status: 401));
+      final svc = _makeAuthService(store: tokenStore, httpClient: authBackend);
+      final client = AuthHttpClient(
+        svc,
+        tokenStore,
+        innerClient: resourceBackend,
+      );
+
+      final response = await client
+          .get(Uri.parse('https://example.test/account/rewards/status'));
+
+      expect(response.statusCode, 401);
+      expect(tokenStore.load().hasTokens, isFalse);
+    });
+  });
+
   // ---------------------------------------------------------------------------
   // AuthSession model edge cases
   // ---------------------------------------------------------------------------
@@ -444,6 +520,45 @@ void main() {
   // ---------------------------------------------------------------------------
   // AuthApiClient — OAuth / social login URL
   // ---------------------------------------------------------------------------
+
+  group('AuthApiClient.refresh secure session headers', () {
+    test('sends secure session headers when a valid session exists', () async {
+      late http.Request capturedRequest;
+      final client = _StubHttpClient((request) {
+        capturedRequest = request;
+        return _jsonResp({
+          'access_token': 'new-access',
+          'refresh_token': 'new-refresh',
+          'expires_in': 3600,
+        });
+      });
+      final secureSessionStore = SecureSessionStore(_MemorySecureStorage());
+      await secureSessionStore.save(SecureSession(
+        sessionId: 'session-1234-5678',
+        protocolVersion: 'syn-sec-v1',
+        selectedSuite: 'X25519-HKDF-SHA256-AES256GCM',
+        clientToServerKey: List<int>.filled(32, 1),
+        serverToClientKey: List<int>.filled(32, 2),
+        expiresAtUtc: DateTime.now().toUtc().add(const Duration(minutes: 5)),
+      ));
+
+      final api = AuthApiClient(
+        client,
+        apiBaseUrl: 'https://api.test',
+        deviceId: _FakeDeviceIdService(),
+        secureSessionStore: secureSessionStore,
+      );
+
+      await api.refresh(
+        refreshToken: 'refresh-token',
+        deviceId: 'device-1',
+        deviceType: 'android',
+      );
+
+      expect(capturedRequest.headers['X-Syn-Sec-Session'], 'session12345678');
+      expect(capturedRequest.headers['X-Syn-Sec-Version'], 'syn-sec-v1');
+    });
+  });
 
   group('AuthApiClient.getOAuthUrl — social login', () {
     test('returns URL string on success', () async {

@@ -6,6 +6,7 @@ import '../../core/services/tier_api_client.dart';
 import '../../core/manager/log_manager.dart';
 import '../../core/env.dart';
 import '../../ui_components/spin_wheel/services/tier_config_cache.dart';
+import 'auth_providers.dart';
 import 'core_providers.dart';
 
 /// ============================================================================
@@ -42,13 +43,44 @@ final dailyBonusConfigProvider = FutureProvider<DailyRewardConfig>((ref) async {
 /// Fetch account reward status (has claimed today, streak, next claim time)
 final dailyBonusStatusProvider =
     FutureProvider.autoDispose<AccountRewardStatus>((ref) async {
+  final client = ref.watch(dailyBonusApiClientProvider);
+
   try {
     LogManager.debug('[Phase2] Fetching daily bonus status...');
-    final client = ref.watch(dailyBonusApiClientProvider);
+    final hasSession = await _ensureAccountRewardSession(ref);
+    if (!hasSession) {
+      throw DailyBonusException(
+        message:
+            'Daily bonus account status requires a player session; device bootstrap did not return tokens',
+        statusCode: 401,
+      );
+    }
+
     final status = await client.getAccountRewardStatus();
     LogManager.debug(
         '[Phase2] Daily bonus status: claimed=${status.claimedToday}');
     return status;
+  } on DailyBonusException catch (e) {
+    if (e.statusCode == 401 && !ref.read(authTokenStoreProvider).hasTokens()) {
+      final recoveredSession = await _ensureAccountRewardSession(ref);
+      if (recoveredSession) {
+        LogManager.debug(
+          '[Phase2] Retrying daily bonus status after player session bootstrap',
+        );
+        final status = await client.getAccountRewardStatus();
+        LogManager.debug(
+          '[Phase2] Daily bonus status: claimed=${status.claimedToday}',
+        );
+        return status;
+      }
+    }
+
+    LogManager.error(
+      '[Phase2] Error fetching daily bonus status: $e',
+      source: 'dailyBonusStatusProvider',
+      error: e,
+    );
+    rethrow;
   } catch (e) {
     LogManager.error(
       '[Phase2] Error fetching daily bonus status: $e',
@@ -58,6 +90,17 @@ final dailyBonusStatusProvider =
     rethrow;
   }
 });
+
+Future<bool> _ensureAccountRewardSession(Ref ref) async {
+  final tokenStore = ref.read(authTokenStoreProvider);
+  if (tokenStore.hasTokens()) return true;
+
+  LogManager.debug(
+    '[Phase2] No player session for account rewards; bootstrapping identity',
+  );
+  await ref.read(playerIdentityProvider.notifier).initialize();
+  return tokenStore.hasTokens();
+}
 
 /// Claim daily reward - returns the claimed amount and new totals
 final dailyBonusClaimProvider =

@@ -32,6 +32,7 @@ import '../../core/services/audio/audio_asset_service.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../../core/services/storage/app_cache_service.dart';
 import '../../core/services/storage/secure_storage.dart';
+import '../../core/security/secure_session_store.dart';
 
 // ---------------------------------------------------------------------------
 // Global infrastructure
@@ -120,6 +121,10 @@ final authTokenStoreProvider = Provider<AuthTokenStore>((ref) {
   return AuthTokenStore(box);
 });
 
+final secureSessionStoreProvider = Provider<SecureSessionStore>((ref) {
+  return ref.watch(serviceManagerProvider).secureSessionStore;
+});
+
 final deviceIdServiceProvider = Provider<DeviceIdService>((ref) {
   final secureStorage = ref.watch(secureStorageProvider);
   return DeviceIdService(secureStorage);
@@ -130,6 +135,7 @@ final authApiClientProvider = Provider<AuthApiClient>((ref) {
     http.Client(),
     apiBaseUrl: EnvConfig.apiV1BaseUrl,
     deviceId: ref.watch(deviceIdServiceProvider),
+    secureSessionStore: ref.watch(secureSessionStoreProvider),
   );
 });
 

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +29,11 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          tooltip: 'Back',
+          onPressed: _handleBackPressed,
+        ),
         title: const Text('Learn Hub'),
       ),
       body: playerIdAsync.when(
@@ -37,6 +42,15 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
         data: (playerId) => _buildModuleList(playerId),
       ),
     );
+  }
+
+  void _handleBackPressed() {
+    final router = GoRouter.of(context);
+    if (router.canPop()) {
+      context.pop();
+      return;
+    }
+    context.go('/game');
   }
 
   Widget _buildModuleList(String? playerId) {

@@ -71,16 +71,31 @@ final playerIdentityProvider =
 
 class PlayerIdentityNotifier extends StateNotifier<PlayerIdentityState> {
   final Ref ref;
+  Future<void>? _initializing;
 
   PlayerIdentityNotifier(this.ref) : super(const PlayerIdentityState());
 
-  Future<void> initialize() async {
+  Future<void> initialize() {
+    final activeInitialization = _initializing;
+    if (activeInitialization != null) return activeInitialization;
+
+    final initialization = _initialize();
+    _initializing = initialization;
+    return initialization.whenComplete(() {
+      if (identical(_initializing, initialization)) {
+        _initializing = null;
+      }
+    });
+  }
+
+  Future<void> _initialize() async {
     final deviceIdService = ref.read(deviceIdServiceProvider);
     final deviceId = await deviceIdService.getOrCreate();
     final deviceType = deviceIdService.getDeviceType();
     final tokenStore = ref.read(authTokenStoreProvider);
 
     if (tokenStore.hasTokens()) {
+      await _ensureSecureSessionForAuthRefresh(ref);
       ref.read(isLoggedInSyncProvider.notifier).state = true;
       state = PlayerIdentityState(
         isReady: true,
@@ -102,6 +117,7 @@ class PlayerIdentityNotifier extends StateNotifier<PlayerIdentityState> {
             );
         if (session.hasTokens) {
           await tokenStore.save(session);
+          await _ensureSecureSessionForAuthRefresh(ref);
           ref.read(isLoggedInSyncProvider.notifier).state = true;
         }
         state = PlayerIdentityState(
@@ -121,6 +137,7 @@ class PlayerIdentityNotifier extends StateNotifier<PlayerIdentityState> {
       final session = await ref.read(authApiClientProvider).bootstrapDevice();
       if (session.hasTokens) {
         await tokenStore.save(session);
+        await _ensureSecureSessionForAuthRefresh(ref);
         ref.read(isLoggedInSyncProvider.notifier).state = true;
       }
     } catch (e) {
@@ -183,6 +200,7 @@ class AuthOperations {
 
       // LoginManager handles everything: tokens, device ID, profile
       await loginManager.login(email, password);
+      await _ensureSecureSessionForAuthRefresh(ref);
       await _hydrateProfileFromBackend();
 
       // Extract and store role/premium info from response if needed
@@ -218,6 +236,7 @@ class AuthOperations {
 
       // LoginManager handles everything: tokens, device ID, profile
       await loginManager.signup(signupData);
+      await _ensureSecureSessionForAuthRefresh(ref);
       await _hydrateProfileFromBackend();
 
       // Extract and store role/premium info from response if needed
@@ -326,6 +345,7 @@ class AuthOperations {
       final secureStorage = ref.read(secureStorageProvider);
 
       await backendAuthService.loginWithGamePlatform(identity);
+      await _ensureSecureSessionForAuthRefresh(ref);
       await _hydrateProfileFromBackend();
       await _updateRoleAndPremiumStatus(secureStorage);
 
@@ -361,11 +381,39 @@ class AuthOperations {
       LogManager.debug('Logout failed: $e');
     }
 
+    try {
+      await ref
+          .read(serviceManagerProvider)
+          .secureChannelService
+          .clearSession();
+    } catch (e) {
+      LogManager.debug('[AuthOperations] Secure session clear skipped: $e');
+    }
+
     // Update Riverpod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = false;
     ref.read(profileSelectedProvider.notifier).state = false;
 
     await ref.read(playerIdentityProvider.notifier).initialize();
+  }
+}
+
+Future<void> _ensureSecureSessionForAuthRefresh(Ref ref) async {
+  try {
+    final session = ref.read(authTokenStoreProvider).load();
+    if (session.accessToken.isEmpty) return;
+
+    final secureChannel = ref.read(serviceManagerProvider).secureChannelService;
+    final existing = await secureChannel.loadSession();
+    if (existing != null &&
+        !existing.isExpired &&
+        existing.sessionId.isNotEmpty) {
+      return;
+    }
+
+    await secureChannel.startSession(accessToken: session.accessToken);
+  } catch (e) {
+    LogManager.debug('[AuthOperations] Secure session bootstrap skipped: $e');
   }
 }
 

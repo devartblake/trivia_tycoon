@@ -1,23 +1,18 @@
 import 'package:logging/logging.dart';
 import 'api_service.dart';
+import 'social/friends_models.dart';
+import 'social/parties_models.dart';
 
-/// TODO: IMPLEMENTATION NEEDED
+/// FriendsApiClient handles all friend relationship operations.
 ///
-/// This file documents the social API contract.
-/// Backend endpoints are ready but Flutter client implementation is incomplete.
-/// Implementation status: PENDING (marked as future scope in Sprint Planning)
-///
-/// Endpoints provided by backend:
+/// Endpoints (REST):
 ///   POST   /friends/request                — send friend request
 ///   GET    /friends                        — list friends with pagination
+///   GET    /friends/requests/pending       — list pending requests
 ///   POST   /friends/request/{id}/accept    — accept friend request
 ///   POST   /friends/request/{id}/decline   — decline friend request
-///   POST   /party                          — create or join party
-///   GET    /party/{partyId}                — get party details
-///   POST   /party/{partyId}/invite         — invite player to party
-///   POST   /party/invites/{id}/accept      — accept party invite
-///   POST   /party/invites/{id}/decline     — decline party invite
-
+///   POST   /friends/{id}/remove            — remove friend
+///   GET    /search/players                 — search players by username
 class FriendsApiClient {
   static final _log = Logger('FriendsApiClient');
 
@@ -27,51 +22,104 @@ class FriendsApiClient {
 
   /// Send a friend request to another player.
   ///
-  /// Backend endpoint ready: POST /friends/request
-  /// IMPLEMENTATION STATUS: PENDING
+  /// Backend endpoint: POST /friends/request
+  /// Returns: void on success, throws exception on error
   Future<void> sendFriendRequest(String targetPlayerId) async {
-    throw UnimplementedError(
-      'Friends feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /friends/request\n'
-      'To implement: Create request DTO, call ApiService.post(), handle response'
-    );
+    _log.info('Sending friend request to: $targetPlayerId');
+    final body = {'targetPlayerId': targetPlayerId};
+    await _apiService.post('/friends/request', body: body);
   }
 
-  /// Get list of friends.
+  /// Get list of friends with pagination.
   ///
-  /// Backend endpoint ready: GET /friends?page=X&pageSize=Y
-  /// IMPLEMENTATION STATUS: PENDING
-  Future<List<Map<String, dynamic>>> listFriends({int page = 1, int pageSize = 20}) async {
-    throw UnimplementedError(
-      'Friends feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: GET /friends\n'
-      'To implement: Call ApiService.get(), parse response list'
-    );
+  /// Backend endpoint: GET /friends?page=X&pageSize=Y
+  /// Returns: FriendsListResponse with friend list and pagination info
+  Future<FriendsListResponse> listFriends({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    _log.info('Fetching friends list: page=$page pageSize=$pageSize');
+    final params = {
+      'page': page,
+      'pageSize': pageSize,
+    };
+    final json = await _apiService.get('/friends', queryParameters: params);
+    return FriendsListResponse.fromJson(json);
   }
 
-  /// Accept a friend request from another player.
+  /// Get pending friend requests.
   ///
-  /// Backend endpoint ready: POST /friends/request/{requestId}/accept
-  /// IMPLEMENTATION STATUS: PENDING
+  /// Backend endpoint: GET /friends/requests/pending?page=X&pageSize=Y
+  /// Returns: FriendRequestsResponse with pending requests
+  Future<FriendRequestsResponse> listPendingRequests({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    _log.info('Fetching pending requests: page=$page pageSize=$pageSize');
+    final params = {
+      'page': page,
+      'pageSize': pageSize,
+    };
+    final json = await _apiService.get(
+      '/friends/requests/pending',
+      queryParameters: params,
+    );
+    return FriendRequestsResponse.fromJson(json);
+  }
+
+  /// Accept a friend request.
+  ///
+  /// Backend endpoint: POST /friends/request/{requestId}/accept
+  /// Returns: void on success, throws exception on error
   Future<void> acceptFriendRequest(String requestId) async {
-    throw UnimplementedError(
-      'Friends feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /friends/request/{id}/accept'
-    );
+    _log.info('Accepting friend request: $requestId');
+    await _apiService.post('/friends/request/$requestId/accept', body: {});
   }
 
   /// Decline a friend request.
   ///
-  /// Backend endpoint ready: POST /friends/request/{requestId}/decline
-  /// IMPLEMENTATION STATUS: PENDING
+  /// Backend endpoint: POST /friends/request/{requestId}/decline
+  /// Returns: void on success, throws exception on error
   Future<void> declineFriendRequest(String requestId) async {
-    throw UnimplementedError(
-      'Friends feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /friends/request/{id}/decline'
+    _log.info('Declining friend request: $requestId');
+    await _apiService.post('/friends/request/$requestId/decline', body: {});
+  }
+
+  /// Remove a friend.
+  ///
+  /// Backend endpoint: POST /friends/{friendId}/remove
+  /// Returns: void on success, throws exception on error
+  Future<void> removeFriend(String friendId) async {
+    _log.info('Removing friend: $friendId');
+    await _apiService.post('/friends/$friendId/remove', body: {});
+  }
+
+  /// Search for players by username.
+  ///
+  /// Backend endpoint: GET /search/players?query=X
+  /// Returns: PlayerSearchResponse with search results
+  Future<PlayerSearchResponse> searchPlayers(String query) async {
+    _log.info('Searching players: query=$query');
+    final params = {'query': query};
+    final json = await _apiService.get(
+      '/search/players',
+      queryParameters: params,
     );
+    return PlayerSearchResponse.fromJson(json);
   }
 }
 
+/// PartyApiClient handles all party/group operations.
+///
+/// Endpoints (REST):
+///   POST   /party                          — create party
+///   GET    /party                          — list parties
+///   GET    /party/{partyId}                — get party details
+///   POST   /party/{partyId}/invite         — invite player to party
+///   POST   /party/invites/{id}/accept      — accept party invite
+///   POST   /party/invites/{id}/decline     — decline party invite
+///   POST   /party/{partyId}/leave          — leave party
+///   POST   /party/{partyId}/disband        — disband party (owner only)
 class PartyApiClient {
   static final _log = Logger('PartyApiClient');
 
@@ -79,65 +127,102 @@ class PartyApiClient {
 
   PartyApiClient(this._apiService);
 
-  /// Create or join a party for group gameplay.
+  /// Create a new party.
   ///
-  /// Backend endpoint ready: POST /party
-  /// IMPLEMENTATION STATUS: PENDING
-  Future<Map<String, dynamic>> createParty({
+  /// Backend endpoint: POST /party
+  /// Returns: PartyResponse with party details
+  Future<PartyResponse> createParty({
     required String name,
+    String? description,
+    int maxMembers = 4,
     String? gameMode,
   }) async {
-    throw UnimplementedError(
-      'Party/Team feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /party\n'
-      'To implement: Create party request DTO, call ApiService.post()'
-    );
+    _log.info('Creating party: $name (max: $maxMembers members)');
+    final body = {
+      'name': name,
+      if (description != null) 'description': description,
+      'maxMembers': maxMembers,
+      if (gameMode != null) 'gameMode': gameMode,
+    };
+    final json = await _apiService.post('/party', body: body);
+    return PartyResponse.fromJson(json);
   }
 
-  /// Get party details and member list.
+  /// Get party details.
   ///
-  /// Backend endpoint ready: GET /party/{partyId}
-  /// IMPLEMENTATION STATUS: PENDING
-  Future<Map<String, dynamic>> getPartyDetails(String partyId) async {
-    throw UnimplementedError(
-      'Party/Team feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: GET /party/{partyId}'
-    );
+  /// Backend endpoint: GET /party/{partyId}
+  /// Returns: PartyDetailResponse with members and invites
+  Future<PartyDetailResponse> getPartyDetails(String partyId) async {
+    _log.info('Fetching party details: $partyId');
+    final json = await _apiService.get('/party/$partyId');
+    return PartyDetailResponse.fromJson(json);
+  }
+
+  /// List parties for current player.
+  ///
+  /// Backend endpoint: GET /party?page=X&pageSize=Y&status=Z
+  /// Returns: PartiesListResponse with paginated list
+  Future<PartiesListResponse> listParties({
+    int page = 1,
+    int pageSize = 20,
+    String? status,
+  }) async {
+    _log.info('Listing parties: page=$page status=$status');
+    final params = {
+      'page': page,
+      'pageSize': pageSize,
+      if (status != null) 'status': status,
+    };
+    final json = await _apiService.get('/party', queryParameters: params);
+    return PartiesListResponse.fromJson(json);
   }
 
   /// Invite a player to the party.
   ///
-  /// Backend endpoint ready: POST /party/{partyId}/invite
-  /// IMPLEMENTATION STATUS: PENDING
+  /// Backend endpoint: POST /party/{partyId}/invite
+  /// Returns: void on success, throws exception on error
   Future<void> inviteToParty({
     required String partyId,
     required String targetPlayerId,
   }) async {
-    throw UnimplementedError(
-      'Party/Team feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /party/{partyId}/invite'
-    );
+    _log.info('Inviting $targetPlayerId to party $partyId');
+    final body = {'targetPlayerId': targetPlayerId};
+    await _apiService.post('/party/$partyId/invite', body: body);
   }
 
   /// Accept a party invite.
   ///
-  /// Backend endpoint ready: POST /party/invites/{inviteId}/accept
-  /// IMPLEMENTATION STATUS: PENDING
+  /// Backend endpoint: POST /party/invites/{inviteId}/accept
+  /// Returns: void on success, throws exception on error
   Future<void> acceptPartyInvite(String inviteId) async {
-    throw UnimplementedError(
-      'Party/Team feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /party/invites/{inviteId}/accept'
-    );
+    _log.info('Accepting party invite: $inviteId');
+    await _apiService.post('/party/invites/$inviteId/accept', body: {});
   }
 
   /// Decline a party invite.
   ///
-  /// Backend endpoint ready: POST /party/invites/{inviteId}/decline
-  /// IMPLEMENTATION STATUS: PENDING
+  /// Backend endpoint: POST /party/invites/{inviteId}/decline
+  /// Returns: void on success, throws exception on error
   Future<void> declinePartyInvite(String inviteId) async {
-    throw UnimplementedError(
-      'Party/Team feature is currently out of scope for this release.\n'
-      'Backend endpoint is ready: POST /party/invites/{inviteId}/decline'
-    );
+    _log.info('Declining party invite: $inviteId');
+    await _apiService.post('/party/invites/$inviteId/decline', body: {});
+  }
+
+  /// Leave a party.
+  ///
+  /// Backend endpoint: POST /party/{partyId}/leave
+  /// Returns: void on success, throws exception on error
+  Future<void> leaveParty(String partyId) async {
+    _log.info('Leaving party: $partyId');
+    await _apiService.post('/party/$partyId/leave', body: {});
+  }
+
+  /// Disband a party (owner only).
+  ///
+  /// Backend endpoint: POST /party/{partyId}/disband
+  /// Returns: void on success, throws exception on error
+  Future<void> disbandParty(String partyId) async {
+    _log.info('Disbanding party: $partyId');
+    await _apiService.post('/party/$partyId/disband', body: {});
   }
 }

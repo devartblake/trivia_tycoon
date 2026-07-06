@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
+import '../security/secure_session_store.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
 
 class AuthApiException implements Exception {
@@ -38,13 +39,17 @@ class AuthApiClient {
   final http.Client _http;
   final String _apiBaseUrl;
   final DeviceIdService _deviceId;
+  final SecureSessionStore? _secureSessionStore;
 
   AuthApiClient(this._http,
-      {required String apiBaseUrl, required DeviceIdService deviceId})
+      {required String apiBaseUrl,
+      required DeviceIdService deviceId,
+      SecureSessionStore? secureSessionStore})
       : _apiBaseUrl = apiBaseUrl.endsWith('/')
             ? apiBaseUrl.substring(0, apiBaseUrl.length - 1)
             : apiBaseUrl,
-        _deviceId = deviceId;
+        _deviceId = deviceId,
+        _secureSessionStore = secureSessionStore;
 
   Uri _u(String path) => Uri.parse('$_apiBaseUrl$path');
 
@@ -60,15 +65,74 @@ class AuthApiClient {
     if (!kDebugMode) return;
     LogManager.debug('[AuthApiClient] $method ${_u(path)}');
     if (body != null) {
-      LogManager.debug('[AuthApiClient] body=$body');
+      LogManager.debug('[AuthApiClient] body=${_redactSensitive(body)}');
     }
   }
 
   void _logResponse(String method, String path, http.Response response) {
     if (!kDebugMode) return;
     LogManager.debug(
-      '[AuthApiClient] $method ${_u(path)} -> ${response.statusCode} ${response.body}',
+      '[AuthApiClient] $method ${_u(path)} -> ${response.statusCode} ${_redactResponseBody(response.body)}',
     );
+  }
+
+  Object? _redactSensitive(Object? value) {
+    const sensitiveKeys = {
+      'password',
+      'accessToken',
+      'access_token',
+      'refreshToken',
+      'refresh_token',
+      'idToken',
+      'id_token',
+      'token',
+      'authorization',
+    };
+
+    if (value is Map) {
+      return value.map((key, entry) {
+        final keyText = key.toString();
+        return MapEntry(
+          key,
+          sensitiveKeys.contains(keyText)
+              ? '<redacted>'
+              : _redactSensitive(entry),
+        );
+      });
+    }
+    if (value is Iterable && value is! String) {
+      return value.map(_redactSensitive).toList();
+    }
+    return value;
+  }
+
+  String _redactResponseBody(String body) {
+    final trimmed = body.trim();
+    if (trimmed.isEmpty) return trimmed;
+    try {
+      return jsonEncode(_redactSensitive(jsonDecode(trimmed)));
+    } catch (_) {
+      return trimmed;
+    }
+  }
+
+  Future<Map<String, String>> _jsonHeaders({
+    bool includeSecureSession = false,
+  }) async {
+    final headers = <String, String>{'Content-Type': 'application/json'};
+
+    final secureSessionStore = _secureSessionStore;
+    if (includeSecureSession && secureSessionStore != null) {
+      final session = await secureSessionStore.load();
+      if (session != null &&
+          !session.isExpired &&
+          session.sessionId.isNotEmpty) {
+        headers['X-Syn-Sec-Session'] = session.sessionId.replaceAll('-', '');
+        headers['X-Syn-Sec-Version'] = session.protocolVersion;
+      }
+    }
+
+    return headers;
   }
 
   Future<AuthSession> login({
@@ -88,7 +152,7 @@ class AuthApiClient {
     try {
       response = await _http.post(
         _u(loginPath),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _jsonHeaders(),
         body: jsonEncode(payload),
       );
     } catch (e) {
@@ -152,7 +216,8 @@ class AuthApiClient {
       if (username != null && username.isNotEmpty) 'username': username,
       if (username != null && username.isNotEmpty) 'handle': username,
       if (country != null && country.isNotEmpty) 'country': country,
-      if (dateOfBirth != null && dateOfBirth.isNotEmpty) 'dateOfBirth': dateOfBirth,
+      if (dateOfBirth != null && dateOfBirth.isNotEmpty)
+        'dateOfBirth': dateOfBirth,
     };
 
     _logRequest('POST', signupPath, body: payload);
@@ -161,7 +226,7 @@ class AuthApiClient {
     try {
       response = await _http.post(
         _u(signupPath),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _jsonHeaders(),
         body: jsonEncode(payload),
       );
     } catch (e) {
@@ -350,7 +415,7 @@ class AuthApiClient {
     try {
       res = await _http.post(
         _u(refreshPath),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _jsonHeaders(includeSecureSession: true),
         body: jsonEncode(payload),
       );
     } catch (e) {
@@ -466,7 +531,7 @@ class AuthApiClient {
     try {
       response = await _http.post(
         _u(deviceBootstrapPath),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _jsonHeaders(),
         body: jsonEncode(payload),
       );
     } catch (e) {
@@ -526,7 +591,7 @@ class AuthApiClient {
     try {
       response = await _http.post(
         _u(mobileGameLoginPath),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _jsonHeaders(),
         body: jsonEncode(payload),
       );
     } catch (e) {
@@ -620,7 +685,7 @@ class AuthApiClient {
     try {
       response = await _http.get(
         _u(path),
-        headers: {'Content-Type': 'application/json'},
+        headers: await _jsonHeaders(),
       );
     } catch (e) {
       throw AuthApiException(

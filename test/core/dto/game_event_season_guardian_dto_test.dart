@@ -213,18 +213,30 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('PlayerSeasonStateDto', () {
-    test('fromJson parses playerId and seasonId', () {
+    // Mirrors backend PlayerSeasonStateDto (GET /seasons/state/{playerId}).
+    test('fromJson parses all fields', () {
       final d = PlayerSeasonStateDto.fromJson({
         'playerId': 'p1',
         'seasonId': 's1',
+        'rankPoints': 120,
+        'wins': 4,
+        'losses': 2,
+        'draws': 1,
+        'matchesPlayed': 7,
         'tier': 3,
-        'xp': 200,
-        'rank': 15,
-        'guardiansDefeated': 2,
-        'tilesControlled': 7,
+        'tierRank': 5,
+        'seasonRank': 15,
       });
       expect(d.playerId, 'p1');
       expect(d.seasonId, 's1');
+      expect(d.rankPoints, 120);
+      expect(d.wins, 4);
+      expect(d.losses, 2);
+      expect(d.draws, 1);
+      expect(d.matchesPlayed, 7);
+      expect(d.tier, 3);
+      expect(d.tierRank, 5);
+      expect(d.seasonRank, 15);
     });
 
     test('fromJson tier defaults 1 when absent', () {
@@ -233,19 +245,19 @@ void main() {
       expect(d.tier, 1);
     });
 
-    test('fromJson xp defaults 0 when absent', () {
+    test('fromJson counters default 0 when absent', () {
       final d =
           PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
-      expect(d.xp, 0);
+      expect(d.rankPoints, 0);
+      expect(d.wins, 0);
+      expect(d.losses, 0);
+      expect(d.draws, 0);
+      expect(d.matchesPlayed, 0);
+      expect(d.tierRank, 0);
+      expect(d.seasonRank, 0);
     });
 
-    test('fromJson rank defaults 0 when absent', () {
-      final d =
-          PlayerSeasonStateDto.fromJson({'playerId': 'p1', 'seasonId': 's1'});
-      expect(d.rank, 0);
-    });
-
-    test('toJson contains all 7 keys', () {
+    test('toJson contains all 10 keys', () {
       final j = PlayerSeasonStateDto.fromJson({
         'playerId': 'p1',
         'seasonId': 's1',
@@ -253,11 +265,14 @@ void main() {
       for (final key in [
         'playerId',
         'seasonId',
+        'rankPoints',
+        'wins',
+        'losses',
+        'draws',
+        'matchesPlayed',
         'tier',
-        'xp',
-        'rank',
-        'guardiansDefeated',
-        'tilesControlled'
+        'tierRank',
+        'seasonRank'
       ]) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
@@ -269,66 +284,71 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('GuardianDto', () {
+    // Mirrors backend TierGuardianDto (GET /guardians/{tierNumber}?seasonId=).
     test('fromJson parses all required fields', () {
       final g = GuardianDto.fromJson({
         'id': 'g1',
+        'seasonId': 's1',
+        'tierNumber': 5,
         'playerId': 'p1',
-        'username': 'alice',
-        'tier': 5,
-        'defenceCount': 3,
+        'defencesWon': 3,
+        'defencesLost': 1,
       });
       expect(g.id, 'g1');
-      expect(g.username, 'alice');
+      expect(g.seasonId, 's1');
+      expect(g.playerId, 'p1');
+      expect(g.tierNumber, 5);
+      expect(g.defencesWon, 3);
+      expect(g.defencesLost, 1);
     });
 
-    test('fromJson avatarUrl null when absent', () {
-      final g =
-          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
-      expect(g.avatarUrl, isNull);
+    test('fromJson tierNumber defaults 1 when absent', () {
+      final g = GuardianDto.fromJson(
+          {'id': 'g1', 'seasonId': 's1', 'playerId': 'p1'});
+      expect(g.tierNumber, 1);
     });
 
-    test('fromJson tier defaults 1 when absent', () {
-      final g =
-          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
-      expect(g.tier, 1);
+    test('fromJson defence counts default 0 when absent', () {
+      final g = GuardianDto.fromJson(
+          {'id': 'g1', 'seasonId': 's1', 'playerId': 'p1'});
+      expect(g.defencesWon, 0);
+      expect(g.defencesLost, 0);
     });
 
-    test('fromJson defenceCount defaults 0 when absent', () {
-      final g =
-          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
-      expect(g.defenceCount, 0);
+    test('fromJson timestamps null when absent', () {
+      final g = GuardianDto.fromJson(
+          {'id': 'g1', 'seasonId': 's1', 'playerId': 'p1'});
+      expect(g.assignedAtUtc, isNull);
+      expect(g.expiresAtUtc, isNull);
     });
 
-    test('fromJson lastChallengedAt null when absent', () {
-      final g =
-          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
-      expect(g.lastChallengedAt, isNull);
-    });
-
-    test('fromJson lastChallengedAt parsed when present', () {
+    test('fromJson timestamps parsed when present', () {
       final g = GuardianDto.fromJson({
         'id': 'g1',
+        'seasonId': 's1',
         'playerId': 'p1',
-        'username': 'x',
-        'lastChallengedAt': '2025-05-01T10:00:00.000Z',
+        'assignedAtUtc': '2025-05-01T10:00:00.000Z',
+        'expiresAtUtc': '2025-05-08T10:00:00.000Z',
       });
-      expect(g.lastChallengedAt, isA<DateTime>());
+      expect(g.assignedAtUtc, isA<DateTime>());
+      expect(g.expiresAtUtc, isA<DateTime>());
     });
 
-    test('toJson lastChallengedAt as ISO when non-null', () {
+    test('toJson timestamps as ISO when non-null', () {
       final g = GuardianDto.fromJson({
         'id': 'g1',
+        'seasonId': 's1',
         'playerId': 'p1',
-        'username': 'x',
-        'lastChallengedAt': '2025-05-01T10:00:00.000Z',
+        'assignedAtUtc': '2025-05-01T10:00:00.000Z',
       });
-      expect(g.toJson()['lastChallengedAt'], isA<String>());
+      expect(g.toJson()['assignedAtUtc'], isA<String>());
     });
 
-    test('toJson lastChallengedAt null when absent', () {
-      final g =
-          GuardianDto.fromJson({'id': 'g1', 'playerId': 'p1', 'username': 'x'});
-      expect(g.toJson()['lastChallengedAt'], isNull);
+    test('toJson timestamps null when absent', () {
+      final g = GuardianDto.fromJson(
+          {'id': 'g1', 'seasonId': 's1', 'playerId': 'p1'});
+      expect(g.toJson()['assignedAtUtc'], isNull);
+      expect(g.toJson()['expiresAtUtc'], isNull);
     });
   });
 

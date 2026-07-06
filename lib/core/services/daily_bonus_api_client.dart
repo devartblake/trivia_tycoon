@@ -70,7 +70,7 @@ class DailyBonusApiClient {
         final data = jsonDecode(response.body);
         final status = AccountRewardStatus.fromJson(data);
         LogManager.debug(
-          '[DailyBonusApiClient] Account reward status: claimed=${"${status.claimedToday}"}, streak=${status.currentStreak}',
+          '[DailyBonusApiClient] Account reward status: claimed=${status.claimedToday}, streak=${status.currentStreak}',
         );
         return status;
       } else if (response.statusCode == 401) {
@@ -85,6 +85,13 @@ class DailyBonusApiClient {
         );
       }
     } catch (e) {
+      if (e is DailyBonusException && e.statusCode == 401) {
+        LogManager.debug(
+          '[DailyBonusApiClient] Account reward status unauthorized: $e',
+        );
+        rethrow;
+      }
+
       LogManager.error(
         '[DailyBonusApiClient] Error fetching account reward status: $e',
         source: 'DailyBonusApiClient.getAccountRewardStatus',

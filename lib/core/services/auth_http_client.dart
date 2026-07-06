@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'auth_api_client.dart' show AuthApiException;
 import 'auth_token_store.dart';
 import 'auth_service.dart' show BackendAuthService;
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -37,6 +38,27 @@ class AuthHttpClient extends http.BaseClient {
     this.onRefreshFailed,
   }) : _inner = innerClient ?? http.Client();
 
+  Future<void> _refreshOnce() {
+    _pendingRefresh ??=
+        _authService.refresh().whenComplete(() => _pendingRefresh = null);
+    return _pendingRefresh!;
+  }
+
+  Exception _asException(Object error) =>
+      error is Exception ? error : Exception(error.toString());
+
+  bool _isSecureSessionRequired(Object error) {
+    return error is AuthApiException &&
+        (error.responseBody?.contains('secure_session_required') ?? false);
+  }
+
+  Future<void> _clearUnrefreshableSession(Object error) async {
+    if (!_isSecureSessionRequired(error)) return;
+    LogManager.debug(
+        '[AuthHttpClient] Clearing auth tokens because refresh requires a missing secure session');
+    await _tokenStore.clear();
+  }
+
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     // Load current session
@@ -48,16 +70,14 @@ class AuthHttpClient extends http.BaseClient {
     if (autoRefresh && session.hasTokens && session.isExpired) {
       try {
         LogManager.debug('[AuthHttpClient] Token expired, refreshing...');
-        _pendingRefresh ??= _authService
-            .refresh()
-            .whenComplete(() => _pendingRefresh = null);
-        await _pendingRefresh;
+        await _refreshOnce();
         onTokenRefreshed?.call();
         LogManager.debug('[AuthHttpClient] Token refreshed successfully');
       } catch (e) {
         _pendingRefresh = null;
         LogManager.debug('[AuthHttpClient] Token refresh failed: $e');
-        onRefreshFailed?.call(e as Exception);
+        await _clearUnrefreshableSession(e);
+        onRefreshFailed?.call(_asException(e));
         // Continue with expired token - backend will reject and user will need to re-login
       }
     }
@@ -84,7 +104,7 @@ class AuthHttpClient extends http.BaseClient {
             '[AuthHttpClient] Got 401, attempting token refresh...');
 
         try {
-          await _authService.refresh();
+          await _refreshOnce();
           onTokenRefreshed?.call();
 
           // Retry request with new token
@@ -96,7 +116,8 @@ class AuthHttpClient extends http.BaseClient {
           return await _inner.send(retryRequest);
         } catch (e) {
           LogManager.debug('[AuthHttpClient] Retry failed: $e');
-          onRefreshFailed?.call(e as Exception);
+          await _clearUnrefreshableSession(e);
+          onRefreshFailed?.call(_asException(e));
           // Return original 401 response
           return response;
         }

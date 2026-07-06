@@ -79,6 +79,7 @@ class ServiceManager {
   final AchievementService achievementService;
   final ThemeNotifier themeNotifier;
   final SecureStorage secureStorage;
+  final AuthTokenStore authTokenStore;
   final QrHistoryService historyService;
   final QuizProgressService quizProgressService;
   final CustomThemeService customThemeService;
@@ -133,6 +134,7 @@ class ServiceManager {
     required this.achievementService,
     required this.themeNotifier,
     required this.secureStorage,
+    required this.authTokenStore,
     required this.historyService,
     required this.multiplayerService,
     required this.missionService,
@@ -298,10 +300,12 @@ class ServiceManager {
     final tokenStore = AuthTokenStore(authBox);
     await tokenStore.initialize();
     final deviceIdSvc = DeviceIdService(secureStorage);
+    final secureSessionStore = SecureSessionStore(secureStorage);
     final authApiClient = AuthApiClient(
       http.Client(),
       apiBaseUrl: apiV1BaseUrl,
       deviceId: deviceIdSvc,
+      secureSessionStore: secureSessionStore,
     );
     final coreAuth = core_auth.BackendAuthService(
       deviceId: deviceIdSvc,
@@ -309,7 +313,6 @@ class ServiceManager {
       api: authApiClient,
     );
     final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
-    final secureSessionStore = SecureSessionStore(secureStorage);
     final secureChannel = DefaultSecureChannelService(
       httpClient: authHttpClient,
       sessionStore: secureSessionStore,
@@ -371,6 +374,7 @@ class ServiceManager {
       localArcadeLeaderboardService: localArcadeLeaderboards,
       themeNotifier: themeNotifier,
       secureStorage: secureStorage,
+      authTokenStore: tokenStore,
       historyService: history,
       multiplayerService: multiplayer,
       missionService: mission,

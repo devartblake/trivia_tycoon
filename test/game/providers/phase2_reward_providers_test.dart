@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trivia_tycoon/core/services/auth_token_store.dart';
 import 'package:trivia_tycoon/core/services/daily_bonus_api_client.dart';
 import 'package:trivia_tycoon/core/services/tier_api_client.dart';
 import 'package:trivia_tycoon/core/services/weekly_rewards_api_client.dart';
+import 'package:trivia_tycoon/game/providers/core_providers.dart';
 import 'package:trivia_tycoon/game/providers/phase2_reward_providers.dart';
 
 void main() {
@@ -13,6 +15,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           currentUserIdProvider.overrideWithValue('test-user'),
+          authTokenStoreProvider.overrideWithValue(_FakeAuthTokenStore()),
           dailyBonusApiClientProvider.overrideWithValue(
             _FakeDailyBonusApiClient(),
           ),
@@ -220,6 +223,21 @@ void main() {
       });
     });
   });
+}
+
+class _FakeAuthTokenStore implements AuthTokenStore {
+  @override
+  bool hasTokens() => true;
+
+  @override
+  AuthSession load() => AuthSession(
+        accessToken: 'access-token',
+        refreshToken: 'refresh-token',
+        userId: 'test-user',
+      );
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class _FakeDailyBonusApiClient implements DailyBonusApiClient {

@@ -22,6 +22,7 @@ import '../services/auth_api_client.dart';
 import '../services/auth_service.dart';
 import '../services/auth_token_store.dart';
 import '../services/device_id_service.dart';
+import '../security/secure_session_store.dart';
 import '../services/notification_service.dart';
 import '../../game/providers/auth_providers.dart';
 import '../helpers/educational_stats_initializer.dart';
@@ -106,8 +107,11 @@ class AppInit {
     _tokenStore = tokenStore;
 
     final httpClient = http.Client();
+    final secureSessionStore = SecureSessionStore(secureStorage);
     final authApi = AuthApiClient(httpClient,
-        apiBaseUrl: EnvConfig.apiV1BaseUrl, deviceId: deviceIdService);
+        apiBaseUrl: EnvConfig.apiV1BaseUrl,
+        deviceId: deviceIdService,
+        secureSessionStore: secureSessionStore);
 
     final authService = BackendAuthService(
       deviceId: deviceIdService,
@@ -146,6 +150,8 @@ class AppInit {
     _lifecycleManager!.initialize();
     LogManager.debug('✅ AppLifecycleManager initialized');
 
+    await _ensureSecureSessionForStoredAuth(serviceManager);
+
     // Check session & load profile using safe casting
     await _initializeUserSession(serviceManager, container);
     await _initializeMultiProfileSystem(serviceManager, container);
@@ -156,6 +162,35 @@ class AppInit {
     _preloadQuestions(serviceManager).ignore();
 
     return (serviceManager, serviceManager.themeNotifier);
+  }
+
+  static Future<void> _ensureSecureSessionForStoredAuth(
+      ServiceManager serviceManager) async {
+    try {
+      final session = serviceManager.authTokenStore.load();
+      if (!session.hasTokens || session.accessToken.isEmpty) return;
+
+      final existing = await serviceManager.secureChannelService.loadSession();
+      if (existing != null &&
+          !existing.isExpired &&
+          existing.sessionId.isNotEmpty) {
+        return;
+      }
+
+      if (session.isExpired) {
+        await serviceManager.secureChannelService.clearSession();
+        await serviceManager.authTokenStore.clear();
+        LogManager.debug(
+            '[AppInit] Cleared stored auth because refresh requires a secure session but the saved access token is expired');
+        return;
+      }
+
+      await serviceManager.secureChannelService
+          .startSession(accessToken: session.accessToken);
+      LogManager.debug('[AppInit] Secure session ready for auth refresh');
+    } catch (e) {
+      LogManager.debug('[AppInit] Secure session bootstrap skipped: $e');
+    }
   }
 
   // Save all app state
@@ -548,7 +583,8 @@ class AppInit {
       LogManager.debug('[AppInit] Starting question preload...');
       // Access the question loader service and preload top categories
       // This loads questions in the background without blocking app startup
-      await Future.delayed(const Duration(seconds: 1)); // Small delay to avoid competing with other initialization
+      // Small delay to avoid competing with other initialization.
+      await Future.delayed(const Duration(seconds: 1));
       // Note: Question preloading happens in QuestionLoaderService
       LogManager.debug('[AppInit] Question preload initiated');
     } catch (e) {

@@ -148,8 +148,10 @@ class VoteTallyUpdatedDto {
   factory VoteTallyUpdatedDto.fromJson(Map<String, dynamic> j) =>
       VoteTallyUpdatedDto(
         topic: j['topic'] as String,
-        tally: (j['tally'] as Map<String, dynamic>?)?.map(
-              (k, v) => MapEntry(k, (v as num).toInt()),
+        // Cast via Map (not Map<String, dynamic>) — nested map literals and
+        // some decoders produce Map<dynamic, dynamic>.
+        tally: (j['tally'] as Map?)?.map(
+              (k, v) => MapEntry(k.toString(), (v as num).toInt()),
             ) ??
             {},
         totalVotes: j['totalVotes'] as int? ?? 0,
