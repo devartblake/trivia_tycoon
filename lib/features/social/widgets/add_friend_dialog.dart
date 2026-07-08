@@ -22,7 +22,6 @@ class AddFriendDialog extends ConsumerStatefulWidget {
 
 class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
   late TextEditingController _searchController;
-  String _lastQuery = '';
 
   @override
   void initState() {
@@ -63,7 +62,7 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
                           icon: const Icon(Icons.clear_rounded),
                           onPressed: () {
                             _searchController.clear();
-                            setState(() => _lastQuery = '');
+                            setState(() {});
                           },
                         )
                       : null,
@@ -72,7 +71,7 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
                   ),
                 ),
                 onChanged: (value) {
-                  setState(() => _lastQuery = value);
+                  setState(() {});
                 },
               ),
             ),
@@ -219,10 +218,8 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
             duration: const Duration(seconds: 2),
           ),
         );
-        // Refresh search results
-        setState(() {
-          _lastQuery = _searchController.text;
-        });
+        // Trigger rebuild so search results refresh
+        setState(() {});
       }
     } catch (e) {
       if (mounted) {

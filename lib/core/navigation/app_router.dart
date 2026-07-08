@@ -3,6 +3,7 @@
 // to FE-B2 (Phase 3). Do NOT rename route path constants here.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/admin/admin_dashboard.dart';
@@ -119,7 +120,7 @@ import '../../screens/account/account_link_rewards_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/web_link/link_code_screen.dart';
 import '../../screens/profile/avatar_selection_screen.dart';
-import '../../screens/profile/friends_screen.dart';
+import '../../features/social/screens/friends_list_screen.dart';
 import '../../screens/help_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/question/question_details_screen.dart';
@@ -182,6 +183,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/home',
     errorBuilder: (context, state) => const NotFoundScreen(),
     debugLogDiagnostics: true,
+    // Screen-navigation breadcrumbs and transactions for error tracking.
+    observers: [SentryNavigatorObserver()],
 
     // Simplified redirect logic using the service
     redirect: (context, state) {
@@ -1081,7 +1084,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/friends',
         name: 'Friends',
-        builder: (context, state) => const FriendsScreen(),
+        builder: (context, state) => const FriendsListScreen(),
         redirect: (context, state) => featureFlagGuard(context, state,
             isEnabled: (FeatureFlags f) => f.socialEnabled),
       ),
