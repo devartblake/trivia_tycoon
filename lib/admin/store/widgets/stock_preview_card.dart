@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../core/models/store/store_stock_ui_model.dart';
-import '../../../../screens/store/widgets/stock_badge.dart';
-import '../../../../screens/store/widgets/stock_meter_bar.dart';
-import '../../../../screens/store/widgets/stock_reset_timer.dart';
-import '../../../../screens/store/widgets/sold_out_overlay.dart';
-import '../../../../screens/store/widgets/limited_offer_chip.dart';
+import 'package:trivia_tycoon/core/models/store/store_stock_ui_model.dart';
+import 'package:trivia_tycoon/screens/store/widgets/stock_badge.dart';
+import 'package:trivia_tycoon/screens/store/widgets/stock_meter_bar.dart';
+import 'package:trivia_tycoon/screens/store/widgets/stock_reset_timer.dart';
+import 'package:trivia_tycoon/screens/store/widgets/sold_out_overlay.dart';
+import 'package:trivia_tycoon/screens/store/widgets/limited_offer_chip.dart';
 
 /// Preview input parameters for admin preview mode.
 class StockPreviewInput {

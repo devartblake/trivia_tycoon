@@ -142,8 +142,13 @@ class _SynaptixAppState extends ConsumerState<SynaptixApp> {
   }
 
   bool _allowOfflineStartup(String reason) {
+    // Default to a degraded (local-fallback) start when the backend is
+    // unreachable: the question system, rewards, and progression all have
+    // offline fallbacks, and blocking at boot leaves users on a dead screen.
+    // Build with --dart-define=ALLOW_OFFLINE_BOOT=false to restore the strict
+    // "backend required" gate for environments where that is intentional.
     const allowOfflineBoot =
-        bool.fromEnvironment('ALLOW_OFFLINE_BOOT', defaultValue: false);
+        bool.fromEnvironment('ALLOW_OFFLINE_BOOT', defaultValue: true);
     if (!kDebugMode && !allowOfflineBoot) return false;
 
     LogManager.warning(

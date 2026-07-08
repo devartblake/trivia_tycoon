@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../core/services/api_service.dart';
 import '../../core/models/question_validation_models.dart';
 import '../models/question_model.dart';
@@ -53,6 +55,30 @@ abstract class QuestionSourceReporter {
   });
 }
 
+/// Circuit breaker that prevents repeated long waits on an unreachable
+/// question backend. After one connectivity failure, question API calls
+/// short-circuit straight to the local fallback until [cooldown] elapses.
+class QuestionBackendGate {
+  QuestionBackendGate({this.cooldown = const Duration(seconds: 60)});
+
+  final Duration cooldown;
+  DateTime? _unavailableSince;
+
+  bool get isOpen {
+    final since = _unavailableSince;
+    if (since == null) return true;
+    if (DateTime.now().difference(since) >= cooldown) {
+      _unavailableSince = null;
+      return true;
+    }
+    return false;
+  }
+
+  void recordFailure() => _unavailableSince = DateTime.now();
+
+  void recordSuccess() => _unavailableSince = null;
+}
+
 class QuestionHubService {
   QuestionHubService({
     required ApiService apiService,
@@ -66,6 +92,72 @@ class QuestionHubService {
   final AdaptedQuestionLoaderService _localLoader;
   final QuestionSourceReporter? _reporter;
 
+  /// Shared across all instances so one detected outage short-circuits every
+  /// question surface (hub, stats providers, daily quiz) at once.
+  static final QuestionBackendGate backendGate = QuestionBackendGate();
+
+  /// Backend does not currently expose `/questions/categories/{slug}/stats`
+  /// or `/questions/classes/{id}/stats` (see docs/api/BACKEND_API_AUDIT.md).
+  /// Stats are computed from local datasets until those endpoints ship —
+  /// flip this to true when they do.
+  static const bool useBackendStatsEndpoints = false;
+
+  /// Hard cap on how long any single question API attempt may take before we
+  /// fall back locally. Keeps the first failure cheap; the gate makes every
+  /// subsequent call during the cooldown free.
+  static const Duration apiAttemptTimeout = Duration(seconds: 4);
+
+  Future<Map<String, dynamic>> _gatedGet(
+    String endpoint, {
+    Map<String, dynamic>? queryParameters,
+  }) {
+    return _gated(
+      endpoint,
+      () => _apiService.get(
+        endpoint,
+        queryParameters: queryParameters,
+        timeout: apiAttemptTimeout,
+      ),
+    );
+  }
+
+  Future<Map<String, dynamic>> _gatedPost(
+    String endpoint, {
+    required Map<String, dynamic> body,
+  }) {
+    return _gated(
+      endpoint,
+      () => _apiService.post(endpoint, body: body, timeout: apiAttemptTimeout),
+    );
+  }
+
+  Future<Map<String, dynamic>> _gated(
+    String endpoint,
+    Future<Map<String, dynamic>> Function() request,
+  ) async {
+    if (!backendGate.isOpen) {
+      throw ApiRequestException(
+        'Question backend short-circuited after recent failure',
+        path: endpoint,
+      );
+    }
+    try {
+      // Outer timeout also bounds the (non-configurable per request) connect
+      // phase, so an unreachable host costs at most ~apiAttemptTimeout once.
+      final response = await request().timeout(apiAttemptTimeout);
+      backendGate.recordSuccess();
+      return response;
+    } on TimeoutException {
+      backendGate.recordFailure();
+      throw ApiRequestException('API Timeout', path: endpoint);
+    } on ApiRequestException catch (e) {
+      // Only connectivity-style failures close the gate; HTTP errors mean the
+      // backend is reachable and should not suppress subsequent calls.
+      if (e.statusCode == null) backendGate.recordFailure();
+      rethrow;
+    }
+  }
+
   Future<List<QuestionModel>> getQuestionsForCategory({
     required String category,
     int amount = 10,
@@ -74,7 +166,7 @@ class QuestionHubService {
     String? playerId,
   }) async {
     try {
-      final response = await _apiService.get(
+      final response = await _gatedGet(
         '/questions/set',
         queryParameters: {
           'category': category,
@@ -128,7 +220,7 @@ class QuestionHubService {
     required String selectedAnswer,
   }) async {
     try {
-      final response = await _apiService.post(
+      final response = await _gatedPost(
         '/questions/check',
         body: {
           'questionId': question.id,
@@ -172,7 +264,7 @@ class QuestionHubService {
     }
 
     try {
-      final response = await _apiService.post(
+      final response = await _gatedPost(
         '/questions/check-batch',
         body: {
           'answers': submissions
@@ -255,7 +347,7 @@ class QuestionHubService {
 
   Future<List<QuizCategory>> getAvailableCategories() async {
     try {
-      final response = await _apiService.get('/questions/categories');
+      final response = await _gatedGet('/questions/categories');
       final envelope = QuestionResponseContract.parseCollection(
         response,
         endpoint: '/questions/categories',
@@ -291,7 +383,7 @@ class QuestionHubService {
 
   Future<Map<String, dynamic>> getQuestionStats() async {
     try {
-      final response = await _apiService.get('/questions/metadata');
+      final response = await _gatedGet('/questions/metadata');
       final envelope = QuestionResponseContract.parseObject(
         response,
         endpoint: '/questions/metadata',
@@ -318,99 +410,97 @@ class QuestionHubService {
 
   Future<Map<String, dynamic>> getCategoryStats(QuizCategory category) async {
     final categorySlug = category.name;
-    try {
-      final response = await _apiService.get(
-        '/questions/categories/$categorySlug/stats',
-      );
-      final envelope = QuestionResponseContract.parseObject(
-        response,
-        endpoint: '/questions/categories/$categorySlug/stats',
-        anyOfKeys: const ['questionCount', 'totalQuestions', 'total'],
-      );
-      _recordBackend(
-        operation: 'category_stats',
-        endpoint: '/questions/categories/$categorySlug/stats',
-        detail: 'Loaded stats for ${category.name}',
-      );
-      return envelope.data;
-    } on ApiRequestException {
-      // fallback below
-    } on QuestionContractException {
-      // fallback below
+    if (useBackendStatsEndpoints) {
+      try {
+        final response = await _gatedGet(
+          '/questions/categories/$categorySlug/stats',
+        );
+        final envelope = QuestionResponseContract.parseObject(
+          response,
+          endpoint: '/questions/categories/$categorySlug/stats',
+          anyOfKeys: const ['questionCount', 'totalQuestions', 'total'],
+        );
+        _recordBackend(
+          operation: 'category_stats',
+          endpoint: '/questions/categories/$categorySlug/stats',
+          detail: 'Loaded stats for ${category.name}',
+        );
+        return envelope.data;
+      } on ApiRequestException {
+        // fallback below
+      } on QuestionContractException {
+        // fallback below
+      }
     }
 
+    // Local stats are the expected source while the backend has no stats
+    // endpoints, so this path intentionally does not flip the fallback banner.
     final questionCount =
         await _localLoader.getQuizCategoryQuestionCount(category);
     final difficulty = await _localLoader.getQuizCategoryDifficulty(category);
 
-    _recordFallback(
-      operation: 'category_stats',
-      endpoint: '/questions/categories/${category.name}/stats',
-      detail: 'Using local stats for ${category.name}',
-    );
     return {
       'questionCount': questionCount,
       'difficulty': difficulty,
       'category': category.name,
-      'source': 'local_fallback',
+      'source': 'local',
     };
   }
 
   Future<Map<String, dynamic>> getClassStats(String classId) async {
-    try {
-      final endpoint = '/questions/classes/$classId/stats';
-      final response = await _apiService.get(endpoint);
-      if (response.isNotEmpty) {
-        final envelope = QuestionResponseContract.parseCollection(
-          response,
-          endpoint: endpoint,
-          itemKeys: const ['availableCategories', 'categories', 'items'],
-        );
-        final categories = envelope.items
-            .map(_parseCategory)
-            .whereType<QuizCategory>()
-            .toList();
+    if (useBackendStatsEndpoints) {
+      try {
+        final endpoint = '/questions/classes/$classId/stats';
+        final response = await _gatedGet(endpoint);
+        if (response.isNotEmpty) {
+          final envelope = QuestionResponseContract.parseCollection(
+            response,
+            endpoint: endpoint,
+            itemKeys: const ['availableCategories', 'categories', 'items'],
+          );
+          final categories = envelope.items
+              .map(_parseCategory)
+              .whereType<QuizCategory>()
+              .toList();
 
-        _recordBackend(
-          operation: 'class_stats',
-          endpoint: endpoint,
-          detail: 'Loaded class stats for $classId',
-        );
-        return {
-          'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
-          'subjectCount':
-              (response['subjectCount'] as num?)?.toInt() ?? categories.length,
-          'availableCategories': categories,
-          'source': 'backend',
-          'meta': envelope.meta,
-        };
+          _recordBackend(
+            operation: 'class_stats',
+            endpoint: endpoint,
+            detail: 'Loaded class stats for $classId',
+          );
+          return {
+            'questionCount': (response['questionCount'] as num?)?.toInt() ?? 0,
+            'subjectCount': (response['subjectCount'] as num?)?.toInt() ??
+                categories.length,
+            'availableCategories': categories,
+            'source': 'backend',
+            'meta': envelope.meta,
+          };
+        }
+      } on ApiRequestException {
+        // fallback below
+      } on QuestionContractException {
+        // fallback below
       }
-    } on ApiRequestException {
-      // fallback below
-    } on QuestionContractException {
-      // fallback below
     }
 
+    // Local stats are the expected source while the backend has no stats
+    // endpoints, so this path intentionally does not flip the fallback banner.
     final questionCount = await _localLoader.getClassQuestionCount(classId);
     final subjectCount = await _localLoader.getClassSubjectCount(classId);
     final categories = QuizCategoryManager.getCategoriesForClass(classId);
 
-    _recordFallback(
-      operation: 'class_stats',
-      endpoint: '/questions/classes/$classId/stats',
-      detail: 'Using local class stats for $classId',
-    );
     return {
       'questionCount': questionCount,
       'subjectCount': subjectCount,
       'availableCategories': categories,
-      'source': 'local_fallback',
+      'source': 'local',
     };
   }
 
   Future<Map<String, dynamic>> getDatasetInfo() async {
     try {
-      final response = await _apiService.get('/questions/metadata');
+      final response = await _gatedGet('/questions/metadata');
       final envelope = QuestionResponseContract.parseObject(
         response,
         endpoint: '/questions/metadata',
@@ -444,7 +534,7 @@ class QuestionHubService {
     String? playerId,
   }) async {
     try {
-      final response = await _apiService.get(
+      final response = await _gatedGet(
         '/questions/set',
         queryParameters: {
           'count': questionCount,
@@ -495,7 +585,7 @@ class QuestionHubService {
 
   Future<List<QuestionModel>> getDailyQuiz({int questionCount = 5}) async {
     try {
-      final response = await _apiService.get(
+      final response = await _gatedGet(
         '/questions/set',
         queryParameters: {
           'count': questionCount,

@@ -39,8 +39,10 @@ class _QuestionScreenState extends ConsumerState<QuestionScreen> {
   void _preloadData() async {
     try {
       final repository = ref.read(questionRepositoryProvider);
-      await repository.getDailyQuestions();
-      await repository.getAvailableCategories();
+      await Future.wait([
+        repository.getDailyQuestions(),
+        repository.getAvailableCategories(),
+      ]);
     } catch (e) {
       // Handle silently for now
       LogManager.debug('Preload warning: $e');

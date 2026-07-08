@@ -1167,7 +1167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   Widget _buildSocialButton({
-    required IconData icon,
+    required FaIconData icon,
     required VoidCallback onPressed,
   }) {
     return Container(

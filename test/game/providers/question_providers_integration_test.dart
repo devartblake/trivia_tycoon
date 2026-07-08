@@ -6,7 +6,6 @@ import 'package:trivia_tycoon/game/models/game_mode.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/providers/question_providers.dart'
     as question_data;
-import 'package:trivia_tycoon/game/providers/quiz_providers.dart';
 import 'package:trivia_tycoon/game/services/quiz_category.dart';
 
 class _FakeQuestionRepository implements QuestionRepository {
@@ -165,19 +164,27 @@ void main() {
     expect(classStats['availableCategories'], [QuizCategory.history]);
   });
 
-  test(
-      'serviceStatusProvider returns normalized repository-backed status payload',
-      () async {
+  test('serviceStatusProvider reflects the question source snapshot', () async {
     final container = containerWithRepo(_FakeQuestionRepository());
     addTearDown(container.dispose);
 
-    final status = await container.read(serviceStatusProvider.future);
+    final status = container.read(question_data.serviceStatusProvider);
 
+    // No fetch has run yet, so the source snapshot is still unknown.
+    expect(status['source'], 'unknown');
     expect(status['isHealthy'], isTrue);
-    expect(status['source'], 'repository');
-    expect((status['questionStats'] as Map<String, dynamic>)['questionCount'],
-        120);
-    expect(
-        (status['datasetInfo'] as Map<String, dynamic>)['name'], 'phase2_pack');
+
+    container
+        .read(question_data.questionSourceStatusProvider.notifier)
+        .recordBackend(
+          operation: 'category_questions',
+          endpoint: '/questions/set',
+          detail: 'test',
+        );
+
+    final backendStatus = container.read(question_data.serviceStatusProvider);
+    expect(backendStatus['source'], 'backend');
+    expect(backendStatus['isHealthy'], isTrue);
+    expect(backendStatus['endpoint'], '/questions/set');
   });
 }

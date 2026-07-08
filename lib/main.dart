@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:trivia_tycoon/core/services/sentry_service.dart';
 import 'core/bootstrap/synaptix_app.dart';
 import 'core/env.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;
@@ -14,6 +16,30 @@ Future<void> main() async {
   // Load environment variables before doing anything else
   await EnvConfig.load();
 
+  // Initialize Sentry when a DSN is configured (dart-define or env file).
+  // Without a DSN the app runs exactly as before — no error tracking.
+  final dsn = SentryService.getSentryDsn();
+
+  if (dsn != null && dsn.isNotEmpty) {
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = dsn;
+        options.environment = SentryService.getSentryEnvironment();
+        options.tracesSampleRate = SentryService.getTraceSampleRate();
+        options.maxBreadcrumbs = 200;
+      },
+      appRunner: _runApp,
+    );
+  } else {
+    LogManager.info(
+      'Sentry DSN not configured - error tracking disabled',
+      source: 'main',
+    );
+    await _runApp();
+  }
+}
+
+Future<void> _runApp() async {
   try {
     // Initialize services first
     final (manager, theme) = await AppInit.initialize();
@@ -27,6 +53,16 @@ Future<void> main() async {
     LogManager.info(
       'Session loaded: isLoggedIn=$isLoggedIn, ageGroup=$savedAgeGroup, synaptixMode=${initialMode.name}',
       source: 'main',
+    );
+
+    SentryService.addBreadcrumb(
+      message: 'App initialization completed',
+      category: 'app-lifecycle',
+      data: {
+        'isLoggedIn': isLoggedIn.toString(),
+        'ageGroup': savedAgeGroup,
+        'mode': initialMode.name,
+      },
     );
 
     runApp(
@@ -44,10 +80,14 @@ Future<void> main() async {
         child: SynaptixApp(initialData: (manager, theme)),
       ),
     );
-  } catch (e) {
-    LogManager.error('App initialization failed: $e', source: 'main');
+  } catch (e, st) {
+    LogManager.error('App initialization failed: $e',
+        source: 'main', stackTrace: st);
 
-    // Fallback - run app without pre-initialized state
+    await SentryService.captureException(e, stackTrace: st);
+
+    // Fallback - run app without pre-initialized state.
+    // SynaptixApp re-attempts AppInit itself when initialData is null.
     runApp(
       ProviderScope(
         child: const SynaptixApp(),

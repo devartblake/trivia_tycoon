@@ -118,12 +118,15 @@ final classStatsProvider =
 final allClassesStatsProvider =
     FutureProvider<Map<String, dynamic>>((ref) async {
   final repository = ref.watch(questionRepositoryProvider);
-  final stats = <String, Map<String, dynamic>>{};
 
-  for (final classId in _defaultClassIds) {
-    final raw = await repository.getClassStats(classId);
-    stats[classId] = normalizeClassStats(raw);
-  }
+  final results = await Future.wait(
+    _defaultClassIds.map((classId) => repository.getClassStats(classId)),
+  );
+
+  final stats = <String, Map<String, dynamic>>{
+    for (var i = 0; i < _defaultClassIds.length; i++)
+      _defaultClassIds[i]: normalizeClassStats(results[i]),
+  };
 
   return {'classStats': stats};
 });

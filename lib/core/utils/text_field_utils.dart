@@ -36,18 +36,18 @@ TextInputType getKeyboardType(LoginUserType userType) {
   }
 }
 
-Icon getPrefixIcon(LoginUserType userType) {
+Widget getPrefixIcon(LoginUserType userType) {
   switch (userType) {
     case LoginUserType.name:
     case LoginUserType.firstName:
     case LoginUserType.lastName:
-      return const Icon(FontAwesomeIcons.circleUser);
+      return const FaIcon(FontAwesomeIcons.circleUser);
     case LoginUserType.phone:
     case LoginUserType.intlPhone:
-      return const Icon(FontAwesomeIcons.squarePhoneFlip);
+      return const FaIcon(FontAwesomeIcons.squarePhoneFlip);
     case LoginUserType.email:
     default:
-      return const Icon(FontAwesomeIcons.squareEnvelope);
+      return const FaIcon(FontAwesomeIcons.squareEnvelope);
   }
 }
 

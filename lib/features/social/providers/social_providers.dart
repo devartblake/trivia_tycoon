@@ -137,9 +137,9 @@ final partyDetailsProvider = FutureProvider.family<PartyDetailResponse, String>(
 Future<void> sendFriendRequest(WidgetRef ref, String targetPlayerId) async {
   final service = ref.read(friendsServiceProvider);
   await service.sendRequest(targetPlayerId);
-  // Refresh search results after sending request
-  ref.refresh(playerSearchProvider(''));
-  ref.refresh(pendingFriendRequestsProvider);
+  // Invalidate search results and requests so watchers refetch
+  ref.invalidate(playerSearchProvider);
+  ref.invalidate(pendingFriendRequestsProvider);
 }
 
 /// Accept a friend request
@@ -147,8 +147,8 @@ Future<void> acceptFriendRequest(WidgetRef ref, String requestId) async {
   final service = ref.read(friendsServiceProvider);
   await service.acceptRequest(requestId);
   // Refresh both lists
-  ref.refresh(friendsListProvider);
-  ref.refresh(pendingFriendRequestsProvider);
+  ref.invalidate(friendsListProvider);
+  ref.invalidate(pendingFriendRequestsProvider);
 }
 
 /// Decline a friend request
@@ -156,7 +156,7 @@ Future<void> declineFriendRequest(WidgetRef ref, String requestId) async {
   final service = ref.read(friendsServiceProvider);
   await service.declineRequest(requestId);
   // Refresh requests list
-  ref.refresh(pendingFriendRequestsProvider);
+  ref.invalidate(pendingFriendRequestsProvider);
 }
 
 /// Remove a friend
@@ -164,7 +164,7 @@ Future<void> removeFriend(WidgetRef ref, String friendId) async {
   final service = ref.read(friendsServiceProvider);
   await service.removeFriend(friendId);
   // Refresh friends list
-  ref.refresh(friendsListProvider);
+  ref.invalidate(friendsListProvider);
 }
 
 /// Create a new party
@@ -183,7 +183,7 @@ Future<PartyResponse> createParty(
     gameMode: gameMode,
   );
   // Refresh parties list
-  ref.refresh(activePartiesProvider);
+  ref.invalidate(activePartiesProvider);
   return party;
 }
 
@@ -199,7 +199,7 @@ Future<void> inviteToParty(
     targetPlayerId: targetPlayerId,
   );
   // Refresh party details
-  ref.refresh(partyDetailsProvider(partyId));
+  ref.invalidate(partyDetailsProvider(partyId));
 }
 
 /// Accept party invitation
@@ -207,7 +207,7 @@ Future<void> acceptPartyInvitation(WidgetRef ref, String inviteId) async {
   final service = ref.read(partiesServiceProvider);
   await service.acceptInvite(inviteId);
   // Refresh parties list
-  ref.refresh(activePartiesProvider);
+  ref.invalidate(activePartiesProvider);
 }
 
 /// Decline party invitation
@@ -221,7 +221,7 @@ Future<void> leaveParty(WidgetRef ref, String partyId) async {
   final service = ref.read(partiesServiceProvider);
   await service.leaveParty(partyId);
   // Refresh parties list
-  ref.refresh(activePartiesProvider);
+  ref.invalidate(activePartiesProvider);
 }
 
 /// Disband a party (owner only)
@@ -229,5 +229,5 @@ Future<void> disbandParty(WidgetRef ref, String partyId) async {
   final service = ref.read(partiesServiceProvider);
   await service.disbandParty(partyId);
   // Refresh parties list
-  ref.refresh(activePartiesProvider);
+  ref.invalidate(activePartiesProvider);
 }

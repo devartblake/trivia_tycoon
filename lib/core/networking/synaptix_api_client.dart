@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
@@ -763,9 +765,12 @@ class SynaptixApiClient {
       '${_http.baseUrl}/health',
     ];
 
+    // Each probe is tightly bounded so a black-holed host cannot pin the
+    // "Connecting to server..." boot screen for the platform default timeout.
+    const probeTimeout = Duration(seconds: 3);
     for (final url in urls.toSet()) {
       try {
-        final response = await http.get(Uri.parse(url));
+        final response = await http.get(Uri.parse(url)).timeout(probeTimeout);
         if (response.statusCode == 200) return true;
       } catch (_) {
         // Try the next configured/fallback health endpoint.

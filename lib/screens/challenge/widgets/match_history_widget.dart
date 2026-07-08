@@ -61,7 +61,7 @@ class MatchHistoryWidget extends ConsumerWidget {
               FilledButton.icon(
                 onPressed: () {
                   // Trigger manual refresh
-                  ref.refresh(activeMatchesProvider);
+                  ref.invalidate(activeMatchesProvider);
                 },
                 icon: const Icon(Icons.refresh_rounded),
                 label: const Text('Refresh'),
@@ -89,7 +89,7 @@ class MatchHistoryWidget extends ConsumerWidget {
 
     return RefreshIndicator(
       onRefresh: () async {
-        ref.refresh(activeMatchesProvider);
+        ref.invalidate(activeMatchesProvider);
       },
       child: ListView.builder(
         itemCount: displayMatches.length,

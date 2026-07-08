@@ -1,8 +1,10 @@
 ﻿# Master Task Tracking - Trivia Tycoon Project
 
-**Last Updated:** July 3, 2026
-**Project Status:** Production-ready core systems with Phase 2 reward/progression API integration verified
+**Last Updated:** July 8, 2026
+**Project Status:** Production-ready core systems; full codebase audit complete with Sprint 1 critical fixes landed (question reachability, Sentry, Friends routing)
 **Overall Completion:** Core gameplay, reward, progression, quiz review, and arcade leaderboard tracks are production-oriented; operator/analytics/realtime work remains future scope
+
+> **See also:** [Codebase Audit & 5-Sprint Plan (2026-07-08)](audit/CODEBASE_AUDIT_AND_SPRINT_PLAN_2026_07_08.md) — the current execution plan. Sprint 1 (critical) items landed 2026-07-08.
 
 ## Current Snapshot
 
@@ -17,6 +19,10 @@
 | Operator Controls | Planned | Requires operator API and dashboard work. |
 | Analytics Dashboard | Planned/In Progress | Separate feature track; not a Phase 2 backend blocker. |
 | Realtime Config Updates | Deferred | Optional WebSocket/config refresh work. |
+| Sentry (client) | Complete | Initialized in `lib/main.dart` (DSN-gated), navigator observer on router (2026-07-08). DSN rotation + CI secret injection still pending. |
+| Friends (Sprint 1) | Routed & functional | `/friends` → `FriendsListScreen`; refresh bugs fixed. Gated by remote `socialEnabled` flag (default false). Tests/debounce/a11y remain. |
+| Question Reachability | Complete | Offline-boot default, health-probe timeouts, `QuestionBackendGate` circuit breaker, local stats (2026-07-08). |
+| Parties (Sprint 2) | Not started (UI) | Models/API client/service exist; screens pending. |
 
 ## Phase 2 Verification Update
 
@@ -54,7 +60,10 @@ Frontend integration status:
 
 - Deploy/QA production-ready quiz review and arcade leaderboard work.
 - Run manual QA against deployed reward/progression backend services.
-- Clean up unrelated analyzer warnings reported by `flutter analyze`.
+- ~~Clean up unrelated analyzer warnings reported by `flutter analyze`.~~ Done 2026-07-08 (26 issues → 4 info-level deprecations).
+- Rotate the committed Sentry DSN and inject via CI secrets (`release.yml`).
+- Decide default for the remote `socialEnabled` flag (Friends hidden until backend enables it).
+- Triage the ~223 full-suite test failures (pending-timer/dispose family) — see audit Appendix B.
 
 ### Next
 
@@ -108,13 +117,17 @@ flutter test test/core/services/phase2_backend_contract_clients_test.dart test/g
 
 Result: 22 tests passed.
 
-Attempted:
+Passed on July 8, 2026 (Flutter 3.44.5):
 
 ```bash
 flutter analyze --no-pub
 ```
 
-Result: timed out before completion. Known analyzer warnings include `avoid_print`, unused imports, unused locals, and unnecessary casts.
+Result: 4 info-level deprecation notices remain (`onReorder` ×2, `axisAlignment` ×2); all warnings/errors cleared.
+
+Full suite (July 8, 2026): 4,269 passed / 223 failed / 2 skipped in 47m25s. Failure triage tracked for Sprint 4 (audit item 4.8).
+
+Note: dependency resolution requires Flutter >= 3.44.5 (`model_viewer_plus` constraint); `font_awesome_flutter` 11.x + `sign_in_button` 5.x migrated 2026-07-08.
 
 ## Key Documents
 
@@ -128,7 +141,9 @@ Result: timed out before completion. Known analyzer warnings include `avoid_prin
 ## Known Risks
 
 - Manual QA against deployed backend services is still needed.
-- Analyzer warning cleanup is still needed.
+- ~223 failing tests in the full suite mean it is not yet a reliable regression gate.
+- Committed Sentry DSN needs rotation.
+- Two competing friends API surfaces (`/friends/*` vs `/users/me/friends/*`) must be reconciled before Friends ships broadly (audit item 2.2).
 - Operator/analytics/realtime scopes require additional product and backend decisions.
 
 ## Success Criteria

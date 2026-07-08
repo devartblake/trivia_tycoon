@@ -1,5 +1,12 @@
 # Trivia Tycoon - Start Here 🚀
 
+> **Current status (2026-07-08):** For the up-to-date project state, read
+> [docs/MASTER_TASK_TRACKING.md](docs/MASTER_TASK_TRACKING.md) and the
+> [Codebase Audit & 5-Sprint Plan](docs/audit/CODEBASE_AUDIT_AND_SPRINT_PLAN_2026_07_08.md).
+> Sprint 1 (critical fixes: question reachability, Sentry, Friends routing) landed 2026-07-08 —
+> see [CHANGELOG.md](CHANGELOG.md) 4.2.0. **Toolchain: Flutter ≥ 3.44.5 required.**
+> The document below describes the earlier widget-modularization/CI session and remains valid.
+
 Welcome! This document guides you through the major architectural improvements completed in this session.
 
 ## What Changed?

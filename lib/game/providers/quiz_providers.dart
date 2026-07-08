@@ -73,17 +73,3 @@ final classSubjectCountProvider =
       await ref.watch(question_data.classStatsProvider(classId).future);
   return (stats['subjectCount'] as num?)?.toInt() ?? 0;
 });
-
-// Service status provider
-final serviceStatusProvider = FutureProvider<Map<String, dynamic>>((ref) async {
-  final questionStats =
-      await ref.watch(question_data.questionStatsProvider.future);
-  final datasetInfo = await ref.watch(question_data.datasetInfoProvider.future);
-
-  return {
-    'isHealthy': true,
-    'source': 'repository',
-    'questionStats': questionStats,
-    'datasetInfo': datasetInfo,
-  };
-});

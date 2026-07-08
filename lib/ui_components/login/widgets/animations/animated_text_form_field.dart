@@ -503,7 +503,7 @@ class _AnimatedPasswordTextFormFieldState
       enabled: widget.enabled,
       autofillHints: widget.autofillHints,
       labelText: widget.labelText,
-      prefixIcon: const Icon(FontAwesomeIcons.lock, size: 20),
+      prefixIcon: const FaIcon(FontAwesomeIcons.lock, size: 20),
       suffixIcon: GestureDetector(
         onTap: () => setState(() => _obscureText = !_obscureText),
         dragStartBehavior: DragStartBehavior.down,
