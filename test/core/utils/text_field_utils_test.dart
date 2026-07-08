@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/ui_components/login/models/login_user_type.dart';
 import 'package:trivia_tycoon/core/utils/text_field_utils.dart';
@@ -193,66 +194,66 @@ void main() {
 
   group('getPrefixIcon', () {
     test('email → non-null Icon', () {
-      expect(getPrefixIcon(LoginUserType.email), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.email), isA<FaIcon>());
     });
 
     test('name → non-null Icon', () {
-      expect(getPrefixIcon(LoginUserType.name), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.name), isA<FaIcon>());
     });
 
     test('firstName → non-null Icon', () {
-      expect(getPrefixIcon(LoginUserType.firstName), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.firstName), isA<FaIcon>());
     });
 
     test('lastName → non-null Icon', () {
-      expect(getPrefixIcon(LoginUserType.lastName), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.lastName), isA<FaIcon>());
     });
 
     test('phone → non-null Icon', () {
-      expect(getPrefixIcon(LoginUserType.phone), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.phone), isA<FaIcon>());
     });
 
     test('intlPhone → non-null Icon', () {
-      expect(getPrefixIcon(LoginUserType.intlPhone), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.intlPhone), isA<FaIcon>());
     });
 
     test('checkbox → non-null Icon (falls through to default)', () {
-      expect(getPrefixIcon(LoginUserType.checkbox), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.checkbox), isA<FaIcon>());
     });
 
     test('text → non-null Icon (falls through to default)', () {
-      expect(getPrefixIcon(LoginUserType.text), isA<Icon>());
+      expect(getPrefixIcon(LoginUserType.text), isA<FaIcon>());
     });
 
     test('name, firstName, lastName share the same icon data', () {
-      final nameIcon = getPrefixIcon(LoginUserType.name);
-      final firstIcon = getPrefixIcon(LoginUserType.firstName);
-      final lastIcon = getPrefixIcon(LoginUserType.lastName);
+      final nameIcon = getPrefixIcon(LoginUserType.name) as FaIcon;
+      final firstIcon = getPrefixIcon(LoginUserType.firstName) as FaIcon;
+      final lastIcon = getPrefixIcon(LoginUserType.lastName) as FaIcon;
       expect(nameIcon.icon, firstIcon.icon);
       expect(firstIcon.icon, lastIcon.icon);
     });
 
     test('phone and intlPhone share the same icon data', () {
-      final phoneIcon = getPrefixIcon(LoginUserType.phone);
-      final intlIcon = getPrefixIcon(LoginUserType.intlPhone);
+      final phoneIcon = getPrefixIcon(LoginUserType.phone) as FaIcon;
+      final intlIcon = getPrefixIcon(LoginUserType.intlPhone) as FaIcon;
       expect(phoneIcon.icon, intlIcon.icon);
     });
 
     test('email and phone use different icons', () {
-      final emailIcon = getPrefixIcon(LoginUserType.email);
-      final phoneIcon = getPrefixIcon(LoginUserType.phone);
+      final emailIcon = getPrefixIcon(LoginUserType.email) as FaIcon;
+      final phoneIcon = getPrefixIcon(LoginUserType.phone) as FaIcon;
       expect(emailIcon.icon, isNot(equals(phoneIcon.icon)));
     });
 
     test('name and email use different icons', () {
-      final nameIcon = getPrefixIcon(LoginUserType.name);
-      final emailIcon = getPrefixIcon(LoginUserType.email);
+      final nameIcon = getPrefixIcon(LoginUserType.name) as FaIcon;
+      final emailIcon = getPrefixIcon(LoginUserType.email) as FaIcon;
       expect(nameIcon.icon, isNot(equals(emailIcon.icon)));
     });
 
-    test('all values return an Icon', () {
+    test('all values return a FaIcon', () {
       for (final t in LoginUserType.values) {
-        expect(getPrefixIcon(t), isA<Icon>());
+        expect(getPrefixIcon(t), isA<FaIcon>());
       }
     });
   });

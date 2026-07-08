@@ -165,7 +165,7 @@ class _AdditionalSignUpCardState extends ConsumerState<_AdditionalSignUpCard>
               width: width,
               labelText: formField.displayName,
               prefixIcon: formField.icon ??
-                  const Icon(FontAwesomeIcons.solidCircleUser),
+                  const FaIcon(FontAwesomeIcons.solidCircleUser),
               keyboardType: getKeyboardType(formField.userType),
               autofillHints: [getAutofillHints(formField.userType)],
               textInputAction:
