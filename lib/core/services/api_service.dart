@@ -600,6 +600,15 @@ class ApiService {
     if (path == '/arcade' || path.startsWith('/arcade/')) return true;
     if (path == '/missions' || path.startsWith('/missions/')) return true;
 
+    // Backend requires authorization for these features (see
+    // docs/api/BACKEND_API_AUDIT.md); without the bearer header they 401.
+    if (path == '/matches' || path.startsWith('/matches/')) return true;
+    if (path == '/party' || path.startsWith('/party/')) return true;
+    if (path == '/progression' || path.startsWith('/progression/')) {
+      return true;
+    }
+    if (path == '/account' || path.startsWith('/account/')) return true;
+
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
     if (path == '/users/search' || path.startsWith('/users/search/')) {
@@ -645,7 +654,9 @@ class ApiService {
     final refreshToken = box.get('auth_refresh_token')?.toString() ?? '';
     if (refreshToken.trim().isEmpty) return false;
 
-    const refreshPaths = ['/admin/auth/refresh', '/auth/refresh'];
+    // User refresh first: regular players are the overwhelming majority, and
+    // trying the admin variant first cost every user a failed request.
+    const refreshPaths = ['/auth/refresh', '/admin/auth/refresh'];
 
     for (final refreshPath in refreshPaths) {
       try {

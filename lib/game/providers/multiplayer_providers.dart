@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/services/matches_api_client.dart';
 import '../../core/services/social/challenge_coordination_service.dart';
 import '../../game/services/matches_service.dart';
 import 'arcade_providers.dart';

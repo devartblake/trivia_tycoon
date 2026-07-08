@@ -134,6 +134,13 @@ class ActiveMatchesNotifier extends StateNotifier<List<Map<String, dynamic>>> {
     });
   }
 
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    _timeUpdateTimer?.cancel();
+    super.dispose();
+  }
+
   void updateMatchScore(String matchId, String newScore, String newStatus) {
     state = state.map((match) {
       if (match['id'] == matchId) {
