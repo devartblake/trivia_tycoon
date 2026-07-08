@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/utils/encryption_utils.dart';
+import 'package:trivia_tycoon/core/utils/encryption_utils.dart';
 
 class EncryptionManagerScreen extends StatefulWidget {
   const EncryptionManagerScreen({super.key});

@@ -5,9 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../game/models/question_model.dart';
-import '../../../core/utils/encryption_utils.dart';
-import '../../../core/services/api_service.dart';
+import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:trivia_tycoon/core/utils/encryption_utils.dart';
+import 'package:trivia_tycoon/core/services/api_service.dart';
 import 'question_ingestion_review.dart';
 import 'question_ingestion_service.dart';
 

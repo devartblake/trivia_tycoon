@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/services/presence/message_reaction_service.dart';
+import 'package:trivia_tycoon/core/services/presence/message_reaction_service.dart';
 import '../../game/models/message_reaction.dart';
 
 class MessageReactionPicker extends StatefulWidget {
