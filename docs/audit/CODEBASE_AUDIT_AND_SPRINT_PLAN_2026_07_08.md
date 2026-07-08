@@ -390,4 +390,12 @@ Assumes 1 sprint = 2 weeks, 1–2 developers. Each sprint has a theme, a definit
 
 ## Appendix B — Test Run
 
-`flutter test` executed as part of this audit — results recorded in the commit message / follow-up note (suite was still executing at time of report writing; see repository CI for the canonical run).
+Full `flutter test` (Flutter 3.44.5, 2026-07-08, 47m25s):
+
+```
+4,269 passed · 223 failed · 2 skipped  (~95% pass rate)
+```
+
+- ~5% of the suite fails — the suite is **not currently a reliable regression gate**, which matters because several docs claim "ready for QA" based on green targeted runs only.
+- Representative failure mode (last recorded): `test/widgets/leaderboard_widgets_test.dart` — "A Timer is still pending even after the widget tree was disposed" (`!timersPending` assertion). Widgets that start timers (score displays, auto-refresh, countdowns) are not disposing them, or tests are missing `pumpAndSettle`/fake-async handling. The unused `_refreshTimer` finding in `MatchesService` (§1.2) is the same family of bug in production code.
+- Action (Sprint 4, item 4.8): triage the 223 failures by suite, fix timer/dispose leaks first (they indicate production-code lifecycle bugs, not just test debt), then make the full suite a required CI gate.
