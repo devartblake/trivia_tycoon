@@ -8,21 +8,22 @@ import 'package:trivia_tycoon/core/manager/log_manager.dart';
 class SentryService {
   /// Get Sentry DSN from environment
   static String? getSentryDsn() {
-    final dartDefined = String.fromEnvironment('SENTRY_DSN');
+    // Must be const for --dart-define values to be baked into AOT builds.
+    const dartDefined = String.fromEnvironment('SENTRY_DSN');
     if (dartDefined.isNotEmpty) return dartDefined;
     return dotenv.env['SENTRY_DSN'];
   }
 
   /// Get Sentry environment (development, staging, production)
   static String getSentryEnvironment() {
-    final dartDefined = String.fromEnvironment('SENTRY_ENVIRONMENT');
+    const dartDefined = String.fromEnvironment('SENTRY_ENVIRONMENT');
     if (dartDefined.isNotEmpty) return dartDefined;
     return dotenv.env['SENTRY_ENVIRONMENT'] ?? 'development';
   }
 
   /// Get trace sample rate (what percentage of transactions to send to Sentry)
   static double getTraceSampleRate() {
-    final dartDefined = String.fromEnvironment('SENTRY_TRACE_SAMPLE_RATE');
+    const dartDefined = String.fromEnvironment('SENTRY_TRACE_SAMPLE_RATE');
     double rate = 1.0;
 
     if (dartDefined.isNotEmpty) {
