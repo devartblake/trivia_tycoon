@@ -1,7 +1,15 @@
 # 🚀 Sprint 1: Friends System — Launch Status
 
-**Date**: 2026-07-05  
-**Status**: FOUNDATION COMPLETE & READY FOR TESTING ✅
+**Date**: 2026-07-05 (updated 2026-07-08)  
+**Status**: FOUNDATION COMPLETE, ROUTED & REACHABLE ✅
+
+> **2026-07-08 update:** The `/friends` route now builds `FriendsListScreen`
+> (it previously still pointed at the legacy profile screen, so this UI was
+> unreachable). Eleven discarded `ref.refresh` results in
+> `social_providers.dart` were fixed with `ref.invalidate`, so friends,
+> requests, and parties lists refetch after accept/decline/remove/create.
+> Note: the route is gated by the remote `socialEnabled` feature flag,
+> which defaults to `false` until the backend `/app/config` enables it.
 
 ---
 
@@ -280,6 +288,10 @@ await acceptFriendRequest(ref, 'request-id-456');
 
 ## 🔧 What Remains for Sprint 1
 
+- [x] Route `/friends` to FriendsListScreen (done 2026-07-08)
+- [x] Fix provider refresh-after-action bugs (done 2026-07-08)
+- [ ] Reconcile the two friends API surfaces (`/friends/*` vs `/users/me/friends/*`) with the backend contract
+- [ ] Enable the `socialEnabled` remote flag (or change its client default)
 - [ ] Unit tests for API client (2-3 hours)
 - [ ] Integration tests with backend (2-3 hours)
 - [ ] Performance optimization (search debouncing)

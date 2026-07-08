@@ -2,6 +2,82 @@
 
 All notable changes to this project are documented in this file.
 
+## [4.2.0] - 2026-07-08
+
+### Full Codebase Audit + Sprint 1 Critical Fixes
+
+#### Added
+- **Codebase Audit & 5-Sprint Plan** (`docs/audit/CODEBASE_AUDIT_AND_SPRINT_PLAN_2026_07_08.md`)
+  - Complete audit of API endpoints, question system, Sentry, user flows, duplicates/legacy code, and outstanding plans
+  - Verified with real toolchain: Flutter 3.44.5 analyze (26 issues → 4 after fixes) and full test run (4,269 passed / 223 failed / 2 skipped in 47m)
+  - Five-sprint execution plan ordered critical → deferred
+- **QuestionBackendGate circuit breaker** (`question_hub_service.dart`)
+  - Every question API attempt capped at 4s; first connectivity failure short-circuits all question endpoints to local fallback for 60s
+  - Replaces the old behavior where each call independently waited out a 10s connect timeout
+
+#### Fixed
+- **Question system not displaying (root causes)**
+  - Release builds no longer block forever on the backend health check: `ALLOW_OFFLINE_BOOT` now defaults to `true` (degraded local-fallback start); build with `--dart-define=ALLOW_OFFLINE_BOOT=false` to restore the strict gate
+  - Health probes bounded to 3s each (previously unbounded — a black-holed host pinned the "Connecting to server..." screen)
+  - Removed duplicate `serviceStatusProvider` in `quiz_providers.dart` that made the source banner permanently read "not confirmed"
+  - Category/class stats no longer call backend endpoints that don't exist (`/questions/categories/{slug}/stats`, `/questions/classes/{id}/stats`); computed locally behind a `useBackendStatsEndpoints` flag
+  - `allClassesStatsProvider` fetches its 13 class stats in parallel (was sequential); QuestionScreen preload parallelized
+- **Sentry effectively OFF in shipped builds**
+  - Sentry init merged into `lib/main.dart` (DSN-gated); `main_with_sentry.dart` deleted — no build ever targeted it
+  - `SentryNavigatorObserver` added to GoRouter for screen breadcrumbs
+  - Env reads now `const String.fromEnvironment` so `--dart-define` values reach AOT builds
+  - Removed dead `_sentryDsn`/`_sentryEnvironment`/`_sentryTraceSampleRate` fields from `EnvConfig`
+- **Sprint 1 Friends system was dark**
+  - `/friends` now routes to the new `FriendsListScreen` (was still building the legacy profile screen; the 1,600-LOC Sprint 1 UI was unreachable)
+  - Fixed 11 discarded `ref.refresh` results in `social_providers.dart` (lists now actually refetch after accept/decline/remove) using `ref.invalidate`
+- **Auth & lifecycle**
+  - Bearer tokens now attach to `/matches`, `/party`, `/progression`, `/account` (previously sent unauthenticated → 401)
+  - Token refresh tries `/auth/refresh` before `/admin/auth/refresh` (regular users no longer burn a guaranteed-failing admin call)
+  - `ActiveMatchesNotifier` cancels its periodic timers in `dispose` (both leaked; same bug family as the pending-timer test failures)
+- **Code health**
+  - 29 wrong-depth relative imports converted to `package:` imports
+  - Analyzer: 26 issues → 4 (remaining are info-level deprecations, tracked for Sprint 4)
+
+#### Changed
+- `font_awesome_flutter` 10.x → 11.x and `sign_in_button` 3.x → 5.x: the locked 10.12.0 fails to compile on Flutter 3.44.5 (extends the now-final `IconData`), breaking tests and release builds; migrated 7 call sites to `FaIcon`/`FaIconData`
+- Toolchain note: dependency resolution requires **Flutter ≥ 3.44.5**
+
+#### Known Issues / Follow-ups
+- Committed Sentry DSN in `assets/config/.env.prod`/`.env.staging` should be rotated and injected via CI secrets
+- `socialEnabled` remote flag defaults to `false` — Friends stays hidden until `/app/config` enables it
+- ~223 test failures in the full suite (mostly pending-timer/dispose family) — triage scheduled in Sprint 4
+
+## [4.1.0] - 2026-07-05
+
+### Phase 2 API Integration, Spin/Match Migration, Sentry Foundation, Friends Foundation
+
+_Covers sessions 2026-07-03 through 2026-07-07 that were not previously recorded here._
+
+#### Added
+- **Sentry error tracking foundation** (2026-07-03/04)
+  - `sentry_flutter` dependency, `SentryService` wrapper (DSN/env/sample-rate from env), setup guide `docs/SENTRY_SETUP_FLUTTER.md`
+  - Note: initialization only became active in shipped builds in 4.2.0
+- **Phase 2 backend contract sync** (2026-07-05)
+  - `DailyBonusApiClient`, `WeeklyRewardsApiClient`, `TierApiClient` aligned with verified backend DTOs under `/api/v1`
+  - Authenticated HTTP transport for Phase 2 clients; contract tests (22 passing)
+- **Spin wheel & matches REST migration** (2026-07-05)
+  - Spin claims use backend-issued claim tokens (prevents "invalid claimToken" failures)
+  - `MatchesService` full REST implementation; Match History tab in Challenges (245-LOC widget, result indicators, relative timestamps)
+- **Skill catalog integration & quiz UI revamp** (2026-07-05)
+  - Skill catalog wired into progression surfaces; quiz screens restyled (dark canvas, segmented progress strip, powerup tray)
+- **Friends system foundation — Sprint 1** (2026-07-05/07)
+  - 7 DTOs, `FriendsApiClient` (7 endpoints), `FriendsService`, 10 Riverpod providers
+  - `FriendsListScreen` (Friends/Requests tabs), `FriendCard`, `FriendRequestCard`, `AddFriendDialog`
+  - `PartyApiClient` + `PartiesService` + party models (UI scheduled for a later sprint)
+  - Secure refresh flow for social API clients
+
+#### Fixed
+- Sentry Flutter API compatibility (simplified to available API surface) (2026-07-04)
+
+#### Documentation
+- `docs/api/BACKEND_API_AUDIT.md` — verified backend endpoint inventory (2026-07-03)
+- `docs/ROADMAP_SUMMARY_2026_07_05.md`, `docs/FUTURE_SPRINTS_FRIENDS_PARTIES_PLAN.md`, Sprint 1 status/progress reports
+
 ## [4.0.0] - 2026-07-01
 
 ### Quiz Review & Arcade Leaderboard System ✅ PRODUCTION READY

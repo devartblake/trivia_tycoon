@@ -5,6 +5,17 @@
 **Toolchain used:** Flutter 3.44.5 stable (`flutter pub get` + `flutter analyze` + `flutter test` run as part of this audit)
 **Branch:** `claude/codebase-audit-sprint-plan-xwf38e`
 
+> **Execution status (2026-07-08):** Sprint 1 (critical) is **complete** —
+> items 1.1–1.7 landed the same day (commits `801b930`…`37becda`), plus an
+> unplanned dependency fix (`font_awesome_flutter` 11.x / `sign_in_button`
+> 5.x, required to compile on Flutter 3.44.5). Analyzer is at 4 info-level
+> notices; targeted suites green (79 tests). Still open from Sprint 1's
+> definition of done: rotating the committed Sentry DSN (needs Sentry
+> admin), wiring DSN via CI secrets, `sentry_dio` HTTP instrumentation
+> (deferred to Sprint 2 alongside backend trace propagation), the
+> `always_use_package_imports` lint + CI analyze gate, and the
+> `socialEnabled` flag decision. See CHANGELOG 4.2.0 for the full list.
+
 ---
 
 ## Executive Summary
@@ -296,15 +307,17 @@ Assumes 1 sprint = 2 weeks, 1–2 developers. Each sprint has a theme, a definit
 
 | # | Task | Ref | Est |
 |---|---|---|---|
-| 1.1 | **Resolve the release health-gate:** product decision + implementation — allow degraded/offline start (recommended: proceed with warning banner; the fallback stack already exists) or fix/deploy backend URL. Add `ALLOW_OFFLINE_BOOT` to release build docs either way | §2.1 | 2d |
-| 1.2 | **Backend-availability short-circuit + timeout tuning** for question endpoints (2–3s connect timeout, shared circuit-breaker so one failure stops the 10s-per-call cascade) | §2.2 | 2d |
-| 1.3 | Delete duplicate `serviceStatusProvider` (quiz_providers copy); stop `getClassStats`/`getCategoryStats` from hitting nonexistent endpoints (compute locally until backend ships them); parallelize `allClassesStatsProvider` | §2.3, §2.4, §8.3 | 2d |
-| 1.4 | **Sentry live in shipped builds:** merge `main_with_sentry.dart` into `main.dart` (guarded zone, `appRunner`), add `SentryNavigatorObserver` + `sentry_dio`, DSN via `--dart-define` from GitHub Secrets, rotate committed DSN, fix unused `EnvConfig` sentry fields, correct the setup doc | §4 | 3d |
-| 1.5 | **Route the Friends system:** point `/friends` at `FriendsListScreen`; fix the 11 `unused_result` refresh bugs in `social_providers.dart`; smoke-test the flow | §5.2, §1.2 | 1d |
-| 1.6 | Fix remaining analyzer warnings (unused import/fields, `_refreshTimer` in `MatchesService`) + the 29 wrong-depth imports; add `always_use_package_imports` (or depth-correct) lint & make `flutter analyze` a required CI gate at 0 warnings | §1.2, §1.3 | 2d |
-| 1.7 | Extend `_isProtectedPath` (or move `/matches`, `/party`, `/progression`, `/account` to the authenticated client); single token-refresh authority; user-path refresh should not try `/admin/auth/refresh` first | §3.4, §7 | 2d |
+| 1.1 ✅ | **Resolve the release health-gate:** product decision + implementation — allow degraded/offline start (recommended: proceed with warning banner; the fallback stack already exists) or fix/deploy backend URL. Add `ALLOW_OFFLINE_BOOT` to release build docs either way | §2.1 | 2d |
+| 1.2 ✅ | **Backend-availability short-circuit + timeout tuning** for question endpoints (2–3s connect timeout, shared circuit-breaker so one failure stops the 10s-per-call cascade) | §2.2 | 2d |
+| 1.3 ✅ | Delete duplicate `serviceStatusProvider` (quiz_providers copy); stop `getClassStats`/`getCategoryStats` from hitting nonexistent endpoints (compute locally until backend ships them); parallelize `allClassesStatsProvider` | §2.3, §2.4, §8.3 | 2d |
+| 1.4 ✅* | **Sentry live in shipped builds:** merge `main_with_sentry.dart` into `main.dart` (guarded zone, `appRunner`), add `SentryNavigatorObserver` + `sentry_dio`, DSN via `--dart-define` from GitHub Secrets, rotate committed DSN, fix unused `EnvConfig` sentry fields, correct the setup doc | §4 | 3d |
+| 1.5 ✅ | **Route the Friends system:** point `/friends` at `FriendsListScreen`; fix the 11 `unused_result` refresh bugs in `social_providers.dart`; smoke-test the flow | §5.2, §1.2 | 1d |
+| 1.6 ✅* | Fix remaining analyzer warnings (unused import/fields, `_refreshTimer` in `MatchesService`) + the 29 wrong-depth imports; add `always_use_package_imports` (or depth-correct) lint & make `flutter analyze` a required CI gate at 0 warnings | §1.2, §1.3 | 2d |
+| 1.7 ✅ | Extend `_isProtectedPath` (or move `/matches`, `/party`, `/progression`, `/account` to the authenticated client); single token-refresh authority; user-path refresh should not try `/admin/auth/refresh` first | §3.4, §7 | 2d |
 
 **Done when:** fresh staging build reaches a playable quiz with backend down *and* up; Sentry shows a test crash with screen breadcrumbs + HTTP spans; `flutter analyze` = 0; Friends screen reachable in-app.
+
+_\* 1.4: `sentry_dio` + DSN-via-CI-secrets + DSN rotation still open. 1.6: 4 info-level deprecations remain (Sprint 4); lint/CI gate not yet added._
 
 ---
 

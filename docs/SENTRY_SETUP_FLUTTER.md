@@ -1,6 +1,7 @@
 # Sentry Error Tracking for Trivia Tycoon Flutter Client
 
-**Status:** ✅ Implemented  
+**Status:** ✅ Implemented & active in the default entrypoint (`lib/main.dart`)  
+**Updated:** 2026-07-08 — Sentry init was merged into `lib/main.dart`; `main_with_sentry.dart` was removed. All builds get Sentry automatically when a DSN is configured. A `SentryNavigatorObserver` is attached to the app router for screen breadcrumbs.  
 **Implementation Date:** 2026-07-03  
 **Version:** 1.0
 
@@ -76,21 +77,17 @@ SENTRY_ENVIRONMENT=production
 SENTRY_TRACE_SAMPLE_RATE=0.1         # 10% sampling in production (cost control)
 ```
 
-### 4. Switch to New Main Entry Point
+### 4. Run the App
 
-Two main entry points are available:
+Sentry initializes automatically from the default entrypoint whenever a DSN
+is configured — no special target is needed:
 
-**Original** (no Sentry):
 ```bash
-# lib/main.dart
 flutter run
 ```
 
-**With Sentry** (recommended):
-```dart
-// lib/main_with_sentry.dart
-flutter run -t lib/main_with_sentry.dart
-```
+With no `SENTRY_DSN` set, the app runs exactly as before with error
+tracking disabled.
 
 ---
 
@@ -207,7 +204,7 @@ SentryService.addBreadcrumb(
 
 ### App Initialization
 
-The new `main_with_sentry.dart` already handles initialization:
+`lib/main.dart` handles initialization:
 
 ```dart
 // Automatically runs at app start
@@ -266,7 +263,7 @@ ElevatedButton(
 ```
 
 Then:
-1. Run the app in debug mode: `flutter run -t lib/main_with_sentry.dart`
+1. Run the app in debug mode: `flutter run`
 2. Tap the test button to trigger an exception
 3. Check Sentry dashboard within 30 seconds
 4. Verify error appears in the Sentry Issues list
@@ -326,7 +323,7 @@ Use Sentry's performance tab to identify slow screens:
 
 ### 5. Add Initialization Breadcrumbs
 
-The `main_with_sentry.dart` automatically adds breadcrumbs during app initialization:
+`lib/main.dart` automatically adds breadcrumbs during app initialization:
 ```dart
 SentryService.addBreadcrumb(
   message: 'App initialization completed',
@@ -347,7 +344,7 @@ SentryService.addBreadcrumb(
 
 1. Verify DSN is set and not empty:
    ```bash
-   flutter run -t lib/main_with_sentry.dart --dart-define-from-file=.env.staging
+   flutter run --dart-define-from-file=.env.staging
    # Check app console output
    ```
 
@@ -359,14 +356,14 @@ SentryService.addBreadcrumb(
 
 3. View Sentry initialization logs:
    ```bash
-   flutter run -t lib/main_with_sentry.dart --dart-define-from-file=.env.staging -v 2>&1 | grep -i sentry
+   flutter run --dart-define-from-file=.env.staging -v 2>&1 | grep -i sentry
    ```
 
 ### No Data in Sentry
 
 1. Ensure the app is built with the correct entry point:
    ```bash
-   flutter run -t lib/main_with_sentry.dart  # Must use this, not lib/main.dart
+   flutter run  # lib/main.dart initializes Sentry when a DSN is set
    ```
 2. Trigger a test error (see Testing section)
 3. Wait 30 seconds for events to appear in Sentry dashboard
@@ -429,7 +426,7 @@ Create custom rules for:
 
 ### Tag Releases
 
-Update `main_with_sentry.dart` with version:
+Update `lib/main.dart` with version:
 
 ```dart
 options.release = '${packageInfo.version}+${packageInfo.buildNumber}';
@@ -480,8 +477,8 @@ SentryService.clearUser();
 1. ✅ Sentry package added to pubspec.yaml
 2. ✅ Environment configuration files created
 3. ✅ SentryService implemented with core APIs
-4. ✅ main_with_sentry.dart entry point created
-5. → Test locally: `flutter run -t lib/main_with_sentry.dart --dart-define-from-file=.env.staging`
+4. ✅ Sentry initialization active in lib/main.dart (default entrypoint)
+5. → Test locally: `flutter run --dart-define-from-file=.env.staging`
 6. → Create Sentry projects for staging/prod at https://sentry.io
 7. → Add DSN values to `.env.staging` and `.env.prod`
 8. → Test error capture by triggering an exception
