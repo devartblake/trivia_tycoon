@@ -33,7 +33,9 @@ class FeatureFlags {
     this.matchmakingEnabled = false,
     this.tournamentsEnabled = false,
     this.cryptoEnabled = false,
-    this.socialEnabled = false,
+    // Social (Friends/Parties) ships enabled; it is only turned off
+    // per-player via moderation (ban) driven by the backend config.
+    this.socialEnabled = true,
     this.skillTreeEnabled = false,
     this.notificationsEnabled = false,
     this.advancedSeasonsEnabled = false,
@@ -59,7 +61,7 @@ class FeatureFlags {
       matchmakingEnabled: flag('matchmakingEnabled'),
       tournamentsEnabled: flag('tournamentsEnabled'),
       cryptoEnabled: flag('cryptoEnabled'),
-      socialEnabled: flag('socialEnabled'),
+      socialEnabled: flag('socialEnabled', fallback: true),
       skillTreeEnabled: flag('skillTreeEnabled'),
       notificationsEnabled: flag('notificationsEnabled'),
       advancedSeasonsEnabled: flag('advancedSeasonsEnabled'),
