@@ -102,10 +102,12 @@ class _FakeQuestionRepository implements QuestionRepository {
   }
 
   @override
-  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+  Future<QuestionBatchCheckOutcome> checkAnswerBatch({
     required List<QuestionAnswerSubmission> submissions,
+    String? quizSessionId,
+    String? mode,
   }) async {
-    return submissions
+    final results = submissions
         .map(
           (submission) => QuestionAnswerCheckResult(
             questionId: submission.question.id,
@@ -117,6 +119,7 @@ class _FakeQuestionRepository implements QuestionRepository {
           ),
         )
         .toList(growable: false);
+    return QuestionBatchCheckOutcome(results: results);
   }
 }
 

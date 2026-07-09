@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:async';
 import '../../core/models/question_validation_models.dart';
 import '../services/quiz_category.dart';
@@ -38,6 +39,14 @@ class AdaptedQuizState {
   final Stopwatch? stopwatch;
   final List<QuestionAnswerSubmission> answerSubmissions;
 
+  /// Stable id for this quiz run; the backend uses it as the idempotency key
+  /// when awarding server-authoritative XP at completion.
+  final String? quizSessionId;
+
+  /// Server-authoritative XP award returned at quiz completion (null when the
+  /// player was offline/unauthenticated and no award happened).
+  final QuizXpAward? serverXpAward;
+
   const AdaptedQuizState({
     this.questions = const [],
     this.currentIndex = 0,
@@ -66,6 +75,8 @@ class AdaptedQuizState {
     this.quizEndTime,
     this.stopwatch,
     this.answerSubmissions = const [],
+    this.quizSessionId,
+    this.serverXpAward,
   });
 
   AdaptedQuizState copyWith({
@@ -96,6 +107,8 @@ class AdaptedQuizState {
     DateTime? quizEndTime,
     Stopwatch? stopwatch,
     List<QuestionAnswerSubmission>? answerSubmissions,
+    String? quizSessionId,
+    QuizXpAward? serverXpAward,
   }) {
     return AdaptedQuizState(
       questions: questions ?? this.questions,
@@ -125,6 +138,8 @@ class AdaptedQuizState {
       quizEndTime: quizEndTime ?? this.quizEndTime,
       stopwatch: stopwatch ?? this.stopwatch,
       answerSubmissions: answerSubmissions ?? this.answerSubmissions,
+      quizSessionId: quizSessionId ?? this.quizSessionId,
+      serverXpAward: serverXpAward ?? this.serverXpAward,
     );
   }
 
@@ -179,6 +194,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         category: category,
         quizStartTime: DateTime.now(),
         stopwatch: Stopwatch()..start(),
+        quizSessionId: const Uuid().v4(),
       );
 
       List<QuestionModel> questions;
@@ -288,6 +304,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         category: category,
         quizStartTime: DateTime.now(),
         stopwatch: Stopwatch()..start(),
+        quizSessionId: const Uuid().v4(),
       );
 
       if (questions.isEmpty) {
@@ -494,9 +511,12 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     }
 
     try {
-      final results = await _repository.checkAnswerBatch(
+      final outcome = await _repository.checkAnswerBatch(
         submissions: state.answerSubmissions,
+        quizSessionId: state.quizSessionId,
+        mode: 'practice',
       );
+      final results = outcome.results;
       if (results.isEmpty) {
         return state;
       }
@@ -522,6 +542,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       state = state.copyWith(
         score: authoritativeScore,
         categoryScores: categoryScores,
+        // Server-authoritative award (null when offline/unauthenticated).
+        serverXpAward: outcome.xpAward,
       );
     } catch (_) {
       // Keep the per-question authoritative/fallback results already in state.

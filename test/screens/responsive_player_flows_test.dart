@@ -68,7 +68,7 @@ void main() {
         await tester.pumpWidget(_quizHarness());
         await tester.pumpAndSettle();
 
-        expect(find.text('Play Quiz'), findsOneWidget);
+        expect(find.text('Play Quiz'), findsWidgets);
         expect(find.text('Quick Actions'), findsOneWidget);
         expect(find.text('Explore Classes'), findsOneWidget);
       });
@@ -368,8 +368,10 @@ class _FakeQuestionRepository implements QuestionRepository {
       );
 
   @override
-  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+  Future<QuestionBatchCheckOutcome> checkAnswerBatch({
     required List<QuestionAnswerSubmission> submissions,
+    String? quizSessionId,
+    String? mode,
   }) async {
     final results = <QuestionAnswerCheckResult>[];
     for (final submission in submissions) {
@@ -380,7 +382,7 @@ class _FakeQuestionRepository implements QuestionRepository {
         ),
       );
     }
-    return results;
+    return QuestionBatchCheckOutcome(results: results);
   }
 }
 

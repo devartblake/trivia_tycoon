@@ -11,6 +11,7 @@ import '../../game/providers/learning_providers.dart'
     show currentPlayerIdProvider;
 import '../../game/providers/personalization_providers.dart';
 import '../../game/providers/powerup_providers.dart';
+import '../../game/providers/tier_progression_provider.dart';
 import '../../game/services/quiz_category.dart';
 // New question system components
 import 'widgets/question_renderer.dart';
@@ -480,6 +481,12 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           final reconciledState = await ref
               .read(adaptedQuizProvider.notifier)
               .reconcileAuthoritativeResults();
+
+          // The backend may have awarded tier XP for this session during
+          // reconciliation — refetch tier progress so the UI reflects it.
+          if (reconciledState.serverXpAward != null) {
+            ref.invalidate(playerTierProgressProvider);
+          }
 
           // STOP THE STOPWATCH HERE BEFORE NAVIGATION
           ref.read(adaptedQuizProvider.notifier).completeQuiz();

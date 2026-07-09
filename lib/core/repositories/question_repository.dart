@@ -52,7 +52,12 @@ abstract class QuestionRepository {
     required String selectedAnswer,
   });
 
-  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+  /// Grades the submissions server-side. When [quizSessionId] is provided
+  /// and the player is authenticated, the backend also awards tier XP for
+  /// the correct answers (idempotent per session id).
+  Future<QuestionBatchCheckOutcome> checkAnswerBatch({
     required List<QuestionAnswerSubmission> submissions,
+    String? quizSessionId,
+    String? mode,
   });
 }
