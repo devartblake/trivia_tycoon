@@ -7,6 +7,8 @@ All notable changes to this project are documented in this file.
 _Backend contracts verified directly against `TycoonTycoon_Backend` source; companion backend branch: `claude/sprint2-server-xp-friends`._
 
 ### Added
+- **Question Phase 4**: free-text question UI (`FreeTextView`, normalized case/whitespace-insensitive grading), boss question variant (10s pressure timer always applies, red boss canvas + "BOSS QUESTION — 5× XP" banner), and timed-challenge mode (per-question countdown from difficulty: easy 30s → boss 10s; opt in via `timedChallenge` on `/quiz/play` extras)
+- `docs/api/SEASONAL_TIEBREAKER_BACKEND_PLAN.md` — phased plan to restore season leaderboard, server-side point accrual, moderation resets, and the tie-breaker mechanic on the backend's existing PlayerSeasonProfile/SeasonPointTransaction domain
 - **Server-authoritative quiz XP**: each quiz run sends a `quizSessionId` with `POST /questions/check-batch`; the backend grades the answers, awards tier XP (difficulty × 10 per correct, idempotent per session), and the client refreshes tier progress from the returned `QuizXpAwardDto` (backend half on the companion branch)
 - `DELETE /users/me/friends/{friendPlayerId}` (backend) — authenticated friend removal
 - 350ms search debounce in AddFriendDialog; social DTO contract tests

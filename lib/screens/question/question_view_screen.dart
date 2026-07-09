@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 import '../../core/dto/powerup_dto.dart';
 import '../../core/helpers/quiz_helpers.dart';
+import '../../game/models/question_difficulty.dart';
 import '../../game/models/question_model.dart';
 import '../../game/providers/quiz_providers.dart';
 import '../../game/providers/quiz_results_provider.dart';
@@ -27,6 +28,10 @@ class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final List<QuestionModel>? initialQuestions;
   final String? displayTitle;
 
+  /// Timed-challenge mode: per-question countdown from the question's
+  /// difficulty instead of the class-level limit.
+  final bool timedChallenge;
+
   const AdaptedQuestionScreen({
     super.key,
     this.classLevel,
@@ -34,6 +39,7 @@ class AdaptedQuestionScreen extends ConsumerStatefulWidget {
     this.questionCount,
     this.initialQuestions,
     this.displayTitle,
+    this.timedChallenge = false,
   });
 
   @override
@@ -71,12 +77,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           questions: initialQuestions,
           classLevel: widget.classLevel ?? '1',
           category: _resolvedCategory,
+          timedChallenge: widget.timedChallenge,
         );
       } else {
         notifier.startQuizWithCategory(
           questionCount: widget.questionCount ?? 10,
           classLevel: widget.classLevel ?? '1',
           category: _resolvedCategory,
+          timedChallenge: widget.timedChallenge,
         );
       }
     });
@@ -147,7 +155,12 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
   /// Dark neutral canvas (Trivia-Crack style): makes the white question card
   /// and answer pills pop, with a whisper of the category color blended in.
+  /// Boss questions get a darker, red-tinted canvas for dramatic tension.
   Color _getCategoryBackgroundColor() {
+    final quizState = ref.read(adaptedQuizProvider);
+    if (quizState.currentQuestion?.difficulty == QuestionDifficulty.boss) {
+      return const Color(0xFF2B1D22);
+    }
     const canvas = Color(0xFF3E4348);
     if (_resolvedCategory != null) {
       return Color.alphaBlend(
@@ -451,9 +464,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
               mode: state.classLevel,
               correct: isCorrect,
               timeMs: state.timeRemaining > 0
-                  ? ((QuizHelpers.getTimeLimitForClass(state.classLevel) -
-                              state.timeRemaining) *
-                          1000)
+                  ? ((state.questionTimeLimit - state.timeRemaining) * 1000)
                       .toInt()
                   : 0,
               questionId: currentQuestion.id,
@@ -464,7 +475,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     // Get updated state to calculate XP gained
     final updatedState = ref.read(adaptedQuizProvider);
     final xpGained = updatedState.totalXP - previousXP;
-    final timeLimit = QuizHelpers.getTimeLimitForClass(state.classLevel);
+    // Use the limit the countdown actually started at (class-based, or the
+    // difficulty-based limit in timed-challenge/boss play).
+    final timeLimit = state.questionTimeLimit;
     final hasTimeBonus = !isTimeout && state.timeRemaining > (timeLimit * 0.7);
 
     await _showEnhancedFeedbackDialog(
@@ -616,12 +629,14 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       questions: initialQuestions,
                       classLevel: widget.classLevel ?? '1',
                       category: _resolvedCategory,
+                      timedChallenge: widget.timedChallenge,
                     );
                   } else {
                     notifier.startQuizWithCategory(
                       classLevel: widget.classLevel ?? '1',
                       category: _resolvedCategory,
                       questionCount: widget.questionCount ?? 10,
+                      timedChallenge: widget.timedChallenge,
                     );
                   }
                 },
@@ -710,6 +725,11 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (currentQuestion.difficulty ==
+                          QuestionDifficulty.boss) ...[
+                        const _BossBanner(),
+                        const SizedBox(height: 12),
+                      ],
                       // Enhanced question metadata with category integration
                       Wrap(
                         spacing: 8,
@@ -893,5 +913,42 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     }
 
     ref.read(adaptedQuizProvider.notifier).applyPowerUp(type);
+  }
+}
+
+/// Dramatic banner shown above boss questions: higher stakes, shorter timer.
+class _BossBanner extends StatelessWidget {
+  const _BossBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF7F1D1D), Color(0xFFB91C1C)],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFF87171)),
+      ),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.whatshot_rounded, color: Color(0xFFFDE68A), size: 20),
+          SizedBox(width: 8),
+          Text(
+            'BOSS QUESTION — 5× XP',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.2,
+            ),
+          ),
+          SizedBox(width: 8),
+          Icon(Icons.whatshot_rounded, color: Color(0xFFFDE68A), size: 20),
+        ],
+      ),
+    );
   }
 }

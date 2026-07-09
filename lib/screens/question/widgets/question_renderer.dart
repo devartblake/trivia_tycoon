@@ -10,6 +10,7 @@ import 'audio_question_view.dart';
 import 'drag_drop_view.dart';
 import 'sorting_view.dart';
 import 'matching_view.dart';
+import 'free_text_view.dart';
 
 /// Unified question renderer that dispatches to type-specific views
 class QuestionRenderer extends StatelessWidget {
@@ -101,6 +102,15 @@ class QuestionRenderer extends StatelessWidget {
           },
           showFeedback: showFeedback,
           selectedAnswer: _parseMapFromString(selectedAnswer),
+          isMultiplayer: isMultiplayer,
+        );
+
+      case QuestionType.freeText:
+        return FreeTextView(
+          question: question,
+          onAnswerSelected: onAnswerSelected,
+          showFeedback: showFeedback,
+          selectedAnswer: selectedAnswer,
           isMultiplayer: isMultiplayer,
         );
 
