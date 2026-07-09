@@ -256,11 +256,15 @@ class QuestionHubService {
     }
   }
 
-  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+  Future<QuestionBatchCheckOutcome> checkAnswerBatch({
     required List<QuestionAnswerSubmission> submissions,
+    String? quizSessionId,
+    String? mode,
   }) async {
     if (submissions.isEmpty) {
-      return const <QuestionAnswerCheckResult>[];
+      return const QuestionBatchCheckOutcome(
+        results: <QuestionAnswerCheckResult>[],
+      );
     }
 
     try {
@@ -274,6 +278,11 @@ class QuestionHubService {
                         .optionIdForAnswer(submission.selectedAnswer),
                   })
               .toList(growable: false),
+          // Authenticated callers with a session id get server-authoritative
+          // XP awarded for the correct answers (idempotent per session).
+          if (quizSessionId != null && quizSessionId.isNotEmpty)
+            'quizSessionId': quizSessionId,
+          if (mode != null && mode.isNotEmpty) 'mode': mode,
         },
       );
 
@@ -321,7 +330,10 @@ class QuestionHubService {
           endpoint: '/questions/check-batch',
           detail: 'Validated ${results.length} answers via backend',
         );
-        return results;
+        return QuestionBatchCheckOutcome(
+          results: results,
+          xpAward: QuizXpAward.fromJson(response['xpAward']),
+        );
       }
     } on ApiRequestException {
       // fallback below
@@ -337,12 +349,14 @@ class QuestionHubService {
       detail: 'Using local batch answer validation',
     );
 
-    return submissions
-        .map((submission) => _fallbackAnswerCheck(
-              submission.question,
-              submission.selectedAnswer,
-            ))
-        .toList(growable: false);
+    return QuestionBatchCheckOutcome(
+      results: submissions
+          .map((submission) => _fallbackAnswerCheck(
+                submission.question,
+                submission.selectedAnswer,
+              ))
+          .toList(growable: false),
+    );
   }
 
   Future<List<QuizCategory>> getAvailableCategories() async {
@@ -534,26 +548,32 @@ class QuestionHubService {
     String? playerId,
   }) async {
     try {
-      final response = await _gatedGet(
-        '/questions/set',
-        queryParameters: {
+      // POST /questions/mixed is the backend's multi-category endpoint
+      // (MixedQuestionSetRequest): all requested categories/difficulties are
+      // honored and the server balances the selection.
+      final response = await _gatedPost(
+        '/questions/mixed',
+        body: {
           'count': questionCount,
-          'mode': mode,
-          if (categories != null && categories.length == 1)
-            'category': categories.first,
-          if (difficulties != null && difficulties.length == 1)
-            'difficulty': _difficultyQuery(difficulties.first),
-          if (playerId != null && playerId.isNotEmpty) 'playerId': playerId,
+          if (categories != null && categories.isNotEmpty)
+            'categories': categories,
+          if (difficulties != null && difficulties.isNotEmpty)
+            'difficulties': difficulties
+                .map(_difficultyQuery)
+                .map((d) => d.toString())
+                .toList(growable: false),
+          'balanceCategories': true,
+          'balanceDifficulties': balanceDifficulties,
         },
       );
       final questions = _parseQuestionListResponse(
         response,
-        endpoint: '/questions/set',
+        endpoint: '/questions/mixed',
       );
       if (questions.isNotEmpty) {
         _recordBackend(
           operation: 'mixed_quiz',
-          endpoint: '/questions/set',
+          endpoint: '/questions/mixed',
           detail: 'Loaded ${questions.length} mixed questions',
         );
         return questions;

@@ -1,7 +1,6 @@
 ﻿import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../core/constants/question_paths.dart';
-import '../../core/services/question_api_client.dart';
 import '../data/question_asset_index_loader.dart';
 import 'quiz_category.dart';
 import '../models/question_model.dart';
@@ -33,12 +32,9 @@ class QuestionDataset {
 class AdaptedQuestionLoaderService {
   AdaptedQuestionLoaderService({
     QuestionAssetIndexLoader? indexLoader,
-    QuestionApiClient? apiClient,
-  })  : _indexLoader = indexLoader ?? QuestionAssetIndexLoader(),
-        _apiClient = apiClient ?? QuestionApiClient();
+  }) : _indexLoader = indexLoader ?? QuestionAssetIndexLoader();
 
   final QuestionAssetIndexLoader _indexLoader;
-  final QuestionApiClient _apiClient;
 
   // Enhanced datasets using QuizCategory enum
   static const List<QuestionDataset> _coreDatasets = [
@@ -971,26 +967,10 @@ class AdaptedQuestionLoaderService {
     final primaryPath = indexedPath ?? resolvedDataset.path;
 
     try {
-      // Try API first for latest questions
-      List<QuestionModel> questions;
-      try {
-        LogManager.debug(
-          '[QuestionLoader] Attempting to fetch $datasetName from API',
-        );
-        questions = await _apiClient.getQuestionsByCategory(
-          datasetName,
-          count: 100, // Fetch more questions for better variety
-        );
-        LogManager.debug(
-          '[QuestionLoader] Successfully loaded $datasetName from API (${questions.length} questions)',
-        );
-      } catch (e) {
-        LogManager.debug(
-          '[QuestionLoader] API fetch failed for $datasetName: $e. Falling back to assets.',
-        );
-        // Fallback to asset loading if API fails
-        questions = await _loadFromPath(primaryPath, datasetName);
-      }
+      // This loader is the local-asset layer; backend fetching is handled by
+      // QuestionHubService. (A legacy API-first attempt here hit the
+      // nonexistent GET /questions endpoint and always failed.)
+      final questions = await _loadFromPath(primaryPath, datasetName);
 
       // Cache the loaded questions
       _cachedDatasets[datasetName] = questions;
