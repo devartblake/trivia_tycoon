@@ -174,18 +174,32 @@ class ApiService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> fetchAchievements(
-      String playerName) async {
+  /// Fetches achievements. With a [playerId] (GUID) the player's unlocked
+  /// achievements are returned (GET /achievements/player/{id}); without one,
+  /// the full catalog (GET /achievements). Both verified against
+  /// AchievementsEndpoints.cs — the old ?playerName= query never existed.
+  Future<List<Map<String, dynamic>>> fetchAchievements({
+    String? playerId,
+  }) async {
     return _handleRequest(() async {
+      final path = (playerId != null && playerId.isNotEmpty)
+          ? '/achievements/player/$playerId'
+          : '/achievements';
       final response = await _dio.get(
-        '/achievements',
-        queryParameters: {'playerName': playerName},
+        path,
         options: _cacheOptions.toOptions(),
       );
-      return List<Map<String, dynamic>>.from(response.data);
+      final data = response.data;
+      final items = data is List
+          ? data
+          : (data is Map ? data['items'] ?? const [] : const []);
+      return List<Map<String, dynamic>>.from(items);
     });
   }
 
+  @Deprecated('The backend has no POST /leaderboard. Scores enter the '
+      'leaderboard server-side via POST /quiz/complete and '
+      'POST /leaderboards/arcade/submit; this call always fails.')
   Future<void> submitScore(String playerName, int score) async {
     await _handleRequest(() async {
       await _dio.post('/leaderboard', data: {
@@ -195,6 +209,12 @@ class ApiService {
     });
   }
 
+  /// POST /quiz/complete (verified against QuizEndpoints.cs). Requires auth;
+  /// [playerId] and [eventId] must be GUIDs and match the JWT player, and
+  /// answers items must be {questionId, selectedOptionId}. NOTE: this
+  /// endpoint awards XP/coins server-side and so does the quizSessionId path
+  /// on POST /questions/check-batch — a quiz run must use one or the other,
+  /// never both, or the player is double-credited.
   Future<void> submitQuizComplete({
     required String eventId,
     required String playerId,
@@ -215,11 +235,13 @@ class ApiService {
     });
   }
 
-  Future<void> unlockAchievement(String playerName, String achievement) async {
+  /// POST /achievements/unlock (verified against AchievementsEndpoints.cs).
+  /// [playerId] is the player's GUID; [achievementKey] the catalog key.
+  Future<void> unlockAchievement(String playerId, String achievementKey) async {
     await _handleRequest(() async {
-      await _dio.post('/achievements', data: {
-        'playerName': playerName,
-        'achievement': achievement,
+      await _dio.post('/achievements/unlock', data: {
+        'playerId': playerId,
+        'achievementKey': achievementKey,
       });
     });
   }
@@ -747,10 +769,14 @@ class ApiService {
   }
 
   /// **🔹 Analytics Event Submission**
-  /// Sends a lightweight event to the `/events/:name` endpoint with the given [data].
-  /// Useful for custom tracking (e.g., startup, session, screen views).
+  /// Sends a lightweight event to POST /analytics/events (verified against
+  /// AnalyticsEndpoints.cs — the old /events/{name} route never existed).
+  /// The endpoint accepts a single event object or an array of them.
   Future<void> sendEvent(String name, Map<String, dynamic> data) async {
-    await post('/events/$name', body: data);
+    await post('/analytics/events', body: {
+      'type': name,
+      ...data,
+    });
   }
 
   Future<Map<String, dynamic>> login({
@@ -790,6 +816,9 @@ class ApiService {
     });
   }
 
+  @Deprecated('No /seasons/{id}/leaderboard endpoint exists on the backend '
+      '(SeasonsEndpoints.cs exposes /seasons/active and /seasons/state/{playerId}). '
+      'This call always fails; season standings need a backend endpoint first.')
   Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
     final response = await get('/seasons/$seasonId/leaderboard');
     final items = response['items'] as List? ?? response['data'] as List? ?? [];
@@ -798,10 +827,15 @@ class ApiService {
         .toList();
   }
 
+  @Deprecated('No such backend endpoint; season resets are server-side '
+      'lifecycle operations (AdminSeasons lives under /admin, outside /api/v1, '
+      'and has no reset-player route). This call always fails.')
   Future<void> resetPlayerSeasonPoints(String playerId) async {
     await post('/admin/seasons/reset-player', body: {'playerId': playerId});
   }
 
+  @Deprecated('No such backend endpoint (see resetPlayerSeasonPoints). '
+      'This call always fails.')
   Future<void> scheduleTiebreakerQuiz({
     required List<String> players,
     required DateTime scheduledTime,
