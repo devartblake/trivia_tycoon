@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/social/friends_models.dart';
@@ -23,6 +25,13 @@ class AddFriendDialog extends ConsumerStatefulWidget {
 class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
   late TextEditingController _searchController;
 
+  /// The query actually sent to the search API. Updated ~350ms after the
+  /// user stops typing so each keystroke doesn't fire a network request.
+  String _debouncedQuery = '';
+  Timer? _debounceTimer;
+
+  static const _debounceDelay = Duration(milliseconds: 350);
+
   @override
   void initState() {
     super.initState();
@@ -31,14 +40,25 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onQueryChanged(String value) {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(_debounceDelay, () {
+      if (!mounted) return;
+      setState(() => _debouncedQuery = value.trim());
+    });
+    // Rebuild immediately for the clear-button/empty-state UI only.
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final searchQuery = _searchController.text;
+    final searchQuery = _debouncedQuery;
     final searchAsync = ref.watch(playerSearchProvider(searchQuery));
 
     return AlertDialog(
@@ -62,7 +82,8 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
                           icon: const Icon(Icons.clear_rounded),
                           onPressed: () {
                             _searchController.clear();
-                            setState(() {});
+                            _debounceTimer?.cancel();
+                            setState(() => _debouncedQuery = '');
                           },
                         )
                       : null,
@@ -70,9 +91,7 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() {});
-                },
+                onChanged: _onQueryChanged,
               ),
             ),
             // Search results

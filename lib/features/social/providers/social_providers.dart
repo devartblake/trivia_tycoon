@@ -104,28 +104,23 @@ final combinedFriendsStateProvider = FutureProvider<CombinedFriendsState>((ref) 
 // Parties State
 // ============================================================================
 
-/// Active parties provider - fetches user's active parties
-final activePartiesProvider = FutureProvider<List<PartyResponse>>((ref) async {
+/// Party invites for the given player (incoming by default).
+final partyInvitesProvider =
+    FutureProvider.family<List<PartyInvite>, String>((ref, playerId) async {
   final service = ref.read(partiesServiceProvider);
-  return await service.getActiveParties();
+  return await service.listInvites(playerId: playerId);
 });
 
-/// All parties provider - fetches all parties (active, completed, etc)
-final allPartiesProvider = FutureProvider<List<PartyResponse>>((ref) async {
-  final service = ref.read(partiesServiceProvider);
-  return await service.getAllParties();
-});
-
-/// Party details provider - fetches specific party info
+/// Party roster/details for a specific party.
 ///
 /// Example usage:
 /// ```dart
-/// final details = ref.watch(partyDetailsProvider('party-123'));
+/// final roster = ref.watch(partyRosterProvider('party-123'));
 /// ```
-final partyDetailsProvider = FutureProvider.family<PartyDetailResponse, String>(
+final partyRosterProvider = FutureProvider.family<PartyRoster, String>(
   (ref, partyId) async {
     final service = ref.read(partiesServiceProvider);
-    return await service.getPartyDetails(partyId);
+    return await service.getPartyRoster(partyId);
   },
 );
 
@@ -167,67 +162,63 @@ Future<void> removeFriend(WidgetRef ref, String friendId) async {
   ref.invalidate(friendsListProvider);
 }
 
-/// Create a new party
-Future<PartyResponse> createParty(
+/// Create a new party led by the current player
+Future<PartyRoster> createParty(
   WidgetRef ref, {
-  required String name,
-  String? description,
-  int maxMembers = 4,
-  String? gameMode,
+  required String leaderPlayerId,
 }) async {
   final service = ref.read(partiesServiceProvider);
-  final party = await service.createParty(
-    name: name,
-    description: description,
-    maxMembers: maxMembers,
-    gameMode: gameMode,
-  );
-  // Refresh parties list
-  ref.invalidate(activePartiesProvider);
-  return party;
+  final roster = await service.createParty(leaderPlayerId: leaderPlayerId);
+  ref.invalidate(partyInvitesProvider);
+  return roster;
 }
 
 /// Invite player to party
 Future<void> inviteToParty(
   WidgetRef ref, {
   required String partyId,
+  required String fromPlayerId,
   required String targetPlayerId,
 }) async {
   final service = ref.read(partiesServiceProvider);
   await service.inviteToParty(
     partyId: partyId,
+    fromPlayerId: fromPlayerId,
     targetPlayerId: targetPlayerId,
   );
-  // Refresh party details
-  ref.invalidate(partyDetailsProvider(partyId));
+  ref.invalidate(partyRosterProvider(partyId));
 }
 
 /// Accept party invitation
-Future<void> acceptPartyInvitation(WidgetRef ref, String inviteId) async {
+Future<void> acceptPartyInvitation(
+  WidgetRef ref, {
+  required String inviteId,
+  required String playerId,
+}) async {
   final service = ref.read(partiesServiceProvider);
-  await service.acceptInvite(inviteId);
-  // Refresh parties list
-  ref.invalidate(activePartiesProvider);
+  await service.acceptInvite(inviteId: inviteId, playerId: playerId);
+  ref.invalidate(partyInvitesProvider);
 }
 
 /// Decline party invitation
-Future<void> declinePartyInvitation(WidgetRef ref, String inviteId) async {
+Future<void> declinePartyInvitation(
+  WidgetRef ref, {
+  required String inviteId,
+  required String playerId,
+}) async {
   final service = ref.read(partiesServiceProvider);
-  await service.declineInvite(inviteId);
+  await service.declineInvite(inviteId: inviteId, playerId: playerId);
+  ref.invalidate(partyInvitesProvider);
 }
 
 /// Leave a party
-Future<void> leaveParty(WidgetRef ref, String partyId) async {
+Future<void> leaveParty(
+  WidgetRef ref, {
+  required String partyId,
+  required String playerId,
+}) async {
   final service = ref.read(partiesServiceProvider);
-  await service.leaveParty(partyId);
-  // Refresh parties list
-  ref.invalidate(activePartiesProvider);
-}
-
-/// Disband a party (owner only)
-Future<void> disbandParty(WidgetRef ref, String partyId) async {
-  final service = ref.read(partiesServiceProvider);
-  await service.disbandParty(partyId);
-  // Refresh parties list
-  ref.invalidate(activePartiesProvider);
+  await service.leaveParty(partyId: partyId, playerId: playerId);
+  ref.invalidate(partyRosterProvider(partyId));
+  ref.invalidate(partyInvitesProvider);
 }

@@ -5,14 +5,20 @@ import 'social/parties_models.dart';
 
 /// FriendsApiClient handles all friend relationship operations.
 ///
-/// Endpoints (REST):
-///   POST   /friends/request                — send friend request
-///   GET    /friends                        — list friends with pagination
-///   GET    /friends/requests/pending       — list pending requests
-///   POST   /friends/request/{id}/accept    — accept friend request
-///   POST   /friends/request/{id}/decline   — decline friend request
-///   POST   /friends/{id}/remove            — remove friend
-///   GET    /search/players                 — search players by username
+/// Canonical backend surface (verified against
+/// Synaptix.Backend.Api/Features/Users/UserFriendsEndpoints.cs — the
+/// authenticated `/users/me/...` group; the acting player is derived from the
+/// JWT server-side, so no player id is ever sent by the client):
+///
+///   GET    /users/me/friends?page&pageSize             — list friends
+///   GET    /users/me/friends/requests?page&pageSize    — incoming pending requests
+///   GET    /users/me/friends/requests/sent             — outgoing requests
+///   POST   /users/me/friends/request {targetUserId}    — send friend request
+///   POST   /users/me/friends/requests/{id}/accept      — accept request
+///   POST   /users/me/friends/requests/{id}/decline     — decline request
+///   DELETE /users/me/friends/{friendPlayerId}          — remove friend
+///   GET    /users/me/friends/suggestions               — friend suggestions
+///   GET    /users/search?handle&page&pageSize          — search players by handle
 class FriendsApiClient {
   static final _log = Logger('FriendsApiClient');
 
@@ -22,18 +28,16 @@ class FriendsApiClient {
 
   /// Send a friend request to another player.
   ///
-  /// Backend endpoint: POST /friends/request
-  /// Returns: void on success, throws exception on error
+  /// Backend endpoint: POST /users/me/friends/request
   Future<void> sendFriendRequest(String targetPlayerId) async {
     _log.info('Sending friend request to: $targetPlayerId');
-    final body = {'targetPlayerId': targetPlayerId};
-    await _apiService.post('/friends/request', body: body);
+    final body = {'targetUserId': targetPlayerId};
+    await _apiService.post('/users/me/friends/request', body: body);
   }
 
   /// Get list of friends with pagination.
   ///
-  /// Backend endpoint: GET /friends?page=X&pageSize=Y
-  /// Returns: FriendsListResponse with friend list and pagination info
+  /// Backend endpoint: GET /users/me/friends?page=X&pageSize=Y
   Future<FriendsListResponse> listFriends({
     int page = 1,
     int pageSize = 20,
@@ -43,14 +47,14 @@ class FriendsApiClient {
       'page': page,
       'pageSize': pageSize,
     };
-    final json = await _apiService.get('/friends', queryParameters: params);
+    final json =
+        await _apiService.get('/users/me/friends', queryParameters: params);
     return FriendsListResponse.fromJson(json);
   }
 
-  /// Get pending friend requests.
+  /// Get incoming pending friend requests.
   ///
-  /// Backend endpoint: GET /friends/requests/pending?page=X&pageSize=Y
-  /// Returns: FriendRequestsResponse with pending requests
+  /// Backend endpoint: GET /users/me/friends/requests?page=X&pageSize=Y
   Future<FriendRequestsResponse> listPendingRequests({
     int page = 1,
     int pageSize = 20,
@@ -61,7 +65,7 @@ class FriendsApiClient {
       'pageSize': pageSize,
     };
     final json = await _apiService.get(
-      '/friends/requests/pending',
+      '/users/me/friends/requests',
       queryParameters: params,
     );
     return FriendRequestsResponse.fromJson(json);
@@ -69,40 +73,46 @@ class FriendsApiClient {
 
   /// Accept a friend request.
   ///
-  /// Backend endpoint: POST /friends/request/{requestId}/accept
-  /// Returns: void on success, throws exception on error
+  /// Backend endpoint: POST /users/me/friends/requests/{requestId}/accept
   Future<void> acceptFriendRequest(String requestId) async {
     _log.info('Accepting friend request: $requestId');
-    await _apiService.post('/friends/request/$requestId/accept', body: {});
+    await _apiService.post(
+      '/users/me/friends/requests/$requestId/accept',
+      body: const {},
+    );
   }
 
   /// Decline a friend request.
   ///
-  /// Backend endpoint: POST /friends/request/{requestId}/decline
-  /// Returns: void on success, throws exception on error
+  /// Backend endpoint: POST /users/me/friends/requests/{requestId}/decline
   Future<void> declineFriendRequest(String requestId) async {
     _log.info('Declining friend request: $requestId');
-    await _apiService.post('/friends/request/$requestId/decline', body: {});
+    await _apiService.post(
+      '/users/me/friends/requests/$requestId/decline',
+      body: const {},
+    );
   }
 
   /// Remove a friend.
   ///
-  /// Backend endpoint: POST /friends/{friendId}/remove
-  /// Returns: void on success, throws exception on error
+  /// Backend endpoint: DELETE /users/me/friends/{friendPlayerId}
   Future<void> removeFriend(String friendId) async {
     _log.info('Removing friend: $friendId');
-    await _apiService.post('/friends/$friendId/remove', body: {});
+    await _apiService.delete('/users/me/friends/$friendId');
   }
 
-  /// Search for players by username.
+  /// Search for players by handle/username.
   ///
-  /// Backend endpoint: GET /search/players?query=X
-  /// Returns: PlayerSearchResponse with search results
+  /// Backend endpoint: GET /users/search?handle=X&page&pageSize
+  /// (backend requires at least 2 characters)
   Future<PlayerSearchResponse> searchPlayers(String query) async {
     _log.info('Searching players: query=$query');
-    final params = {'query': query};
+    if (query.trim().length < 2) {
+      return const PlayerSearchResponse(results: [], totalCount: 0);
+    }
+    final params = {'handle': query.trim(), 'page': 1, 'pageSize': 20};
     final json = await _apiService.get(
-      '/search/players',
+      '/users/search',
       queryParameters: params,
     );
     return PlayerSearchResponse.fromJson(json);
@@ -111,15 +121,18 @@ class FriendsApiClient {
 
 /// PartyApiClient handles all party/group operations.
 ///
-/// Endpoints (REST):
-///   POST   /party                          — create party
-///   GET    /party                          — list parties
-///   GET    /party/{partyId}                — get party details
-///   POST   /party/{partyId}/invite         — invite player to party
-///   POST   /party/invites/{id}/accept      — accept party invite
-///   POST   /party/invites/{id}/decline     — decline party invite
-///   POST   /party/{partyId}/leave          — leave party
-///   POST   /party/{partyId}/disband        — disband party (owner only)
+/// Canonical backend surface (verified against
+/// Synaptix.Backend.Api/Features/Party/PartyEndpoints.cs). This surface takes
+/// explicit player ids in request bodies, so callers must supply the current
+/// player's id.
+///
+///   POST   /party {leaderPlayerId}                      — create party
+///   GET    /party/{partyId}                             — get party roster
+///   POST   /party/{partyId}/invite {fromPlayerId,toPlayerId} — invite player
+///   POST   /party/invites/{id}/accept {playerId}        — accept invite
+///   POST   /party/invites/{id}/decline {playerId}       — decline invite
+///   POST   /party/{partyId}/leave {playerId}            — leave party
+///   GET    /party/invites?playerId&box&page&pageSize    — list invites
 class PartyApiClient {
   static final _log = Logger('PartyApiClient');
 
@@ -127,102 +140,104 @@ class PartyApiClient {
 
   PartyApiClient(this._apiService);
 
-  /// Create a new party.
+  /// Create a new party led by [leaderPlayerId].
   ///
   /// Backend endpoint: POST /party
-  /// Returns: PartyResponse with party details
-  Future<PartyResponse> createParty({
-    required String name,
-    String? description,
-    int maxMembers = 4,
-    String? gameMode,
-  }) async {
-    _log.info('Creating party: $name (max: $maxMembers members)');
-    final body = {
-      'name': name,
-      if (description != null) 'description': description,
-      'maxMembers': maxMembers,
-      if (gameMode != null) 'gameMode': gameMode,
-    };
-    final json = await _apiService.post('/party', body: body);
-    return PartyResponse.fromJson(json);
+  Future<PartyRoster> createParty({required String leaderPlayerId}) async {
+    _log.info('Creating party for leader: $leaderPlayerId');
+    final json = await _apiService.post(
+      '/party',
+      body: {'leaderPlayerId': leaderPlayerId},
+    );
+    return PartyRoster.fromJson(json);
   }
 
-  /// Get party details.
+  /// Get party roster/details.
   ///
   /// Backend endpoint: GET /party/{partyId}
-  /// Returns: PartyDetailResponse with members and invites
-  Future<PartyDetailResponse> getPartyDetails(String partyId) async {
-    _log.info('Fetching party details: $partyId');
+  Future<PartyRoster> getPartyRoster(String partyId) async {
+    _log.info('Fetching party roster: $partyId');
     final json = await _apiService.get('/party/$partyId');
-    return PartyDetailResponse.fromJson(json);
+    return PartyRoster.fromJson(json);
   }
 
-  /// List parties for current player.
+  /// List party invites for [playerId].
   ///
-  /// Backend endpoint: GET /party?page=X&pageSize=Y&status=Z
-  /// Returns: PartiesListResponse with paginated list
-  Future<PartiesListResponse> listParties({
+  /// Backend endpoint: GET /party/invites?playerId=&box=incoming|outgoing|all
+  Future<List<PartyInvite>> listInvites({
+    required String playerId,
+    String box = 'incoming',
     int page = 1,
-    int pageSize = 20,
-    String? status,
+    int pageSize = 50,
   }) async {
-    _log.info('Listing parties: page=$page status=$status');
-    final params = {
+    _log.info('Fetching party invites: player=$playerId box=$box');
+    final json = await _apiService.get('/party/invites', queryParameters: {
+      'playerId': playerId,
+      'box': box,
       'page': page,
       'pageSize': pageSize,
-      if (status != null) 'status': status,
-    };
-    final json = await _apiService.get('/party', queryParameters: params);
-    return PartiesListResponse.fromJson(json);
+    });
+    final items = json['items'] as List? ?? const [];
+    return items
+        .whereType<Map>()
+        .map((item) => PartyInvite.fromJson(Map<String, dynamic>.from(item)))
+        .toList(growable: false);
   }
 
   /// Invite a player to the party.
   ///
   /// Backend endpoint: POST /party/{partyId}/invite
-  /// Returns: void on success, throws exception on error
   Future<void> inviteToParty({
     required String partyId,
+    required String fromPlayerId,
     required String targetPlayerId,
   }) async {
     _log.info('Inviting $targetPlayerId to party $partyId');
-    final body = {'targetPlayerId': targetPlayerId};
-    await _apiService.post('/party/$partyId/invite', body: body);
+    await _apiService.post('/party/$partyId/invite', body: {
+      'fromPlayerId': fromPlayerId,
+      'toPlayerId': targetPlayerId,
+    });
   }
 
-  /// Accept a party invite.
+  /// Accept a party invitation.
   ///
   /// Backend endpoint: POST /party/invites/{inviteId}/accept
-  /// Returns: void on success, throws exception on error
-  Future<void> acceptPartyInvite(String inviteId) async {
+  Future<void> acceptInvite({
+    required String inviteId,
+    required String playerId,
+  }) async {
     _log.info('Accepting party invite: $inviteId');
-    await _apiService.post('/party/invites/$inviteId/accept', body: {});
+    await _apiService.post(
+      '/party/invites/$inviteId/accept',
+      body: {'playerId': playerId},
+    );
   }
 
-  /// Decline a party invite.
+  /// Decline a party invitation.
   ///
   /// Backend endpoint: POST /party/invites/{inviteId}/decline
-  /// Returns: void on success, throws exception on error
-  Future<void> declinePartyInvite(String inviteId) async {
+  Future<void> declineInvite({
+    required String inviteId,
+    required String playerId,
+  }) async {
     _log.info('Declining party invite: $inviteId');
-    await _apiService.post('/party/invites/$inviteId/decline', body: {});
+    await _apiService.post(
+      '/party/invites/$inviteId/decline',
+      body: {'playerId': playerId},
+    );
   }
 
   /// Leave a party.
   ///
   /// Backend endpoint: POST /party/{partyId}/leave
-  /// Returns: void on success, throws exception on error
-  Future<void> leaveParty(String partyId) async {
+  Future<void> leaveParty({
+    required String partyId,
+    required String playerId,
+  }) async {
     _log.info('Leaving party: $partyId');
-    await _apiService.post('/party/$partyId/leave', body: {});
-  }
-
-  /// Disband a party (owner only).
-  ///
-  /// Backend endpoint: POST /party/{partyId}/disband
-  /// Returns: void on success, throws exception on error
-  Future<void> disbandParty(String partyId) async {
-    _log.info('Disbanding party: $partyId');
-    await _apiService.post('/party/$partyId/disband', body: {});
+    await _apiService.post(
+      '/party/$partyId/leave',
+      body: {'playerId': playerId},
+    );
   }
 }

@@ -4,11 +4,9 @@ import '../../../core/services/social/parties_models.dart';
 
 /// Business logic layer for party/group operations.
 ///
-/// Handles:
-/// - Party creation and management
-/// - Party invitations
-/// - Member management
-/// - Error handling and logging
+/// Wraps [PartyApiClient] (the verified /party backend surface). The party
+/// endpoints take explicit player ids, so every mutating call requires the
+/// current player's id from the caller.
 class PartiesService {
   static final _log = Logger('PartiesService');
 
@@ -16,90 +14,69 @@ class PartiesService {
 
   PartiesService(this._apiClient);
 
-  /// Create a new party
-  Future<PartyResponse> createParty({
-    required String name,
-    String? description,
-    int maxMembers = 4,
-    String? gameMode,
-  }) async {
+  /// Create a new party led by [leaderPlayerId].
+  Future<PartyRoster> createParty({required String leaderPlayerId}) async {
     try {
-      _log.info('Creating party: $name (max: $maxMembers)');
-      final party = await _apiClient.createParty(
-        name: name,
-        description: description,
-        maxMembers: maxMembers,
-        gameMode: gameMode,
+      _log.info('Creating party for leader: $leaderPlayerId');
+      final roster = await _apiClient.createParty(
+        leaderPlayerId: leaderPlayerId,
       );
-      _log.fine('Party created: ${party.partyId}');
-      return party;
+      _log.fine('Party created: ${roster.partyId}');
+      return roster;
     } catch (e, stackTrace) {
       _log.warning('Failed to create party', e, stackTrace);
       rethrow;
     }
   }
 
-  /// Get party details
-  Future<PartyDetailResponse> getPartyDetails(String partyId) async {
+  /// Get party roster/details.
+  Future<PartyRoster> getPartyRoster(String partyId) async {
     try {
-      _log.info('Fetching party details: $partyId');
-      final party = await _apiClient.getPartyDetails(partyId);
-      _log.fine('Fetched party: ${party.name} (${party.members.length} members)');
-      return party;
+      _log.info('Fetching party roster: $partyId');
+      final roster = await _apiClient.getPartyRoster(partyId);
+      _log.fine(
+          'Fetched party ${roster.partyId} (${roster.members.length} members)');
+      return roster;
     } catch (e, stackTrace) {
-      _log.warning('Failed to fetch party details', e, stackTrace);
+      _log.warning('Failed to fetch party roster', e, stackTrace);
       rethrow;
     }
   }
 
-  /// Get active parties for current player
-  Future<List<PartyResponse>> getActiveParties({
+  /// List party invites for [playerId] (incoming by default).
+  Future<List<PartyInvite>> listInvites({
+    required String playerId,
+    String box = 'incoming',
     int page = 1,
-    int pageSize = 20,
+    int pageSize = 50,
   }) async {
     try {
-      _log.info('Fetching active parties: page=$page pageSize=$pageSize');
-      final response = await _apiClient.listParties(
-        page: page,
-        pageSize: pageSize,
-        status: 'active',
-      );
-      _log.fine('Fetched ${response.parties.length} active parties');
-      return response.parties;
-    } catch (e, stackTrace) {
-      _log.warning('Failed to fetch active parties', e, stackTrace);
-      rethrow;
-    }
-  }
-
-  /// Get all parties for current player
-  Future<List<PartyResponse>> getAllParties({
-    int page = 1,
-    int pageSize = 20,
-  }) async {
-    try {
-      _log.info('Fetching all parties: page=$page pageSize=$pageSize');
-      final response = await _apiClient.listParties(
+      _log.info('Fetching party invites: player=$playerId box=$box');
+      final invites = await _apiClient.listInvites(
+        playerId: playerId,
+        box: box,
         page: page,
         pageSize: pageSize,
       );
-      _log.fine('Fetched ${response.parties.length} parties');
-      return response.parties;
+      _log.fine('Fetched ${invites.length} party invites');
+      return invites;
     } catch (e, stackTrace) {
-      _log.warning('Failed to fetch parties', e, stackTrace);
+      _log.warning('Failed to fetch party invites', e, stackTrace);
       rethrow;
     }
   }
 
-  /// Invite a friend to the party
+  /// Invite a player to the party.
   Future<void> inviteToParty({
     required String partyId,
+    required String fromPlayerId,
     required String targetPlayerId,
   }) async {
     try {
       _log.info('Inviting $targetPlayerId to party $partyId');
       await _apiClient.inviteToParty(
         partyId: partyId,
+        fromPlayerId: fromPlayerId,
         targetPlayerId: targetPlayerId,
       );
       _log.fine('Invitation sent successfully');
@@ -109,11 +86,14 @@ class PartiesService {
     }
   }
 
-  /// Accept a party invitation
-  Future<void> acceptInvite(String inviteId) async {
+  /// Accept a party invitation.
+  Future<void> acceptInvite({
+    required String inviteId,
+    required String playerId,
+  }) async {
     try {
       _log.info('Accepting party invite: $inviteId');
-      await _apiClient.acceptPartyInvite(inviteId);
+      await _apiClient.acceptInvite(inviteId: inviteId, playerId: playerId);
       _log.fine('Party invite accepted successfully');
     } catch (e, stackTrace) {
       _log.warning('Failed to accept party invite', e, stackTrace);
@@ -121,11 +101,14 @@ class PartiesService {
     }
   }
 
-  /// Decline a party invitation
-  Future<void> declineInvite(String inviteId) async {
+  /// Decline a party invitation.
+  Future<void> declineInvite({
+    required String inviteId,
+    required String playerId,
+  }) async {
     try {
       _log.info('Declining party invite: $inviteId');
-      await _apiClient.declinePartyInvite(inviteId);
+      await _apiClient.declineInvite(inviteId: inviteId, playerId: playerId);
       _log.fine('Party invite declined successfully');
     } catch (e, stackTrace) {
       _log.warning('Failed to decline party invite', e, stackTrace);
@@ -133,26 +116,17 @@ class PartiesService {
     }
   }
 
-  /// Leave a party
-  Future<void> leaveParty(String partyId) async {
+  /// Leave a party.
+  Future<void> leaveParty({
+    required String partyId,
+    required String playerId,
+  }) async {
     try {
       _log.info('Leaving party: $partyId');
-      await _apiClient.leaveParty(partyId);
+      await _apiClient.leaveParty(partyId: partyId, playerId: playerId);
       _log.fine('Left party successfully');
     } catch (e, stackTrace) {
       _log.warning('Failed to leave party', e, stackTrace);
-      rethrow;
-    }
-  }
-
-  /// Disband a party (owner only)
-  Future<void> disbandParty(String partyId) async {
-    try {
-      _log.info('Disbanding party: $partyId');
-      await _apiClient.disbandParty(partyId);
-      _log.fine('Party disbanded successfully');
-    } catch (e, stackTrace) {
-      _log.warning('Failed to disband party', e, stackTrace);
       rethrow;
     }
   }
