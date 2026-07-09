@@ -12,7 +12,9 @@
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\lmxbl\\\\StudioProjects\\\\trivia_tycoon\\\\test\" -Recurse -Directory)",
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(grep -E \"\\\\.dart$\")",
-      "Bash(xargs grep -l \"^const.*path\\\\|^class.*Route\\\\|^class.*Path\")"
+      "Bash(xargs grep -l \"^const.*path\\\\|^class.*Route\\\\|^class.*Path\")",
+      "mcp__Claude_Code_Remote__subscribe_pr_activity",
+      "mcp__Claude_Code_Remote__send_later"
     ]
   }
 }
