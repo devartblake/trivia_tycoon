@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/core/models/question_validation_models.dart';
 import 'package:trivia_tycoon/core/services/api_service.dart';
+import 'package:trivia_tycoon/game/models/question_difficulty.dart';
 import 'package:trivia_tycoon/game/models/question_model.dart';
 import 'package:trivia_tycoon/game/services/question_hub_service.dart';
 import 'package:trivia_tycoon/game/services/question_loader_service.dart';
@@ -129,10 +130,15 @@ Map<String, dynamic> _questionJson(
 }
 
 void main() {
+  setUp(() {
+    // The gate is shared across service instances; keep tests isolated.
+    QuestionHubService.backendGate.recordSuccess();
+  });
+
   test('parses backend GameplayQuestionDto without embedded correctness',
       () async {
     final api = _FakeApiService()
-      ..getResponses['/questions/set'] = {
+      ..postResponses['/questions/mixed'] = {
         'questions': [
           {
             'id': 'backend-1',
@@ -163,7 +169,7 @@ void main() {
       [false, false],
     );
     expect(result.first.correctAnswer, isEmpty);
-    expect(result.first.difficulty, 4);
+    expect(result.first.difficulty, QuestionDifficulty.expert);
     expect(result.first.imageUrl, 'media/questions/backend-1.png');
     expect(result.first.optionIdForAnswer('Beta'), 'b');
   });
@@ -198,10 +204,10 @@ void main() {
     });
   });
 
-  test('mixed quiz sends ranked mode without personalization when requested',
+  test('mixed quiz posts MixedQuestionSetRequest to /questions/mixed',
       () async {
     final api = _FakeApiService()
-      ..getResponses['/questions/set'] = {
+      ..postResponses['/questions/mixed'] = {
         'items': [_questionJson(id: 'ranked', difficulty: 2)],
       };
 
@@ -212,14 +218,20 @@ void main() {
 
     await service.getMixedQuiz(
       questionCount: 8,
+      categories: const ['science', 'history'],
+      difficulties: const ['medium'],
+      balanceDifficulties: true,
       mode: 'ranked',
       playerId: null,
     );
 
-    expect(api.lastGetPath, '/questions/set');
-    expect(api.lastGetQueryParameters, {
+    expect(api.lastPostPath, '/questions/mixed');
+    expect(api.lastPostBody, {
       'count': 8,
-      'mode': 'ranked',
+      'categories': ['science', 'history'],
+      'difficulties': ['Medium'],
+      'balanceCategories': true,
+      'balanceDifficulties': true,
     });
   });
 
@@ -263,8 +275,7 @@ void main() {
     );
 
     expect(result.length, 1);
-    expect(result.first.id, '2');
-    expect(result.first.difficulty, 2);
+    expect(result.first.difficulty, QuestionDifficulty.medium);
   });
 
   test('getDailyQuiz falls back to local when backend contract is invalid',
@@ -306,11 +317,9 @@ void main() {
     expect(result.first.id, 'fallback-mixed');
   });
 
-  test(
-      'getClassStats falls back to local when backend class payload is invalid',
+  test('getClassStats serves local stats (backend has no stats endpoints)',
       () async {
-    final api = _FakeApiService()
-      ..getResponses['/quiz/classes/7/stats'] = {'questionCount': 10};
+    final api = _FakeApiService();
     final loader = _FakeLoaderService()
       ..classQuestionCount = 44
       ..classSubjectCount = 5;
@@ -318,14 +327,17 @@ void main() {
     final service = QuestionHubService(apiService: api, localLoader: loader);
     final stats = await service.getClassStats('7');
 
-    expect(stats['source'], 'local_fallback');
+    // Stats endpoints are flag-gated off; local data is canonical and the
+    // API must not be called at all.
+    expect(api.lastGetPath, isNull);
+    expect(stats['source'], 'local');
     expect(stats['questionCount'], 44);
     expect(stats['subjectCount'], 5);
   });
 
-  test('getCategoryStats falls back when contract is invalid', () async {
-    final api = _FakeApiService()
-      ..getResponses['/quiz/categories/science/stats'] = {'unexpected': true};
+  test('getCategoryStats serves local stats (backend has no stats endpoints)',
+      () async {
+    final api = _FakeApiService();
     final loader = _FakeLoaderService()
       ..categoryQuestions = [
         QuestionModel.fromJson(_questionJson(id: '1', difficulty: 1)),
@@ -334,7 +346,8 @@ void main() {
     final service = QuestionHubService(apiService: api, localLoader: loader);
     final stats = await service.getCategoryStats(QuizCategory.science);
 
-    expect(stats['source'], 'local_fallback');
+    expect(api.lastGetPath, isNull);
+    expect(stats['source'], 'local');
     expect(stats['questionCount'], 1);
     expect(stats['category'], 'science');
   });
@@ -446,8 +459,8 @@ void main() {
       ],
     );
 
-    expect(result, hasLength(1));
-    expect(result.first.isCorrect, isTrue);
-    expect(result.first.source, 'local_fallback');
+    expect(result.results, hasLength(1));
+    expect(result.results.first.isCorrect, isTrue);
+    expect(result.results.first.source, 'local_fallback');
   });
 }

@@ -1,236 +1,123 @@
-/// Data Transfer Objects and Domain Models for Parties API
+/// Data Transfer Objects for the Party API.
 ///
-/// This file defines all request/response shapes for party operations:
-/// - Party creation and management
-/// - Party member management
-/// - Party invitations
+/// Shapes mirror the backend contracts in
+/// Synaptix.Shared.Contracts/Dtos/SocialDtos.cs:
+/// - PartyRosterDto  {partyId, leaderPlayerId, status, members}
+/// - PartyMemberDto  {playerId, role, joinedAtUtc}
+/// - PartyInviteDto  {inviteId, partyId, fromPlayerId, toPlayerId, status,
+///                    createdAtUtc, respondedAtUtc}
 library;
 
-/// Response for a single party
-class PartyResponse {
+/// A party roster — returned by POST /party and GET /party/{id}.
+class PartyRoster {
   final String partyId;
-  final String name;
-  final String? description;
-  final String ownerId;
-  final int memberCount;
-  final int maxMembers;
-  final String status; // 'active', 'completed', 'disbanded'
-  final String? gameMode;
-  final DateTime createdAtUtc;
+  final String leaderPlayerId;
 
-  const PartyResponse({
-    required this.partyId,
-    required this.name,
-    this.description,
-    required this.ownerId,
-    required this.memberCount,
-    required this.maxMembers,
-    required this.status,
-    this.gameMode,
-    required this.createdAtUtc,
-  });
-
-  factory PartyResponse.fromJson(Map<String, dynamic> json) {
-    return PartyResponse(
-      partyId: json['partyId']?.toString() ?? '',
-      name: json['name']?.toString() ?? '',
-      description: json['description'] as String?,
-      ownerId: json['ownerId']?.toString() ?? '',
-      memberCount: (json['memberCount'] as num?)?.toInt() ?? 0,
-      maxMembers: (json['maxMembers'] as num?)?.toInt() ?? 4,
-      status: json['status']?.toString() ?? 'active',
-      gameMode: json['gameMode'] as String?,
-      createdAtUtc: DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ??
-          DateTime.now().toUtc(),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    'partyId': partyId,
-    'name': name,
-    'description': description,
-    'ownerId': ownerId,
-    'memberCount': memberCount,
-    'maxMembers': maxMembers,
-    'status': status,
-    'gameMode': gameMode,
-    'createdAtUtc': createdAtUtc.toIso8601String(),
-  };
-}
-
-/// Detailed party information including members and pending invites
-class PartyDetailResponse {
-  final String partyId;
-  final String name;
-  final String? description;
-  final String ownerId;
-  final String ownerUsername;
-  final List<PartyMember> members;
-  final List<PartyInvite> pendingInvites;
-  final int maxMembers;
+  /// Open | Queued | Matched | Closed
   final String status;
-  final String? gameMode;
-  final DateTime createdAtUtc;
+  final List<PartyMember> members;
 
-  const PartyDetailResponse({
+  const PartyRoster({
     required this.partyId,
-    required this.name,
-    this.description,
-    required this.ownerId,
-    required this.ownerUsername,
-    required this.members,
-    required this.pendingInvites,
-    required this.maxMembers,
+    required this.leaderPlayerId,
     required this.status,
-    this.gameMode,
-    required this.createdAtUtc,
+    required this.members,
   });
 
-  factory PartyDetailResponse.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> membersList = json['members'] as List<dynamic>? ?? [];
-    final List<dynamic> invitesList = json['pendingInvites'] as List<dynamic>? ?? [];
-
-    return PartyDetailResponse(
+  factory PartyRoster.fromJson(Map<String, dynamic> json) {
+    final membersList = json['members'] as List<dynamic>? ?? const [];
+    return PartyRoster(
       partyId: json['partyId']?.toString() ?? '',
-      name: json['name']?.toString() ?? '',
-      description: json['description'] as String?,
-      ownerId: json['ownerId']?.toString() ?? '',
-      ownerUsername: json['ownerUsername']?.toString() ?? 'Unknown',
+      leaderPlayerId: json['leaderPlayerId']?.toString() ?? '',
+      status: json['status']?.toString() ?? 'Open',
       members: membersList
+          .whereType<Map>()
           .map((m) => PartyMember.fromJson(Map<String, dynamic>.from(m)))
-          .toList(),
-      pendingInvites: invitesList
-          .map((i) => PartyInvite.fromJson(Map<String, dynamic>.from(i)))
-          .toList(),
-      maxMembers: (json['maxMembers'] as num?)?.toInt() ?? 4,
-      status: json['status']?.toString() ?? 'active',
-      gameMode: json['gameMode'] as String?,
-      createdAtUtc: DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ??
-          DateTime.now().toUtc(),
+          .toList(growable: false),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'partyId': partyId,
-    'name': name,
-    'description': description,
-    'ownerId': ownerId,
-    'ownerUsername': ownerUsername,
-    'members': members.map((m) => m.toJson()).toList(),
-    'pendingInvites': pendingInvites.map((i) => i.toJson()).toList(),
-    'maxMembers': maxMembers,
-    'status': status,
-    'gameMode': gameMode,
-    'createdAtUtc': createdAtUtc.toIso8601String(),
-  };
+        'partyId': partyId,
+        'leaderPlayerId': leaderPlayerId,
+        'status': status,
+        'members': members.map((m) => m.toJson()).toList(growable: false),
+      };
 }
 
-/// Party member information
+/// A member of a party.
 class PartyMember {
   final String playerId;
-  final String username;
-  final String? avatarUrl;
-  final String role; // 'owner', 'member'
+  final String role;
   final DateTime joinedAtUtc;
-  final bool isReady;
 
   const PartyMember({
     required this.playerId,
-    required this.username,
-    this.avatarUrl,
     required this.role,
     required this.joinedAtUtc,
-    required this.isReady,
   });
 
   factory PartyMember.fromJson(Map<String, dynamic> json) {
     return PartyMember(
       playerId: json['playerId']?.toString() ?? '',
-      username: json['username']?.toString() ?? 'Unknown',
-      avatarUrl: json['avatarUrl'] as String?,
       role: json['role']?.toString() ?? 'member',
-      joinedAtUtc: DateTime.tryParse(json['joinedAtUtc']?.toString() ?? '')?.toUtc() ??
-          DateTime.now().toUtc(),
-      isReady: (json['isReady'] as bool?) ?? false,
+      joinedAtUtc:
+          DateTime.tryParse(json['joinedAtUtc']?.toString() ?? '')?.toUtc() ??
+              DateTime.now().toUtc(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'playerId': playerId,
-    'username': username,
-    'avatarUrl': avatarUrl,
-    'role': role,
-    'joinedAtUtc': joinedAtUtc.toIso8601String(),
-    'isReady': isReady,
-  };
+        'playerId': playerId,
+        'role': role,
+        'joinedAtUtc': joinedAtUtc.toIso8601String(),
+      };
 }
 
-/// Pending party invitation
+/// A party invitation.
 class PartyInvite {
   final String inviteId;
+  final String partyId;
+  final String fromPlayerId;
   final String toPlayerId;
-  final String toUsername;
-  final String? toAvatarUrl;
-  final DateTime sentAtUtc;
+
+  /// Pending | Accepted | Declined | Cancelled
+  final String status;
+  final DateTime createdAtUtc;
+  final DateTime? respondedAtUtc;
 
   const PartyInvite({
     required this.inviteId,
+    required this.partyId,
+    required this.fromPlayerId,
     required this.toPlayerId,
-    required this.toUsername,
-    this.toAvatarUrl,
-    required this.sentAtUtc,
+    required this.status,
+    required this.createdAtUtc,
+    this.respondedAtUtc,
   });
 
   factory PartyInvite.fromJson(Map<String, dynamic> json) {
     return PartyInvite(
       inviteId: json['inviteId']?.toString() ?? '',
+      partyId: json['partyId']?.toString() ?? '',
+      fromPlayerId: json['fromPlayerId']?.toString() ?? '',
       toPlayerId: json['toPlayerId']?.toString() ?? '',
-      toUsername: json['toUsername']?.toString() ?? 'Unknown',
-      toAvatarUrl: json['toAvatarUrl'] as String?,
-      sentAtUtc: DateTime.tryParse(json['sentAtUtc']?.toString() ?? '')?.toUtc() ??
-          DateTime.now().toUtc(),
+      status: json['status']?.toString() ?? 'Pending',
+      createdAtUtc:
+          DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ??
+              DateTime.now().toUtc(),
+      respondedAtUtc:
+          DateTime.tryParse(json['respondedAtUtc']?.toString() ?? '')?.toUtc(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'inviteId': inviteId,
-    'toPlayerId': toPlayerId,
-    'toUsername': toUsername,
-    'toAvatarUrl': toAvatarUrl,
-    'sentAtUtc': sentAtUtc.toIso8601String(),
-  };
-}
-
-/// Response containing list of parties
-class PartiesListResponse {
-  final List<PartyResponse> parties;
-  final int totalCount;
-  final int page;
-  final int pageSize;
-
-  const PartiesListResponse({
-    required this.parties,
-    required this.totalCount,
-    required this.page,
-    required this.pageSize,
-  });
-
-  factory PartiesListResponse.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> partiesList = json['parties'] as List<dynamic>? ?? [];
-    return PartiesListResponse(
-      parties: partiesList
-          .map((p) => PartyResponse.fromJson(Map<String, dynamic>.from(p)))
-          .toList(),
-      totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
-      page: (json['page'] as num?)?.toInt() ?? 1,
-      pageSize: (json['pageSize'] as num?)?.toInt() ?? 20,
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    'parties': parties.map((p) => p.toJson()).toList(),
-    'totalCount': totalCount,
-    'page': page,
-    'pageSize': pageSize,
-  };
+        'inviteId': inviteId,
+        'partyId': partyId,
+        'fromPlayerId': fromPlayerId,
+        'toPlayerId': toPlayerId,
+        'status': status,
+        'createdAtUtc': createdAtUtc.toIso8601String(),
+        'respondedAtUtc': respondedAtUtc?.toIso8601String(),
+      };
 }

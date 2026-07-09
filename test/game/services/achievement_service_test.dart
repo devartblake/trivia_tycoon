@@ -12,8 +12,9 @@ class _StubApiService extends ApiService {
       : super(baseUrl: 'http://stub.invalid', initializeCache: false);
 
   @override
-  Future<List<Map<String, dynamic>>> fetchAchievements(
-      String playerName) async {
+  Future<List<Map<String, dynamic>>> fetchAchievements({
+    String? playerId,
+  }) async {
     throw UnimplementedError('stub');
   }
 

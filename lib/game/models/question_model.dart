@@ -56,8 +56,17 @@ class QuestionModel {
   bool checkAnswer(int selectedIndex) => selectedIndex == correctIndex;
 
   bool isCorrectAnswer(String selectedAnswer) {
+    if (type == QuestionType.freeText) {
+      // Typed answers can't be exact-matched fairly: ignore case and
+      // collapse internal whitespace before comparing.
+      return _normalizeFreeText(selectedAnswer) ==
+          _normalizeFreeText(correctAnswer);
+    }
     return selectedAnswer == correctAnswer;
   }
+
+  static String _normalizeFreeText(String value) =>
+      value.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' ');
 
   String optionIdForAnswer(String selectedAnswer) {
     return optionIdByText?[selectedAnswer] ?? selectedAnswer;

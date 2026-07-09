@@ -29,3 +29,42 @@ class QuestionAnswerCheckResult {
   final String source;
   final Map<String, dynamic> metadata;
 }
+
+/// Server-authoritative XP awarded for a graded quiz session.
+/// Mirrors the backend's QuizXpAwardDto on POST /questions/check-batch.
+class QuizXpAward {
+  const QuizXpAward({
+    required this.xpAwarded,
+    required this.totalXp,
+    required this.tierUpgraded,
+    this.newTierId,
+  });
+
+  final double xpAwarded;
+  final double totalXp;
+  final bool tierUpgraded;
+  final String? newTierId;
+
+  static QuizXpAward? fromJson(Object? json) {
+    if (json is! Map) return null;
+    final map = Map<String, dynamic>.from(json);
+    return QuizXpAward(
+      xpAwarded: (map['xpAwarded'] as num?)?.toDouble() ?? 0,
+      totalXp: (map['totalXp'] as num?)?.toDouble() ?? 0,
+      tierUpgraded: (map['tierUpgraded'] as bool?) ?? false,
+      newTierId: map['newTierId']?.toString(),
+    );
+  }
+}
+
+/// Result of a batch answer check: per-question grading plus, when the
+/// backend awarded quiz XP server-side, the authoritative award summary.
+class QuestionBatchCheckOutcome {
+  const QuestionBatchCheckOutcome({
+    required this.results,
+    this.xpAward,
+  });
+
+  final List<QuestionAnswerCheckResult> results;
+  final QuizXpAward? xpAward;
+}

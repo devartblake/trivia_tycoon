@@ -100,7 +100,7 @@ void main() {
     expect(protectedAttempts, 2);
   });
 
-  test('falls back to /auth/refresh when /admin/auth/refresh is unavailable',
+  test('tries /auth/refresh first and succeeds without touching admin refresh',
       () async {
     await authBox.put('auth_access_token', 'expired-token');
     await authBox.put('auth_refresh_token', 'refresh-token');
@@ -185,6 +185,96 @@ void main() {
     expect(response['ok'], isTrue);
     expect(authBox.get('auth_access_token'), 'fallback-access-token');
     expect(authBox.get('auth_refresh_token'), 'fallback-refresh-token');
+    // User refresh is first in the chain now, so it succeeds on the only
+    // attempt and the admin variant is never called.
+    expect(refreshAttempts, 1);
+  });
+
+  test('falls back to /admin/auth/refresh when /auth/refresh is unavailable',
+      () async {
+    await authBox.put('auth_access_token', 'expired-token');
+    await authBox.put('auth_refresh_token', 'refresh-token');
+
+    final dio = Dio(BaseOptions(baseUrl: 'https://example.test'));
+    var refreshAttempts = 0;
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          if (options.path == '/admin/users') {
+            if (options.headers['Authorization'] ==
+                'Bearer admin-access-token') {
+              handler.resolve(
+                Response(
+                  requestOptions: options,
+                  statusCode: 200,
+                  data: {'ok': true},
+                ),
+              );
+              return;
+            }
+
+            handler.reject(
+              DioException(
+                requestOptions: options,
+                response: Response(
+                  requestOptions: options,
+                  statusCode: 401,
+                  data: {'message': 'expired'},
+                ),
+                type: DioExceptionType.badResponse,
+              ),
+            );
+            return;
+          }
+
+          if (options.path == '/auth/refresh') {
+            refreshAttempts++;
+            handler.reject(
+              DioException(
+                requestOptions: options,
+                response: Response(
+                  requestOptions: options,
+                  statusCode: 404,
+                  data: {'message': 'not found'},
+                ),
+                type: DioExceptionType.badResponse,
+              ),
+            );
+            return;
+          }
+
+          if (options.path == '/admin/auth/refresh') {
+            refreshAttempts++;
+            handler.resolve(
+              Response(
+                requestOptions: options,
+                statusCode: 200,
+                data: {
+                  'access_token': 'admin-access-token',
+                  'refresh_token': 'admin-refresh-token',
+                },
+              ),
+            );
+            return;
+          }
+
+          handler.next(options);
+        },
+      ),
+    );
+
+    final service = ApiService(
+      baseUrl: 'https://example.test',
+      dio: dio,
+      initializeCache: false,
+    );
+
+    final response = await service.get('/admin/users');
+
+    expect(response['ok'], isTrue);
+    expect(authBox.get('auth_access_token'), 'admin-access-token');
+    expect(authBox.get('auth_refresh_token'), 'admin-refresh-token');
     expect(refreshAttempts, 2);
   });
 

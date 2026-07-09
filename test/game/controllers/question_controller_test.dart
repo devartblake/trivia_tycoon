@@ -90,10 +90,12 @@ class _FakeQuestionRepository implements QuestionRepository {
       );
 
   @override
-  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+  Future<QuestionBatchCheckOutcome> checkAnswerBatch({
     required List<QuestionAnswerSubmission> submissions,
+    String? quizSessionId,
+    String? mode,
   }) async =>
-      [];
+      const QuestionBatchCheckOutcome(results: []);
 }
 
 // ---------------------------------------------------------------------------

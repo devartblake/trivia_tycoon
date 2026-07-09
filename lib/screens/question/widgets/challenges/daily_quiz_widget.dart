@@ -193,12 +193,15 @@ class DailyQuizWidget extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  const Text(
-                    "Daily Quiz",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  const Flexible(
+                    child: Text(
+                      "Daily Quiz",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   if (status.completionStreak > 0) ...[
@@ -227,12 +230,14 @@ class DailyQuizWidget extends ConsumerWidget {
                 status.canPlay
                     ? "${quizData.totalQuestions} questions • ${quizData.totalXPReward} XP"
                     : "Completed! Reset in ${status.timeUntilReset}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 14,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: status.canPlay
                     ? () => _handleDailyQuizTap(context, quizData)

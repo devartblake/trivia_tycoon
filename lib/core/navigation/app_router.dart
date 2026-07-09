@@ -780,11 +780,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             final questionCount = (extra['questionCount'] as num?)?.toInt();
             final displayTitle =
                 extra['displayTitle']?.toString() ?? extra['title']?.toString();
+            final timedChallenge = extra['timedChallenge'] == true;
 
             final hasLaunchPayload = questions.isNotEmpty ||
                 category != null ||
                 classLevel != null ||
-                questionCount != null;
+                questionCount != null ||
+                timedChallenge;
 
             if (hasLaunchPayload) {
               return AdaptedQuestionScreen(
@@ -793,6 +795,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 questionCount: questionCount,
                 initialQuestions: questions.isEmpty ? null : questions,
                 displayTitle: displayTitle,
+                timedChallenge: timedChallenge,
               );
             }
           }

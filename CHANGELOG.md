@@ -2,6 +2,31 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased] - Sprint 2 (API contract alignment, server-authoritative XP)
+
+_Backend contracts verified directly against `TycoonTycoon_Backend` source; companion backend branch: `claude/sprint2-server-xp-friends`._
+
+### Added
+- **Season leaderboard revived (Phase A of the seasonal plan)**: backend gains `GET /seasons/{seasonId}/leaderboard` + `GET /seasons/active/leaderboard` (paginated rank-point standings; closed seasons serve the immutable snapshot; optional `me` entry with off-page rank when authenticated — backend branch `claude/season-leaderboard`). Client `getSeasonLeaderboard` is un-deprecated and re-wired to the new route (legacy non-GUID local season ids fall back to the active season); `SeasonPlayer.fromJson` accepts the backend entry shape; `seasonal_competition_service` no longer calls the dead per-player reset route (resets/carryover are server-side at season close)
+- **Question Phase 4**: free-text question UI (`FreeTextView`, normalized case/whitespace-insensitive grading), boss question variant (10s pressure timer always applies, red boss canvas + "BOSS QUESTION — 5× XP" banner), and timed-challenge mode (per-question countdown from difficulty: easy 30s → boss 10s; opt in via `timedChallenge` on `/quiz/play` extras)
+- `docs/api/SEASONAL_TIEBREAKER_BACKEND_PLAN.md` — phased plan to restore season leaderboard, server-side point accrual, moderation resets, and the tie-breaker mechanic on the backend's existing PlayerSeasonProfile/SeasonPointTransaction domain
+- **Server-authoritative quiz XP**: each quiz run sends a `quizSessionId` with `POST /questions/check-batch`; the backend grades the answers, awards tier XP (difficulty × 10 per correct, idempotent per session), and the client refreshes tier progress from the returned `QuizXpAwardDto` (backend half on the companion branch)
+- `DELETE /users/me/friends/{friendPlayerId}` (backend) — authenticated friend removal
+- 350ms search debounce in AddFriendDialog; social DTO contract tests
+
+### Changed
+- `socialEnabled` now defaults to **true** on the client (constructor + missing-key fallback); backend `/app/config` can still disable it per release or per player (ban)
+- `getMixedQuiz` posts the real `MixedQuestionSetRequest` to `POST /questions/mixed` — multi-category requests now work (the old GET path silently dropped all but one category)
+- Friends client migrated to the canonical authenticated surface `/users/me/friends/*` + `/users/search?handle=` with real DTO field mappings; party client/service/models rewritten to the actual `/party` contract (leader-based creation, roster shape, invite bodies)
+
+### Fixed
+- Quiz hub RenderFlex overflows at phone widths (grid headers, category cards, daily-quiz card, CTA card); responsive quiz-hub tests now pass at 390/900/1280px
+- Carousel auto-advance timer leak (`Future.delayed` chain → cancellable `Timer.periodic` with dispose)
+- `ApiService.getRequest` double-base-URL helper removed; referral invite service migrated to typed helpers
+
+### Removed
+- Legacy question API layers (`question_api_client.dart`, `question/question_api_service.dart`) and the loader's doomed API-first fetch — all targeted endpoints that don't exist on the backend
+
 ## [4.2.0] - 2026-07-08
 
 ### Full Codebase Audit + Sprint 1 Critical Fixes

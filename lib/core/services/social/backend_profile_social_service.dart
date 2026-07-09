@@ -206,20 +206,17 @@ class BackendProfileSocialService {
 
   Future<Map<String, dynamic>> removeFriend(
     String friendId, {
+    // Retained for call-site compatibility; the acting player now comes from
+    // the JWT server-side and is never sent by the client.
     String? playerId,
   }) async {
-    final body = {
-      if (playerId != null && playerId.isNotEmpty) 'playerId': playerId,
-      // Send both common field names so the client remains compatible with
-      // either backend binder shape while alpha contracts settle.
-      'friendId': friendId,
-      'targetUserId': friendId,
-      'friendPlayerId': friendId,
-    };
-
+    // DELETE /users/me/friends/{friendPlayerId} — the authenticated removal
+    // endpoint. (The old DELETE /friends took player ids in the body with no
+    // auth, which was spoofable.)
+    final path = '/users/me/friends/$friendId';
     return _encryptedClient != null
-        ? _encryptedClient!.deleteEncrypted('/friends', body: body)
-        : _apiService.delete('/friends', body: body, timeout: _socialTimeout);
+        ? _encryptedClient!.deleteEncrypted(path, body: const {})
+        : _apiService.delete(path, timeout: _socialTimeout);
   }
 
   // ---------------------------------------------------------------------------

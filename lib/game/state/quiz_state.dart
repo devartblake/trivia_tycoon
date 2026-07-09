@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:async';
 import '../../core/models/question_validation_models.dart';
 import '../services/quiz_category.dart';
@@ -38,6 +39,22 @@ class AdaptedQuizState {
   final Stopwatch? stopwatch;
   final List<QuestionAnswerSubmission> answerSubmissions;
 
+  /// Timed-challenge mode: each question's countdown comes from its
+  /// difficulty (easy 30s ... boss 10s) instead of the class-level limit.
+  final bool timedChallenge;
+
+  /// The time limit that was applied to the current question, so answer
+  /// timing and time-bonus math use the same number the countdown started at.
+  final int questionTimeLimit;
+
+  /// Stable id for this quiz run; the backend uses it as the idempotency key
+  /// when awarding server-authoritative XP at completion.
+  final String? quizSessionId;
+
+  /// Server-authoritative XP award returned at quiz completion (null when the
+  /// player was offline/unauthenticated and no award happened).
+  final QuizXpAward? serverXpAward;
+
   const AdaptedQuizState({
     this.questions = const [],
     this.currentIndex = 0,
@@ -66,6 +83,10 @@ class AdaptedQuizState {
     this.quizEndTime,
     this.stopwatch,
     this.answerSubmissions = const [],
+    this.timedChallenge = false,
+    this.questionTimeLimit = 30,
+    this.quizSessionId,
+    this.serverXpAward,
   });
 
   AdaptedQuizState copyWith({
@@ -96,6 +117,10 @@ class AdaptedQuizState {
     DateTime? quizEndTime,
     Stopwatch? stopwatch,
     List<QuestionAnswerSubmission>? answerSubmissions,
+    bool? timedChallenge,
+    int? questionTimeLimit,
+    String? quizSessionId,
+    QuizXpAward? serverXpAward,
   }) {
     return AdaptedQuizState(
       questions: questions ?? this.questions,
@@ -125,6 +150,10 @@ class AdaptedQuizState {
       quizEndTime: quizEndTime ?? this.quizEndTime,
       stopwatch: stopwatch ?? this.stopwatch,
       answerSubmissions: answerSubmissions ?? this.answerSubmissions,
+      timedChallenge: timedChallenge ?? this.timedChallenge,
+      questionTimeLimit: questionTimeLimit ?? this.questionTimeLimit,
+      quizSessionId: quizSessionId ?? this.quizSessionId,
+      serverXpAward: serverXpAward ?? this.serverXpAward,
     );
   }
 
@@ -170,6 +199,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     bool includeImages = true,
     bool includeVideos = true,
     bool includeAudio = true,
+    bool timedChallenge = false,
   }) async {
     try {
       state = state.copyWith(
@@ -179,6 +209,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         category: category,
         quizStartTime: DateTime.now(),
         stopwatch: Stopwatch()..start(),
+        quizSessionId: const Uuid().v4(),
+        timedChallenge: timedChallenge,
       );
 
       List<QuestionModel> questions;
@@ -223,6 +255,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         }
       }
 
+      final firstLimit =
+          _timeLimitForQuestion(questions.isEmpty ? null : questions.first);
       state = state.copyWith(
         questions: questions,
         currentIndex: 0,
@@ -232,7 +266,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         diamonds: 0,
         stars: 0,
         isLoading: false,
-        timeRemaining: _getTimeLimitForClass(classLevel),
+        timeRemaining: firstLimit,
+        questionTimeLimit: firstLimit,
         categoryScores: categoryScores,
         achievements: <String>[],
         answerSubmissions: const <QuestionAnswerSubmission>[],
@@ -267,11 +302,13 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     required String classLevel,
     QuizCategory? category,
     int questionCount = 10,
+    bool timedChallenge = false,
   }) async {
     await startQuiz(
       questionCount: questionCount,
       classLevel: classLevel,
       category: category,
+      timedChallenge: timedChallenge,
     );
   }
 
@@ -279,6 +316,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     required List<QuestionModel> questions,
     String classLevel = '1',
     QuizCategory? category,
+    bool timedChallenge = false,
   }) async {
     try {
       state = state.copyWith(
@@ -288,6 +326,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         category: category,
         quizStartTime: DateTime.now(),
         stopwatch: Stopwatch()..start(),
+        quizSessionId: const Uuid().v4(),
+        timedChallenge: timedChallenge,
       );
 
       if (questions.isEmpty) {
@@ -312,7 +352,10 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
         diamonds: 0,
         stars: 0,
         isLoading: false,
-        timeRemaining: _getTimeLimitForClass(classLevel),
+        timeRemaining:
+            _timeLimitForQuestion(questions.isEmpty ? null : questions.first),
+        questionTimeLimit:
+            _timeLimitForQuestion(questions.isEmpty ? null : questions.first),
         categoryScores: categoryScores,
         achievements: <String>[],
         answerSubmissions: const <QuestionAnswerSubmission>[],
@@ -381,7 +424,7 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
 
     _stopTimer();
     final answerTimeMs =
-        ((_getTimeLimitForClass(state.classLevel) - state.timeRemaining) * 1000)
+        ((state.questionTimeLimit - state.timeRemaining) * 1000)
             .clamp(0, 1 << 31)
             .toInt();
 
@@ -459,11 +502,17 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       return;
     }
 
+    final nextIndex = state.currentIndex + 1;
+    final nextQuestion =
+        nextIndex < state.questions.length ? state.questions[nextIndex] : null;
+    final nextLimit = _timeLimitForQuestion(nextQuestion);
+
     state = state.copyWith(
-      currentIndex: state.currentIndex + 1,
+      currentIndex: nextIndex,
       selectedAnswer: null,
       showFeedback: false,
-      timeRemaining: _getTimeLimitForClass(state.classLevel),
+      timeRemaining: nextLimit,
+      questionTimeLimit: nextLimit,
       hasUsedPowerUp: false,
       isTimerExpired: false,
     );
@@ -494,9 +543,12 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
     }
 
     try {
-      final results = await _repository.checkAnswerBatch(
+      final outcome = await _repository.checkAnswerBatch(
         submissions: state.answerSubmissions,
+        quizSessionId: state.quizSessionId,
+        mode: 'practice',
       );
+      final results = outcome.results;
       if (results.isEmpty) {
         return state;
       }
@@ -522,6 +574,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       state = state.copyWith(
         score: authoritativeScore,
         categoryScores: categoryScores,
+        // Server-authoritative award (null when offline/unauthenticated).
+        serverXpAward: outcome.xpAward,
       );
     } catch (_) {
       // Keep the per-question authoritative/fallback results already in state.
@@ -627,6 +681,21 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
   }
 
   /// Helper methods
+  /// Time limit for a specific question. Boss questions always play under
+  /// their own pressure timer (10s); in timed-challenge mode every question
+  /// uses its difficulty's limit; otherwise the class-level limit applies.
+  int _timeLimitForQuestion(QuestionModel? question) {
+    final difficultyLimit = question?.difficulty.timeLimitSeconds;
+    if (question?.difficulty == QuestionDifficulty.boss &&
+        difficultyLimit != null) {
+      return difficultyLimit;
+    }
+    if (state.timedChallenge && difficultyLimit != null) {
+      return difficultyLimit;
+    }
+    return _getTimeLimitForClass(state.classLevel);
+  }
+
   int _getTimeLimitForClass(String classLevel) {
     final level = int.tryParse(classLevel) ?? 1;
     if (level <= 2) return 45; // More time for younger students

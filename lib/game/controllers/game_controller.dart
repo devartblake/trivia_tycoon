@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
+import '../providers/game_providers.dart' show playerProfileServiceProvider;
+import '../../core/services/settings/player_profile_service.dart';
 import '../../core/services/settings/quiz_progress_service.dart';
 import '../../game/models/power_up.dart';
 import '../../game/models/achievement.dart';
@@ -24,6 +26,7 @@ final gameControllerProvider = ChangeNotifierProvider<GameController>((ref) {
   final questionRepository = ref.read(questionRepositoryProvider);
   final achievementService = ref.read(providers.achievementServiceProvider);
   final quizProgressService = ref.read(providers.quizProgressServiceProvider);
+  final playerProfileService = ref.read(playerProfileServiceProvider);
   final router = ref.read(providers.routerProvider).value!;
 
   return GameController(
@@ -31,6 +34,7 @@ final gameControllerProvider = ChangeNotifierProvider<GameController>((ref) {
       questionRepository: questionRepository,
       achievementService: achievementService,
       quizProgressService: quizProgressService,
+      playerProfileService: playerProfileService,
       router: router);
 });
 
@@ -41,6 +45,7 @@ class GameController extends ChangeNotifier {
   final QuestionRepository questionRepository;
   final AchievementService achievementService;
   final QuizProgressService quizProgressService;
+  final PlayerProfileService playerProfileService;
   final GoRouter router;
 
   GameState _gameState = GameState.idle;
@@ -62,6 +67,7 @@ class GameController extends ChangeNotifier {
     required this.questionRepository,
     required this.achievementService,
     required this.quizProgressService,
+    required this.playerProfileService,
     required this.router,
   }) {
     _loadProgress();
@@ -194,10 +200,11 @@ class GameController extends ChangeNotifier {
         title: '5 Correct Answer Streak',
         description: '5 Correct Answers in a Row',
       );
-      achievementService.unlockAchievement(
-        achievement,
-        'PlayerName',
-      ); // Replace with actual player name
+      // Resolve the real player GUID; the backend unlock is keyed on it.
+      // Fire-and-forget: local save still happens even if the id is missing.
+      playerProfileService.getUserId().then((playerId) {
+        achievementService.unlockAchievement(achievement, playerId ?? '');
+      });
       _log.fine('Achievement Unlocked: 5 Correct Answers in a Row!');
     }
   }

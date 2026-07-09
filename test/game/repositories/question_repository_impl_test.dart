@@ -101,11 +101,13 @@ class _FakeQuestionHubService extends QuestionHubService {
   }
 
   @override
-  Future<List<QuestionAnswerCheckResult>> checkAnswerBatch({
+  Future<QuestionBatchCheckOutcome> checkAnswerBatch({
     required List<QuestionAnswerSubmission> submissions,
+    String? quizSessionId,
+    String? mode,
   }) async {
     lastBatchSubmissions = submissions;
-    return submissions
+    final results = submissions
         .map(
           (submission) => QuestionAnswerCheckResult(
             questionId: submission.question.id,
@@ -114,6 +116,7 @@ class _FakeQuestionHubService extends QuestionHubService {
           ),
         )
         .toList();
+    return QuestionBatchCheckOutcome(results: results);
   }
 }
 

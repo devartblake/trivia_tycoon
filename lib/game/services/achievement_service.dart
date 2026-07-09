@@ -30,9 +30,10 @@ class AchievementService {
     }
   }
 
-  Future<List<Achievement>> fetchAchievements(String playerName) async {
+  /// [playerId] is the player's GUID (the backend has no name-keyed lookup).
+  Future<List<Achievement>> fetchAchievements(String playerId) async {
     final List<Map<String, dynamic>> response =
-        await apiService.fetchAchievements(playerName);
+        await apiService.fetchAchievements(playerId: playerId);
     final achievements =
         response.map((data) => Achievement.fromJson(data)).toList();
 
@@ -107,8 +108,9 @@ class AchievementService {
   }
 
   /// Unlocks a new achievement and saves it locally and remotely.
+  /// [playerId] is the player's GUID (the backend has no name-keyed unlock).
   Future<void> unlockAchievement(
-      Achievement achievement, String playerName) async {
+      Achievement achievement, String playerId) async {
     try {
       final unlockedAchievements = await getUnlockedAchievements();
 
@@ -119,10 +121,10 @@ class AchievementService {
         await saveAchievements(unlockedAchievements);
 
         // Track achievement unlock
-        await _recordAchievementUnlock(achievement.id, playerName);
+        await _recordAchievementUnlock(achievement.id, playerId);
 
         try {
-          await apiService.unlockAchievement(playerName, achievement.id);
+          await apiService.unlockAchievement(playerId, achievement.id);
         } catch (e) {
           LogManager.debug('Failed to sync achievement unlock to server: $e');
           // Achievement is still saved locally
@@ -140,11 +142,11 @@ class AchievementService {
     return unlockedAchievements.any((a) => a.id == achievementId);
   }
 
-  /// Syncs achievements with the API.
-  Future<void> syncAchievements(String playerName) async {
+  /// Syncs achievements with the API. [playerId] is the player's GUID.
+  Future<void> syncAchievements(String playerId) async {
     try {
       final List<Map<String, dynamic>> achievementsData =
-          await apiService.fetchAchievements(playerName);
+          await apiService.fetchAchievements(playerId: playerId);
       final List<Achievement> achievements =
           achievementsData.map(Achievement.fromJson).toList();
 
