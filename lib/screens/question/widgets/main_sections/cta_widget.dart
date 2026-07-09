@@ -101,6 +101,8 @@ class _CTAWidgetState extends State<CTAWidget>
                       children: [
                         Text(
                           widget.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -110,6 +112,8 @@ class _CTAWidgetState extends State<CTAWidget>
                         const SizedBox(height: 4),
                         Text(
                           widget.subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.white70,
@@ -121,6 +125,8 @@ class _CTAWidgetState extends State<CTAWidget>
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.blueAccent,
+                            visualDensity: VisualDensity.compact,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),

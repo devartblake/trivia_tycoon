@@ -25,9 +25,9 @@ class ReferralInviteApiService {
   /// Get all invites for a user
   Future<List<ReferralInvite>> getInvites(String userId) async {
     try {
-      final response =
-          await _apiService.getRequest('referrals/invites/user/$userId');
-      return (response as List)
+      final response = await _apiService
+          .getList('/referrals/invites/user/$userId');
+      return response
           .map((e) => ReferralInvite.fromJson(Map<String, dynamic>.from(e)))
           .toList();
     } catch (e) {
@@ -40,7 +40,7 @@ class ReferralInviteApiService {
   Future<ReferralInvite?> getInvite(String inviteId) async {
     try {
       final response =
-          await _apiService.getRequest('referrals/invites/$inviteId');
+          await _apiService.get('/referrals/invites/$inviteId');
       return ReferralInvite.fromJson(response);
     } catch (e) {
       return null;
@@ -108,7 +108,7 @@ class ReferralInviteApiService {
   Future<Map<String, int>> getInviteStats(String userId) async {
     try {
       final response =
-          await _apiService.getRequest('referrals/invites/user/$userId/stats');
+          await _apiService.get('/referrals/invites/user/$userId/stats');
       return Map<String, int>.from(response);
     } catch (e) {
       return {

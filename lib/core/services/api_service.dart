@@ -249,19 +249,6 @@ class ApiService {
     );
   }
 
-  Future<dynamic> getRequest(String endpoint) async {
-    return _handleRequest(() async {
-      final response = await _dio.get('$baseUrl/$endpoint');
-      if (response.statusCode == 200) {
-        return response.data is String
-            ? jsonDecode(response.data as String)
-            : response.data;
-      } else {
-        throw Exception("Error: ${response.statusCode}");
-      }
-    });
-  }
-
   /// Unified API Request Handler with silent timeout handling
   Future<T> _handleRequest<T>(Future<T> Function() request,
       {bool allowAuthRetry = true}) async {
