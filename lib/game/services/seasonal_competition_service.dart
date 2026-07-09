@@ -108,13 +108,11 @@ class SeasonalCompetitionService {
       }
     }
 
-    // Players below top 25 lose accumulated points
+    // Players below top 25 are demoted. Point resets/carryover happen
+    // server-side when the season is closed (SeasonService.CloseAsync) —
+    // the client only reports the outcome.
     final below25 = leaderboard.skip(25).toList();
-    for (final player in below25) {
-      demoted.add(player);
-      // Reset their seasonal points
-      await _resetPlayerSeasonPoints(player.playerId);
-    }
+    demoted.addAll(below25);
 
     return SeasonEndResult(
       promoted: promoted,
@@ -122,12 +120,6 @@ class SeasonalCompetitionService {
       tiebreakers: tiebreakers,
       seasonId: await getCurrentSeasonId(),
     );
-  }
-
-  /// Reset player's seasonal points
-  Future<void> _resetPlayerSeasonPoints(String playerId) async {
-    // In a real implementation, this would update the player's record
-    await _apiService.resetPlayerSeasonPoints(playerId);
   }
 
   /// Schedule tiebreaker quiz

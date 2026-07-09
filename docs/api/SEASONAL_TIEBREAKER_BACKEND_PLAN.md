@@ -1,7 +1,7 @@
 # Seasonal Events & Tie-breaker — Backend Route Plan
 
 **Date:** 2026-07-09
-**Status:** 📋 Proposed — grounded in TycoonTycoon_Backend source (verified 2026-07-09)
+**Status:** 🚧 Phase A implemented (2026-07-09) — backend branch `claude/season-leaderboard` adds both leaderboard routes; client re-wired (`getSeasonLeaderboard` un-deprecated, `SeasonPlayer` maps the new entry shape). Phases B–E remain proposed pending the §5 decisions.
 **Motivation:** Four client methods (`submitScore`, `getSeasonLeaderboard`, `resetPlayerSeasonPoints`, `scheduleTiebreakerQuiz`) were part of the seasonal-events and multiplayer tie-breaker design but call routes that never shipped. They are currently `@Deprecated` in `ApiService`. This plan restores the features properly — server-authoritative, on the data model the backend already has.
 
 ---

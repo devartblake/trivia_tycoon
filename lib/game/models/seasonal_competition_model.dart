@@ -13,13 +13,24 @@ class SeasonPlayer {
     required this.lastActive,
   });
 
+  /// Accepts both the legacy client shape (playerName/points/lastActive) and
+  /// the backend leaderboard entry shape from
+  /// GET /seasons/{id}/leaderboard (handle/displayName/rankPoints, no
+  /// lastActive — the backend doesn't track per-season activity timestamps).
   factory SeasonPlayer.fromJson(Map<String, dynamic> json) {
+    final lastActiveRaw = json['lastActive'] as String?;
     return SeasonPlayer(
-      playerId: json['playerId'],
-      playerName: json['playerName'],
-      points: json['points'],
-      rank: json['rank'],
-      lastActive: DateTime.parse(json['lastActive']),
+      playerId: json['playerId']?.toString() ?? '',
+      playerName: (json['playerName'] ??
+              json['displayName'] ??
+              json['handle'] ??
+              'Unknown')
+          .toString(),
+      points: (json['points'] ?? json['rankPoints'] ?? 0) as int,
+      rank: (json['rank'] ?? 0) as int,
+      lastActive: lastActiveRaw != null
+          ? DateTime.parse(lastActiveRaw)
+          : DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 }

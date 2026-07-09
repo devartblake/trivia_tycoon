@@ -816,12 +816,27 @@ class ApiService {
     });
   }
 
-  @Deprecated('No /seasons/{id}/leaderboard endpoint exists on the backend '
-      '(SeasonsEndpoints.cs exposes /seasons/active and /seasons/state/{playerId}). '
-      'This call always fails; season standings need a backend endpoint first.')
-  Future<List<SeasonPlayer>> getSeasonLeaderboard(String seasonId) async {
-    final response = await get('/seasons/$seasonId/leaderboard');
-    final items = response['items'] as List? ?? response['data'] as List? ?? [];
+  static final RegExp _guidPattern = RegExp(
+      r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
+
+  /// **🔹 Season Leaderboard**
+  /// GET /seasons/{seasonId}/leaderboard — rank-point standings for a season
+  /// (closed seasons serve the immutable end-of-season snapshot). The backend
+  /// only knows seasons by GUID; legacy locally generated ids
+  /// (`season_<millis>`) fall back to the active season's leaderboard.
+  Future<List<SeasonPlayer>> getSeasonLeaderboard(
+    String seasonId, {
+    int page = 1,
+    int pageSize = 50,
+  }) async {
+    final path = _guidPattern.hasMatch(seasonId)
+        ? '/seasons/$seasonId/leaderboard'
+        : '/seasons/active/leaderboard';
+    final response = await get(path, queryParameters: {
+      'page': page,
+      'pageSize': pageSize,
+    });
+    final items = response['items'] as List? ?? [];
     return items
         .map((item) => SeasonPlayer.fromJson(item as Map<String, dynamic>))
         .toList();
