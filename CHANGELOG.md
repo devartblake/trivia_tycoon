@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased] - Sprint 2 (API contract alignment, server-authoritative XP)
+
+_Backend contracts verified directly against `TycoonTycoon_Backend` source; companion backend branch: `claude/sprint2-server-xp-friends`._
+
+### Added
+- **Server-authoritative quiz XP**: each quiz run sends a `quizSessionId` with `POST /questions/check-batch`; the backend grades the answers, awards tier XP (difficulty × 10 per correct, idempotent per session), and the client refreshes tier progress from the returned `QuizXpAwardDto` (backend half on the companion branch)
+- `DELETE /users/me/friends/{friendPlayerId}` (backend) — authenticated friend removal
+- 350ms search debounce in AddFriendDialog; social DTO contract tests
+
+### Changed
+- `socialEnabled` now defaults to **true** on the client (constructor + missing-key fallback); backend `/app/config` can still disable it per release or per player (ban)
+- `getMixedQuiz` posts the real `MixedQuestionSetRequest` to `POST /questions/mixed` — multi-category requests now work (the old GET path silently dropped all but one category)
+- Friends client migrated to the canonical authenticated surface `/users/me/friends/*` + `/users/search?handle=` with real DTO field mappings; party client/service/models rewritten to the actual `/party` contract (leader-based creation, roster shape, invite bodies)
+
+### Fixed
+- Quiz hub RenderFlex overflows at phone widths (grid headers, category cards, daily-quiz card, CTA card); responsive quiz-hub tests now pass at 390/900/1280px
+- Carousel auto-advance timer leak (`Future.delayed` chain → cancellable `Timer.periodic` with dispose)
+- `ApiService.getRequest` double-base-URL helper removed; referral invite service migrated to typed helpers
+
+### Removed
+- Legacy question API layers (`question_api_client.dart`, `question/question_api_service.dart`) and the loader's doomed API-first fetch — all targeted endpoints that don't exist on the backend
+
 ## [4.2.0] - 2026-07-08
 
 ### Full Codebase Audit + Sprint 1 Critical Fixes
