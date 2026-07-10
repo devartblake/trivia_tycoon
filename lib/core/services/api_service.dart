@@ -614,6 +614,8 @@ class ApiService {
     // Backend requires authorization for these features (see
     // docs/api/BACKEND_API_AUDIT.md); without the bearer header they 401.
     if (path == '/matches' || path.startsWith('/matches/')) return true;
+    // Game-event entry / live-round answers are player-scoped (JWT).
+    if (path == '/game-events' || path.startsWith('/game-events/')) return true;
     if (path == '/party' || path.startsWith('/party/')) return true;
     if (path == '/progression' || path.startsWith('/progression/')) {
       return true;
@@ -913,6 +915,20 @@ class ApiService {
       'gameEventId': gameEventId,
       'playerId': playerId,
     });
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Submit Live Round Answer**
+  /// POST /game-events/{id}/rounds/answer — answer the current live round of a
+  /// Champion vs Tier match. The backend derives the player from the JWT.
+  Future<String> submitRoundAnswer({
+    required String gameEventId,
+    required String optionId,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/rounds/answer',
+      body: {'optionId': optionId},
+    );
     return response['status']?.toString() ?? 'Unknown';
   }
 }
