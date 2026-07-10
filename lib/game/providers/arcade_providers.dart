@@ -19,6 +19,7 @@ import '../../core/services/tier_api_client.dart';
 import '../../core/state/flow_connect_state_notifier.dart';
 import '../../game/data/mission_data_loader.dart';
 import '../../game/models/badge.dart';
+import '../../game/models/champion_event.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/models/tier_model.dart';
@@ -127,6 +128,28 @@ final myTiebreakersProvider =
     return tiebreakers.where((t) => t.isPending).toList();
   } catch (_) {
     return const [];
+  }
+});
+
+/// The current weekly "Champion vs Tier" headline event, if one is
+/// scheduled/open/live. Null when there's none or the backend is
+/// unreachable, so the card simply hides.
+final championEventProvider = FutureProvider<ChampionEvent?>((ref) async {
+  final apiService = ref.read(apiServiceProvider);
+  try {
+    final events = await apiService.getUpcomingGameEvents();
+    final summary = events
+        .where((e) => e.isChampionVsTier && e.status != 'Closed')
+        .firstOrNull;
+    if (summary == null) return null;
+    // Fetch full status so the card can show jackpot/champion/alive count.
+    try {
+      return await apiService.getGameEventStatus(summary.id);
+    } catch (_) {
+      return summary; // fall back to the summary shape
+    }
+  } catch (_) {
+    return null;
   }
 });
 
