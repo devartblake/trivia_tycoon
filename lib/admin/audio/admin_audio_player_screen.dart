@@ -83,7 +83,8 @@ class _AdminAudioPlayerScreenState extends State<AdminAudioPlayerScreen> {
   Future<void> _loadCatalogsFromIndex() async {
     final songsJson =
         await AssetResolver.instance.loadString('media/audio/songs/index');
-    final soundsJson = await rootBundle.loadString('assets/audio/ui/index.json');
+    final soundsJson =
+        await rootBundle.loadString('assets/audio/ui/index.json');
 
     final songMap = jsonDecode(songsJson) as Map<String, dynamic>;
     final sfxMap = jsonDecode(soundsJson) as Map<String, dynamic>;

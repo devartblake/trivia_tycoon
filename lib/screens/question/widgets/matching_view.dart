@@ -5,7 +5,8 @@ import 'question_power_ups.dart';
 /// Matching pairs question renderer
 class MatchingView extends StatefulWidget {
   final QuestionModel question;
-  final void Function(Map<String, String>)? onAnswerSelected; // Maps left items to right items
+  final void Function(Map<String, String>)?
+      onAnswerSelected; // Maps left items to right items
   final bool showFeedback;
   final Map<String, String>? selectedAnswer; // Current mappings
   final bool isMultiplayer;
@@ -35,10 +36,13 @@ class _MatchingViewState extends State<MatchingView> {
     super.initState();
     currentMatches = widget.selectedAnswer ?? {};
     // Parse left items from question options (first half)
-    leftItems = widget.question.options.take((widget.question.options.length / 2).ceil()).toList();
+    leftItems = widget.question.options
+        .take((widget.question.options.length / 2).ceil())
+        .toList();
     // Parse right items from question options (second half) or tags
     rightItems = widget.question.tags ?? [];
-    if (rightItems.isEmpty && widget.question.options.length > leftItems.length) {
+    if (rightItems.isEmpty &&
+        widget.question.options.length > leftItems.length) {
       rightItems = widget.question.options.skip(leftItems.length).toList();
     }
     connections = {};
@@ -103,7 +107,8 @@ class _MatchingViewState extends State<MatchingView> {
             isShielded: widget.question.isShielded,
             multiplier: widget.question.multiplier,
           ),
-        if (widget.question.showHint && widget.question.powerUpHint?.isNotEmpty == true)
+        if (widget.question.showHint &&
+            widget.question.powerUpHint?.isNotEmpty == true)
           HintPanel(hint: widget.question.powerUpHint!),
         const SizedBox(height: 24),
         Text(
@@ -124,7 +129,8 @@ class _MatchingViewState extends State<MatchingView> {
               child: Column(
                 children: leftItems.map((leftItem) {
                   final isMatched = currentMatches.containsKey(leftItem);
-                  final matchedRight = isMatched ? currentMatches[leftItem] : null;
+                  final matchedRight =
+                      isMatched ? currentMatches[leftItem] : null;
                   final isSelected = _selectedLeftItem == leftItem;
 
                   return Padding(
@@ -143,7 +149,9 @@ class _MatchingViewState extends State<MatchingView> {
                           borderRadius: BorderRadius.circular(8),
                           color: isSelected
                               ? Colors.blue.shade50
-                              : (isMatched ? Colors.green.shade50 : Colors.white),
+                              : (isMatched
+                                  ? Colors.green.shade50
+                                  : Colors.white),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

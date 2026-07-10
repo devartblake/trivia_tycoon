@@ -5,7 +5,8 @@ import 'question_power_ups.dart';
 /// Drag-and-drop question renderer
 class DragDropView extends StatefulWidget {
   final QuestionModel question;
-  final void Function(Map<String, String>)? onAnswerSelected; // Maps item to target
+  final void Function(Map<String, String>)?
+      onAnswerSelected; // Maps item to target
   final bool showFeedback;
   final Map<String, String>? selectedAnswer; // Current mapping
   final bool isMultiplayer;
@@ -72,7 +73,8 @@ class _DragDropViewState extends State<DragDropView> {
             isShielded: widget.question.isShielded,
             multiplier: widget.question.multiplier,
           ),
-        if (widget.question.showHint && widget.question.powerUpHint?.isNotEmpty == true)
+        if (widget.question.showHint &&
+            widget.question.powerUpHint?.isNotEmpty == true)
           HintPanel(hint: widget.question.powerUpHint!),
         const SizedBox(height: 24),
         // Draggable items (left side)
@@ -140,7 +142,8 @@ class _DragDropViewState extends State<DragDropView> {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: DragTarget<String>(
-                onAcceptWithDetails: (details) => _onItemDropped(details.data, target),
+                onAcceptWithDetails: (details) =>
+                    _onItemDropped(details.data, target),
                 builder: (context, candidateData, rejectedData) {
                   return Container(
                     padding: const EdgeInsets.all(12),
@@ -180,7 +183,8 @@ class _DragDropViewState extends State<DragDropView> {
                                           currentMapping.remove(item);
                                         });
                                         if (widget.onAnswerSelected != null) {
-                                          widget.onAnswerSelected!(currentMapping);
+                                          widget.onAnswerSelected!(
+                                              currentMapping);
                                         }
                                       }
                                     : null,

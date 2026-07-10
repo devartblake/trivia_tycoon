@@ -41,7 +41,9 @@ class NavigationRedirectService {
 
     if (!isOnboardingComplete) {
       if (isOnboardingPath || isAuthPath) return null;
-      return hasAccountIdentity ? canonicalOnboardingRoute : canonicalLoginRoute;
+      return hasAccountIdentity
+          ? canonicalOnboardingRoute
+          : canonicalLoginRoute;
     }
 
     if (hasAccountIdentity && !profileSelected) {

@@ -48,7 +48,8 @@ void main() {
       );
     });
 
-    testWidgets('displays progress title and next tier name', (WidgetTester tester) async {
+    testWidgets('displays progress title and next tier name',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -100,7 +101,8 @@ void main() {
       expect(find.text('Estimated: ~3 more quizzes'), findsOneWidget);
     });
 
-    testWidgets('progress bar renders with correct value', (WidgetTester tester) async {
+    testWidgets('progress bar renders with correct value',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -113,7 +115,8 @@ void main() {
       expect(linearProgress, findsOneWidget);
     });
 
-    testWidgets('shows max tier message when at max tier', (WidgetTester tester) async {
+    testWidgets('shows max tier message when at max tier',
+        (WidgetTester tester) async {
       final maxTierProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: null,
@@ -135,7 +138,8 @@ void main() {
       expect(find.byType(LinearProgressIndicator), findsNothing);
     });
 
-    testWidgets('progress color changes at 0% (blue)', (WidgetTester tester) async {
+    testWidgets('progress color changes at 0% (blue)',
+        (WidgetTester tester) async {
       final lowProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: nextTier,
@@ -156,7 +160,8 @@ void main() {
       expect(find.text('0%'), findsOneWidget);
     });
 
-    testWidgets('progress color changes at 25% (orange)', (WidgetTester tester) async {
+    testWidgets('progress color changes at 25% (orange)',
+        (WidgetTester tester) async {
       final quarterProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: nextTier,
@@ -177,7 +182,8 @@ void main() {
       expect(find.text('25%'), findsOneWidget);
     });
 
-    testWidgets('progress color changes at 50% (amber)', (WidgetTester tester) async {
+    testWidgets('progress color changes at 50% (amber)',
+        (WidgetTester tester) async {
       final halfProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: nextTier,
@@ -198,7 +204,8 @@ void main() {
       expect(find.text('50%'), findsOneWidget);
     });
 
-    testWidgets('progress color changes at 75% (green)', (WidgetTester tester) async {
+    testWidgets('progress color changes at 75% (green)',
+        (WidgetTester tester) async {
       final threeQuarterProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: nextTier,
@@ -240,7 +247,8 @@ void main() {
       expect(find.text('100%'), findsOneWidget);
     });
 
-    testWidgets('displays schedule icon for estimated time', (WidgetTester tester) async {
+    testWidgets('displays schedule icon for estimated time',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -265,7 +273,8 @@ void main() {
       expect(card, findsOneWidget);
     });
 
-    testWidgets('shows correct quiz count for large XP difference', (WidgetTester tester) async {
+    testWidgets('shows correct quiz count for large XP difference',
+        (WidgetTester tester) async {
       final newProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: nextTier,
@@ -287,7 +296,8 @@ void main() {
       expect(find.text('Estimated: ~4 more quizzes'), findsOneWidget);
     });
 
-    testWidgets('shows correct quiz count for 1 remaining', (WidgetTester tester) async {
+    testWidgets('shows correct quiz count for 1 remaining',
+        (WidgetTester tester) async {
       final almostProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: nextTier,

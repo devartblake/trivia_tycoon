@@ -101,7 +101,9 @@ void main() {
         roomId: 'r1',
         roomName: 'Lobby',
         capacity: 4,
-        players: [PresenceDto(playerId: 'p1', playerName: 'Alice', isHost: true)],
+        players: [
+          PresenceDto(playerId: 'p1', playerName: 'Alice', isHost: true)
+        ],
       );
       final json = dto.toJson();
       expect(json['roomId'], 'r1');
@@ -132,7 +134,9 @@ void main() {
         'roomId': 'r99',
         'roomName': 'Arena',
         'capacity': 6,
-        'players': [_presenceJson(playerId: 'p1', playerName: 'X', isHost: true)],
+        'players': [
+          _presenceJson(playerId: 'p1', playerName: 'X', isHost: true)
+        ],
       });
       final restored = RoomDto.fromJson(original.toJson());
       expect(restored.roomId, original.roomId);

@@ -107,8 +107,7 @@ void main() {
     });
 
     test('parses page', () {
-      expect(
-          RankedLeaderboardResponse.fromJson(responseJson(page: 3)).page, 3);
+      expect(RankedLeaderboardResponse.fromJson(responseJson(page: 3)).page, 3);
     });
 
     test('parses pageSize', () {
@@ -119,8 +118,7 @@ void main() {
     });
 
     test('parses total', () {
-      expect(
-          RankedLeaderboardResponse.fromJson(responseJson(total: 500)).total,
+      expect(RankedLeaderboardResponse.fromJson(responseJson(total: 500)).total,
           500);
     });
 

@@ -225,9 +225,7 @@ class _TierSection extends StatelessWidget {
                         ),
                       ),
                       Icon(
-                        isExpanded
-                            ? Icons.expand_less
-                            : Icons.expand_more,
+                        isExpanded ? Icons.expand_less : Icons.expand_more,
                         color: Colors.white,
                         size: 28,
                       ),

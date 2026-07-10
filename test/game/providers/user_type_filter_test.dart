@@ -84,9 +84,7 @@ void main() {
       addTearDown(container.dispose);
 
       for (final type in UserType.values) {
-        container
-            .read(userTypeFilterProvider.notifier)
-            .update((_) => type);
+        container.read(userTypeFilterProvider.notifier).update((_) => type);
         expect(container.read(userTypeFilterProvider), type);
       }
     });

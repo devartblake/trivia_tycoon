@@ -93,8 +93,10 @@ class SwipeItemState extends State<SwipeItem> {
             child: Transform(
               alignment: FractionalOffset(0.5, 0.5),
               transform: Matrix4.identity()
-                ..translateByVector3(Vector3(swipeDistance * swipeSign * -0.5, 0.0, 0.0))
-                ..scaleByVector3(Vector3(0.5 + 0.5 * swipeRatio, 0.5 + 0.5 * swipeRatio, 1.0)),
+                ..translateByVector3(
+                    Vector3(swipeDistance * swipeSign * -0.5, 0.0, 0.0))
+                ..scaleByVector3(Vector3(
+                    0.5 + 0.5 * swipeRatio, 0.5 + 0.5 * swipeRatio, 1.0)),
               child: Stack(alignment: Alignment.center, children: [
                 Container(
                   width: 28,

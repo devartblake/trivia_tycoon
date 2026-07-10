@@ -15,8 +15,7 @@ class OnboardingPhaseIndicator extends StatelessWidget {
         (p) => currentStep >= p.startStep && currentStep <= p.endStep,
       );
 
-  int get _stepWithinPhase =>
-      currentStep - _phases[_currentPhase].startStep;
+  int get _stepWithinPhase => currentStep - _phases[_currentPhase].startStep;
 
   @override
   Widget build(BuildContext context) {

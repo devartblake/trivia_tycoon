@@ -26,7 +26,8 @@ class SpinConfigCache {
   int _cacheHits = 0;
   int _cacheMisses = 0;
 
-  SpinConfigCache({required SpinWheelApiClient apiClient}) : _apiClient = apiClient;
+  SpinConfigCache({required SpinWheelApiClient apiClient})
+      : _apiClient = apiClient;
 
   /// Get wheel segments with multi-level caching
   Future<List<WheelSegment>> getSegments() async {
@@ -49,7 +50,8 @@ class SpinConfigCache {
       // Store in memory cache
       _storeInMemoryCache(cacheKey, segments);
 
-      LogManager.debug('[SpinConfigCache] Fetched ${segments.length} segments from API');
+      LogManager.debug(
+          '[SpinConfigCache] Fetched ${segments.length} segments from API');
       return segments;
     } catch (e) {
       LogManager.error(
@@ -67,13 +69,15 @@ class SpinConfigCache {
 
     // Check memory cache
     if (_isMemoryCacheValid(cacheKey)) {
-      LogManager.debug('[SpinConfigCache] Memory cache hit for probability config');
+      LogManager.debug(
+          '[SpinConfigCache] Memory cache hit for probability config');
       _cacheHits++;
       return _getMemoryCachedConfig(cacheKey);
     }
 
     _cacheMisses++;
-    LogManager.debug('[SpinConfigCache] Memory cache miss for probability config');
+    LogManager.debug(
+        '[SpinConfigCache] Memory cache miss for probability config');
 
     try {
       // Fetch from API
@@ -115,7 +119,8 @@ class SpinConfigCache {
       // Store in memory cache
       _storeInMemoryCache(cacheKey, analytics);
 
-      LogManager.debug('[SpinConfigCache] Fetched analytics for period=$period');
+      LogManager.debug(
+          '[SpinConfigCache] Fetched analytics for period=$period');
       return analytics;
     } catch (e) {
       LogManager.error(

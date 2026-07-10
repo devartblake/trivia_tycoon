@@ -19,7 +19,8 @@ void main() {
       expect(UnicodeUtils.sanitizeString('café'), 'café');
     });
 
-    test('lone high surrogate (0xD800–0xDBFF) without low surrogate is removed', () {
+    test('lone high surrogate (0xD800–0xDBFF) without low surrogate is removed',
+        () {
       // Build a string with a lone high surrogate (codeUnit 0xD800)
       final lone = String.fromCharCode(0xD800);
       final result = UnicodeUtils.sanitizeString(lone);
@@ -39,7 +40,8 @@ void main() {
       expect(result, emoji);
     });
 
-    test('mixed: ASCII + lone surrogate → ASCII preserved, surrogate removed', () {
+    test('mixed: ASCII + lone surrogate → ASCII preserved, surrogate removed',
+        () {
       final lone = String.fromCharCode(0xD800);
       final input = 'abc${lone}xyz';
       final result = UnicodeUtils.sanitizeString(input);

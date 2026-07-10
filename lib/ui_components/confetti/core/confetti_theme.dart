@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../models/confetti_settings.dart';
 import '../models/confetti_shape.dart';
 import '../core/presets/confetti_preset_images.dart';
@@ -89,7 +89,8 @@ class ConfettiTheme {
 
   /// * Auto-generate theme name from settings
   static String _generateNameFromSettings(ConfettiSettings s) {
-    final colorsHash = s.colors.map((c) => c.toARGB32().toRadixString(16)).join("-");
+    final colorsHash =
+        s.colors.map((c) => c.toARGB32().toRadixString(16)).join("-");
     final gravityLabel = s.gravity > 0.2 ? "Heavy" : "Light";
     final speedLabel = s.speed > 2.0
         ? "Fast"

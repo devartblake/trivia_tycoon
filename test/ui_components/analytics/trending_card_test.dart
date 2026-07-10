@@ -46,7 +46,8 @@ void main() {
       expect(find.byIcon(Icons.trending_up), findsOneWidget);
     });
 
-    testWidgets('displays trending down indicator', (WidgetTester tester) async {
+    testWidgets('displays trending down indicator',
+        (WidgetTester tester) async {
       final trending = TrendingSummary(
         period: '24h',
         questionsAnswered: 20,
@@ -113,7 +114,8 @@ void main() {
       expect(find.text('80.0%'), findsOneWidget);
     });
 
-    testWidgets('displays success rate progress bar', (WidgetTester tester) async {
+    testWidgets('displays success rate progress bar',
+        (WidgetTester tester) async {
       final trending = TrendingSummary(
         period: '24h',
         questionsAnswered: 20,
@@ -212,8 +214,7 @@ void main() {
         ),
       );
 
-      final progressIndicator =
-          find.byType(LinearProgressIndicator).first;
+      final progressIndicator = find.byType(LinearProgressIndicator).first;
       expect(progressIndicator, findsOneWidget);
     });
   });

@@ -26,8 +26,8 @@ class LeaderboardRankChangedDto {
         oldRank: json['OldRank'] as int,
         newRank: json['NewRank'] as int,
         newScore: json['NewScore'] as int,
-        timestamp:
-            DateTime.tryParse(json['Timestamp'] as String? ?? '') ?? DateTime.now(),
+        timestamp: DateTime.tryParse(json['Timestamp'] as String? ?? '') ??
+            DateTime.now(),
       );
 }
 

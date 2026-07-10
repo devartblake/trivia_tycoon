@@ -30,7 +30,8 @@ class TierProgressionService {
     try {
       final tiers = await _tierApiClient.getTierDefinitions();
       _cachedTiers = tiers;
-      LogManager.debug('[TierProgressionService] Loaded ${tiers.length} tier definitions');
+      LogManager.debug(
+          '[TierProgressionService] Loaded ${tiers.length} tier definitions');
       return tiers;
     } catch (e) {
       LogManager.error(
@@ -52,7 +53,8 @@ class TierProgressionService {
         minXp: 0,
         maxXp: 500,
         iconName: 'bronze_rookie',
-        rewards: TierReward(badge: 'welcome_badge', coinsBonus: 100, gemsBonus: 0),
+        rewards:
+            TierReward(badge: 'welcome_badge', coinsBonus: 100, gemsBonus: 0),
       ),
       TierDefinition(
         id: 'silver-scholar',
@@ -61,7 +63,8 @@ class TierProgressionService {
         minXp: 500,
         maxXp: 1200,
         iconName: 'silver_scholar',
-        rewards: TierReward(badge: 'scholar_badge', coinsBonus: 250, gemsBonus: 5),
+        rewards:
+            TierReward(badge: 'scholar_badge', coinsBonus: 250, gemsBonus: 5),
       ),
       TierDefinition(
         id: 'gold-master',
@@ -70,7 +73,8 @@ class TierProgressionService {
         minXp: 1200,
         maxXp: 2500,
         iconName: 'gold_master',
-        rewards: TierReward(badge: 'master_badge', coinsBonus: 500, gemsBonus: 15),
+        rewards:
+            TierReward(badge: 'master_badge', coinsBonus: 500, gemsBonus: 15),
       ),
       TierDefinition(
         id: 'platinum-elite',
@@ -79,7 +83,8 @@ class TierProgressionService {
         minXp: 2500,
         maxXp: 5000,
         iconName: 'platinum_elite',
-        rewards: TierReward(badge: 'elite_badge', coinsBonus: 1000, gemsBonus: 30),
+        rewards:
+            TierReward(badge: 'elite_badge', coinsBonus: 1000, gemsBonus: 30),
       ),
       TierDefinition(
         id: 'diamond-legend',
@@ -88,7 +93,8 @@ class TierProgressionService {
         minXp: 5000,
         maxXp: 10000,
         iconName: 'diamond_legend',
-        rewards: TierReward(badge: 'legend_badge', coinsBonus: 2000, gemsBonus: 50),
+        rewards:
+            TierReward(badge: 'legend_badge', coinsBonus: 2000, gemsBonus: 50),
       ),
       TierDefinition(
         id: 'master-sage',
@@ -97,7 +103,8 @@ class TierProgressionService {
         minXp: 10000,
         maxXp: 20000,
         iconName: 'master_sage',
-        rewards: TierReward(badge: 'sage_badge', coinsBonus: 5000, gemsBonus: 100),
+        rewards:
+            TierReward(badge: 'sage_badge', coinsBonus: 5000, gemsBonus: 100),
       ),
       TierDefinition(
         id: 'grandmaster',
@@ -106,7 +113,8 @@ class TierProgressionService {
         minXp: 20000,
         maxXp: 50000,
         iconName: 'grandmaster',
-        rewards: TierReward(badge: 'grandmaster_badge', coinsBonus: 10000, gemsBonus: 200),
+        rewards: TierReward(
+            badge: 'grandmaster_badge', coinsBonus: 10000, gemsBonus: 200),
       ),
       TierDefinition(
         id: 'ultimate-champion',
@@ -115,7 +123,8 @@ class TierProgressionService {
         minXp: 50000,
         maxXp: 100000,
         iconName: 'ultimate_champion',
-        rewards: TierReward(badge: 'champion_badge', coinsBonus: 20000, gemsBonus: 500),
+        rewards: TierReward(
+            badge: 'champion_badge', coinsBonus: 20000, gemsBonus: 500),
       ),
     ];
   }
@@ -126,7 +135,8 @@ class TierProgressionService {
     try {
       final tiers = await getTierDefinitions();
       if (tiers.isEmpty) {
-        LogManager.warning('[TierProgressionService] No tier definitions available');
+        LogManager.warning(
+            '[TierProgressionService] No tier definitions available');
         return _getEmptyProgress();
       }
 

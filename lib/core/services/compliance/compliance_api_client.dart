@@ -7,7 +7,7 @@ import 'compliance_status_model.dart';
 class ComplianceApiException implements Exception {
   final String message;
   final String path;
-  final int?   statusCode;
+  final int? statusCode;
 
   const ComplianceApiException({
     required this.message,
@@ -16,7 +16,8 @@ class ComplianceApiException implements Exception {
   });
 
   @override
-  String toString() => 'ComplianceApiException($path status=$statusCode): $message';
+  String toString() =>
+      'ComplianceApiException($path status=$statusCode): $message';
 }
 
 class ComplianceApiClient {
@@ -43,7 +44,8 @@ class ComplianceApiClient {
   }
 
   void _log(String method, String path, int status) {
-    if (kDebugMode) LogManager.debug('[ComplianceApiClient] $method $path -> $status');
+    if (kDebugMode)
+      LogManager.debug('[ComplianceApiClient] $method $path -> $status');
   }
 
   // ── Compliance status ─────────────────────────────────────────────────────
@@ -54,9 +56,13 @@ class ComplianceApiClient {
       final res = await _http.get(_u(path), headers: _headers);
       _log('GET', path, res.statusCode);
       if (res.statusCode == 200) {
-        return ComplianceStatus.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+        return ComplianceStatus.fromJson(
+            jsonDecode(res.body) as Map<String, dynamic>);
       }
-      throw ComplianceApiException(message: 'Failed to get compliance status', path: path, statusCode: res.statusCode);
+      throw ComplianceApiException(
+          message: 'Failed to get compliance status',
+          path: path,
+          statusCode: res.statusCode);
     } catch (e) {
       if (e is ComplianceApiException) rethrow;
       throw ComplianceApiException(message: '$e', path: path);
@@ -92,7 +98,8 @@ class ComplianceApiClient {
 
   // ── Age verification ──────────────────────────────────────────────────────
 
-  Future<AgeVerificationResult> verifyAge(String userId, DateTime dateOfBirth) async {
+  Future<AgeVerificationResult> verifyAge(
+      String userId, DateTime dateOfBirth) async {
     const path = '/api/transaction/age-verify';
     try {
       final dob = '${dateOfBirth.year.toString().padLeft(4, '0')}-'

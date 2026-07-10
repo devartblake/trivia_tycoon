@@ -62,13 +62,17 @@ void main() {
 
   group('SearchService — empty query', () {
     test('returns [] immediately for empty string', () async {
-      final svc = SearchService([_MockProvider(results: [_result()])]);
+      final svc = SearchService([
+        _MockProvider(results: [_result()])
+      ]);
       final results = await svc.search('', SearchFilter());
       expect(results, isEmpty);
     });
 
     test('returns [] for whitespace-only string', () async {
-      final svc = SearchService([_MockProvider(results: [_result()])]);
+      final svc = SearchService([
+        _MockProvider(results: [_result()])
+      ]);
       final results = await svc.search('   ', SearchFilter());
       expect(results, isEmpty);
     });
@@ -167,8 +171,10 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('SearchService — error handling', () {
-    test('throwing provider is swallowed; other providers still contribute', () async {
-      final throwing = _MockProvider(category: SearchCategory.players, shouldThrow: true);
+    test('throwing provider is swallowed; other providers still contribute',
+        () async {
+      final throwing =
+          _MockProvider(category: SearchCategory.players, shouldThrow: true);
       final good = _MockProvider(results: [_result(id: 'ok')]);
       final svc = SearchService([throwing, good]);
       final results = await svc.search('query', SearchFilter());
@@ -203,7 +209,9 @@ void main() {
     });
 
     test('returns empty map for empty query', () async {
-      final svc = SearchService([_MockProvider(results: [_result()])]);
+      final svc = SearchService([
+        _MockProvider(results: [_result()])
+      ]);
       final grouped = await svc.searchByCategory('', SearchFilter());
       expect(grouped, isEmpty);
     });

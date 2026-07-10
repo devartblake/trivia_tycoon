@@ -40,7 +40,8 @@ void main() {
         expect(find.byType(Card), findsOneWidget);
       });
 
-      testWidgets('has proper elevation and shape', (WidgetTester tester) async {
+      testWidgets('has proper elevation and shape',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: ProviderScope(
@@ -119,7 +120,8 @@ void main() {
         expect(find.byType(Card), findsOneWidget);
       });
 
-      testWidgets('has proper styling with gradient', (WidgetTester tester) async {
+      testWidgets('has proper styling with gradient',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: ProviderScope(

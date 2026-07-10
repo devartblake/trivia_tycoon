@@ -39,7 +39,8 @@ class _MissionTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: SynaptixHomeTheme.panelAlt.withValues(alpha: 0.84),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: SynaptixHomeTheme.stroke.withValues(alpha: 0.75)),
+        border:
+            Border.all(color: SynaptixHomeTheme.stroke.withValues(alpha: 0.75)),
       ),
       child: Row(
         children: [

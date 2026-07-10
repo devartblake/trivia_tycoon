@@ -73,7 +73,8 @@ void main() {
       expect(find.text('70.0%'), findsOneWidget);
     });
 
-    testWidgets('displays correct/total questions', (WidgetTester tester) async {
+    testWidgets('displays correct/total questions',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -99,7 +100,8 @@ void main() {
       expect(find.text('No category data available'), findsOneWidget);
     });
 
-    testWidgets('handles callback on category tap', (WidgetTester tester) async {
+    testWidgets('handles callback on category tap',
+        (WidgetTester tester) async {
       String? selectedCategory;
 
       await tester.pumpWidget(
@@ -146,7 +148,8 @@ void main() {
       expect(find.text('Category 9'), findsNothing); // Should not show 6th+
     });
 
-    testWidgets('sorts by questions count (descending)', (WidgetTester tester) async {
+    testWidgets('sorts by questions count (descending)',
+        (WidgetTester tester) async {
       final unsortedCategories = [
         CategoryPerformance(
           category: 'Low',
@@ -178,7 +181,8 @@ void main() {
       expect(lowFinder, findsOneWidget);
     });
 
-    testWidgets('displays progress bar for each category', (WidgetTester tester) async {
+    testWidgets('displays progress bar for each category',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

@@ -77,7 +77,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
       final box = context.findRenderObject() as RenderBox?;
       final size = box?.size ?? const Size(400, 700);
       _transform.value = vmath.Matrix4.identity()
-        ..translateByVector3(vmath.Vector3(size.width / 2.0, size.height / 2.0, 0.0))
+        ..translateByVector3(
+            vmath.Vector3(size.width / 2.0, size.height / 2.0, 0.0))
         ..scaleByVector3(vmath.Vector3(0.5, 0.5, 1.0));
     });
   }
@@ -111,7 +112,8 @@ class _SkillTreeViewState extends ConsumerState<SkillTreeView>
     final box = context.findRenderObject() as RenderBox?;
     final size = box?.size ?? const Size(400, 700);
     _transform.value = vmath.Matrix4.identity()
-      ..translateByVector3(vmath.Vector3(size.width / 2.0, size.height / 2.0, 0.0))
+      ..translateByVector3(
+          vmath.Vector3(size.width / 2.0, size.height / 2.0, 0.0))
       ..scaleByVector3(vmath.Vector3(0.5, 0.5, 1.0));
   }
 

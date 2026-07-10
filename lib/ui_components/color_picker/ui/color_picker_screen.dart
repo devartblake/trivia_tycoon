@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:trivia_tycoon/ui_components/color_picker/core/color_picker_theme.dart';
@@ -344,7 +344,10 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                             setState(() {
                               _controller.updateColor(color);
                               ColorLogManager.logColorSelection(
-                                color.toARGB32().toRadixString(16).toUpperCase(),
+                                color
+                                    .toARGB32()
+                                    .toRadixString(16)
+                                    .toUpperCase(),
                               );
                             });
                           },
@@ -454,7 +457,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                                     setState(() {
                                       _controller.updateColor(color);
                                       ColorLogManager.logColorSelection(
-                                        color.toARGB32()
+                                        color
+                                            .toARGB32()
                                             .toRadixString(16)
                                             .toUpperCase(),
                                       );
@@ -469,7 +473,8 @@ class _ColorPickerScreenState extends State<ColorPickerScreen>
                                     setState(() {
                                       _controller.updateColor(color);
                                       ColorLogManager.logColorSelection(
-                                        color.toARGB32()
+                                        color
+                                            .toARGB32()
                                             .toRadixString(16)
                                             .toUpperCase(),
                                       );

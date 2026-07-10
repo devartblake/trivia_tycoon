@@ -25,7 +25,8 @@ class TierLeaderboardService {
   /// Calculate score multiplier for a player based on tier
   Future<double> getScoreMultiplier(String userId) async {
     try {
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
       final tierId = progress.currentTier.id;
       final multiplier = tierMultipliers[tierId] ?? 1.0;
 
@@ -66,7 +67,8 @@ class TierLeaderboardService {
   /// Get tier bonus points (flat bonus for reaching tier)
   Future<int> getTierBonus(String userId) async {
     try {
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
       final tierId = progress.currentTier.id;
 
       // Bonus points increase with tier level
@@ -120,7 +122,8 @@ class TierLeaderboardService {
   /// Get score breakdown for display
   Future<ScoreBreakdown> getScoreBreakdown(String userId, int baseScore) async {
     try {
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
       final multiplier = await getScoreMultiplier(userId);
       final bonus = await getTierBonus(userId);
       final multipliedScore = (baseScore * multiplier).round();
@@ -170,7 +173,8 @@ class TierLeaderboardService {
   }
 
   /// Estimate score increase from tier advancement
-  static int estimateScoreIncrease(String currentTierId, String nextTierId, int baseScore) {
+  static int estimateScoreIncrease(
+      String currentTierId, String nextTierId, int baseScore) {
     final currentMultiplier = tierMultipliers[currentTierId] ?? 1.0;
     final nextMultiplier = tierMultipliers[nextTierId] ?? 1.0;
 

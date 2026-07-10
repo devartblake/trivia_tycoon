@@ -49,7 +49,8 @@ class _ConfettiPresetSelectorState extends State<ConfettiPresetSelector> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       transform: Matrix4.identity()
-                        ..scaleByVector3(Vector3(isHovered ? 1.05 : 1.0, isHovered ? 1.05 : 1.0, 1.0)),
+                        ..scaleByVector3(Vector3(isHovered ? 1.05 : 1.0,
+                            isHovered ? 1.05 : 1.0, 1.0)),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),

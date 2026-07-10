@@ -116,12 +116,15 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
 
     // submit score to backend (best-effort, non-blocking)
     unawaited(
-      ref.read(arcadeLeaderboardApiServiceProvider).submitScore(
+      ref
+          .read(arcadeLeaderboardApiServiceProvider)
+          .submitScore(
             gameId: result.gameId.name,
             difficulty: result.difficulty.name,
             score: result.score,
             durationMs: result.duration.inMilliseconds,
-          ).catchError((_) {}),
+          )
+          .catchError((_) {}),
     );
 
     // XP (your canonical write path)
@@ -169,8 +172,7 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
             ? () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) =>
-                        QuizReviewScreen(records: reviewRecords!),
+                    builder: (_) => QuizReviewScreen(records: reviewRecords!),
                   ),
                 );
               }

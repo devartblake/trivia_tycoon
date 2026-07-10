@@ -58,7 +58,8 @@ void main() {
     test('indexes conversation under all participants', () async {
       final conv = _conv(id: 'c1', participants: ['alice', 'bob']);
       await svc.saveConversation(conv);
-      expect(svc.getUserConversations('alice').map((c) => c.id), contains('c1'));
+      expect(
+          svc.getUserConversations('alice').map((c) => c.id), contains('c1'));
       expect(svc.getUserConversations('bob').map((c) => c.id), contains('c1'));
     });
   });
@@ -94,9 +95,12 @@ void main() {
     });
 
     test('sorted by lastMessageTime descending', () async {
-      await svc.saveConversation(_conv(id: 'c1', participants: ['u1'], lastMessageTime: _t0));
-      await svc.saveConversation(_conv(id: 'c2', participants: ['u1'], lastMessageTime: _t2));
-      await svc.saveConversation(_conv(id: 'c3', participants: ['u1'], lastMessageTime: _t1));
+      await svc.saveConversation(
+          _conv(id: 'c1', participants: ['u1'], lastMessageTime: _t0));
+      await svc.saveConversation(
+          _conv(id: 'c2', participants: ['u1'], lastMessageTime: _t2));
+      await svc.saveConversation(
+          _conv(id: 'c3', participants: ['u1'], lastMessageTime: _t1));
       final ids = svc.getUserConversations('u1').map((c) => c.id).toList();
       expect(ids, ['c2', 'c3', 'c1']);
     });
@@ -108,8 +112,10 @@ void main() {
 
   group('getDirectConversations', () {
     test('returns only direct-type conversations', () async {
-      await svc.saveConversation(_conv(id: 'direct', type: ConversationType.direct, participants: ['u1']));
-      await svc.saveConversation(_conv(id: 'group', type: ConversationType.group, participants: ['u1']));
+      await svc.saveConversation(_conv(
+          id: 'direct', type: ConversationType.direct, participants: ['u1']));
+      await svc.saveConversation(_conv(
+          id: 'group', type: ConversationType.group, participants: ['u1']));
       final directs = svc.getDirectConversations('u1');
       expect(directs.length, 1);
       expect(directs.first.id, 'direct');
@@ -118,8 +124,10 @@ void main() {
 
   group('getGroupConversations', () {
     test('returns only group-type conversations', () async {
-      await svc.saveConversation(_conv(id: 'direct', type: ConversationType.direct, participants: ['u1']));
-      await svc.saveConversation(_conv(id: 'group', type: ConversationType.group, participants: ['u1']));
+      await svc.saveConversation(_conv(
+          id: 'direct', type: ConversationType.direct, participants: ['u1']));
+      await svc.saveConversation(_conv(
+          id: 'group', type: ConversationType.group, participants: ['u1']));
       final groups = svc.getGroupConversations('u1');
       expect(groups.length, 1);
       expect(groups.first.id, 'group');
@@ -133,7 +141,10 @@ void main() {
   group('findDirectConversation', () {
     test('finds an existing direct conversation between two users', () async {
       await svc.saveConversation(
-        _conv(id: 'dm', type: ConversationType.direct, participants: ['u1', 'u2']),
+        _conv(
+            id: 'dm',
+            type: ConversationType.direct,
+            participants: ['u1', 'u2']),
       );
       final result = svc.findDirectConversation('u1', 'u2');
       expect(result?.id, 'dm');
@@ -145,7 +156,10 @@ void main() {
 
     test('does not return a group conversation', () async {
       await svc.saveConversation(
-        _conv(id: 'grp', type: ConversationType.group, participants: ['u1', 'u2']),
+        _conv(
+            id: 'grp',
+            type: ConversationType.group,
+            participants: ['u1', 'u2']),
       );
       expect(svc.findDirectConversation('u1', 'u2'), isNull);
     });
@@ -184,7 +198,8 @@ void main() {
     });
 
     test('is a no-op for unknown conversation id', () async {
-      await expectLater(svc.updateLastMessage('unknown', 'msg', _t0), completes);
+      await expectLater(
+          svc.updateLastMessage('unknown', 'msg', _t0), completes);
     });
   });
 
@@ -243,8 +258,10 @@ void main() {
     });
 
     test('sums unreadCounts across all user conversations', () async {
-      await svc.saveConversation(_conv(id: 'c1', participants: ['u1'], unreadCount: 3));
-      await svc.saveConversation(_conv(id: 'c2', participants: ['u1'], unreadCount: 5));
+      await svc.saveConversation(
+          _conv(id: 'c1', participants: ['u1'], unreadCount: 3));
+      await svc.saveConversation(
+          _conv(id: 'c2', participants: ['u1'], unreadCount: 5));
       expect(svc.getTotalUnreadCount('u1'), 8);
     });
   });

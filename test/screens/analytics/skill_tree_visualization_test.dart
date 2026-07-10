@@ -199,8 +199,7 @@ void main() {
       expect(find.byType(Card), findsWidgets);
     });
 
-    testWidgets('displays summary statistics',
-        (WidgetTester tester) async {
+    testWidgets('displays summary statistics', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -233,8 +232,7 @@ void main() {
   });
 
   group('SkillTreeVisualization Error Handling', () {
-    testWidgets('shows error state gracefully',
-        (WidgetTester tester) async {
+    testWidgets('shows error state gracefully', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -249,8 +247,7 @@ void main() {
       expect(find.byType(SkillTreeVisualization), findsOneWidget);
     });
 
-    testWidgets('shows empty state message',
-        (WidgetTester tester) async {
+    testWidgets('shows empty state message', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -287,8 +284,7 @@ void main() {
       }
     });
 
-    testWidgets('responds to scroll actions',
-        (WidgetTester tester) async {
+    testWidgets('responds to scroll actions', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -301,7 +297,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -100));
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, -100));
       await tester.pumpAndSettle();
 
       expect(find.byType(SkillTreeVisualization), findsOneWidget);

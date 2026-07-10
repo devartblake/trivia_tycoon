@@ -66,8 +66,8 @@ void main() {
     test('darkened color has lower luminance than original', () {
       final original = Colors.blue;
       final darkened = darken(original, 0.1);
-      expect(darkened.computeLuminance(),
-          lessThan(original.computeLuminance()));
+      expect(
+          darkened.computeLuminance(), lessThan(original.computeLuminance()));
     });
 
     test('darken by 0 returns same luminance', () {
@@ -87,8 +87,7 @@ void main() {
       final original = Colors.teal;
       final darker1 = darken(original, 0.1);
       final darker2 = darken(original, 0.2);
-      expect(darker2.computeLuminance(),
-          lessThan(darker1.computeLuminance()));
+      expect(darker2.computeLuminance(), lessThan(darker1.computeLuminance()));
     });
   });
 
@@ -145,7 +144,8 @@ void main() {
       }
     });
 
-    test('MaterialColor from custom color returns that color at each shade', () {
+    test('MaterialColor from custom color returns that color at each shade',
+        () {
       const custom = Color(0xFFABCDEF);
       final mc = getMaterialColor(custom);
       for (final shade in shades.values) {

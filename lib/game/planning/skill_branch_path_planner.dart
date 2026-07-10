@@ -115,7 +115,8 @@ class SkillBranchPathPlanner {
     }
 
     for (final e in edges) {
-      if (!branchNodeIds.contains(e.fromId) || !branchNodeIds.contains(e.toId)) {
+      if (!branchNodeIds.contains(e.fromId) ||
+          !branchNodeIds.contains(e.toId)) {
         continue;
       }
       adj[e.fromId]!.add(e.toId);

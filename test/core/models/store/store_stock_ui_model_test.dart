@@ -287,8 +287,8 @@ void main() {
     });
 
     test('parses type', () {
-      expect(
-          PlayerStoreItem.fromJson(makeJson(type: 'cosmetic')).type, 'cosmetic');
+      expect(PlayerStoreItem.fromJson(makeJson(type: 'cosmetic')).type,
+          'cosmetic');
     });
 
     test('parses type from itemType fallback', () {
@@ -327,13 +327,14 @@ void main() {
     });
 
     test('parses isFeatured', () {
-      expect(
-          PlayerStoreItem.fromJson(makeJson(isFeatured: true)).isFeatured, isTrue);
+      expect(PlayerStoreItem.fromJson(makeJson(isFeatured: true)).isFeatured,
+          isTrue);
     });
 
     test('parses iconPath', () {
       expect(
-          PlayerStoreItem.fromJson(makeJson(iconPath: 'assets/icon.png')).iconPath,
+          PlayerStoreItem.fromJson(makeJson(iconPath: 'assets/icon.png'))
+              .iconPath,
           'assets/icon.png');
     });
 

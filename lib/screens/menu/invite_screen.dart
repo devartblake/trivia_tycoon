@@ -323,7 +323,8 @@ class _InviteScreenState extends ConsumerState<InviteScreen> {
 
   Widget _buildContentFallback(
       BuildContext context, ThemeData theme, ReferralCode referralCode) {
-    final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
+    final baseUrl =
+        EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
     final link = '$baseUrl/register?inviteCode=${referralCode.code}';
     return _buildContent(context, theme, referralCode, link, link);
   }

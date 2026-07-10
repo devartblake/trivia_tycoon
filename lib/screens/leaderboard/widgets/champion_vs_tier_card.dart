@@ -6,7 +6,8 @@ import 'package:uuid/uuid.dart';
 import '../../../game/models/champion_event.dart';
 import '../../../game/providers/arcade_providers.dart';
 import '../../../game/providers/core_providers.dart' show apiServiceProvider;
-import '../../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../../../game/providers/learning_providers.dart'
+    show currentPlayerIdProvider;
 import '../champion_live_screen.dart';
 
 /// Weekly "Champion vs Tier" headline card: the tier's #1 defends the crown
@@ -118,7 +119,8 @@ class _CardState extends ConsumerState<_Card> {
             children: [
               _Stat(
                 label: 'Jackpot',
-                value: NumberFormat.decimalPattern().format(event.displayJackpot),
+                value:
+                    NumberFormat.decimalPattern().format(event.displayJackpot),
                 icon: Icons.savings_rounded,
                 accent: const Color(0xFFFCD34D),
               ),
@@ -229,8 +231,8 @@ class _StatusPill extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-            color: color, fontSize: 11, fontWeight: FontWeight.w900),
+        style:
+            TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w900),
       ),
     );
   }

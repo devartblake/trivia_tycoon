@@ -126,7 +126,9 @@ void main() {
         const Ok(1),
         const Err(_failure),
       ];
-      final branches = results.map((r) => r.match(ok: (_) => 'ok', err: (_) => 'err')).toList();
+      final branches = results
+          .map((r) => r.match(ok: (_) => 'ok', err: (_) => 'err'))
+          .toList();
       expect(branches, ['ok', 'err']);
     });
   });

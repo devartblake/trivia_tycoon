@@ -380,7 +380,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       // Mark onboarding complete in persistence + provider before navigating
       // so the router's redirect sees the new state immediately.
       await onboardingService.setOnboardingCompleted(true);
-      await _persistProgressSnapshot(completed: true, hasCompletedProfile: true);
+      await _persistProgressSnapshot(
+          completed: true, hasCompletedProfile: true);
       await ref
           .read(onboardingProgressProvider.notifier)
           .markOnboardingCompleted(true);

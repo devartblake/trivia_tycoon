@@ -532,7 +532,8 @@ void main() {
     });
 
     test('copies difficulty', () {
-      final updated = _q(difficulty: 1).copyWith(difficulty: qdiff.QuestionDifficultyExtension.fromInt(4));
+      final updated = _q(difficulty: 1)
+          .copyWith(difficulty: qdiff.QuestionDifficultyExtension.fromInt(4));
       expect(updated.difficulty.value, 4);
     });
 

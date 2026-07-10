@@ -62,7 +62,8 @@ class _SkillBranchDetailScreenState
   @override
   void initState() {
     super.initState();
-    _transform.value = vmath.Matrix4.identity()..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
+    _transform.value = vmath.Matrix4.identity()
+      ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
     _showPath = widget.showPathInitially;
     if (widget.initialStep != null) {
       _pathIndex = widget.initialStep!.clamp(0, _maxInitialStepIndex);
@@ -781,7 +782,8 @@ class _SkillBranchDetailScreenState
                 if (!mounted) return;
                 setState(() {
                   _transform.value = vmath.Matrix4.identity()
-                    ..translateByVector3(vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
+                    ..translateByVector3(
+                        vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
                     ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0));
                 });
               });
@@ -866,13 +868,16 @@ class _SkillBranchDetailScreenState
                     right: 12,
                     bottom: 12,
                     child: _ZoomPad(
-                      onIn: () => setState(() =>
-                          _transform.value = _transform.value.scaledByDouble(1.15, 1.15, 1.0, 1.0)),
-                      onOut: () => setState(() =>
-                          _transform.value = _transform.value.scaledByDouble(0.87, 0.87, 1.0, 1.0)),
+                      onIn: () => setState(() => _transform.value = _transform
+                          .value
+                          .scaledByDouble(1.15, 1.15, 1.0, 1.0)),
+                      onOut: () => setState(() => _transform.value = _transform
+                          .value
+                          .scaledByDouble(0.87, 0.87, 1.0, 1.0)),
                       onReset: () => setState(
                           () => _transform.value = (vmath.Matrix4.identity()
-                            ..translateByVector3(vmath.Vector3(c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
+                            ..translateByVector3(vmath.Vector3(
+                                c.maxWidth / 2.0, c.maxHeight / 2.0, 0.0))
                             ..scaleByVector3(vmath.Vector3(0.9, 0.9, 1.0)))),
                     ),
                   ),

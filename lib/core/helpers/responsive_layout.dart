@@ -99,8 +99,8 @@ class AppAdaptiveScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final useRail =
-            constraints.maxWidth >= AppBreakpoints.dashboardRail && rail != null;
+        final useRail = constraints.maxWidth >= AppBreakpoints.dashboardRail &&
+            rail != null;
         final useRightPanel =
             constraints.maxWidth >= AppBreakpoints.dashboardRail &&
                 rightPanel != null;

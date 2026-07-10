@@ -14,8 +14,8 @@ class SendFriendRequestRequest {
 
   // Backend contract: UserFriendsEndpoints.SendFriendRequestBody(TargetUserId)
   Map<String, dynamic> toJson() => {
-    'targetUserId': targetPlayerId,
-  };
+        'targetUserId': targetPlayerId,
+      };
 }
 
 /// Response containing list of friends
@@ -151,13 +151,13 @@ class Friend {
   }
 
   Map<String, dynamic> toJson() => {
-    'friendId': friendId,
-    'username': username,
-    'avatarUrl': avatarUrl,
-    'level': level,
-    'connectedSinceUtc': connectedSinceUtc.toIso8601String(),
-    'isOnline': isOnline,
-  };
+        'friendId': friendId,
+        'username': username,
+        'avatarUrl': avatarUrl,
+        'level': level,
+        'connectedSinceUtc': connectedSinceUtc.toIso8601String(),
+        'isOnline': isOnline,
+      };
 }
 
 /// Friend request domain model - represents a pending friend request
@@ -189,7 +189,8 @@ class FriendRequest {
           json['senderDisplayName']?.toString() ??
           json['fromUsername']?.toString() ??
           'Unknown',
-      fromAvatarUrl: (json['senderAvatarUrl'] ?? json['fromAvatarUrl']) as String?,
+      fromAvatarUrl:
+          (json['senderAvatarUrl'] ?? json['fromAvatarUrl']) as String?,
       sentAtUtc: DateTime.tryParse(json['createdAtUtc']?.toString() ??
                   json['sentAtUtc']?.toString() ??
                   '')
@@ -200,13 +201,13 @@ class FriendRequest {
   }
 
   Map<String, dynamic> toJson() => {
-    'requestId': requestId,
-    'fromPlayerId': fromPlayerId,
-    'fromUsername': fromUsername,
-    'fromAvatarUrl': fromAvatarUrl,
-    'sentAtUtc': sentAtUtc.toIso8601String(),
-    'status': status,
-  };
+        'requestId': requestId,
+        'fromPlayerId': fromPlayerId,
+        'fromUsername': fromUsername,
+        'fromAvatarUrl': fromAvatarUrl,
+        'sentAtUtc': sentAtUtc.toIso8601String(),
+        'status': status,
+      };
 }
 
 /// Player search result - represents a player found via search
@@ -247,12 +248,12 @@ class PlayerSearchResult {
   }
 
   Map<String, dynamic> toJson() => {
-    'playerId': playerId,
-    'username': username,
-    'avatarUrl': avatarUrl,
-    'level': level,
-    'isFriend': isFriend,
-    'hasOutgoingRequest': hasOutgoingRequest,
-    'hasIncomingRequest': hasIncomingRequest,
-  };
+        'playerId': playerId,
+        'username': username,
+        'avatarUrl': avatarUrl,
+        'level': level,
+        'isFriend': isFriend,
+        'hasOutgoingRequest': hasOutgoingRequest,
+        'hasIncomingRequest': hasIncomingRequest,
+      };
 }

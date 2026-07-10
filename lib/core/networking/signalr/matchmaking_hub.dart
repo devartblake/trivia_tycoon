@@ -20,9 +20,8 @@ class MatchmakingQueuedDto {
         ticketId: json['TicketId'] as String,
         mode: json['Mode'] as String,
         tier: json['Tier'] as int,
-        queuedAtUtc:
-            DateTime.tryParse(json['QueuedAtUtc'] as String? ?? '') ??
-                DateTime.now(),
+        queuedAtUtc: DateTime.tryParse(json['QueuedAtUtc'] as String? ?? '') ??
+            DateTime.now(),
       );
 }
 
@@ -98,14 +97,14 @@ class MatchmakingHub extends HubClientBase {
   void registerHandlers(HubConnection connection) {
     connection.on('Queued', (args) {
       if (args == null || args.isEmpty) return;
-      _queued.add(
-          MatchmakingQueuedDto.fromJson(args[0] as Map<String, dynamic>));
+      _queued
+          .add(MatchmakingQueuedDto.fromJson(args[0] as Map<String, dynamic>));
     });
 
     connection.on('Matched', (args) {
       if (args == null || args.isEmpty) return;
-      _matched.add(
-          MatchmakingMatchedDto.fromJson(args[0] as Map<String, dynamic>));
+      _matched
+          .add(MatchmakingMatchedDto.fromJson(args[0] as Map<String, dynamic>));
     });
 
     connection.on('Cancelled', (args) {

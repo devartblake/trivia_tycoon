@@ -103,7 +103,8 @@ class FriendCard extends StatelessWidget {
               value: 'remove',
               child: Row(
                 children: [
-                  const Icon(Icons.person_remove_rounded, size: 20, color: Colors.red),
+                  const Icon(Icons.person_remove_rounded,
+                      size: 20, color: Colors.red),
                   const SizedBox(width: 8),
                   const Text('Remove', style: TextStyle(color: Colors.red)),
                 ],

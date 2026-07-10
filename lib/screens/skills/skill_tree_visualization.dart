@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/skill_progression_model.dart';
-import '../../game/providers/skill_progression_provider.dart' show allSkillsProvider;
+import '../../game/providers/skill_progression_provider.dart'
+    show allSkillsProvider;
 
 /// Visualization of player's skill tree progression
 class SkillTreeVisualization extends ConsumerWidget {
@@ -52,21 +53,15 @@ class SkillTreeVisualization extends ConsumerWidget {
   }
 
   List<SkillNode> _getMathSkills(List<SkillNode> allSkills) {
-    return allSkills
-        .where((s) => s.category.contains('math'))
-        .toList();
+    return allSkills.where((s) => s.category.contains('math')).toList();
   }
 
   List<SkillNode> _getScienceSkills(List<SkillNode> allSkills) {
-    return allSkills
-        .where((s) => s.category.contains('science'))
-        .toList();
+    return allSkills.where((s) => s.category.contains('science')).toList();
   }
 
   List<SkillNode> _getLogicSkills(List<SkillNode> allSkills) {
-    return allSkills
-        .where((s) => s.category.contains('logic'))
-        .toList();
+    return allSkills.where((s) => s.category.contains('logic')).toList();
   }
 }
 
@@ -196,8 +191,7 @@ class _SkillNodeCardState extends State<_SkillNodeCard>
                                 children: [
                                   if (!isUnlocked)
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8),
+                                      padding: const EdgeInsets.only(right: 8),
                                       child: Icon(
                                         Icons.lock,
                                         size: 20,
@@ -245,8 +239,7 @@ class _SkillNodeCardState extends State<_SkillNodeCard>
                         value: progress,
                         minHeight: 6,
                         backgroundColor: Colors.grey.shade300,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(widget.color),
+                        valueColor: AlwaysStoppedAnimation<Color>(widget.color),
                       ),
                     ),
                   ],
@@ -279,8 +272,7 @@ class _SkillNodeCardState extends State<_SkillNodeCard>
                         value: xpProgress,
                         minHeight: 8,
                         backgroundColor: Colors.grey.shade300,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(widget.color),
+                        valueColor: AlwaysStoppedAnimation<Color>(widget.color),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -305,18 +297,16 @@ class _SkillNodeCardState extends State<_SkillNodeCard>
                       const SizedBox(height: 8),
                       Wrap(
                         spacing: 8,
-                        children: widget.skill.prerequisites
-                            .map((prereq) {
-                              return Chip(
-                                label: Text(prereq),
-                                backgroundColor: Colors.grey.shade200,
-                                labelStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade700,
-                                ),
-                              );
-                            })
-                            .toList(),
+                        children: widget.skill.prerequisites.map((prereq) {
+                          return Chip(
+                            label: Text(prereq),
+                            backgroundColor: Colors.grey.shade200,
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade700,
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ],
                   ],

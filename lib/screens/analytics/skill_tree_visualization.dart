@@ -292,4 +292,3 @@ class SkillTreeVisualization extends ConsumerWidget {
     );
   }
 }
-

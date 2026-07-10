@@ -84,8 +84,9 @@ class MatchHistoryWidget extends ConsumerWidget {
         : matches;
 
     // Apply max items limit if specified
-    final displayMatches =
-        maxItems != null ? filteredMatches.take(maxItems!).toList() : filteredMatches;
+    final displayMatches = maxItems != null
+        ? filteredMatches.take(maxItems!).toList()
+        : filteredMatches;
 
     return RefreshIndicator(
       onRefresh: () async {

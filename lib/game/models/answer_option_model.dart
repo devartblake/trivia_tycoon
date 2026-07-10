@@ -18,7 +18,8 @@ class AnswerOptionModel {
   factory AnswerOptionModel.fromJson(Map<String, dynamic> json) {
     return AnswerOptionModel(
       id: (json['optionId'] ?? json['id'] ?? json['text'] ?? '').toString(),
-      text: (json['text'] ?? json['label'] ?? json['optionText'] ?? '').toString(),
+      text: (json['text'] ?? json['label'] ?? json['optionText'] ?? '')
+          .toString(),
       mediaUrl: json['mediaUrl'] ?? json['imageUrl'] ?? json['imageKey'],
       semanticLabel: json['semanticLabel'] ?? json['ariaLabel'],
       isCorrect: json['isCorrect'] == true,
@@ -67,5 +68,6 @@ class AnswerOptionModel {
   int get hashCode => Object.hash(id, text, mediaUrl, isCorrect);
 
   @override
-  String toString() => 'AnswerOptionModel(id: $id, text: $text, isCorrect: $isCorrect)';
+  String toString() =>
+      'AnswerOptionModel(id: $id, text: $text, isCorrect: $isCorrect)';
 }

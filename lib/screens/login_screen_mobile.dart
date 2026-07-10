@@ -21,7 +21,6 @@ bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 bool get _isAndroid =>
     !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
-
 /// Mobile-only login screen.
 ///
 /// Differences from [LoginScreen]:
@@ -44,7 +43,6 @@ class LoginScreenMobile extends ConsumerStatefulWidget {
 
 class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
     with SingleTickerProviderStateMixin {
-
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -144,7 +142,8 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
         }
       } else {
         // Backend authentication required
-        _showErrorSnackBar('Backend authentication is required. Please configure backend API.');
+        _showErrorSnackBar(
+            'Backend authentication is required. Please configure backend API.');
         setState(() => _isLoading = false);
         return;
       }

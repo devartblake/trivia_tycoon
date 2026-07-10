@@ -150,8 +150,7 @@ class _AgeGateScreenState extends ConsumerState<AgeGateScreen> {
               ),
               const SizedBox(width: 12),
               FilledButton(
-                onPressed:
-                    (_submittingAge || ageVerified) ? null : _submitAge,
+                onPressed: (_submittingAge || ageVerified) ? null : _submitAge,
                 child: _submittingAge
                     ? const SizedBox(
                         height: 18,
@@ -274,7 +273,8 @@ class _ParentalConsentCard extends StatelessWidget {
                         height: 18,
                         width: 18,
                         child: CircularProgressIndicator(strokeWidth: 2))
-                    : Text(requested ? 'Request sent ✓' : 'Send consent request'),
+                    : Text(
+                        requested ? 'Request sent ✓' : 'Send consent request'),
               ),
             ),
           ],

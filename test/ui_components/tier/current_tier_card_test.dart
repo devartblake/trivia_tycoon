@@ -48,7 +48,8 @@ void main() {
       );
     });
 
-    testWidgets('displays current tier name and level', (WidgetTester tester) async {
+    testWidgets('displays current tier name and level',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -79,7 +80,8 @@ void main() {
       expect(find.text('50'), findsOneWidget);
     });
 
-    testWidgets('displays max tier message when at max tier', (WidgetTester tester) async {
+    testWidgets('displays max tier message when at max tier',
+        (WidgetTester tester) async {
       final maxTierProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: null,
@@ -100,7 +102,8 @@ void main() {
       expect(find.text("You've reached the maximum tier!"), findsOneWidget);
     });
 
-    testWidgets('uses correct color for Gold tier', (WidgetTester tester) async {
+    testWidgets('uses correct color for Gold tier',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -113,7 +116,8 @@ void main() {
       expect(icons, findsWidgets);
     });
 
-    testWidgets('uses correct color for Platinum tier', (WidgetTester tester) async {
+    testWidgets('uses correct color for Platinum tier',
+        (WidgetTester tester) async {
       final platinumTier = TierDefinition(
         id: '10',
         name: 'Platinum Tier',
@@ -148,7 +152,8 @@ void main() {
       expect(find.byIcon(Icons.diamond), findsOneWidget);
     });
 
-    testWidgets('uses correct color for Silver tier', (WidgetTester tester) async {
+    testWidgets('uses correct color for Silver tier',
+        (WidgetTester tester) async {
       final silverTier = TierDefinition(
         id: '3',
         name: 'Silver Tier',
@@ -223,7 +228,8 @@ void main() {
       expect(find.byIcon(Icons.monetization_on), findsWidgets);
     });
 
-    testWidgets('max tier message styled correctly', (WidgetTester tester) async {
+    testWidgets('max tier message styled correctly',
+        (WidgetTester tester) async {
       final maxTierProgress = PlayerTierProgress(
         currentTier: currentTier,
         nextTier: null,
@@ -248,7 +254,8 @@ void main() {
       expect(star, findsOneWidget);
     });
 
-    testWidgets('reward values are displayed correctly', (WidgetTester tester) async {
+    testWidgets('reward values are displayed correctly',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -258,7 +265,7 @@ void main() {
       );
 
       expect(find.text('1000'), findsOneWidget); // coinsBonus
-      expect(find.text('50'), findsOneWidget);   // gemsBonus
+      expect(find.text('50'), findsOneWidget); // gemsBonus
       expect(find.text('Gold Badge'), findsOneWidget); // badge
     });
 
@@ -276,7 +283,8 @@ void main() {
       expect(find.byType(Row), findsWidgets);
     });
 
-    testWidgets('card renders without errors for Bronze tier', (WidgetTester tester) async {
+    testWidgets('card renders without errors for Bronze tier',
+        (WidgetTester tester) async {
       final bronzeTier = TierDefinition(
         id: '1',
         name: 'Bronze Tier',

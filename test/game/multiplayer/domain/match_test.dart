@@ -57,7 +57,8 @@ void main() {
 
     test('replaces currentTurn', () {
       final newTurn = GameTurn(questionId: 'q2', startAt: _t0, endAt: _t1);
-      expect(_match().copyWith(currentTurn: newTurn).currentTurn?.questionId, 'q2');
+      expect(_match().copyWith(currentTurn: newTurn).currentTurn?.questionId,
+          'q2');
     });
 
     test('clearTurn sets currentTurn to null', () {

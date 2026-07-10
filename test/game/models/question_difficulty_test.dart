@@ -99,17 +99,25 @@ void main() {
 
     group('fromInt parsing', () {
       test('Parses integer values correctly', () {
-        expect(QuestionDifficultyExtension.fromInt(1), equals(QuestionDifficulty.easy));
-        expect(QuestionDifficultyExtension.fromInt(2), equals(QuestionDifficulty.medium));
-        expect(QuestionDifficultyExtension.fromInt(3), equals(QuestionDifficulty.hard));
-        expect(QuestionDifficultyExtension.fromInt(4), equals(QuestionDifficulty.expert));
-        expect(QuestionDifficultyExtension.fromInt(5), equals(QuestionDifficulty.boss));
+        expect(QuestionDifficultyExtension.fromInt(1),
+            equals(QuestionDifficulty.easy));
+        expect(QuestionDifficultyExtension.fromInt(2),
+            equals(QuestionDifficulty.medium));
+        expect(QuestionDifficultyExtension.fromInt(3),
+            equals(QuestionDifficulty.hard));
+        expect(QuestionDifficultyExtension.fromInt(4),
+            equals(QuestionDifficulty.expert));
+        expect(QuestionDifficultyExtension.fromInt(5),
+            equals(QuestionDifficulty.boss));
       });
 
       test('Returns easy for invalid integers', () {
-        expect(QuestionDifficultyExtension.fromInt(0), equals(QuestionDifficulty.easy));
-        expect(QuestionDifficultyExtension.fromInt(99), equals(QuestionDifficulty.easy));
-        expect(QuestionDifficultyExtension.fromInt(-1), equals(QuestionDifficulty.easy));
+        expect(QuestionDifficultyExtension.fromInt(0),
+            equals(QuestionDifficulty.easy));
+        expect(QuestionDifficultyExtension.fromInt(99),
+            equals(QuestionDifficulty.easy));
+        expect(QuestionDifficultyExtension.fromInt(-1),
+            equals(QuestionDifficulty.easy));
       });
     });
 

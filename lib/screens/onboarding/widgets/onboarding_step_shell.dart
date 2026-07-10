@@ -244,9 +244,8 @@ class _RightPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = isDesktop
-        ? const EdgeInsets.all(32)
-        : const EdgeInsets.all(24);
+    final padding =
+        isDesktop ? const EdgeInsets.all(32) : const EdgeInsets.all(24);
 
     final titleStyle = isDesktop
         ? theme.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold)

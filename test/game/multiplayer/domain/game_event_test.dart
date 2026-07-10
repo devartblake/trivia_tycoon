@@ -47,7 +47,8 @@ void main() {
 
     test('isHost defaults to false', () {
       expect(
-        const PlayerJoined(roomId: 'r1', playerId: 'p1', playerName: 'Bob').isHost,
+        const PlayerJoined(roomId: 'r1', playerId: 'p1', playerName: 'Bob')
+            .isHost,
         isFalse,
       );
     });
@@ -99,7 +100,8 @@ void main() {
     });
 
     test('toString contains matchId', () {
-      expect(const MatchStarted(matchId: 'm-42', roomId: 'r1').toString(), contains('m-42'));
+      expect(const MatchStarted(matchId: 'm-42', roomId: 'r1').toString(),
+          contains('m-42'));
     });
   });
 
@@ -116,7 +118,8 @@ void main() {
     });
 
     test('durationMs is null by default', () {
-      expect(const TurnStarted(matchId: 'm1', questionId: 'q1').durationMs, isNull);
+      expect(const TurnStarted(matchId: 'm1', questionId: 'q1').durationMs,
+          isNull);
     });
   });
 
@@ -226,7 +229,8 @@ void main() {
     });
 
     test('toString contains code', () {
-      expect(const ServerNotice(code: 'restart', message: '').toString(), contains('restart'));
+      expect(const ServerNotice(code: 'restart', message: '').toString(),
+          contains('restart'));
     });
   });
 
@@ -250,7 +254,8 @@ void main() {
     });
 
     test('toString contains message', () {
-      expect(const ProtocolError('bad_frame').toString(), contains('bad_frame'));
+      expect(
+          const ProtocolError('bad_frame').toString(), contains('bad_frame'));
     });
   });
 
@@ -267,16 +272,20 @@ void main() {
         const HostChanged(roomId: 'r1', newHostPlayerId: 'p2'),
         const MatchStarted(matchId: 'm1', roomId: 'r1'),
         const TurnStarted(matchId: 'm1', questionId: 'q1'),
-        const TurnRevealed(matchId: 'm1', questionId: 'q1', correctAnswerId: 'a1'),
-        const AnswerAccepted(matchId: 'm1', questionId: 'q1', playerId: 'p1', answerId: 'a1'),
-        const AnswerRejected(matchId: 'm1', questionId: 'q1', playerId: 'p1', reason: 'x'),
+        const TurnRevealed(
+            matchId: 'm1', questionId: 'q1', correctAnswerId: 'a1'),
+        const AnswerAccepted(
+            matchId: 'm1', questionId: 'q1', playerId: 'p1', answerId: 'a1'),
+        const AnswerRejected(
+            matchId: 'm1', questionId: 'q1', playerId: 'p1', reason: 'x'),
         const MatchEnded(matchId: 'm1', roomId: 'r1'),
         const ServerNotice(code: 'c', message: 'm'),
         const Kicked(reason: 'x'),
         const ProtocolError('msg'),
       ];
       for (final e in events) {
-        expect(e, isA<GameEvent>(), reason: '${e.runtimeType} should extend GameEvent');
+        expect(e, isA<GameEvent>(),
+            reason: '${e.runtimeType} should extend GameEvent');
       }
     });
   });

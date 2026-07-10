@@ -105,8 +105,9 @@ class CategoryHeaderBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               const SizedBox(width: 8),
               _Chip(
-                background:
-                    urgent ? Colors.red.shade600 : tileColor.withValues(alpha: 0.85),
+                background: urgent
+                    ? Colors.red.shade600
+                    : tileColor.withValues(alpha: 0.85),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

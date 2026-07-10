@@ -224,8 +224,7 @@ void main() {
     });
 
     test('fromJson parses firstSessionDiscount true', () {
-      expect(
-          EconomyStateDto.fromJson(fullJson()).firstSessionDiscount, isTrue);
+      expect(EconomyStateDto.fromJson(fullJson()).firstSessionDiscount, isTrue);
     });
 
     test('fromJson parses modes map into ModeCostDto objects', () {

@@ -115,8 +115,8 @@ void main() {
 
       expect(response.totalCount, 2);
       expect(response.results, hasLength(2));
-      expect(
-          response.results.first.playerId, '55555555-5555-5555-5555-555555555555');
+      expect(response.results.first.playerId,
+          '55555555-5555-5555-5555-555555555555');
       expect(response.results.first.username, 'triviafan');
       expect(response.results.first.level, 'silver-scholar');
       // Search endpoint does not provide relationship flags — safe defaults.

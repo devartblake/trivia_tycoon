@@ -58,7 +58,8 @@ class TierSkillIntegrationService {
 
       // Check tier requirement
       if (skill.requiredTierId != null) {
-        final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+        final progress =
+            await _tierProgressionService.getPlayerTierProgress(userId);
 
         // Check if player has reached the required tier
         if (progress.currentTier.id != skill.requiredTierId) {
@@ -109,7 +110,8 @@ class TierSkillIntegrationService {
       final skill = _tieredSkills[skillId];
       if (skill == null) return null;
 
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
       final canAccess = await canAccessSkill(userId, skillId);
 
       return SkillUnlockInfo(
@@ -176,7 +178,8 @@ class TierSkillIntegrationService {
   /// Get the next tier that unlocks new skills
   Future<String?> getNextUnlockingTier(String userId) async {
     try {
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
       final currentTierId = progress.currentTier.id;
 
       // Find the next tier that has skills to unlock

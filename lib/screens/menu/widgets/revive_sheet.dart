@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/dto/economy_dto.dart';
 import '../../../game/analytics/providers/analytics_providers.dart';
@@ -155,8 +155,8 @@ class _ReviveSheetContent extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF4CAF50).withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
-              border:
-                  Border.all(color: const Color(0xFF4CAF50).withValues(alpha: 0.5)),
+              border: Border.all(
+                  color: const Color(0xFF4CAF50).withValues(alpha: 0.5)),
             ),
             child: const Text(
               'Almost-win discount applied!',

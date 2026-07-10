@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../core/constants/question_paths.dart';
 import '../data/question_asset_index_loader.dart';
@@ -676,8 +676,8 @@ class AdaptedQuestionLoaderService {
     // Apply type filter
     if (types != null && types.isNotEmpty) {
       filteredQuestions = filteredQuestions
-          .where((q) =>
-              types.any((type) => q.type.value.toLowerCase() == type.toLowerCase()))
+          .where((q) => types
+              .any((type) => q.type.value.toLowerCase() == type.toLowerCase()))
           .toList();
     }
 
@@ -1330,9 +1330,12 @@ class AdaptedQuestionLoaderService {
       List<QuestionModel> questions, int count) {
     if (questions.length <= count) return questions;
 
-    final easyQuestions = questions.where((q) => q.difficulty.value == 1).toList();
-    final mediumQuestions = questions.where((q) => q.difficulty.value == 2).toList();
-    final hardQuestions = questions.where((q) => q.difficulty.value == 3).toList();
+    final easyQuestions =
+        questions.where((q) => q.difficulty.value == 1).toList();
+    final mediumQuestions =
+        questions.where((q) => q.difficulty.value == 2).toList();
+    final hardQuestions =
+        questions.where((q) => q.difficulty.value == 3).toList();
 
     final balanced = <QuestionModel>[];
     final targetEach = count ~/ 3;
@@ -1615,7 +1618,8 @@ class AdaptedQuestionLoaderService {
           (categoryCount[question.category] ?? 0) + 1;
       difficultyCount[question.difficulty.value] =
           (difficultyCount[question.difficulty.value] ?? 0) + 1;
-      typeCount[question.type.value] = (typeCount[question.type.value] ?? 0) + 1;
+      typeCount[question.type.value] =
+          (typeCount[question.type.value] ?? 0) + 1;
 
       // Count media types
       mediaCount[question.mediaType] =

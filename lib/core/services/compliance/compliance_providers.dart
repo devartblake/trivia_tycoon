@@ -6,7 +6,8 @@ import 'compliance_status_model.dart';
 final complianceServiceProvider = Provider<ComplianceService?>((ref) => null);
 
 // Per-user compliance status — drives UI gating for crypto and prize surfaces
-final complianceStatusProvider = FutureProvider.family<ComplianceStatus, String>(
+final complianceStatusProvider =
+    FutureProvider.family<ComplianceStatus, String>(
   (ref, userId) async {
     final service = ref.watch(complianceServiceProvider);
     if (service == null) return _blockedStatus(userId);
@@ -30,14 +31,14 @@ final canReceivePrizesProvider = FutureProvider.family<bool, String>(
 );
 
 ComplianceStatus _blockedStatus(String userId) => ComplianceStatus(
-  userId:          userId,
-  kycStatus:       KycStatus.notStarted,
-  ageStatus:       AgeStatus.unknown,
-  geoStatus:       GeoStatus.unchecked,
-  amlStatus:       AmlStatus.clear,
-  consentStatus:   ConsentStatus.notGiven,
-  canUseCrypto:    false,
-  canReceivePrizes: false,
-  canCollectData:  false,
-  requiredActions: [],
-);
+      userId: userId,
+      kycStatus: KycStatus.notStarted,
+      ageStatus: AgeStatus.unknown,
+      geoStatus: GeoStatus.unchecked,
+      amlStatus: AmlStatus.clear,
+      consentStatus: ConsentStatus.notGiven,
+      canUseCrypto: false,
+      canReceivePrizes: false,
+      canCollectData: false,
+      requiredActions: [],
+    );

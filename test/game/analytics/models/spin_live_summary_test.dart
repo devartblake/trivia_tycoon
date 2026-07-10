@@ -45,9 +45,11 @@ void main() {
     test('parses canSpin', () => expect(_fromFull().canSpin, isTrue));
     test('parses spinsRemaining', () => expect(_fromFull().spinsRemaining, 7));
     test('parses rewardPoints', () => expect(_fromFull().rewardPoints, 4.5));
-    test('parses userName from map', () => expect(_fromFull().userName, 'Alice'));
+    test('parses userName from map',
+        () => expect(_fromFull().userName, 'Alice'));
     test('parses userId from map', () => expect(_fromFull().userId, 'u1'));
-    test('source comes from factory parameter', () => expect(_fromFull().source, 'test'));
+    test('source comes from factory parameter',
+        () => expect(_fromFull().source, 'test'));
     test('parses snapshotAt from snapshot_at key', () {
       expect(_fromFull().snapshotAt, _snapshotDt);
     });
@@ -173,7 +175,9 @@ void main() {
       expect(s.snapshotAt, DateTime.utc(2026, 7, 4));
     });
 
-    test('snapshotAt is non-null when no timestamp key present (uses DateTime.now())', () {
+    test(
+        'snapshotAt is non-null when no timestamp key present (uses DateTime.now())',
+        () {
       final before = DateTime.now();
       final s = SpinLiveSummary.fromMap(
         {},
@@ -181,7 +185,8 @@ void main() {
         fallbackUserId: 'fb',
         source: 's',
       );
-      expect(s.snapshotAt.isAfter(before.subtract(const Duration(seconds: 2))), isTrue);
+      expect(s.snapshotAt.isAfter(before.subtract(const Duration(seconds: 2))),
+          isTrue);
     });
   });
 
@@ -195,16 +200,25 @@ void main() {
       expect(
         keys,
         containsAll([
-          'today_count', 'daily_limit', 'weekly_count', 'total_spins',
-          'can_spin', 'spins_remaining', 'reward_points',
-          'user_name', 'user_id', 'snapshot_at', 'source',
+          'today_count',
+          'daily_limit',
+          'weekly_count',
+          'total_spins',
+          'can_spin',
+          'spins_remaining',
+          'reward_points',
+          'user_name',
+          'user_id',
+          'snapshot_at',
+          'source',
         ]),
       );
     });
 
     test('snapshot_at is ISO8601 string', () {
       final map = _fromFull().toMap();
-      expect(() => DateTime.parse(map['snapshot_at'] as String), returnsNormally);
+      expect(
+          () => DateTime.parse(map['snapshot_at'] as String), returnsNormally);
     });
 
     test('round-trip preserves numeric fields', () {

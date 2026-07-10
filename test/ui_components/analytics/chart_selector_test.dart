@@ -240,7 +240,8 @@ void main() {
       expect(find.byType(SizedBox), findsWidgets);
     });
 
-    testWidgets('handles multiple rapid selections', (WidgetTester tester) async {
+    testWidgets('handles multiple rapid selections',
+        (WidgetTester tester) async {
       final selections = <String>[];
 
       await tester.pumpWidget(

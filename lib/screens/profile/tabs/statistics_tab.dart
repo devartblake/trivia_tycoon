@@ -164,13 +164,12 @@ class StatisticsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...subjects
-              .map((subject) => _buildSubjectItem(
-                    subject['name'] as String,
-                    subject['score'] as int,
-                    subject['quizzes'] as int,
-                    subject['color'] as Color,
-                  )),
+          ...subjects.map((subject) => _buildSubjectItem(
+                subject['name'] as String,
+                subject['score'] as int,
+                subject['quizzes'] as int,
+                subject['color'] as Color,
+              )),
         ],
       ),
     );

@@ -74,7 +74,8 @@ class FriendsListScreen extends ConsumerWidget {
                   final friend = friends[index];
                   return FriendCard(
                     friend: friend,
-                    onRemove: () => _removeFriend(context, ref, friend.friendId),
+                    onRemove: () =>
+                        _removeFriend(context, ref, friend.friendId),
                     onChallenge: () => _challengeFriend(context, friend),
                   );
                 },
@@ -104,7 +105,10 @@ class FriendsListScreen extends ConsumerWidget {
                     Icon(
                       Icons.mail_outline_rounded,
                       size: 64,
-                      color: Theme.of(context).colorScheme.secondary.withAlpha(128),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withAlpha(128),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -116,8 +120,7 @@ class FriendsListScreen extends ConsumerWidget {
               ),
             )
           : RefreshIndicator(
-              onRefresh: () async =>
-                  ref.refresh(pendingFriendRequestsProvider),
+              onRefresh: () async => ref.refresh(pendingFriendRequestsProvider),
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 itemCount: requests.length,
@@ -282,8 +285,7 @@ class FriendsListScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Remove Friend?'),
-        content:
-            const Text('Are you sure you want to remove this friend?'),
+        content: const Text('Are you sure you want to remove this friend?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

@@ -17,8 +17,10 @@ const _mapper = MatchMapper();
 const int _startMs = 1767254400000; // 2026-01-01 12:00:00 UTC
 const int _endMs = 1767254430000; // 2026-01-01 12:00:30 UTC
 
-final DateTime _startDt = DateTime.fromMillisecondsSinceEpoch(_startMs, isUtc: true);
-final DateTime _endDt = DateTime.fromMillisecondsSinceEpoch(_endMs, isUtc: true);
+final DateTime _startDt =
+    DateTime.fromMillisecondsSinceEpoch(_startMs, isUtc: true);
+final DateTime _endDt =
+    DateTime.fromMillisecondsSinceEpoch(_endMs, isUtc: true);
 
 const _hostDto = PresenceDto(playerId: 'p1', playerName: 'Alice', isHost: true);
 const _guestDto = PresenceDto(playerId: 'p2', playerName: 'Bob');
@@ -142,11 +144,13 @@ void main() {
       expect(restored.roomId, original.roomId);
       expect(restored.players.length, original.players.length);
       expect(restored.players[0].id, original.players[0].id);
-      expect(restored.currentTurn?.questionId, original.currentTurn?.questionId);
+      expect(
+          restored.currentTurn?.questionId, original.currentTurn?.questionId);
       expect(restored.currentTurn?.startAt, original.currentTurn?.startAt);
     });
 
-    test('toDto(toDomain(dto)) preserves matchId, roomId, players, and turn', () {
+    test('toDto(toDomain(dto)) preserves matchId, roomId, players, and turn',
+        () {
       final original = MatchDto(
         matchId: 'm2',
         roomId: 'r2',
@@ -157,7 +161,8 @@ void main() {
       expect(restored.matchId, original.matchId);
       expect(restored.roomId, original.roomId);
       expect(restored.players.length, original.players.length);
-      expect(restored.currentTurn?.questionId, original.currentTurn?.questionId);
+      expect(
+          restored.currentTurn?.questionId, original.currentTurn?.questionId);
       expect(restored.currentTurn?.startAtMs, original.currentTurn?.startAtMs);
     });
   });

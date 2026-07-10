@@ -25,9 +25,11 @@ SecureRequestContext _ctx({
       pathAndQuery: pathAndQuery,
       sessionId: sessionId,
       sequence: sequence,
-      replayNonce: replayNonce ?? base64Url.encode(List<int>.generate(16, (_) => 0)),
+      replayNonce:
+          replayNonce ?? base64Url.encode(List<int>.generate(16, (_) => 0)),
       subjectId: subjectId,
-      encryptedAtUtc: encryptedAtUtc ?? DateTime.utc(2026, 5, 21).toIso8601String(),
+      encryptedAtUtc:
+          encryptedAtUtc ?? DateTime.utc(2026, 5, 21).toIso8601String(),
     );
 
 void main() {
@@ -611,7 +613,8 @@ void main() {
       expect(decrypted, equals(body));
     });
 
-    test('query string is included in AAD — path without query fails to decrypt',
+    test(
+        'query string is included in AAD — path without query fails to decrypt',
         () async {
       final body = {'spin': true};
       final ctxWithQuery =

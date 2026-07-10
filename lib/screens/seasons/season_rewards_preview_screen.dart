@@ -59,8 +59,7 @@ class _SeasonRewardsPreviewScreenState
         'NotEligible' => 'Not eligible to claim right now.',
         _ => 'Claim status: ${result.status}',
       };
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(msg)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
       _reload();
     } on HttpException catch (e) {
       if (!mounted) return;
@@ -86,7 +85,8 @@ class _SeasonRewardsPreviewScreenState
           }
           final e = snap.data!;
           final nextClaim = e.nextClaimAtUtc;
-          final waiting = nextClaim != null && nextClaim.isAfter(DateTime.now());
+          final waiting =
+              nextClaim != null && nextClaim.isAfter(DateTime.now());
           final canClaim = e.eligible && !waiting && !_claiming;
 
           return Padding(

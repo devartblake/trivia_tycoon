@@ -289,24 +289,27 @@ class _RewardsDisplay extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            if (reward.coins > 0) _RewardItem(
-              icon: Icons.monetization_on,
-              label: 'Coins',
-              value: reward.coins.toString(),
-              color: Colors.amber,
-            ),
-            if (reward.gems > 0) _RewardItem(
-              icon: Icons.diamond_outlined,
-              label: 'Gems',
-              value: reward.gems.toString(),
-              color: Colors.purple,
-            ),
-            if (reward.badgeName != null) _RewardItem(
-              icon: Icons.shield,
-              label: 'Badge',
-              value: reward.badgeName!,
-              color: Colors.cyan,
-            ),
+            if (reward.coins > 0)
+              _RewardItem(
+                icon: Icons.monetization_on,
+                label: 'Coins',
+                value: reward.coins.toString(),
+                color: Colors.amber,
+              ),
+            if (reward.gems > 0)
+              _RewardItem(
+                icon: Icons.diamond_outlined,
+                label: 'Gems',
+                value: reward.gems.toString(),
+                color: Colors.purple,
+              ),
+            if (reward.badgeName != null)
+              _RewardItem(
+                icon: Icons.shield,
+                label: 'Badge',
+                value: reward.badgeName!,
+                color: Colors.cyan,
+              ),
           ],
         ),
       ],

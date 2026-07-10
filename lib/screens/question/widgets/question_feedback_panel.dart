@@ -50,7 +50,8 @@ class QuestionFeedbackPanel extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: isCorrect ? Colors.green.shade800 : Colors.red.shade800,
+                    color:
+                        isCorrect ? Colors.green.shade800 : Colors.red.shade800,
                   ),
                 ),
               ),

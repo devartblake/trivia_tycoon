@@ -51,7 +51,8 @@ void main() {
       expect(find.byType(TierProgressWidget), findsOneWidget);
     });
 
-    testWidgets('renders as part of dashboard layout', (WidgetTester tester) async {
+    testWidgets('renders as part of dashboard layout',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: ProviderScope(

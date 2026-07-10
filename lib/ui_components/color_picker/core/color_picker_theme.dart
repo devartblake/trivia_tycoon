@@ -245,17 +245,21 @@ class ColorPickerTheme {
       final textStyleMap = map['textStyle'] as Map<String, dynamic>? ?? {};
 
       return ColorPickerTheme(
-        backgroundColor: Color(map['backgroundColor'] ?? Colors.white.toARGB32()),
+        backgroundColor:
+            Color(map['backgroundColor'] ?? Colors.white.toARGB32()),
         borderColor: Color(map['borderColor'] ?? Colors.black.toARGB32()),
         borderWidth: (map['borderWidth'] ?? 2.0).toDouble(),
         indicatorColor: Color(map['indicatorColor'] ?? Colors.black.toARGB32()),
-        sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.toARGB32()),
+        sliderTrackColor:
+            Color(map['sliderTrackColor'] ?? Colors.grey.toARGB32()),
         presetButtonColor:
             Color(map['presetButtonColor'] ?? Colors.blueAccent.toARGB32()),
         presetButtonSize: (map['presetButtonSize'] ?? 40.0).toDouble(),
         surfaceColor: Color(map['surfaceColor'] ?? Colors.white.toARGB32()),
-        onSurfaceColor: Color(map['onSurfaceColor'] ?? Colors.black87.toARGB32()),
-        primaryColor: Color(map['primaryColor'] ?? Colors.blueAccent.toARGB32()),
+        onSurfaceColor:
+            Color(map['onSurfaceColor'] ?? Colors.black87.toARGB32()),
+        primaryColor:
+            Color(map['primaryColor'] ?? Colors.blueAccent.toARGB32()),
         secondaryColor: Color(map['secondaryColor'] ?? Colors.grey.toARGB32()),
         errorColor: Color(map['errorColor'] ?? Colors.red.toARGB32()),
         shadowColor: Color(map['shadowColor'] ?? Colors.black26.toARGB32()),
@@ -307,7 +311,8 @@ class ColorPickerTheme {
       borderColor: Color(map['borderColor'] ?? Colors.black.toARGB32()),
       borderWidth: (map['borderWidth'] ?? 2.0).toDouble(),
       indicatorColor: Color(map['indicatorColor'] ?? Colors.black.toARGB32()),
-      sliderTrackColor: Color(map['sliderTrackColor'] ?? Colors.grey.toARGB32()),
+      sliderTrackColor:
+          Color(map['sliderTrackColor'] ?? Colors.grey.toARGB32()),
       presetButtonColor:
           Color(map['presetButtonColor'] ?? Colors.blueAccent.toARGB32()),
       presetButtonSize: (map['presetButtonSize'] ?? 40.0).toDouble(),

@@ -25,7 +25,6 @@ bool get _isIOS => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 bool get _isAndroid =>
     !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
-
 /// Modern game-inspired login screen
 class LoginScreen extends ConsumerStatefulWidget {
   static const routeName = canonicalLoginRoute;
@@ -39,7 +38,6 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen>
     with SingleTickerProviderStateMixin {
-
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -135,7 +133,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         }
       } else {
         // Backend authentication required
-        _showErrorSnackBar('Backend authentication is required. Please configure backend API.');
+        _showErrorSnackBar(
+            'Backend authentication is required. Please configure backend API.');
         setState(() => _isLoading = false);
         return;
       }
@@ -1308,7 +1307,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 maxLength: 6,
                 textCapitalization: TextCapitalization.characters,
                 buildCounter: (_,
-                        {required currentLength, required isFocused, maxLength}) =>
+                        {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
                     null,
               );
               final linkButton = ElevatedButton(

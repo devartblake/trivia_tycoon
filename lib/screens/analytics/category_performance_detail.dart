@@ -337,11 +337,13 @@ class _TimeAnalysisCard extends StatelessWidget {
               children: [
                 _TimeMetric(
                   label: 'Avg Time',
-                  value: '${performance.averageTimeSeconds?.toStringAsFixed(1) ?? "N/A"}s',
+                  value:
+                      '${performance.averageTimeSeconds?.toStringAsFixed(1) ?? "N/A"}s',
                 ),
                 _TimeMetric(
                   label: 'Total Time',
-                  value: '${(performance.totalTime?.toStringAsFixed(0) ?? "N/A")}s',
+                  value:
+                      '${(performance.totalTime?.toStringAsFixed(0) ?? "N/A")}s',
                 ),
               ],
             ),
@@ -395,13 +397,15 @@ class _ImprovementSuggestions extends StatelessWidget {
     final accuracy = performance.accuracy;
 
     if (accuracy < 0.6) {
-      suggestions.add('Your accuracy is below 60%. Consider practicing more questions in this category.');
+      suggestions.add(
+          'Your accuracy is below 60%. Consider practicing more questions in this category.');
     } else if (accuracy < 0.75) {
       suggestions.add('Keep practicing to improve your accuracy to 75%+.');
     }
 
     if (performance.totalQuestions < 10) {
-      suggestions.add('Answer more questions to get a better understanding of this category.');
+      suggestions.add(
+          'Answer more questions to get a better understanding of this category.');
     }
 
     if (suggestions.isEmpty) {

@@ -329,7 +329,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin/content',
             name: 'admin-content',
-            builder: (context, state) => const AdminDashboardScreen(), // Placeholder - redirects to main admin dashboard
+            builder: (context, state) =>
+                const AdminDashboardScreen(), // Placeholder - redirects to main admin dashboard
           ),
           GoRoute(
             path: '/admin/analytics',
@@ -607,7 +608,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/weekly-rewards',
         name: 'weekly-rewards',
-        builder: (context, state) => const MissionsScreen(), // Placeholder - shows weekly rewards
+        builder: (context, state) =>
+            const MissionsScreen(), // Placeholder - shows weekly rewards
       ),
       GoRoute(path: '/invite', builder: (context, state) => InviteScreen()),
       // Add this route to test:
@@ -920,7 +922,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/multiplayer/challenge/:id',
         name: 'multiplayer-challenge',
-        builder: (context, state) => const ChallengeScreen(), // Placeholder - challenge details
+        builder: (context, state) =>
+            const ChallengeScreen(), // Placeholder - challenge details
         redirect: (context, state) => featureFlagGuard(context, state,
             isEnabled: (FeatureFlags f) => f.realtimeMultiplayerEnabled),
       ),
@@ -1360,7 +1363,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/confetti-theme-editor',
         name: 'confetti-theme-editor',
-        builder: (context, state) => const ConfettiSettings(), // Placeholder - confetti theme customization
+        builder: (context, state) =>
+            const ConfettiSettings(), // Placeholder - confetti theme customization
       ),
       GoRoute(
         path: '/color-settings',

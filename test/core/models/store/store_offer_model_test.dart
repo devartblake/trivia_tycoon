@@ -47,7 +47,8 @@ void main() {
     });
 
     test('prefers sku over id', () {
-      expect(OfferItem.fromJson(makeJson(sku: 'sku_1', id: 'id_1')).id, 'sku_1');
+      expect(
+          OfferItem.fromJson(makeJson(sku: 'sku_1', id: 'id_1')).id, 'sku_1');
     });
 
     test('tab defaults to "Limited Time" when absent', () {
@@ -74,7 +75,8 @@ void main() {
     });
 
     test('parses price from legacy price field', () {
-      expect(OfferItem.fromJson(makeJson(id: 'x', price: '9.99')).price, '9.99');
+      expect(
+          OfferItem.fromJson(makeJson(id: 'x', price: '9.99')).price, '9.99');
     });
 
     test('parses originalPrice', () {
@@ -124,7 +126,8 @@ void main() {
     });
 
     test('parses tier', () {
-      expect(OfferItem.fromJson(makeJson(id: 'x', tier: 'elite')).tier, 'elite');
+      expect(
+          OfferItem.fromJson(makeJson(id: 'x', tier: 'elite')).tier, 'elite');
     });
 
     test('tier is null when absent', () {
@@ -193,8 +196,8 @@ void main() {
         };
 
     test('parses badgeText', () {
-      expect(
-          FeaturedOffer.fromJson(makeJson(badgeText: 'SALE')).badgeText, 'SALE');
+      expect(FeaturedOffer.fromJson(makeJson(badgeText: 'SALE')).badgeText,
+          'SALE');
     });
 
     test('badgeText defaults to "SALE" when absent', () {
@@ -215,13 +218,14 @@ void main() {
 
     test('parses description', () {
       expect(
-          FeaturedOffer.fromJson(makeJson(description: 'Great value')).description,
+          FeaturedOffer.fromJson(makeJson(description: 'Great value'))
+              .description,
           'Great value');
     });
 
     test('parses expiresAt', () {
-      final o =
-          FeaturedOffer.fromJson(makeJson(expiresAt: '2025-12-25T00:00:00.000Z'));
+      final o = FeaturedOffer.fromJson(
+          makeJson(expiresAt: '2025-12-25T00:00:00.000Z'));
       expect(o.expiresAt, isNotNull);
       expect(o.expiresAt!.month, 12);
     });

@@ -9,9 +9,11 @@ void main() {
 
   group('SynaptixLabels.surface', () {
     test('leaderboard: kids→Top Players, teen→Arena, adult→Arena', () {
-      expect(SynaptixLabels.surface('leaderboard', SynaptixMode.kids), 'Top Players');
+      expect(SynaptixLabels.surface('leaderboard', SynaptixMode.kids),
+          'Top Players');
       expect(SynaptixLabels.surface('leaderboard', SynaptixMode.teen), 'Arena');
-      expect(SynaptixLabels.surface('leaderboard', SynaptixMode.adult), 'Arena');
+      expect(
+          SynaptixLabels.surface('leaderboard', SynaptixMode.adult), 'Arena');
     });
 
     test('arcade: all modes → Labs', () {
@@ -21,13 +23,17 @@ void main() {
     });
 
     test('skill_tree: kids→Pathways, teen→Neural Pathways, adult→Pathways', () {
-      expect(SynaptixLabels.surface('skill_tree', SynaptixMode.kids), 'Pathways');
-      expect(SynaptixLabels.surface('skill_tree', SynaptixMode.teen), 'Neural Pathways');
-      expect(SynaptixLabels.surface('skill_tree', SynaptixMode.adult), 'Pathways');
+      expect(
+          SynaptixLabels.surface('skill_tree', SynaptixMode.kids), 'Pathways');
+      expect(SynaptixLabels.surface('skill_tree', SynaptixMode.teen),
+          'Neural Pathways');
+      expect(
+          SynaptixLabels.surface('skill_tree', SynaptixMode.adult), 'Pathways');
     });
 
     test('profile: kids→My Journey, teen→Journey, adult→Journey', () {
-      expect(SynaptixLabels.surface('profile', SynaptixMode.kids), 'My Journey');
+      expect(
+          SynaptixLabels.surface('profile', SynaptixMode.kids), 'My Journey');
       expect(SynaptixLabels.surface('profile', SynaptixMode.teen), 'Journey');
       expect(SynaptixLabels.surface('profile', SynaptixMode.adult), 'Journey');
     });
@@ -41,13 +47,15 @@ void main() {
     test('admin: kids→Command, teen→Command, adult→Synaptix Command', () {
       expect(SynaptixLabels.surface('admin', SynaptixMode.kids), 'Command');
       expect(SynaptixLabels.surface('admin', SynaptixMode.teen), 'Command');
-      expect(SynaptixLabels.surface('admin', SynaptixMode.adult), 'Synaptix Command');
+      expect(SynaptixLabels.surface('admin', SynaptixMode.adult),
+          'Synaptix Command');
     });
 
     test('unknown key returns raw internalName', () {
       // For a known key, teen fallback is the teen value itself (covered above)
       // For an unknown key, returns raw internalName
-      expect(SynaptixLabels.surface('unknown_surface', SynaptixMode.kids), 'unknown_surface');
+      expect(SynaptixLabels.surface('unknown_surface', SynaptixMode.kids),
+          'unknown_surface');
     });
 
     test('unknown key with any mode returns the raw internal name', () {
@@ -112,13 +120,16 @@ void main() {
 
     test('gems: kids→Shards, teen→Synapse Shards, adult→Synapse Shards', () {
       expect(SynaptixLabels.economy('gems', SynaptixMode.kids), 'Shards');
-      expect(SynaptixLabels.economy('gems', SynaptixMode.teen), 'Synapse Shards');
-      expect(SynaptixLabels.economy('gems', SynaptixMode.adult), 'Synapse Shards');
+      expect(
+          SynaptixLabels.economy('gems', SynaptixMode.teen), 'Synapse Shards');
+      expect(
+          SynaptixLabels.economy('gems', SynaptixMode.adult), 'Synapse Shards');
     });
 
     test('energy: kids→Focus, teen→Cognitive Energy, adult→Focus', () {
       expect(SynaptixLabels.economy('energy', SynaptixMode.kids), 'Focus');
-      expect(SynaptixLabels.economy('energy', SynaptixMode.teen), 'Cognitive Energy');
+      expect(SynaptixLabels.economy('energy', SynaptixMode.teen),
+          'Cognitive Energy');
       expect(SynaptixLabels.economy('energy', SynaptixMode.adult), 'Focus');
     });
 
@@ -140,14 +151,20 @@ void main() {
       }
     });
 
-    test('daily_bonus: kids→Daily Reward, teen→Daily Signal, adult→Daily Reward', () {
-      expect(SynaptixLabels.economy('daily_bonus', SynaptixMode.kids), 'Daily Reward');
-      expect(SynaptixLabels.economy('daily_bonus', SynaptixMode.teen), 'Daily Signal');
-      expect(SynaptixLabels.economy('daily_bonus', SynaptixMode.adult), 'Daily Reward');
+    test(
+        'daily_bonus: kids→Daily Reward, teen→Daily Signal, adult→Daily Reward',
+        () {
+      expect(SynaptixLabels.economy('daily_bonus', SynaptixMode.kids),
+          'Daily Reward');
+      expect(SynaptixLabels.economy('daily_bonus', SynaptixMode.teen),
+          'Daily Signal');
+      expect(SynaptixLabels.economy('daily_bonus', SynaptixMode.adult),
+          'Daily Reward');
     });
 
     test('unknown economy term returns raw internal name', () {
-      expect(SynaptixLabels.economy('unknown_term', SynaptixMode.teen), 'unknown_term');
+      expect(SynaptixLabels.economy('unknown_term', SynaptixMode.teen),
+          'unknown_term');
     });
   });
 }

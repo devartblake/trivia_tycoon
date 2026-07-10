@@ -29,11 +29,13 @@ class TierConfigCache {
 
     // Check memory cache
     if (_isMemoryCacheValid(cacheKey)) {
-      LogManager.debug('[TierConfigCache] Memory cache hit for tier definitions');
+      LogManager.debug(
+          '[TierConfigCache] Memory cache hit for tier definitions');
       return _getMemoryCachedTiers(cacheKey);
     }
 
-    LogManager.debug('[TierConfigCache] Memory cache miss for tier definitions');
+    LogManager.debug(
+        '[TierConfigCache] Memory cache miss for tier definitions');
 
     try {
       // Fetch from API
@@ -44,7 +46,8 @@ class TierConfigCache {
 
       // TODO: Store in disk cache (Phase 2.2.2)
 
-      LogManager.debug('[TierConfigCache] Fetched ${tiers.length} tier definitions from API');
+      LogManager.debug(
+          '[TierConfigCache] Fetched ${tiers.length} tier definitions from API');
       return tiers;
     } catch (e) {
       LogManager.error(
@@ -62,7 +65,8 @@ class TierConfigCache {
 
     // Check memory cache
     if (_isMemoryCacheValid(cacheKey, ttl: _playerProgressTtl)) {
-      LogManager.debug('[TierConfigCache] Memory cache hit for player progress');
+      LogManager.debug(
+          '[TierConfigCache] Memory cache hit for player progress');
       return _getMemoryCachedProgress(cacheKey);
     }
 
@@ -77,7 +81,8 @@ class TierConfigCache {
 
       // TODO: Store in disk cache if needed
 
-      LogManager.debug('[TierConfigCache] Fetched player progress for user=$userId');
+      LogManager.debug(
+          '[TierConfigCache] Fetched player progress for user=$userId');
       return progress;
     } catch (e) {
       LogManager.error(
@@ -90,7 +95,8 @@ class TierConfigCache {
   }
 
   /// Award XP to player
-  Future<XpAwardResult> awardXp(String userId, int amount, String reason) async {
+  Future<XpAwardResult> awardXp(
+      String userId, int amount, String reason) async {
     try {
       LogManager.debug('[TierConfigCache] Awarding $amount XP to user=$userId');
 
@@ -113,9 +119,8 @@ class TierConfigCache {
 
   /// Get cache statistics
   Map<String, dynamic> getCacheStats() {
-    final ttlExpiredCount = _cacheTimestamps.entries
-        .where((e) => _isExpired(e.value))
-        .length;
+    final ttlExpiredCount =
+        _cacheTimestamps.entries.where((e) => _isExpired(e.value)).length;
 
     return {
       'totalItems': _memoryCache.length,

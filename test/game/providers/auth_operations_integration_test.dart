@@ -63,7 +63,8 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('AuthOperations.trySilentGameLogin', () {
-    test('returns false when game platform silent sign-in returns null', () async {
+    test('returns false when game platform silent sign-in returns null',
+        () async {
       final container = ProviderContainer(
         overrides: [
           gamePlatformAuthServiceProvider

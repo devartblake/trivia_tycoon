@@ -450,7 +450,8 @@ class AdaptedQuizNotifier extends StateNotifier<AdaptedQuizState> {
       newScore++;
 
       // Calculate XP based on difficulty and time
-      xpGained = _calculateXP(currentQuestion.difficulty.value, state.timeRemaining);
+      xpGained =
+          _calculateXP(currentQuestion.difficulty.value, state.timeRemaining);
 
       // Calculate rewards
       coinsGained = _calculateCoins(currentQuestion.difficulty.value);

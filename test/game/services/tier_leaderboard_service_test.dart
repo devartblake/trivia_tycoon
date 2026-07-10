@@ -31,7 +31,8 @@ void main() {
         mockTierProgressionService.setTierProgress(bronzeTier);
 
         // Act
-        final multiplier = await tierLeaderboardService.getScoreMultiplier('user1');
+        final multiplier =
+            await tierLeaderboardService.getScoreMultiplier('user1');
 
         // Assert
         expect(multiplier, 1.0);
@@ -52,7 +53,8 @@ void main() {
         mockTierProgressionService.setTierProgress(goldTier);
 
         // Act
-        final multiplier = await tierLeaderboardService.getScoreMultiplier('user1');
+        final multiplier =
+            await tierLeaderboardService.getScoreMultiplier('user1');
 
         // Assert
         expect(multiplier, 1.25);
@@ -67,13 +69,15 @@ void main() {
           minXp: 20000,
           maxXp: 50000,
           iconName: 'grandmaster',
-          rewards: TierReward(badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
+          rewards: TierReward(
+              badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
         );
 
         mockTierProgressionService.setTierProgress(grandmasterTier);
 
         // Act
-        final multiplier = await tierLeaderboardService.getScoreMultiplier('user1');
+        final multiplier =
+            await tierLeaderboardService.getScoreMultiplier('user1');
 
         // Assert
         expect(multiplier, 2.5);
@@ -96,7 +100,8 @@ void main() {
         mockTierProgressionService.setTierProgress(silverTier);
 
         // Act
-        final score = await tierLeaderboardService.applyTierMultiplier('user1', 1000);
+        final score =
+            await tierLeaderboardService.applyTierMultiplier('user1', 1000);
 
         // Assert: 1000 × 1.1 = 1100
         expect(score, 1100);
@@ -117,7 +122,8 @@ void main() {
         mockTierProgressionService.setTierProgress(platinumTier);
 
         // Act: 777 × 1.5 = 1165.5 → rounds to 1166
-        final score = await tierLeaderboardService.applyTierMultiplier('user1', 777);
+        final score =
+            await tierLeaderboardService.applyTierMultiplier('user1', 777);
 
         // Assert
         expect(score, 1166);
@@ -176,7 +182,8 @@ void main() {
           minXp: 20000,
           maxXp: 50000,
           iconName: 'grandmaster',
-          rewards: TierReward(badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
+          rewards: TierReward(
+              badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
         );
 
         mockTierProgressionService.setTierProgress(grandmasterTier);
@@ -205,7 +212,8 @@ void main() {
         mockTierProgressionService.setTierProgress(platinumTier);
 
         // Act: 1000 × 1.5 + 200 = 1500 + 200 = 1700
-        final score = await tierLeaderboardService.calculateLeaderboardScore('user1', 1000);
+        final score = await tierLeaderboardService.calculateLeaderboardScore(
+            'user1', 1000);
 
         // Assert
         expect(score, 1700);
@@ -226,7 +234,8 @@ void main() {
         mockTierProgressionService.setTierProgress(diamondTier);
 
         // Act
-        final breakdown = await tierLeaderboardService.getScoreBreakdown('user1', 1000);
+        final breakdown =
+            await tierLeaderboardService.getScoreBreakdown('user1', 1000);
 
         // Assert
         expect(breakdown.baseScore, 1000);
@@ -252,7 +261,8 @@ void main() {
         );
 
         mockTierProgressionService.setTierProgress(baseTier);
-        final baseScore = await tierLeaderboardService.calculateLeaderboardScore('user1', 1000);
+        final baseScore = await tierLeaderboardService
+            .calculateLeaderboardScore('user1', 1000);
 
         final advancedTier = TierDefinition(
           id: 'gold-master',
@@ -265,8 +275,8 @@ void main() {
         );
 
         mockTierProgressionService.setTierProgress(advancedTier);
-        final advancedScore =
-            await tierLeaderboardService.calculateLeaderboardScore('user1', 1000);
+        final advancedScore = await tierLeaderboardService
+            .calculateLeaderboardScore('user1', 1000);
 
         // Assert
         expect(advancedScore, greaterThan(baseScore));
@@ -291,7 +301,8 @@ void main() {
     group('Tier Multiplier Info', () {
       test('Gets multiplier for specific tier', () {
         // Act
-        final multiplier = TierLeaderboardService.getTierMultiplier('platinum-elite');
+        final multiplier =
+            TierLeaderboardService.getTierMultiplier('platinum-elite');
 
         // Assert
         expect(multiplier, 1.5);
@@ -299,7 +310,8 @@ void main() {
 
       test('Returns null for invalid tier', () {
         // Act
-        final multiplier = TierLeaderboardService.getTierMultiplier('invalid-tier');
+        final multiplier =
+            TierLeaderboardService.getTierMultiplier('invalid-tier');
 
         // Assert
         expect(multiplier, isNull);
@@ -332,8 +344,10 @@ void main() {
         mockTierProgressionService.setTierProgress(goldTier);
 
         // Act
-        final multiplier1 = await tierLeaderboardService.getScoreMultiplier('user1');
-        final multiplier2 = await tierLeaderboardService.getScoreMultiplier('user1');
+        final multiplier1 =
+            await tierLeaderboardService.getScoreMultiplier('user1');
+        final multiplier2 =
+            await tierLeaderboardService.getScoreMultiplier('user1');
 
         // Assert
         expect(multiplier1, multiplier2);

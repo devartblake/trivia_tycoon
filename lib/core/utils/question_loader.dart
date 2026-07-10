@@ -21,8 +21,9 @@ class QuestionLoader {
 
         // Optional: filter by difficulty
         if (difficultyFilter != null) {
-          questions =
-              questions.where((q) => q.difficulty.value == difficultyFilter).toList();
+          questions = questions
+              .where((q) => q.difficulty.value == difficultyFilter)
+              .toList();
         }
 
         if (shuffle) {

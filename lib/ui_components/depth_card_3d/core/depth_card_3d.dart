@@ -214,8 +214,8 @@ class _DepthCard3DState extends State<DepthCard3D> {
   }
 
   Widget _buildFallback() => const Center(
-    child: Icon(Icons.view_in_ar_outlined, color: Colors.white54, size: 48),
-  );
+        child: Icon(Icons.view_in_ar_outlined, color: Colors.white54, size: 48),
+      );
 
   void _onModelError(String err, String path) {
     LogManager.debug('DepthCard3D: model load error for $path — $err');

@@ -78,8 +78,7 @@ class EncryptedApiClient {
       final sequence = secureSession.nextSequence;
       final replayNonce = base64Url.encode(_randomBytes(16));
       final encryptedAtUtc = DateTime.now().toUtc().toIso8601String();
-      final pathAndQuery =
-          uri.hasQuery ? '${uri.path}?${uri.query}' : uri.path;
+      final pathAndQuery = uri.hasQuery ? '${uri.path}?${uri.query}' : uri.path;
 
       final context = SecureRequestContext(
         method: method,

@@ -890,9 +890,7 @@ class ApiService {
           ? data
           : (data is Map ? (data['data'] ?? data['items']) as List? : null) ??
               const [];
-      return list
-          .map((e) => ChampionEvent.fromJson(_asJsonMap(e)))
-          .toList();
+      return list.map((e) => ChampionEvent.fromJson(_asJsonMap(e))).toList();
     });
   }
 

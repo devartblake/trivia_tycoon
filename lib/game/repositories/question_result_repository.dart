@@ -28,7 +28,8 @@ class QuestionResultRepository {
     if (_box == null) return false;
 
     try {
-      final key = '${DateTime.now().millisecondsSinceEpoch}_${result.questionId}';
+      final key =
+          '${DateTime.now().millisecondsSinceEpoch}_${result.questionId}';
       await _box!.put(key, result.toJson());
 
       // Cleanup old results if exceeding max
@@ -79,7 +80,8 @@ class QuestionResultRepository {
     try {
       return _box!.values
           .map((json) => QuestionResultModel.fromJson(json))
-          .where((result) => result.category.toLowerCase() == category.toLowerCase())
+          .where((result) =>
+              result.category.toLowerCase() == category.toLowerCase())
           .toList();
     } catch (e) {
       LogManager.error('[QuestionResultRepository] Get by category error: $e');
@@ -116,7 +118,8 @@ class QuestionResultRepository {
     final totalCoins = results.fold(0, (sum, r) => sum + r.coinsEarned);
     final avgTime = results.isEmpty
         ? 0
-        : results.fold(0, (sum, r) => sum + r.timeTakenSeconds) ~/ results.length;
+        : results.fold(0, (sum, r) => sum + r.timeTakenSeconds) ~/
+            results.length;
 
     // Category breakdown
     final categoryStats = <String, CategoryStats>{};
@@ -164,7 +167,8 @@ class QuestionResultRepository {
     final totalCoins = results.fold(0, (sum, r) => sum + r.coinsEarned);
     final avgTime = results.isEmpty
         ? 0
-        : results.fold(0, (sum, r) => sum + r.timeTakenSeconds) ~/ results.length;
+        : results.fold(0, (sum, r) => sum + r.timeTakenSeconds) ~/
+            results.length;
 
     return QuestionAnalytics(
       totalAnswered: results.length,
@@ -197,7 +201,8 @@ class QuestionResultRepository {
         allKeys.sort();
 
         // Remove oldest entries, keeping _maxResults
-        final keysToRemove = allKeys.take(allKeys.length - _maxResults).toList();
+        final keysToRemove =
+            allKeys.take(allKeys.length - _maxResults).toList();
         await _box!.deleteAll(keysToRemove);
 
         LogManager.debug(

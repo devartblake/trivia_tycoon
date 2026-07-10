@@ -112,12 +112,13 @@ void main() {
     });
 
     test('parses giftName', () {
-      expect(ReceivedGift.fromJson(makeJson(giftName: 'Coins')).giftName, 'Coins');
+      expect(
+          ReceivedGift.fromJson(makeJson(giftName: 'Coins')).giftName, 'Coins');
     });
 
     test('parses icon', () {
-      expect(
-          ReceivedGift.fromJson(makeJson(icon: 'flash_on')).icon, Icons.flash_on);
+      expect(ReceivedGift.fromJson(makeJson(icon: 'flash_on')).icon,
+          Icons.flash_on);
     });
 
     test('unknown icon falls back to card_giftcard', () {
@@ -182,25 +183,29 @@ void main() {
     });
 
     test('parses name', () {
-      expect(SendableGift.fromJson(makeJson(name: 'Gem Gift')).name, 'Gem Gift');
+      expect(
+          SendableGift.fromJson(makeJson(name: 'Gem Gift')).name, 'Gem Gift');
     });
 
     test('parses description', () {
-      expect(SendableGift.fromJson(makeJson(description: '10 gems')).description,
+      expect(
+          SendableGift.fromJson(makeJson(description: '10 gems')).description,
           '10 gems');
     });
 
     test('parses icon', () {
-      expect(SendableGift.fromJson(makeJson(icon: 'diamond')).icon, Icons.diamond);
+      expect(
+          SendableGift.fromJson(makeJson(icon: 'diamond')).icon, Icons.diamond);
     });
 
     test('unknown icon falls back to card_giftcard', () {
-      expect(
-          SendableGift.fromJson(makeJson(icon: 'unk')).icon, Icons.card_giftcard);
+      expect(SendableGift.fromJson(makeJson(icon: 'unk')).icon,
+          Icons.card_giftcard);
     });
 
     test('parses cost', () {
-      expect(SendableGift.fromJson(makeJson(cost: '100 Coins')).cost, '100 Coins');
+      expect(
+          SendableGift.fromJson(makeJson(cost: '100 Coins')).cost, '100 Coins');
     });
 
     test('parses color', () {
@@ -250,8 +255,8 @@ void main() {
     });
 
     test('parses type', () {
-      expect(
-          GiftHistoryItem.fromJson(makeJson(type: 'received')).type, 'received');
+      expect(GiftHistoryItem.fromJson(makeJson(type: 'received')).type,
+          'received');
     });
 
     test('type defaults to "sent" when absent', () {
@@ -269,13 +274,14 @@ void main() {
     });
 
     test('parses giftName', () {
-      expect(GiftHistoryItem.fromJson(makeJson(giftName: '1000 Coins')).giftName,
+      expect(
+          GiftHistoryItem.fromJson(makeJson(giftName: '1000 Coins')).giftName,
           '1000 Coins');
     });
 
     test('parses status', () {
-      expect(
-          GiftHistoryItem.fromJson(makeJson(status: 'Claimed')).status, 'Claimed');
+      expect(GiftHistoryItem.fromJson(makeJson(status: 'Claimed')).status,
+          'Claimed');
     });
 
     test('parses icon', () {

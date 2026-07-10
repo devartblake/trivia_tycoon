@@ -235,7 +235,8 @@ final referralApiServiceProvider = Provider<ReferralApiService>((ref) {
 final referralServiceProvider = Provider<ReferralService>((ref) {
   final storage = ref.watch(referralStorageServiceProvider);
   final api = ref.watch(referralApiServiceProvider);
-  final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
+  final baseUrl =
+      EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
   return ReferralService(
     storage: storage,
     api: api,
@@ -249,7 +250,8 @@ final asyncReferralServiceProvider =
   final storage = ref.watch(referralStorageServiceProvider);
   final api = ref.watch(referralApiServiceProvider);
   final userId = await ref.watch(currentUserIdProvider.future);
-  final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
+  final baseUrl =
+      EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
   return ReferralService(
     storage: storage,
     api: api,

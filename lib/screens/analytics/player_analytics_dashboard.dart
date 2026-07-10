@@ -160,7 +160,8 @@ class _QuickTipsSection extends StatelessWidget {
 
     if (weakCategoriesCount > 0) {
       tips.add('Focus on improving your weak categories first');
-      tips.add('Practice $weakCategoriesCount category/categories where accuracy is low');
+      tips.add(
+          'Practice $weakCategoriesCount category/categories where accuracy is low');
     }
 
     tips.addAll([

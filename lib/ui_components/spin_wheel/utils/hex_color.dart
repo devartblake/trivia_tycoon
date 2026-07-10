@@ -1,4 +1,4 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 
 class HexColor extends Color {
   HexColor(final String hex) : super(_parseHex(hex));
@@ -15,7 +15,8 @@ class HexColor extends Color {
   }
 
   static String toHex(Color color, {bool leadingHashSign = true}) {
-    final hex = color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
+    final hex =
+        color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
     return '${leadingHashSign ? '#' : ''}$hex';
   }
 }

@@ -71,7 +71,8 @@ void main() {
     });
 
     test('delay is capped at maxDelay', () {
-      expect(noJitter.nextDelay(10), lessThanOrEqualTo(const Duration(seconds: 20)));
+      expect(noJitter.nextDelay(10),
+          lessThanOrEqualTo(const Duration(seconds: 20)));
     });
 
     test('delay is never negative across all attempts', () {

@@ -107,7 +107,8 @@ void main() {
         tierSkillService.registerSkill(skill);
 
         // Act
-        final canAccess = await tierSkillService.canAccessSkill('user1', 'free_skill');
+        final canAccess =
+            await tierSkillService.canAccessSkill('user1', 'free_skill');
 
         // Assert
         expect(canAccess, true);
@@ -172,7 +173,8 @@ void main() {
         mockTierProgressionService.setTierProgress(goldTier);
 
         // Act
-        final canAccess = await tierSkillService.canAccessSkill('user1', 'gold_skill');
+        final canAccess =
+            await tierSkillService.canAccessSkill('user1', 'gold_skill');
 
         // Assert
         expect(canAccess, true);
@@ -205,7 +207,8 @@ void main() {
         mockTierProgressionService.setTierProgress(platinumTier);
 
         // Act
-        final info = await tierSkillService.getUnlockInfo('user1', 'advanced_skill');
+        final info =
+            await tierSkillService.getUnlockInfo('user1', 'advanced_skill');
 
         // Assert
         expect(info, isNotNull);
@@ -216,7 +219,8 @@ void main() {
 
       test('Returns null for non-existent skill', () async {
         // Act
-        final info = await tierSkillService.getUnlockInfo('user1', 'nonexistent');
+        final info =
+            await tierSkillService.getUnlockInfo('user1', 'nonexistent');
 
         // Assert
         expect(info, isNull);
@@ -257,7 +261,8 @@ void main() {
         mockTierProgressionService.setTierProgress(bronzeTier);
 
         // Act
-        final unlockedSkills = await tierSkillService.getUnlockedSkills('user1');
+        final unlockedSkills =
+            await tierSkillService.getUnlockedSkills('user1');
 
         // Assert
         expect(unlockedSkills.length, 1);

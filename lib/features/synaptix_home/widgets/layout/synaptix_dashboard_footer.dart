@@ -25,7 +25,8 @@ class SynaptixDashboardFooter extends StatelessWidget {
       decoration: BoxDecoration(
         color: SynaptixHomeTheme.page.withValues(alpha: 0.78),
         border: Border(
-          top: BorderSide(color: SynaptixHomeTheme.stroke.withValues(alpha: 0.72)),
+          top: BorderSide(
+              color: SynaptixHomeTheme.stroke.withValues(alpha: 0.72)),
         ),
       ),
       child: LayoutBuilder(

@@ -186,8 +186,7 @@ void main() {
 
     test('parses subtitle', () {
       expect(
-          StoreSectionData.fromJson(sectionJson(subtitle: 'Buy gems'))
-              .subtitle,
+          StoreSectionData.fromJson(sectionJson(subtitle: 'Buy gems')).subtitle,
           'Buy gems');
     });
 
@@ -231,8 +230,7 @@ void main() {
     });
 
     test('parses badge', () {
-      expect(
-          StoreSectionData.fromJson(sectionJson(badge: 'HOT')).badge, 'HOT');
+      expect(StoreSectionData.fromJson(sectionJson(badge: 'HOT')).badge, 'HOT');
     });
 
     test('badge is null when absent', () {
@@ -317,8 +315,8 @@ void main() {
     });
 
     test('parses sku', () {
-      expect(FeaturedItemData.fromJson(featuredJson(sku: 'SKU001')).sku,
-          'SKU001');
+      expect(
+          FeaturedItemData.fromJson(featuredJson(sku: 'SKU001')).sku, 'SKU001');
     });
 
     test('sku is null when absent', () {

@@ -171,8 +171,8 @@ final spinAnalyticsProvider =
 });
 
 /// Get segment-specific analytics
-final segmentAnalyticsProvider =
-    FutureProvider.autoDispose.family<SegmentStats?, String>((ref, segmentId) async {
+final segmentAnalyticsProvider = FutureProvider.autoDispose
+    .family<SegmentStats?, String>((ref, segmentId) async {
   try {
     final apiClient = ref.watch(spinWheelApiClientProvider);
     final analytics = await apiClient.getAnalytics(segmentId: segmentId);
@@ -255,14 +255,15 @@ final spinWheelStateProvider =
 final jackpotProbabilityProvider =
     FutureProvider.autoDispose<double>((ref) async {
   final config = await ref.watch(spinProbabilityConfigProvider.future);
-  final multiplier = await ref.watch(currentProbabilityMultiplierProvider.future);
+  final multiplier =
+      await ref.watch(currentProbabilityMultiplierProvider.future);
 
   return config.baseDistribution.jackpot * multiplier;
 });
 
 /// Get segment details by ID
-final spinSegmentByIdProvider =
-    FutureProvider.autoDispose.family<WheelSegment?, String>((ref, segmentId) async {
+final spinSegmentByIdProvider = FutureProvider.autoDispose
+    .family<WheelSegment?, String>((ref, segmentId) async {
   final segments = await ref.watch(spinSegmentConfigProvider.future);
   try {
     return segments.firstWhere((s) => s.id == segmentId);

@@ -55,8 +55,8 @@ void main() {
     });
 
     test('round-trip preserves categories list', () {
-      const original = OnboardingProgress(
-          categories: ['math', 'science', 'history']);
+      const original =
+          OnboardingProgress(categories: ['math', 'science', 'history']);
       final restored = OnboardingProgress.fromMap(original.toMap());
       expect(restored.categories, ['math', 'science', 'history']);
     });
@@ -80,8 +80,7 @@ void main() {
 
     test('copyWith updates only specified fields', () {
       const original = OnboardingProgress(currentStep: 2, username: 'bob');
-      final updated =
-          original.copyWith(currentStep: 7, hasSeenIntro: true);
+      final updated = original.copyWith(currentStep: 7, hasSeenIntro: true);
       expect(updated.currentStep, 7);
       expect(updated.hasSeenIntro, isTrue);
       expect(updated.username, 'bob'); // unchanged
@@ -131,7 +130,8 @@ void main() {
       expect(box.containsKey('onboarding_complete'), isFalse);
     });
 
-    test('migrates legacy "onboarding_complete"=false without setting new key', () async {
+    test('migrates legacy "onboarding_complete"=false without setting new key',
+        () async {
       final box = await Hive.openBox('settings');
       await box.put('onboarding_complete', false);
 

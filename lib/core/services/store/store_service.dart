@@ -657,7 +657,8 @@ class StoreService {
     } on ApiRequestException catch (e) {
       if (e.statusCode == 404) {
         // Endpoint not yet deployed — silently use local catalog.
-        LogManager.debug('[StoreService] /store/catalog not found (404), using local data');
+        LogManager.debug(
+            '[StoreService] /store/catalog not found (404), using local data');
         return StoreDataService.loadStoreItems();
       }
       rethrow; // Let getAllItems() handle other failures (5xx, network errors)
@@ -704,9 +705,7 @@ class StoreService {
       }
 
       final inventory = await getInventory(playerId);
-      return inventory.items
-          .map((item) => item.itemType.toLowerCase())
-          .toSet();
+      return inventory.items.map((item) => item.itemType.toLowerCase()).toSet();
     } catch (_) {
       return <String>{};
     }

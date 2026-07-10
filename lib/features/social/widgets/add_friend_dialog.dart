@@ -159,8 +159,8 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
                                     Icon(
                                       Icons.person_off_rounded,
                                       size: 48,
-                                      color:
-                                          theme.colorScheme.secondary.withAlpha(128),
+                                      color: theme.colorScheme.secondary
+                                          .withAlpha(128),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
@@ -173,14 +173,14 @@ class _AddFriendDialogState extends ConsumerState<AddFriendDialog> {
                             )
                           : ListView.builder(
                               shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
                               itemCount: results.length,
                               itemBuilder: (context, index) {
                                 final player = results[index];
                                 return _PlayerSearchResult(
                                   player: player,
-                                  onAction: () =>
-                                      _handlePlayerAction(player),
+                                  onAction: () => _handlePlayerAction(player),
                                 );
                               },
                             ),
@@ -272,9 +272,8 @@ class _PlayerSearchResult extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: theme.colorScheme.primaryContainer,
-          backgroundImage: player.avatarUrl != null
-              ? NetworkImage(player.avatarUrl!)
-              : null,
+          backgroundImage:
+              player.avatarUrl != null ? NetworkImage(player.avatarUrl!) : null,
           child: player.avatarUrl == null
               ? Icon(
                   Icons.person_rounded,

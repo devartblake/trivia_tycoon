@@ -34,7 +34,8 @@ class SpinWheelApiClient {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final segments = (data['segments'] as List<dynamic>)
-            .map((e) => WheelSegment.fromJson(Map<String, dynamic>.from(e as Map)))
+            .map((e) =>
+                WheelSegment.fromJson(Map<String, dynamic>.from(e as Map)))
             .toList();
 
         LogManager.debug(
@@ -244,7 +245,8 @@ class ProbabilityConfig {
   factory ProbabilityConfig.fromJson(Map<String, dynamic> json) {
     return ProbabilityConfig(
       version: json['version'] ?? '1.0.0',
-      lastUpdated: DateTime.parse(json['lastUpdated'] ?? DateTime.now().toIso8601String()),
+      lastUpdated: DateTime.parse(
+          json['lastUpdated'] ?? DateTime.now().toIso8601String()),
       baseDistribution: BaseDistribution.fromJson(
         json['baseDistribution'] ?? {},
       ),
@@ -346,7 +348,8 @@ class TimeBasedAdjustment {
     return TimeBasedAdjustment(
       name: json['name'] ?? '',
       days: List<String>.from(json['days'] ?? []),
-      startDate: json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
+      startDate:
+          json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
       endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
       probabilityMultiplier: (json['probabilityMultiplier'] ?? 1.0).toDouble(),
       active: json['active'] ?? false,
@@ -380,8 +383,10 @@ class SpinAnalytics {
 
   factory SpinAnalytics.fromJson(Map<String, dynamic> json) {
     return SpinAnalytics(
-      fromDate: DateTime.parse(json['period']['from'] ?? DateTime.now().toIso8601String()),
-      toDate: DateTime.parse(json['period']['to'] ?? DateTime.now().toIso8601String()),
+      fromDate: DateTime.parse(
+          json['period']['from'] ?? DateTime.now().toIso8601String()),
+      toDate: DateTime.parse(
+          json['period']['to'] ?? DateTime.now().toIso8601String()),
       totalSpins: json['totalSpins'] ?? 0,
       segmentStats: (json['segmentStats'] as Map<String, dynamic>?)?.map(
             (key, value) => MapEntry(key, SegmentStats.fromJson(value)),

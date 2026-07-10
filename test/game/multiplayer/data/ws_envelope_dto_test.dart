@@ -108,7 +108,11 @@ void main() {
 
   group('WsEnvelopeDto.copyWith', () {
     final base = WsEnvelopeDto(
-      op: 'a', ts: 100, data: {'k': 'v'}, seq: 1, reqId: 'r',
+      op: 'a',
+      ts: 100,
+      data: {'k': 'v'},
+      seq: 1,
+      reqId: 'r',
     );
 
     test('updates op only, preserves other fields', () {

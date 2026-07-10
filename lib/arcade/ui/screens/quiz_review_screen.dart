@@ -13,7 +13,9 @@ class QuizReviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final correct = records.where((r) => r.isCorrect).length;
     final wrong = records.length - correct;
-    final accuracy = records.isEmpty ? 0 : (correct / records.length * 100).toStringAsFixed(1);
+    final accuracy = records.isEmpty
+        ? 0
+        : (correct / records.length * 100).toStringAsFixed(1);
 
     return Scaffold(
       backgroundColor: Colors.black,

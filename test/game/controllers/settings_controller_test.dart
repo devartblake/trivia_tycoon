@@ -14,8 +14,7 @@ void main() {
   late PurchaseSettingsService purchaseService;
 
   setUpAll(() async {
-    tempDir =
-        await Directory.systemTemp.createTemp('settings_controller_test');
+    tempDir = await Directory.systemTemp.createTemp('settings_controller_test');
     Hive.init(tempDir.path);
   });
 
@@ -135,6 +134,7 @@ void main() {
     final controller = makeController();
     await controller.purchaseSong('track_a.mp3');
     await controller.purchaseSong('track_b.mp3');
-    expect(controller.purchasedSongs.value, containsAll(['track_a.mp3', 'track_b.mp3']));
+    expect(controller.purchasedSongs.value,
+        containsAll(['track_a.mp3', 'track_b.mp3']));
   });
 }

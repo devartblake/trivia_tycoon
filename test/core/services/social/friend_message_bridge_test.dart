@@ -101,7 +101,8 @@ void main() {
       expect(convStorage.getConversationById('conv_user_a_user_b'), isNotNull);
     });
 
-    test('conversation ID is sorted: user_b < user_a → conv_user_a_user_b', () async {
+    test('conversation ID is sorted: user_b < user_a → conv_user_a_user_b',
+        () async {
       // Sender and recipient are sorted alphabetically
       await bridge.onFriendRequestSent(
         senderId: 'user_b',
@@ -210,7 +211,8 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('full friend request flow', () {
-    test('sent then accepted produces two messages in same conversation', () async {
+    test('sent then accepted produces two messages in same conversation',
+        () async {
       await bridge.onFriendRequestSent(
         senderId: 'user_a',
         senderName: 'Alice',

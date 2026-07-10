@@ -117,8 +117,7 @@ void main() {
     test(
         'BUG: setSegmentFetchTime writes to string literal "_lastSegmentFetchTimeKey" '
         'but getSegmentFetchTime reads from constant "lastSegmentFetchTime", '
-        'so getSegmentFetchTime always returns null after set',
-        () async {
+        'so getSegmentFetchTime always returns null after set', () async {
       final svc = makeService();
       final t = DateTime(2026, 3, 1, 10, 0, 0);
       await svc.setSegmentFetchTime(t);

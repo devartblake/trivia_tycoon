@@ -42,8 +42,7 @@ class PartyRosterDto {
 
   factory PartyRosterDto.fromJson(Map<String, dynamic> j) => PartyRosterDto(
         partyId: (j['partyId'] ?? j['PartyId']) as String,
-        leaderPlayerId:
-            (j['leaderPlayerId'] ?? j['LeaderPlayerId']) as String,
+        leaderPlayerId: (j['leaderPlayerId'] ?? j['LeaderPlayerId']) as String,
         status: (j['status'] ?? j['Status']) as String? ?? 'Open',
         members: ((j['members'] ?? j['Members']) as List<dynamic>? ?? const [])
             .cast<Map<String, dynamic>>()

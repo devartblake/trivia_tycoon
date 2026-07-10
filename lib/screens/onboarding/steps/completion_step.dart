@@ -174,7 +174,8 @@ class _CompletionStepState extends State<CompletionStep>
                 const SizedBox(height: 32),
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child: _buildSummaryCard(context, theme, username, categories),
+                  child:
+                      _buildSummaryCard(context, theme, username, categories),
                 ),
                 const SizedBox(height: 32),
                 FadeTransition(
@@ -265,8 +266,8 @@ class _CompletionStepState extends State<CompletionStep>
                 runSpacing: 6,
                 children: categories.take(5).map((cat) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(8),

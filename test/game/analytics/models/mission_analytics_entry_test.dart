@@ -92,7 +92,11 @@ void main() {
 
   group('MissionAnalyticsEntry.toJson', () {
     test('serialises all five fields', () {
-      final e = _entry(missionsCompleted: 7, missionsSwapped: 1, xpEarned: 300, userType: 'premium');
+      final e = _entry(
+          missionsCompleted: 7,
+          missionsSwapped: 1,
+          xpEarned: 300,
+          userType: 'premium');
       final json = e.toJson();
       expect(json['missionsCompleted'], 7);
       expect(json['missionsSwapped'], 1);

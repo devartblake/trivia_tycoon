@@ -3,7 +3,8 @@ import 'package:trivia_tycoon/game/models/seasonal_competition_model.dart';
 
 void main() {
   group('SeasonPlayer.fromJson', () {
-    test('parses a backend season leaderboard entry '
+    test(
+        'parses a backend season leaderboard entry '
         '(GET /seasons/{id}/leaderboard item shape)', () {
       final player = SeasonPlayer.fromJson({
         'rank': 3,

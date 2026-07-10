@@ -76,16 +76,15 @@ class _AnswerOptionCardState extends State<AnswerOptionCard> {
               duration: const Duration(milliseconds: 160),
               width: double.infinity,
               constraints: const BoxConstraints(minHeight: 56),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(14),
                 border: border,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black
-                        .withValues(alpha: _pressed ? 0.10 : 0.22),
+                    color:
+                        Colors.black.withValues(alpha: _pressed ? 0.10 : 0.22),
                     blurRadius: _pressed ? 3 : 6,
                     offset: Offset(0, _pressed ? 1 : 3),
                   ),

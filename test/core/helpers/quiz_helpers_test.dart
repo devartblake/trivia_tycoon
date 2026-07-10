@@ -148,7 +148,8 @@ void main() {
     });
 
     test('technology → Colors.indigo.shade600', () {
-      expect(QuizHelpers.getCategoryColor('technology'), Colors.indigo.shade600);
+      expect(
+          QuizHelpers.getCategoryColor('technology'), Colors.indigo.shade600);
     });
 
     test('unknown category → Colors.grey.shade600', () {

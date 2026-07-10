@@ -70,8 +70,9 @@ class _ComprehensiveLeaderboardScreenState
         var entries = response.items;
         if (_searchQuery != null && _searchQuery!.isNotEmpty) {
           entries = entries
-              .where((e) =>
-                  e.playerId.toLowerCase().contains(_searchQuery!.toLowerCase()))
+              .where((e) => e.playerId
+                  .toLowerCase()
+                  .contains(_searchQuery!.toLowerCase()))
               .toList();
         }
 
@@ -152,8 +153,7 @@ class _ComprehensiveLeaderboardScreenState
                 _selectedTier = tier;
                 _currentPage = 1;
               }),
-              onDateRangeChanged: (range) =>
-                  setState(() => _dateRange = range),
+              onDateRangeChanged: (range) => setState(() => _dateRange = range),
               onSearchChanged: (query) => setState(() {
                 _searchQuery = query;
                 _currentPage = 1;
@@ -211,9 +211,8 @@ class _ComprehensiveLeaderboardScreenState
             total: data.total,
             pageSize: data.pageSize,
             seasonId: data.seasonId,
-            onPrevPage: data.page > 1
-                ? () => setState(() => _currentPage--)
-                : null,
+            onPrevPage:
+                data.page > 1 ? () => setState(() => _currentPage--) : null,
             onNextPage: (data.page * data.pageSize) < data.total
                 ? () => setState(() => _currentPage++)
                 : null,
@@ -256,9 +255,8 @@ class _ComprehensiveLeaderboardScreenState
                                         .titleMedium),
                                 const Spacer(),
                                 Text('RP: ${entry.rankPoints}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall),
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall),
                               ],
                             ),
                             const SizedBox(height: 8),
@@ -294,9 +292,8 @@ class _ComprehensiveLeaderboardScreenState
               ),
               const Spacer(),
               FilledButton.tonal(
-                onPressed: data.page > 1
-                    ? () => setState(() => _currentPage--)
-                    : null,
+                onPressed:
+                    data.page > 1 ? () => setState(() => _currentPage--) : null,
                 child: const Text('← Prev'),
               ),
               const SizedBox(width: 8),
