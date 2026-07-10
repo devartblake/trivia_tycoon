@@ -19,6 +19,7 @@ import '../../core/services/tier_api_client.dart';
 import '../../core/state/flow_connect_state_notifier.dart';
 import '../../game/data/mission_data_loader.dart';
 import '../../game/models/badge.dart';
+import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/models/tier_model.dart';
 import '../../game/services/flow_connect_level_generator.dart';
@@ -112,6 +113,21 @@ final seasonLeaderboardProvider =
   final seasonService = ref.read(seasonalCompetitionServiceProvider);
   final seasonId = await seasonService.getCurrentSeasonId();
   return await apiService.getSeasonLeaderboard(seasonId);
+});
+
+/// The authenticated player's pending end-of-season tie-breakers
+/// (GET /seasons/tiebreakers/mine). Resolves to an empty list on any
+/// failure — including an unreachable backend — so UI can simply hide
+/// the banner.
+final myTiebreakersProvider =
+    FutureProvider<List<SeasonTiebreaker>>((ref) async {
+  final apiService = ref.read(apiServiceProvider);
+  try {
+    final tiebreakers = await apiService.getMyTiebreakers();
+    return tiebreakers.where((t) => t.isPending).toList();
+  } catch (_) {
+    return const [];
+  }
 });
 
 // ---------------------------------------------------------------------------

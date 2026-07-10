@@ -122,25 +122,7 @@ class SeasonalCompetitionService {
     );
   }
 
-  /// Schedule tiebreaker quiz
-  Future<void> scheduleTiebreaker(List<SeasonPlayer> tiedPlayers) async {
-    final tiebreakerTime = DateTime.now().add(const Duration(hours: 2));
-
-    await _apiService.scheduleTiebreakerQuiz(
-      players: tiedPlayers.map((p) => p.playerId).toList(),
-      scheduledTime: tiebreakerTime,
-    );
-
-    // Notify players about tiebreaker
-    for (final player in tiedPlayers) {
-      await _notifyPlayerOfTiebreaker(player, tiebreakerTime);
-    }
-  }
-
-  /// Notify player of tiebreaker requirement
-  Future<void> _notifyPlayerOfTiebreaker(
-      SeasonPlayer player, DateTime time) async {
-    // Implementation would send push notification or in-app notification
-    LogManager.debug('Tiebreaker scheduled for ${player.playerName} at $time');
-  }
+  /// Tiebreaker scheduling is server-side: the backend detects contested
+  /// ranks at season close, schedules the match, and notifies the players.
+  /// The client surfaces them via ApiService.getMyTiebreakers().
 }

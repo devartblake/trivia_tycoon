@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import 'package:trivia_tycoon/core/env.dart';
+import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 import 'package:trivia_tycoon/core/manager/log_manager.dart';
@@ -618,6 +619,13 @@ class ApiService {
     }
     if (path == '/account' || path.startsWith('/account/')) return true;
 
+    // Tiebreakers are caller-scoped; the leaderboard is public but returns
+    // the caller's own off-page rank ("me") when a bearer token is present.
+    if (path.startsWith('/seasons/') &&
+        (path.contains('/tiebreakers') || path.endsWith('/leaderboard'))) {
+      return true;
+    }
+
     // User-scoped/profile endpoints also require auth headers and token refresh handling.
     if (path == '/users/me' || path.startsWith('/users/me/')) return true;
     if (path == '/users/search' || path.startsWith('/users/search/')) {
@@ -842,22 +850,22 @@ class ApiService {
         .toList();
   }
 
-  @Deprecated('No such backend endpoint; season resets are server-side '
-      'lifecycle operations (AdminSeasons lives under /admin, outside /api/v1, '
-      'and has no reset-player route). This call always fails.')
-  Future<void> resetPlayerSeasonPoints(String playerId) async {
-    await post('/admin/seasons/reset-player', body: {'playerId': playerId});
-  }
-
-  @Deprecated('No such backend endpoint (see resetPlayerSeasonPoints). '
-      'This call always fails.')
-  Future<void> scheduleTiebreakerQuiz({
-    required List<String> players,
-    required DateTime scheduledTime,
-  }) async {
-    await post('/admin/seasons/schedule-tiebreaker', body: {
-      'players': players,
-      'scheduledTime': scheduledTime.toIso8601String(),
-    });
+  /// **🔹 My Season Tiebreakers**
+  /// GET /seasons/tiebreakers/mine — the authenticated player's pending
+  /// end-of-season tie-breakers. Detection, scheduling and resolution are
+  /// server-side; the client only surfaces them and deep-links into the
+  /// match flow (mode 'tiebreaker').
+  ///
+  /// Replaces the old client-driven `resetPlayerSeasonPoints` /
+  /// `scheduleTiebreakerQuiz` methods, which called routes that never
+  /// existed — resets happen at season close (carryover) or via the admin
+  /// moderation route, and tiebreakers are scheduled by the backend when a
+  /// season closes with a contested rank.
+  Future<List<SeasonTiebreaker>> getMyTiebreakers() async {
+    final response = await get('/seasons/tiebreakers/mine');
+    final items = response['items'] as List? ?? [];
+    return items
+        .map((item) => SeasonTiebreaker.fromJson(item as Map<String, dynamic>))
+        .toList();
   }
 }

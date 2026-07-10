@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
+import 'package:trivia_tycoon/screens/leaderboard/widgets/tiebreaker_banner.dart';
 import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
 import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
 import '../../core/animations/animation_manager.dart';
@@ -195,6 +196,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           padding: padding,
           child: Column(
             children: [
+              const TiebreakerBanner(),
               _buildTierHeader(),
               const SizedBox(height: 24),
               if (layout.isDesktop)
@@ -623,6 +625,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                   ref.read(seasonalCompetitionServiceProvider);
               final result = await seasonService.endSeason();
               ref.invalidate(seasonLeaderboardProvider);
+              ref.invalidate(myTiebreakersProvider);
               if (!context.mounted) return;
               if (result.hasTiebreakers) {
                 _showTiebreakerDialog(context, result.tiebreakers);
@@ -675,23 +678,20 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('Tiebreaker Required'),
-        content: Column(
+        content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-                'Multiple players are tied for the final promotion spots.'),
-            const SizedBox(height: 16),
-            const Text(
-                'A tiebreaker quiz has been scheduled. You have 2 hours to participate or you will be automatically eliminated.'),
+            Text('Multiple players are tied for the final promotion spots.'),
+            SizedBox(height: 16),
+            Text('If you are one of them, the server has scheduled a '
+                'tie-breaker match for you — check the banner on this screen '
+                'or your notifications for the match time.'),
           ],
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Navigate to tiebreaker quiz
-            },
-            child: const Text('Join Tiebreaker'),
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Got it'),
           ),
         ],
       ),
