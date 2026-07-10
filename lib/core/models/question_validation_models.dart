@@ -38,12 +38,16 @@ class QuizXpAward {
     required this.totalXp,
     required this.tierUpgraded,
     this.newTierId,
+    this.seasonPointsAwarded = 0,
   });
 
   final double xpAwarded;
   final double totalXp;
   final bool tierUpgraded;
   final String? newTierId;
+
+  /// Season rank points earned by this quiz session (server-capped per day).
+  final int seasonPointsAwarded;
 
   static QuizXpAward? fromJson(Object? json) {
     if (json is! Map) return null;
@@ -53,6 +57,7 @@ class QuizXpAward {
       totalXp: (map['totalXp'] as num?)?.toDouble() ?? 0,
       tierUpgraded: (map['tierUpgraded'] as bool?) ?? false,
       newTierId: map['newTierId']?.toString(),
+      seasonPointsAwarded: (map['seasonPointsAwarded'] as num?)?.toInt() ?? 0,
     );
   }
 }

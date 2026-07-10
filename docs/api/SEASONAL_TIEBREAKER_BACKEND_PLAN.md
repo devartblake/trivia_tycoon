@@ -1,7 +1,7 @@
 # Seasonal Events & Tie-breaker — Backend Route Plan
 
 **Date:** 2026-07-09
-**Status:** 🚧 Phase A implemented (2026-07-09) — backend branch `claude/season-leaderboard` adds both leaderboard routes; client re-wired (`getSeasonLeaderboard` un-deprecated, `SeasonPlayer` maps the new entry shape). Phases B–E remain proposed pending the §5 decisions.
+**Status:** ✅ Phases A–E implemented (2026-07-10) on backend branch `claude/season-leaderboard` + this repo. §5 decisions (confirmed by owner): balanced point formula with a 50/day solo cap; tie detection at rank 1 + promotion cutoffs only; 24h snapshot deferral with real stakes; auto-scheduling at close with admin override. Implementation notes vs. this plan: match-point accrual already existed (`SubmitMatch` + `RankedSeasonOptions`, win 30 + correct/2 — kept as-is rather than the proposed 25/10/5, since it is live behavior and already satisfies "multiplayer out-earns solo"); the solo daily cap is computed from the `SeasonPointTransaction` ledger (no schema change); tiebreaker resolution also has an admin lever (`POST /admin/seasons/tiebreakers/{id}/resolve`).
 **Motivation:** Four client methods (`submitScore`, `getSeasonLeaderboard`, `resetPlayerSeasonPoints`, `scheduleTiebreakerQuiz`) were part of the seasonal-events and multiplayer tie-breaker design but call routes that never shipped. They are currently `@Deprecated` in `ApiService`. This plan restores the features properly — server-authoritative, on the data model the backend already has.
 
 ---
