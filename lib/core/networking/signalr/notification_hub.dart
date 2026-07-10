@@ -26,6 +26,10 @@ class NotificationHub extends HubClientBase {
       StreamController<ChampionRoundResolvedDto>.broadcast();
   final _championMatchEnded =
       StreamController<ChampionMatchEndedDto>.broadcast();
+  final _championDuelStarted =
+      StreamController<ChampionDuelStartedDto>.broadcast();
+  final _championDuelResolved =
+      StreamController<ChampionDuelResolvedDto>.broadcast();
 
   Stream<PlayerNotificationDto> get playerNotifications =>
       _playerNotifications.stream;
@@ -44,6 +48,10 @@ class NotificationHub extends HubClientBase {
       _championRoundResolved.stream;
   Stream<ChampionMatchEndedDto> get championMatchEnded =>
       _championMatchEnded.stream;
+  Stream<ChampionDuelStartedDto> get championDuelStarted =>
+      _championDuelStarted.stream;
+  Stream<ChampionDuelResolvedDto> get championDuelResolved =>
+      _championDuelResolved.stream;
 
   @override
   void registerHandlers(HubConnection connection) {
@@ -116,6 +124,20 @@ class NotificationHub extends HubClientBase {
         _championMatchEnded.add(ChampionMatchEndedDto.fromJson(raw));
       }
     });
+
+    connection.on('ChampionDuelStarted', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championDuelStarted.add(ChampionDuelStartedDto.fromJson(raw));
+      }
+    });
+
+    connection.on('ChampionDuelResolved', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championDuelResolved.add(ChampionDuelResolvedDto.fromJson(raw));
+      }
+    });
   }
 
   // ── Group subscriptions ──────────────────────────────────────────────────
@@ -146,6 +168,8 @@ class NotificationHub extends HubClientBase {
     await _championRoundStarted.close();
     await _championRoundResolved.close();
     await _championMatchEnded.close();
+    await _championDuelStarted.close();
+    await _championDuelResolved.close();
   }
 
   // ── Helpers ──────────────────────────────────────────────────────────────

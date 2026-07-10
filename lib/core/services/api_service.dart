@@ -946,6 +946,22 @@ class ApiService {
     }
   }
 
+  /// **🔹 Live Match Roster**
+  /// GET /game-events/{id}/participants — players with handles + champion /
+  /// eliminated flags, for the champion's duel picker and the mob view.
+  Future<List<ChampionParticipant>> getEventParticipants(
+      String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/participants');
+      final items = response['participants'] as List? ?? const [];
+      return items
+          .map((e) => ChampionParticipant.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// **🔹 Start a Champion Duel**
   /// POST /game-events/{id}/duel — the champion calls out a challenger.
   Future<String> startChampionDuel({

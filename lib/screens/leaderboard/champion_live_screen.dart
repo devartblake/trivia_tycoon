@@ -6,10 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/dto/champion_round_events.dart';
 import '../../game/providers/core_providers.dart' show apiServiceProvider;
 import '../../game/providers/hub_providers.dart';
+import '../../game/providers/learning_providers.dart'
+    show currentPlayerIdProvider;
 
 /// Live Champion vs Tier match screen. Joins the event's realtime group, shows
-/// the current round question with a countdown, submits the tapped answer, and
-/// renders round-resolved / match-ended feedback.
+/// the current round (or an active duel the viewer is in) with a countdown,
+/// submits answers, and — for the champion — offers a "call out a challenger"
+/// roster picker to start head-to-head duels.
 class ChampionLiveScreen extends ConsumerStatefulWidget {
   final String gameEventId;
   const ChampionLiveScreen({super.key, required this.gameEventId});
@@ -22,23 +25,36 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
   ChampionRoundStartedDto? _round;
   ChampionRoundResolvedDto? _lastResolved;
   ChampionMatchEndedDto? _ended;
-  String? _selectedOptionId;
+  ChampionDuelStartedDto? _duel;
+  ChampionDuelResolvedDto? _duelResolved;
+
+  String? _playerId;
+  String? _championId;
+  int _duelsRemaining = 0;
+
+  String? _selectedOptionId; // round answer
+  String? _duelSelectedOptionId; // duel answer
   bool _submitting = false;
+  bool _duelSubmitting = false;
+  bool _startingDuel = false;
+
   Timer? _ticker;
-  Duration _remaining = Duration.zero;
+  Timer? _duelClear;
 
   @override
   void initState() {
     super.initState();
-    // Join the realtime group and replay the in-progress state so a client
-    // entering mid-match sees the current round/duel without waiting.
+    // A single always-on tick keeps every countdown fresh.
+    _ticker = Timer.periodic(
+        const Duration(milliseconds: 250), (_) => mounted ? setState(() {}) : null);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _playerId = await ref.read(currentPlayerIdProvider.future);
+      if (!mounted) return;
       try {
-        await ref
-            .read(notificationHubProvider)
-            .joinGameEvent(widget.gameEventId);
+        await ref.read(notificationHubProvider).joinGameEvent(widget.gameEventId);
       } catch (_) {
-        // Not connected yet — the stream listeners still catch rounds once it is.
+        // Not connected yet — stream listeners still catch events once it is.
       }
       await _replayFromSnapshot();
     });
@@ -47,18 +63,27 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
   @override
   void dispose() {
     _ticker?.cancel();
+    _duelClear?.cancel();
     super.dispose();
   }
 
-  /// Replay-on-join: seed the current open round from the backend snapshot so
-  /// a mid-match arrival renders immediately. A live broadcast for a newer
-  /// round always supersedes this.
+  bool get _amIChampion => _playerId != null && _playerId == _championId;
+  bool _amInDuel(ChampionDuelStartedDto d) =>
+      _playerId == d.championPlayerId || _playerId == d.challengerPlayerId;
+
   Future<void> _replayFromSnapshot() async {
     final snap =
         await ref.read(apiServiceProvider).getLiveSnapshot(widget.gameEventId);
-    if (!mounted || snap == null || _round != null || _ended != null) return;
-    final round = snap.currentRound;
-    if (round != null) _onRoundStarted(round);
+    if (!mounted || snap == null) return;
+    setState(() {
+      _championId = snap.championPlayerId;
+      _duelsRemaining = snap.duelsRemaining;
+    });
+    if (_ended != null) return;
+    if (snap.currentDuel != null) _onDuelStarted(snap.currentDuel!);
+    if (_round == null && snap.currentRound != null) {
+      _onRoundStarted(snap.currentRound!);
+    }
   }
 
   bool _isForThisEvent(String eventId) => eventId == widget.gameEventId;
@@ -70,33 +95,42 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
       _lastResolved = null;
       _selectedOptionId = null;
     });
-    _startTicker(r.deadlineUtc);
   }
 
   void _onRoundResolved(ChampionRoundResolvedDto r) {
     if (!_isForThisEvent(r.gameEventId)) return;
-    _ticker?.cancel();
     setState(() => _lastResolved = r);
   }
 
   void _onMatchEnded(ChampionMatchEndedDto r) {
     if (!_isForThisEvent(r.gameEventId)) return;
-    _ticker?.cancel();
     setState(() => _ended = r);
   }
 
-  void _startTicker(DateTime deadlineUtc) {
-    _ticker?.cancel();
-    void tick() {
-      final left = deadlineUtc.difference(DateTime.now().toUtc());
-      setState(() => _remaining = left.isNegative ? Duration.zero : left);
-    }
-
-    tick();
-    _ticker = Timer.periodic(const Duration(milliseconds: 250), (_) => tick());
+  void _onDuelStarted(ChampionDuelStartedDto d) {
+    if (!_isForThisEvent(d.gameEventId)) return;
+    _duelClear?.cancel();
+    setState(() {
+      _duel = d;
+      _duelResolved = null;
+      _duelSelectedOptionId = null;
+    });
   }
 
-  Future<void> _submit(String optionId) async {
+  void _onDuelResolved(ChampionDuelResolvedDto d) {
+    if (!_isForThisEvent(d.gameEventId)) return;
+    setState(() {
+      _duelResolved = d;
+      if (_amIChampion && _duelsRemaining > 0) _duelsRemaining--;
+    });
+    // Show the result briefly, then return to the round view.
+    _duelClear?.cancel();
+    _duelClear = Timer(const Duration(seconds: 5), () {
+      if (mounted) setState(() => _duel = null);
+    });
+  }
+
+  Future<void> _submitRound(String optionId) async {
     if (_submitting || _selectedOptionId != null) return;
     setState(() {
       _selectedOptionId = optionId;
@@ -104,30 +138,99 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
     });
     try {
       await ref.read(apiServiceProvider).submitRoundAnswer(
-            gameEventId: widget.gameEventId,
-            optionId: optionId,
-          );
+          gameEventId: widget.gameEventId, optionId: optionId);
     } catch (_) {
-      // Leave the selection; the round will resolve regardless.
+      // Selection stays; the round resolves regardless.
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
   }
 
+  Future<void> _submitDuel(String optionId) async {
+    if (_duelSubmitting || _duelSelectedOptionId != null) return;
+    setState(() {
+      _duelSelectedOptionId = optionId;
+      _duelSubmitting = true;
+    });
+    try {
+      await ref.read(apiServiceProvider).submitDuelAnswer(
+          gameEventId: widget.gameEventId, optionId: optionId);
+    } catch (_) {
+      // Selection stays; the duel resolves regardless.
+    } finally {
+      if (mounted) setState(() => _duelSubmitting = false);
+    }
+  }
+
+  Future<void> _openDuelPicker() async {
+    if (_startingDuel) return;
+    final participants =
+        await ref.read(apiServiceProvider).getEventParticipants(widget.gameEventId);
+    if (!mounted) return;
+    final challengers = participants
+        .where((p) => !p.eliminated && !p.isChampion)
+        .toList();
+    if (challengers.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No challengers left to call out.')),
+      );
+      return;
+    }
+
+    final picked = await showModalBottomSheet<ChampionParticipant>(
+      context: context,
+      backgroundColor: const Color(0xFF231145),
+      showDragHandle: true,
+      builder: (ctx) => _DuelPicker(challengers: challengers),
+    );
+    if (picked == null || !mounted) return;
+    await _startDuel(picked);
+  }
+
+  Future<void> _startDuel(ChampionParticipant target) async {
+    setState(() => _startingDuel = true);
+    try {
+      final status = await ref.read(apiServiceProvider).startChampionDuel(
+          gameEventId: widget.gameEventId, challengerPlayerId: target.playerId);
+      if (!mounted) return;
+      final ok = status == 'Started';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(ok
+            ? 'You called out ${target.displayName}!'
+            : 'Could not start duel: $status'),
+        backgroundColor: ok ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+      ));
+    } finally {
+      if (mounted) setState(() => _startingDuel = false);
+    }
+  }
+
+  int _secondsLeft(DateTime deadlineUtc) {
+    final left = deadlineUtc.difference(DateTime.now().toUtc());
+    return left.isNegative ? 0 : left.inMilliseconds ~/ 1000 + 1;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Bridge the broadcast streams into local state.
-    ref.listen(championRoundStartedStreamProvider, (_, next) {
-      final v = next.valueOrNull;
+    ref.listen(championRoundStartedStreamProvider, (_, n) {
+      final v = n.valueOrNull;
       if (v != null) _onRoundStarted(v);
     });
-    ref.listen(championRoundResolvedStreamProvider, (_, next) {
-      final v = next.valueOrNull;
+    ref.listen(championRoundResolvedStreamProvider, (_, n) {
+      final v = n.valueOrNull;
       if (v != null) _onRoundResolved(v);
     });
-    ref.listen(championMatchEndedStreamProvider, (_, next) {
-      final v = next.valueOrNull;
+    ref.listen(championMatchEndedStreamProvider, (_, n) {
+      final v = n.valueOrNull;
       if (v != null) _onMatchEnded(v);
+    });
+    ref.listen(championDuelStartedStreamProvider, (_, n) {
+      final v = n.valueOrNull;
+      if (v != null) _onDuelStarted(v);
+    });
+    ref.listen(championDuelResolvedStreamProvider, (_, n) {
+      final v = n.valueOrNull;
+      if (v != null) _onDuelResolved(v);
     });
 
     return Scaffold(
@@ -137,22 +240,166 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
         elevation: 0,
         title: const Text('Champion vs Tier — LIVE'),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: _ended != null
-              ? _EndedView(ended: _ended!)
-              : _round == null
-                  ? const _WaitingView()
-                  : _buildRound(_round!),
-        ),
+      body: SafeArea(child: _body()),
+    );
+  }
+
+  Widget _body() {
+    if (_ended != null) {
+      return Padding(padding: const EdgeInsets.all(20), child: _EndedView(ended: _ended!));
+    }
+    // A duelist gets the focused duel view; everyone else follows the round.
+    final duel = _duel;
+    if (duel != null && _amInDuel(duel)) {
+      return Padding(padding: const EdgeInsets.all(20), child: _buildDuel(duel));
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (duel != null) _spectatorDuelBanner(duel),
+          if (_round != null) _buildRound(_round!) else const _WaitingView(),
+          if (_amIChampion && _duel == null && _round != null) ...[
+            const SizedBox(height: 20),
+            _championControls(),
+          ],
+        ],
       ),
+    );
+  }
+
+  Widget _championControls() {
+    final canDuel = _duelsRemaining > 0 && !_startingDuel;
+    return Column(
+      children: [
+        const Divider(color: Colors.white12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Champion powers',
+                style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+            Text('$_duelsRemaining duel${_duelsRemaining == 1 ? '' : 's'} left',
+                style: const TextStyle(color: Color(0xFFFCD34D), fontSize: 12)),
+          ],
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: canDuel ? _openDuelPicker : null,
+            icon: _startingDuel
+                ? const SizedBox(
+                    height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.sports_kabaddi_rounded),
+            label: Text(_duelsRemaining > 0
+                ? 'Call out a challenger'
+                : 'No duels remaining'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: const Color(0xFFFCD34D),
+              side: const BorderSide(color: Color(0xFFFCD34D)),
+              padding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _spectatorDuelBanner(ChampionDuelStartedDto duel) {
+    final resolved = _duelResolved;
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFCD34D).withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFFCD34D)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.sports_kabaddi_rounded, color: Color(0xFFFCD34D)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              resolved == null
+                  ? '⚔️ The Champion called out a challenger — duel in progress!'
+                  : (resolved.championAlive
+                      ? 'The Champion won the duel and holds the crown.'
+                      : 'The challenger dethroned the Champion!'),
+              style: const TextStyle(
+                  color: Color(0xFFFDE68A), fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDuel(ChampionDuelStartedDto duel) {
+    final resolved = _duelResolved;
+    final seconds = _secondsLeft(duel.deadlineUtc);
+    final amChampion = _playerId == duel.championPlayerId;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.sports_kabaddi_rounded, color: Color(0xFFFCD34D)),
+            const SizedBox(width: 8),
+            Text(amChampion ? 'Your duel — defend the crown!' : 'Duel! Beat the Champion!',
+                style: const TextStyle(
+                    color: Color(0xFFFCD34D),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: (seconds / 12).clamp(0.0, 1.0),
+          backgroundColor: Colors.white10,
+          color: seconds <= 3 ? const Color(0xFFEF4444) : const Color(0xFFFCD34D),
+          minHeight: 6,
+        ),
+        const SizedBox(height: 4),
+        Text('${seconds}s',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white54, fontSize: 12)),
+        const SizedBox(height: 24),
+        Text(duel.prompt,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                height: 1.3)),
+        const SizedBox(height: 28),
+        ...duel.options.map((o) => _answerTile(
+              o,
+              selectedId: _duelSelectedOptionId,
+              correctId: resolved?.correctOptionId,
+              onTap: () => _submitDuel(o.optionId),
+            )),
+        if (resolved != null) ...[
+          const SizedBox(height: 16),
+          Text(
+            resolved.winnerPlayerId == _playerId
+                ? 'You won the duel! 🎉'
+                : 'You lost the duel — eliminated.',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ],
     );
   }
 
   Widget _buildRound(ChampionRoundStartedDto round) {
     final resolved = _lastResolved;
-    final seconds = _remaining.inMilliseconds / 1000.0;
+    final seconds = _secondsLeft(round.deadlineUtc);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -174,22 +421,24 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
           minHeight: 6,
         ),
         const SizedBox(height: 4),
-        Text('${seconds.ceil()}s',
+        Text('${seconds}s',
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white54, fontSize: 12)),
         const SizedBox(height: 24),
-        Text(
-          round.prompt,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            height: 1.3,
-          ),
-        ),
+        Text(round.prompt,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                height: 1.3)),
         const SizedBox(height: 28),
-        ...round.options.map((o) => _optionTile(o, resolved)),
+        ...round.options.map((o) => _answerTile(
+              o,
+              selectedId: _selectedOptionId,
+              correctId: resolved?.correctOptionId,
+              onTap: () => _submitRound(o.optionId),
+            )),
         if (resolved != null) ...[
           const SizedBox(height: 16),
           Text(
@@ -205,10 +454,17 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
     );
   }
 
-  Widget _optionTile(ChampionRoundOption o, ChampionRoundResolvedDto? resolved) {
-    final selected = _selectedOptionId == o.optionId;
-    final revealed = resolved != null;
-    final isCorrect = revealed && o.optionId == resolved.correctOptionId;
+  /// Shared answer tile for both rounds and duels. Locks once an answer is
+  /// chosen or the correct option is revealed.
+  Widget _answerTile(
+    ChampionRoundOption o, {
+    required String? selectedId,
+    required String? correctId,
+    required VoidCallback onTap,
+  }) {
+    final selected = selectedId == o.optionId;
+    final revealed = correctId != null;
+    final isCorrect = revealed && o.optionId == correctId;
     final isWrongPick = revealed && selected && !isCorrect;
 
     Color bg = Colors.white10;
@@ -231,9 +487,7 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
-          onTap: (revealed || _selectedOptionId != null)
-              ? null
-              : () => _submit(o.optionId),
+          onTap: (revealed || selectedId != null) ? null : onTap,
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
@@ -241,16 +495,67 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
               borderRadius: BorderRadius.circular(14),
               border: Border.all(color: border, width: 1.5),
             ),
-            child: Text(
-              o.text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            child: Text(o.text,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600)),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _DuelPicker extends StatelessWidget {
+  final List<ChampionParticipant> challengers;
+  const _DuelPicker({required this.challengers});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text('Call out a challenger',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800)),
+          ),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: challengers.length,
+              itemBuilder: (ctx, i) {
+                final c = challengers[i];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: const Color(0xFF6D28D9),
+                    backgroundImage: (c.avatarUrl != null && c.avatarUrl!.isNotEmpty)
+                        ? NetworkImage(c.avatarUrl!)
+                        : null,
+                    child: (c.avatarUrl == null || c.avatarUrl!.isEmpty)
+                        ? Text(
+                            c.displayName.isNotEmpty
+                                ? c.displayName[0].toUpperCase()
+                                : '?',
+                            style: const TextStyle(color: Colors.white))
+                        : null,
+                  ),
+                  title: Text(c.displayName,
+                      style: const TextStyle(color: Colors.white)),
+                  trailing: const Icon(Icons.sports_kabaddi_rounded,
+                      color: Color(0xFFFCD34D)),
+                  onTap: () => Navigator.of(ctx).pop(c),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }
@@ -260,7 +565,8 @@ class _WaitingView extends StatelessWidget {
   const _WaitingView();
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 60),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -298,10 +604,7 @@ class _EndedView extends StatelessWidget {
                 : 'A new Champion is crowned!',
             textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-            ),
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 12),
           Text(

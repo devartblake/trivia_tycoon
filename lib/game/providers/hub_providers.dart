@@ -83,6 +83,16 @@ final championMatchEndedStreamProvider =
   return ref.watch(notificationHubProvider).championMatchEnded;
 });
 
+final championDuelStartedStreamProvider =
+    StreamProvider<ChampionDuelStartedDto>((ref) {
+  return ref.watch(notificationHubProvider).championDuelStarted;
+});
+
+final championDuelResolvedStreamProvider =
+    StreamProvider<ChampionDuelResolvedDto>((ref) {
+  return ref.watch(notificationHubProvider).championDuelResolved;
+});
+
 final guardianChangedStreamProvider = StreamProvider<GuardianChangedDto>((ref) {
   return ref.watch(notificationHubProvider).guardianChanges;
 });

@@ -182,6 +182,9 @@ class ChampionLiveSnapshotDto {
   final bool isLive;
   final ChampionRoundStartedDto? currentRound;
   final ChampionDuelStartedDto? currentDuel;
+  final String? championPlayerId;
+  final int duelsUsed;
+  final int maxDuels;
 
   const ChampionLiveSnapshotDto({
     required this.gameEventId,
@@ -190,13 +193,19 @@ class ChampionLiveSnapshotDto {
     required this.isLive,
     required this.currentRound,
     required this.currentDuel,
+    this.championPlayerId,
+    this.duelsUsed = 0,
+    this.maxDuels = 0,
   });
+
+  int get duelsRemaining => (maxDuels - duelsUsed).clamp(0, maxDuels);
 
   factory ChampionLiveSnapshotDto.fromJson(Map<String, dynamic> j) {
     Map<String, dynamic>? asMap(Object? v) =>
         v is Map<String, dynamic> ? v : null;
     final round = asMap(j['currentRound'] ?? j['CurrentRound']);
     final duel = asMap(j['currentDuel'] ?? j['CurrentDuel']);
+    final champ = (j['championPlayerId'] ?? j['ChampionPlayerId'])?.toString();
     return ChampionLiveSnapshotDto(
       gameEventId: (j['gameEventId'] ?? j['GameEventId'] ?? '').toString(),
       aliveCount: (j['aliveCount'] ?? j['AliveCount'] ?? 0) as int,
@@ -205,6 +214,41 @@ class ChampionLiveSnapshotDto {
       currentRound:
           round == null ? null : ChampionRoundStartedDto.fromJson(round),
       currentDuel: duel == null ? null : ChampionDuelStartedDto.fromJson(duel),
+      championPlayerId: (champ == null || champ.isEmpty) ? null : champ,
+      duelsUsed: (j['duelsUsed'] ?? j['DuelsUsed'] ?? 0) as int,
+      maxDuels: (j['maxDuels'] ?? j['MaxDuels'] ?? 0) as int,
+    );
+  }
+}
+
+/// One player in the live match roster (GET /game-events/{id}/participants).
+class ChampionParticipant {
+  final String playerId;
+  final String handle;
+  final String displayName;
+  final String? avatarUrl;
+  final bool isChampion;
+  final bool eliminated;
+
+  const ChampionParticipant({
+    required this.playerId,
+    required this.handle,
+    required this.displayName,
+    required this.avatarUrl,
+    required this.isChampion,
+    required this.eliminated,
+  });
+
+  factory ChampionParticipant.fromJson(Map<String, dynamic> j) {
+    String s(String a, String b) => (j[a] ?? j[b] ?? '').toString();
+    return ChampionParticipant(
+      playerId: s('playerId', 'PlayerId'),
+      handle: s('handle', 'Handle'),
+      displayName: (j['displayName'] ?? j['DisplayName'] ?? j['handle'] ?? '')
+          .toString(),
+      avatarUrl: (j['avatarUrl'] ?? j['AvatarUrl'])?.toString(),
+      isChampion: (j['isChampion'] ?? j['IsChampion'] ?? false) as bool,
+      eliminated: (j['eliminated'] ?? j['Eliminated'] ?? false) as bool,
     );
   }
 }
