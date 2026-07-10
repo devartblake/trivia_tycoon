@@ -8,8 +8,8 @@ void main() {
 
   group('PresenceMapper.toDomain', () {
     test('maps dto fields to domain entity', () {
-      const dto = PresenceDto(
-          playerId: 'p1', playerName: 'Alice', isHost: true);
+      const dto =
+          PresenceDto(playerId: 'p1', playerName: 'Alice', isHost: true);
       final domain = mapper.toDomain(dto);
       expect(domain.id, 'p1');
       expect(domain.name, 'Alice');
@@ -17,8 +17,7 @@ void main() {
     });
 
     test('isHost=false maps correctly', () {
-      const dto = PresenceDto(
-          playerId: 'p2', playerName: 'Bob', isHost: false);
+      const dto = PresenceDto(playerId: 'p2', playerName: 'Bob', isHost: false);
       expect(mapper.toDomain(dto).isHost, isFalse);
     });
 
@@ -45,8 +44,8 @@ void main() {
 
   group('PresenceMapper round-trip', () {
     test('dto → domain → dto preserves all fields', () {
-      const original = PresenceDto(
-          playerId: 'p3', playerName: 'Charlie', isHost: false);
+      const original =
+          PresenceDto(playerId: 'p3', playerName: 'Charlie', isHost: false);
       final restored = mapper.toDto(mapper.toDomain(original));
       expect(restored.playerId, original.playerId);
       expect(restored.playerName, original.playerName);

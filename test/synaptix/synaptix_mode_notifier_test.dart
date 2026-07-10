@@ -14,15 +14,18 @@ void main() {
     });
 
     test('"child" → SynaptixMode.kids', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('child'), SynaptixMode.kids);
+      expect(
+          SynaptixModeNotifier.mapAgeGroupToMode('child'), SynaptixMode.kids);
     });
 
     test('"children" → SynaptixMode.kids', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('children'), SynaptixMode.kids);
+      expect(SynaptixModeNotifier.mapAgeGroupToMode('children'),
+          SynaptixMode.kids);
     });
 
     test('"elementary" → SynaptixMode.kids', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('elementary'), SynaptixMode.kids);
+      expect(SynaptixModeNotifier.mapAgeGroupToMode('elementary'),
+          SynaptixMode.kids);
     });
 
     test('"k-5" → SynaptixMode.kids', () {
@@ -35,24 +38,29 @@ void main() {
     });
 
     test('"teens" → SynaptixMode.teen', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('teens'), SynaptixMode.teen);
+      expect(
+          SynaptixModeNotifier.mapAgeGroupToMode('teens'), SynaptixMode.teen);
     });
 
     test('"middle" → SynaptixMode.teen', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('middle'), SynaptixMode.teen);
+      expect(
+          SynaptixModeNotifier.mapAgeGroupToMode('middle'), SynaptixMode.teen);
     });
 
     test('"middle school" → SynaptixMode.teen', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('middle school'), SynaptixMode.teen);
+      expect(SynaptixModeNotifier.mapAgeGroupToMode('middle school'),
+          SynaptixMode.teen);
     });
 
     // --- adult (default) ---
     test('"adult" → SynaptixMode.adult', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('adult'), SynaptixMode.adult);
+      expect(
+          SynaptixModeNotifier.mapAgeGroupToMode('adult'), SynaptixMode.adult);
     });
 
     test('"senior" → SynaptixMode.adult (default)', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('senior'), SynaptixMode.adult);
+      expect(
+          SynaptixModeNotifier.mapAgeGroupToMode('senior'), SynaptixMode.adult);
     });
 
     test('empty string → SynaptixMode.adult (default)', () {
@@ -60,7 +68,8 @@ void main() {
     });
 
     test('unrecognized string → SynaptixMode.adult (default)', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('unknown_group'), SynaptixMode.adult);
+      expect(SynaptixModeNotifier.mapAgeGroupToMode('unknown_group'),
+          SynaptixMode.adult);
     });
 
     // --- case-insensitive ---
@@ -73,7 +82,8 @@ void main() {
     });
 
     test('"ADULT" uppercase → SynaptixMode.adult', () {
-      expect(SynaptixModeNotifier.mapAgeGroupToMode('ADULT'), SynaptixMode.adult);
+      expect(
+          SynaptixModeNotifier.mapAgeGroupToMode('ADULT'), SynaptixMode.adult);
     });
   });
 }

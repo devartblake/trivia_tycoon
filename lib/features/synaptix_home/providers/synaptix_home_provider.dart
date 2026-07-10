@@ -132,13 +132,15 @@ final synaptixHomeProvider = FutureProvider<SynaptixHomeState>((ref) async {
     newsItem: remainingRewards > 0
         ? SynaptixNewsItem(
             title: 'Unclaimed Rewards',
-            body: 'You have $remainingRewards account rewards waiting. Claim them now!',
+            body:
+                'You have $remainingRewards account rewards waiting. Claim them now!',
             route: canonicalRewardsRoute,
           )
         : preferredCategories.isNotEmpty
             ? SynaptixNewsItem(
                 title: '${preferredCategories.first} Challenge',
-                body: 'New ${preferredCategories.first.toLowerCase()} questions added this week!',
+                body:
+                    'New ${preferredCategories.first.toLowerCase()} questions added this week!',
                 route: canonicalPlayRoute,
               )
             : const SynaptixNewsItem(

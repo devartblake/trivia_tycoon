@@ -96,14 +96,16 @@ class QuestionResultService {
 
     // Calculate final rewards
     final xpEarned = (result.baseXPReward *
-        difficultyMultiplier *
-        (shouldApplyStreakBonus ? streakMultiplier : 1.0) *
-        timeBonus).round();
+            difficultyMultiplier *
+            (shouldApplyStreakBonus ? streakMultiplier : 1.0) *
+            timeBonus)
+        .round();
 
     final coinsEarned = (result.baseCoinReward *
-        coinMultiplier *
-        (shouldApplyStreakBonus ? streakMultiplier : 1.0) *
-        timeBonus).round();
+            coinMultiplier *
+            (shouldApplyStreakBonus ? streakMultiplier : 1.0) *
+            timeBonus)
+        .round();
 
     // Award to services
     xpService.addXP(xpEarned);
@@ -129,7 +131,8 @@ class QuestionResultService {
   }
 
   /// Calculate time-based bonus (faster answers = higher bonus)
-  double _calculateTimeBonus(Duration timeTaken, QuestionDifficulty difficulty) {
+  double _calculateTimeBonus(
+      Duration timeTaken, QuestionDifficulty difficulty) {
     final timeLimit = difficulty.timeLimitSeconds ?? 30;
     final secondsTaken = timeTaken.inSeconds;
 
@@ -210,7 +213,8 @@ class QuestionResultService {
   /// Check if streak is still active
   bool get isStreakActive {
     if (_lastCorrectAnswerTime == null) return false;
-    final elapsed = DateTime.now().difference(_lastCorrectAnswerTime!).inMinutes;
+    final elapsed =
+        DateTime.now().difference(_lastCorrectAnswerTime!).inMinutes;
     return elapsed <= _streakTimeoutMinutes;
   }
 

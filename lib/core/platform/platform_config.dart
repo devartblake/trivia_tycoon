@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Platform type enum
 enum AppPlatform {
-  mobile,   // iOS / Android
-  web,      // Web browser
+  mobile, // iOS / Android
+  web, // Web browser
 }
 
 /// Platform configuration

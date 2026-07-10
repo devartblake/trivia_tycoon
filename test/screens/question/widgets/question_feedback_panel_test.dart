@@ -4,7 +4,8 @@ import 'package:trivia_tycoon/screens/question/widgets/question_feedback_panel.d
 
 void main() {
   group('QuestionFeedbackPanel', () {
-    testWidgets('Displays correct result with icon', (WidgetTester tester) async {
+    testWidgets('Displays correct result with icon',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -19,7 +20,8 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
     });
 
-    testWidgets('Displays incorrect result with icon', (WidgetTester tester) async {
+    testWidgets('Displays incorrect result with icon',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -141,7 +143,8 @@ void main() {
       expect(buttonPressed, isTrue);
     });
 
-    testWidgets('Hides rewards for incorrect answers', (WidgetTester tester) async {
+    testWidgets('Hides rewards for incorrect answers',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -158,7 +161,8 @@ void main() {
       expect(find.byIcon(Icons.monetization_on), findsNothing);
     });
 
-    testWidgets('Shows multiple reward badges together', (WidgetTester tester) async {
+    testWidgets('Shows multiple reward badges together',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -177,7 +181,8 @@ void main() {
       expect(find.byIcon(Icons.local_fire_department), findsOneWidget);
     });
 
-    testWidgets('Renders correct background color for correct answer', (WidgetTester tester) async {
+    testWidgets('Renders correct background color for correct answer',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -192,7 +197,8 @@ void main() {
       expect(container.decoration, isNotNull);
     });
 
-    testWidgets('Renders correct background color for incorrect answer', (WidgetTester tester) async {
+    testWidgets('Renders correct background color for incorrect answer',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -207,7 +213,8 @@ void main() {
       expect(container.decoration, isNotNull);
     });
 
-    testWidgets('Text is properly aligned and styled', (WidgetTester tester) async {
+    testWidgets('Text is properly aligned and styled',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -223,7 +230,8 @@ void main() {
       expect(find.text('Test explanation'), findsOneWidget);
     });
 
-    testWidgets('Handles null callbacks gracefully', (WidgetTester tester) async {
+    testWidgets('Handles null callbacks gracefully',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -241,7 +249,8 @@ void main() {
       expect(find.text('Next Question'), findsNothing);
     });
 
-    testWidgets('Renders with all optional fields', (WidgetTester tester) async {
+    testWidgets('Renders with all optional fields',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

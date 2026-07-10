@@ -165,7 +165,8 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('provider state', () {
-    test('controller state equals the overridden gameSessionProvider value', () {
+    test('controller state equals the overridden gameSessionProvider value',
+        () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
       handler.nextTriggerResult = true;
@@ -177,7 +178,8 @@ void main() {
       expect(container.read(gameSessionControllerProvider), same(session));
     });
 
-    test('effectHandler is the overridden skillEffectHandlerProvider value', () {
+    test('effectHandler is the overridden skillEffectHandlerProvider value',
+        () {
       final handler = MockSkillEffectHandler();
       final session = MockGameSession();
 

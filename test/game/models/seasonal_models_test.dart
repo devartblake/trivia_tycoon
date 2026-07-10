@@ -162,15 +162,13 @@ void main() {
 
     test('parses seasonId', () {
       expect(
-          SeasonRewardPreview.fromJson(previewJson(seasonId: 'szn_x'))
-              .seasonId,
+          SeasonRewardPreview.fromJson(previewJson(seasonId: 'szn_x')).seasonId,
           'szn_x');
     });
 
     test('parses playerId', () {
       expect(
-          SeasonRewardPreview.fromJson(previewJson(playerId: 'uid_y'))
-              .playerId,
+          SeasonRewardPreview.fromJson(previewJson(playerId: 'uid_y')).playerId,
           'uid_y');
     });
 
@@ -185,13 +183,12 @@ void main() {
     });
 
     test('parses tierRank', () {
-      expect(SeasonRewardPreview.fromJson(previewJson(tierRank: 12)).tierRank,
-          12);
+      expect(
+          SeasonRewardPreview.fromJson(previewJson(tierRank: 12)).tierRank, 12);
     });
 
     test('parses rewardXp', () {
-      expect(
-          SeasonRewardPreview.fromJson(previewJson(rewardXp: 1000)).rewardXp,
+      expect(SeasonRewardPreview.fromJson(previewJson(rewardXp: 1000)).rewardXp,
           1000);
     });
 

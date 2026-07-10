@@ -107,12 +107,10 @@ class _RankedLeaderboardScreenState extends State<RankedLeaderboardScreen> {
                         child: Row(
                           children: [
                             Text('Season: ${data.seasonId}',
-                                style:
-                                    Theme.of(context).textTheme.bodySmall),
+                                style: Theme.of(context).textTheme.bodySmall),
                             const Spacer(),
                             Text('Total: ${data.total}',
-                                style:
-                                    Theme.of(context).textTheme.bodySmall),
+                                style: Theme.of(context).textTheme.bodySmall),
                           ],
                         ),
                       ),

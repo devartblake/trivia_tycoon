@@ -38,17 +38,17 @@ class MatchesService {
     final response = await _apiClient.listMatches(status: 'ongoing');
     return response.matches
         .map((m) => {
-          'id': m.matchId,
-          'matchId': m.matchId,
-          'opponentId': m.opponentId,
-          'opponentName': m.opponentName ?? 'Unknown',
-          'playerScore': m.playerScore,
-          'opponentScore': m.opponentScore ?? 0,
-          'gameMode': m.gameMode,
-          'status': m.status,
-          'result': m.result,
-          'createdAt': m.createdAtUtc.toIso8601String(),
-        })
+              'id': m.matchId,
+              'matchId': m.matchId,
+              'opponentId': m.opponentId,
+              'opponentName': m.opponentName ?? 'Unknown',
+              'playerScore': m.playerScore,
+              'opponentScore': m.opponentScore ?? 0,
+              'gameMode': m.gameMode,
+              'status': m.status,
+              'result': m.result,
+              'createdAt': m.createdAtUtc.toIso8601String(),
+            })
         .toList();
   }
 

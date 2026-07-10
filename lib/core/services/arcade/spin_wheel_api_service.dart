@@ -92,13 +92,15 @@ class SpinWheelApiService {
   /// This method uses the legacy contract and will be removed in a future version.
   /// All clients should migrate to [claimStartedReward] which uses the authoritative
   /// backend-generated contract.
-  @Deprecated('Use claimStartedReward() instead. This method will be removed in v2.0.0')
+  @Deprecated(
+      'Use claimStartedReward() instead. This method will be removed in v2.0.0')
   Future<SpinClaimResponse> claimReward({
     required String playerId,
     required String segmentId,
     required String spinId,
   }) async {
-    _log.warning('DEPRECATED: claimReward() called. Migrate to claimStartedReward() with spinId + claimToken + idempotencyKey');
+    _log.warning(
+        'DEPRECATED: claimReward() called. Migrate to claimStartedReward() with spinId + claimToken + idempotencyKey');
     final body = {
       'playerId': playerId,
       'segmentId': segmentId,

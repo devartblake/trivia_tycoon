@@ -23,7 +23,7 @@ class PerformanceSummaryCard extends StatelessWidget {
               'Overall Performance',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-              ),
+                  ),
             ),
             const SizedBox(height: 20),
             // Stats Grid
@@ -89,7 +89,7 @@ class PerformanceSummaryCard extends StatelessWidget {
               'Avg. Time: ${summary.averageTimeSeconds}s',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Colors.grey.shade600,
-              ),
+                  ),
             ),
           ],
         ),

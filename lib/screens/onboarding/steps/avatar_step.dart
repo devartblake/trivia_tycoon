@@ -138,13 +138,12 @@ class _AvatarStepState extends State<AvatarStep>
     }
   }
 
-  AvatarOption? get _selectedOption =>
-      _selectedAvatar != null
-          ? avatars.firstWhere(
-              (a) => a.id == _selectedAvatar,
-              orElse: () => avatars.first,
-            )
-          : null;
+  AvatarOption? get _selectedOption => _selectedAvatar != null
+      ? avatars.firstWhere(
+          (a) => a.id == _selectedAvatar,
+          orElse: () => avatars.first,
+        )
+      : null;
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +254,8 @@ class _AvatarStepState extends State<AvatarStep>
           itemBuilder: (context, index) {
             final avatar = avatars[index];
             final isSelected = _selectedAvatar == avatar.id;
-            return _buildAvatarCard(context, avatar: avatar, isSelected: isSelected);
+            return _buildAvatarCard(context,
+                avatar: avatar, isSelected: isSelected);
           },
         );
       },

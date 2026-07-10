@@ -89,7 +89,8 @@ void main() {
         await tierRewardsService.claimPendingRewards('user1');
 
         // Assert: Check storage has the claimed tier
-        final storedTiers = await mockStorage.getStringList('claimed_tier_rewards');
+        final storedTiers =
+            await mockStorage.getStringList('claimed_tier_rewards');
         expect(storedTiers, contains('platinum-elite'));
       });
     });
@@ -113,13 +114,15 @@ void main() {
         await tierRewardsService.claimPendingRewards('user1');
 
         // Assert: Check it's claimed
-        final isClaimed = await tierRewardsService.hasTierRewardBeenClaimed('bronze-rookie');
+        final isClaimed =
+            await tierRewardsService.hasTierRewardBeenClaimed('bronze-rookie');
         expect(isClaimed, true);
       });
 
       test('Returns false for unclaimed tier', () async {
         // Act & Assert
-        final isClaimed = await tierRewardsService.hasTierRewardBeenClaimed('diamond-legend');
+        final isClaimed =
+            await tierRewardsService.hasTierRewardBeenClaimed('diamond-legend');
         expect(isClaimed, false);
       });
     });
@@ -182,7 +185,8 @@ void main() {
           minXp: 20000,
           maxXp: 50000,
           iconName: 'grandmaster',
-          rewards: TierReward(badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
+          rewards: TierReward(
+              badge: 'grandmaster', coinsBonus: 10000, gemsBonus: 200),
         );
 
         mockTierProgressionService.setTierProgress(testTier);
@@ -213,7 +217,8 @@ void main() {
           minXp: 50000,
           maxXp: 100000,
           iconName: 'ultimate',
-          rewards: TierReward(badge: 'champion', coinsBonus: 20000, gemsBonus: 500),
+          rewards:
+              TierReward(badge: 'champion', coinsBonus: 20000, gemsBonus: 500),
         );
 
         mockTierProgressionService.setTierProgress(testTier);
@@ -283,8 +288,10 @@ void main() {
         mockTierProgressionService.setTierProgress(tier2);
 
         // Act: Check claimed status
-        var isClaimed1 = await tierRewardsService.hasTierRewardBeenClaimed('tier-1');
-        var isClaimed2 = await tierRewardsService.hasTierRewardBeenClaimed('tier-2');
+        var isClaimed1 =
+            await tierRewardsService.hasTierRewardBeenClaimed('tier-1');
+        var isClaimed2 =
+            await tierRewardsService.hasTierRewardBeenClaimed('tier-2');
 
         // Assert
         expect(isClaimed1, true);
@@ -341,7 +348,8 @@ class MockTierProgressionService implements TierProgressionService {
   void clearCache() {}
 }
 
-class MockGeneralKeyValueStorageService implements GeneralKeyValueStorageService {
+class MockGeneralKeyValueStorageService
+    implements GeneralKeyValueStorageService {
   final _data = <String, dynamic>{};
 
   @override

@@ -52,12 +52,15 @@ class QuestionMetadata extends StatelessWidget {
           children: [
             if (showDifficultyBadge)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   // Slightly stronger fill so the badge reads on the dark canvas.
-                  color: _getDifficultyColor(question.difficulty).withValues(alpha: 0.18),
+                  color: _getDifficultyColor(question.difficulty)
+                      .withValues(alpha: 0.18),
                   border: Border.all(
-                    color: _getDifficultyColor(question.difficulty).withValues(alpha: 0.55),
+                    color: _getDifficultyColor(question.difficulty)
+                        .withValues(alpha: 0.55),
                   ),
                   borderRadius: BorderRadius.circular(6),
                 ),

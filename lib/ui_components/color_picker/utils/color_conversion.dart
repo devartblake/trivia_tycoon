@@ -1,4 +1,4 @@
-﻿import 'dart:math';
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ColorConversion {
@@ -18,7 +18,8 @@ class ColorConversion {
     }
 
     // Generate hex string
-    final hex = color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
+    final hex =
+        color.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase();
     final result = '#$hex';
 
     // Cache the result
@@ -261,10 +262,18 @@ class ColorConversion {
   /// Blend two colors with given ratio (0.0 to 1.0)
   static Color blendColors(Color color1, Color color2, double ratio) {
     ratio = ratio.clamp(0.0, 1.0);
-    final r = (color1.r * (1 - ratio) * 255.0 + color2.r * ratio * 255.0).round().clamp(0, 255);
-    final g = (color1.g * (1 - ratio) * 255.0 + color2.g * ratio * 255.0).round().clamp(0, 255);
-    final b = (color1.b * (1 - ratio) * 255.0 + color2.b * ratio * 255.0).round().clamp(0, 255);
-    final a = (color1.a * (1 - ratio) * 255.0 + color2.a * ratio * 255.0).round().clamp(0, 255);
+    final r = (color1.r * (1 - ratio) * 255.0 + color2.r * ratio * 255.0)
+        .round()
+        .clamp(0, 255);
+    final g = (color1.g * (1 - ratio) * 255.0 + color2.g * ratio * 255.0)
+        .round()
+        .clamp(0, 255);
+    final b = (color1.b * (1 - ratio) * 255.0 + color2.b * ratio * 255.0)
+        .round()
+        .clamp(0, 255);
+    final a = (color1.a * (1 - ratio) * 255.0 + color2.a * ratio * 255.0)
+        .round()
+        .clamp(0, 255);
     return Color.fromARGB(a, r, g, b);
   }
 
@@ -304,9 +313,13 @@ class ColorConversion {
 
   /// Convert color to grayscale
   static Color toGrayscale(Color color) {
-    final gray =
-        (color.r * 0.299 * 255.0 + color.g * 0.587 * 255.0 + color.b * 0.114 * 255.0).round().clamp(0, 255);
-    return Color.fromARGB((color.a * 255.0).round().clamp(0, 255), gray, gray, gray);
+    final gray = (color.r * 0.299 * 255.0 +
+            color.g * 0.587 * 255.0 +
+            color.b * 0.114 * 255.0)
+        .round()
+        .clamp(0, 255);
+    return Color.fromARGB(
+        (color.a * 255.0).round().clamp(0, 255), gray, gray, gray);
   }
 
   /// Get complementary color (opposite on color wheel)

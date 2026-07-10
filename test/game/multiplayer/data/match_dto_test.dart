@@ -103,7 +103,8 @@ void main() {
         matchId: 'm1',
         roomId: 'r1',
         players: [const PresenceDto(playerId: 'p1', playerName: 'Alice')],
-        currentTurn: const TurnDto(questionId: 'q1', startAtMs: 0, endAtMs: 1000),
+        currentTurn:
+            const TurnDto(questionId: 'q1', startAtMs: 0, endAtMs: 1000),
       );
       final json = dto.toJson();
       expect(json['matchId'], 'm1');
@@ -141,7 +142,8 @@ void main() {
       expect(restored.roomId, original.roomId);
       expect(restored.players.length, original.players.length);
       expect(restored.players.first.playerId, original.players.first.playerId);
-      expect(restored.currentTurn?.questionId, original.currentTurn?.questionId);
+      expect(
+          restored.currentTurn?.questionId, original.currentTurn?.questionId);
     });
   });
 }

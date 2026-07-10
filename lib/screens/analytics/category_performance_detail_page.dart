@@ -277,7 +277,8 @@ class _ImprovementTips extends ConsumerWidget {
       tips.add('You\'re doing well! Push for 80%+ accuracy');
       tips.add('Review incorrect answers to identify patterns');
     } else {
-      tips.add('Excellent performance! Consider challenging yourself with harder questions');
+      tips.add(
+          'Excellent performance! Consider challenging yourself with harder questions');
       tips.add('Maintain this level by practicing regularly');
     }
 

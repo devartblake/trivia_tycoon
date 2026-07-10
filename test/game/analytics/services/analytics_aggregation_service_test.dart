@@ -196,10 +196,14 @@ void main() {
       expect(result[0].activeUsers, 200);
     });
 
-    test('two entries on same day: activeUsers summed, session averages taken (daily)', () {
+    test(
+        'two entries on same day: activeUsers summed, session averages taken (daily)',
+        () {
       final entries = [
-        _engagement(date: _dayA, activeUsers: 100, avgSession: 10, sessionsPerUser: 4),
-        _engagement(date: _dayA, activeUsers: 200, avgSession: 20, sessionsPerUser: 6),
+        _engagement(
+            date: _dayA, activeUsers: 100, avgSession: 10, sessionsPerUser: 4),
+        _engagement(
+            date: _dayA, activeUsers: 200, avgSession: 20, sessionsPerUser: 6),
       ];
       final result = AnalyticsAggregationService.aggregateEngagementBy(
           AnalyticsTimeframe.daily, entries);
@@ -311,7 +315,8 @@ void main() {
 
     test('empty input returns empty list', () {
       expect(
-        AnalyticsAggregationService.filterByTimeline([], TimelineRange.last7Days),
+        AnalyticsAggregationService.filterByTimeline(
+            [], TimelineRange.last7Days),
         isEmpty,
       );
     });

@@ -95,7 +95,6 @@ class _ResultDialogState extends State<ResultDialog>
       parent: _celebrationController,
       curve: Curves.elasticInOut,
     ));
-
   }
 
   void _startEntranceAnimation() async {

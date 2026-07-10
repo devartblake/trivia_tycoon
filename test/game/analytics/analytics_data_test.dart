@@ -45,22 +45,22 @@ void main() {
   group('AnalyticsData — list identity', () {
     test('missions stores the exact list passed in', () {
       final missions = <MissionAnalyticsEntry>[];
-      final data = AnalyticsData(
-          missions: missions, engagements: [], retentions: []);
+      final data =
+          AnalyticsData(missions: missions, engagements: [], retentions: []);
       expect(data.missions, same(missions));
     });
 
     test('engagements stores the exact list passed in', () {
       final engagements = <EngagementEntry>[];
-      final data = AnalyticsData(
-          missions: [], engagements: engagements, retentions: []);
+      final data =
+          AnalyticsData(missions: [], engagements: engagements, retentions: []);
       expect(data.engagements, same(engagements));
     });
 
     test('retentions stores the exact list passed in', () {
       final retentions = <RetentionEntry>[];
-      final data = AnalyticsData(
-          missions: [], engagements: [], retentions: retentions);
+      final data =
+          AnalyticsData(missions: [], engagements: [], retentions: retentions);
       expect(data.retentions, same(retentions));
     });
   });
@@ -80,8 +80,8 @@ void main() {
         xpEarned: 100,
         userType: 'free',
       );
-      final data = AnalyticsData(
-          missions: [m], engagements: [], retentions: []);
+      final data =
+          AnalyticsData(missions: [m], engagements: [], retentions: []);
       expect(data.missions.length, 1);
       expect(data.missions.first.missionsCompleted, 5);
     });
@@ -93,8 +93,8 @@ void main() {
         averageSessionLength: 15,
         sessionsPerUser: 3,
       );
-      final data = AnalyticsData(
-          missions: [], engagements: [e], retentions: []);
+      final data =
+          AnalyticsData(missions: [], engagements: [e], retentions: []);
       expect(data.engagements.length, 1);
       expect(data.engagements.first.activeUsers, 50);
     });
@@ -106,8 +106,8 @@ void main() {
         day7Retention: 60,
         day30Retention: 40,
       );
-      final data = AnalyticsData(
-          missions: [], engagements: [], retentions: [r]);
+      final data =
+          AnalyticsData(missions: [], engagements: [], retentions: [r]);
       expect(data.retentions.length, 1);
       expect(data.retentions.first.day1Retention, 80);
     });
@@ -122,8 +122,8 @@ void main() {
                 day30Retention: 30,
               ))
           .toList();
-      final data = AnalyticsData(
-          missions: [], engagements: [], retentions: retentions);
+      final data =
+          AnalyticsData(missions: [], engagements: [], retentions: retentions);
       expect(data.retentions.length, 2);
       expect(data.retentions[0].date, dates[0]);
       expect(data.retentions[1].date, dates[1]);

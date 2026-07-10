@@ -11,7 +11,8 @@ void main() {
   group('CurrencyType enum', () {
     test('has exactly 2 values: coins and diamonds', () {
       expect(CurrencyType.values.length, 2);
-      expect(CurrencyType.values, containsAll([CurrencyType.coins, CurrencyType.diamonds]));
+      expect(CurrencyType.values,
+          containsAll([CurrencyType.coins, CurrencyType.diamonds]));
     });
 
     test('coins name is "coins"', () {
@@ -81,10 +82,13 @@ void main() {
     });
 
     test('fromString round-trips all known values', () {
-      expect(MatchStatusExtension.fromString('your_turn'), MatchStatus.yourTurn);
+      expect(
+          MatchStatusExtension.fromString('your_turn'), MatchStatus.yourTurn);
       expect(MatchStatusExtension.fromString('waiting'), MatchStatus.waiting);
-      expect(MatchStatusExtension.fromString('similar_stats'), MatchStatus.similarStats);
-      expect(MatchStatusExtension.fromString('fast_player'), MatchStatus.fastPlayer);
+      expect(MatchStatusExtension.fromString('similar_stats'),
+          MatchStatus.similarStats);
+      expect(MatchStatusExtension.fromString('fast_player'),
+          MatchStatus.fastPlayer);
       expect(MatchStatusExtension.fromString('finished'), MatchStatus.finished);
     });
 
@@ -176,7 +180,8 @@ void main() {
   group('MenuItemType enum', () {
     test('has 2 values: gradient and simple', () {
       expect(MenuItemType.values.length, 2);
-      expect(MenuItemType.values, containsAll([MenuItemType.gradient, MenuItemType.simple]));
+      expect(MenuItemType.values,
+          containsAll([MenuItemType.gradient, MenuItemType.simple]));
     });
   });
 }

@@ -123,7 +123,8 @@ Widget _messagesHarness() {
       ),
       GoRoute(
         path: '/messages/search',
-        builder: (_, __) => const Scaffold(body: Text('route:/messages/search')),
+        builder: (_, __) =>
+            const Scaffold(body: Text('route:/messages/search')),
       ),
       GoRoute(
         path: '/messages/add-friend',

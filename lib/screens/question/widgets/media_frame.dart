@@ -205,8 +205,7 @@ class AudioPlayerFrame extends StatelessWidget {
               ),
               child: Slider(
                 value: duration != null && duration!.inMilliseconds > 0
-                    ? (position?.inMilliseconds ?? 0) /
-                        duration!.inMilliseconds
+                    ? (position?.inMilliseconds ?? 0) / duration!.inMilliseconds
                     : 0.0,
                 onChanged: (value) {
                   if (duration != null && onSeek != null) {

@@ -61,8 +61,8 @@ void main() {
     });
 
     test('performanceChartDataProvider fetches data for 24h', () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.hours24).future);
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.hours24).future);
 
       expect(data, isNotNull);
       expect(data, isNotEmpty);
@@ -70,8 +70,8 @@ void main() {
     });
 
     test('performanceChartDataProvider fetches data for 7 days', () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.days7).future);
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.days7).future);
 
       expect(data, isNotNull);
       expect(data, isNotEmpty);
@@ -89,8 +89,8 @@ void main() {
 
     test('performanceChartDataProvider returns correct data structure',
         () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.hours24).future);
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.hours24).future);
 
       expect(data, isNotEmpty);
       final point = data[0];
@@ -102,8 +102,8 @@ void main() {
 
     test('performanceChartDataProvider data has valid accuracy values',
         () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.hours24).future);
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.hours24).future);
 
       for (final point in data) {
         expect(point.accuracy, greaterThanOrEqualTo(0.0));
@@ -111,10 +111,9 @@ void main() {
       }
     });
 
-    test('performanceChartDataProvider data has positive xp values',
-        () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.hours24).future);
+    test('performanceChartDataProvider data has positive xp values', () async {
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.hours24).future);
 
       for (final point in data) {
         expect(point.xpEarned, greaterThanOrEqualTo(0));
@@ -123,8 +122,8 @@ void main() {
 
     test('performanceChartDataProvider data has positive question counts',
         () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.hours24).future);
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.hours24).future);
 
       for (final point in data) {
         expect(point.questionsAnswered, greaterThanOrEqualTo(0));
@@ -134,8 +133,7 @@ void main() {
     test('performanceChartDisplayProvider updates when time range changes',
         () async {
       // Read initial data
-      var data = await container
-          .read(performanceChartDisplayProvider.future);
+      var data = await container.read(performanceChartDisplayProvider.future);
       expect(data.length, equals(24));
 
       // Change time range
@@ -143,8 +141,7 @@ void main() {
           TimeRange.days7;
 
       // Read updated data
-      data = await container
-          .read(performanceChartDisplayProvider.future);
+      data = await container.read(performanceChartDisplayProvider.future);
       expect(data.length, equals(7));
     });
 
@@ -218,12 +215,11 @@ void main() {
       expect(data1, equals(data2));
     });
 
-    test('provider returns different data for different time ranges',
-        () async {
+    test('provider returns different data for different time ranges', () async {
       final data24h = await container
           .read(performanceChartDataProvider(TimeRange.hours24).future);
-      final data7d =
-          await container.read(performanceChartDataProvider(TimeRange.days7).future);
+      final data7d = await container
+          .read(performanceChartDataProvider(TimeRange.days7).future);
 
       expect(data24h.length, equals(24));
       expect(data7d.length, equals(7));
@@ -231,8 +227,8 @@ void main() {
     });
 
     test('data is chronologically ordered', () async {
-      final data =
-          await container.read(performanceChartDataProvider(TimeRange.hours24).future);
+      final data = await container
+          .read(performanceChartDataProvider(TimeRange.hours24).future);
 
       for (int i = 0; i < data.length - 1; i++) {
         expect(

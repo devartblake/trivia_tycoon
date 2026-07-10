@@ -99,8 +99,7 @@ void main() {
       expect(find.text('Time Range'), findsOneWidget);
     });
 
-    testWidgets('shows loading state initially',
-        (WidgetTester tester) async {
+    testWidgets('shows loading state initially', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -151,8 +150,7 @@ void main() {
       expect(find.text('Low'), findsOneWidget);
     });
 
-    testWidgets('renders in scrollable container',
-        (WidgetTester tester) async {
+    testWidgets('renders in scrollable container', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -242,8 +240,7 @@ void main() {
       }
     });
 
-    testWidgets('handles error state gracefully',
-        (WidgetTester tester) async {
+    testWidgets('handles error state gracefully', (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(

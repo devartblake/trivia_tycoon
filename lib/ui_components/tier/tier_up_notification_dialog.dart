@@ -31,13 +31,11 @@ class _TierUpNotificationDialogState extends State<TierUpNotificationDialog>
       vsync: this,
     );
 
-    _scaleAnimation =
-        Tween<double>(begin: 0.5, end: 1.0).animate(
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
     );
 
-    _opacityAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
     );
 
@@ -139,15 +137,13 @@ class _TierUpNotificationDialogState extends State<TierUpNotificationDialog>
                           _RewardBadge(
                             icon: Icons.monetization_on,
                             label: 'Coins',
-                            value: widget.newTier.rewards.coinsBonus
-                                .toString(),
+                            value: widget.newTier.rewards.coinsBonus.toString(),
                             color: Colors.amber,
                           ),
                           _RewardBadge(
                             icon: Icons.diamond,
                             label: 'Gems',
-                            value: widget.newTier.rewards.gemsBonus
-                                .toString(),
+                            value: widget.newTier.rewards.gemsBonus.toString(),
                             color: Colors.purple,
                           ),
                           _RewardBadge(

@@ -72,7 +72,8 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
       // Best-effort: prefer the server's determination when reachable.
       minor = await _client.submitAge(age);
     } on ComplianceConsentApiException catch (e) {
-      LogManager.debug('[AgeVerificationStep] submitAge failed (fail-open): $e');
+      LogManager.debug(
+          '[AgeVerificationStep] submitAge failed (fail-open): $e');
     } catch (e) {
       LogManager.debug('[AgeVerificationStep] submitAge error (fail-open): $e');
     } finally {
@@ -130,7 +131,8 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
           policyVersion: AgeVerificationStep.policyVersion,
         );
       } catch (e) {
-        LogManager.debug('[AgeVerificationStep] recordConsent ${entry.key}: $e');
+        LogManager.debug(
+            '[AgeVerificationStep] recordConsent ${entry.key}: $e');
       }
     }
 
@@ -310,9 +312,8 @@ class _ParentalConsentCard extends StatelessWidget {
                         height: 18,
                         width: 18,
                         child: CircularProgressIndicator(strokeWidth: 2))
-                    : Text(requested
-                        ? 'Request sent ✓'
-                        : 'Send consent request'),
+                    : Text(
+                        requested ? 'Request sent ✓' : 'Send consent request'),
               ),
             ),
           ],

@@ -136,7 +136,8 @@ void main() {
       ];
     });
 
-    testWidgets('displays strong categories title', (WidgetTester tester) async {
+    testWidgets('displays strong categories title',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -196,8 +197,7 @@ void main() {
         ),
       );
 
-      expect(
-          find.text('No strong categories yet - Keep practicing!'),
+      expect(find.text('No strong categories yet - Keep practicing!'),
           findsOneWidget);
     });
 

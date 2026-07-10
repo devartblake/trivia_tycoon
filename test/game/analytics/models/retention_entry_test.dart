@@ -84,7 +84,8 @@ void main() {
     });
 
     test('round-trip preserves all values', () {
-      final original = _entry(date: DateTime.utc(2026, 7, 4), day1: 70, day7: 45, day30: 22);
+      final original =
+          _entry(date: DateTime.utc(2026, 7, 4), day1: 70, day7: 45, day30: 22);
       final restored = RetentionEntry.fromJson(original.toJson());
       expect(restored.date, original.date);
       expect(restored.day1Retention, original.day1Retention);

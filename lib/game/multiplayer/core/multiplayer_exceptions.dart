@@ -28,8 +28,7 @@ class ProtocolFailure extends MultiplayerException {
 
 /// User not authorized/forbidden.
 class NotAuthorized extends MultiplayerException {
-  const NotAuthorized([super.msg = 'Not authorized'])
-      : super(status: 401);
+  const NotAuthorized([super.msg = 'Not authorized']) : super(status: 401);
 }
 
 /// Room is full.

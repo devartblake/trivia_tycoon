@@ -63,15 +63,18 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('conversation ID generation', () {
-    test('onChallengeCreated creates conversation with sorted-ID key', () async {
-      final challenge = challengeFixture(challengerId: 'user_b', opponentId: 'user_a');
+    test('onChallengeCreated creates conversation with sorted-ID key',
+        () async {
+      final challenge =
+          challengeFixture(challengerId: 'user_b', opponentId: 'user_a');
       await bridge.onChallengeCreated(challenge);
       // sorted: user_a < user_b → conv_user_a_user_b
       final conv = convStorage.getConversationById('conv_user_a_user_b');
       expect(conv, isNotNull);
     });
 
-    test('conversation ID is the same regardless of challenger/opponent order', () async {
+    test('conversation ID is the same regardless of challenger/opponent order',
+        () async {
       final c1 = challengeFixture(challengerId: 'user_x', opponentId: 'user_z');
       final c2 = challengeFixture(challengerId: 'user_z', opponentId: 'user_x');
       await bridge.onChallengeCreated(c1);
@@ -91,7 +94,8 @@ void main() {
       final challenge = challengeFixture();
       await bridge.onChallengeCreated(challenge);
       final convId = 'conv_user_a_user_b';
-      final messages = msgStorage.getMessagesByType(convId, MessageType.challengeRequest);
+      final messages =
+          msgStorage.getMessagesByType(convId, MessageType.challengeRequest);
       expect(messages, hasLength(1));
     });
 
@@ -167,7 +171,8 @@ void main() {
         acceptedAt: DateTime.now(),
       ));
       final msg = msgStorage
-          .getMessagesByType('conv_user_a_user_b', MessageType.challengeAccepted)
+          .getMessagesByType(
+              'conv_user_a_user_b', MessageType.challengeAccepted)
           .first;
       expect(msg.senderId, 'user_b');
       expect(msg.senderName, 'Bob');
@@ -180,7 +185,8 @@ void main() {
         acceptedAt: DateTime.now(),
       ));
       final msg = msgStorage
-          .getMessagesByType('conv_user_a_user_b', MessageType.challengeAccepted)
+          .getMessagesByType(
+              'conv_user_a_user_b', MessageType.challengeAccepted)
           .first;
       expect(msg.content, 'Accepted your challenge!');
     });
@@ -208,7 +214,8 @@ void main() {
       expect(msg.status, MessageStatus.delivered);
     });
 
-    test('result content names challenger as winner when winnerId=challengerId', () async {
+    test('result content names challenger as winner when winnerId=challengerId',
+        () async {
       await bridge.onChallengeCreated(challengeFixture());
       await bridge.onChallengeCompleted(challengeFixture(), 'user_a', 75);
       final msg = msgStorage
@@ -218,7 +225,8 @@ void main() {
       expect(msg.content, contains('75'));
     });
 
-    test('result content names opponent as winner when winnerId=opponentId', () async {
+    test('result content names opponent as winner when winnerId=opponentId',
+        () async {
       await bridge.onChallengeCreated(challengeFixture());
       await bridge.onChallengeCompleted(challengeFixture(), 'user_b', 30);
       final msg = msgStorage
@@ -239,7 +247,8 @@ void main() {
 
     test('result metadata contains challengeId and winnerId', () async {
       await bridge.onChallengeCreated(challengeFixture(id: 'chal_99'));
-      await bridge.onChallengeCompleted(challengeFixture(id: 'chal_99'), 'user_a', 100);
+      await bridge.onChallengeCompleted(
+          challengeFixture(id: 'chal_99'), 'user_a', 100);
       final msg = msgStorage
           .getMessagesByType('conv_user_a_user_b', MessageType.challengeResult)
           .first;

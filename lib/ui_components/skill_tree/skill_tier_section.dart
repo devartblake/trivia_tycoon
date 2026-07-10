@@ -43,10 +43,8 @@ class _SkillTierSectionState extends State<SkillTierSection> {
   /// Build tier header with title and progress
   Widget _buildTierHeader(BuildContext context) {
     final totalSkills = widget.skills.length;
-    final unlockedCount =
-        widget.skills.where((s) => s.level > 0).length;
-    final masteredCount =
-        widget.skills.where((s) => s.isMastered).length;
+    final unlockedCount = widget.skills.where((s) => s.level > 0).length;
+    final masteredCount = widget.skills.where((s) => s.isMastered).length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

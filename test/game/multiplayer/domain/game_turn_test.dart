@@ -85,7 +85,8 @@ void main() {
 
     test('remainingMs argument ignored when clearRemaining is true', () {
       final t = _turn(remainingMs: 5000);
-      expect(t.copyWith(remainingMs: 999, clearRemaining: true).remainingMs, isNull);
+      expect(t.copyWith(remainingMs: 999, clearRemaining: true).remainingMs,
+          isNull);
     });
 
     test('null remainingMs stays null without clearRemaining', () {

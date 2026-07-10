@@ -460,8 +460,7 @@ class EnhancedRewardService {
   Future<UserProfile> _loadUserProfile() async {
     final level = await AppSettings.getInt("userLevel");
     final winStreak = await AppSettings.getWinStreak();
-    final exclusiveCurrency =
-        await AppSettings.getInt("exclusiveCurrency");
+    final exclusiveCurrency = await AppSettings.getInt("exclusiveCurrency");
     final lastJackpot = await AppSettings.getJackpotTime();
     final spinsSinceRare = await AppSettings.getInt("spinsSinceLastRare");
     final totalSpins = await AppSettings.getTotalSpins();

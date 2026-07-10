@@ -56,7 +56,8 @@ class _AnimatedRankBadgeState extends State<AnimatedRankBadge>
             color: improved
                 ? Colors.green.withValues(alpha: 0.2 * (1 - _controller.value))
                 : declined
-                    ? Colors.red.withValues(alpha: 0.2 * (1 - _controller.value))
+                    ? Colors.red
+                        .withValues(alpha: 0.2 * (1 - _controller.value))
                     : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),

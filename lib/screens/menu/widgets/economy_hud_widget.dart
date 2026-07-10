@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -156,7 +156,8 @@ class _TicketBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFFD700).withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.7)),
+        border:
+            Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.7)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

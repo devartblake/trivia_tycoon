@@ -16,7 +16,12 @@ Room _room({
   List<PlayerPresence> players = const [],
   bool isHost = false,
 }) =>
-    Room(id: id, name: name, capacity: capacity, players: players, isHost: isHost);
+    Room(
+        id: id,
+        name: name,
+        capacity: capacity,
+        players: players,
+        isHost: isHost);
 
 // ---------------------------------------------------------------------------
 // Tests

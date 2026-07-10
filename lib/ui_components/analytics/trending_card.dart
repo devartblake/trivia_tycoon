@@ -64,7 +64,8 @@ class TrendingPerformanceCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
                     value: trending.questionsAnswered > 0
-                        ? (trending.correctAnswered / trending.questionsAnswered)
+                        ? (trending.correctAnswered /
+                            trending.questionsAnswered)
                         : 0,
                     minHeight: 12,
                     backgroundColor: Colors.grey.shade200,

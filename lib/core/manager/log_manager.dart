@@ -138,7 +138,8 @@ class LogManager {
   static void setProductionMode(bool enabled) {
     _productionMode = enabled;
     if (enabled && kDebugMode) {
-      debugPrint('⚠️ LogManager: Production mode enabled - debug logs suppressed');
+      debugPrint(
+          '⚠️ LogManager: Production mode enabled - debug logs suppressed');
     }
   }
 
@@ -163,7 +164,8 @@ class LogManager {
     final entry = LogEntry(level, message, source: source);
 
     // In production mode, suppress debug and info logs (only show warnings and errors)
-    if (_productionMode && (level == LogLevel.debug || level == LogLevel.info)) {
+    if (_productionMode &&
+        (level == LogLevel.debug || level == LogLevel.info)) {
       // Don't log or print, but still store for analysis if forced
       if (forceLog) {
         _logs.add(entry);

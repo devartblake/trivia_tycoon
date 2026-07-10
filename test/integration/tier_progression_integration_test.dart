@@ -97,7 +97,8 @@ void main() {
           await tierManager.updateTierProgress();
 
           final tier = await tierManager.getCurrentTier();
-          expect(tier?.id, i, reason: 'Should be tier $i at XP ${xpThresholds[i]}');
+          expect(tier?.id, i,
+              reason: 'Should be tier $i at XP ${xpThresholds[i]}');
         }
       });
     });
@@ -352,8 +353,7 @@ class MockPlayerProfileService implements PlayerProfileService {
   }
 
   @override
-  Future<void> saveLevelData(
-      {int? level, int? currentXP, int? maxXP}) async {
+  Future<void> saveLevelData({int? level, int? currentXP, int? maxXP}) async {
     if (level != null) _profile['level'] = level;
     if (currentXP != null) _profile['currentXP'] = currentXP;
     if (maxXP != null) _profile['maxXP'] = maxXP;
@@ -394,7 +394,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 0,
         maxXp: 500,
         iconName: 'bronze_rookie',
-        rewards: TierReward(badge: 'welcome_badge', coinsBonus: 100, gemsBonus: 0),
+        rewards:
+            TierReward(badge: 'welcome_badge', coinsBonus: 100, gemsBonus: 0),
       ),
       TierDefinition(
         id: 'silver-scholar',
@@ -403,7 +404,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 500,
         maxXp: 1200,
         iconName: 'silver_scholar',
-        rewards: TierReward(badge: 'scholar_badge', coinsBonus: 250, gemsBonus: 5),
+        rewards:
+            TierReward(badge: 'scholar_badge', coinsBonus: 250, gemsBonus: 5),
       ),
       TierDefinition(
         id: 'gold-master',
@@ -412,7 +414,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 1200,
         maxXp: 2500,
         iconName: 'gold_master',
-        rewards: TierReward(badge: 'master_badge', coinsBonus: 500, gemsBonus: 15),
+        rewards:
+            TierReward(badge: 'master_badge', coinsBonus: 500, gemsBonus: 15),
       ),
       TierDefinition(
         id: 'platinum-elite',
@@ -421,7 +424,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 2500,
         maxXp: 5000,
         iconName: 'platinum_elite',
-        rewards: TierReward(badge: 'elite_badge', coinsBonus: 1000, gemsBonus: 30),
+        rewards:
+            TierReward(badge: 'elite_badge', coinsBonus: 1000, gemsBonus: 30),
       ),
       TierDefinition(
         id: 'diamond-legend',
@@ -430,7 +434,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 5000,
         maxXp: 10000,
         iconName: 'diamond_legend',
-        rewards: TierReward(badge: 'legend_badge', coinsBonus: 2000, gemsBonus: 50),
+        rewards:
+            TierReward(badge: 'legend_badge', coinsBonus: 2000, gemsBonus: 50),
       ),
       TierDefinition(
         id: 'master-sage',
@@ -439,7 +444,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 10000,
         maxXp: 20000,
         iconName: 'master_sage',
-        rewards: TierReward(badge: 'sage_badge', coinsBonus: 5000, gemsBonus: 100),
+        rewards:
+            TierReward(badge: 'sage_badge', coinsBonus: 5000, gemsBonus: 100),
       ),
       TierDefinition(
         id: 'grandmaster',
@@ -448,8 +454,8 @@ class MockTierApiClient implements TierApiClient {
         minXp: 20000,
         maxXp: 50000,
         iconName: 'grandmaster',
-        rewards:
-            TierReward(badge: 'grandmaster_badge', coinsBonus: 10000, gemsBonus: 200),
+        rewards: TierReward(
+            badge: 'grandmaster_badge', coinsBonus: 10000, gemsBonus: 200),
       ),
       if (_tierCount >= 8)
         TierDefinition(
@@ -471,7 +477,8 @@ class MockTierApiClient implements TierApiClient {
   }
 
   @override
-  Future<XpAwardResult> awardXp(String userId, int amount, String reason) async {
+  Future<XpAwardResult> awardXp(
+      String userId, int amount, String reason) async {
     throw UnimplementedError();
   }
 

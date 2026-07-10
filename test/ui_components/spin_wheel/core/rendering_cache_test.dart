@@ -24,7 +24,8 @@ void main() {
         expect(identical(shader1, shader2), true);
       });
 
-      test('getCachedRadialGradient creates new shader for different colors', () {
+      test('getCachedRadialGradient creates new shader for different colors',
+          () {
         final rect = Rect.fromLTWH(0, 0, 100, 100);
 
         final shader1 = cacheManager.getCachedRadialGradient(Colors.blue, rect);
@@ -154,10 +155,18 @@ void main() {
     group('Geometry Caching', () {
       test('getCachedSegmentGeometry caches geometry correctly', () {
         final geom1 = cacheManager.getCachedSegmentGeometry(
-          0, 0, 100, 0, 0.5,
+          0,
+          0,
+          100,
+          0,
+          0.5,
         );
         final geom2 = cacheManager.getCachedSegmentGeometry(
-          0, 0, 100, 0, 0.5,
+          0,
+          0,
+          100,
+          0,
+          0.5,
         );
 
         expect(identical(geom1, geom2), true);
@@ -165,7 +174,7 @@ void main() {
 
       test('geometry cache returns correct calculated values', () {
         final geom = cacheManager.getCachedSegmentGeometry(
-          50, 50, 100, 0, 1.57,  // pi/2
+          50, 50, 100, 0, 1.57, // pi/2
         );
 
         expect(geom.center, const Offset(50, 50));
@@ -262,7 +271,7 @@ void main() {
         center: Offset.zero,
         radius: 100,
         startAngle: 0,
-        endAngle: 1.57,  // pi/2
+        endAngle: 1.57, // pi/2
       );
 
       final rotation = geom.getTextRotation();

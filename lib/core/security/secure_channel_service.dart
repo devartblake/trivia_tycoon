@@ -104,8 +104,7 @@ class DefaultSecureChannelService implements SecureChannelService {
       throw const SecureChannelException('Missing serverPublicKey in response');
     }
 
-    final selectedSuite =
-        payload['selectedSuite']?.toString() ?? _suiteX25519;
+    final selectedSuite = payload['selectedSuite']?.toString() ?? _suiteX25519;
 
     // We always send an X25519 public key; the server performs X25519 ECDH
     // regardless of the selected suite label. The suite label differentiates
@@ -168,8 +167,8 @@ class DefaultSecureChannelService implements SecureChannelService {
   }
 
   @override
-  Future<void> persistSequenceIncrement(SecureSession session) =>
-      _sessionStore.save(session.copyWith(nextSequence: session.nextSequence + 1));
+  Future<void> persistSequenceIncrement(SecureSession session) => _sessionStore
+      .save(session.copyWith(nextSequence: session.nextSequence + 1));
 
   @override
   Future<void> clearSession() async {

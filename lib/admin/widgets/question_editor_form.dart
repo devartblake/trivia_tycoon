@@ -200,8 +200,7 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
           const SizedBox(height: 12),
           RadioGroup<int>(
             groupValue: _correctAnswerIndex,
-            onChanged: (value) =>
-                setState(() => _correctAnswerIndex = value!),
+            onChanged: (value) => setState(() => _correctAnswerIndex = value!),
             child: Column(
               children: List.generate(_optionControllers.length, (index) {
                 final isCorrect = _correctAnswerIndex == index;
@@ -220,8 +219,8 @@ class _QuestionEditorFormState extends State<QuestionEditorForm> {
                     ),
                   ),
                   child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 4),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     leading: Radio<int>(value: index),
                     title: TextFormField(
                       controller: _optionControllers[index],

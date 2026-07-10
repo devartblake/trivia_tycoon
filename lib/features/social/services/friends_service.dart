@@ -32,7 +32,8 @@ class FriendsService {
   Future<List<Friend>> getFriends({int page = 1, int pageSize = 20}) async {
     try {
       _log.info('Fetching friends: page=$page pageSize=$pageSize');
-      final response = await _apiClient.listFriends(page: page, pageSize: pageSize);
+      final response =
+          await _apiClient.listFriends(page: page, pageSize: pageSize);
       _log.fine('Fetched ${response.friends.length} friends');
       return response.friends;
     } catch (e, stackTrace) {
@@ -46,8 +47,8 @@ class FriendsService {
       {int page = 1, int pageSize = 20}) async {
     try {
       _log.info('Fetching pending requests: page=$page pageSize=$pageSize');
-      final response = await _apiClient.listPendingRequests(
-          page: page, pageSize: pageSize);
+      final response =
+          await _apiClient.listPendingRequests(page: page, pageSize: pageSize);
       _log.fine('Fetched ${response.requests.length} pending requests');
       return response.requests;
     } catch (e, stackTrace) {

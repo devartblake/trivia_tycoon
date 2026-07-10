@@ -105,7 +105,8 @@ void main() {
         };
 
     test('parses sku', () {
-      expect(DailyStoreItem.fromJson(makeJson(sku: 'daily:xp')).sku, 'daily:xp');
+      expect(
+          DailyStoreItem.fromJson(makeJson(sku: 'daily:xp')).sku, 'daily:xp');
     });
 
     test('uses id as sku fallback', () {
@@ -113,8 +114,8 @@ void main() {
     });
 
     test('parses title from name', () {
-      expect(
-          DailyStoreItem.fromJson(makeJson(name: 'Double XP')).title, 'Double XP');
+      expect(DailyStoreItem.fromJson(makeJson(name: 'Double XP')).title,
+          'Double XP');
     });
 
     test('parses title from title field', () {
@@ -123,7 +124,8 @@ void main() {
     });
 
     test('parses description', () {
-      expect(DailyStoreItem.fromJson(makeJson(description: 'Great')).description,
+      expect(
+          DailyStoreItem.fromJson(makeJson(description: 'Great')).description,
           'Great');
     });
 
@@ -147,7 +149,8 @@ void main() {
 
     test('parses iconPath', () {
       expect(
-          DailyStoreItem.fromJson(makeJson(iconPath: 'assets/icon.png')).iconPath,
+          DailyStoreItem.fromJson(makeJson(iconPath: 'assets/icon.png'))
+              .iconPath,
           'assets/icon.png');
     });
 

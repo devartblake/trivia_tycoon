@@ -41,11 +41,11 @@ class SkillDetailPopup extends StatelessWidget {
                     children: [
                       Text(
                         skill.name,
-                        style: Theme.of(context).textTheme.headlineSmall
-                            ?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: skillColor,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: skillColor,
+                                ),
                       ),
                       const SizedBox(height: 4),
                       Chip(
@@ -131,7 +131,8 @@ class SkillDetailPopup extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.orange.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                  border:
+                      Border.all(color: Colors.orange.withValues(alpha: 0.3)),
                 ),
                 padding: const EdgeInsets.all(12),
                 child: Row(
@@ -141,7 +142,8 @@ class SkillDetailPopup extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Complete the requirements above to unlock this skill',
-                        style: TextStyle(color: Colors.orange[700], fontSize: 12),
+                        style:
+                            TextStyle(color: Colors.orange[700], fontSize: 12),
                       ),
                     ),
                   ],

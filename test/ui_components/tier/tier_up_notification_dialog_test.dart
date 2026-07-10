@@ -53,7 +53,8 @@ void main() {
       expect(find.text('Platinum Tier'), findsOneWidget);
     });
 
-    testWidgets('displays congratulations message', (WidgetTester tester) async {
+    testWidgets('displays congratulations message',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
@@ -65,8 +66,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Congratulations on reaching Level 6!'),
-          findsOneWidget);
+      expect(find.text('Congratulations on reaching Level 6!'), findsOneWidget);
     });
 
     testWidgets('displays rewards unlocked title', (WidgetTester tester) async {
@@ -206,7 +206,8 @@ void main() {
       expect(dismissed, true);
     });
 
-    testWidgets('displays correct icon for Platinum tier', (WidgetTester tester) async {
+    testWidgets('displays correct icon for Platinum tier',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
@@ -221,7 +222,8 @@ void main() {
       expect(find.byIcon(Icons.diamond), findsOneWidget);
     });
 
-    testWidgets('displays correct icon for Gold tier', (WidgetTester tester) async {
+    testWidgets('displays correct icon for Gold tier',
+        (WidgetTester tester) async {
       final goldTier = TierDefinition(
         id: '5',
         name: 'Gold Tier',
@@ -250,7 +252,8 @@ void main() {
       expect(find.byIcon(Icons.monetization_on), findsOneWidget);
     });
 
-    testWidgets('displays correct icon for Silver tier', (WidgetTester tester) async {
+    testWidgets('displays correct icon for Silver tier',
+        (WidgetTester tester) async {
       final silverTier = TierDefinition(
         id: '3',
         name: 'Silver Tier',
@@ -279,7 +282,8 @@ void main() {
       expect(find.byIcon(Icons.shield), findsOneWidget);
     });
 
-    testWidgets('dialog has scale and fade animation', (WidgetTester tester) async {
+    testWidgets('dialog has scale and fade animation',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Material(
@@ -311,7 +315,8 @@ void main() {
       expect(find.byIcon(Icons.card_giftcard), findsOneWidget);
     });
 
-    testWidgets('handles high tier numbers correctly', (WidgetTester tester) async {
+    testWidgets('handles high tier numbers correctly',
+        (WidgetTester tester) async {
       final maxTier = TierDefinition(
         id: '18',
         name: 'Platinum Tier Max',
@@ -337,13 +342,14 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Congratulations on reaching Level 18!'),
-          findsOneWidget);
+      expect(
+          find.text('Congratulations on reaching Level 18!'), findsOneWidget);
       expect(find.text('10000'), findsOneWidget);
       expect(find.text('500'), findsOneWidget);
     });
 
-    testWidgets('displays correct level in message for all tiers', (WidgetTester tester) async {
+    testWidgets('displays correct level in message for all tiers',
+        (WidgetTester tester) async {
       for (int level = 1; level <= 6; level++) {
         final tier = TierDefinition(
           id: level.toString(),

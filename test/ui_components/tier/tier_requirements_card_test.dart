@@ -213,7 +213,8 @@ void main() {
       expect(find.byIcon(Icons.diamond), findsOneWidget);
     });
 
-    testWidgets('uses correct color for Platinum tier', (WidgetTester tester) async {
+    testWidgets('uses correct color for Platinum tier',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -228,7 +229,8 @@ void main() {
       expect(find.byIcon(Icons.diamond), findsOneWidget);
     });
 
-    testWidgets('uses correct color for Gold tier', (WidgetTester tester) async {
+    testWidgets('uses correct color for Gold tier',
+        (WidgetTester tester) async {
       final goldTier = TierDefinition(
         id: '5',
         name: 'Gold Tier',
@@ -257,7 +259,8 @@ void main() {
       expect(find.byIcon(Icons.monetization_on), findsWidgets);
     });
 
-    testWidgets('uses correct color for Silver tier', (WidgetTester tester) async {
+    testWidgets('uses correct color for Silver tier',
+        (WidgetTester tester) async {
       final silverTier = TierDefinition(
         id: '3',
         name: 'Silver Tier',

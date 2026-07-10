@@ -551,7 +551,8 @@ class _LocalArcadeLeaderboardScreenState
   Widget _buildGlobalLeaderboard(_GameData game) {
     return ArcadeGlobalLeaderboardView(
       gameId: game.id,
-      difficulty: ArcadeDifficulty.normal, // Default to normal, could add another toggle for difficulty
+      difficulty: ArcadeDifficulty
+          .normal, // Default to normal, could add another toggle for difficulty
     );
   }
 

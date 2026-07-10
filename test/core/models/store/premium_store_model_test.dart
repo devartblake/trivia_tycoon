@@ -49,7 +49,8 @@ void main() {
 
     test('parses durationLabel', () {
       expect(
-          AdRemovePlan.fromJson(makeJson(durationLabel: '7 DAYS')).durationLabel,
+          AdRemovePlan.fromJson(makeJson(durationLabel: '7 DAYS'))
+              .durationLabel,
           '7 DAYS');
     });
 
@@ -59,7 +60,8 @@ void main() {
     });
 
     test('parses badge', () {
-      expect(AdRemovePlan.fromJson(makeJson(badge: 'Hot Deal')).badge, 'Hot Deal');
+      expect(
+          AdRemovePlan.fromJson(makeJson(badge: 'Hot Deal')).badge, 'Hot Deal');
     });
 
     test('badge defaults to "" when absent', () {
@@ -69,8 +71,8 @@ void main() {
     });
 
     test('parses isBestValue', () {
-      expect(
-          AdRemovePlan.fromJson(makeJson(isBestValue: true)).isBestValue, isTrue);
+      expect(AdRemovePlan.fromJson(makeJson(isBestValue: true)).isBestValue,
+          isTrue);
     });
 
     test('isBestValue defaults to false when absent', () {

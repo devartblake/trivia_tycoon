@@ -390,7 +390,8 @@ class UserProfileScreen extends StatelessWidget {
 
   // Bottom sheet for QR/share
   Widget _buildShareModal(BuildContext context) {
-    final baseUrl = EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
+    final baseUrl =
+        EnvConfig.appRedirectBaseUrl ?? 'https://app.synapticplay.com';
     final shareUrl = '$baseUrl/user/${entry.userId}';
 
     return Padding(

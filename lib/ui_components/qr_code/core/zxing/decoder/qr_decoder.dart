@@ -132,7 +132,6 @@ class QrDecoder {
     final success = _ecc.decode(copy, ecCodewords);
     return success ? copy : null;
   }
-
 }
 
 class QrDecodeResult {

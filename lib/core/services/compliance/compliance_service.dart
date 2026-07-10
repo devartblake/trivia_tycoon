@@ -27,7 +27,7 @@ class ComplianceService {
 
     try {
       final status = await _client.getStatus(userId);
-      _cached      = status;
+      _cached = status;
       _cacheExpiry = DateTime.now().add(_cacheTtl);
       return status;
     } catch (_) {
@@ -42,7 +42,7 @@ class ComplianceService {
   }
 
   void invalidateCache() {
-    _cached      = null;
+    _cached = null;
     _cacheExpiry = null;
   }
 
@@ -64,7 +64,8 @@ class ComplianceService {
 
   // ── Age verification ──────────────────────────────────────────────────────
 
-  Future<AgeVerificationResult> verifyAge(String userId, DateTime dateOfBirth) async {
+  Future<AgeVerificationResult> verifyAge(
+      String userId, DateTime dateOfBirth) async {
     final result = await _client.verifyAge(userId, dateOfBirth);
     invalidateCache();
     return result;
@@ -85,7 +86,8 @@ class ComplianceService {
     double amount,
     String network,
     String transactionType,
-  ) => _client.checkTransaction(userId, amount, network, transactionType);
+  ) =>
+      _client.checkTransaction(userId, amount, network, transactionType);
 
   // ── CCPA ──────────────────────────────────────────────────────────────────
 
@@ -95,21 +97,22 @@ class ComplianceService {
   Future<DataSubjectRequestResult> requestDataDeletion(String userId) =>
       _client.requestDataDeletion(userId);
 
-  Future<void> recordConsent(String userId, String consentType, {required bool granted}) =>
+  Future<void> recordConsent(String userId, String consentType,
+          {required bool granted}) =>
       _client.recordConsent(userId, consentType, granted: granted);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   static ComplianceStatus _unknownStatus(String userId) => ComplianceStatus(
-    userId:          userId,
-    kycStatus:       KycStatus.notStarted,
-    ageStatus:       AgeStatus.unknown,
-    geoStatus:       GeoStatus.unchecked,
-    amlStatus:       AmlStatus.clear,
-    consentStatus:   ConsentStatus.notGiven,
-    canUseCrypto:    false,
-    canReceivePrizes: false,
-    canCollectData:  false,
-    requiredActions: ['kyc', 'age_verification', 'consent', 'geo_check'],
-  );
+        userId: userId,
+        kycStatus: KycStatus.notStarted,
+        ageStatus: AgeStatus.unknown,
+        geoStatus: GeoStatus.unchecked,
+        amlStatus: AmlStatus.clear,
+        consentStatus: ConsentStatus.notGiven,
+        canUseCrypto: false,
+        canReceivePrizes: false,
+        canCollectData: false,
+        requiredActions: ['kyc', 'age_verification', 'consent', 'geo_check'],
+      );
 }

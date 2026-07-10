@@ -141,7 +141,8 @@ void main() {
     await _expectDrawerRoute(tester, router, 'REWARDS', canonicalRewardsRoute);
     await _expectDrawerRoute(tester, router, 'SKILL TREE', '/skills');
     await _expectDrawerRoute(tester, router, 'ARCADE', canonicalLabsRoute);
-    await _expectDrawerRoute(tester, router, 'SETTINGS', canonicalSettingsRoute);
+    await _expectDrawerRoute(
+        tester, router, 'SETTINGS', canonicalSettingsRoute);
   });
 }
 

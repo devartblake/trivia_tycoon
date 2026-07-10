@@ -161,7 +161,8 @@ class PerformanceChartScreen extends ConsumerWidget {
     final avg = values.isNotEmpty
         ? values.reduce((a, b) => a + b) / values.length
         : 0.0;
-    final max = values.isNotEmpty ? values.reduce((a, b) => a > b ? a : b) : 0.0;
+    final max =
+        values.isNotEmpty ? values.reduce((a, b) => a > b ? a : b) : 0.0;
     final min =
         values.isNotEmpty ? values.reduce((a, b) => a < b ? a : b) : 0.0;
 
@@ -203,7 +204,7 @@ class PerformanceChartScreen extends ConsumerWidget {
               value,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
-              ),
+                  ),
             ),
             const SizedBox(height: 4),
             Text(

@@ -30,8 +30,8 @@ void main() {
     });
 
     test('toJson round-trips multiplier back to basis points', () {
-      final j = TileDto.fromJson(
-          {'category': 'arts', 'xpMultiplierBps': 12500}).toJson();
+      final j = TileDto.fromJson({'category': 'arts', 'xpMultiplierBps': 12500})
+          .toJson();
       for (final key in ['category', 'ownerId', 'xpMultiplierBps']) {
         expect(j.containsKey(key), isTrue, reason: 'missing: $key');
       }
@@ -112,8 +112,8 @@ void main() {
     });
 
     test('toJson contains matchId and tileOwnerId', () {
-      final j = DuelResultDto.fromJson(
-          {'matchId': 'm2', 'tileOwnerId': 'p2'}).toJson();
+      final j = DuelResultDto.fromJson({'matchId': 'm2', 'tileOwnerId': 'p2'})
+          .toJson();
       expect(j['matchId'], 'm2');
       expect(j['tileOwnerId'], 'p2');
     });

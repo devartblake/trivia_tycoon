@@ -86,7 +86,8 @@ class _SynaptixHomeAdaptiveShell extends StatelessWidget {
           body: isWide
               ? SingleChildScrollView(
                   key: const Key('synaptix-main-scroll'),
-                  child: _MainDashboard(home: home, isWide: isWide, isMedium: isMedium),
+                  child: _MainDashboard(
+                      home: home, isWide: isWide, isMedium: isMedium),
                 )
               : _StackedDashboard(home: home, isMedium: isMedium),
         );

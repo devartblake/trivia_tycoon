@@ -217,8 +217,8 @@ class AudioController {
 
     // Fallback: load from bundled assets via SoLoud.
     try {
-      _nextMusic =
-          (await soloud!.loadFile('assets/audio/music/${song.filename}')) as Handle?;
+      _nextMusic = (await soloud!
+          .loadFile('assets/audio/music/${song.filename}')) as Handle?;
       _crossfadeToNextSong();
     } catch (e) {
       _log.warning('Bundled music unavailable for ${song.filename}: $e');

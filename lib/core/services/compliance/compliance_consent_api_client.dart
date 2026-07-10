@@ -118,7 +118,8 @@ class ComplianceConsentApiClient {
         headers: _headers, body: jsonEncode({'declaredAge': declaredAge}));
     _log('POST', path, res.statusCode);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body) as Map<String, dynamic>)['isMinor'] as bool? ??
+      return (jsonDecode(res.body) as Map<String, dynamic>)['isMinor']
+              as bool? ??
           false;
     }
     _fail('POST', path, res.statusCode, res.body);
@@ -163,7 +164,8 @@ class ComplianceConsentApiClient {
     final res = await _http.get(_u(path), headers: _headers);
     _log('GET', path, res.statusCode);
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body) as List<dynamic>).cast<Map<String, dynamic>>();
+      return (jsonDecode(res.body) as List<dynamic>)
+          .cast<Map<String, dynamic>>();
     }
     _fail('GET', path, res.statusCode, res.body);
   }

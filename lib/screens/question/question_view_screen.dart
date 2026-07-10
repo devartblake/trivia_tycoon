@@ -772,8 +772,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
 
       // Fixed bottom power-up tray (Trivia-Crack style)
       bottomNavigationBar: PowerupTray(
-        powerUps:
-            QuizHelpers.getAvailablePowerUps(currentQuestion, quizState.classLevel),
+        powerUps: QuizHelpers.getAvailablePowerUps(
+            currentQuestion, quizState.classLevel),
         enabled: !(quizState.showFeedback ||
             quizState.hasUsedPowerUp ||
             quizState.isTimerExpired),

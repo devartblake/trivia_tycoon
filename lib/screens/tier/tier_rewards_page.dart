@@ -18,15 +18,25 @@ class _TierRewardsPageState extends ConsumerState<TierRewardsPage> {
   Widget build(BuildContext context) {
     // Mock available rewards - in real app, fetch from provider
     final availableRewards = <TierReward>[
-      tierDefinitions[2]?.reward ?? TierReward(coins: 250, gems: 15), // CONTENDER
-      tierDefinitions[3]?.reward ?? TierReward(coins: 500, gems: 30), // CHALLENGER
+      tierDefinitions[2]?.reward ??
+          TierReward(coins: 250, gems: 15), // CONTENDER
+      tierDefinitions[3]?.reward ??
+          TierReward(coins: 500, gems: 30), // CHALLENGER
     ];
 
     final claimedRewards = <(TierDefinition, TierReward, DateTime)>[
       if (tierDefinitions[1] != null)
-        (tierDefinitions[1]!, tierDefinitions[1]!.reward, DateTime.now().subtract(const Duration(days: 3))),
+        (
+          tierDefinitions[1]!,
+          tierDefinitions[1]!.reward,
+          DateTime.now().subtract(const Duration(days: 3))
+        ),
       if (tierDefinitions[0] != null)
-        (tierDefinitions[0]!, tierDefinitions[0]!.reward, DateTime.now().subtract(const Duration(days: 7))),
+        (
+          tierDefinitions[0]!,
+          tierDefinitions[0]!.reward,
+          DateTime.now().subtract(const Duration(days: 7))
+        ),
     ];
 
     return Scaffold(
@@ -200,7 +210,8 @@ class _TierRewardsPageState extends ConsumerState<TierRewardsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${rewards.length} reward${rewards.length > 1 ? 's' : ''} claimed!'),
+            content: Text(
+                '${rewards.length} reward${rewards.length > 1 ? 's' : ''} claimed!'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
@@ -258,9 +269,10 @@ class _RewardClaimCardState extends State<_RewardClaimCard> {
                       const SizedBox(height: 4),
                       Text(
                         widget.reward.badgeName ?? 'Achievement Badge',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                     ],
                   ),
@@ -296,16 +308,18 @@ class _RewardClaimCardState extends State<_RewardClaimCard> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _isClaiming ? null : () async {
-                  setState(() => _isClaiming = true);
-                  try {
-                    widget.onClaim();
-                  } finally {
-                    if (mounted) {
-                      setState(() => _isClaiming = false);
-                    }
-                  }
-                },
+                onPressed: _isClaiming
+                    ? null
+                    : () async {
+                        setState(() => _isClaiming = true);
+                        try {
+                          widget.onClaim();
+                        } finally {
+                          if (mounted) {
+                            setState(() => _isClaiming = false);
+                          }
+                        }
+                      },
                 child: _isClaiming
                     ? const SizedBox(
                         height: 20,

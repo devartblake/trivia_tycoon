@@ -6,7 +6,8 @@ class SynaptixPanelHeader extends StatelessWidget {
   final String title;
   final String action;
 
-  const SynaptixPanelHeader({super.key, required this.title, required this.action});
+  const SynaptixPanelHeader(
+      {super.key, required this.title, required this.action});
 
   @override
   Widget build(BuildContext context) {

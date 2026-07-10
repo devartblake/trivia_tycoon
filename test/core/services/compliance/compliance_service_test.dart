@@ -18,7 +18,8 @@ void main() {
       expect(client.getStatusCallCount, 1);
     });
 
-    test('returns cached status when refresh fails and cache is still valid', () async {
+    test('returns cached status when refresh fails and cache is still valid',
+        () async {
       final client = _FakeComplianceApiClient()
         ..enqueueStatus((userId) => _status(userId, canUseCrypto: true))
         ..enqueueStatusError(const ComplianceApiException(
@@ -34,7 +35,8 @@ void main() {
       expect(client.getStatusCallCount, 2);
     });
 
-    test('returns unknown status when request fails without a reusable cache', () async {
+    test('returns unknown status when request fails without a reusable cache',
+        () async {
       final client = _FakeComplianceApiClient()
         ..enqueueStatusError(const ComplianceApiException(
           message: 'network failure',
@@ -50,7 +52,8 @@ void main() {
       expect(status.canCollectData, isFalse);
       expect(
         status.requiredActions,
-        containsAll(<String>['kyc', 'age_verification', 'consent', 'geo_check']),
+        containsAll(
+            <String>['kyc', 'age_verification', 'consent', 'geo_check']),
       );
       expect(client.getStatusCallCount, 1);
     });
@@ -58,9 +61,11 @@ void main() {
 }
 
 class _FakeComplianceApiClient extends ComplianceApiClient {
-  _FakeComplianceApiClient() : super(http.Client(), baseUrl: 'https://example.test');
+  _FakeComplianceApiClient()
+      : super(http.Client(), baseUrl: 'https://example.test');
 
-  final List<Future<ComplianceStatus> Function(String userId)> _statusCalls = [];
+  final List<Future<ComplianceStatus> Function(String userId)> _statusCalls =
+      [];
   int getStatusCallCount = 0;
 
   void enqueueStatus(ComplianceStatus Function(String userId) handler) {
@@ -82,15 +87,16 @@ class _FakeComplianceApiClient extends ComplianceApiClient {
   }
 }
 
-ComplianceStatus _status(String userId, {required bool canUseCrypto}) => ComplianceStatus(
-  userId: userId,
-  kycStatus: KycStatus.approved,
-  ageStatus: AgeStatus.adult,
-  geoStatus: GeoStatus.allowed,
-  amlStatus: AmlStatus.clear,
-  consentStatus: ConsentStatus.full,
-  canUseCrypto: canUseCrypto,
-  canReceivePrizes: canUseCrypto,
-  canCollectData: true,
-  requiredActions: const [],
-);
+ComplianceStatus _status(String userId, {required bool canUseCrypto}) =>
+    ComplianceStatus(
+      userId: userId,
+      kycStatus: KycStatus.approved,
+      ageStatus: AgeStatus.adult,
+      geoStatus: GeoStatus.allowed,
+      amlStatus: AmlStatus.clear,
+      consentStatus: ConsentStatus.full,
+      canUseCrypto: canUseCrypto,
+      canReceivePrizes: canUseCrypto,
+      canCollectData: true,
+      requiredActions: const [],
+    );

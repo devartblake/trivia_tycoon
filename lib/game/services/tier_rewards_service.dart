@@ -24,7 +24,8 @@ class TierRewardsService {
   Future<List<String>> claimPendingRewards(String userId) async {
     try {
       final claimedTiers = await _getClaimedTiers();
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
       final currentTierId = progress.currentTier.id;
 
       // Check if current tier reward has been claimed
@@ -154,7 +155,8 @@ class TierRewardsService {
   Future<List<String>> getUnclaimedTiers(String userId) async {
     try {
       final claimed = await _getClaimedTiers();
-      final progress = await _tierProgressionService.getPlayerTierProgress(userId);
+      final progress =
+          await _tierProgressionService.getPlayerTierProgress(userId);
 
       // For now, just the current tier if not claimed
       final unclaimed = <String>[];

@@ -11,22 +11,21 @@ void main() {
       for (final size in [3, 4, 5, 6]) {
         final level = FlowConnectLevelGenerator.generateLevel(
             size, FlowConnectDifficulty.medium);
-        expect(level.gridSize, size,
-            reason: 'gridSize should be $size');
+        expect(level.gridSize, size, reason: 'gridSize should be $size');
       }
     });
 
     test('grid rows match gridSize when path succeeds', () {
-      final level =
-          FlowConnectLevelGenerator.generateLevel(5, FlowConnectDifficulty.medium);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          5, FlowConnectDifficulty.medium);
       if (level.solutionPath.isNotEmpty) {
         expect(level.grid.length, 5);
       }
     });
 
     test('each grid row has gridSize columns when path succeeds', () {
-      final level =
-          FlowConnectLevelGenerator.generateLevel(5, FlowConnectDifficulty.medium);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          5, FlowConnectDifficulty.medium);
       if (level.solutionPath.isNotEmpty) {
         for (final row in level.grid) {
           expect(row.length, 5);
@@ -36,8 +35,8 @@ void main() {
 
     test('solutionPath visits every cell (length == gridSize²) on success', () {
       // Use 4x4 — very high probability of Hamiltonian path success
-      final level =
-          FlowConnectLevelGenerator.generateLevel(4, FlowConnectDifficulty.easy);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          4, FlowConnectDifficulty.easy);
       if (level.solutionPath.isNotEmpty) {
         expect(level.solutionPath.length, 4 * 4);
       }
@@ -50,8 +49,8 @@ void main() {
 
   group('generateLevel — failure sentinel', () {
     test('on path failure: grid is empty', () {
-      final level =
-          FlowConnectLevelGenerator.generateLevel(5, FlowConnectDifficulty.medium);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          5, FlowConnectDifficulty.medium);
       // Both paths: success (grid filled) or failure (grid empty)
       if (level.solutionPath.isEmpty) {
         expect(level.grid, isEmpty);
@@ -59,8 +58,8 @@ void main() {
     });
 
     test('on path failure: totalNumbers is 0', () {
-      final level =
-          FlowConnectLevelGenerator.generateLevel(5, FlowConnectDifficulty.medium);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          5, FlowConnectDifficulty.medium);
       if (level.solutionPath.isEmpty) {
         expect(level.totalNumbers, 0);
       }
@@ -84,8 +83,7 @@ void main() {
       for (final diff in FlowConnectDifficulty.values) {
         final level = FlowConnectLevelGenerator.generateLevel(5, diff);
         if (level.solutionPath.isNotEmpty) {
-          expect(level.totalNumbers,
-              inInclusiveRange(4, 12),
+          expect(level.totalNumbers, inInclusiveRange(4, 12),
               reason: '$diff should produce 4–12 checkpoints');
         }
       }
@@ -124,8 +122,7 @@ void main() {
       final hard = FlowConnectLevelGenerator.generateLevel(
           5, FlowConnectDifficulty.hard);
       if (medium.solutionPath.isNotEmpty && hard.solutionPath.isNotEmpty) {
-        expect(hard.totalNumbers,
-            greaterThanOrEqualTo(medium.totalNumbers));
+        expect(hard.totalNumbers, greaterThanOrEqualTo(medium.totalNumbers));
       }
     });
 
@@ -135,8 +132,7 @@ void main() {
       final medium = FlowConnectLevelGenerator.generateLevel(
           5, FlowConnectDifficulty.medium);
       if (easy.solutionPath.isNotEmpty && medium.solutionPath.isNotEmpty) {
-        expect(medium.totalNumbers,
-            greaterThanOrEqualTo(easy.totalNumbers));
+        expect(medium.totalNumbers, greaterThanOrEqualTo(easy.totalNumbers));
       }
     });
   });
@@ -147,8 +143,8 @@ void main() {
 
   group('generateLevel — grid cell positions', () {
     test('each grid cell has correct row and col indices', () {
-      final level =
-          FlowConnectLevelGenerator.generateLevel(4, FlowConnectDifficulty.easy);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          4, FlowConnectDifficulty.easy);
       if (level.solutionPath.isNotEmpty) {
         for (int r = 0; r < 4; r++) {
           for (int c = 0; c < 4; c++) {
@@ -160,10 +156,11 @@ void main() {
     });
 
     test('numbered cells have number > 0', () {
-      final level =
-          FlowConnectLevelGenerator.generateLevel(5, FlowConnectDifficulty.medium);
+      final level = FlowConnectLevelGenerator.generateLevel(
+          5, FlowConnectDifficulty.medium);
       if (level.solutionPath.isNotEmpty) {
-        final numberedCells = level.grid.expand((row) => row)
+        final numberedCells = level.grid
+            .expand((row) => row)
             .where((cell) => (cell.number ?? 0) > 0)
             .toList();
         expect(numberedCells.length, level.totalNumbers);
@@ -181,11 +178,13 @@ void main() {
     });
 
     test('contains easy, medium, hard', () {
-      expect(FlowConnectDifficulty.values, containsAll([
-        FlowConnectDifficulty.easy,
-        FlowConnectDifficulty.medium,
-        FlowConnectDifficulty.hard,
-      ]));
+      expect(
+          FlowConnectDifficulty.values,
+          containsAll([
+            FlowConnectDifficulty.easy,
+            FlowConnectDifficulty.medium,
+            FlowConnectDifficulty.hard,
+          ]));
     });
   });
 }

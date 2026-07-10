@@ -4,8 +4,10 @@ import 'package:trivia_tycoon/core/services/arcade/spin_wheel_api_service.dart';
 void main() {
   group('SpinStartResponse', () {
     test('fromJson with all fields parses correctly', () {
-      final expiry =
-          DateTime.now().toUtc().add(const Duration(minutes: 10)).toIso8601String();
+      final expiry = DateTime.now()
+          .toUtc()
+          .add(const Duration(minutes: 10))
+          .toIso8601String();
       final response = SpinStartResponse.fromJson({
         'spinId': 'srv-spin-abc',
         'segmentId': 'seg-gold',
@@ -22,10 +24,13 @@ void main() {
       expect(response.expiresAtUtc.isAfter(DateTime.now().toUtc()), isTrue);
     });
 
-    test('fromJson with missing optional fields — segmentId and wheelStopIndex are null',
+    test(
+        'fromJson with missing optional fields — segmentId and wheelStopIndex are null',
         () {
-      final expiry =
-          DateTime.now().toUtc().add(const Duration(minutes: 5)).toIso8601String();
+      final expiry = DateTime.now()
+          .toUtc()
+          .add(const Duration(minutes: 5))
+          .toIso8601String();
       final response = SpinStartResponse.fromJson({
         'spinId': 'srv-spin-def',
         'claimToken': 'tok-abc',
@@ -38,7 +43,8 @@ void main() {
       expect(response.wheelStopIndex, isNull);
     });
 
-    test('fromJson with missing expiresAtUtc — defaults to roughly 5 minutes from now',
+    test(
+        'fromJson with missing expiresAtUtc — defaults to roughly 5 minutes from now',
         () {
       final before = DateTime.now().toUtc();
       final response = SpinStartResponse.fromJson({

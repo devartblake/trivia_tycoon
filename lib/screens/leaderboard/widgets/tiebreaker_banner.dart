@@ -90,8 +90,7 @@ class _TiebreakerCard extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           ElevatedButton(
-            onPressed:
-                playable ? () => context.push('/multiplayer') : null,
+            onPressed: playable ? () => context.push('/multiplayer') : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFCD34D),
               foregroundColor: const Color(0xFF7C2D12),

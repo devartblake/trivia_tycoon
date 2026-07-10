@@ -52,7 +52,8 @@ void main() {
     });
 
     test('coerces non-string questionId via toString', () {
-      final dto = TurnDto.fromJson({'questionId': 99, 'startAtMs': 0, 'endAtMs': 0});
+      final dto =
+          TurnDto.fromJson({'questionId': 99, 'startAtMs': 0, 'endAtMs': 0});
       expect(dto.questionId, '99');
     });
   });

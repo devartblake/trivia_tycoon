@@ -136,8 +136,7 @@ void main() {
     });
 
     test('ageGroup defaults general when absent', () {
-      final j = Map<String, dynamic>.from(fullPlayerJson())
-        ..remove('ageGroup');
+      final j = Map<String, dynamic>.from(fullPlayerJson())..remove('ageGroup');
       expect(PlayerDto.fromJson(j).ageGroup, 'general');
     });
 

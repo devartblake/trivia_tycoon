@@ -48,8 +48,9 @@ class ChampionRoundStartedDto {
       options: rawOptions
           .map((e) => ChampionRoundOption.fromJson(e as Map<String, dynamic>))
           .toList(),
-      deadlineUtc: DateTime.tryParse(s('deadlineUtc', 'DeadlineUtc'))?.toUtc() ??
-          DateTime.now().toUtc(),
+      deadlineUtc:
+          DateTime.tryParse(s('deadlineUtc', 'DeadlineUtc'))?.toUtc() ??
+              DateTime.now().toUtc(),
       aliveCount: i('aliveCount', 'AliveCount'),
       jackpotPool: i('jackpotPool', 'JackpotPool'),
     );
@@ -79,8 +80,9 @@ class ChampionRoundResolvedDto {
   factory ChampionRoundResolvedDto.fromJson(Map<String, dynamic> j) {
     String s(String a, String b) => (j[a] ?? j[b] ?? '').toString();
     int i(String a, String b) => (j[a] ?? j[b] ?? 0) as int;
-    final raw = (j['eliminatedPlayerIds'] ?? j['EliminatedPlayerIds'] ?? const [])
-        as List;
+    final raw = (j['eliminatedPlayerIds'] ??
+        j['EliminatedPlayerIds'] ??
+        const []) as List;
     return ChampionRoundResolvedDto(
       gameEventId: s('gameEventId', 'GameEventId'),
       roundNumber: i('roundNumber', 'RoundNumber'),
@@ -130,8 +132,9 @@ class ChampionDuelStartedDto {
       options: rawOptions
           .map((e) => ChampionRoundOption.fromJson(e as Map<String, dynamic>))
           .toList(),
-      deadlineUtc: DateTime.tryParse(s('deadlineUtc', 'DeadlineUtc'))?.toUtc() ??
-          DateTime.now().toUtc(),
+      deadlineUtc:
+          DateTime.tryParse(s('deadlineUtc', 'DeadlineUtc'))?.toUtc() ??
+              DateTime.now().toUtc(),
     );
   }
 }
@@ -167,7 +170,8 @@ class ChampionDuelResolvedDto {
       winnerPlayerId: s('winnerPlayerId', 'WinnerPlayerId'),
       loserPlayerId: s('loserPlayerId', 'LoserPlayerId'),
       correctOptionId: s('correctOptionId', 'CorrectOptionId'),
-      championAlive: (j['championAlive'] ?? j['ChampionAlive'] ?? false) as bool,
+      championAlive:
+          (j['championAlive'] ?? j['ChampionAlive'] ?? false) as bool,
       survivorsRemaining: i('survivorsRemaining', 'SurvivorsRemaining'),
       jackpotPool: i('jackpotPool', 'JackpotPool'),
     );

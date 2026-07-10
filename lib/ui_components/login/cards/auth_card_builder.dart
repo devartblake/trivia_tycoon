@@ -518,8 +518,10 @@ class AuthCardState extends ConsumerState<AuthCard>
           alignment: Alignment.center,
           transform: Matrix4.identity()
             ..rotateZ(_cardRotationAnimation.value)
-            ..scaleByVector3(Vector3(_cardSizeAnimation.value, _cardSizeAnimation.value, 1.0))
-            ..scaleByVector3(Vector3(_cardSize2AnimationX.value, _cardSize2AnimationY.value, 1.0)),
+            ..scaleByVector3(Vector3(
+                _cardSizeAnimation.value, _cardSizeAnimation.value, 1.0))
+            ..scaleByVector3(Vector3(
+                _cardSize2AnimationX.value, _cardSize2AnimationY.value, 1.0)),
           child: current,
         );
       },

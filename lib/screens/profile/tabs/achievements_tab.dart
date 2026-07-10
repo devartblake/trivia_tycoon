@@ -198,15 +198,14 @@ class AchievementsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...recentAchievements
-              .map((achievement) => _buildAchievementItem(
-                    achievement['title'] as String,
-                    achievement['description'] as String,
-                    achievement['icon'] as IconData,
-                    achievement['color'] as Color,
-                    achievement['date'] as String,
-                    achievement['isNew'] as bool,
-                  )),
+          ...recentAchievements.map((achievement) => _buildAchievementItem(
+                achievement['title'] as String,
+                achievement['description'] as String,
+                achievement['icon'] as IconData,
+                achievement['color'] as Color,
+                achievement['date'] as String,
+                achievement['isNew'] as bool,
+              )),
         ],
       ),
     );
@@ -367,13 +366,12 @@ class AchievementsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...subjects
-              .map((subject) => _buildMasteryItem(
-                    subject['name'] as String,
-                    subject['level'] as int,
-                    subject['maxLevel'] as int,
-                    subject['color'] as Color,
-                  )),
+          ...subjects.map((subject) => _buildMasteryItem(
+                subject['name'] as String,
+                subject['level'] as int,
+                subject['maxLevel'] as int,
+                subject['color'] as Color,
+              )),
         ],
       ),
     );
@@ -511,16 +509,15 @@ class AchievementsTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ...streakAchievements
-              .map((achievement) => _buildStreakItem(
-                    achievement['title'] as String,
-                    achievement['description'] as String,
-                    achievement['currentStreak'] as int,
-                    achievement['targetStreak'] as int,
-                    achievement['icon'] as IconData,
-                    achievement['color'] as Color,
-                    achievement['completed'] as bool,
-                  )),
+          ...streakAchievements.map((achievement) => _buildStreakItem(
+                achievement['title'] as String,
+                achievement['description'] as String,
+                achievement['currentStreak'] as int,
+                achievement['targetStreak'] as int,
+                achievement['icon'] as IconData,
+                achievement['color'] as Color,
+                achievement['completed'] as bool,
+              )),
         ],
       ),
     );

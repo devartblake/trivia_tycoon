@@ -39,8 +39,8 @@ class _VideoQuestionViewState extends State<VideoQuestionView> {
 
   Future<void> _initializeVideo() async {
     if (widget.question.videoUrl?.isNotEmpty == true) {
-      _videoController =
-          VideoPlayerController.networkUrl(Uri.parse(widget.question.videoUrl!));
+      _videoController = VideoPlayerController.networkUrl(
+          Uri.parse(widget.question.videoUrl!));
       await _videoController!.initialize();
 
       _chewieController = ChewieController(

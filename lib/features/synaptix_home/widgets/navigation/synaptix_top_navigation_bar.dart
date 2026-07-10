@@ -43,7 +43,8 @@ class SynaptixTopNavigationBar extends StatelessWidget {
                 icon: const Icon(Icons.menu_rounded),
                 color: Colors.white,
                 style: IconButton.styleFrom(
-                  backgroundColor: SynaptixHomeTheme.panelAlt.withValues(alpha: 0.92),
+                  backgroundColor:
+                      SynaptixHomeTheme.panelAlt.withValues(alpha: 0.92),
                   fixedSize: const Size.square(40),
                 ),
               ),
@@ -135,7 +136,8 @@ class _TopNavItem extends StatelessWidget {
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
             border: selected
-                ? Border.all(color: SynaptixHomeTheme.purple.withValues(alpha: 0.55))
+                ? Border.all(
+                    color: SynaptixHomeTheme.purple.withValues(alpha: 0.55))
                 : null,
           ),
           child: Row(

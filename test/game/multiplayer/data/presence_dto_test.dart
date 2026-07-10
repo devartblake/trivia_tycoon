@@ -50,8 +50,8 @@ void main() {
 
   group('PresenceDto.toJson', () {
     test('round-trip preserves all fields', () {
-      const original = PresenceDto(
-          playerId: 'p1', playerName: 'Alice', isHost: true);
+      const original =
+          PresenceDto(playerId: 'p1', playerName: 'Alice', isHost: true);
       final restored = PresenceDto.fromJson(original.toJson());
       expect(restored.playerId, original.playerId);
       expect(restored.playerName, original.playerName);
@@ -60,8 +60,7 @@ void main() {
 
     test('toJson contains exactly three keys', () {
       const dto = PresenceDto(playerId: 'x', playerName: 'Y');
-      expect(dto.toJson().keys.toSet(),
-          {'playerId', 'playerName', 'isHost'});
+      expect(dto.toJson().keys.toSet(), {'playerId', 'playerName', 'isHost'});
     });
 
     test('isHost=false round-trips correctly', () {

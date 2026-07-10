@@ -512,10 +512,9 @@ class _SkillTreeNavScreenState extends ConsumerState<SkillTreeNavScreen>
     // Exact title match gets highest score
     if (title == query) {
       score += 100;
-    } else if (title.startsWith(query))
-      {
-        score += 80;
-      }
+    } else if (title.startsWith(query)) {
+      score += 80;
+    }
     // Title contains query
     else if (title.contains(query)) {
       score += 60;

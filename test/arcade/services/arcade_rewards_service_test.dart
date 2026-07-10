@@ -84,8 +84,7 @@ void main() {
     });
 
     test('difficulty order is easy < normal < hard < insane for XP', () {
-      final xps =
-          ArcadeDifficulty.values.map((d) => rewardsFor(d).xp).toList();
+      final xps = ArcadeDifficulty.values.map((d) => rewardsFor(d).xp).toList();
       for (int i = 1; i < xps.length; i++) {
         expect(xps[i], greaterThanOrEqualTo(xps[i - 1]));
       }

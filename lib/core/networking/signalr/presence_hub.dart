@@ -43,8 +43,8 @@ class PlayerPresenceSnapshotDto {
                 status: e['Status'] as String,
               ))
           .toList(),
-      timestamp:
-          DateTime.tryParse(json['Timestamp'] as String? ?? '') ?? DateTime.now(),
+      timestamp: DateTime.tryParse(json['Timestamp'] as String? ?? '') ??
+          DateTime.now(),
     );
   }
 }

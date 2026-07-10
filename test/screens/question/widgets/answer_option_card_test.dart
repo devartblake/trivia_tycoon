@@ -42,7 +42,8 @@ void main() {
       expect(pressed, isTrue);
     });
 
-    testWidgets('Disables button when onPressed is null', (WidgetTester tester) async {
+    testWidgets('Disables button when onPressed is null',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -62,7 +63,8 @@ void main() {
       expect(buttonWidget.onPressed, isNull);
     });
 
-    testWidgets('Shows selected state with blue background', (WidgetTester tester) async {
+    testWidgets('Shows selected state with blue background',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -79,7 +81,8 @@ void main() {
       expect(button.style?.backgroundColor, isNotNull);
     });
 
-    testWidgets('Shows correct state with green background', (WidgetTester tester) async {
+    testWidgets('Shows correct state with green background',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -97,7 +100,8 @@ void main() {
       expect(button.style?.backgroundColor, isNotNull);
     });
 
-    testWidgets('Shows incorrect state with red background', (WidgetTester tester) async {
+    testWidgets('Shows incorrect state with red background',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -116,7 +120,8 @@ void main() {
       expect(button.style?.backgroundColor, isNotNull);
     });
 
-    testWidgets('Disables button when showFeedback is true', (WidgetTester tester) async {
+    testWidgets('Disables button when showFeedback is true',
+        (WidgetTester tester) async {
       bool pressed = false;
 
       await tester.pumpWidget(
@@ -139,7 +144,8 @@ void main() {
       expect(pressed, isFalse); // Should not call onPressed
     });
 
-    testWidgets('Multiplayer styling applies different colors', (WidgetTester tester) async {
+    testWidgets('Multiplayer styling applies different colors',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -157,7 +163,8 @@ void main() {
       expect(button.style?.backgroundColor, isNotNull);
     });
 
-    testWidgets('Text is centered and properly styled', (WidgetTester tester) async {
+    testWidgets('Text is centered and properly styled',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -217,7 +224,8 @@ void main() {
     });
 
     group('State combinations', () {
-      testWidgets('Selected and correct shows green', (WidgetTester tester) async {
+      testWidgets('Selected and correct shows green',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -235,7 +243,8 @@ void main() {
         expect(find.text('Option A'), findsOneWidget);
       });
 
-      testWidgets('Selected and incorrect shows red', (WidgetTester tester) async {
+      testWidgets('Selected and incorrect shows red',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -253,7 +262,8 @@ void main() {
         expect(find.text('Option A'), findsOneWidget);
       });
 
-      testWidgets('Not selected but correct shows light green', (WidgetTester tester) async {
+      testWidgets('Not selected but correct shows light green',
+          (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(

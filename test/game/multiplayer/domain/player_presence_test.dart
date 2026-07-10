@@ -24,7 +24,8 @@ void main() {
 
   group('PlayerPresence construction', () {
     test('stores all provided fields', () {
-      final p = _p(id: 'u1', name: 'Bob', avatarUrl: 'https://img', isHost: true);
+      final p =
+          _p(id: 'u1', name: 'Bob', avatarUrl: 'https://img', isHost: true);
       expect(p.id, 'u1');
       expect(p.name, 'Bob');
       expect(p.avatarUrl, 'https://img');

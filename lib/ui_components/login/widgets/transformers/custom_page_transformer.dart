@@ -14,11 +14,13 @@ class CustomPageTransformer extends PageTransformer {
 
     if (position > 0) {
       transform
-        ..scaleByVector3(Vector3(lerp(0.6, 1.0, pageDt), lerp(0.6, 1.0, pageDt), 1.0))
+        ..scaleByVector3(
+            Vector3(lerp(0.6, 1.0, pageDt), lerp(0.6, 1.0, pageDt), 1.0))
         ..rotateY(position * -1.5);
     } else {
       transform
-        ..scaleByVector3(Vector3(lerp(0.6, 1.0, pageDt), lerp(0.6, 1.0, pageDt), 1.0))
+        ..scaleByVector3(
+            Vector3(lerp(0.6, 1.0, pageDt), lerp(0.6, 1.0, pageDt), 1.0))
         ..rotateY(position * 1.5);
     }
 

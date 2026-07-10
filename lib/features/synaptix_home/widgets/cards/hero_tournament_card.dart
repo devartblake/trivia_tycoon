@@ -15,8 +15,10 @@ class HeroTournamentCard extends StatelessWidget {
     final showTrophy = MediaQuery.sizeOf(context).width >= 680;
     final event = home.featuredEvent;
     final titleWords = event.title.split(' ');
-    final titleLine1 = titleWords.take((titleWords.length / 2).ceil()).join(' ');
-    final titleLine2 = titleWords.skip((titleWords.length / 2).ceil()).join(' ');
+    final titleLine1 =
+        titleWords.take((titleWords.length / 2).ceil()).join(' ');
+    final titleLine2 =
+        titleWords.skip((titleWords.length / 2).ceil()).join(' ');
 
     return SynaptixPanel(
       minHeight: 260,
@@ -61,7 +63,9 @@ class HeroTournamentCard extends StatelessWidget {
                     _LiveBadge(label: event.timeRemaining),
                     const SizedBox(height: 18),
                     Text(
-                      titleLine2.isEmpty ? titleLine1 : '$titleLine1\n$titleLine2',
+                      titleLine2.isEmpty
+                          ? titleLine1
+                          : '$titleLine1\n$titleLine2',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 42,

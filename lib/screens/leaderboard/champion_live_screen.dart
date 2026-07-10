@@ -45,14 +45,16 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
   void initState() {
     super.initState();
     // A single always-on tick keeps every countdown fresh.
-    _ticker = Timer.periodic(
-        const Duration(milliseconds: 250), (_) => mounted ? setState(() {}) : null);
+    _ticker = Timer.periodic(const Duration(milliseconds: 250),
+        (_) => mounted ? setState(() {}) : null);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _playerId = await ref.read(currentPlayerIdProvider.future);
       if (!mounted) return;
       try {
-        await ref.read(notificationHubProvider).joinGameEvent(widget.gameEventId);
+        await ref
+            .read(notificationHubProvider)
+            .joinGameEvent(widget.gameEventId);
       } catch (_) {
         // Not connected yet — stream listeners still catch events once it is.
       }
@@ -164,12 +166,12 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
 
   Future<void> _openDuelPicker() async {
     if (_startingDuel) return;
-    final participants =
-        await ref.read(apiServiceProvider).getEventParticipants(widget.gameEventId);
+    final participants = await ref
+        .read(apiServiceProvider)
+        .getEventParticipants(widget.gameEventId);
     if (!mounted) return;
-    final challengers = participants
-        .where((p) => !p.eliminated && !p.isChampion)
-        .toList();
+    final challengers =
+        participants.where((p) => !p.eliminated && !p.isChampion).toList();
     if (challengers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('No challengers left to call out.')),
@@ -246,12 +248,14 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
 
   Widget _body() {
     if (_ended != null) {
-      return Padding(padding: const EdgeInsets.all(20), child: _EndedView(ended: _ended!));
+      return Padding(
+          padding: const EdgeInsets.all(20), child: _EndedView(ended: _ended!));
     }
     // A duelist gets the focused duel view; everyone else follows the round.
     final duel = _duel;
     if (duel != null && _amInDuel(duel)) {
-      return Padding(padding: const EdgeInsets.all(20), child: _buildDuel(duel));
+      return Padding(
+          padding: const EdgeInsets.all(20), child: _buildDuel(duel));
     }
 
     return SingleChildScrollView(
@@ -279,7 +283,8 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Champion powers',
-                style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+                style: TextStyle(
+                    color: Colors.white70, fontWeight: FontWeight.w700)),
             Text('$_duelsRemaining duel${_duelsRemaining == 1 ? '' : 's'} left',
                 style: const TextStyle(color: Color(0xFFFCD34D), fontSize: 12)),
           ],
@@ -291,7 +296,9 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
             onPressed: canDuel ? _openDuelPicker : null,
             icon: _startingDuel
                 ? const SizedBox(
-                    height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    height: 16,
+                    width: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2))
                 : const Icon(Icons.sports_kabaddi_rounded),
             label: Text(_duelsRemaining > 0
                 ? 'Call out a challenger'
@@ -350,7 +357,10 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
           children: [
             const Icon(Icons.sports_kabaddi_rounded, color: Color(0xFFFCD34D)),
             const SizedBox(width: 8),
-            Text(amChampion ? 'Your duel — defend the crown!' : 'Duel! Beat the Champion!',
+            Text(
+                amChampion
+                    ? 'Your duel — defend the crown!'
+                    : 'Duel! Beat the Champion!',
                 style: const TextStyle(
                     color: Color(0xFFFCD34D),
                     fontSize: 16,
@@ -361,7 +371,8 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
         LinearProgressIndicator(
           value: (seconds / 12).clamp(0.0, 1.0),
           backgroundColor: Colors.white10,
-          color: seconds <= 3 ? const Color(0xFFEF4444) : const Color(0xFFFCD34D),
+          color:
+              seconds <= 3 ? const Color(0xFFEF4444) : const Color(0xFFFCD34D),
           minHeight: 6,
         ),
         const SizedBox(height: 4),
@@ -390,7 +401,8 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
                 ? 'You won the duel! 🎉'
                 : 'You lost the duel — eliminated.',
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+                color: Colors.white70, fontWeight: FontWeight.w600),
           ),
         ],
       ],
@@ -417,7 +429,8 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
         LinearProgressIndicator(
           value: (seconds / 12).clamp(0.0, 1.0),
           backgroundColor: Colors.white10,
-          color: seconds <= 3 ? const Color(0xFFEF4444) : const Color(0xFFA855F7),
+          color:
+              seconds <= 3 ? const Color(0xFFEF4444) : const Color(0xFFA855F7),
           minHeight: 6,
         ),
         const SizedBox(height: 4),
@@ -534,9 +547,10 @@ class _DuelPicker extends StatelessWidget {
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: const Color(0xFF6D28D9),
-                    backgroundImage: (c.avatarUrl != null && c.avatarUrl!.isNotEmpty)
-                        ? NetworkImage(c.avatarUrl!)
-                        : null,
+                    backgroundImage:
+                        (c.avatarUrl != null && c.avatarUrl!.isNotEmpty)
+                            ? NetworkImage(c.avatarUrl!)
+                            : null,
                     child: (c.avatarUrl == null || c.avatarUrl!.isEmpty)
                         ? Text(
                             c.displayName.isNotEmpty

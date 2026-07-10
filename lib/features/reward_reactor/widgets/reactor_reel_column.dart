@@ -99,10 +99,12 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
               offset: Offset(0, -offset),
               child: Column(
                 children: _displaySymbols.asMap().entries.map((entry) {
-                  final count = widget.symbols.isEmpty ? 1 : widget.symbols.length;
+                  final count =
+                      widget.symbols.isEmpty ? 1 : widget.symbols.length;
                   final isWinning = !widget.isSpinning &&
                       entry.key == 1 &&
-                      entry.value == widget.symbols[widget.winningSymbolIndex % count];
+                      entry.value ==
+                          widget.symbols[widget.winningSymbolIndex % count];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: ReactorSymbolTile(

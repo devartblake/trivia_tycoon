@@ -309,7 +309,8 @@ class MultiplayerQuizService {
       correctAnswer: correctAnswer,
       options: options, // List<String> for compatibility
       type: QuestionType.multipleChoice,
-      difficulty: QuestionDifficultyExtension.fromInt(_getDifficultyLevelForGameMode(gameMode)),
+      difficulty: QuestionDifficultyExtension.fromInt(
+          _getDifficultyLevelForGameMode(gameMode)),
       correctIndex: correctIndex,
       powerUpHint: sample['hint'],
     );

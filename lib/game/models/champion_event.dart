@@ -42,7 +42,8 @@ class ChampionEvent {
 
   /// The jackpot to show players: the multiplied pool once known, else the raw
   /// pool (summaries don't carry a jackpot at all → 0).
-  int get displayJackpot => effectiveJackpot > 0 ? effectiveJackpot : jackpotPool;
+  int get displayJackpot =>
+      effectiveJackpot > 0 ? effectiveJackpot : jackpotPool;
 
   /// Backend serializes GameEventStatus via JsonStringEnumConverter (string),
   /// but tolerate the raw int enum (1..4) as well.
@@ -70,8 +71,7 @@ class ChampionEvent {
       aliveCount: (json['aliveCount'] as num?)?.toInt() ?? 0,
       jackpotPool: (json['jackpotPool'] as num?)?.toInt() ?? 0,
       effectiveJackpot: (json['effectiveJackpot'] as num?)?.toInt() ?? 0,
-      jackpotMultiplier:
-          (json['jackpotMultiplier'] as num?)?.toDouble() ?? 1.0,
+      jackpotMultiplier: (json['jackpotMultiplier'] as num?)?.toDouble() ?? 1.0,
       championPlayerId: json['championPlayerId']?.toString(),
     );
   }

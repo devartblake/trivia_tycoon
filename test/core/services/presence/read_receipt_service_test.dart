@@ -192,8 +192,7 @@ void main() {
     });
 
     test('readCount counts only read status', () {
-      final s =
-          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s = makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.readCount, 1);
     });
 
@@ -212,8 +211,7 @@ void main() {
     });
 
     test('isReadByAll false when some not read', () {
-      final s =
-          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s = makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.isReadByAll, isFalse);
     });
 
@@ -224,14 +222,12 @@ void main() {
     });
 
     test('isDeliveredToAll true when all delivered or read', () {
-      final s =
-          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s = makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.isDeliveredToAll, isTrue);
     });
 
     test('isDeliveredToAll false when any sent or failed', () {
-      final s =
-          makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.sent});
+      final s = makeStatus({'u1': ReadStatus.delivered, 'u2': ReadStatus.sent});
       expect(s.isDeliveredToAll, isFalse);
     });
 
@@ -242,14 +238,12 @@ void main() {
     });
 
     test('hasFailures false when none failed', () {
-      final s =
-          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s = makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.hasFailures, isFalse);
     });
 
     test('getReceiptForUser returns correct receipt', () {
-      final s =
-          makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
+      final s = makeStatus({'u1': ReadStatus.read, 'u2': ReadStatus.delivered});
       expect(s.getReceiptForUser('u1')?.status, ReadStatus.read);
     });
 

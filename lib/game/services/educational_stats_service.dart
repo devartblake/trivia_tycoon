@@ -120,10 +120,7 @@ class EducationalStatsService {
     }
 
     if (data is List) {
-      return data
-          .whereType<Map>()
-          .map((item) => _safeCastMap(item))
-          .toList();
+      return data.whereType<Map>().map((item) => _safeCastMap(item)).toList();
     }
 
     return <Map<String, dynamic>>[];
@@ -335,15 +332,11 @@ class EducationalStatsService {
       if (quizzesCompleted >= 5) {
         if (averageScore >= 95) {
           masteryLevel = 5;
-        } else if (averageScore >= 85)
-          {
-            masteryLevel = 4;
-          }
-        else if (averageScore >= 75)
-          {
-            masteryLevel = 3;
-          }
-        else if (averageScore >= 65) {
+        } else if (averageScore >= 85) {
+          masteryLevel = 4;
+        } else if (averageScore >= 75) {
+          masteryLevel = 3;
+        } else if (averageScore >= 65) {
           masteryLevel = 2;
         }
       }

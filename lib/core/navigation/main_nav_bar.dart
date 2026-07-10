@@ -30,8 +30,8 @@ class MainNavBar extends StatelessWidget {
         body: const SizedBox.shrink(),
         icons: _navItems
             .map(
-              (item) =>
-                  FluidNavBarIcon(icon: item.icon, extras: {'label': item.label}),
+              (item) => FluidNavBarIcon(
+                  icon: item.icon, extras: {'label': item.label}),
             )
             .toList(),
         defaultIndex: currentIndex,

@@ -29,7 +29,8 @@ class _SortingViewState extends State<SortingView> {
   @override
   void initState() {
     super.initState();
-    currentOrder = widget.selectedAnswer ?? List<String>.from(widget.question.options);
+    currentOrder =
+        widget.selectedAnswer ?? List<String>.from(widget.question.options);
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -67,7 +68,8 @@ class _SortingViewState extends State<SortingView> {
             isShielded: widget.question.isShielded,
             multiplier: widget.question.multiplier,
           ),
-        if (widget.question.showHint && widget.question.powerUpHint?.isNotEmpty == true)
+        if (widget.question.showHint &&
+            widget.question.powerUpHint?.isNotEmpty == true)
           HintPanel(hint: widget.question.powerUpHint!),
         const SizedBox(height: 24),
         Text(

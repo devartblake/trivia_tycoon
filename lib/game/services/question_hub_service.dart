@@ -199,7 +199,9 @@ class QuestionHubService {
     final localQuestions = await _localLoader.getQuestionsByCategory(category);
     final filtered = difficulty == null
         ? localQuestions
-        : localQuestions.where((q) => q.difficulty.value == difficulty).toList();
+        : localQuestions
+            .where((q) => q.difficulty.value == difficulty)
+            .toList();
     filtered.shuffle();
 
     _recordFallback(

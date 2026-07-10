@@ -170,7 +170,8 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
               child: widget.icon == null
                   ? SvgPicture.string(
                       widget.svgPath!,
-                      colorFilter: ColorFilter.mode(widget.unselectedForegroundColor, BlendMode.srcIn),
+                      colorFilter: ColorFilter.mode(
+                          widget.unselectedForegroundColor, BlendMode.srcIn),
                       width: _iconSize,
                       height: _iconSize * scaleAnimation.value,
                     )
@@ -188,7 +189,8 @@ class _FluidNavBarItemState extends State<FluidNavBarItem>
                 child: widget.icon == null
                     ? SvgPicture.string(
                         widget.svgPath!,
-                        colorFilter: ColorFilter.mode(widget.selectedForegroundColor, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(
+                            widget.selectedForegroundColor, BlendMode.srcIn),
                         width: _iconSize,
                         height: _iconSize * scaleAnimation.value,
                       )

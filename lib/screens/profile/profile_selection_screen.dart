@@ -203,9 +203,7 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                   return _buildAddProfileCard();
                 },
               ),
-
               SizedBox(height: AppResponsive.gap(layout)),
-
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 360),
                 child: SizedBox(
@@ -230,7 +228,6 @@ class _ProfileSelectionScreenState extends ConsumerState<ProfileSelectionScreen>
                   ),
                 ),
               ),
-
               const SizedBox(height: 24),
             ],
           ),

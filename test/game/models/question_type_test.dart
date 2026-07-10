@@ -35,7 +35,8 @@ void main() {
 
     group('displayName getter', () {
       test('Returns user-friendly display names', () {
-        expect(QuestionType.multipleChoice.displayName, equals('Multiple Choice'));
+        expect(
+            QuestionType.multipleChoice.displayName, equals('Multiple Choice'));
         expect(QuestionType.trueFalse.displayName, equals('True/False'));
         expect(QuestionType.imageChoice.displayName, equals('Image Question'));
         expect(QuestionType.videoChoice.displayName, equals('Video Question'));
@@ -43,7 +44,8 @@ void main() {
         expect(QuestionType.dragDrop.displayName, equals('Drag & Drop'));
         expect(QuestionType.sorting.displayName, equals('Sorting'));
         expect(QuestionType.matching.displayName, equals('Matching'));
-        expect(QuestionType.classification.displayName, equals('Classification'));
+        expect(
+            QuestionType.classification.displayName, equals('Classification'));
         expect(QuestionType.labeling.displayName, equals('Labeling'));
         expect(QuestionType.freeText.displayName, equals('Free Text'));
       });

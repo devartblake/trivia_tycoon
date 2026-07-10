@@ -152,7 +152,6 @@ class EnhancedSpinningController extends ChangeNotifier {
       sensitivityMultiplier: 1.0,
       enableGestureOptimization: true,
     );
-
   }
 
   void _startPeriodicTasks() {

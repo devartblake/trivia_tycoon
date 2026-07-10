@@ -68,7 +68,8 @@ class SkillProgressionService {
       prerequisites: ['logic_patterns'],
     );
 
-    LogManager.debug('[SkillProgressionService] Initialized with default skills');
+    LogManager.debug(
+        '[SkillProgressionService] Initialized with default skills');
   }
 
   /// Add a skill to the tree
@@ -175,8 +176,9 @@ class SkillProgressionService {
     }
 
     final mastery = _categoryMastery[category]!;
-    final masteredCount =
-        _skills.values.where((s) => s.category == category && s.isMastered).length;
+    final masteredCount = _skills.values
+        .where((s) => s.category == category && s.isMastered)
+        .length;
 
     _categoryMastery[category] = SkillCategoryMastery(
       category: category,
@@ -199,7 +201,8 @@ class SkillProgressionService {
   /// Get all skills for a category
   List<SkillNode> getSkillsForCategory(String category) {
     return _skills.values
-        .where((skill) => skill.category.toLowerCase() == category.toLowerCase())
+        .where(
+            (skill) => skill.category.toLowerCase() == category.toLowerCase())
         .toList();
   }
 
@@ -219,8 +222,8 @@ class SkillProgressionService {
   SkillProgressOverview getProgressOverview() {
     final totalSkills = _skills.length;
     final masteredSkills = _skills.values.where((s) => s.isMastered).length;
-    final totalXp =
-        _skills.values.fold(0, (sum, s) => sum + s.totalXpRequired + s.currentXp);
+    final totalXp = _skills.values
+        .fold(0, (sum, s) => sum + s.totalXpRequired + s.currentXp);
     final categories = _categoryMastery.values.toList();
 
     return SkillProgressOverview(

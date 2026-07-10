@@ -315,8 +315,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   double _getStatCardWidth(BuildContext context) {
     final numColumns = WheelResponsive.getStatCardsColumns(context);
     final padding = WheelResponsive.getResponsivePadding(context);
-    final availableWidth = MediaQuery.of(context).size.width -
-        (padding.left + padding.right);
+    final availableWidth =
+        MediaQuery.of(context).size.width - (padding.left + padding.right);
     final spacing = 8.0;
     final totalSpacing = spacing * (numColumns - 1);
 
@@ -607,9 +607,13 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                 children: [
                                   // Wheel section - responsive
                                   Container(
-                                    margin: WheelResponsive.getWheelContainerMargin(context),
+                                    margin:
+                                        WheelResponsive.getWheelContainerMargin(
+                                            context),
                                     constraints: BoxConstraints(
-                                      maxWidth: WheelResponsive.getMaxContentWidth(context),
+                                      maxWidth:
+                                          WheelResponsive.getMaxContentWidth(
+                                              context),
                                     ),
                                     decoration: BoxDecoration(
                                       color: isDark
@@ -637,7 +641,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                             child: AspectRatio(
                                               aspectRatio: 1.0,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(16.0),
+                                                padding:
+                                                    const EdgeInsets.all(16.0),
                                                 child: GestureDetector(
                                                   onVerticalDragEnd: (d) =>
                                                       _handleGestureSpin(d
@@ -651,9 +656,11 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                           .dx),
                                                   child: WheelWidget(
                                                     segments: _segments,
-                                                    rotationAngle: _currentAngle,
+                                                    rotationAngle:
+                                                        _currentAngle,
                                                     activeIndex: _activeIndex,
-                                                    size: WheelResponsive.getWheelSize(context),
+                                                    size: WheelResponsive
+                                                        .getWheelSize(context),
                                                   ),
                                                 ),
                                               ),
@@ -667,10 +674,16 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                   // Controls section - responsive
                                   Container(
                                     padding: EdgeInsets.fromLTRB(
-                                      WheelResponsive.getResponsivePadding(context).left,
+                                      WheelResponsive.getResponsivePadding(
+                                              context)
+                                          .left,
                                       0,
-                                      WheelResponsive.getResponsivePadding(context).right,
-                                      WheelResponsive.getResponsivePadding(context).bottom,
+                                      WheelResponsive.getResponsivePadding(
+                                              context)
+                                          .right,
+                                      WheelResponsive.getResponsivePadding(
+                                              context)
+                                          .bottom,
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
@@ -707,7 +720,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                             runSpacing: 8,
                                             children: [
                                               SizedBox(
-                                                width: _getStatCardWidth(context),
+                                                width:
+                                                    _getStatCardWidth(context),
                                                 child: StatCard(
                                                   icon: Icons.casino,
                                                   label: 'Spins Today',
@@ -717,7 +731,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: _getStatCardWidth(context),
+                                                width:
+                                                    _getStatCardWidth(context),
                                                 child: StatCard(
                                                   icon: Icons.timer,
                                                   label: 'Cooldown',
@@ -727,7 +742,8 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: _getStatCardWidth(context),
+                                                width:
+                                                    _getStatCardWidth(context),
                                                 child: StatCard(
                                                   icon: Icons.emoji_events,
                                                   label: 'Rewards',

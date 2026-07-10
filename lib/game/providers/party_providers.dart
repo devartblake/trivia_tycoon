@@ -73,7 +73,9 @@ class PartyController extends StateNotifier<PartyState> {
       }))
       ..add(hub.partyClosed.listen((_) {
         state = state.copyWith(
-            clearRoster: true, clearQueueStatus: true, incomingInvites: const []);
+            clearRoster: true,
+            clearQueueStatus: true,
+            incomingInvites: const []);
       }));
   }
 

@@ -176,13 +176,12 @@ class _TierCard extends StatelessWidget {
       margin: const EdgeInsets.only(right: 12, bottom: 8),
       child: Card(
         elevation: isCurrent ? 8 : 2,
-        shadowColor: isCurrent ? Colors.blue.withValues(alpha: 0.5) : Colors.grey,
+        shadowColor:
+            isCurrent ? Colors.blue.withValues(alpha: 0.5) : Colors.grey,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: isCurrent
-                ? Border.all(color: Colors.blue, width: 2)
-                : null,
+            border: isCurrent ? Border.all(color: Colors.blue, width: 2) : null,
           ),
           child: Column(
             children: [

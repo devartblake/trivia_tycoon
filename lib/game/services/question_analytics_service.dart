@@ -127,9 +127,9 @@ class QuestionAnalyticsService {
         })
         .where((cat) => double.parse(cat.accuracy) < 75.0)
         .toList()
-        ..sort((a, b) =>
-            double.parse(a.accuracy).compareTo(double.parse(b.accuracy)))
-        ..take(limit);
+      ..sort((a, b) =>
+          double.parse(a.accuracy).compareTo(double.parse(b.accuracy)))
+      ..take(limit);
   }
 
   /// Get strongest categories
@@ -164,9 +164,9 @@ class QuestionAnalyticsService {
         })
         .where((cat) => double.parse(cat.accuracy) >= 75.0)
         .toList()
-        ..sort((a, b) =>
-            double.parse(b.accuracy).compareTo(double.parse(a.accuracy)))
-        ..take(limit);
+      ..sort((a, b) =>
+          double.parse(b.accuracy).compareTo(double.parse(a.accuracy)))
+      ..take(limit);
   }
 }
 

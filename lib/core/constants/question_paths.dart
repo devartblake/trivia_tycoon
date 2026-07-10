@@ -9,8 +9,7 @@ class ArtHistory {
 }
 
 class Arts {
-  static const String artsQuestion =
-      'assets/questions/arts/arts_question.json';
+  static const String artsQuestion = 'assets/questions/arts/arts_question.json';
 }
 
 class Astronomy {
@@ -154,8 +153,7 @@ class Literature {
 }
 
 class Math {
-  static const String mathQuestion =
-      'assets/questions/math/math_question.json';
+  static const String mathQuestion = 'assets/questions/math/math_question.json';
 }
 
 class Media {

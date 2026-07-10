@@ -332,62 +332,63 @@ class _SkillTreeScreenState extends ConsumerState<SkillTreeScreen> {
             Navigator.pop(ctx);
           },
           child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Handle
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Handle
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const Text(
-                'Filter Skills',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                const Text(
+                  'Filter Skills',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              ...SkillNodeFilterMode.values.map((mode) {
-                final modeCount = count(mode);
-                return ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: Radio<SkillNodeFilterMode>(
-                    value: mode,
-                    activeColor: mode.color,
-                  ),
-                  title: Row(
-                    children: [
-                      Icon(mode.icon, color: mode.color, size: 18),
-                      const SizedBox(width: 8),
-                      Text(mode.label,
-                          style: const TextStyle(color: Colors.white)),
-                    ],
-                  ),
-                  subtitle: Text(
-                    '$modeCount skill${modeCount == 1 ? '' : 's'}',
-                    style: const TextStyle(color: Colors.white38, fontSize: 12),
-                  ),
-                  onTap: () {
-                    setSheetState(() => sheetSelected = mode);
-                    setState(() => _filterMode = mode);
-                    Navigator.pop(ctx);
-                  },
-                );
-              }),
-            ],
+                const SizedBox(height: 12),
+                ...SkillNodeFilterMode.values.map((mode) {
+                  final modeCount = count(mode);
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<SkillNodeFilterMode>(
+                      value: mode,
+                      activeColor: mode.color,
+                    ),
+                    title: Row(
+                      children: [
+                        Icon(mode.icon, color: mode.color, size: 18),
+                        const SizedBox(width: 8),
+                        Text(mode.label,
+                            style: const TextStyle(color: Colors.white)),
+                      ],
+                    ),
+                    subtitle: Text(
+                      '$modeCount skill${modeCount == 1 ? '' : 's'}',
+                      style:
+                          const TextStyle(color: Colors.white38, fontSize: 12),
+                    ),
+                    onTap: () {
+                      setSheetState(() => sheetSelected = mode);
+                      setState(() => _filterMode = mode);
+                      Navigator.pop(ctx);
+                    },
+                  );
+                }),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

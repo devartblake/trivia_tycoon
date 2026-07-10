@@ -125,11 +125,10 @@ class TierHistoryTimeline extends StatelessWidget {
                     Expanded(
                       child: Text(
                         event.tierName,
-                        style:
-                            Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: event.tierColor,
-                                ),
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: event.tierColor,
+                            ),
                       ),
                     ),
                     Container(
@@ -143,11 +142,10 @@ class TierHistoryTimeline extends StatelessWidget {
                       ),
                       child: Text(
                         event.achievement,
-                        style:
-                            Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  color: event.tierColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: event.tierColor,
+                              fontWeight: FontWeight.w600,
+                            ),
                       ),
                     ),
                   ],

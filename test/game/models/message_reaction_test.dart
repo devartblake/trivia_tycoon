@@ -317,7 +317,8 @@ void main() {
     });
 
     test('getReactionsForType returns empty for absent type', () {
-      expect(reactionSummary({}).getReactionsForType(ReactionType.wow), isEmpty);
+      expect(
+          reactionSummary({}).getReactionsForType(ReactionType.wow), isEmpty);
     });
 
     test('hasUserReacted true when user has reaction', () {
@@ -414,7 +415,8 @@ void main() {
     });
 
     test('getUsersForReaction returns empty for absent type', () {
-      expect(reactionSummary({}).getUsersForReaction(ReactionType.gem), isEmpty);
+      expect(
+          reactionSummary({}).getUsersForReaction(ReactionType.gem), isEmpty);
     });
   });
 }

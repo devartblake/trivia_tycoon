@@ -12,9 +12,12 @@ void main() {
     test('999 → "999"', () => expect(MenuHelpers.formatNumber(999), '999'));
     test('1000 → "1.0K"', () => expect(MenuHelpers.formatNumber(1000), '1.0K'));
     test('1500 → "1.5K"', () => expect(MenuHelpers.formatNumber(1500), '1.5K'));
-    test('10000 → "10.0K"', () => expect(MenuHelpers.formatNumber(10000), '10.0K'));
-    test('1000000 → "1.0M"', () => expect(MenuHelpers.formatNumber(1000000), '1.0M'));
-    test('2500000 → "2.5M"', () => expect(MenuHelpers.formatNumber(2500000), '2.5M'));
+    test('10000 → "10.0K"',
+        () => expect(MenuHelpers.formatNumber(10000), '10.0K'));
+    test('1000000 → "1.0M"',
+        () => expect(MenuHelpers.formatNumber(1000000), '1.0M'));
+    test('2500000 → "2.5M"',
+        () => expect(MenuHelpers.formatNumber(2500000), '2.5M'));
     test('1234 → "1.2K"', () {
       // Values >= 1000 are abbreviated rather than formatted with separators.
       expect(MenuHelpers.formatNumber(1234), '1.2K');
@@ -190,13 +193,18 @@ void main() {
     test('2 → "2nd"', () => expect(MenuHelpers.getRankSuffix(2), '2nd'));
     test('3 → "3rd"', () => expect(MenuHelpers.getRankSuffix(3), '3rd'));
     test('4 → "4th"', () => expect(MenuHelpers.getRankSuffix(4), '4th'));
-    test('11 → "11th" (teens rule)', () => expect(MenuHelpers.getRankSuffix(11), '11th'));
-    test('12 → "12th" (teens rule)', () => expect(MenuHelpers.getRankSuffix(12), '12th'));
-    test('13 → "13th" (teens rule)', () => expect(MenuHelpers.getRankSuffix(13), '13th'));
+    test('11 → "11th" (teens rule)',
+        () => expect(MenuHelpers.getRankSuffix(11), '11th'));
+    test('12 → "12th" (teens rule)',
+        () => expect(MenuHelpers.getRankSuffix(12), '12th'));
+    test('13 → "13th" (teens rule)',
+        () => expect(MenuHelpers.getRankSuffix(13), '13th'));
     test('21 → "21st"', () => expect(MenuHelpers.getRankSuffix(21), '21st'));
     test('22 → "22nd"', () => expect(MenuHelpers.getRankSuffix(22), '22nd'));
-    test('100 → "100th"', () => expect(MenuHelpers.getRankSuffix(100), '100th'));
-    test('101 → "101st"', () => expect(MenuHelpers.getRankSuffix(101), '101st'));
+    test(
+        '100 → "100th"', () => expect(MenuHelpers.getRankSuffix(100), '100th'));
+    test(
+        '101 → "101st"', () => expect(MenuHelpers.getRankSuffix(101), '101st'));
   });
 
   // -------------------------------------------------------------------------

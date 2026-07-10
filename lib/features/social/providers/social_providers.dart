@@ -53,7 +53,8 @@ final friendsListProvider = FutureProvider<List<Friend>>((ref) async {
 });
 
 /// Pending friend requests provider
-final pendingFriendRequestsProvider = FutureProvider<List<FriendRequest>>((ref) async {
+final pendingFriendRequestsProvider =
+    FutureProvider<List<FriendRequest>>((ref) async {
   final service = ref.read(friendsServiceProvider);
   return await service.getPendingRequests();
 });
@@ -82,7 +83,8 @@ class CombinedFriendsState {
   });
 }
 
-final combinedFriendsStateProvider = FutureProvider<CombinedFriendsState>((ref) async {
+final combinedFriendsStateProvider =
+    FutureProvider<CombinedFriendsState>((ref) async {
   final friendsAsync = ref.watch(friendsListProvider);
   final requestsAsync = ref.watch(pendingFriendRequestsProvider);
 

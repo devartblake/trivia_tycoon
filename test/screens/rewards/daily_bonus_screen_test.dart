@@ -95,7 +95,8 @@ void main() {
       expect(find.byType(DailyBonusScreen), findsOneWidget);
     });
 
-    testWidgets('always scrollable physics enabled', (WidgetTester tester) async {
+    testWidgets('always scrollable physics enabled',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: ProviderScope(
@@ -107,8 +108,7 @@ void main() {
       final scrollable = find.byType(SingleChildScrollView);
       expect(scrollable, findsOneWidget);
 
-      final SingleChildScrollView scrollWidget =
-          tester.widget(scrollable);
+      final SingleChildScrollView scrollWidget = tester.widget(scrollable);
       expect(
         scrollWidget.physics,
         isA<AlwaysScrollableScrollPhysics>(),

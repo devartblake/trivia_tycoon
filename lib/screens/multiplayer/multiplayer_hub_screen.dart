@@ -264,10 +264,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
             title: 'Party',
             subtitle: 'Play with friends',
             gradient: const LinearGradient(
-              colors: [
-                MultiplayerPalette.secondary,
-                MultiplayerPalette.accent
-              ],
+              colors: [MultiplayerPalette.secondary, MultiplayerPalette.accent],
             ),
             onTap: () => context.push('/party'),
           ),

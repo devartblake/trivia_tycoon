@@ -83,7 +83,8 @@ void main() {
     });
 
     test('toString contains message', () {
-      expect(const ProtocolFailure('parse error').toString(), contains('parse error'));
+      expect(const ProtocolFailure('parse error').toString(),
+          contains('parse error'));
     });
   });
 

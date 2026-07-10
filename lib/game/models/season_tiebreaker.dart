@@ -45,10 +45,9 @@ class SeasonTiebreaker {
       tier: (json['tier'] as num?)?.toInt() ?? 0,
       boundaryRank: (json['boundaryRank'] as num?)?.toInt() ?? 0,
       rankPoints: (json['rankPoints'] as num?)?.toInt() ?? 0,
-      playerIds: (json['playerIds'] as List?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          const [],
+      playerIds:
+          (json['playerIds'] as List?)?.map((e) => e.toString()).toList() ??
+              const [],
       scheduledAtUtc:
           DateTime.tryParse(json['scheduledAtUtc']?.toString() ?? '') ??
               DateTime.fromMillisecondsSinceEpoch(0),

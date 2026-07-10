@@ -123,7 +123,8 @@ class TierProgressBar extends StatelessWidget {
             const SizedBox(height: 16),
             // Estimated time (simplified)
             _EstimatedTimeDisplay(
-              xpRemaining: progress.xpNeededForNextTier - progress.xpInCurrentTier,
+              xpRemaining:
+                  progress.xpNeededForNextTier - progress.xpInCurrentTier,
             ),
           ],
         ),

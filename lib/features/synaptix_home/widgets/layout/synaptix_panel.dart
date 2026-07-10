@@ -28,7 +28,8 @@ class SynaptixPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: SynaptixHomeTheme.panel.withValues(alpha: 0.78),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: SynaptixHomeTheme.stroke.withValues(alpha: 0.90)),
+        border:
+            Border.all(color: SynaptixHomeTheme.stroke.withValues(alpha: 0.90)),
         boxShadow: [
           BoxShadow(
             color: SynaptixHomeTheme.purple.withValues(alpha: 0.14),

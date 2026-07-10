@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SeasonalEventsScreen extends StatefulWidget {
@@ -704,8 +704,7 @@ class _SeasonalEventsScreenState extends State<SeasonalEventsScreen>
             ),
           ),
           const SizedBox(height: 16),
-          ...challenges
-              .map((challenge) => _buildChallengeItem(challenge)),
+          ...challenges.map((challenge) => _buildChallengeItem(challenge)),
         ],
       ),
     );

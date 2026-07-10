@@ -88,7 +88,8 @@ void main() {
       expect(find.text('Avg. Time: 45s'), findsOneWidget);
     });
 
-    testWidgets('calculates incorrect questions correctly', (WidgetTester tester) async {
+    testWidgets('calculates incorrect questions correctly',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

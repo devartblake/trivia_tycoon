@@ -7,8 +7,7 @@ void main() {
   late Directory tempDir;
 
   setUp(() async {
-    tempDir =
-        await Directory.systemTemp.createTemp('audio_settings_test_');
+    tempDir = await Directory.systemTemp.createTemp('audio_settings_test_');
     Hive.init(tempDir.path);
   });
 
@@ -17,7 +16,8 @@ void main() {
     await tempDir.delete(recursive: true);
   });
 
-  Future<AudioSettingsService> makeService() => AudioSettingsService.initialize();
+  Future<AudioSettingsService> makeService() =>
+      AudioSettingsService.initialize();
 
   // -------------------------------------------------------------------------
   // Audio on/off
@@ -225,10 +225,16 @@ void main() {
     test('returns map with all expected keys', () async {
       final svc = await makeService();
       final dump = svc.debugDump();
-      expect(dump.keys.toSet(), containsAll([
-        'audioOn', 'musicOn', 'soundsOn',
-        'musicVolume', 'soundVolume', 'wasPlayingBeforePause',
-      ]));
+      expect(
+          dump.keys.toSet(),
+          containsAll([
+            'audioOn',
+            'musicOn',
+            'soundsOn',
+            'musicVolume',
+            'soundVolume',
+            'wasPlayingBeforePause',
+          ]));
     });
   });
 

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:trivia_tycoon/core/utils/color_utils.dart';
 
-int colorChannel(double value) =>
-    (value * 255.0).round().clamp(0, 255).toInt();
+int colorChannel(double value) => (value * 255.0).round().clamp(0, 255).toInt();
 
 void main() {
   // -------------------------------------------------------------------------

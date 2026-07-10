@@ -102,7 +102,8 @@ void main() {
       expect(find.byType(TierHistoryTimeline), findsOneWidget);
     });
 
-    testWidgets('shows empty state with no events', (WidgetTester tester) async {
+    testWidgets('shows empty state with no events',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -169,8 +170,7 @@ void main() {
       expect(find.byType(Container), findsWidgets);
     });
 
-    testWidgets('tier names have correct styling',
-        (WidgetTester tester) async {
+    testWidgets('tier names have correct styling', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -182,8 +182,7 @@ void main() {
       expect(find.text('Tier 5: Master'), findsOneWidget);
     });
 
-    testWidgets('achievement badges are visible',
-        (WidgetTester tester) async {
+    testWidgets('achievement badges are visible', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -195,8 +194,7 @@ void main() {
       expect(find.text('Tier Up'), findsWidgets);
     });
 
-    testWidgets('can scroll through many events',
-        (WidgetTester tester) async {
+    testWidgets('can scroll through many events', (WidgetTester tester) async {
       final now = DateTime.now();
       final manyEvents = List.generate(
         30,
@@ -325,8 +323,7 @@ void main() {
       expect(mockData.length, equals(5));
     });
 
-    testWidgets('mock data has correct structure',
-        (WidgetTester tester) async {
+    testWidgets('mock data has correct structure', (WidgetTester tester) async {
       final mockData = generateMockTierHistory();
 
       for (final event in mockData) {
@@ -385,7 +382,8 @@ void main() {
       expect(find.byType(TierHistoryTimeline), findsOneWidget);
     });
 
-    testWidgets('formats yesterday date correctly', (WidgetTester tester) async {
+    testWidgets('formats yesterday date correctly',
+        (WidgetTester tester) async {
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
       final event = TierHistoryEvent(
         tier: 1,

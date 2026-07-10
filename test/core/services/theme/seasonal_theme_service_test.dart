@@ -88,7 +88,8 @@ void main() {
 
     test('active theme with dates spanning now is returned', () async {
       final svc = makeService();
-      await svc.saveSeasonalTheme(activeThemeFixture(id: 'spring', themeType: ThemeType.allStar));
+      await svc.saveSeasonalTheme(
+          activeThemeFixture(id: 'spring', themeType: ThemeType.allStar));
       final retrieved = await svc.getCurrentSeasonalTheme();
       expect(retrieved, isNotNull);
       expect(retrieved!.id, 'spring');
@@ -143,7 +144,8 @@ void main() {
     test('overwriting with a new theme returns the latest one', () async {
       final svc = makeService();
       await svc.saveSeasonalTheme(activeThemeFixture(id: 'first'));
-      await svc.saveSeasonalTheme(activeThemeFixture(id: 'second', themeType: ThemeType.competition));
+      await svc.saveSeasonalTheme(
+          activeThemeFixture(id: 'second', themeType: ThemeType.competition));
       final retrieved = await svc.getCurrentSeasonalTheme();
       expect(retrieved!.id, 'second');
       expect(retrieved.themeType, ThemeType.competition);
@@ -191,13 +193,15 @@ void main() {
 
     test('returns seasonal theme when no user override', () async {
       final svc = makeService();
-      await svc.saveSeasonalTheme(activeThemeFixture(themeType: ThemeType.competition));
+      await svc.saveSeasonalTheme(
+          activeThemeFixture(themeType: ThemeType.competition));
       expect(await svc.getActiveTheme(), ThemeType.competition);
     });
 
     test('user override takes precedence over active seasonal theme', () async {
       final svc = makeService();
-      await svc.saveSeasonalTheme(activeThemeFixture(themeType: ThemeType.competition));
+      await svc.saveSeasonalTheme(
+          activeThemeFixture(themeType: ThemeType.competition));
       await svc.setUserThemeOverride(ThemeType.allStar);
       expect(await svc.getActiveTheme(), ThemeType.allStar);
     });

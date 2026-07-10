@@ -267,7 +267,8 @@ void main() {
   });
 
   group('PerformanceDataPoint', () {
-    testWidgets('creates data point with all fields', (WidgetTester tester) async {
+    testWidgets('creates data point with all fields',
+        (WidgetTester tester) async {
       final now = DateTime.now();
       final point = PerformanceDataPoint(
         timestamp: now,
@@ -282,7 +283,8 @@ void main() {
       expect(point.questionsAnswered, equals(10));
     });
 
-    testWidgets('handles boundary accuracy values', (WidgetTester tester) async {
+    testWidgets('handles boundary accuracy values',
+        (WidgetTester tester) async {
       final now = DateTime.now();
 
       final minPoint = PerformanceDataPoint(

@@ -68,7 +68,8 @@ class _CurrentTierSection extends ConsumerWidget {
           );
         }
 
-        final progressAsyncValue = ref.watch(playerTierProgressProvider(userId));
+        final progressAsyncValue =
+            ref.watch(playerTierProgressProvider(userId));
         return progressAsyncValue.when(
           data: (progress) => CurrentTierCard(progress: progress),
           loading: () => const _LoadingWidget(),
@@ -100,7 +101,8 @@ class _ProgressionSection extends ConsumerWidget {
           );
         }
 
-        final progressAsyncValue = ref.watch(playerTierProgressProvider(userId));
+        final progressAsyncValue =
+            ref.watch(playerTierProgressProvider(userId));
         return progressAsyncValue.when(
           data: (progress) => TierProgressBar(progress: progress),
           loading: () => const _LoadingWidget(),
@@ -132,7 +134,8 @@ class _NextTierSection extends ConsumerWidget {
           );
         }
 
-        final progressAsyncValue = ref.watch(playerTierProgressProvider(userId));
+        final progressAsyncValue =
+            ref.watch(playerTierProgressProvider(userId));
         return progressAsyncValue.when(
           data: (progress) => TierRequirementsCard(
             nextTier: progress.nextTier,
@@ -181,8 +184,7 @@ class _TierInfoCard extends StatelessWidget {
             _InfoItem(
               icon: Icons.card_giftcard,
               title: 'Unlock Rewards',
-              description:
-                  'Each tier grants coins, gems, and exclusive badges',
+              description: 'Each tier grants coins, gems, and exclusive badges',
             ),
             const SizedBox(height: 16),
             _InfoItem(

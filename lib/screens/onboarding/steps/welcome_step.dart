@@ -287,7 +287,8 @@ class _AnimatedBackground extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const AssetImage('assets/images/welcome_images/Bg-Blue.png'),
+              image:
+                  const AssetImage('assets/images/welcome_images/Bg-Blue.png'),
               fit: BoxFit.cover,
               onError: (_, __) {},
             ),
@@ -304,7 +305,6 @@ class _AnimatedBackground extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class _Logo extends StatelessWidget {

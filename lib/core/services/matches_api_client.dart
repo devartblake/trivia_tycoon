@@ -9,9 +9,9 @@ class MatchStartRequest {
   MatchStartRequest({this.opponentId, this.gameMode});
 
   Map<String, dynamic> toJson() => {
-    if (opponentId != null) 'opponentId': opponentId,
-    if (gameMode != null) 'gameMode': gameMode,
-  };
+        if (opponentId != null) 'opponentId': opponentId,
+        if (gameMode != null) 'gameMode': gameMode,
+      };
 }
 
 class MatchStartResponse {
@@ -38,7 +38,9 @@ class MatchStartResponse {
       opponentId: json['opponentId'] as String?,
       gameMode: json['gameMode']?.toString() ?? 'quiz',
       status: json['status']?.toString() ?? 'started',
-      createdAtUtc: DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ?? DateTime.now().toUtc(),
+      createdAtUtc:
+          DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ??
+              DateTime.now().toUtc(),
     );
   }
 }
@@ -57,11 +59,12 @@ class MatchSubmitRequest {
   });
 
   Map<String, dynamic> toJson() => {
-    'playerScore': playerScore,
-    if (opponentScore != null) 'opponentScore': opponentScore,
-    'answeredQuestionIds': answeredQuestionIds,
-    if (completedAtUtc != null) 'completedAtUtc': completedAtUtc?.toIso8601String(),
-  };
+        'playerScore': playerScore,
+        if (opponentScore != null) 'opponentScore': opponentScore,
+        'answeredQuestionIds': answeredQuestionIds,
+        if (completedAtUtc != null)
+          'completedAtUtc': completedAtUtc?.toIso8601String(),
+      };
 }
 
 class MatchSubmitResponse {
@@ -133,8 +136,12 @@ class MatchDetailsResponse {
       gameMode: json['gameMode']?.toString() ?? 'quiz',
       status: json['status']?.toString() ?? 'ongoing',
       result: json['result']?.toString() ?? 'ongoing',
-      createdAtUtc: DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ?? DateTime.now().toUtc(),
-      completedAtUtc: json['completedAtUtc'] != null ? DateTime.tryParse(json['completedAtUtc']?.toString() ?? '')?.toUtc() : null,
+      createdAtUtc:
+          DateTime.tryParse(json['createdAtUtc']?.toString() ?? '')?.toUtc() ??
+              DateTime.now().toUtc(),
+      completedAtUtc: json['completedAtUtc'] != null
+          ? DateTime.tryParse(json['completedAtUtc']?.toString() ?? '')?.toUtc()
+          : null,
       rewardCoins: (json['rewardCoins'] as num?)?.toInt(),
     );
   }
@@ -156,7 +163,10 @@ class MatchListResponse {
   factory MatchListResponse.fromJson(Map<String, dynamic> json) {
     final List<dynamic> matchesList = json['matches'] as List<dynamic>? ?? [];
     return MatchListResponse(
-      matches: matchesList.map((m) => MatchDetailsResponse.fromJson(Map<String, dynamic>.from(m))).toList(),
+      matches: matchesList
+          .map((m) =>
+              MatchDetailsResponse.fromJson(Map<String, dynamic>.from(m)))
+          .toList(),
       totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
       page: (json['page'] as num?)?.toInt() ?? 1,
       pageSize: (json['pageSize'] as num?)?.toInt() ?? 10,
@@ -224,7 +234,8 @@ class MatchesApiClient {
     required List<String> answeredQuestionIds,
     DateTime? completedAtUtc,
   }) async {
-    _log.info('Submitting match result: matchId=$matchId playerScore=$playerScore');
+    _log.info(
+        'Submitting match result: matchId=$matchId playerScore=$playerScore');
     final body = MatchSubmitRequest(
       playerScore: playerScore,
       opponentScore: opponentScore,
@@ -258,7 +269,8 @@ class MatchesApiClient {
     String? status, // 'ongoing', 'completed', 'abandoned'
     String? gameMode, // 'quiz', 'duel', etc.
   }) async {
-    _log.info('Listing matches: page=$page pageSize=$pageSize status=$status gameMode=$gameMode');
+    _log.info(
+        'Listing matches: page=$page pageSize=$pageSize status=$status gameMode=$gameMode');
     final params = {
       'page': page,
       'pageSize': pageSize,
@@ -290,21 +302,22 @@ extension LegacyMatchesSupport on MatchesApiClient {
   /// Returns active (ongoing) matches for the current player.
   @Deprecated('Use listMatches(status: "ongoing") instead')
   Future<List<Map<String, dynamic>>> getActiveMatches() async {
-    MatchesApiClient._log.warning('DEPRECATED: getActiveMatches() called. Use listMatches(status: "ongoing") instead.');
+    MatchesApiClient._log.warning(
+        'DEPRECATED: getActiveMatches() called. Use listMatches(status: "ongoing") instead.');
     final response = await listMatches(status: 'ongoing');
     return response.matches
         .map((m) => {
-          'id': m.matchId,
-          'matchId': m.matchId,
-          'opponentId': m.opponentId,
-          'opponentName': m.opponentName,
-          'playerScore': m.playerScore,
-          'opponentScore': m.opponentScore,
-          'gameMode': m.gameMode,
-          'status': m.status,
-          'result': m.result,
-          'createdAt': m.createdAtUtc.toIso8601String(),
-        })
+              'id': m.matchId,
+              'matchId': m.matchId,
+              'opponentId': m.opponentId,
+              'opponentName': m.opponentName,
+              'playerScore': m.playerScore,
+              'opponentScore': m.opponentScore,
+              'gameMode': m.gameMode,
+              'status': m.status,
+              'result': m.result,
+              'createdAt': m.createdAtUtc.toIso8601String(),
+            })
         .toList();
   }
 }

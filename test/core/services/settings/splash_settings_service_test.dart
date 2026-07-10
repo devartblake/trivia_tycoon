@@ -34,7 +34,8 @@ void main() {
       expect(await svc.getSplashType(), SplashType.mindMarket);
     });
 
-    test('returns fortuneWheel fallback for unrecognized stored value', () async {
+    test('returns fortuneWheel fallback for unrecognized stored value',
+        () async {
       final box = await Hive.openBox('settings');
       await box.put('splash_type', 'unknown_type_xyz');
       expect(await makeService().getSplashType(), SplashType.fortuneWheel);

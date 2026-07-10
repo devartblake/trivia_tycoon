@@ -175,9 +175,7 @@ class EnvConfig {
       mergedSegments.addAll(suffixSegments);
     }
 
-    return baseUri
-        .replace(pathSegments: mergedSegments)
-        .toString();
+    return baseUri.replace(pathSegments: mergedSegments).toString();
   }
 
   static String _resolveApiHealthUrl({
@@ -398,10 +396,9 @@ class EnvConfig {
           : _normalizeApiBaseUrlForRuntime(rawComplianceServiceUrl.trim());
       const dartDefinedComplianceConsentUrl =
           String.fromEnvironment('COMPLIANCE_CONSENT_SERVICE_URL');
-      final rawComplianceConsentUrl =
-          dartDefinedComplianceConsentUrl.isNotEmpty
-              ? dartDefinedComplianceConsentUrl
-              : dotenv.env['COMPLIANCE_CONSENT_SERVICE_URL'];
+      final rawComplianceConsentUrl = dartDefinedComplianceConsentUrl.isNotEmpty
+          ? dartDefinedComplianceConsentUrl
+          : dotenv.env['COMPLIANCE_CONSENT_SERVICE_URL'];
       _complianceConsentServiceUrl = rawComplianceConsentUrl == null ||
               rawComplianceConsentUrl.trim().isEmpty
           ? null
