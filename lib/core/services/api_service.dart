@@ -7,6 +7,7 @@ import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import 'package:trivia_tycoon/core/env.dart';
 import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
+import '../../game/models/champion_prediction.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
@@ -982,6 +983,32 @@ class ApiService {
     final response = await post(
       '/game-events/$gameEventId/duel/answer',
       body: {'optionId': optionId},
+    );
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 My Prediction State**
+  /// GET /game-events/{id}/prediction — the caller's pick, live tally, and
+  /// (once the match ends) their reward.
+  Future<ChampionPrediction?> getPrediction(String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/prediction');
+      if (response.isEmpty) return null;
+      return ChampionPrediction.fromJson(response);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// **🔹 Submit a Prediction**
+  /// POST /game-events/{id}/predict — "will the champion defend?" (no stake).
+  Future<String> submitPrediction({
+    required String gameEventId,
+    required bool championDefends,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/predict',
+      body: {'championDefends': championDefends},
     );
     return response['status']?.toString() ?? 'Unknown';
   }

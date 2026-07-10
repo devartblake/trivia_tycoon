@@ -9,6 +9,7 @@ import '../../../game/providers/core_providers.dart' show apiServiceProvider;
 import '../../../game/providers/learning_providers.dart'
     show currentPlayerIdProvider;
 import '../champion_live_screen.dart';
+import 'champion_prediction_panel.dart';
 
 /// Weekly "Champion vs Tier" headline card: the tier's #1 defends the crown
 /// against 99 challengers, and every elimination grows the jackpot. Hides
@@ -204,6 +205,9 @@ class _CardState extends ConsumerState<_Card> {
                       ),
               ),
             ),
+          // No-loss prediction — the audience hook for everyone who isn't
+          // one of the ~100 participants.
+          ChampionPredictionPanel(gameEventId: event.id),
         ],
       ),
     );
