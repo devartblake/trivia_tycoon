@@ -40,6 +40,53 @@ void main() {
     expect(dto.championAlive, isTrue);
   });
 
+  test('ChampionLiveSnapshotDto parses a current round and null duel', () {
+    final snap = ChampionLiveSnapshotDto.fromJson({
+      'gameEventId': 'e1',
+      'aliveCount': 30,
+      'jackpotPool': 500,
+      'isLive': true,
+      'currentRound': {
+        'gameEventId': 'e1',
+        'roundNumber': 4,
+        'questionId': 'q9',
+        'prompt': 'Capital of France?',
+        'options': [
+          {'optionId': 'A', 'text': 'Paris'},
+        ],
+        'deadlineUtc': '2026-07-15T18:00:12.000Z',
+        'aliveCount': 30,
+        'jackpotPool': 500,
+      },
+      'currentDuel': null,
+    });
+
+    expect(snap.isLive, isTrue);
+    expect(snap.currentRound, isNotNull);
+    expect(snap.currentRound!.roundNumber, 4);
+    expect(snap.currentDuel, isNull);
+    expect(snap.aliveCount, 30);
+  });
+
+  test('ChampionDuelStartedDto parses duelists and options', () {
+    final duel = ChampionDuelStartedDto.fromJson({
+      'gameEventId': 'e1',
+      'duelId': 'd1',
+      'championPlayerId': 'c1',
+      'challengerPlayerId': 'x9',
+      'questionId': 'q1',
+      'prompt': 'Duel!',
+      'options': [
+        {'optionId': 'A', 'text': 'yes'},
+        {'optionId': 'B', 'text': 'no'},
+      ],
+      'deadlineUtc': '2026-07-15T18:00:12.000Z',
+    });
+    expect(duel.championPlayerId, 'c1');
+    expect(duel.challengerPlayerId, 'x9');
+    expect(duel.options, hasLength(2));
+  });
+
   test('ChampionMatchEndedDto normalizes empty winner to null', () {
     final defended = ChampionMatchEndedDto.fromJson({
       'gameEventId': 'e1',

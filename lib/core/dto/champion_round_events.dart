@@ -94,6 +94,121 @@ class ChampionRoundResolvedDto {
   }
 }
 
+/// A champion duel opened (the champion called out a challenger). Reuses the
+/// round option shape.
+class ChampionDuelStartedDto {
+  final String gameEventId;
+  final String duelId;
+  final String championPlayerId;
+  final String challengerPlayerId;
+  final String questionId;
+  final String prompt;
+  final List<ChampionRoundOption> options;
+  final DateTime deadlineUtc;
+
+  const ChampionDuelStartedDto({
+    required this.gameEventId,
+    required this.duelId,
+    required this.championPlayerId,
+    required this.challengerPlayerId,
+    required this.questionId,
+    required this.prompt,
+    required this.options,
+    required this.deadlineUtc,
+  });
+
+  factory ChampionDuelStartedDto.fromJson(Map<String, dynamic> j) {
+    String s(String a, String b) => (j[a] ?? j[b] ?? '').toString();
+    final rawOptions = (j['options'] ?? j['Options'] ?? const []) as List;
+    return ChampionDuelStartedDto(
+      gameEventId: s('gameEventId', 'GameEventId'),
+      duelId: s('duelId', 'DuelId'),
+      championPlayerId: s('championPlayerId', 'ChampionPlayerId'),
+      challengerPlayerId: s('challengerPlayerId', 'ChallengerPlayerId'),
+      questionId: s('questionId', 'QuestionId'),
+      prompt: s('prompt', 'Prompt'),
+      options: rawOptions
+          .map((e) => ChampionRoundOption.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      deadlineUtc: DateTime.tryParse(s('deadlineUtc', 'DeadlineUtc'))?.toUtc() ??
+          DateTime.now().toUtc(),
+    );
+  }
+}
+
+/// A duel resolved.
+class ChampionDuelResolvedDto {
+  final String gameEventId;
+  final String duelId;
+  final String winnerPlayerId;
+  final String loserPlayerId;
+  final String correctOptionId;
+  final bool championAlive;
+  final int survivorsRemaining;
+  final int jackpotPool;
+
+  const ChampionDuelResolvedDto({
+    required this.gameEventId,
+    required this.duelId,
+    required this.winnerPlayerId,
+    required this.loserPlayerId,
+    required this.correctOptionId,
+    required this.championAlive,
+    required this.survivorsRemaining,
+    required this.jackpotPool,
+  });
+
+  factory ChampionDuelResolvedDto.fromJson(Map<String, dynamic> j) {
+    String s(String a, String b) => (j[a] ?? j[b] ?? '').toString();
+    int i(String a, String b) => (j[a] ?? j[b] ?? 0) as int;
+    return ChampionDuelResolvedDto(
+      gameEventId: s('gameEventId', 'GameEventId'),
+      duelId: s('duelId', 'DuelId'),
+      winnerPlayerId: s('winnerPlayerId', 'WinnerPlayerId'),
+      loserPlayerId: s('loserPlayerId', 'LoserPlayerId'),
+      correctOptionId: s('correctOptionId', 'CorrectOptionId'),
+      championAlive: (j['championAlive'] ?? j['ChampionAlive'] ?? false) as bool,
+      survivorsRemaining: i('survivorsRemaining', 'SurvivorsRemaining'),
+      jackpotPool: i('jackpotPool', 'JackpotPool'),
+    );
+  }
+}
+
+/// Replay-on-join snapshot: the current open round and/or duel.
+class ChampionLiveSnapshotDto {
+  final String gameEventId;
+  final int aliveCount;
+  final int jackpotPool;
+  final bool isLive;
+  final ChampionRoundStartedDto? currentRound;
+  final ChampionDuelStartedDto? currentDuel;
+
+  const ChampionLiveSnapshotDto({
+    required this.gameEventId,
+    required this.aliveCount,
+    required this.jackpotPool,
+    required this.isLive,
+    required this.currentRound,
+    required this.currentDuel,
+  });
+
+  factory ChampionLiveSnapshotDto.fromJson(Map<String, dynamic> j) {
+    Map<String, dynamic>? asMap(Object? v) =>
+        v is Map<String, dynamic> ? v : null;
+    final round = asMap(j['currentRound'] ?? j['CurrentRound']);
+    final duel = asMap(j['currentDuel'] ?? j['CurrentDuel']);
+    return ChampionLiveSnapshotDto(
+      gameEventId: (j['gameEventId'] ?? j['GameEventId'] ?? '').toString(),
+      aliveCount: (j['aliveCount'] ?? j['AliveCount'] ?? 0) as int,
+      jackpotPool: (j['jackpotPool'] ?? j['JackpotPool'] ?? 0) as int,
+      isLive: (j['isLive'] ?? j['IsLive'] ?? false) as bool,
+      currentRound:
+          round == null ? null : ChampionRoundStartedDto.fromJson(round),
+      currentDuel: duel == null ? null : ChampionDuelStartedDto.fromJson(duel),
+    );
+  }
+}
+
 /// The match ended.
 class ChampionMatchEndedDto {
   final String gameEventId;

@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import 'package:trivia_tycoon/core/env.dart';
+import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
@@ -927,6 +928,45 @@ class ApiService {
   }) async {
     final response = await post(
       '/game-events/$gameEventId/rounds/answer',
+      body: {'optionId': optionId},
+    );
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Live Match Snapshot (replay-on-join)**
+  /// GET /game-events/{id}/live — the current open round/duel so a client
+  /// entering mid-match renders live state immediately.
+  Future<ChampionLiveSnapshotDto?> getLiveSnapshot(String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/live');
+      if (response.isEmpty) return null;
+      return ChampionLiveSnapshotDto.fromJson(response);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// **🔹 Start a Champion Duel**
+  /// POST /game-events/{id}/duel — the champion calls out a challenger.
+  Future<String> startChampionDuel({
+    required String gameEventId,
+    required String challengerPlayerId,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/duel',
+      body: {'challengerPlayerId': challengerPlayerId},
+    );
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Submit a Duel Answer**
+  /// POST /game-events/{id}/duel/answer — either duelist answers.
+  Future<String> submitDuelAnswer({
+    required String gameEventId,
+    required String optionId,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/duel/answer',
       body: {'optionId': optionId},
     );
     return response['status']?.toString() ?? 'Unknown';

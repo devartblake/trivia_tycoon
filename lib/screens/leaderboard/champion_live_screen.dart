@@ -30,7 +30,8 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
   @override
   void initState() {
     super.initState();
-    // Join the realtime group once the hub is available.
+    // Join the realtime group and replay the in-progress state so a client
+    // entering mid-match sees the current round/duel without waiting.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         await ref
@@ -39,6 +40,7 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
       } catch (_) {
         // Not connected yet — the stream listeners still catch rounds once it is.
       }
+      await _replayFromSnapshot();
     });
   }
 
@@ -46,6 +48,17 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
   void dispose() {
     _ticker?.cancel();
     super.dispose();
+  }
+
+  /// Replay-on-join: seed the current open round from the backend snapshot so
+  /// a mid-match arrival renders immediately. A live broadcast for a newer
+  /// round always supersedes this.
+  Future<void> _replayFromSnapshot() async {
+    final snap =
+        await ref.read(apiServiceProvider).getLiveSnapshot(widget.gameEventId);
+    if (!mounted || snap == null || _round != null || _ended != null) return;
+    final round = snap.currentRound;
+    if (round != null) _onRoundStarted(round);
   }
 
   bool _isForThisEvent(String eventId) => eventId == widget.gameEventId;
