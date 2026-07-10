@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:signalr_netcore/signalr_client.dart';
+import '../../dto/champion_round_events.dart';
 import '../../dto/hub_event_dto.dart';
 import 'hub_client_base.dart';
 
@@ -19,6 +20,16 @@ class NotificationHub extends HubClientBase {
   final _voteTallyUpdates = StreamController<VoteTallyUpdatedDto>.broadcast();
   final _directMessagesUpdated =
       StreamController<DirectMessagesUpdatedDto>.broadcast();
+  final _championRoundStarted =
+      StreamController<ChampionRoundStartedDto>.broadcast();
+  final _championRoundResolved =
+      StreamController<ChampionRoundResolvedDto>.broadcast();
+  final _championMatchEnded =
+      StreamController<ChampionMatchEndedDto>.broadcast();
+  final _championDuelStarted =
+      StreamController<ChampionDuelStartedDto>.broadcast();
+  final _championDuelResolved =
+      StreamController<ChampionDuelResolvedDto>.broadcast();
 
   Stream<PlayerNotificationDto> get playerNotifications =>
       _playerNotifications.stream;
@@ -31,6 +42,16 @@ class NotificationHub extends HubClientBase {
   Stream<VoteTallyUpdatedDto> get voteTallyUpdates => _voteTallyUpdates.stream;
   Stream<DirectMessagesUpdatedDto> get directMessagesUpdated =>
       _directMessagesUpdated.stream;
+  Stream<ChampionRoundStartedDto> get championRoundStarted =>
+      _championRoundStarted.stream;
+  Stream<ChampionRoundResolvedDto> get championRoundResolved =>
+      _championRoundResolved.stream;
+  Stream<ChampionMatchEndedDto> get championMatchEnded =>
+      _championMatchEnded.stream;
+  Stream<ChampionDuelStartedDto> get championDuelStarted =>
+      _championDuelStarted.stream;
+  Stream<ChampionDuelResolvedDto> get championDuelResolved =>
+      _championDuelResolved.stream;
 
   @override
   void registerHandlers(HubConnection connection) {
@@ -82,6 +103,41 @@ class NotificationHub extends HubClientBase {
         _directMessagesUpdated.add(DirectMessagesUpdatedDto.fromJson(raw));
       }
     });
+
+    connection.on('ChampionRoundStarted', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championRoundStarted.add(ChampionRoundStartedDto.fromJson(raw));
+      }
+    });
+
+    connection.on('ChampionRoundResolved', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championRoundResolved.add(ChampionRoundResolvedDto.fromJson(raw));
+      }
+    });
+
+    connection.on('ChampionMatchEnded', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championMatchEnded.add(ChampionMatchEndedDto.fromJson(raw));
+      }
+    });
+
+    connection.on('ChampionDuelStarted', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championDuelStarted.add(ChampionDuelStartedDto.fromJson(raw));
+      }
+    });
+
+    connection.on('ChampionDuelResolved', (args) {
+      final raw = _firstArg(args);
+      if (raw != null) {
+        _championDuelResolved.add(ChampionDuelResolvedDto.fromJson(raw));
+      }
+    });
   }
 
   // ── Group subscriptions ──────────────────────────────────────────────────
@@ -109,6 +165,11 @@ class NotificationHub extends HubClientBase {
     await _territoryCaptures.close();
     await _voteTallyUpdates.close();
     await _directMessagesUpdated.close();
+    await _championRoundStarted.close();
+    await _championRoundResolved.close();
+    await _championMatchEnded.close();
+    await _championDuelStarted.close();
+    await _championDuelResolved.close();
   }
 
   // ── Helpers ──────────────────────────────────────────────────────────────

@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import 'package:trivia_tycoon/core/env.dart';
+import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
@@ -614,6 +615,8 @@ class ApiService {
     // Backend requires authorization for these features (see
     // docs/api/BACKEND_API_AUDIT.md); without the bearer header they 401.
     if (path == '/matches' || path.startsWith('/matches/')) return true;
+    // Game-event entry / live-round answers are player-scoped (JWT).
+    if (path == '/game-events' || path.startsWith('/game-events/')) return true;
     if (path == '/party' || path.startsWith('/party/')) return true;
     if (path == '/progression' || path.startsWith('/progression/')) {
       return true;
@@ -913,6 +916,75 @@ class ApiService {
       'gameEventId': gameEventId,
       'playerId': playerId,
     });
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Submit Live Round Answer**
+  /// POST /game-events/{id}/rounds/answer — answer the current live round of a
+  /// Champion vs Tier match. The backend derives the player from the JWT.
+  Future<String> submitRoundAnswer({
+    required String gameEventId,
+    required String optionId,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/rounds/answer',
+      body: {'optionId': optionId},
+    );
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Live Match Snapshot (replay-on-join)**
+  /// GET /game-events/{id}/live — the current open round/duel so a client
+  /// entering mid-match renders live state immediately.
+  Future<ChampionLiveSnapshotDto?> getLiveSnapshot(String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/live');
+      if (response.isEmpty) return null;
+      return ChampionLiveSnapshotDto.fromJson(response);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// **🔹 Live Match Roster**
+  /// GET /game-events/{id}/participants — players with handles + champion /
+  /// eliminated flags, for the champion's duel picker and the mob view.
+  Future<List<ChampionParticipant>> getEventParticipants(
+      String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/participants');
+      final items = response['participants'] as List? ?? const [];
+      return items
+          .map((e) => ChampionParticipant.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// **🔹 Start a Champion Duel**
+  /// POST /game-events/{id}/duel — the champion calls out a challenger.
+  Future<String> startChampionDuel({
+    required String gameEventId,
+    required String challengerPlayerId,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/duel',
+      body: {'challengerPlayerId': challengerPlayerId},
+    );
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Submit a Duel Answer**
+  /// POST /game-events/{id}/duel/answer — either duelist answers.
+  Future<String> submitDuelAnswer({
+    required String gameEventId,
+    required String optionId,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/duel/answer',
+      body: {'optionId': optionId},
+    );
     return response['status']?.toString() ?? 'Unknown';
   }
 }

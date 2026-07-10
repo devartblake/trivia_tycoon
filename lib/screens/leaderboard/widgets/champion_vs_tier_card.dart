@@ -7,6 +7,7 @@ import '../../../game/models/champion_event.dart';
 import '../../../game/providers/arcade_providers.dart';
 import '../../../game/providers/core_providers.dart' show apiServiceProvider;
 import '../../../game/providers/learning_providers.dart' show currentPlayerIdProvider;
+import '../champion_live_screen.dart';
 
 /// Weekly "Champion vs Tier" headline card: the tier's #1 defends the crown
 /// against 99 challengers, and every elimination grows the jackpot. Hides
@@ -163,7 +164,16 @@ class _CardState extends ConsumerState<_Card> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: (event.isOpenForEntry && !_entering) ? _enter : null,
+                onPressed: _entering
+                    ? null
+                    : event.isLive
+                        ? () => Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) =>
+                                  ChampionLiveScreen(gameEventId: event.id),
+                            ))
+                        : event.isOpenForEntry
+                            ? _enter
+                            : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFCD34D),
                   foregroundColor: const Color(0xFF3B0764),
@@ -181,12 +191,12 @@ class _CardState extends ConsumerState<_Card> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
-                        event.isOpenForEntry
-                            ? (event.entryFeeCoins > 0
-                                ? 'Challenge the Champion — ${event.entryFeeCoins} coins'
-                                : 'Challenge the Champion')
-                            : event.isLive
-                                ? 'Battle in progress'
+                        event.isLive
+                            ? 'Watch the battle live'
+                            : event.isOpenForEntry
+                                ? (event.entryFeeCoins > 0
+                                    ? 'Challenge the Champion — ${event.entryFeeCoins} coins'
+                                    : 'Challenge the Champion')
                                 : 'Opens ${DateFormat('MMM d, h:mm a').format(event.scheduledAtUtc.toLocal())}',
                         style: const TextStyle(fontWeight: FontWeight.w800),
                       ),

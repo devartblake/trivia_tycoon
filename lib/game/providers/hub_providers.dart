@@ -5,6 +5,7 @@ import '../../core/networking/signalr/presence_hub.dart';
 import '../../core/networking/signalr/leaderboard_hub.dart';
 import '../../core/networking/signalr/matchmaking_hub.dart';
 import '../../core/dto/hub_event_dto.dart';
+import '../../core/dto/champion_round_events.dart';
 import '../../core/dto/game_event_dto.dart';
 import '../../core/dto/guardian_dto.dart';
 import '../../core/dto/territory_dto.dart';
@@ -63,6 +64,33 @@ final gameEventEliminationStreamProvider =
 
 final gameEventClosedStreamProvider = StreamProvider<GameEventClosedDto>((ref) {
   return ref.watch(notificationHubProvider).gameEventsClosed;
+});
+
+// ── Champion vs Tier live-round streams ──────────────────────────────────────
+
+final championRoundStartedStreamProvider =
+    StreamProvider<ChampionRoundStartedDto>((ref) {
+  return ref.watch(notificationHubProvider).championRoundStarted;
+});
+
+final championRoundResolvedStreamProvider =
+    StreamProvider<ChampionRoundResolvedDto>((ref) {
+  return ref.watch(notificationHubProvider).championRoundResolved;
+});
+
+final championMatchEndedStreamProvider =
+    StreamProvider<ChampionMatchEndedDto>((ref) {
+  return ref.watch(notificationHubProvider).championMatchEnded;
+});
+
+final championDuelStartedStreamProvider =
+    StreamProvider<ChampionDuelStartedDto>((ref) {
+  return ref.watch(notificationHubProvider).championDuelStarted;
+});
+
+final championDuelResolvedStreamProvider =
+    StreamProvider<ChampionDuelResolvedDto>((ref) {
+  return ref.watch(notificationHubProvider).championDuelResolved;
 });
 
 final guardianChangedStreamProvider = StreamProvider<GuardianChangedDto>((ref) {
