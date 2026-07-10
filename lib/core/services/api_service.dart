@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import 'package:trivia_tycoon/core/env.dart';
+import '../../game/models/champion_event.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
@@ -867,5 +868,51 @@ class ApiService {
     return items
         .map((item) => SeasonTiebreaker.fromJson(item as Map<String, dynamic>))
         .toList();
+  }
+
+  /// **🔹 Upcoming Game Events**
+  /// GET /game-events/upcoming — scheduled/open/live events, optionally
+  /// filtered to a tier. Used to surface the weekly Champion vs Tier event.
+  Future<List<ChampionEvent>> getUpcomingGameEvents({int? tierId}) async {
+    return _handleRequest(() async {
+      // The endpoint returns a bare JSON array, so read the Dio body directly
+      // (the generic get() helper coerces non-map bodies to an empty map).
+      final response = await _dio.get(
+        '/game-events/upcoming',
+        queryParameters: {if (tierId != null) 'tierId': tierId},
+        options: _buildJsonOptions('/game-events/upcoming', null),
+      );
+      final data = response.data;
+      final list = data is List
+          ? data
+          : (data is Map ? (data['data'] ?? data['items']) as List? : null) ??
+              const [];
+      return list
+          .map((e) => ChampionEvent.fromJson(_asJsonMap(e)))
+          .toList();
+    });
+  }
+
+  /// **🔹 Game Event Status**
+  /// GET /game-events/{id} — full status incl. jackpot, champion, alive count.
+  Future<ChampionEvent> getGameEventStatus(String gameEventId) async {
+    final response = await get('/game-events/$gameEventId');
+    return ChampionEvent.fromJson(response);
+  }
+
+  /// **🔹 Enter Game Event**
+  /// POST /game-events/enter — join an open event (debits the entry fee).
+  /// [eventId] is a client-minted idempotency key for the entry.
+  Future<String> enterGameEvent({
+    required String eventId,
+    required String gameEventId,
+    required String playerId,
+  }) async {
+    final response = await post('/game-events/enter', body: {
+      'eventId': eventId,
+      'gameEventId': gameEventId,
+      'playerId': playerId,
+    });
+    return response['status']?.toString() ?? 'Unknown';
   }
 }

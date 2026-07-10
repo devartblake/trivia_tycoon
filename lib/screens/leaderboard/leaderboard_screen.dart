@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
+import 'package:trivia_tycoon/screens/leaderboard/widgets/champion_vs_tier_card.dart';
 import 'package:trivia_tycoon/screens/leaderboard/widgets/tiebreaker_banner.dart';
 import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
 import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
@@ -197,6 +198,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           child: Column(
             children: [
               const TiebreakerBanner(),
+              const ChampionVsTierCard(),
               _buildTierHeader(),
               const SizedBox(height: 24),
               if (layout.isDesktop)
