@@ -8,6 +8,7 @@ import 'package:trivia_tycoon/core/env.dart';
 import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
 import '../../game/models/champion_prediction.dart';
+import '../../game/models/champion_spectator.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
@@ -1011,5 +1012,19 @@ class ApiService {
       body: {'championDefends': championDefends},
     );
     return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Spectator View**
+  /// GET /game-events/{id}/spectate — live counts + jackpot for everyone; the
+  /// elimination-cam feed is populated only when the caller holds a premium
+  /// spectator pass. Anonymous callers still get the free basic view.
+  Future<ChampionSpectatorView?> getSpectatorView(String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/spectate');
+      if (response.isEmpty) return null;
+      return ChampionSpectatorView.fromJson(response);
+    } catch (_) {
+      return null;
+    }
   }
 }
