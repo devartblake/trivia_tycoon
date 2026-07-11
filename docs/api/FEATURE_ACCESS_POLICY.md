@@ -39,6 +39,14 @@ the client hid them.
   until the feature is finished or for admin users.
 - **Real-money store purchases** — `store_purchases_enabled` kept default off
   (payments carry the same caution as crypto for a product with minor users).
+  Resolved 2026-07: **stays off** until the real-money flow is verified
+  end-to-end with live Apple/Google/Stripe credentials — same posture as crypto.
+  Note this flag gates **only** the external-payment paths
+  (`EnsurePaymentsEnabledAsync` → IAP receipt validation + Stripe). Coin-based
+  in-game store purchases go through a separate `EnsureStoreEnabledAsync` gate
+  plus the COPPA/parental eligibility check, and remain available. The client
+  models no store-purchase flag; a real-money attempt simply returns
+  `403 FeatureDisabled` server-side.
 - **Dev tester** — `dev_tester_enabled` stays off in production.
 - **Parental-consent / guardian controls** — a *separate*, compliance-critical
   system, unchanged by this work. The ban gate is additive to it.
