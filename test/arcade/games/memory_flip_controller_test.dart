@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_id.dart';
-import 'package:trivia_tycoon/arcade/games/memory_flip/memory_flip_controller.dart';
-import 'package:trivia_tycoon/arcade/games/memory_flip/memory_flip_models.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_game_id.dart';
+import 'package:synaptix/arcade/games/memory_flip/memory_flip_controller.dart';
+import 'package:synaptix/arcade/games/memory_flip/memory_flip_models.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

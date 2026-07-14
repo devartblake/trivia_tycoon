@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/question_analytics_service.dart';
-import 'package:trivia_tycoon/ui_components/analytics/category_pie_chart.dart';
+import 'package:synaptix/game/services/question_analytics_service.dart';
+import 'package:synaptix/ui_components/analytics/category_pie_chart.dart';
 
 void main() {
   group('CategoryPieChart', () {

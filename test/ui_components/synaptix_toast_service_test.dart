@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast_service.dart';
+import 'package:synaptix/ui_components/synaptix_toast/synaptix_toast_service.dart';
 
 void main() {
   testWidgets('SynaptixToastService renders a toast through global app keys',

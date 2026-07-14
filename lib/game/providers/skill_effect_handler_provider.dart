@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';
+import 'package:synaptix/game/providers/xp_provider.dart';
 import '../logic/skill_effect_handler.dart';
 import 'game_session_provider.dart';
 

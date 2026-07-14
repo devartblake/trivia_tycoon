@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/presence/typing_indicator_service.dart';
+import 'package:synaptix/core/services/presence/typing_indicator_service.dart';
 
 // ---------------------------------------------------------------------------
 // Notes on test design

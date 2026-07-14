@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/study_dto.dart';
+import 'package:synaptix/core/dto/study_dto.dart';
 
 void main() {
   // -------------------------------------------------------------------------

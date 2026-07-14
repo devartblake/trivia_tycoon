@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/providers/branch_path_providers.dart';
+import 'package:synaptix/game/providers/branch_path_providers.dart';
 
 void main() {
   group('resolveInitialAutoPathStep', () {

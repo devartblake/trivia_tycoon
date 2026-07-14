@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/models/app_config.dart';
-import 'package:trivia_tycoon/game/providers/feature_flag_providers.dart';
+import 'package:synaptix/core/models/app_config.dart';
+import 'package:synaptix/game/providers/feature_flag_providers.dart';
 
 /// Returns null (allow navigation) when [isEnabled] returns true for the
 /// current [FeatureFlags], or redirects to ['/home'] when the feature is

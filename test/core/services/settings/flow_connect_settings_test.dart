@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/settings/flow_connect_settings.dart';
-import 'package:trivia_tycoon/game/services/flow_connect_level_generator.dart';
+import 'package:synaptix/core/services/settings/flow_connect_settings.dart';
+import 'package:synaptix/game/services/flow_connect_level_generator.dart';
 
 void main() {
   group('FlowConnectSettings', () {

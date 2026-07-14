@@ -1,4 +1,4 @@
-# Trivia Tycoon / Synaptix Migration Package — File-by-File Patch Order
+# Synaptix / Synaptix Migration Package — File-by-File Patch Order
 
 This patch order is sequenced to reduce breakage while you move from legacy quiz semantics toward a clean Play / Learn / Study split.
 
@@ -19,9 +19,9 @@ Patch transport and routing seams first, then screen launchers, then new surface
 ## Phase 0 — Freeze and annotate contracts
 
 ### 0.1 Backend contract comments and API notes
-- `Tycoon.Backend.Api/Features/Questions/QuestionsEndpoints.cs`
-- `Tycoon.Backend.Api/Features/LearningModules/LearningModulesEndpoints.cs`
-- `Tycoon.Backend.Api/Program.cs`
+- `Synaptix.Backend.Api/Features/Questions/QuestionsEndpoints.cs`
+- `Synaptix.Backend.Api/Features/LearningModules/LearningModulesEndpoints.cs`
+- `Synaptix.Backend.Api/Program.cs`
 
 **Patch goal**
 - Add explicit comments that `/questions` is the gameplay question API.
@@ -132,7 +132,7 @@ Patch transport and routing seams first, then screen launchers, then new surface
 ## Phase 6 — Introduce Study as a first-class product surface
 
 ### 6.1 Backend Study API scaffolding
-- `Tycoon.Backend.Api/Features/StudySets/*`
+- `Synaptix.Backend.Api/Features/StudySets/*`
 - matching application and DTO layers
 
 **Patch goal**
@@ -183,7 +183,7 @@ Patch transport and routing seams first, then screen launchers, then new surface
 - Redirect or remove ambiguous quiz entry points once telemetry shows safe adoption.
 
 ### 8.2 Backend cleanup confirmation
-- `Tycoon.Backend.Api/Program.cs`
+- `Synaptix.Backend.Api/Program.cs`
 - question/learning contract docs
 
 **Patch goal**

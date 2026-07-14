@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/helpers/responsive_layout.dart';
 import '../../../core/navigation/navigation_extensions.dart';
-import 'package:trivia_tycoon/arcade/ui/screens/widgets/wallet_counters_row.dart';
+import 'package:synaptix/arcade/ui/screens/widgets/wallet_counters_row.dart';
 import '../../../game/analytics/providers/analytics_providers.dart';
 import '../../../synaptix/mode/synaptix_mode_provider.dart';
 import '../../domain/arcade_difficulty.dart';
 import '../../domain/arcade_game_definition.dart';
 import '../../providers/arcade_providers.dart';
 import '../../../game/providers/feature_flag_providers.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 class ArcadeHubScreen extends ConsumerWidget {
   const ArcadeHubScreen({super.key});

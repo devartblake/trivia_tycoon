@@ -1,5 +1,5 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/player_presence.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_turn.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/player_presence.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_turn.dart';
 
 /// A running or finalized match within a room.
 class Match {

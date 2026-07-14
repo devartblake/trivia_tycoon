@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
 import '../../../game/models/question_model.dart';
 import '../../utils/encryption_utils.dart';
 

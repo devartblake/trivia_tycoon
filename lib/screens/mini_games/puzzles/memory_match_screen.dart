@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
-import 'package:trivia_tycoon/ui_components/flip_card/flip_card.dart';
-import 'package:trivia_tycoon/ui_components/flip_card/controller/flip_card_controller.dart';
+import 'package:synaptix/ui_components/flip_card/flip_card.dart';
+import 'package:synaptix/ui_components/flip_card/controller/flip_card_controller.dart';
 
 import '../dialogs/game_result_dialog.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class MemoryMatchScreen extends StatefulWidget {
   const MemoryMatchScreen({super.key});

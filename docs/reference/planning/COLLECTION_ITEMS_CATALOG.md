@@ -1,4 +1,4 @@
-# Trivia Tycoon Collection Items
+# Synaptix Collection Items
 ## Complete Collectibles Catalog with AI Image Generation Descriptions
 
 Based on your question categories, here are **50 unique collection items** representing different trivia domains. Each item includes a detailed description for AI image generation.
@@ -359,5 +359,5 @@ class CollectionItem {
 
 ---
 
-*Generated for Trivia Tycoon - Collection System*  
+*Generated for Synaptix - Collection System*  
 *Based on 41 question categories across multiple domains*

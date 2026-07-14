@@ -1,7 +1,7 @@
 import 'dart:convert';
 import '../../../core/services/settings/general_key_value_storage_service.dart';
 import '../models/confetti_settings.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Handles saving, loading, and managing confetti themes using instance-based key-value storage.
 class ConfettiSettingsStorage {

@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:trivia_tycoon/core/services/native_platform_service.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/native_platform_service.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 
 import '../../game/providers/notification_history_store.dart';
 import '../../game/services/channel_prefs.dart'
     show kNotifDraftsKey, kNotifEnabledPrefix;
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class NotificationService {
   // -------- Singleton (keeps your original pattern) --------
@@ -23,7 +23,7 @@ class NotificationService {
   bool _hasPermissions = false;
 
   // -------- Channel group & keys (your existing + admin) --------
-  static const String _groupKey = 'trivia_tycoon_group';
+  static const String _groupKey = 'synaptix_group';
 
   // Existing channels (do not rename—keeps other services stable)
   static const String basicChannelKey = 'basic_channel';

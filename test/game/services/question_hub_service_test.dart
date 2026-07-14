@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/services/question_hub_service.dart';
-import 'package:trivia_tycoon/game/services/question_loader_service.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/services/question_hub_service.dart';
+import 'package:synaptix/game/services/question_loader_service.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
 
 class _FakeApiService extends ApiService {
   _FakeApiService()

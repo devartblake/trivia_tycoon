@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/providers/question_provider_contracts.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
+import 'package:synaptix/game/providers/question_provider_contracts.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
 
 void main() {
   test('normalizeQuestionStats maps alternative totals to questionCount', () {

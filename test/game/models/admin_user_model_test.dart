@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/admin_user_model.dart';
+import 'package:synaptix/game/models/admin_user_model.dart';
 
 Map<String, dynamic> _baseJson({
   String id = 'uid_1',

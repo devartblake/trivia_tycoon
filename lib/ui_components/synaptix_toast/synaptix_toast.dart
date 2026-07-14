@@ -55,8 +55,8 @@ class SynaptixToast<T> extends StatefulWidget {
     this.progressIndicatorController,
     this.progressIndicatorBackgroundColor,
     this.progressIndicatorValueColor,
-    this.tycoonToastPosition = SynaptixToastPosition.top,
-    this.tycoonToastStyle = SynaptixToastStyle.floating,
+    this.toastPosition = SynaptixToastPosition.top,
+    this.toastStyle = SynaptixToastStyle.floating,
     this.positionOffset = 0.0,
     this.dismissDirection = SynaptixToastDismissDirection.vertical,
     this.forwardAnimationCurve = Curves.easeOutBack,
@@ -112,8 +112,8 @@ class SynaptixToast<T> extends StatefulWidget {
   final AnimationController? progressIndicatorController;
   final Color? progressIndicatorBackgroundColor;
   final Animation<Color>? progressIndicatorValueColor;
-  final SynaptixToastPosition tycoonToastPosition;
-  final SynaptixToastStyle tycoonToastStyle;
+  final SynaptixToastPosition toastPosition;
+  final SynaptixToastStyle toastStyle;
   final double positionOffset;
   final SynaptixToastDismissDirection dismissDirection;
   final Curve forwardAnimationCurve;

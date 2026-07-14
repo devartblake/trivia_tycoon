@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/core/repositories/question_repository.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
-import 'package:trivia_tycoon/game/providers/game_providers.dart';
-import 'package:trivia_tycoon/game/providers/question_providers.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
-import 'package:trivia_tycoon/game/state/question_state.dart';
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/core/repositories/question_repository.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/game_mode.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/models/question_type.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
+import 'package:synaptix/game/providers/game_providers.dart';
+import 'package:synaptix/game/providers/question_providers.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
+import 'package:synaptix/game/state/question_state.dart';
 
 // ---------------------------------------------------------------------------
 // Fake QuestionRepository

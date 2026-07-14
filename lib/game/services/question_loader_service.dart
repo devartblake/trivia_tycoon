@@ -6,7 +6,7 @@ import 'quiz_category.dart';
 import '../models/question_model.dart';
 import '../models/question_type.dart';
 import '../models/question_difficulty.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class QuestionDataset {
   final String name;

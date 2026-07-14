@@ -1,6 +1,6 @@
 # Game Balance / Economy System — Implementation Guide
 
-This document describes the server-driven economy system added to Trivia Tycoon,
+This document describes the server-driven economy system added to Synaptix,
 covering architecture, data flow, UI components, and resilience behaviour.
 
 ---

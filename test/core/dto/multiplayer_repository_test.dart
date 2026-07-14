@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/repositories/multiplayer_repository_impl.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_client.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/data/repositories/multiplayer_repository_impl.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_client.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 // ---------------------------------------------------------------------------
 // Fake WsClient — captures sent messages without a real WebSocket

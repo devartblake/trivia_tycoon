@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/screens/question/widgets/question_feedback_panel.dart';
+import 'package:synaptix/screens/question/widgets/question_feedback_panel.dart';
 
 void main() {
   group('QuestionFeedbackPanel', () {

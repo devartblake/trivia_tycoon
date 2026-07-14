@@ -26,7 +26,7 @@ _Date: 2026-03-31 | Last updated: 2026-05-10_
 > source code and do not require resolution.
 
 ### Previously open Synaptix-branded frontend TODOs — now resolved ✅
-- `lib/main.dart` — `TriviaTycoonApp` → `SynaptixApp` rename: **completed**
+- `lib/main.dart` — `SynaptixApp` → `SynaptixApp` rename: **completed**
 - `lib/synaptix/widgets/hub_daily_quest.dart` — mock → provider-driven quest data: **completed**
 - `lib/synaptix/widgets/hub_featured_match.dart` — static → data-driven recommendations: **completed**
 - `lib/synaptix/widgets/hub_live_ticker.dart` — static → provider/stream live data: **completed**
@@ -64,7 +64,7 @@ For Synaptix **Alpha (mobile + web)**, the minimum outstanding execution set is:
 1. ~~Close high-visibility Synaptix TODOs in hub widgets and app naming.~~ ✅ Done
 2. Complete Phase 7 QA checklist in `synaptix_frontend_plan.md` and mark completed items. _(requires device)_
 3. Run onboarding acceptance criteria from `synaptix_onboarding_production_implementation.md` as explicit test cases. _(requires device)_
-4. ~~Decide whether Phase 8 technical rename (`TriviaTycoonApp` -> `SynaptixApp`) is in Alpha scope or deferred.~~ ✅ Done
+4. ~~Decide whether Phase 8 technical rename (`SynaptixApp` -> `SynaptixApp`) is in Alpha scope or deferred.~~ ✅ Done
 
 ## 4) 2026-04-04 execution plan update
 
@@ -166,7 +166,7 @@ Progress update (2026-04-04 execution — complete):
   imports; wired in conditional import; `_initializeCache()` calls `createCacheStore()`.
 - `auth_error_messages.dart`: removed `dart:io`; exception-type guards replaced with
   `runtimeType.toString()` / `toString().startsWith()` checks.
-- `web/index.html` + `web/manifest.json`: branding updated (`trivia_tycoon` → `Synaptix`).
+- `web/index.html` + `web/manifest.json`: branding updated (`synaptix` → `Synaptix`).
 
 > **Result:** Web and Edge startup cascade failure eliminated. App can now load on web
 > in both debug (DDC) and release (dart2js) modes.

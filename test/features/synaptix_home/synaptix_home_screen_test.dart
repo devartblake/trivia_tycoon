@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
-import 'package:trivia_tycoon/features/synaptix_home/models/synaptix_home_state.dart';
-import 'package:trivia_tycoon/features/synaptix_home/providers/synaptix_home_provider.dart';
-import 'package:trivia_tycoon/features/synaptix_home/screens/synaptix_home_screen.dart';
-import 'package:trivia_tycoon/features/synaptix_home/theme/synaptix_home_theme.dart';
+import 'package:synaptix/core/navigation/canonical_routes.dart';
+import 'package:synaptix/features/synaptix_home/models/synaptix_home_state.dart';
+import 'package:synaptix/features/synaptix_home/providers/synaptix_home_provider.dart';
+import 'package:synaptix/features/synaptix_home/screens/synaptix_home_screen.dart';
+import 'package:synaptix/features/synaptix_home/theme/synaptix_home_theme.dart';
 
 void main() {
   testWidgets('wide layout renders rail, main dashboard, and right panel',

@@ -169,7 +169,7 @@ Then run web and check console logs for actual URL being used.
 
 ```dart
 // In any image loading code, use AssetResolver:
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 
 // Instead of hardcoded paths:
 Image.asset('assets/images/rewards/silver.png')

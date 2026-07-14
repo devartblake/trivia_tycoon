@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/auth_api_client.dart';
-import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
+import 'package:synaptix/core/services/auth_api_client.dart';
+import 'package:synaptix/core/services/auth_error_messages.dart';
 
 void main() {
   group('AuthErrorMessages', () {

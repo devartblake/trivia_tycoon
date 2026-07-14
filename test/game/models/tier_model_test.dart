@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/tier_model.dart';
+import 'package:synaptix/game/models/tier_model.dart';
 
 Map<String, dynamic> _baseJson({
   int id = 1,

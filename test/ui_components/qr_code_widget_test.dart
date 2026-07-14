@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:trivia_tycoon/ui_components/qr_code/widgets/qr_code_widget.dart';
+import 'package:synaptix/ui_components/qr_code/widgets/qr_code_widget.dart';
 
 void main() {
   testWidgets('QrCodeWidget renders a standards-compliant QR image',

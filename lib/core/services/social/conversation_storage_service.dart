@@ -1,5 +1,5 @@
 import '../../../game/models/conversation_models.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Simple storage service for conversations - no business logic
 class ConversationStorageService {

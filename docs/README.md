@@ -1,6 +1,6 @@
 ﻿# Documentation Structure
 
-This directory contains organized documentation for the Trivia Tycoon development project. Files are organized by purpose and development phase for easy navigation.
+This directory contains organized documentation for the Synaptix development project. Files are organized by purpose and development phase for easy navigation.
 
 ## 🎯 START HERE - PRODUCTION READINESS STATUS
 

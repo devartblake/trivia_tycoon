@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import '../domain/arcade_result.dart';
 
 class ArcadeAnalyticsService {

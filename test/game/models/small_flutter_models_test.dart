@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/favorite_category_models.dart';
-import 'package:trivia_tycoon/game/models/favorite_question_models.dart';
-import 'package:trivia_tycoon/game/models/word_search_model.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_category_colors.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/models/favorite_category_models.dart';
+import 'package:synaptix/game/models/favorite_question_models.dart';
+import 'package:synaptix/game/models/word_search_model.dart';
+import 'package:synaptix/game/models/skill_tree_category_colors.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
 
 void main() {
   // -------------------------------------------------------------------------

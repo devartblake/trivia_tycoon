@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/admin/widgets/analytics/analytics_empty_state.dart';
-import 'package:trivia_tycoon/admin/widgets/analytics/user_type_dropdown.dart';
-import 'package:trivia_tycoon/core/manager/analytics/analytics_stream_manager.dart';
-import 'package:trivia_tycoon/game/providers/mission_filters_provider.dart';
+import 'package:synaptix/admin/widgets/analytics/analytics_empty_state.dart';
+import 'package:synaptix/admin/widgets/analytics/user_type_dropdown.dart';
+import 'package:synaptix/core/manager/analytics/analytics_stream_manager.dart';
+import 'package:synaptix/game/providers/mission_filters_provider.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../ui_components/mission/mission_filters_segmented_tabs.dart';
 import '../widgets/analytics/timeline_filter_tabs.dart';

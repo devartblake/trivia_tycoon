@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/analytics/models/analytics_data.dart';
-import 'package:trivia_tycoon/game/analytics/models/engagement_entry.dart';
-import 'package:trivia_tycoon/game/analytics/models/mission_analytics_entry.dart';
-import 'package:trivia_tycoon/game/analytics/models/retention_entry.dart';
+import 'package:synaptix/game/analytics/models/analytics_data.dart';
+import 'package:synaptix/game/analytics/models/engagement_entry.dart';
+import 'package:synaptix/game/analytics/models/mission_analytics_entry.dart';
+import 'package:synaptix/game/analytics/models/retention_entry.dart';
 
 void main() {
   // -------------------------------------------------------------------------

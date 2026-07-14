@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/controllers/multiplayer_controller.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/controllers/room_controller.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/controllers/match_controller.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/multiplayer_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/room_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/match_state.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/application/controllers/multiplayer_controller.dart';
+import 'package:synaptix/game/multiplayer/application/controllers/room_controller.dart';
+import 'package:synaptix/game/multiplayer/application/controllers/match_controller.dart';
+import 'package:synaptix/game/multiplayer/application/state/multiplayer_state.dart';
+import 'package:synaptix/game/multiplayer/application/state/room_state.dart';
+import 'package:synaptix/game/multiplayer/application/state/match_state.dart';
 import '../../providers/riverpod_providers.dart';
 import '../domain/entities/player_presence.dart';
 

@@ -5,10 +5,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'synaptix_toast.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
-  final SynaptixToast<T> tycoonToast;
+  final SynaptixToast<T> toast;
   final Builder _builder;
   final Completer<T?> _transitionCompleter = Completer<T?>();
   final SynaptixToastStatusCallback? _onStatusChanged;
@@ -28,11 +28,11 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
   final int _stackIndex = 0;
 
   SynaptixToastRoute({
-    required this.tycoonToast,
+    required this.toast,
     super.settings,
-  })  : _builder = Builder(builder: (BuildContext innerContext) => tycoonToast),
-        _onStatusChanged = tycoonToast.onStatusChanged {
-    _configureAlignment(tycoonToast.tycoonToastPosition);
+  })  : _builder = Builder(builder: (BuildContext innerContext) => toast),
+        _onStatusChanged = toast.onStatusChanged {
+    _configureAlignment(toast.toastPosition);
   }
 
   void _configureAlignment(SynaptixToastPosition position) {
@@ -42,16 +42,16 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
     switch (position) {
       case SynaptixToastPosition.top:
         _initialAlignment = const Alignment(0.0, -2.0);
-        _endAlignment = tycoonToast.endOffset != null
+        _endAlignment = toast.endOffset != null
             ? Alignment(0.0, -0.8 + stackOffset) +
-                Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
+                Alignment(toast.endOffset!.dx, toast.endOffset!.dy)
             : Alignment(0.0, -0.8 + stackOffset);
         break;
       case SynaptixToastPosition.bottom:
         _initialAlignment = const Alignment(0.0, 2.0);
-        _endAlignment = tycoonToast.endOffset != null
+        _endAlignment = toast.endOffset != null
             ? Alignment(0.0, 0.8 - stackOffset) +
-                Alignment(tycoonToast.endOffset!.dx, tycoonToast.endOffset!.dy)
+                Alignment(toast.endOffset!.dx, toast.endOffset!.dy)
             : Alignment(0.0, 0.8 - stackOffset);
         break;
     }
@@ -61,22 +61,22 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
   Iterable<OverlayEntry> createOverlayEntries() {
     final overlays = <OverlayEntry>[];
 
-    if (tycoonToast.blockBackgroundInteraction) {
+    if (toast.blockBackgroundInteraction) {
       overlays.add(
         OverlayEntry(
           builder: (context) => Listener(
             onPointerDown:
-                tycoonToast.isDismissible ? (_) => tycoonToast.dismiss() : null,
+                toast.isDismissible ? (_) => toast.dismiss() : null,
             child: _createBackgroundOverlay(),
           ),
         ),
       );
     }
 
-    Widget child = tycoonToast.isDismissible
+    Widget child = toast.isDismissible
         ? _getDismissibleToast(_builder)
         : _getToast();
-    if (tycoonToast.safeArea) {
+    if (toast.safeArea) {
       child = SafeArea(child: child);
     }
 
@@ -96,7 +96,7 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
   }
 
   Widget _applyTransitionAnimations(Widget child) {
-    switch (tycoonToast.transitionType) {
+    switch (toast.transitionType) {
       case SynaptixToastTransition.scale:
         return AnimatedBuilder(
           animation: _scaleAnimation!,
@@ -119,7 +119,7 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
 
       case SynaptixToastTransition.slide:
         // Enhanced slide with slight rotation for reward toasts
-        if (tycoonToast.toastType == SynaptixToastType.reward) {
+        if (toast.toastType == SynaptixToastType.reward) {
           return AnimatedBuilder(
             animation: _rotationAnimation!,
             builder: (context, child) => Transform.rotate(
@@ -169,15 +169,15 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
 
   Widget _getDismissibleToast(Widget child) {
     return Dismissible(
-      direction: tycoonToast.dismissDirection ==
+      direction: toast.dismissDirection ==
               SynaptixToastDismissDirection.horizontal
           ? DismissDirection.horizontal
-          : (tycoonToast.tycoonToastPosition == SynaptixToastPosition.top
+          : (toast.toastPosition == SynaptixToastPosition.top
               ? DismissDirection.up
               : DismissDirection.down),
       key: UniqueKey(),
       onDismissed: (_) {
-        tycoonToast.onDismiss?.call();
+        toast.onDismiss?.call();
         _timer?.cancel();
         if (isActive) {
           navigator?.removeRoute(this);
@@ -193,7 +193,7 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
   }
 
   Widget _getToast() => Container(
-        margin: tycoonToast.margin,
+        margin: toast.margin,
         constraints: BoxConstraints(
           maxHeight: 140, // Increased from 120 to 140 for more room
           maxWidth: MediaQuery.of(navigator!.context).size.width * 0.9,
@@ -202,7 +202,7 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
       );
 
   AnimationController createAnimationController() => AnimationController(
-        duration: tycoonToast.animationDuration,
+        duration: toast.animationDuration,
         vsync: navigator!,
       );
 
@@ -218,8 +218,8 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
     super.install();
 
     // Play sound effect
-    if (tycoonToast.soundEffect != null) {
-      unawaited(_playSound(tycoonToast.soundEffect!));
+    if (toast.soundEffect != null) {
+      unawaited(_playSound(toast.soundEffect!));
     }
   }
 
@@ -233,8 +233,8 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
     ).animate(
       CurvedAnimation(
         parent: _controller!,
-        curve: tycoonToast.forwardAnimationCurve,
-        reverseCurve: tycoonToast.reverseAnimationCurve,
+        curve: toast.forwardAnimationCurve,
+        reverseCurve: toast.reverseAnimationCurve,
       ),
     );
   }
@@ -276,9 +276,9 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
   }
 
   Animation<double>? createBlurFilterAnimation() =>
-      tycoonToast.routeBlur == null
+      toast.routeBlur == null
           ? null
-          : Tween<double>(begin: 0.0, end: tycoonToast.routeBlur).animate(
+          : Tween<double>(begin: 0.0, end: toast.routeBlur).animate(
               CurvedAnimation(
                 parent: _controller!,
                 curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
@@ -286,9 +286,9 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
             );
 
   Animation<Color?>? createColorFilterAnimation() =>
-      tycoonToast.routeColor == null
+      toast.routeColor == null
           ? null
-          : ColorTween(begin: Colors.transparent, end: tycoonToast.routeColor)
+          : ColorTween(begin: Colors.transparent, end: toast.routeColor)
               .animate(
               CurvedAnimation(
                 parent: _controller!,
@@ -301,7 +301,7 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
     super.didPush();
     _animation!.addStatusListener(_handleStatusChanged);
     _configureTimer();
-    tycoonToast.onShow?.call();
+    toast.onShow?.call();
     return _controller!.forward();
   }
 
@@ -330,12 +330,12 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
   }
 
   void _configureTimer() {
-    if (tycoonToast.duration != null) {
-      _timer = Timer(tycoonToast.duration!, () {
+    if (toast.duration != null) {
+      _timer = Timer(toast.duration!, () {
         final routeNavigator = navigator;
         if (routeNavigator == null || !isActive) return;
 
-        tycoonToast.onAutoDismiss?.call();
+        toast.onAutoDismiss?.call();
         if (isCurrent) {
           routeNavigator.pop();
         } else {
@@ -372,7 +372,7 @@ SynaptixToastRoute<T> showSynaptixToast<T extends Object?>({
   required SynaptixToast<T> toast,
 }) {
   return SynaptixToastRoute<T>(
-    tycoonToast: toast,
+    toast: toast,
     settings: const RouteSettings(name: synaptixToastRouteName),
   );
 }

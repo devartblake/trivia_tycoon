@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:grpc/grpc_web.dart' as grpc_web;
 import 'package:grpc/service_api.dart' as grpc_api;
-import 'package:trivia_tycoon/core/env.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/env.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Manages the singleton gRPC channel connecting to the backend
 /// MobileMatchService on port 5001 (HTTP/2).

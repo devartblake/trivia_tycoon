@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:encrypt/encrypt.dart' hide Fernet;
 import 'package:fernet/fernet.dart' as f;
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
 
 class FernetService {
   static const _fernetSecretKey = 'fernet_secret';

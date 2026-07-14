@@ -1,4 +1,4 @@
-Trivia Tycoon — API Spec (v1)
+Synaptix — API Spec (v1)
 0) Conventions
 
 Base URL: /v1

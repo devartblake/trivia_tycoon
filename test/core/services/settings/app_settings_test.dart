@@ -1,11 +1,11 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/navigation/splash_type.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
-import 'package:trivia_tycoon/game/controllers/theme_settings_controller.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/models/spin_system_models.dart';
+import 'package:synaptix/core/services/navigation/splash_type.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
+import 'package:synaptix/game/controllers/theme_settings_controller.dart';
+import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
 
 void main() {
   late Directory tempDir;

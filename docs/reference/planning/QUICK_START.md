@@ -3,7 +3,7 @@
 ## What You Need to Do
 
 ### 1. Replace AuthEndpoints.cs (5 minutes)
-**Location:** `Tycoon.Backend.Api/Features/Auth/AuthEndpoints.cs`
+**Location:** `Synaptix.Backend.Api/Features/Auth/AuthEndpoints.cs`
 
 Replace your current file with the new `AuthEndpoints.cs` that includes the `HandleSignup` method.
 

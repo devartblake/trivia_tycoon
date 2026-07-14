@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_id.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_result.dart';
-import 'package:trivia_tycoon/arcade/missions/arcade_mission_catalog.dart';
-import 'package:trivia_tycoon/arcade/missions/arcade_mission_models.dart';
-import 'package:trivia_tycoon/arcade/missions/arcade_mission_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_game_id.dart';
+import 'package:synaptix/arcade/domain/arcade_result.dart';
+import 'package:synaptix/arcade/missions/arcade_mission_catalog.dart';
+import 'package:synaptix/arcade/missions/arcade_mission_models.dart';
+import 'package:synaptix/arcade/missions/arcade_mission_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/core/repositories/question_repository.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
-import 'package:trivia_tycoon/game/state/quiz_state.dart';
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/core/repositories/question_repository.dart';
+import 'package:synaptix/game/models/game_mode.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
+import 'package:synaptix/game/state/quiz_state.dart';
 
 QuestionModel _question({
   required String id,

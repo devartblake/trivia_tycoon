@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/player.dart';
-import 'package:trivia_tycoon/game/models/player_progress.dart';
-import 'package:trivia_tycoon/game/models/typing_status_model.dart';
+import 'package:synaptix/game/models/player.dart';
+import 'package:synaptix/game/models/player_progress.dart';
+import 'package:synaptix/game/models/typing_status_model.dart';
 
 void main() {
   // -------------------------------------------------------------------------

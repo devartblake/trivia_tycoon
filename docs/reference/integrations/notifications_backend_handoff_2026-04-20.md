@@ -20,7 +20,7 @@ Implemented routes:
 
 Validated on **April 20, 2026** with:
 
-- `dotnet test Tycoon.Backend.Api.Tests\Tycoon.Backend.Api.Tests.csproj --no-build --no-restore --filter "PlayerNotificationsEndpointsTests|MessagesEndpointsTests"`
+- `dotnet test Synaptix.Backend.Api.Tests\Synaptix.Backend.Api.Tests.csproj --no-build --no-restore --filter "PlayerNotificationsEndpointsTests|MessagesEndpointsTests"`
 - Result: `Passed (8/8)`
 
 Current v1 notification sources:

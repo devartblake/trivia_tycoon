@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/providers/user_type_filter_provider.dart';
+import 'package:synaptix/game/providers/user_type_filter_provider.dart';
 
 void main() {
   // -------------------------------------------------------------------------

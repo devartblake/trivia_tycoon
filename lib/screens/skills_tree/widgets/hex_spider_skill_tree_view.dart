@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/index.dart';
+import 'package:synaptix/ui_components/hex_grid/index.dart';
 import '../../../game/models/skill_tree_category_colors.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/providers/skill_cooldown_service_provider.dart';

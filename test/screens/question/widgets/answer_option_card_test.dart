@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/screens/question/widgets/answer_option_card.dart';
+import 'package:synaptix/screens/question/widgets/answer_option_card.dart';
 
 void main() {
   group('AnswerOptionCard', () {

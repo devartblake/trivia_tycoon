@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/utils/tier_assigner.dart';
-import 'package:trivia_tycoon/game/utils/referral_code_gen.dart';
-import 'package:trivia_tycoon/game/utils/qr_payload.dart';
-import 'package:trivia_tycoon/game/utils/date_formatter.dart';
-import 'package:trivia_tycoon/game/utils/greeting_utils.dart';
-import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
+import 'package:synaptix/game/utils/tier_assigner.dart';
+import 'package:synaptix/game/utils/referral_code_gen.dart';
+import 'package:synaptix/game/utils/qr_payload.dart';
+import 'package:synaptix/game/utils/date_formatter.dart';
+import 'package:synaptix/game/utils/greeting_utils.dart';
+import 'package:synaptix/game/models/leaderboard_entry.dart';
 
 LeaderboardEntry _entry({required int userId, required int score}) =>
     LeaderboardEntry(

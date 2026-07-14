@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/room_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/application/state/room_state.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 /// Manages lobby/room lifecycle: create, join, leave, and reacts to room-level events.
 class RoomController extends StateNotifier<RoomState> {

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/ui_components/analytics/performance_line_chart.dart';
-import 'package:trivia_tycoon/ui_components/analytics/chart_selector.dart';
-import 'package:trivia_tycoon/ui_components/analytics/performance_chart_provider.dart';
+import 'package:synaptix/ui_components/analytics/performance_line_chart.dart';
+import 'package:synaptix/ui_components/analytics/chart_selector.dart';
+import 'package:synaptix/ui_components/analytics/performance_chart_provider.dart';
 
 void main() {
   group('Performance Chart Providers', () {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast.dart';
+import 'package:synaptix/ui_components/synaptix_toast/synaptix_toast.dart';
 
 Size? getWidgetSize(GlobalKey key) {
   final renderBox = key.currentContext?.findRenderObject() as RenderBox?;
@@ -24,7 +24,7 @@ SynaptixToast showSuccessToast(
     backgroundGradient: LinearGradient(
       colors: [Colors.green[600]!, Colors.green[400]!],
     ),
-    onTap: (tycoonToast) => tycoonToast.dismiss(),
+    onTap: (toast) => toast.dismiss(),
   )..show(context);
 }
 
@@ -42,6 +42,6 @@ SynaptixToast showErrorToast(
     backgroundGradient: LinearGradient(
       colors: [Colors.red[600]!, Colors.red[400]!],
     ),
-    onTap: (tycoonToast) => tycoonToast.dismiss(),
+    onTap: (toast) => toast.dismiss(),
   )..show(context);
 }

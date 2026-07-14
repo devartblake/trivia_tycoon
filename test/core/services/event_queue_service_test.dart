@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/event_queue_service.dart';
+import 'package:synaptix/core/services/event_queue_service.dart';
 
 void main() {
   late Directory tempDir;

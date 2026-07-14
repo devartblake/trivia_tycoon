@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/screens/skills_tree/widgets/skill_node_widget.dart';
+import 'package:synaptix/screens/skills_tree/widgets/skill_node_widget.dart';
 import 'package:vector_math/vector_math_64.dart' as vmath;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/index.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/ui_components/hex_grid/index.dart';
 import '../../../game/controllers/skill_tree_controller.dart';
 import '../../../game/models/skill_tree_category_colors.dart';
 import '../../../game/providers/hex_theme_providers.dart';
@@ -12,7 +12,7 @@ import '../../../game/providers/skill_cooldown_service_provider.dart';
 import '../../../game/providers/skill_tree_provider.dart';
 import '../../../game/providers/xp_provider.dart';
 import 'skill_node_detail_sheet.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 enum SkillNodeFilterMode { all, unlocked, available, locked }
 

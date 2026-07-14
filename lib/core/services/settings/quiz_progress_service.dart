@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Service to manage quiz session data, onboarding flags, and player metadata.
 class QuizProgressService {

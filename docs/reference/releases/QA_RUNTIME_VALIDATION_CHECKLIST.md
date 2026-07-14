@@ -53,7 +53,7 @@ Use:
 
 ## D. Branding/consistency checks
 
-- [ ] No high-visibility “Trivia Tycoon” strings remain
+- [ ] No high-visibility “Synaptix” strings remain
 - [ ] No mixed old/new adjacent screen language
 - [ ] Mode-specific differences render correctly
 - [ ] Frontend labels align with backend/dashboard terminology

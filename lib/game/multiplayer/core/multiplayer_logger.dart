@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Tiny logger wrapper so you can turn logs on/off from config.
 class MultiplayerLogger {

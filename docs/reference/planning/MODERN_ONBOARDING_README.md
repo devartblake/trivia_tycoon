@@ -1,4 +1,4 @@
-# Modern Trivia Tycoon Onboarding System
+# Modern Synaptix Onboarding System
 
 A complete redesign of the onboarding flow with **modern UI/UX patterns**, **trivia-specific category selection**, and **smooth animations**.
 
@@ -384,7 +384,7 @@ Potential additions:
 
 ## 📄 License
 
-Use this in your Trivia Tycoon project. Feel free to modify as needed!
+Use this in your Synaptix project. Feel free to modify as needed!
 
 ---
 

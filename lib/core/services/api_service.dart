@@ -4,14 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
-import 'package:trivia_tycoon/core/env.dart';
+import 'package:synaptix/core/env.dart';
 import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 
 class ApiRequestException implements Exception {
   final String message;

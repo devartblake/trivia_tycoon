@@ -12,8 +12,8 @@ import '../../game/providers/friends_providers.dart';
 import '../../game/providers/message_providers.dart';
 import '../../game/providers/profile_providers.dart' hide currentUserIdProvider;
 import '../../ui_components/presence/presence_status_widget.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 class FriendsScreen extends ConsumerStatefulWidget {
   const FriendsScreen({super.key});

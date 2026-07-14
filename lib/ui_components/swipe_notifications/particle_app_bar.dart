@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/screens/app_shell/app_shell.dart';
+import 'package:synaptix/screens/app_shell/app_shell.dart';
 
 import 'package:flutter/material.dart';
 

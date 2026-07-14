@@ -40,10 +40,10 @@ These are internal code renames with no impact on app stores, native config, or 
 
 | Item | Current | Target | Risk |
 |---|---|---|---|
-| Root app class | `TriviaTycoonApp` | `SynaptixApp` | Low — one class rename + references |
+| Root app class | `SynaptixApp` | `SynaptixApp` | Low — one class rename + references |
 | Internal helper names tied to old branding | Various `trivia_tycoon_*` or `tycoon_*` symbols | Synaptix equivalents | Low — scoped to files |
 | `// TODO(Synaptix Phase 8)` comments | Sprinkled at deferral points | Resolve or remove | Trivial |
-| README + inline comments | References to Trivia Tycoon | Synaptix | Trivial |
+| README + inline comments | References to Synaptix | Synaptix | Trivial |
 | `pubspec.yaml` description field | Old product description | Synaptix platform description | Trivial |
 
 **Estimated scope:** A few hours to a day. No store submission required. No backend impact.
@@ -56,8 +56,8 @@ This is the highest-blast change in the entire project. Every Dart file that imp
 
 | Item | Current | Target | Risk |
 |---|---|---|---|
-| `pubspec.yaml` package name | `trivia_tycoon` | `synaptix` | **High** — all imports cascade |
-| All `package:trivia_tycoon/...` import paths | Across every `.dart` file in `lib/`, `test/`, generated files | `package:synaptix/...` | **High** — hundreds of files |
+| `pubspec.yaml` package name | `synaptix` | `synaptix` | **High** — all imports cascade |
+| All `package:synaptix/...` import paths | Across every `.dart` file in `lib/`, `test/`, generated files | `package:synaptix/...` | **High** — hundreds of files |
 | `build_runner` generated files | Tied to package name | Need full regeneration | **Medium** |
 | Android application ID | `com.tycoon.app` *(confirm current value)* | `com.synaptix.app` | **High** — Play Store implications |
 | iOS bundle identifier | `com.tycoon.app` *(confirm current value)* | `com.synaptix.app` | **High** — App Store implications |
@@ -108,10 +108,10 @@ These are still on the Packet E backlog and **have not been changed**:
 
 | Item | Current (unchanged) | Target (future) |
 |---|---|---|
-| Backend namespace | `Tycoon.Backend.*` | `Synaptix.Backend.*` |
+| Backend namespace | `Synaptix.Backend.*` | `Synaptix.Backend.*` |
 | Docker container names | `tycoon_*` | `synaptix_*` |
 | Elasticsearch aliases | `tycoon-qa-*` | `synaptix-qa-*` |
-| `Observability:ServiceName` | `Tycoon.Backend.Api` | `Synaptix.Backend.Api` |
+| `Observability:ServiceName` | `Synaptix.Backend.Api` | `Synaptix.Backend.Api` |
 | IAP `GooglePackageName` config | `com.tycoon.app.dev` | `com.synaptix.app.dev` |
 | CI/CD pipeline labels | `tycoon-*` | `synaptix-*` |
 
@@ -127,7 +127,7 @@ Please review each item below and respond with current status.
 
 | Item | Status — please confirm |
 |---|---|
-| Has `TriviaTycoonApp` been renamed to `SynaptixApp`? | ✅ **Done** — `lib/main.dart` uses `SynaptixApp` / `_SynaptixAppState` |
+| Has `SynaptixApp` been renamed to `SynaptixApp`? | ✅ **Done** — `lib/main.dart` uses `SynaptixApp` / `_SynaptixAppState` |
 | Have internal `trivia_tycoon_*` / `tycoon_*` symbol names been cleaned up? | ✅ **Complete (commit `79bc788`)** — `tycoon_toast/` folder renamed, all `TycoonToast*` symbols, `TycoonApiClientEnhanced`, `TycoonLinearProgressIndicator`, `LoginMessages` toast constants, `tTriviaGameImage` all renamed. `trivia_tycoon_group` notification key preserved intentionally (Android OS-persisted value). |
 | Are all `// TODO(Synaptix Phase 8)` comments resolved or reviewed? | ✅ **Done** — no `TODO(Synaptix Phase 8)` comments found in the codebase |
 | Has `pubspec.yaml` description been updated? | ✅ **Done (commit `79bc788`)** — now reads `"Synaptix — Train. Compete. Grow."` |
@@ -136,10 +136,10 @@ Please review each item below and respond with current status.
 
 | Item | Status — please confirm |
 |---|---|
-| Has `pubspec.yaml` `name:` been changed from `trivia_tycoon` to `synaptix`? | ❌ **Not started** — still `name: trivia_tycoon` |
-| Have all `package:trivia_tycoon/...` imports been updated? | ❌ **Not started** — **564** occurrences across `lib/` |
-| What is the current Android application ID? | `com.theoreticalmindstech.trivia_tycoon` |
-| What is the current iOS bundle identifier? | `com.theoreticalmindstech.triviaTycoon` |
+| Has `pubspec.yaml` `name:` been changed from `synaptix` to `synaptix`? | ❌ **Not started** — still `name: synaptix` |
+| Have all `package:synaptix/...` imports been updated? | ❌ **Not started** — **564** occurrences across `lib/` |
+| What is the current Android application ID? | `com.theoreticalmindstech.synaptix` |
+| What is the current iOS bundle identifier? | `com.theoreticalmindstech.synaptix` |
 | Target bundle ID (both platforms — confirmed 2026-05-06) | `com.theoreticalmindstech.synaptix` |
 | Has a store transition plan been agreed with product/legal for the bundle ID change? | ⚠️ **In discussion** — no final plan yet |
 
@@ -307,7 +307,7 @@ These items are not part of the Packet E scope but are relevant to overall proje
 
 | Item | Evidence |
 |---|---|
-| `TriviaTycoonApp` → `SynaptixApp` root class rename | `lib/main.dart` — class is `SynaptixApp`, state is `_SynaptixAppState` |
+| `SynaptixApp` → `SynaptixApp` root class rename | `lib/main.dart` — class is `SynaptixApp`, state is `_SynaptixAppState` |
 | All `// TODO(Synaptix Phase 8)` comments cleared | Full `grep` scan returned zero matches |
 | JWT: no local `iss`/`aud` claim validation | No JWT validation package in `pubspec.yaml`/`pubspec.lock`; tokens are opaque bearer strings |
 | JWT: no old issuer/audience values hardcoded | Zero matches for `TycoonBackendApi`, `TycoonFrontendApp`, `TycoonClient` across `lib/`, `assets/`, `.env.example` |
@@ -322,7 +322,7 @@ These items are not part of the Packet E scope but are relevant to overall proje
 | `TycoonApiClientEnhanced` | ✅ → `SynaptixApiClientEnhanced`; `tycoonApiClientEnhancedProvider` → `synaptixApiClientEnhancedProvider` in `core_providers.dart` |
 | `TycoonLinearProgressIndicator` | ✅ → `SynaptixLinearProgressIndicator`; `_TycoonLinearProgressIndicatorState` → `_SynaptixLinearProgressIndicatorState`; `mission_card_widget.dart` updated (2 usages) |
 | `LoginMessages` toast constants | ✅ `defaultTycoonToastTitleSuccess/Error` → `defaultToastTitleSuccess/Error`; `tycoonToastTitleSuccess/Error` field → `toastTitleSuccess/Error`; 5 login card callsite files updated |
-| `tTriviaGameImage` constant | ✅ → `tSynaptixAppLogo`; asset path `trivia_tycoon_appLogo.png` → `synaptix_appLogo.png`; `app_logo.dart` + `login_screen.dart` updated |
+| `tTriviaGameImage` constant | ✅ → `tSynaptixAppLogo`; asset path `synaptix_appLogo_legacy.png` → `synaptix_appLogo.png`; `app_logo.dart` + `login_screen.dart` updated |
 | "Tycoon backend" comments | ✅ `mission_repository.dart` both occurrences updated; `leaderboard_entry.dart` and `leaderboard_swipe_card.dart` "Tycoon Hall" → "Synaptix Hall"; `rank_tab_widget.dart` tier name "Tycoon" → "Synaptix" |
 | `tier_manager.dart` reward string | ✅ `'Tycoon Badge'` → `'Synaptix Badge'` |
 | `pubspec.yaml` description | ✅ Updated to `"Synaptix — Train. Compete. Grow."` |
@@ -333,10 +333,10 @@ These items are not part of the Packet E scope but are relevant to overall proje
 
 | Item | Detail |
 |---|---|
-| `pubspec.yaml` `name:` | Still `trivia_tycoon` |
-| `package:trivia_tycoon/` imports | **564 occurrences** across `lib/` |
-| Android application ID | `com.theoreticalmindstech.trivia_tycoon` → target: `com.theoreticalmindstech.synaptix` |
-| iOS bundle identifier | `com.theoreticalmindstech.triviaTycoon` → target: `com.theoreticalmindstech.synaptix` |
+| `pubspec.yaml` `name:` | Still `synaptix` |
+| `package:synaptix/` imports | **564 occurrences** across `lib/` |
+| Android application ID | `com.theoreticalmindstech.synaptix` → target: `com.theoreticalmindstech.synaptix` |
+| iOS bundle identifier | `com.theoreticalmindstech.synaptix` → target: `com.theoreticalmindstech.synaptix` |
 | Firebase / Google services config | Will require new Firebase app registrations once bundle IDs change |
 | `build_runner` generated files | Full regeneration required after package rename |
 | Store transition plan | In discussion with product/legal — no final plan yet |

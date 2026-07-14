@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/multi_profile_service.dart';
-import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
+import 'package:synaptix/core/services/settings/multi_profile_service.dart';
+import 'package:synaptix/game/providers/multi_profile_providers.dart';
 import '../dialogs/manage_profile_dialog.dart';
 
 /// Netflix-style profile switcher section

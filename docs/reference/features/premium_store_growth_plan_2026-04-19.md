@@ -48,7 +48,7 @@ Confirmed existing supporting purchase routes:
 
 Validation run on **April 20, 2026**:
 
-- `dotnet test Tycoon.Backend.Api.Tests\Tycoon.Backend.Api.Tests.csproj --no-build --no-restore --filter PremiumStoreEndpointsTests`
+- `dotnet test Synaptix.Backend.Api.Tests\Synaptix.Backend.Api.Tests.csproj --no-build --no-restore --filter PremiumStoreEndpointsTests`
 - Result: `Passed (9/9)`
 
 ### Current alignment conclusion
@@ -113,8 +113,8 @@ So the backend already exposes the concrete purchase path for premium plans, and
 
 The current backend already gives us several strong foundations:
 
-- **Store route family** in `Tycoon.Backend.Api/Features/Store/StoreEndpoints.cs`
-- **Config-backed premium options** in `Tycoon.Backend.Api/Features/Store/StorePremiumOptions.cs`
+- **Store route family** in `Synaptix.Backend.Api/Features/Store/StoreEndpoints.cs`
+- **Config-backed premium options** in `Synaptix.Backend.Api/Features/Store/StorePremiumOptions.cs`
 - **Shared DTO contract** in `Tycoon.Shared.Contracts/Dtos/StoreDtos.cs`
 - **Short-lived catalog caching** via `IMemoryCache`
 - **Wallet persistence** via `PlayerWallet`
@@ -122,7 +122,7 @@ The current backend already gives us several strong foundations:
 - **Applied transaction history** via `PlayerTransaction`
 - **External checkout groundwork** via existing Stripe and PayPal subscription/payment flows
 - **Admin store infrastructure** already used for catalog/system controls on the broader `/store` surface
-- **Automated contract coverage** in `Tycoon.Backend.Api.Tests/Store/PremiumStoreEndpointsTests.cs`
+- **Automated contract coverage** in `Synaptix.Backend.Api.Tests/Store/PremiumStoreEndpointsTests.cs`
 
 ### Why this is a good baseline
 

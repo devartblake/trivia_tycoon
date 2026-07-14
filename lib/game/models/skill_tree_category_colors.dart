@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
 
 class SkillTreeCategoryColors {
   static Map<SkillCategory, Color> categoryColors = {

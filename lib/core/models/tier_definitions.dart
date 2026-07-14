@@ -185,7 +185,7 @@ final tierDefinitions = <int, TierDefinition>{
   ),
   10: TierDefinition(
     tier: 10,
-    name: 'TRIVIA TYCOON',
+    name: 'SYNAPTIX',
     tagline: 'Unrivaled Champion!',
     requiredXp: 100000,
     primaryColor: const Color(0xFF7C3AED), // Purple/Violet
@@ -194,7 +194,7 @@ final tierDefinitions = <int, TierDefinition>{
     reward: const TierReward(
       coins: 50000,
       gems: 5000,
-      badgeName: 'Trivia Tycoon Crown',
+      badgeName: 'Synaptix Crown',
       badgeDescription: 'Unrivaled champion status!',
     ),
   ),

@@ -2,10 +2,10 @@
 
 ## WHAT TO ADD
 
-### 1. Add State Variable (in _TriviaTycoonAppState, line 93)
+### 1. Add State Variable (in _SynaptixAppState, line 93)
 
 ```dart
-class _TriviaTycoonAppState extends State<TriviaTycoonApp> {
+class _SynaptixAppState extends State<SynaptixApp> {
   (ServiceManager, ThemeNotifier)? _initialData;
   bool _initialized = false;
   bool _splashFinished = false;

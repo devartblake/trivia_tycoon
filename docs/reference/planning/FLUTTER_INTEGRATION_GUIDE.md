@@ -224,8 +224,8 @@ assert(!session.hasTokens);
 **Cause:** Two different `AuthService` classes with same name  
 **Fix:** Use import aliases:
 ```dart
-import 'package:trivia_tycoon/core/services/auth_service.dart' as core_auth;
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart' as ui_auth;
+import 'package:synaptix/core/services/auth_service.dart' as core_auth;
+import 'package:synaptix/ui_components/login/providers/auth.dart' as ui_auth;
 ```
 
 ### Issue 4: "Email already registered" but it's not

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/core/utils/encryption_utils.dart';
+import 'package:synaptix/core/utils/encryption_utils.dart';
 
 /// Controller for managing encryption/decryption operations
 class EncryptionController extends ChangeNotifier {

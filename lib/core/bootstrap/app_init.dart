@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
-import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
-import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import 'package:synaptix/core/services/analytics/config_service.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/services/theme/theme_notifier.dart';
+import 'package:synaptix/core/manager/service_manager.dart';
 import '../../game/analytics/services/spin_analytics_tracker.dart';
 import '../../game/logic/referral_invite_adapter.dart';
 import '../../game/providers/multi_profile_providers.dart';

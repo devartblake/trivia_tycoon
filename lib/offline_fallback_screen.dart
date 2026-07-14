@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/widgets/app_logo.dart';
+import 'package:synaptix/widgets/app_logo.dart';
 
 class OfflineFallbackScreen extends StatelessWidget {
   final String? errorMessage;

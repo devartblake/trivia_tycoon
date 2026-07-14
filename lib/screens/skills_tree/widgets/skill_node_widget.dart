@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/index.dart';
+import 'package:synaptix/ui_components/hex_grid/index.dart';
 import '../../../game/models/skill_tree_graph.dart';
 import '../../../game/services/skill_cooldown_service.dart';
 import '../../../ui_components/hex_grid/widgets/hexagon.dart';

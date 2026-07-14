@@ -4,7 +4,7 @@ Avatar Package Schema
   "packageId": "neon_set_v1",
   "displayName": "Neon Avatar Set",
   "version": "1.0.0",
-  "author": "Trivia Tycoon",
+  "author": "Synaptix",
   "type": "image",
   "preview": "preview.png",
   "avatars": [
@@ -47,4 +47,4 @@ final config = DepthCardSpecMapper.toConfig(
 
 return DepthCard3D(config: config);
 
-dotnet ef migrations add InitialCreate --project Tycoon.Backend.Migrations/Tycoon.Backend.Migrations.csproj --startup-project Tycoon.MigrationService/Tycoon.MigrationService.csproj
+dotnet ef migrations add InitialCreate --project Synaptix.Backend.Migrations/Synaptix.Backend.Migrations.csproj --startup-project Tycoon.MigrationService/Tycoon.MigrationService.csproj

@@ -1,4 +1,4 @@
-﻿# Master Task Tracking - Trivia Tycoon Project
+﻿# Master Task Tracking - Synaptix Project
 
 **Last Updated:** July 8, 2026
 **Project Status:** Production-ready core systems; full codebase audit complete with Sprint 1 critical fixes landed (question reachability, Sentry, Friends routing)

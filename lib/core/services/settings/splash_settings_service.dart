@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/navigation/splash_type.dart';
+import 'package:synaptix/core/services/navigation/splash_type.dart';
 
 /// Service responsible for storing and retrieving splash screen preferences.
 class SplashSettingsService {

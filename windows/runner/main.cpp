@@ -26,19 +26,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
       GetCommandLineArguments();
 
   // Read optional environment variable overrides for the Dart entrypoint.
-  // Example: set TRIVIA_TYCOON_ENV=staging before launching.
+  // Example: set SYNAPTIX_ENV=staging before launching.
   {
     // MAX_ENV_VAR_LEN covers typical values; very long strings are silently
     // ignored (env_len will equal 0 when the buffer is too small).
     static constexpr DWORD kMaxEnvVarLen = 256;
     wchar_t env_buf[kMaxEnvVarLen] = {};
-    DWORD env_len = ::GetEnvironmentVariableW(L"TRIVIA_TYCOON_ENV",
+    DWORD env_len = ::GetEnvironmentVariableW(L"SYNAPTIX_ENV",
                                                env_buf,
                                                kMaxEnvVarLen);
     if (env_len > 0) {
       std::string env_value = Utf8FromUtf16(env_buf);
-      command_line_arguments.push_back("--trivia-env=" + env_value);
-      LogMessage(LogLevel::kInfo, "TRIVIA_TYCOON_ENV = " + env_value);
+      command_line_arguments.push_back("--synaptix-env=" + env_value);
+      LogMessage(LogLevel::kInfo, "SYNAPTIX_ENV = " + env_value);
     }
   }
 
@@ -56,7 +56,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
-  if (!window.Create(L"Trivia Tycoon", origin, size)) {
+  if (!window.Create(L"Synaptix", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

@@ -6,10 +6,10 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/services/xp_service.dart';
-import 'package:trivia_tycoon/game/utils/tier_assigner.dart';
-import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/services/xp_service.dart';
+import 'package:synaptix/game/utils/tier_assigner.dart';
+import 'package:synaptix/game/models/leaderboard_entry.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

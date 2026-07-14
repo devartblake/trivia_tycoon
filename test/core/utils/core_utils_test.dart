@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/utils/question_schema_validator.dart';
-import 'package:trivia_tycoon/core/utils/unicode_utils.dart';
-import 'package:trivia_tycoon/core/utils/input_validator.dart';
-import 'package:trivia_tycoon/core/utils/crypto_address_validator.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_network.dart';
+import 'package:synaptix/core/utils/question_schema_validator.dart';
+import 'package:synaptix/core/utils/unicode_utils.dart';
+import 'package:synaptix/core/utils/input_validator.dart';
+import 'package:synaptix/core/utils/crypto_address_validator.dart';
+import 'package:synaptix/core/models/crypto/crypto_network.dart';
 
 Map<String, dynamic> _validQuestion() => {
       'id': 'q1',

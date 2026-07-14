@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/presence/presence_status_widget.dart';
+import 'package:synaptix/ui_components/presence/presence_status_widget.dart';
 import '../../game/models/user_presence_models.dart';
 
 class RichPresenceIndicator extends StatelessWidget {

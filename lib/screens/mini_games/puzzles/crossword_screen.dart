@@ -6,8 +6,8 @@ import 'dart:math';
 
 import '../dialogs/crossword_settings_dialog.dart';
 import '../dialogs/game_result_dialog.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 
 class CrosswordScreen extends StatefulWidget {
   const CrosswordScreen({super.key});

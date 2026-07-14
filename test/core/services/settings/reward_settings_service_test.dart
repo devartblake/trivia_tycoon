@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/settings/reward_settings_service.dart';
+import 'package:synaptix/core/services/settings/reward_settings_service.dart';
 
 void main() {
   late Directory tempDir;

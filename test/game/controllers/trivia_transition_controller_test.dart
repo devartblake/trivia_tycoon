@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/controllers/trivia_transition_controller.dart';
+import 'package:synaptix/game/controllers/trivia_transition_controller.dart';
 
 void main() {
   // -------------------------------------------------------------------------

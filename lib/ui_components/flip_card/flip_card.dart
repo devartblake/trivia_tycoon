@@ -2,7 +2,7 @@ library;
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/flip_card/transition/flip_card_transition.dart';
+import 'package:synaptix/ui_components/flip_card/transition/flip_card_transition.dart';
 import 'controller/flip_card_controller.dart';
 
 enum CardSide {

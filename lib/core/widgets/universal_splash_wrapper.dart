@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/navigation/splash_type.dart';
-import 'package:trivia_tycoon/screens/splash_variants/fortune_wheel_splash.dart';
-import 'package:trivia_tycoon/screens/splash_variants/hq_terminal_splash.dart';
-import 'package:trivia_tycoon/screens/splash_variants/mind_market_splash.dart';
-import 'package:trivia_tycoon/screens/splash_variants/vault_splash.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/navigation/splash_type.dart';
+import 'package:synaptix/screens/splash_variants/fortune_wheel_splash.dart';
+import 'package:synaptix/screens/splash_variants/hq_terminal_splash.dart';
+import 'package:synaptix/screens/splash_variants/mind_market_splash.dart';
+import 'package:synaptix/screens/splash_variants/vault_splash.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 final splashTypeProvider = FutureProvider<SplashType>((ref) {
   final splashSettingsService =

@@ -5,10 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:trivia_tycoon/core/env.dart';
-import 'package:trivia_tycoon/core/services/analytics/config_service.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
+import 'package:synaptix/core/env.dart';
+import 'package:synaptix/core/services/analytics/config_service.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/core/services/auth_error_messages.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
@@ -983,7 +983,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 Text(
                   spec.isWeb
                       ? 'Play from your browser with synced progress'
-                      : 'Master every question, become the ultimate tycoon',
+                      : 'Master every question, become the ultimate champion',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white.withValues(alpha: 0.8),

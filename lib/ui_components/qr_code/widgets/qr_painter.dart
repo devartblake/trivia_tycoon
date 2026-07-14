@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/qr_matrix.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class QrPainter extends CustomPainter {
   final QrMatrix matrix;

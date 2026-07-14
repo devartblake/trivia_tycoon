@@ -1,5 +1,5 @@
 import 'package:logging/logging.dart';
-import 'package:trivia_tycoon/core/networking/synaptix_api_client.dart';
+import 'package:synaptix/core/networking/synaptix_api_client.dart';
 import 'audio_asset_response.dart';
 
 /// Fetches presigned MinIO URLs for audio assets from the backend.

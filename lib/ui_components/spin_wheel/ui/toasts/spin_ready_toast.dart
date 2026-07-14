@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast.dart';
+import 'package:synaptix/ui_components/synaptix_toast/synaptix_toast.dart';
 
 class SpinReadyToast {
   static Future<void> show({
@@ -12,8 +12,8 @@ class SpinReadyToast {
       message: customMessage ?? 'Your spin is available. Tap to spin now!',
       icon: _buildSpinIcon(),
       toastType: SynaptixToastType.reward,
-      tycoonToastPosition: SynaptixToastPosition.bottom,
-      tycoonToastStyle: SynaptixToastStyle.floating,
+      toastPosition: SynaptixToastPosition.bottom,
+      toastStyle: SynaptixToastStyle.floating,
       themeEvent: 'spin_ready',
       isDismissible: true,
       shouldIconPulse: true,

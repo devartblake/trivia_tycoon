@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_secret_store.dart';
+import 'package:synaptix/core/services/storage/secure_secret_store.dart';
 
 class SecureStorage {
   static const _boxName = 'secrets';

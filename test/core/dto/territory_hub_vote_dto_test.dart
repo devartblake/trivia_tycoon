@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/territory_dto.dart';
-import 'package:trivia_tycoon/core/dto/hub_event_dto.dart';
-import 'package:trivia_tycoon/core/dto/vote_dto.dart';
+import 'package:synaptix/core/dto/territory_dto.dart';
+import 'package:synaptix/core/dto/hub_event_dto.dart';
+import 'package:synaptix/core/dto/vote_dto.dart';
 
 void main() {
   // -------------------------------------------------------------------------

@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/controllers/energy_notifier.dart';
-import 'package:trivia_tycoon/game/controllers/challenge_lives_notifier.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/controllers/energy_notifier.dart';
+import 'package:synaptix/game/controllers/challenge_lives_notifier.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 
 // ---------------------------------------------------------------------------
 // Fake in-memory storage (no Hive required in unit tests)

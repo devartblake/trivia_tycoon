@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_api_error.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_fund_prize_pool_request.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_link_wallet_request.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_network.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_stake_request.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_transaction_kind.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_transaction_status.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_withdraw_request.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/crypto/crypto_service.dart';
+import 'package:synaptix/core/models/crypto/crypto_api_error.dart';
+import 'package:synaptix/core/models/crypto/crypto_fund_prize_pool_request.dart';
+import 'package:synaptix/core/models/crypto/crypto_link_wallet_request.dart';
+import 'package:synaptix/core/models/crypto/crypto_network.dart';
+import 'package:synaptix/core/models/crypto/crypto_stake_request.dart';
+import 'package:synaptix/core/models/crypto/crypto_transaction_kind.dart';
+import 'package:synaptix/core/models/crypto/crypto_transaction_status.dart';
+import 'package:synaptix/core/models/crypto/crypto_withdraw_request.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/crypto/crypto_service.dart';
 
 void main() {
   late Directory tempDir;

@@ -248,7 +248,7 @@ cp animation_manager.dart lib/core/animations/
 
 ### Step 2: Import
 ```dart
-import 'package:trivia_tycoon/core/animations/animation_manager.dart';
+import 'package:synaptix/core/animations/animation_manager.dart';
 ```
 
 ### Step 3: Use!

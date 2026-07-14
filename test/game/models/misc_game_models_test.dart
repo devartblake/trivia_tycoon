@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/player_progress.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
+import 'package:synaptix/game/models/player_progress.dart';
+import 'package:synaptix/game/models/game_mode.dart';
 
 void main() {
   // ---------------------------------------------------------------------------

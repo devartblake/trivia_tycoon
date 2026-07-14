@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/ui_components/tier/tier_history_timeline.dart';
+import 'package:synaptix/ui_components/tier/tier_history_timeline.dart';
 
 void main() {
   group('TierHistoryTimeline', () {

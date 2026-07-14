@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/navigation/navigation_extensions.dart';
-import 'package:trivia_tycoon/core/theme/themes.dart';
+import 'package:synaptix/core/theme/themes.dart';
 
 class CompetitionScreen extends StatelessWidget {
   const CompetitionScreen({super.key});

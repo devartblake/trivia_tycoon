@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/notifications/player_inbox_item.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/notifications/player_notifications_service.dart';
+import 'package:synaptix/core/models/notifications/player_inbox_item.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/notifications/player_notifications_service.dart';
 
 void main() {
   test('getInbox loads paginated inbox items from backend contract', () async {

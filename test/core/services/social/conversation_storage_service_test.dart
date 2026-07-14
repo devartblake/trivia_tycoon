@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/social/conversation_storage_service.dart';
-import 'package:trivia_tycoon/game/models/conversation_models.dart';
+import 'package:synaptix/core/services/social/conversation_storage_service.dart';
+import 'package:synaptix/game/models/conversation_models.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

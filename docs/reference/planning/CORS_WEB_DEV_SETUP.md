@@ -12,7 +12,7 @@ Backend Docker CORS defaults now include `http://localhost:63033` and `http://12
 - `OPTIONS http://localhost:5000/auth/login` with `Origin: http://127.0.0.1:63033` returns `204` and `Access-Control-Allow-Origin: http://127.0.0.1:63033`.
 - `GET http://localhost:5000/healthz` returns `200`.
 
-**Project:** Synaptix / Trivia Tycoon  
+**Project:** Synaptix / Synaptix  
 **Scope:** Flutter Web local development  
 **Status:** ✅ Fix implemented (VS Code launch config + Android Studio run configs + `run_web.sh`)
 

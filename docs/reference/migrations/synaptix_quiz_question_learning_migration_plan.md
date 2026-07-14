@@ -1,4 +1,4 @@
-# Trivia Tycoon / Synaptix Migration Plan
+# Synaptix / Synaptix Migration Plan
 
 ## Purpose
 
@@ -18,7 +18,7 @@ The backend has already crossed the migration threshold:
 - `QuestionsEndpoints.Map(app)` and `LearningModulesEndpoints.Map(app)` are the active public content surfaces
 - `/questions/*` is the live gameplay question contract
 - `/modules/*` is the live learning contract
-- `/quiz/*` is no longer mapped in `Tycoon.Backend.Api`
+- `/quiz/*` is no longer mapped in `Synaptix.Backend.Api`
 
 From this point forward, the plan assumes **option 2**:
 do not restore a backend `/quiz` shim. Remove stale dependencies instead.
@@ -648,4 +648,4 @@ Instead:
 - launch the Quizlet-style idea as **Study**
 - and remove remaining stale quiz-route assumptions as cleanup work
 
-That gives you a cleaner long-term foundation for Synaptix / Trivia Tycoon while preserving the separation you already established in the backend.
+That gives you a cleaner long-term foundation for Synaptix / Synaptix while preserving the separation you already established in the backend.

@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/data/question_asset_index_loader.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
+import 'package:synaptix/game/data/question_asset_index_loader.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/models/question_type.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

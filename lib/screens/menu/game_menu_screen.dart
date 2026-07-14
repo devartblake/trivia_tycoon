@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
-import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
-import 'package:trivia_tycoon/synaptix/widgets/hub_daily_quest.dart';
-import 'package:trivia_tycoon/synaptix/widgets/hub_retention_banner.dart';
-import 'package:trivia_tycoon/synaptix/widgets/hub_featured_match.dart';
-import 'package:trivia_tycoon/synaptix/widgets/hub_live_ticker.dart';
-import 'package:trivia_tycoon/synaptix/widgets/hub_metallic_buttons.dart';
-import 'package:trivia_tycoon/synaptix/widgets/synaptix_hub_card.dart';
-import 'package:trivia_tycoon/synaptix/widgets/synaptix_hub_header.dart';
-import 'package:trivia_tycoon/synaptix/widgets/synaptix_mode_banner.dart';
-import 'package:trivia_tycoon/synaptix/widgets/synaptix_progress_snapshot.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
+import 'package:synaptix/synaptix/widgets/hub_daily_quest.dart';
+import 'package:synaptix/synaptix/widgets/hub_retention_banner.dart';
+import 'package:synaptix/synaptix/widgets/hub_featured_match.dart';
+import 'package:synaptix/synaptix/widgets/hub_live_ticker.dart';
+import 'package:synaptix/synaptix/widgets/hub_metallic_buttons.dart';
+import 'package:synaptix/synaptix/widgets/synaptix_hub_card.dart';
+import 'package:synaptix/synaptix/widgets/synaptix_hub_header.dart';
+import 'package:synaptix/synaptix/widgets/synaptix_mode_banner.dart';
+import 'package:synaptix/synaptix/widgets/synaptix_progress_snapshot.dart';
 
 /// Synaptix Hub — the central launch surface for all product areas.
 ///

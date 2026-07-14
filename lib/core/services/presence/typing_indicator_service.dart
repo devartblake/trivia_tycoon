@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../core/networking/ws_protocol.dart';
 import '../../utils/input_validator.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Service for managing typing indicators in chat conversations
 class TypingIndicatorService extends ChangeNotifier {

@@ -345,7 +345,7 @@ Create `test/connection_test.dart`:
 ```dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/env.dart';
+import 'package:synaptix/core/env.dart';
 
 void main() {
   group('Backend Connection Tests', () {

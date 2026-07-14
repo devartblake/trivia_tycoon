@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
+import 'package:synaptix/game/models/leaderboard_entry.dart';
 
 // ---------------------------------------------------------------------------
 // Helper — builds a minimal but valid JSON map for LeaderboardEntry.fromJson

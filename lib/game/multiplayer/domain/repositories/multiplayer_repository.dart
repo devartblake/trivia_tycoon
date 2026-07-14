@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/match.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/room.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/match.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/room.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 /// Domain-facing contract for multiplayer data operations.
 /// Implemented by your data layer (WebSocket/HTTP), consumed by controllers/services.

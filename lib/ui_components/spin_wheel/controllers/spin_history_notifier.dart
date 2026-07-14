@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/settings/app_settings.dart';
 import '../../../game/providers/reward_backend_providers.dart';
 import '../models/spin_system_models.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Enhanced spin history provider with caching and analytics
 final spinHistoryProvider =

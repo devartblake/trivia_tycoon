@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/game/providers/notification_history_store.dart';
-import 'package:trivia_tycoon/game/providers/notification_template_store.dart';
+import 'package:synaptix/game/providers/notification_history_store.dart';
+import 'package:synaptix/game/providers/notification_template_store.dart';
 
 void main() {
   late Directory tempDir;

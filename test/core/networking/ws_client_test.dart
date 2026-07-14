@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/networking/ws_client.dart';
-import 'package:trivia_tycoon/core/networking/ws_protocol.dart';
-import 'package:trivia_tycoon/core/networking/ws_reliability.dart';
+import 'package:synaptix/core/networking/ws_client.dart';
+import 'package:synaptix/core/networking/ws_protocol.dart';
+import 'package:synaptix/core/networking/ws_reliability.dart';
 
 void main() {
   // -------------------------------------------------------------------------

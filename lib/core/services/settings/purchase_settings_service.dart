@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Service to manage purchased items and inventory (e.g. store items, power-ups)
 class PurchaseSettingsService {

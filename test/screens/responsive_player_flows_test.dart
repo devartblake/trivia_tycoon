@@ -2,36 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/core/repositories/question_repository.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/event_queue_service.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/settings/multi_profile_service.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/game/controllers/coin_balance_notifier.dart';
-import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
-import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/conversation_models.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
-import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
-import 'package:trivia_tycoon/game/providers/message_providers.dart';
-import 'package:trivia_tycoon/game/providers/profile_providers.dart'
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/core/repositories/question_repository.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/event_queue_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/multi_profile_service.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/game/controllers/coin_balance_notifier.dart';
+import 'package:synaptix/game/analytics/providers/analytics_providers.dart';
+import 'package:synaptix/game/analytics/services/analytics_service.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/conversation_models.dart';
+import 'package:synaptix/game/models/game_mode.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/models/question_type.dart' as qtype;
+import 'package:synaptix/game/models/question_difficulty.dart' as qdiff;
+import 'package:synaptix/game/providers/message_providers.dart';
+import 'package:synaptix/game/providers/profile_providers.dart'
     as profile_data;
-import 'package:trivia_tycoon/game/providers/question_providers.dart'
+import 'package:synaptix/game/providers/question_providers.dart'
     as question_data;
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
-import 'package:trivia_tycoon/screens/messages/messages_screen.dart';
-import 'package:trivia_tycoon/screens/profile/profile_selection_screen.dart';
-import 'package:trivia_tycoon/screens/question/question_screen.dart';
-import 'package:trivia_tycoon/screens/question/widgets/challenges/daily_quiz_widget.dart';
-import 'package:trivia_tycoon/screens/question/widgets/challenges/featured_challenge_widget.dart';
-import 'package:trivia_tycoon/screens/question/widgets/challenges/monthly_quiz_widget.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_notifier.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
+import 'package:synaptix/screens/messages/messages_screen.dart';
+import 'package:synaptix/screens/profile/profile_selection_screen.dart';
+import 'package:synaptix/screens/question/question_screen.dart';
+import 'package:synaptix/screens/question/widgets/challenges/daily_quiz_widget.dart';
+import 'package:synaptix/screens/question/widgets/challenges/featured_challenge_widget.dart';
+import 'package:synaptix/screens/question/widgets/challenges/monthly_quiz_widget.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_notifier.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
 
 void main() {
   group('responsive player flows', () {

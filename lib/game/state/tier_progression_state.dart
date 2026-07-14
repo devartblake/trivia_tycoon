@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/state/tier_update_result.dart';
+import 'package:synaptix/game/state/tier_update_result.dart';
 import '../../core/manager/tier_manager.dart';
 import '../models/tier_model.dart';
 

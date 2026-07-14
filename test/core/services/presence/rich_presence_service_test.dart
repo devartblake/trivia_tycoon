@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/presence/rich_presence_service.dart';
-import 'package:trivia_tycoon/game/models/user_presence_models.dart';
+import 'package:synaptix/core/services/presence/rich_presence_service.dart';
+import 'package:synaptix/game/models/user_presence_models.dart';
 
 void main() {
   // RichPresenceService is a singleton. setUp re-initializes it to reset

@@ -1,5 +1,5 @@
 # P2-P3 Implementation Roadmap
-## Trivia Tycoon - Advanced Features
+## Synaptix - Advanced Features
 
 ---
 

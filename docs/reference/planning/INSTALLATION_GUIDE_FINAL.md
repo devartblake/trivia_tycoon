@@ -1,4 +1,4 @@
-# TRIVIA TYCOON - GRACEFUL SHUTDOWN INSTALLATION
+# SYNAPTIX - GRACEFUL SHUTDOWN INSTALLATION
 
 Blake, here's your **exact step-by-step guide** for integrating graceful shutdown into your app.
 

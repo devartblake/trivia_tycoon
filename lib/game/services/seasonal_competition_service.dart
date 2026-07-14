@@ -2,7 +2,7 @@ import 'dart:async';
 import '../../core/services/api_service.dart';
 import '../../core/services/settings/general_key_value_storage_service.dart';
 import '../models/seasonal_competition_model.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SeasonalCompetitionService {
   final GeneralKeyValueStorageService _storage;

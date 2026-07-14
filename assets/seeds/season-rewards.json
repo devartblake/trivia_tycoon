@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "seasonId": "season_001_founders_league",
   "title": "Founders League",
-  "description": "Launch season rewards for Trivia Tycoon/Synaptix ranked progression.",
+  "description": "Launch season rewards for Synaptix/Synaptix ranked progression.",
   "startsAtUtc": "2026-05-01T00:00:00Z",
   "endsAtUtc": "2026-06-01T00:00:00Z",
   "rankRules": {

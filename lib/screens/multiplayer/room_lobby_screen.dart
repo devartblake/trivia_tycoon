@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
-import 'package:trivia_tycoon/screens/multiplayer/widgets/player_chip.dart';
+import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
+import 'package:synaptix/screens/multiplayer/widgets/player_chip.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import 'dialogs/exit_match_confirm.dart';
 

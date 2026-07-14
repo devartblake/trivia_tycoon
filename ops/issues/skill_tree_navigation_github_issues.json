@@ -350,7 +350,7 @@
       "body": "Docs directory has broad plans/checklists/handoffs but no dedicated current-state Skill Tree Navigation document from this review. Add `docs/skill_tree_navigation_status.md` with route map, architecture, known issues, next sequence, and QA checklist.",
       "files": [
         "docs/skill_tree_navigation_status.md",
-        "docs/trivia_tycoon_migration_frontend_github_issues.json",
+        "docs/synaptix_migration_frontend_github_issues.json",
         "lib/screens/skills_tree/skill_tree_nav_screen.dart",
         "lib/screens/skills_tree/skill_branch_detail_screen.dart"
       ],

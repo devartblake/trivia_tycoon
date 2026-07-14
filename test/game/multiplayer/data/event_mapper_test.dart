@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/ws_envelope_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/mappers/event_mapper.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_protocol.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/data/dto/ws_envelope_dto.dart';
+import 'package:synaptix/game/multiplayer/data/mappers/event_mapper.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_protocol.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

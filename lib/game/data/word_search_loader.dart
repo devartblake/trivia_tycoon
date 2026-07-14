@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 
 class WordSearchDataLoader {
   static Future<List<String>> loadWords(String assetPath,

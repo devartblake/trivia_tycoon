@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
 
 void main() {
   group('QuestionDifficulty', () {

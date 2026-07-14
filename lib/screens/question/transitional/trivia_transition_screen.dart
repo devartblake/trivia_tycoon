@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/controllers/trivia_transition_controller.dart';
-import 'package:trivia_tycoon/core/widgets/shimmer_card.dart';
+import 'package:synaptix/game/controllers/trivia_transition_controller.dart';
+import 'package:synaptix/core/widgets/shimmer_card.dart';
 
 class TriviaTransitionScreen extends ConsumerWidget {
   const TriviaTransitionScreen({super.key});

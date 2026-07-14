@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/badge.dart';
-import 'package:trivia_tycoon/game/models/player_progress.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_level_data.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_grid_cell.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_path_point.dart';
-import 'package:trivia_tycoon/game/models/drawer_enums.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/badge.dart';
+import 'package:synaptix/game/models/player_progress.dart';
+import 'package:synaptix/game/models/flow_connect_level_data.dart';
+import 'package:synaptix/game/models/flow_connect_grid_cell.dart';
+import 'package:synaptix/game/models/flow_connect_path_point.dart';
+import 'package:synaptix/game/models/drawer_enums.dart';
 
 void main() {
   // -------------------------------------------------------------------------

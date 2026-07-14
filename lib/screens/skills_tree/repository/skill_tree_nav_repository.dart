@@ -1,8 +1,8 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:ui' show Color;
 import 'package:flutter/services.dart' show rootBundle;
 import '../../../game/models/skill_tree_nav_models.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Reads your skill_tree.json and produces group/branch VMs.
 class SkillTreeNavRepository {

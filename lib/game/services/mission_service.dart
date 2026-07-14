@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import '../../core/repositories/mission_repository.dart';
 import '../../core/services/notification_service.dart';
 import '../models/mission_model.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class MissionService {
   final NotificationService _notificationService = NotificationService();

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/analytics/models/retention_entry.dart';
-import 'package:trivia_tycoon/game/analytics/services/analytics_aggregation_service.dart';
-import 'package:trivia_tycoon/game/providers/timeline_filter_provider.dart';
+import 'package:synaptix/game/analytics/models/retention_entry.dart';
+import 'package:synaptix/game/analytics/services/analytics_aggregation_service.dart';
+import 'package:synaptix/game/providers/timeline_filter_provider.dart';
 
 import '../../../screens/rewards/spin_earn_screen.dart';
 

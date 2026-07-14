@@ -151,10 +151,10 @@ In files that use both AuthService classes:
 
 ```dart
 // Core auth (backend tokens)
-import 'package:trivia_tycoon/core/services/auth_service.dart' as core_auth;
+import 'package:synaptix/core/services/auth_service.dart' as core_auth;
 
 // UI auth (state management)
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart' as ui_auth;
+import 'package:synaptix/ui_components/login/providers/auth.dart' as ui_auth;
 
 // Then use:
 final coreAuth = core_auth.AuthService(...);

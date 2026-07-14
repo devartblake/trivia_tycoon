@@ -1,6 +1,6 @@
 import '../models/skill_progression_model.dart';
 import '../models/question_result_model.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Service for managing skill tree progression based on question results
 class SkillProgressionService {

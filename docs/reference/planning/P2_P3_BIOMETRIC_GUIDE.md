@@ -1,5 +1,5 @@
 # Biometric Authentication Guide
-## Fingerprint & Face ID for Trivia Tycoon
+## Fingerprint & Face ID for Synaptix
 
 ---
 

@@ -44,7 +44,7 @@ Before deploying, replace:
 - `YOUR_RELEASE_CERT_SHA256_FINGERPRINT`
 
 with the SHA-256 fingerprint from the Android release signing certificate for
-`com.theoreticalmindstech.trivia_tycoon`.
+`com.theoreticalmindstech.synaptix`.
 
 ## iOS
 
@@ -57,7 +57,7 @@ Before deploying, replace:
 
 - `YOUR_TEAM_ID`
 
-in the `appID` value for bundle id `com.theoreticalmindstech.triviaTycoon`.
+in the `appID` value for bundle id `com.theoreticalmindstech.synaptix`.
 
 ## App Configuration
 

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/skill_dto.dart';
+import 'package:synaptix/core/dto/skill_dto.dart';
 
 void main() {
   group('SkillNodeDto', () {

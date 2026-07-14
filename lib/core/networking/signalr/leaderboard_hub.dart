@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:signalr_netcore/signalr_client.dart';
-import 'package:trivia_tycoon/core/networking/signalr/hub_client_base.dart';
+import 'package:synaptix/core/networking/signalr/hub_client_base.dart';
 
 class LeaderboardRankChangedDto {
   final String playerId;

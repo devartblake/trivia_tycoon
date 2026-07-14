@@ -1,6 +1,6 @@
 import '../models/question_result_model.dart';
 import '../repositories/question_result_repository.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Service for question analytics and reporting
 class QuestionAnalyticsService {

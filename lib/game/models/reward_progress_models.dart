@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/models/reward_step_models.dart';
+import 'package:synaptix/game/models/reward_step_models.dart';
 
 /// Progress tracker for reward steps
 class RewardProgress {

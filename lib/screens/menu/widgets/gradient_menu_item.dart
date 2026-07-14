@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/animations/animation_manager.dart';
+import 'package:synaptix/core/animations/animation_manager.dart';
 import '../../../game/models/drawer_menu_data.dart';
 
 /// Gradient-styled menu item with animation

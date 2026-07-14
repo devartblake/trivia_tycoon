@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_turn.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_turn.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

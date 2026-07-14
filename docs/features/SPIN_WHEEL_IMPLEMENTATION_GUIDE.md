@@ -156,7 +156,7 @@ Widget build(BuildContext context) {
 
 Just import and use in your services:
 ```dart
-import 'package:trivia_tycoon/core/services/spin_wheel_api_client.dart';
+import 'package:synaptix/core/services/spin_wheel_api_client.dart';
 
 final apiClient = SpinWheelApiClient();
 final segments = await apiClient.getSegments();
@@ -168,7 +168,7 @@ final config = await apiClient.getProbabilityConfig();
 **File**: `lib/ui_components/spin_wheel/services/segment_loader.dart`
 
 ```dart
-import 'package:trivia_tycoon/core/services/spin_wheel_api_client.dart';
+import 'package:synaptix/core/services/spin_wheel_api_client.dart';
 
 class SegmentLoader {
   final SpinWheelApiClient _apiClient;

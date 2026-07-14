@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/env.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import 'package:synaptix/core/env.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/manager/service_manager.dart';
 import '../storage/config_storage_service.dart';
 
 class ConfigService extends ChangeNotifier {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/helpers/quiz_helpers.dart';
+import 'package:synaptix/core/helpers/quiz_helpers.dart';
 
 void main() {
   // -------------------------------------------------------------------------

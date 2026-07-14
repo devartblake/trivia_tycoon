@@ -1,11 +1,11 @@
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
+import 'package:synaptix/core/models/question_validation_models.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/repositories/question_repository_impl.dart';
-import 'package:trivia_tycoon/game/services/question_hub_service.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/game/models/game_mode.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/repositories/question_repository_impl.dart';
+import 'package:synaptix/game/services/question_hub_service.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
 
 class _FakeQuestionHubService extends QuestionHubService {
   _FakeQuestionHubService()

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/referral_models.dart';
+import 'package:synaptix/game/models/referral_models.dart';
 
 void main() {
   // -------------------------------------------------------------------------

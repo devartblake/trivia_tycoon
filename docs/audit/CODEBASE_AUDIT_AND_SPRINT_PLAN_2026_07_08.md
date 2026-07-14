@@ -1,4 +1,4 @@
-# Trivia Tycoon — Full Codebase Audit & 5-Sprint Plan
+# Synaptix — Full Codebase Audit & 5-Sprint Plan
 
 **Audit Date:** 2026-07-08
 **Scope:** Entire Flutter client (`lib/`, 1,418 Dart files), config, assets, docs, CI

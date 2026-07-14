@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_notifier.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_notifier.dart';
 
 void main() {
   // -------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 # Energy & Lives System Guide
 
-This document describes the **energy** and **lives** systems in Trivia Tycoon,
+This document describes the **energy** and **lives** systems in Synaptix,
 including default values, gating rules, and where to modify them.
 
 ---

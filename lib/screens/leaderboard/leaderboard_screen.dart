@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/champion_vs_tier_card.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/tiebreaker_banner.dart';
-import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
-import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
+import 'package:synaptix/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
+import 'package:synaptix/screens/leaderboard/widgets/champion_vs_tier_card.dart';
+import 'package:synaptix/screens/leaderboard/widgets/tiebreaker_banner.dart';
+import 'package:synaptix/ui_components/mission/mission_panel.dart';
+import 'package:synaptix/ui_components/seasonal/seasonal_events_widget.dart';
 import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/navigation/canonical_routes.dart';
@@ -15,8 +15,8 @@ import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});

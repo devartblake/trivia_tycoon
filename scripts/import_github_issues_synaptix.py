@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Import GitHub issues for the trivia_tycoon repository.
+Import GitHub issues for the synaptix repository.
 
 Default target repo:
     devartblake/trivia_tycoon
@@ -407,7 +407,7 @@ def build_issue_body(issue: dict) -> str:
     body_parts.append(
         "## Import Notes\n"
         "- Imported from `ops/issues/skill_tree_navigation_github_issues.json`.\n"
-        "- Confirm implementation details against the current `trivia_tycoon` codebase before starting work."
+        "- Confirm implementation details against the current `synaptix` codebase before starting work."
     )
 
     return "\n\n".join(body_parts).strip() + "\n"
@@ -442,7 +442,7 @@ def load_issue_package(json_path: Path) -> dict:
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     """Parse CLI arguments."""
     parser = argparse.ArgumentParser(
-        description="Import trivia_tycoon GitHub issues from a repo-local JSON package."
+        description="Import synaptix GitHub issues from a repo-local JSON package."
     )
     parser.add_argument(
         "--repo",

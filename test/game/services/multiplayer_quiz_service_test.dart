@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/core/repositories/question_repository.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/services/multiplayer_quiz_service.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/core/repositories/question_repository.dart';
+import 'package:synaptix/game/models/game_mode.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/services/multiplayer_quiz_service.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
 
 class _FakeQuestionRepository implements QuestionRepository {
   _FakeQuestionRepository({

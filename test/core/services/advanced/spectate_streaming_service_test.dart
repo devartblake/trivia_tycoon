@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/advanced/spectate_streaming_service.dart';
+import 'package:synaptix/core/services/advanced/spectate_streaming_service.dart';
 
 void main() {
   // SpectateStreamingService is a singleton — use unique game IDs per test.

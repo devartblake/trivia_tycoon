@@ -1,6 +1,6 @@
 # Synaptix Project
 
-Documentation related to the Synaptix project (sister project to Trivia Tycoon).
+Documentation related to the Synaptix project (sister project to Synaptix).
 
 **Contains:**
 - Synaptix frontend and backend plans
@@ -9,4 +9,4 @@ Documentation related to the Synaptix project (sister project to Trivia Tycoon).
 - Database migration and release plans
 - Synaptix feature roadmaps
 
-**Note:** These are reference materials for the Synaptix project. Not directly related to Trivia Tycoon development.
+**Note:** These are reference materials for the Synaptix project. Not directly related to Synaptix development.

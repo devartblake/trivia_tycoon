@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/qr_code/services/qr_history_service.dart';
+import 'package:synaptix/ui_components/qr_code/services/qr_history_service.dart';
 
 class AdminScanSyncCard extends ConsumerStatefulWidget {
   final String userId;

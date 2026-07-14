@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 import '../models/answer.dart';
 import '../models/question_model.dart';

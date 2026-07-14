@@ -1,7 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/physics/spin_velocity.dart';
+import 'package:synaptix/ui_components/spin_wheel/physics/spin_velocity.dart';
 
 import '../../../game/providers/riverpod_providers.dart';
 import '../models/spin_system_models.dart';

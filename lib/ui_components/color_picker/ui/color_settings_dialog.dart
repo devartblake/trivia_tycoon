@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/ui_components/color_picker/models/color_palette.dart';
+import 'package:synaptix/ui_components/color_picker/models/color_palette.dart';
 import '../core/color_picker_settings.dart';
 import '../utils/color_storage.dart';
 import 'color_picker_component.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class ColorSettingsDialog extends StatefulWidget {
   final ColorPickerSettings settings;

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
-import 'package:trivia_tycoon/core/utils/encryption_utils.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/utils/encryption_utils.dart';
+import 'package:synaptix/game/models/question_model.dart';
 
 class EncryptedQuestionCache {
   static const _cacheBox = 'encrypted_question_cache';

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/question/widgets/bottom_nav/question_screen_bottom_nav.dart';
-import 'package:trivia_tycoon/screens/question/widgets/categories/featured_categories_loading.dart';
-import 'package:trivia_tycoon/screens/question/widgets/categories/featured_categories_section.dart';
-import 'package:trivia_tycoon/screens/question/widgets/create_quiz/create_quiz_bottom_sheet.dart';
-import 'package:trivia_tycoon/screens/question/widgets/main_sections/carousel_challenge_section.dart';
-import 'package:trivia_tycoon/screens/question/widgets/main_sections/grid_category_section.dart';
-import 'package:trivia_tycoon/screens/question/widgets/quick_access/quick_access_section.dart';
-import 'package:trivia_tycoon/screens/question/widgets/stats/stats_loading_card.dart';
-import 'package:trivia_tycoon/screens/question/widgets/stats/stats_overview_card.dart';
+import 'package:synaptix/screens/question/widgets/bottom_nav/question_screen_bottom_nav.dart';
+import 'package:synaptix/screens/question/widgets/categories/featured_categories_loading.dart';
+import 'package:synaptix/screens/question/widgets/categories/featured_categories_section.dart';
+import 'package:synaptix/screens/question/widgets/create_quiz/create_quiz_bottom_sheet.dart';
+import 'package:synaptix/screens/question/widgets/main_sections/carousel_challenge_section.dart';
+import 'package:synaptix/screens/question/widgets/main_sections/grid_category_section.dart';
+import 'package:synaptix/screens/question/widgets/quick_access/quick_access_section.dart';
+import 'package:synaptix/screens/question/widgets/stats/stats_loading_card.dart';
+import 'package:synaptix/screens/question/widgets/stats/stats_overview_card.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../game/providers/question_providers.dart';
 import '../question/widgets/main_sections/top_menu_section.dart';
 import '../question/widgets/main_sections/grid_menu_section.dart';
 import '../question/widgets/main_sections/cta_widget.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/navigation/canonical_routes.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
 
 class QuestionScreen extends ConsumerStatefulWidget {
   const QuestionScreen({super.key});

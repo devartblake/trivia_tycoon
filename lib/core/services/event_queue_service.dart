@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Used by queue handlers to mark a failed event as permanent (do not retry).
 class NonRetryableEventException implements Exception {

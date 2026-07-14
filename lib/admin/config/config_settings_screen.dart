@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
 
 import '../../core/services/settings/app_settings.dart';
 import '../../game/providers/riverpod_providers.dart';

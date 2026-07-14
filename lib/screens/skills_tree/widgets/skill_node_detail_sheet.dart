@@ -10,7 +10,7 @@ import '../../../game/providers/xp_provider.dart';
 import '../../../game/services/skill_cooldown_service.dart';
 import 'skill_effect_labels.dart';
 import 'skill_node_widget.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 /// A rich modal bottom sheet showing full detail for a [SkillNode].
 ///

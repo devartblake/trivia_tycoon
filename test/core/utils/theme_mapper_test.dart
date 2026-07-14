@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/utils/theme_mapper.dart';
-import 'package:trivia_tycoon/core/utils/theme_utils.dart';
-import 'package:trivia_tycoon/game/controllers/theme_settings_controller.dart';
+import 'package:synaptix/core/utils/theme_mapper.dart';
+import 'package:synaptix/core/utils/theme_utils.dart';
+import 'package:synaptix/game/controllers/theme_settings_controller.dart';
 
 void main() {
   // -------------------------------------------------------------------------

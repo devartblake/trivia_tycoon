@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/question/widgets/quick_access/quick_access_card.dart';
+import 'package:synaptix/screens/question/widgets/quick_access/quick_access_card.dart';
 
 class QuickAccessSection extends StatelessWidget {
   const QuickAccessSection({super.key});

@@ -4,7 +4,7 @@ import '../../game/state/tier_update_result.dart';
 import '../services/settings/general_key_value_storage_service.dart';
 import '../services/settings/player_profile_service.dart';
 import '../services/tier_api_client.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class TierManager {
   final GeneralKeyValueStorageService _storage;

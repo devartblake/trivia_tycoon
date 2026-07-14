@@ -4,8 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
-import 'package:trivia_tycoon/ui_components/synaptix_toast/synaptix_toast_service.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
+import 'package:synaptix/ui_components/synaptix_toast/synaptix_toast_service.dart';
 
 import '../../game/analytics/services/analytics_service.dart';
 import '../../game/models/reward_step_models.dart';
@@ -16,7 +16,7 @@ import '../../ui_components/spin_wheel/services/spin_tracker.dart'
     show SpinStatistics, SpinTracker;
 import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
 import '../../ui_components/spin_wheel/ui/widgets/wheel_widget.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SpinEarnScreen extends ConsumerStatefulWidget {
   const SpinEarnScreen({super.key});

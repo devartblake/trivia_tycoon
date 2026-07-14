@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/helpers/dart_helper.dart';
-import 'package:trivia_tycoon/core/helpers/math_helper.dart';
+import 'package:synaptix/core/helpers/dart_helper.dart';
+import 'package:synaptix/core/helpers/math_helper.dart';
 
 void main() {
   // -------------------------------------------------------------------------

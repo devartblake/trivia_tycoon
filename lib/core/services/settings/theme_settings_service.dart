@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/game/controllers/theme_settings_controller.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/game/controllers/theme_settings_controller.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// ThemeSettingsService handles the storage and retrieval of
 /// primary theme attributes like brightness and color scheme.

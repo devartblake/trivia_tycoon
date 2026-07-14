@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/game/models/question_model.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../widgets/fab_menu.dart';
 

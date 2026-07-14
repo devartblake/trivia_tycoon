@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/question_analytics_service.dart';
-import 'package:trivia_tycoon/ui_components/analytics/trending_card.dart';
+import 'package:synaptix/game/services/question_analytics_service.dart';
+import 'package:synaptix/ui_components/analytics/trending_card.dart';
 
 void main() {
   group('TrendingPerformanceCard', () {

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/match_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/multiplayer_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/room_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/player_presence.dart';
+import 'package:synaptix/game/multiplayer/application/state/match_state.dart';
+import 'package:synaptix/game/multiplayer/application/state/multiplayer_state.dart';
+import 'package:synaptix/game/multiplayer/application/state/room_state.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/player_presence.dart';
 
 void main() {
   // ---------------------------------------------------------------------------

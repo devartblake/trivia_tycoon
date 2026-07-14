@@ -1,5 +1,5 @@
-name: trivia_tycoon
-description: "Synaptix Trivia Tycoon — The ultimate multiplayer trivia platform. Challenge friends, climb tiers, master quizzes, and become a Trivia Tycoon! Features real-time multiplayer battles, skill progression system, tier rankings, seasonal rewards, and hundreds of trivia questions across multiple categories."
+name: synaptix
+description: "Synaptix — The ultimate multiplayer trivia platform. Challenge friends, climb tiers, master quizzes, and become a champion. Features real-time multiplayer battles, skill progression, tier rankings, seasonal rewards, and hundreds of trivia questions across multiple categories."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

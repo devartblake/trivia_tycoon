@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

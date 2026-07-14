@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 import '../../../game/models/power_up.dart';
 
 class PowerUpService {

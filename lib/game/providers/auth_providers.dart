@@ -8,7 +8,7 @@ import '../../ui_components/login/models/signup_data.dart';
 import 'core_providers.dart';
 import 'game_providers.dart';
 import 'multi_profile_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Main auth provider - initialized by AppInit, used by router
 final isLoggedInSyncProvider = StateProvider<bool>((ref) => false);

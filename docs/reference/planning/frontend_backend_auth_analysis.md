@@ -128,7 +128,7 @@ Conflicting method/path combination "GET users/me"
 **Find and delete one:**
 ```bash
 # Search your API project
-grep -rn "users/me" Tycoon.Backend.Api/ --include="*.cs"
+grep -rn "users/me" Synaptix.Backend.Api/ --include="*.cs"
 ```
 
 You'll find something like:
@@ -153,7 +153,7 @@ await apiService.signup(email: email, password: password, extra: {...});
 
 **But your backend has NO `/auth/signup` endpoint.**
 
-You need to add this to your `Tycoon.Backend.Api`:
+You need to add this to your `Synaptix.Backend.Api`:
 
 ```csharp
 app.MapPost("/auth/signup", async (
@@ -232,7 +232,7 @@ You'll need to implement this in `AuthService.cs` — hash the password with BCr
 
 ### 1. Fix Swagger (5 minutes)
 ```bash
-cd Tycoon.Backend.Api
+cd Synaptix.Backend.Api
 grep -rn "users/me" . --include="*.cs"
 # Delete one of the duplicate MapGet("/users/me") lines
 docker compose restart backend-api

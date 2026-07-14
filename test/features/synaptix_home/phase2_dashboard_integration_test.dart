@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/features/synaptix_home/widgets/cards/phase2_daily_bonus_card.dart';
-import 'package:trivia_tycoon/features/synaptix_home/widgets/cards/phase2_weekly_rewards_card.dart';
-import 'package:trivia_tycoon/features/synaptix_home/widgets/cards/phase2_tier_progress_card.dart';
+import 'package:synaptix/features/synaptix_home/widgets/cards/phase2_daily_bonus_card.dart';
+import 'package:synaptix/features/synaptix_home/widgets/cards/phase2_weekly_rewards_card.dart';
+import 'package:synaptix/features/synaptix_home/widgets/cards/phase2_tier_progress_card.dart';
 
 void main() {
   group('Phase 2 Dashboard Integration', () {

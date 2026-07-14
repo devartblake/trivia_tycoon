@@ -1,4 +1,4 @@
-# Trivia Tycoon - Start Here 🚀
+# Synaptix - Start Here 🚀
 
 > **Current status (2026-07-08):** For the up-to-date project state, read
 > [docs/MASTER_TASK_TRACKING.md](docs/MASTER_TASK_TRACKING.md) and the

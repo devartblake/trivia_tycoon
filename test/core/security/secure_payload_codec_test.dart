@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/security/secure_channel_exceptions.dart';
-import 'package:trivia_tycoon/core/security/secure_channel_models.dart';
-import 'package:trivia_tycoon/core/security/secure_payload_codec.dart';
-import 'package:trivia_tycoon/core/security/secure_session_store.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/security/secure_channel_exceptions.dart';
+import 'package:synaptix/core/security/secure_channel_models.dart';
+import 'package:synaptix/core/security/secure_payload_codec.dart';
+import 'package:synaptix/core/security/secure_session_store.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
 
 List<int> _randomKey() =>
     List<int>.generate(32, (_) => Random.secure().nextInt(256));

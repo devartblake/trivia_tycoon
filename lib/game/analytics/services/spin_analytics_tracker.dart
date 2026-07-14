@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/ui_components/spin_wheel/models/spin_system_models.dart';
+import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
 import 'analytics_service.dart';
 
 /// Dedicated tracker for Spin & Earn analytics

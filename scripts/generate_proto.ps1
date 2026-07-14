@@ -1,5 +1,5 @@
 # =============================================================================
-# Proto codegen script for trivia_tycoon Flutter project (PowerShell).
+# Proto codegen script for synaptix Flutter project (PowerShell).
 #
 # Generates Dart gRPC stubs from protos/mobile.proto into
 # lib/core/networking/grpc/generated/

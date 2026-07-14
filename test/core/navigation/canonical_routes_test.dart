@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
-import 'package:trivia_tycoon/screens/login_screen.dart';
-import 'package:trivia_tycoon/screens/login_screen_mobile.dart';
+import 'package:synaptix/core/navigation/canonical_routes.dart';
+import 'package:synaptix/screens/login_screen.dart';
+import 'package:synaptix/screens/login_screen_mobile.dart';
 
 void main() {
   group('canonical navigation routes', () {

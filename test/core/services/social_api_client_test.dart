@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/social/friends_models.dart';
-import 'package:trivia_tycoon/core/services/social/parties_models.dart';
+import 'package:synaptix/core/services/social/friends_models.dart';
+import 'package:synaptix/core/services/social/parties_models.dart';
 
 /// Contract tests for the social DTO mappings.
 ///

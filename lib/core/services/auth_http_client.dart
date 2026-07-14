@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'auth_api_client.dart' show AuthApiException;
 import 'auth_token_store.dart';
 import 'auth_service.dart' show BackendAuthService;
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// HTTP client that automatically adds auth headers and refreshes expired tokens
 ///

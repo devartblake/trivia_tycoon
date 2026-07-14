@@ -1,6 +1,6 @@
 import '../decoder/galois_field.dart';
 import '../decoder/gf_poly.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Reed-Solomon encoder for QR codes
 /// This REUSES your existing GaloisField and GFPoly classes!

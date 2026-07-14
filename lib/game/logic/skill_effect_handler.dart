@@ -7,7 +7,7 @@ import '../services/xp_service.dart';
 import '../services/profile_service.dart';
 import '../services/skill_cooldown_service.dart';
 import '../models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SkillEffectHandler {
   // Injected services

@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'package:trivia_tycoon/game/multiplayer/core/multiplayer_config.dart';
-import 'package:trivia_tycoon/game/multiplayer/core/multiplayer_constants.dart';
-import 'package:trivia_tycoon/game/multiplayer/core/multiplayer_exceptions.dart';
-import 'package:trivia_tycoon/game/multiplayer/core/multiplayer_logger.dart';
+import 'package:synaptix/game/multiplayer/core/multiplayer_config.dart';
+import 'package:synaptix/game/multiplayer/core/multiplayer_constants.dart';
+import 'package:synaptix/game/multiplayer/core/multiplayer_exceptions.dart';
+import 'package:synaptix/game/multiplayer/core/multiplayer_logger.dart';
 
 /// Thin HTTP client for multiplayer REST endpoints.
 /// Handles auth header, timeouts, and simple JSON encode/decode.

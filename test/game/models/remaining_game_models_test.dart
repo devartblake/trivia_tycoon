@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/menu_enums.dart';
-import 'package:trivia_tycoon/game/models/menu_data.dart';
-import 'package:trivia_tycoon/game/models/game_mode.dart';
-import 'package:trivia_tycoon/game/models/versus_models.dart';
-import 'package:trivia_tycoon/game/models/drawer_menu_data.dart';
-import 'package:trivia_tycoon/game/models/search.dart';
+import 'package:synaptix/game/models/menu_enums.dart';
+import 'package:synaptix/game/models/menu_data.dart';
+import 'package:synaptix/game/models/game_mode.dart';
+import 'package:synaptix/game/models/versus_models.dart';
+import 'package:synaptix/game/models/drawer_menu_data.dart';
+import 'package:synaptix/game/models/search.dart';
 
 void main() {
   // -------------------------------------------------------------------------

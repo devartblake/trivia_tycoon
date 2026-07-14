@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/arcade/spin_wheel_api_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/arcade/spin_wheel_api_service.dart';
 
 void main() {
   group('SpinWheelApiService', () {

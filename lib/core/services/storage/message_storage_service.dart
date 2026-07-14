@@ -1,5 +1,5 @@
 import '../../../game/models/message_models.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Simple storage service for messages - no business logic
 /// Just CRUD operations

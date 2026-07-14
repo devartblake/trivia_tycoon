@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
-import 'package:trivia_tycoon/core/navigation/navigation_redirect_service.dart';
-import 'package:trivia_tycoon/game/providers/auth_providers.dart';
-import 'package:trivia_tycoon/game/providers/onboarding_providers.dart'
+import 'package:synaptix/core/navigation/canonical_routes.dart';
+import 'package:synaptix/core/navigation/navigation_redirect_service.dart';
+import 'package:synaptix/game/providers/auth_providers.dart';
+import 'package:synaptix/game/providers/onboarding_providers.dart'
     show onboardingCompleteProvider;
 
 void main() {

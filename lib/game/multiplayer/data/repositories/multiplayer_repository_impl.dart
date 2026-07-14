@@ -1,9 +1,9 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/room.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/repositories/multiplayer_repository.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/match.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_client.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/room.dart';
+import 'package:synaptix/game/multiplayer/domain/repositories/multiplayer_repository.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/match.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_client.dart';
 
 class MultiplayerRepositoryImpl implements MultiplayerRepository {
   final WsClient wsClient;

@@ -46,7 +46,7 @@ import 'package:flutter/material.dart';
 import 'api_service.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../../game/services/leaderboard_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import '../leaderboard/leaderboard_websocket_adapter.dart'; // ✅ ADD THIS
 
 class LeaderboardDataService extends ChangeNotifier { // ✅ ADD ChangeNotifier

@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/player_presence.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/player_presence.dart';
 
 /// Room/lobby state observed by the lobby UI and room controller.
 ///

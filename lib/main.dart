@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:trivia_tycoon/core/bootstrap/app_init.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/sentry_service.dart';
+import 'package:synaptix/core/bootstrap/app_init.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/sentry_service.dart';
 import 'core/bootstrap/synaptix_app.dart';
 import 'core/env.dart';
 import 'game/providers/riverpod_providers.dart' hide themeNotifierProvider;

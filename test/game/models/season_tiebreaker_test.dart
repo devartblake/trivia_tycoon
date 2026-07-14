@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/season_tiebreaker.dart';
+import 'package:synaptix/game/models/season_tiebreaker.dart';
 
 void main() {
   group('SeasonTiebreaker.fromJson', () {

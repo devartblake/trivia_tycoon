@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/social/challenge_coordination_service.dart';
-import 'package:trivia_tycoon/game/models/pvp_challenge_models.dart';
+import 'package:synaptix/core/services/social/challenge_coordination_service.dart';
+import 'package:synaptix/game/models/pvp_challenge_models.dart';
 
 // ChallengeCoordinationService is a singleton, so tests must use unique
 // userId strings to isolate coin balances and challenge lists.

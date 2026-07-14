@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:trivia_tycoon/admin/notifications/widgets/role_gate.dart';
+import 'package:synaptix/admin/notifications/widgets/role_gate.dart';
 import '../../core/services/notification_service.dart';
 import '../../game/providers/riverpod_providers.dart';
 import 'channel_manager_screen.dart';

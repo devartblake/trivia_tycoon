@@ -1,6 +1,6 @@
 # Build and Deployment Guide
 
-This document explains how to build and deploy Trivia Tycoon for different environments with proper secret injection.
+This document explains how to build and deploy Synaptix for different environments with proper secret injection.
 
 ## Overview
 
@@ -161,7 +161,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT }}
-          packageName: com.synaptixplay.trivia_tycoon
+          packageName: com.synaptixplay.synaptix
           releaseFiles: build/app/outputs/apk/release/app-release.apk
           track: beta
 ```
@@ -359,7 +359,7 @@ flutter build apk --release \
 set -e
 
 VERSION="${1:-1.0.0}"
-echo "Building Trivia Tycoon v$VERSION for production..."
+echo "Building Synaptix v$VERSION for production..."
 
 # Validate environment
 if [ -z "$PROD_API_URL" ]; then

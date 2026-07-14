@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/leaderboard_data_service.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/game/controllers/leaderboard_controller.dart';
-import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
-import 'package:trivia_tycoon/admin/controllers/admin_filter_controller.dart';
-import 'package:trivia_tycoon/admin/leaderboard/leaderboard_filter_screen.dart';
+import 'package:synaptix/core/services/leaderboard_data_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/controllers/leaderboard_controller.dart';
+import 'package:synaptix/game/models/leaderboard_entry.dart';
+import 'package:synaptix/admin/controllers/admin_filter_controller.dart';
+import 'package:synaptix/admin/leaderboard/leaderboard_filter_screen.dart';
 
 // ---------------------------------------------------------------------------
 // Stubs

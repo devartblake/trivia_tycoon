@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_nav_models.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_nav_providers.dart';
+import 'package:synaptix/game/models/skill_tree_nav_models.dart';
+import 'package:synaptix/game/providers/skill_tree_nav_providers.dart';
 
 void main() {
   group('skillTreeNavSectionsProvider', () {

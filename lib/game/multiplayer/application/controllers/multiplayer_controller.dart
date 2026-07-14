@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/multiplayer/application/state/multiplayer_state.dart';
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/application/state/multiplayer_state.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 /// Handles connection lifecycle (connect / disconnect), basic presence,
 /// and high-level errors. It also exposes latency updates if available.

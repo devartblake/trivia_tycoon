@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/env.dart';
-import 'package:trivia_tycoon/core/services/store/store_return_url_builder.dart';
+import 'package:synaptix/core/env.dart';
+import 'package:synaptix/core/services/store/store_return_url_builder.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/core_providers.dart';
 import '../providers/xp_provider.dart';
 import '../providers/game_bonus_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 
 /// ProfileService owns player XP and other profile data.
 /// Implements XPService so existing controller code works with the same API.

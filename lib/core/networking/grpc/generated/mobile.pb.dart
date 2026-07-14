@@ -38,7 +38,7 @@ class GrpcStartMatchRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GrpcStartMatchRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'hostPlayerId')
     ..aOS(2, _omitFieldNames ? '' : 'mode')
@@ -118,7 +118,7 @@ class GrpcStartMatchResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GrpcStartMatchResponse',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'matchId')
     ..aInt64(2, _omitFieldNames ? '' : 'startedAt')
@@ -226,7 +226,7 @@ class GrpcSubmitMatchRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GrpcSubmitMatchRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'eventId')
     ..aOS(2, _omitFieldNames ? '' : 'matchId')
@@ -403,7 +403,7 @@ class ParticipantResult extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ParticipantResult',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.O3)
@@ -529,7 +529,7 @@ class GrpcSubmitMatchResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GrpcSubmitMatchResponse',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'eventId')
     ..aOS(2, _omitFieldNames ? '' : 'matchId')
@@ -631,7 +631,7 @@ class MatchAward extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'MatchAward',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'awardedXp', $pb.PbFieldType.O3)
@@ -734,7 +734,7 @@ class PlayerAction extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PlayerAction',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..oo(0, [1, 2, 3])
     ..aOM<JoinMatchAction>(1, _omitFieldNames ? '' : 'join',
@@ -839,7 +839,7 @@ class JoinMatchAction extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'JoinMatchAction',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'matchId')
     ..aOS(2, _omitFieldNames ? '' : 'playerId')
@@ -925,7 +925,7 @@ class SubmitAnswerAction extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SubmitAnswerAction',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'matchId')
     ..aOS(2, _omitFieldNames ? '' : 'questionId')
@@ -1025,7 +1025,7 @@ class HeartbeatAction extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'HeartbeatAction',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'clientTimestampMs')
     ..hasRequiredFields = false;
@@ -1126,7 +1126,7 @@ class MatchEvent extends $pb.GeneratedMessage {
   };
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'MatchEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..oo(0, [1, 2, 3, 4, 5, 6])
     ..aOM<QuestionEvent>(1, _omitFieldNames ? '' : 'question',
@@ -1300,7 +1300,7 @@ class QuestionEvent extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'QuestionEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'questionId')
     ..aOS(2, _omitFieldNames ? '' : 'text')
@@ -1448,7 +1448,7 @@ class Option extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Option',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'text')
@@ -1528,7 +1528,7 @@ class OpponentScoreEvent extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'OpponentScoreEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'opponentPlayerId')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.O3)
@@ -1619,7 +1619,7 @@ class TimerEvent extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TimerEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'questionId')
     ..a<$core.int>(
@@ -1712,7 +1712,7 @@ class AnswerResultEvent extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AnswerResultEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'questionId')
     ..aOS(2, _omitFieldNames ? '' : 'selectedOptionId')
@@ -1859,7 +1859,7 @@ class MatchEndEvent extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'MatchEndEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'matchId')
     ..aOS(2, _omitFieldNames ? '' : 'outcome')
@@ -1994,7 +1994,7 @@ class FinalParticipant extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'FinalParticipant',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'score', $pb.PbFieldType.O3)
@@ -2111,7 +2111,7 @@ class ErrorEvent extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ErrorEvent',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'code')
     ..aOS(2, _omitFieldNames ? '' : 'message')
@@ -2191,7 +2191,7 @@ class LeaderboardWatchRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LeaderboardWatchRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..aOS(2, _omitFieldNames ? '' : 'mode')
@@ -2296,7 +2296,7 @@ class LeaderboardUpdate extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LeaderboardUpdate',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..a<$core.int>(2, _omitFieldNames ? '' : 'playerRank', $pb.PbFieldType.O3)
@@ -2418,7 +2418,7 @@ class LeaderboardEntry extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LeaderboardEntry',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'rank', $pb.PbFieldType.O3)
     ..aOS(2, _omitFieldNames ? '' : 'playerId')
@@ -2539,7 +2539,7 @@ class WatchMatchmakingRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'WatchMatchmakingRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..aOS(2, _omitFieldNames ? '' : 'mode')
@@ -2649,7 +2649,7 @@ class MatchmakingStatusUpdate extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'MatchmakingStatusUpdate',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'ticketId')
     ..aOS(2, _omitFieldNames ? '' : 'status')
@@ -2783,7 +2783,7 @@ class CancelMatchmakingRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CancelMatchmakingRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'playerId')
     ..aOS(2, _omitFieldNames ? '' : 'ticketId')
@@ -2863,7 +2863,7 @@ class CancelMatchmakingResponse extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CancelMatchmakingResponse',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'tycoon.mobile'),
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'synaptix.mobile'),
       createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'cancelled')
     ..aOS(2, _omitFieldNames ? '' : 'ticketId')

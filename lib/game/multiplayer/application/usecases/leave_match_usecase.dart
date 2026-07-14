@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
 
 /// Leaves the current match or room. If you later add a dedicated server op,
 /// wire it in here; for now we keep it graceful (disconnect or room reset).

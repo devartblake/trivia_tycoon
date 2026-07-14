@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:trivia_tycoon/game/services/referral_invite_storage_service.dart';
+import 'package:synaptix/game/services/referral_invite_storage_service.dart';
 import 'package:uuid/uuid.dart';
 import 'referral_invite_api_service.dart';
 import '../models/referral_models.dart';

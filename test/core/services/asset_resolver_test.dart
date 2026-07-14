@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/services/asset_download_service.dart';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/asset_download_service.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

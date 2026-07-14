@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/advanced/customization_service.dart';
-import 'package:trivia_tycoon/core/services/advanced/gift_transaction_service.dart';
+import 'package:synaptix/core/services/advanced/customization_service.dart';
+import 'package:synaptix/core/services/advanced/gift_transaction_service.dart';
 
 void main() {
   // CustomizationService is a singleton — use unique user IDs per test.

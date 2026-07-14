@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/collection_item.dart';
+import 'package:synaptix/game/models/collection_item.dart';
 
 Map<String, dynamic> _baseJson({
   String id = 'ci1',

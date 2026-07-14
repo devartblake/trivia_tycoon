@@ -1,6 +1,6 @@
 # Production Build Guide
 
-Complete guide for building, validating, and deploying Trivia Tycoon to production.
+Complete guide for building, validating, and deploying Synaptix to production.
 
 ---
 

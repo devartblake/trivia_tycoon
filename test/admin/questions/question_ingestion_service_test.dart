@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/admin/questions/question_ingestion_service.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:synaptix/admin/questions/question_ingestion_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/game/models/question_model.dart';
 
 class _FakeApiService extends ApiService {
   _FakeApiService()

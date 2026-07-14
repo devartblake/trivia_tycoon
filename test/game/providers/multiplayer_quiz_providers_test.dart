@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/providers/multiplayer_quiz_providers.dart';
-import 'package:trivia_tycoon/game/services/multiplayer_quiz_service.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/providers/multiplayer_quiz_providers.dart';
+import 'package:synaptix/game/services/multiplayer_quiz_service.dart';
 
 class _FakeMultiplayerQuizService extends MultiplayerQuizService {
   _FakeMultiplayerQuizService({

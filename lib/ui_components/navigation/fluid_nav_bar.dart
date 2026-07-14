@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/animations/animations.dart';
+import 'package:synaptix/animations/animations.dart';
 import '../../ui_components/navigation/fluid_nav_bar_style.dart';
 import '../../ui_components/navigation/fluid_nav_bar_icon.dart';
 import '../../ui_components/navigation/fluid_nav_bar_item.dart';

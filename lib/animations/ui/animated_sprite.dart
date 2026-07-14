@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:trivia_tycoon/animations/ui/sprite.dart';
+import 'package:synaptix/animations/ui/sprite.dart';
 
 class AnimatedSprite extends AnimatedWidget {
   final ImageProvider image;

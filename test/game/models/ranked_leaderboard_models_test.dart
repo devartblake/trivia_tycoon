@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/ranked_leaderboard_models.dart';
+import 'package:synaptix/game/models/ranked_leaderboard_models.dart';
 
 Map<String, dynamic> _entryJson({
   String playerId = 'p1',

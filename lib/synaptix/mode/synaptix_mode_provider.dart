@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart'
+import 'package:synaptix/game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
 import '../../game/analytics/providers/analytics_providers.dart';
 import 'synaptix_mode.dart';

@@ -79,7 +79,7 @@
 | 7 | LEGEND | Trivia Legend! | 20,000 | Sparkle | Magenta/Gold | 8K | 400 |
 | 8 | ICON | Iconic Mind! | 35,000 | Brain | B.Blue/White | 15K | 750 |
 | 9 | G.O.A.T. | Greatest of All Time! | 50,000 | Bulb | Gold/White | 25K | 1.5K |
-| 10 | TRIVIA TYCOON | Unrivaled Champion! | 100,000 | Crown | Purple/Gold | 50K | 5K |
+| 10 | SYNAPTIX | Unrivaled Champion! | 100,000 | Crown | Purple/Gold | 50K | 5K |
 
 ---
 
@@ -321,7 +321,7 @@ TierProgressionShowcaseScreen(
 ### Quick Reference
 ```
 Tier 1:    0 XP  → ROOKIE (Entry Level)
-Tier 10:  100K XP → TRIVIA TYCOON (Max)
+Tier 10:  100K XP → SYNAPTIX (Max)
 
 Total Coins Available: 106,850
 Total Gems Available:  8,050

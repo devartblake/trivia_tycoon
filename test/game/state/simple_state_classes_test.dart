@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/state/energy_state.dart';
-import 'package:trivia_tycoon/game/state/lives_state.dart';
-import 'package:trivia_tycoon/game/state/premium_profile_state.dart';
-import 'package:trivia_tycoon/game/state/tier_update_result.dart';
-import 'package:trivia_tycoon/game/state/question_state.dart';
-import 'package:trivia_tycoon/game/state/tier_progression_state.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
+import 'package:synaptix/game/state/energy_state.dart';
+import 'package:synaptix/game/state/lives_state.dart';
+import 'package:synaptix/game/state/premium_profile_state.dart';
+import 'package:synaptix/game/state/tier_update_result.dart';
+import 'package:synaptix/game/state/question_state.dart';
+import 'package:synaptix/game/state/tier_progression_state.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/question_type.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
 
 QuestionModel _q({
   String id = 'q1',

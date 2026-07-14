@@ -153,10 +153,10 @@ In `login_manager.dart`, use these import aliases to distinguish between the two
 
 ```dart
 // Core auth service (handles backend tokens)
-import 'package:trivia_tycoon/core/services/auth_service.dart' as core_auth;
+import 'package:synaptix/core/services/auth_service.dart' as core_auth;
 
 // UI auth service (handles UI state)
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart' as ui_auth;
+import 'package:synaptix/ui_components/login/providers/auth.dart' as ui_auth;
 ```
 
 Then use:

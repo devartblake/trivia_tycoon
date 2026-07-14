@@ -6,11 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/avatar_upload_service.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
-import 'package:trivia_tycoon/game/controllers/profile_avatar_controller.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/avatar_upload_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/game/controllers/profile_avatar_controller.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes

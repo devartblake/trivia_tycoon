@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart'
+import 'package:synaptix/game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/referral_models.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/ui_components/qr_code/widgets/qr_code_widget.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/ui_components/qr_code/widgets/qr_code_widget.dart';
 import '../../core/env.dart';
 
 class InviteScreen extends ConsumerStatefulWidget {

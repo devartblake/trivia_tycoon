@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/widgets/mini_hex_preview.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
+import 'package:synaptix/ui_components/hex_grid/widgets/mini_hex_preview.dart';
 
 void main() {
   group('AutoPathOverlayPainter', () {

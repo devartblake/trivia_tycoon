@@ -1,6 +1,6 @@
 # Environment Configuration Guide
 
-This document explains how to configure the Trivia Tycoon app for different deployment environments.
+This document explains how to configure the Synaptix app for different deployment environments.
 
 ## Overview
 

@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
 
 /// Submits an answer for the current question. The server will emit
 /// [AnswerAccepted] or [AnswerRejected] events that your controller can observe.

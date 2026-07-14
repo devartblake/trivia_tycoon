@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/theme/styles.dart';
+import 'package:synaptix/core/theme/styles.dart';
 
 void main() {
   // -------------------------------------------------------------------------

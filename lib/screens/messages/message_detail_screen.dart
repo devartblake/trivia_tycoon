@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:trivia_tycoon/screens/messages/widgets/message_reactions_widget.dart';
+import 'package:synaptix/screens/messages/widgets/message_reactions_widget.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../game/models/message_models.dart';
 import '../../game/providers/message_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class MessageDetailScreen extends ConsumerStatefulWidget {
   final String conversationId;

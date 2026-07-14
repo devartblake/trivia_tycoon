@@ -1,5 +1,5 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/room.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/room_dto.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/room.dart';
+import 'package:synaptix/game/multiplayer/data/dto/room_dto.dart';
 import 'presence_mapper.dart';
 
 class RoomMapper {

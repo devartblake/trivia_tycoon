@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import '../../../core/services/compliance/compliance_consent_api_client.dart';
 import '../../../core/services/compliance/compliance_consent_providers.dart';
 import '../../../game/controllers/onboarding_controller.dart';

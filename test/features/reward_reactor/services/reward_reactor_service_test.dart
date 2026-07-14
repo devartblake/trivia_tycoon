@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/features/reward_reactor/models/reactor_claim_response.dart';
-import 'package:trivia_tycoon/features/reward_reactor/models/reactor_reward_preview.dart';
-import 'package:trivia_tycoon/features/reward_reactor/models/reactor_spin_response.dart';
-import 'package:trivia_tycoon/features/reward_reactor/models/user_rewards_response.dart';
-import 'package:trivia_tycoon/features/reward_reactor/services/reward_reactor_service.dart';
+import 'package:synaptix/features/reward_reactor/models/reactor_claim_response.dart';
+import 'package:synaptix/features/reward_reactor/models/reactor_reward_preview.dart';
+import 'package:synaptix/features/reward_reactor/models/reactor_spin_response.dart';
+import 'package:synaptix/features/reward_reactor/models/user_rewards_response.dart';
+import 'package:synaptix/features/reward_reactor/services/reward_reactor_service.dart';
 
 // ---------------------------------------------------------------------------
 // Test doubles

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/models/achievement.dart';
-import 'package:trivia_tycoon/game/services/achievement_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/game/models/achievement.dart';
+import 'package:synaptix/game/services/achievement_service.dart';
 
 // Stub that throws on API calls to keep tests free of network I/O.
 class _StubApiService extends ApiService {

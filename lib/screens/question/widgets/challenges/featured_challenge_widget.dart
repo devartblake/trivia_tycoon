@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../game/providers/question_providers.dart' as question_data;
 import '../../../../game/providers/game_providers.dart';
 import '../../../../game/models/question_model.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 // Provider for featured challenge data
 final featuredChallengeProvider =

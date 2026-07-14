@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/services/daily_bonus_api_client.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
-import 'package:trivia_tycoon/core/services/weekly_rewards_api_client.dart';
+import 'package:synaptix/core/services/daily_bonus_api_client.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
+import 'package:synaptix/core/services/weekly_rewards_api_client.dart';
 
 void main() {
   const baseUrl = 'https://example.test/api/v1';

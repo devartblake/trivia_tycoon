@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/match_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/presence_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/turn_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/mappers/match_mapper.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_turn.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/match.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/player_presence.dart';
+import 'package:synaptix/game/multiplayer/data/dto/match_dto.dart';
+import 'package:synaptix/game/multiplayer/data/dto/presence_dto.dart';
+import 'package:synaptix/game/multiplayer/data/dto/turn_dto.dart';
+import 'package:synaptix/game/multiplayer/data/mappers/match_mapper.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_turn.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/match.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/player_presence.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

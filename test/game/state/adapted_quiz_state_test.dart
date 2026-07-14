@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/state/quiz_state.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
-import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/state/quiz_state.dart';
+import 'package:synaptix/game/models/question_type.dart' as qtype;
+import 'package:synaptix/game/models/question_difficulty.dart' as qdiff;
 
 // ---------------------------------------------------------------------------
 // Helpers

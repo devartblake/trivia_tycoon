@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/utils/input_validator.dart';
+import 'package:synaptix/core/utils/input_validator.dart';
 
 void main() {
   // -------------------------------------------------------------------------

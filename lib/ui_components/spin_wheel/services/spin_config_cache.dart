@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/spin_wheel_api_client.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/models/spin_system_models.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/spin_wheel_api_client.dart';
+import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
 
 /// Multi-level cache for spin wheel configuration
 ///

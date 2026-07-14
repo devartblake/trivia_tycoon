@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/hive_providers.dart';
+import 'package:synaptix/game/providers/hive_providers.dart';
 import '../../core/services/encryption/fernet_service.dart';
 
 class FernetController extends AsyncNotifier<FernetService> {

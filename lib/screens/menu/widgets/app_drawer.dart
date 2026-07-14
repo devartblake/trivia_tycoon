@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/profile_switcher.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/simple_menu_item.dart';
+import 'package:synaptix/screens/menu/widgets/profile_switcher.dart';
+import 'package:synaptix/screens/menu/widgets/simple_menu_item.dart';
 import '../../../core/services/settings/multi_profile_service.dart';
 import '../../../core/animations/animation_manager.dart';
 import '../../../game/providers/multi_profile_providers.dart';

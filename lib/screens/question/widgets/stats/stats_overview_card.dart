@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/screens/question/widgets/stats/stat_item.dart';
+import 'package:synaptix/screens/question/widgets/stats/stat_item.dart';
 
 class StatsOverviewCard extends StatelessWidget {
   final Map<String, dynamic> stats;

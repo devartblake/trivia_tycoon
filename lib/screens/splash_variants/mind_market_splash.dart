@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:trivia_tycoon/screens/splash_variants/widgets/background_parallax.dart';
-import 'package:trivia_tycoon/screens/splash_variants/widgets/golden_trivia_coin.dart';
-import 'package:trivia_tycoon/screens/splash_variants/widgets/ticker_tape_widget.dart';
-import 'package:trivia_tycoon/screens/splash_variants/widgets/typing_trivia_logo.dart';
+import 'package:synaptix/screens/splash_variants/widgets/background_parallax.dart';
+import 'package:synaptix/screens/splash_variants/widgets/golden_trivia_coin.dart';
+import 'package:synaptix/screens/splash_variants/widgets/ticker_tape_widget.dart';
+import 'package:synaptix/screens/splash_variants/widgets/typing_trivia_logo.dart';
 
 class MindMarketSplash extends StatefulWidget {
   final VoidCallback onStart;

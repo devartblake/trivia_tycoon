@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/analytics/models/engagement_entry.dart';
+import 'package:synaptix/game/analytics/models/engagement_entry.dart';
 
 void main() {
   // -------------------------------------------------------------------------

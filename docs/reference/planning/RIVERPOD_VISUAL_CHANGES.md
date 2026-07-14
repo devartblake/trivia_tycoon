@@ -7,7 +7,7 @@
   import 'package:go_router/go_router.dart';
 + import 'package:hive/hive.dart';
 + import 'package:http/http.dart' as http;
-  import 'package:trivia_tycoon/core/services/settings/admin_settings_service.dart';
+  import 'package:synaptix/core/services/settings/admin_settings_service.dart';
   ...
   
 + // NEW: Core auth imports

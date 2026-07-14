@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/game/controllers/theme_settings_controller.dart';
+import 'package:synaptix/game/controllers/theme_settings_controller.dart';
 
 /// Handles custom theme presets and persistent theme settings (e.g., selected theme, colors, age group).
 class CustomThemeService {

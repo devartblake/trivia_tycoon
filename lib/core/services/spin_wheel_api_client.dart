@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/models/spin_system_models.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
 
 /// API client for spin wheel configuration and control
 /// Handles:
