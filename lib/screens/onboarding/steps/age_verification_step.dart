@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 import '../../../core/services/compliance/compliance_consent_api_client.dart';
@@ -7,14 +6,13 @@ import '../../../core/services/compliance/compliance_consent_providers.dart';
 import '../../../game/controllers/onboarding_controller.dart';
 import '../widgets/onboarding_step_shell.dart';
 
-/// Onboarding step: exact-age verification + Terms/Privacy/Marketing consent,
+/// Onboarding step: date-of-birth verification + Terms/Privacy/Marketing consent,
 /// with a parental-consent email flow for minors (under 13). Backed by
-/// Synaptix.Compliance.Api.
+/// Synaptix.Compliance.Api when available.
 ///
-/// Fail-open: the compliance service is optional in alpha (defaults to the API
-/// host and may be undeployed). Backend errors are logged and never block the
-/// user from completing onboarding — required consent is enforced client-side
-/// and `isMinor` is derived from the entered age when the server is unreachable.
+/// Fail-open: compliance service errors are logged and never block onboarding —
+/// required consent is enforced client-side and `isMinor` is derived from DOB
+/// when the server is unreachable.
 class AgeVerificationStep extends ConsumerStatefulWidget {
   final ModernOnboardingController controller;
 
@@ -26,16 +24,37 @@ class AgeVerificationStep extends ConsumerStatefulWidget {
   /// Age below which parental consent is required (COPPA).
   static const minorThreshold = 13;
 
+  /// Full years completed as of [asOf] (defaults to now).
+  static int ageFromDateOfBirth(DateTime dob, [DateTime? asOf]) {
+    final today = asOf ?? DateTime.now();
+    var age = today.year - dob.year;
+    final birthdayThisYear = DateTime(today.year, dob.month, dob.day);
+    if (today.isBefore(birthdayThisYear)) age--;
+    return age;
+  }
+
+  /// Map age → onboarding age-group id used by [AgeGroupStep].
+  static String ageGroupIdForAge(int age) {
+    if (age < 13) return 'kids';
+    if (age <= 17) return 'teens';
+    if (age <= 24) return 'adults';
+    return 'general';
+  }
+
   @override
   ConsumerState<AgeVerificationStep> createState() =>
       _AgeVerificationStepState();
 }
 
 class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
-  final _ageCtrl = TextEditingController();
   final _parentEmailCtrl = TextEditingController();
 
+  int? _day;
+  int? _month;
+  int? _year;
+
   int? _verifiedAge;
+  DateTime? _dateOfBirth;
   bool? _isMinor;
   bool _verifying = false;
 
@@ -50,9 +69,37 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
   ComplianceConsentApiClient get _client =>
       ref.read(complianceConsentApiClientProvider);
 
+  static const _months = <String>[
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    final existingDob = widget.controller.userData['dateOfBirth'];
+    if (existingDob is String && existingDob.isNotEmpty) {
+      final parsed = DateTime.tryParse(existingDob);
+      if (parsed != null) {
+        _day = parsed.day;
+        _month = parsed.month;
+        _year = parsed.year;
+      }
+    }
+  }
+
   @override
   void dispose() {
-    _ageCtrl.dispose();
     _parentEmailCtrl.dispose();
     super.dispose();
   }
@@ -60,16 +107,47 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
   void _snack(String msg) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
-  Future<void> _verifyAge() async {
-    final age = int.tryParse(_ageCtrl.text.trim());
-    if (age == null || age < 1 || age > 120) {
-      _snack('Enter a valid age (1–120).');
+  int get _maxDay {
+    if (_year == null || _month == null) return 31;
+    return DateUtils.getDaysInMonth(_year!, _month!);
+  }
+
+  List<int> get _yearOptions {
+    final now = DateTime.now().year;
+    // Ages 1–120 inclusive.
+    return [for (var y = now - 1; y >= now - 120; y--) y];
+  }
+
+  DateTime? get _parsedDob {
+    if (_day == null || _month == null || _year == null) return null;
+    if (_day! < 1 || _day! > _maxDay) return null;
+    try {
+      final dob = DateTime(_year!, _month!, _day!);
+      if (dob.isAfter(DateTime.now())) return null;
+      return dob;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> _verifyDob() async {
+    final dob = _parsedDob;
+    if (dob == null) {
+      _snack('Enter a valid date of birth (day, month, and year).');
       return;
     }
+
+    final age = AgeVerificationStep.ageFromDateOfBirth(dob);
+    if (age < 1 || age > 120) {
+      _snack('Please enter a realistic date of birth.');
+      return;
+    }
+
     setState(() => _verifying = true);
     bool minor = age < AgeVerificationStep.minorThreshold;
     try {
       // Best-effort: prefer the server's determination when reachable.
+      // API currently accepts declared age years (derived from DOB).
       minor = await _client.submitAge(age);
     } on ComplianceConsentApiException catch (e) {
       LogManager.debug(
@@ -79,6 +157,7 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
     } finally {
       if (mounted) {
         setState(() {
+          _dateOfBirth = dob;
           _verifiedAge = age;
           _isMinor = minor;
           _verifying = false;
@@ -99,7 +178,6 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
       if (mounted) setState(() => _parentRequested = true);
       _snack('Parental consent request sent to $email.');
     } on ComplianceConsentApiException catch (e) {
-      // Fail-open: allow progress even if the email could not be dispatched.
       LogManager.debug('[AgeVerificationStep] parental consent failed: $e');
       if (mounted) setState(() => _parentRequested = true);
       _snack('We\'ll follow up on parental consent shortly.');
@@ -109,7 +187,11 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
   }
 
   bool get _canContinue {
-    if (_verifiedAge == null || !_terms || !_privacy || _continuing) {
+    if (_verifiedAge == null ||
+        _dateOfBirth == null ||
+        !_terms ||
+        !_privacy ||
+        _continuing) {
       return false;
     }
     if (_isMinor == true && !_parentRequested) return false;
@@ -118,7 +200,6 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
 
   Future<void> _continue() async {
     setState(() => _continuing = true);
-    // Best-effort consent recording — never blocks onboarding.
     for (final entry in <String, bool>{
       'TermsOfService': true,
       'PrivacyPolicy': true,
@@ -136,9 +217,18 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
       }
     }
 
+    final age = _verifiedAge!;
+    final dob = _dateOfBirth!;
+    final suggestedGroup = AgeVerificationStep.ageGroupIdForAge(age);
+
     widget.controller.updateUserData({
-      'declaredAge': _verifiedAge,
+      'declaredAge': age,
+      'dateOfBirth':
+          '${dob.year.toString().padLeft(4, '0')}-'
+          '${dob.month.toString().padLeft(2, '0')}-'
+          '${dob.day.toString().padLeft(2, '0')}',
       'isMinor': _isMinor ?? false,
+      'suggestedAgeGroup': suggestedGroup,
       'consentTos': true,
       'consentPrivacy': true,
       'consentMarketing': _marketing,
@@ -146,10 +236,18 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
     widget.controller.nextStep();
   }
 
+  bool get _dobVerified => _verifiedAge != null && _dateOfBirth != null;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final ageVerified = _verifiedAge != null;
+
+    // Clamp day if month/year change reduces max days.
+    if (_day != null && _day! > _maxDay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _day = _maxDay);
+      });
+    }
 
     return OnboardingStepShell(
       hero: Container(
@@ -163,8 +261,9 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
       ),
       panelIllustration: const Text('🔒', style: TextStyle(fontSize: 120)),
       title: 'Verify your age',
-      subtitle: 'This keeps the experience appropriate and compliant. '
-          'Players under 13 need a parent or guardian\'s consent.',
+      subtitle: 'Enter your date of birth so we can keep the experience '
+          'appropriate and compliant. Players under 13 need a parent or '
+          'guardian\'s consent.',
       footer: SizedBox(
         width: double.infinity,
         child: FilledButton(
@@ -188,35 +287,115 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
       ),
       child: ListView(
         children: [
+          Text(
+            'Date of birth',
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _ageCtrl,
-                  enabled: !ageVerified,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(3),
-                  ],
+                flex: 2,
+                child: DropdownButtonFormField<int>(
+                  // ignore: deprecated_member_use
+                  value: _day != null && _day! <= _maxDay ? _day : null,
                   decoration: const InputDecoration(
-                    labelText: 'Age',
+                    labelText: 'Day',
                     border: OutlineInputBorder(),
                   ),
+                  items: [
+                    for (var d = 1; d <= _maxDay; d++)
+                      DropdownMenuItem(value: d, child: Text('$d')),
+                  ],
+                  onChanged: _dobVerified
+                      ? null
+                      : (v) => setState(() {
+                            _day = v;
+                            _verifiedAge = null;
+                            _dateOfBirth = null;
+                            _isMinor = null;
+                          }),
                 ),
               ),
-              const SizedBox(width: 12),
-              FilledButton(
-                onPressed: (_verifying || ageVerified) ? null : _verifyAge,
-                child: _verifying
-                    ? const SizedBox(
-                        height: 18,
-                        width: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Verify'),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 3,
+                child: DropdownButtonFormField<int>(
+                  // ignore: deprecated_member_use
+                  value: _month,
+                  decoration: const InputDecoration(
+                    labelText: 'Month',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    for (var m = 1; m <= 12; m++)
+                      DropdownMenuItem(
+                        value: m,
+                        child: Text(_months[m - 1]),
+                      ),
+                  ],
+                  onChanged: _dobVerified
+                      ? null
+                      : (v) => setState(() {
+                            _month = v;
+                            _verifiedAge = null;
+                            _dateOfBirth = null;
+                            _isMinor = null;
+                          }),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 2,
+                child: DropdownButtonFormField<int>(
+                  // ignore: deprecated_member_use
+                  value: _year,
+                  decoration: const InputDecoration(
+                    labelText: 'Year',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: [
+                    for (final y in _yearOptions)
+                      DropdownMenuItem(value: y, child: Text('$y')),
+                  ],
+                  onChanged: _dobVerified
+                      ? null
+                      : (v) => setState(() {
+                            _year = v;
+                            _verifiedAge = null;
+                            _dateOfBirth = null;
+                            _isMinor = null;
+                          }),
+                ),
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerRight,
+            child: FilledButton(
+              onPressed: (_verifying || _dobVerified) ? null : _verifyDob,
+              child: _verifying
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(_dobVerified ? 'Verified ✓' : 'Verify'),
+            ),
+          ),
+          if (_dobVerified) ...[
+            const SizedBox(height: 8),
+            Text(
+              'Verified age: $_verifiedAge',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
           if (_isMinor == true) ...[
             const SizedBox(height: 20),
             _ParentalConsentCard(

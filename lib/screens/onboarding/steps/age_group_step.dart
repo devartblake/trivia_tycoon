@@ -50,7 +50,14 @@ class _AgeGroupStepState extends State<AgeGroupStep> {
   void initState() {
     super.initState();
     if (widget.controller.userData['ageGroup'] != null) {
-      _selectedAgeGroup = widget.controller.userData['ageGroup'];
+      _selectedAgeGroup = widget.controller.userData['ageGroup'] as String?;
+    } else {
+      // Pre-select from DOB verification when available.
+      final suggested = widget.controller.userData['suggestedAgeGroup'];
+      if (suggested is String &&
+          _ageGroups.any((g) => g.id == suggested)) {
+        _selectedAgeGroup = suggested;
+      }
     }
   }
 
