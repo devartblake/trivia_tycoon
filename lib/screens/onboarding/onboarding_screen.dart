@@ -163,6 +163,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final serviceManager = ref.read(serviceManagerProvider);
     final onboardingService = serviceManager.onboardingSettingsService;
     final progress = await onboardingService.getOnboardingProgress();
+    if (!mounted) return;
+
+    // Already finished: leave the wizard (router also enforces this).
+    if (progress.completed) {
+      if (mounted) context.go('/home');
+      return;
+    }
 
     final restoredStep =
         progress.currentStep.clamp(0, _controller.totalSteps - 1);
@@ -179,7 +186,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     });
 
     if (restoredStep > 0) {
-      _controller.goToStep(restoredStep);
+      // Wait until the PageView is attached to avoid jump errors on web.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _controller.goToStep(restoredStep);
+      });
     }
   }
 
@@ -254,19 +265,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         : null;
     final syncableAvatar = _normalizeSyncableAvatar(avatar);
 
-    if (ageGroup == null ||
-        country == null ||
-        categories == null ||
-        categories.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Please complete all required onboarding fields or use Skip.',
-            ),
-          ),
-        );
-      }
+    // Guard incomplete required fields — send user back to the first gap
+    // instead of dead-ending on the completion step.
+    if (ageGroup == null) {
+      _nudgeIncomplete('Pick an age group to continue.', step: 3);
+      return;
+    }
+    if (country == null) {
+      _nudgeIncomplete('Select your country to continue.', step: 6);
+      return;
+    }
+    if (categories == null || categories.isEmpty) {
+      _nudgeIncomplete('Choose at least one category to continue.', step: 7);
       return;
     }
 
@@ -433,11 +443,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     return 'player_${millis.substring(millis.length - 6)}';
   }
 
+  void _nudgeIncomplete(String message, {required int step}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+    _controller.goToStep(step);
+  }
+
   Future<void> _handleSkip() async {
     final serviceManager = ref.read(serviceManagerProvider);
     final onboardingService = serviceManager.onboardingSettingsService;
 
     // Mark the gate complete while keeping profile setup visibly unfinished.
+    // Guests can finish later; do not wipe partial progress.
     await onboardingService.updateOnboardingProgress(
       completed: true,
       hasSeenIntro: true,
@@ -452,7 +471,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           currentStep: _controller.currentStep,
         );
 
+    // Guests landing on home after skip still get playable identity from earlier.
     if (mounted) {
+      ref.read(profileSelectedProvider.notifier).state = true;
       context.go('/home');
     }
   }

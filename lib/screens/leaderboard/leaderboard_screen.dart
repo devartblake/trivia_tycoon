@@ -29,6 +29,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late int playerXP;
   AnimationController? _animationController;
+  dynamic _leaderboardService; // Use dynamic or specific type if imported
 
   // Leaderboard state
   List<LeaderboardEntry> _entries = [];
@@ -59,6 +60,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     });
 
     // Initialize leaderboard
+    final serviceManager = ref.read(serviceManagerProvider);
+    _leaderboardService = serviceManager.leaderboardDataService;
+
     _initializeLeaderboard();
   }
 
@@ -72,8 +76,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   // ✅ ADD THIS - Initialize leaderboard with WebSocket
   Future<void> _initializeLeaderboard() async {
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final leaderboardService = serviceManager.leaderboardDataService;
+      final leaderboardService = _leaderboardService;
 
       // Initialize WebSocket
       leaderboardService.initializeWebSocket(useWebSocket: true);
@@ -104,8 +107,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     if (!mounted) return;
 
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final leaderboardService = serviceManager.leaderboardDataService;
+      final leaderboardService = _leaderboardService;
 
       // Track previous ranks for animations
       for (final entry in _entries) {
@@ -135,10 +137,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   // ✅ ADD THIS - Cleanup
   void _cleanupLeaderboard() {
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final leaderboardService = serviceManager.leaderboardDataService;
-      leaderboardService.removeListener(_onLeaderboardUpdate);
-      leaderboardService.unsubscribe();
+      final leaderboardService = _leaderboardService;
+      if (leaderboardService != null) {
+        leaderboardService.removeListener(_onLeaderboardUpdate);
+        leaderboardService.unsubscribe();
+      }
     } catch (e) {
       LogManager.debug('[LeaderboardScreen] Cleanup error: $e');
     }

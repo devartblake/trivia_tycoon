@@ -731,19 +731,10 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                         const SizedBox(height: 12),
                       ],
                       // Enhanced question metadata with category integration
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          // Use new QuestionMetadata component with type-safe difficulty
-                          Expanded(
-                            child: QuestionMetadata(
-                              question: currentQuestion,
-                              showDifficultyBadge: true,
-                              showTags: true,
-                            ),
-                          ),
-                        ],
+                      QuestionMetadata(
+                        question: currentQuestion,
+                        showDifficultyBadge: true,
+                        showTags: true,
                       ),
 
                       const SizedBox(height: 16),

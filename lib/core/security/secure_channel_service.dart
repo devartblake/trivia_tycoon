@@ -5,6 +5,7 @@ import 'package:cryptography/cryptography.dart';
 
 import '../services/auth_http_client.dart';
 import '../services/device_id_service.dart';
+import '../manager/log_manager.dart';
 import 'secure_channel_exceptions.dart';
 import 'secure_channel_models.dart';
 import 'secure_payload_codec.dart';
@@ -68,6 +69,29 @@ class DefaultSecureChannelService implements SecureChannelService {
 
   @override
   Future<SecureSession> startSession({required String accessToken}) async {
+    const int maxRetries = 2;
+    int attempt = 0;
+
+    while (attempt <= maxRetries) {
+      try {
+        return await _doStartSession(accessToken);
+      } catch (e) {
+        attempt++;
+        if (attempt > maxRetries) {
+          LogManager.debug(
+              '[SecureChannelService] Failed to start session after $maxRetries retries: $e');
+          rethrow;
+        }
+        final delay = Duration(milliseconds: 500 * attempt);
+        LogManager.debug(
+            '[SecureChannelService] Session start attempt $attempt failed ($e). Retrying in ${delay.inMilliseconds}ms...');
+        await Future.delayed(delay);
+      }
+    }
+    throw const SecureChannelException('Failed to start secure session');
+  }
+
+  Future<SecureSession> _doStartSession(String accessToken) async {
     final clientNonce = _randomBytes(16);
     final deviceId = await _deviceIdService.getOrCreate();
     final uri = Uri.parse('$_baseUrl/api/v1/security/sessions/start');
@@ -95,7 +119,7 @@ class DefaultSecureChannelService implements SecureChannelService {
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw SecureChannelException(
-          'Secure session start failed (${response.statusCode})');
+          'Secure session start failed (${response.statusCode}): ${response.body}');
     }
 
     final payload = jsonDecode(response.body) as Map<String, dynamic>;
