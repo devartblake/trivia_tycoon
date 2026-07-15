@@ -20,9 +20,11 @@ import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
+import '../../game/providers/guest_session_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../ui_components/power_ups/power_up_hud_overlay.dart';
 import '../../ui_components/synaptix_toast/synaptix_toast_service.dart';
+
 import '../../widgets/app_logo.dart';
 import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
@@ -387,6 +389,15 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
 
       // Initialize wallet persistence
       await ref.read(walletServiceProvider).init();
+
+      // Guest session timers / leave wipe / hydrate API gate flag.
+      // Full-account sessions clear the guest flag so backend traffic is allowed.
+      final guestController = ref.read(guestSessionControllerProvider);
+      if (isLoggedIn || hasFullAccountIdentity) {
+        await guestController.onAuthenticated();
+      } else {
+        await guestController.start();
+      }
 
       LogManager.info(
           'Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded',

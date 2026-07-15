@@ -124,6 +124,25 @@ class SynaptixToastService {
     );
   }
 
+  /// Information toast with a custom action button (e.g. "Sign up free").
+  static Future<void> action({
+    required String message,
+    required Widget button,
+    String? title,
+    Duration duration = const Duration(seconds: 5),
+    BuildContext? context,
+  }) async {
+    await show<void>(
+      SynaptixToastHelper.createAction(
+        title: title,
+        message: message,
+        button: button,
+        duration: duration,
+      ),
+      context: context,
+    );
+  }
+
   static void _showSnackBarFallback(SynaptixToast<dynamic> toast) {
     final messenger = scaffoldMessengerKey.currentState;
     if (messenger == null) return;

@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../core/bootstrap/app_init.dart';
 import '../core/constants/image_strings.dart';
 import '../core/navigation/canonical_routes.dart';
+import '../game/providers/guest_session_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
 import 'onboarding/steps/constants.dart';
 
@@ -319,6 +320,8 @@ class _LoginScreenMobileState extends ConsumerState<LoginScreenMobile>
       if (!identity.hasPlayableIdentity) {
         await ref.read(playerIdentityProvider.notifier).initialize();
       }
+
+      await ref.read(guestSessionControllerProvider).onGuestModeEntered();
 
       if (mounted) context.go(canonicalOnboardingRoute);
     } catch (e) {

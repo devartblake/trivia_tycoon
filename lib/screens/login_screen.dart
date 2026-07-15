@@ -15,6 +15,7 @@ import '../core/constants/image_strings.dart';
 import '../core/helpers/responsive_layout.dart';
 import '../core/navigation/canonical_routes.dart';
 import '../core/services/auth_token_store.dart';
+import '../game/providers/guest_session_providers.dart';
 import '../game/providers/multi_profile_providers.dart';
 import '../game/providers/web_link_providers.dart';
 import 'onboarding/steps/constants.dart';
@@ -306,6 +307,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       ));
 
       ref.read(isLoggedInSyncProvider.notifier).state = true;
+      await ref.read(guestSessionControllerProvider).onAuthenticated();
       if (mounted) context.go('/home');
     } catch (e) {
       _showErrorSnackBar('Google Sign-In failed: ${e.toString()}');
@@ -335,6 +337,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       ));
 
       ref.read(isLoggedInSyncProvider.notifier).state = true;
+      await ref.read(guestSessionControllerProvider).onAuthenticated();
       if (mounted) context.go('/home');
     } catch (e) {
       _showErrorSnackBar('Invalid or expired code. Please try again.');
@@ -393,6 +396,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       if (!identity.hasPlayableIdentity) {
         await ref.read(playerIdentityProvider.notifier).initialize();
       }
+
+      // Mark guest session so API gate + session timers activate.
+      await ref.read(guestSessionControllerProvider).onGuestModeEntered();
 
       if (mounted) {
         context.go(canonicalOnboardingRoute);
