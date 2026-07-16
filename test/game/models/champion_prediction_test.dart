@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/champion_prediction.dart';
+import 'package:synaptix/game/models/champion_prediction.dart';
 
 void main() {
   group('ChampionPrediction.fromJson', () {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/app_config.dart';
+import 'package:synaptix/core/models/app_config.dart';
 
 void main() {
   group('FeatureFlags defaults (features open, crypto/dev gated)', () {
