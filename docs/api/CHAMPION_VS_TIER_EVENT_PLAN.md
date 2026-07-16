@@ -1,7 +1,7 @@
 # Champion vs Tier — Weekly 1-vs-99 Spectacle Event
 
 **Date:** 2026-07-10
-**Status:** 🚧 Phase 1 (core) implemented on backend branch `claude/season-leaderboard` + this repo. Phases 2–5 proposed.
+**Status:** ✅ Phases 1–5 all implemented (backend merged to `main` via PR #437; client on branch `claude/codebase-audit-sprint-plan-xwf38e`). Core, live rounds + duels + replay-on-join, no-loss prediction, premium spectator / elimination cam, and sponsor-multiplier attribution are all shipped.
 **Inspiration:** the "1 vs 100" / mob-vs-individual game-show format — high-spectacle tension where one champion faces a crowd, and every fallen challenger swells the prize.
 
 > **Design decisions confirmed by owner (2026-07-10):**
@@ -38,8 +38,8 @@ The backend already carries a near-complete elimination-event framework. The use
 | **1 — Core (this session)** | `champion_vs_tier` kind; champion seeded from tier #1 at Open; jackpot (entry + per-elim, ×multiplier); asymmetric win/prize at close; status DTO exposes champion/jackpot/multiplier; admin-create validation; client entry card | ~1 day | existing GameEvents framework |
 | **2 — Live rounds (done)** | ✅ Backend: `ChampionRound`/`ChampionRoundAnswer` + `ChampionMatchOrchestrator` (start → broadcast → answer window → resolve → next/close), **dual driver** (Hangfire schedule + hosted `ChampionRoundWatchdog` redundancy sweep), REST answer endpoint, SignalR round contracts, scheduler Start hook. ✅ **Champion duels** (`ChampionDuel`): champion-initiated 1v1 cull, capped per match, loser eliminated, dethrone ends the match. ✅ **Replay-on-join**: `GET /game-events/{id}/live` snapshot. ✅ Client: round + duel + snapshot DTOs, hub streams, `ChampionLiveScreen` seeds from the snapshot on join, **champion "call out a challenger" roster picker → duel, duelist answer view, spectator duel banner, duels-remaining counter**, `GET /game-events/{id}/participants` roster. Phase 2 complete. | ~3–4 days | Phase 1 + NotificationHub |
 | **3 — No-loss prediction (done)** | ✅ `ChampionPrediction` entity + migration; `POST /game-events/{id}/predict` ("will the champion defend?", Open-window only) + `GET /prediction`; `ChampionPredictionService` splits a fixed coin pool among correct predictors at close (resolved from `EndMatchAsync`, idempotent), plus flat XP; no stake lost. Client: `ChampionPrediction` model, `getPrediction`/`submitPrediction`, and a `ChampionPredictionPanel` on the card (Yes/No pick, live tally bar, locked/result states). | ~1.5 days | Phase 1 |
-| **4 — Premium spectator** | Entitlement-gated live spectator channel (read-only round feed, elimination cam, jackpot ticker) via SignalR; `PlayerEntitlement` check | ~2 days | Phase 2 |
-| **5 — Sponsor jackpot multiplier** | Admin sets a sponsor + `JackpotMultiplier` per event; multiplier applied to the final jackpot (column shipped in Phase 1); sponsor attribution surfaced to spectators | ~1 day | Phase 1 |
+| **4 — Premium spectator (done)** | ✅ Basic live spectating is **free** (rounds over SignalR, live counts, jackpot); a `spectator_premium` entitlement unlocks the elimination-cam feed. `ChampionSpectatorService`, `GET /game-events/{id}/spectate` (anonymous → basic view), admin `POST /admin/game-events/spectator-pass`. Client: spectator models + `getSpectatorView`/`championSpectatorProvider` + elimination-cam panel on `ChampionLiveScreen` (premium feed vs locked upsell). | ~2 days | Phase 2 |
+| **5 — Sponsor jackpot multiplier (done)** | ✅ `GameEvent.SponsorName` + `ApplySponsor(name, multiplier)` (clamped 1–10×, no-op after close); `GameEventSponsorAttribution` record written at close (base/effective/boost/beneficiary/season) for reconciliation; admin `POST /admin/game-events/{id}/sponsor` + `GET /admin/game-events/sponsor-attributions`; `SponsorName` on status DTO. Client: `ChampionEvent.sponsorName`/`hasSponsor` + "N× boosted by <sponsor>" line on the card. | ~1 day | Phase 1 |
 
 ## 3. Phase 1 (core) — as built
 
