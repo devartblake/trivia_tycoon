@@ -13,8 +13,7 @@ import 'package:synaptix/core/services/user_identity_resolver.dart';
 import 'package:synaptix/game/analytics/models/spin_live_summary.dart';
 import 'package:synaptix/game/analytics/providers/analytics_providers.dart';
 import 'package:synaptix/game/providers/multi_profile_providers.dart';
-import 'package:synaptix/game/providers/riverpod_providers.dart'
-    as providers;
+import 'package:synaptix/game/providers/riverpod_providers.dart' as providers;
 import 'package:synaptix/game/providers/wallet_providers.dart';
 import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';

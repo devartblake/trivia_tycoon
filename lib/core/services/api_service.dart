@@ -16,7 +16,6 @@ import 'package:synaptix/core/manager/log_manager.dart';
 import 'package:synaptix/core/services/asset_resolver.dart';
 import 'package:synaptix/core/services/guest_api_gate.dart';
 
-
 class ApiRequestException implements Exception {
   final String message;
   final int? statusCode;

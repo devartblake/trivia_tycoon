@@ -206,7 +206,8 @@ class ServiceManager {
   static EnvConfig? get envConfig => null;
 
   /// Initialize all core services and return a ready ServiceManager
-  static Future<ServiceManager> initialize({AuthTokenStore? authTokenStore}) async {
+  static Future<ServiceManager> initialize(
+      {AuthTokenStore? authTokenStore}) async {
     final String baseUrl = EnvConfig.apiBaseUrl;
     final String apiV1BaseUrl = EnvConfig.apiV1BaseUrl;
 
