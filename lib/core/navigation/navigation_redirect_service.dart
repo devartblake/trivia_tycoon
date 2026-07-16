@@ -39,11 +39,17 @@ class NavigationRedirectService {
       return canonicalLoginRoute;
     }
 
+    // Incomplete onboarding: any playable identity (including guests) resumes
+    // onboarding instead of being bounced to login. Auth routes stay open so
+    // guests can sign up mid-flow.
     if (!isOnboardingComplete) {
       if (isOnboardingPath || isAuthPath) return null;
-      return hasAccountIdentity
-          ? canonicalOnboardingRoute
-          : canonicalLoginRoute;
+      // Account-link is part of post-setup for full accounts only; guests mid-
+      // onboarding should not land there via deep link either.
+      if (currentPath == canonicalAccountLinkRoute && hasAccountIdentity) {
+        return null;
+      }
+      return canonicalOnboardingRoute;
     }
 
     if (hasAccountIdentity && !profileSelected) {
@@ -51,6 +57,8 @@ class NavigationRedirectService {
       return '/profile-selection';
     }
 
+    // Finished onboarding: leave /onboarding and profile-selection for home,
+    // but allow /account-link (signup / rewards CTA after completion).
     if (isOnboardingPath || currentPath == '/profile-selection') {
       return canonicalHomeRoute;
     }

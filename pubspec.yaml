@@ -144,7 +144,14 @@ flutter:
    - assets/images/rewards/
    - assets/images/collections/collection_items.json
    - assets/3d/index.json
-   - assets/data/mini-games/word_search_easy.json
+   - assets/data/
+   - assets/data/analytics/
+   - assets/data/events/
+   - assets/data/leaderboard/
+   - assets/data/mini-games/
+   - assets/data/missions/
+   - assets/data/skill_tree/
+   - assets/data/snapple_facts/
    - assets/icons/index.json
    - assets/icons/store/coins_100.png
    - assets/icons/store/diamonds_10.png

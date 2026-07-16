@@ -18,6 +18,7 @@ import '../env.dart';
 import '../networking/ws_client.dart';
 import '../services/app_lifecycle_manager.dart';
 import '../services/asset_resolver.dart';
+import '../services/guest_api_gate.dart';
 import '../services/auth_api_client.dart';
 import '../services/auth_service.dart';
 import '../services/auth_token_store.dart';
@@ -123,7 +124,7 @@ class AppInit {
     await authService.ensureDeviceId();
 
     // 3. Service Manager & Core Logic
-    final serviceManager = await ServiceManager.initialize();
+    final serviceManager = await ServiceManager.initialize(authTokenStore: tokenStore);
     _serviceManager = serviceManager; // Store for lifecycle callbacks
 
     // ✅ NEW - Initialize lifecycle manager with save callbacks
@@ -189,7 +190,15 @@ class AppInit {
           .startSession(accessToken: session.accessToken);
       LogManager.debug('[AppInit] Secure session ready for auth refresh');
     } catch (e) {
-      LogManager.debug('[AppInit] Secure session bootstrap skipped: $e');
+      LogManager.debug('[AppInit] Secure session bootstrap failed: $e');
+
+      // If secure session fails with an auth error, clear the tokens.
+      // Transient errors (like 500) are skipped to avoid aggressive logouts.
+      if (e.toString().contains('401') || e.toString().contains('403')) {
+        LogManager.debug(
+            '[AppInit] Clearing session due to auth error during secure bootstrap');
+        await serviceManager.authTokenStore.clear();
+      }
     }
   }
 
@@ -502,6 +511,13 @@ class AppInit {
       ServiceManager serviceManager, ProviderContainer? container) async {
     try {
       final isLoggedIn = await serviceManager.authService.isLoggedIn();
+
+      // Ensure GuestApiGate is updated immediately if we are logged in.
+      // Full hydration/timers happen in AppLauncher via GuestSessionController.
+      if (isLoggedIn) {
+        GuestApiGate.isGuestSession = false;
+      }
+
       if (container != null) {
         container.read(isLoggedInSyncProvider.notifier).state = isLoggedIn;
       }

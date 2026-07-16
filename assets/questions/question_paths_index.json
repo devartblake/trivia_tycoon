@@ -229,9 +229,9 @@
   },
   {
     "folder": "questions",
-    "subfolder": "tech",
+    "subfolder": "technology",
     "filename": "tech_question",
-    "asset_path": "assets/questions/tech/tech_question.json"
+    "asset_path": "assets/questions/technology/tech_question.json"
   },
   {
     "folder": "questions",

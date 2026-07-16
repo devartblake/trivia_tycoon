@@ -31,6 +31,7 @@ class MissionDataLoader {
       final assetPath = _assetPaths[ageGroup]!;
       final String jsonString = await AssetResolver.instance.loadString(
         assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+        bundledFallbackPath: assetPath,
       );
       final List<dynamic> jsonList = json.decode(jsonString);
 

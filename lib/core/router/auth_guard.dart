@@ -5,9 +5,8 @@ import 'package:synaptix/game/providers/riverpod_providers.dart';
 
 Future<String?> authGuard(BuildContext context, GoRouterState state) async {
   final container = ProviderScope.containerOf(context);
-  final authService = container.read(authServiceProvider);
+  final isLoggedIn = container.read(isLoggedInSyncProvider);
 
-  final isLoggedIn = await authService.isLoggedIn();
   return isLoggedIn ? null : '/login';
 }
 

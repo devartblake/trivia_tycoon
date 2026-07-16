@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/navigation/canonical_routes.dart';
 import '../../models/synaptix_home_state.dart';
 import '../../theme/synaptix_home_theme.dart';
+import '../guest_create_account_banner.dart';
 import 'synaptix_logo_mark.dart';
 
 class SynaptixTopNavigationBar extends StatelessWidget {
@@ -86,6 +87,9 @@ class SynaptixTopNavigationBar extends StatelessWidget {
             ),
           ] else
             const Spacer(),
+          // Upper-right: persistent guest signup CTA
+          GuestCreateAccountBanner(compact: isCompact),
+          const SizedBox(width: 10),
           _CurrencyPill(
             icon: Icons.monetization_on_rounded,
             value: home.player.coins.toString(),

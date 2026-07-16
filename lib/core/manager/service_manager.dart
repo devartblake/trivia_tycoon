@@ -206,10 +206,27 @@ class ServiceManager {
   static EnvConfig? get envConfig => null;
 
   /// Initialize all core services and return a ready ServiceManager
-  static Future<ServiceManager> initialize() async {
+  static Future<ServiceManager> initialize({AuthTokenStore? authTokenStore}) async {
     final String baseUrl = EnvConfig.apiBaseUrl;
     final String apiV1BaseUrl = EnvConfig.apiV1BaseUrl;
-    final api = ApiService(baseUrl: apiV1BaseUrl);
+
+    // Build token store early for ApiService callback
+    final tokenStore = authTokenStore ??
+        await (() async {
+          final authBox = Hive.isBoxOpen('auth_tokens')
+              ? Hive.box('auth_tokens')
+              : await Hive.openBox('auth_tokens');
+          final store = AuthTokenStore(authBox);
+          await store.initialize();
+          return store;
+        })();
+
+    final api = ApiService(
+      baseUrl: apiV1BaseUrl,
+      onAuthCleared: () async {
+        await tokenStore.clear();
+      },
+    );
 
     // Add async initialize methods
     final audio = await AudioSettingsService.initialize();
@@ -293,12 +310,8 @@ class ServiceManager {
         generalKey: generalKey,
         playerProfileService: playerProfile);
 
-    // Build BackendAuthService + AuthHttpClient for API calls
-    final authBox = Hive.isBoxOpen('auth_tokens')
-        ? Hive.box('auth_tokens')
-        : await Hive.openBox('auth_tokens');
-    final tokenStore = AuthTokenStore(authBox);
-    await tokenStore.initialize();
+    // Keep Dio guest-gate / Authorization headers in sync with secure tokens.
+    ApiService.bindAccessTokenProvider(() => tokenStore.accessTokenSync);
     final deviceIdSvc = DeviceIdService(secureStorage);
     final secureSessionStore = SecureSessionStore(secureStorage);
     final authApiClient = AuthApiClient(

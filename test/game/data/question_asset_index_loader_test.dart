@@ -22,7 +22,7 @@ void main() {
 
       final path = await loader.resolveAssetPath('Technology');
 
-      expect(path, 'assets/questions/tech/tech_question.json');
+      expect(path, 'assets/questions/technology/tech_question.json');
     });
 
     test('resolves class dataset path through index aliasing', () async {
