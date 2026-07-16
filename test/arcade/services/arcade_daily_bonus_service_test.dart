@@ -1,23 +1,28 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:synaptix/arcade/services/arcade_daily_bonus_service.dart';
 import 'package:synaptix/core/services/storage/app_cache_service.dart';
 
+import '../../support/hive_test_env.dart';
+
 void main() {
-  late Directory tempDir;
+  late HiveTestEnv hiveEnv;
   late AppCacheService cache;
 
-  setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('daily_bonus_test');
-    Hive.init(tempDir.path);
+  // Init Hive once for the whole file and keep the box open throughout: the
+  // service persists fire-and-forget, so closing the box between tests let a
+  // late write hit a closed box ("Box has already been closed"). Per-test
+  // isolation comes from clearing the box in setUp instead.
+  setUpAll(() async {
+    hiveEnv = await HiveTestEnv.create();
     cache = await AppCacheService.initialize();
   });
 
-  tearDown(() async {
-    await Hive.deleteBoxFromDisk('cache');
-    await tempDir.delete(recursive: true);
+  setUp(() async {
+    await cache.clear();
+  });
+
+  tearDownAll(() async {
+    await hiveEnv.dispose();
   });
 
   // ---------------------------------------------------------------------------

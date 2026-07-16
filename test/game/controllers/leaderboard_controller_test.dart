@@ -1,14 +1,22 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
+import 'package:synaptix/core/services/api_service.dart';
 import 'package:synaptix/core/services/leaderboard_data_service.dart';
 import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import 'package:synaptix/game/controllers/leaderboard_controller.dart';
 import 'package:synaptix/game/models/leaderboard_entry.dart';
 import 'package:synaptix/admin/controllers/admin_filter_controller.dart';
 import 'package:synaptix/admin/leaderboard/leaderboard_filter_screen.dart';
+
+import '../../support/hive_test_env.dart';
+
+// Real-but-unused dependencies for the fake data service. LeaderboardDataService
+// requires non-null ApiService/AppCacheService; the fake overrides every method
+// that would touch them, so these just satisfy the (non-nullable) types.
+// Assigned in setUp before the provider is first read.
+late ApiService _api;
+late AppCacheService _cache;
 
 // ---------------------------------------------------------------------------
 // Stubs
@@ -24,8 +32,8 @@ class _StubAdminFilterController extends AdminFilterController {
 class _FakeLeaderboardDataService extends LeaderboardDataService {
   _FakeLeaderboardDataService()
       : super(
-          apiService: null as dynamic,
-          appCache: null as dynamic,
+          apiService: _api,
+          appCache: _cache,
           assetLoader: () async => [],
         );
 
@@ -120,12 +128,13 @@ LeaderboardEntry _entry({
 // ---------------------------------------------------------------------------
 
 void main() {
-  late Directory tempDir;
+  late HiveTestEnv hiveEnv;
   late ProviderContainer container;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('leaderboard_ctrl_test');
-    Hive.init(tempDir.path);
+    hiveEnv = await HiveTestEnv.create();
+    _api = ApiService(baseUrl: 'http://localhost', initializeCache: false);
+    _cache = await AppCacheService.initialize();
 
     container = ProviderContainer(
       overrides: [
@@ -138,8 +147,7 @@ void main() {
 
   tearDown(() async {
     container.dispose();
-    await Hive.close();
-    await tempDir.delete(recursive: true);
+    await hiveEnv.dispose();
   });
 
   // -------------------------------------------------------------------------
