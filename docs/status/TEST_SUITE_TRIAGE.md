@@ -48,8 +48,38 @@ Per-dir wall-clock (bisect, `flutter test <dir>`), post-quarantine:
 
 Total ≈ 7 min — comfortably under the 30-min CI cap now that nothing hangs.
 
-## 3. Remaining failures (in progress)
+## 3. Failure categorization (full-suite JSON run)
 
-The dirs marked "fail" carry the historical ~223 pre-existing failures. These
-do not block the suite from completing, but they do keep it red. Categorization
-by root-cause bucket and the fix plan are tracked below as they land.
+Post-quarantine the suite completes: **7,458 tests run, 330 failures**. Grouped
+by root cause (most leverage first):
+
+| Bucket | ~count | Root cause | Status |
+|--------|-------:|-----------|--------|
+| **Hive not initialized** | ~130 err / ~56 tests | services call `Hive.openBox` in tests that never init Hive | **fixed** via `test/support/hive_test_env.dart` in the 5 worst files |
+| Widget-test failures ("see exception logs") | ~101 | mixed; many are Hive/`getApplicationDocumentsDirectory` MissingPlugin in pumped screens | pending |
+| `Null is not a subtype of ApiService` | 25 | `leaderboard_controller_test` + others missing an `ApiService` mock/override | pending |
+| `Box has already been closed` | 57 (1 file) | `arcade_daily_bonus_service_test` closes the box then reuses it | pending |
+| Mockito `when` within stub | 11 | nested-`when` test bug | pending |
+| `_Map<dynamic,dynamic>` cast | ~5 | JSON decoded as `Map<dynamic,dynamic>`, cast to `Map<String,dynamic>` | pending |
+| `SecureChannelException: decrypt` | 3 | `secure_payload_codec_test` key/nonce mismatch | pending |
+| Assorted `Expected: <N>` / bool | ~60 | genuine per-test assertion/logic drift (reward math, colors, routes) | per-test |
+
+### Shared-fix opportunities (high leverage)
+- **Hive** — done for 5 files; the same `HiveTestEnv` applies to any remaining
+  "need to initialize Hive" file.
+- **path_provider MissingPlugin** — a `setUpAll` that stubs the
+  `plugins.flutter.io/path_provider` channel (or `PathProviderPlatform` mock)
+  would clear the widget-screen and `question_asset_index_loader` failures.
+- **ApiService null** — most of the 25 are one shared fixture missing an
+  `apiServiceProvider` override; fix the fixture, not each test.
+
+### Duplicate test files (cleanup)
+`test/core/dto/profile_service_test.dart` vs `test/game/services/profile_service_test.dart`
+and `test/core/dto/skill_tree_controller_test.dart` vs
+`test/game/controllers/skill_tree_controller_test.dart` are near-duplicates that
+have since diverged — consolidate to one location.
+
+### Note on the 40% coverage gate
+CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
+above failures (which currently abort mid-file) restores the coverage those
+files were meant to produce, which is the intended path to satisfying the gate.
