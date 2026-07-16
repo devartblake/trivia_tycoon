@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_definition.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_id.dart';
-import 'package:trivia_tycoon/arcade/ui/screens/arcade_game_shell.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_game_definition.dart';
+import 'package:synaptix/arcade/domain/arcade_game_id.dart';
+import 'package:synaptix/arcade/ui/screens/arcade_game_shell.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

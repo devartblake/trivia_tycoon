@@ -1,5 +1,5 @@
-import 'package:trivia_tycoon/game/services/referral_api_service.dart';
-import 'package:trivia_tycoon/game/services/referral_storage_service.dart';
+import 'package:synaptix/game/services/referral_api_service.dart';
+import 'package:synaptix/game/services/referral_storage_service.dart';
 import '../models/referral_models.dart';
 import '../utils/qr_payload.dart';
 import '../utils/referral_code_gen.dart';

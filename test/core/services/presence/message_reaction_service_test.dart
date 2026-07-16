@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/presence/message_reaction_service.dart';
-import 'package:trivia_tycoon/game/models/message_reaction.dart';
+import 'package:synaptix/core/services/presence/message_reaction_service.dart';
+import 'package:synaptix/game/models/message_reaction.dart';
 
 void main() {
   late MessageReactionService svc;

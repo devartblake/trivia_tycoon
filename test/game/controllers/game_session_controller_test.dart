@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:trivia_tycoon/game/controllers/game_session_controller.dart';
-import 'package:trivia_tycoon/game/logic/skill_effect_handler.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/game/services/game_session.dart';
+import 'package:synaptix/game/controllers/game_session_controller.dart';
+import 'package:synaptix/game/logic/skill_effect_handler.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/services/game_session.dart';
 
 // ---------------------------------------------------------------------------
 // Manual Mockito mocks (no code generation required)

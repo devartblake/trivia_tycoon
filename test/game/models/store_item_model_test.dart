@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/store_item_model.dart';
-import 'package:trivia_tycoon/game/models/currency_type.dart';
+import 'package:synaptix/game/models/store_item_model.dart';
+import 'package:synaptix/game/models/currency_type.dart';
 
 Map<String, dynamic> _baseJson({
   String id = 'item1',

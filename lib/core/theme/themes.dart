@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/color_utils.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 // Synaptix Phase 2: The SynaptixTheme (lib/synaptix/theme/) is a parallel
 // ThemeExtension layered on top of this system — it does NOT replace AppTheme

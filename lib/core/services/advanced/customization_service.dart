@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'gift_transaction_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class CustomizationService extends ChangeNotifier {
   static final CustomizationService _instance =

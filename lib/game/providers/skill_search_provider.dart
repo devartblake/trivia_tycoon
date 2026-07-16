@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/game/models/search.dart';
+import 'package:synaptix/game/models/search.dart';
 import '../../screens/skills_tree/repository/skill_tree_nav_repository.dart';
 
 abstract class SearchProvider {

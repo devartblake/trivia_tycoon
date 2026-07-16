@@ -1,9 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
-import 'package:trivia_tycoon/screens/multiplayer/widgets/answer_controls.dart';
-import 'package:trivia_tycoon/screens/multiplayer/widgets/countdown_timer.dart';
+import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
+import 'package:synaptix/screens/multiplayer/widgets/answer_controls.dart';
+import 'package:synaptix/screens/multiplayer/widgets/countdown_timer.dart';
 import '../../game/multiplayer/application/state/match_state.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import 'dialogs/exit_match_confirm.dart';

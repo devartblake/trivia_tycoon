@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/xp_service.dart';
+import 'package:synaptix/game/services/xp_service.dart';
 
 void main() {
   group('XPService — core XP operations', () {

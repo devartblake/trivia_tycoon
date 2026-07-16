@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/question/widgets/create_quiz/quick_template_card.dart';
+import 'package:synaptix/screens/question/widgets/create_quiz/quick_template_card.dart';
 
 import '../../../../game/providers/question_providers.dart';
 import '../../../../game/services/quiz_category.dart';

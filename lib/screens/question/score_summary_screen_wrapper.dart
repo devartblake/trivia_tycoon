@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/screens/question/score_summary_screen.dart';
-import 'package:trivia_tycoon/screens/question/widgets/score_summary/tier_progression_dialog.dart';
+import 'package:synaptix/screens/question/score_summary_screen.dart';
+import 'package:synaptix/screens/question/widgets/score_summary/tier_progression_dialog.dart';
 import '../../game/logic/quiz_completion_handler.dart';
 import '../../game/providers/quiz_results_provider.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/state/tier_update_result.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class ScoreSummaryScreenWrapper extends ConsumerStatefulWidget {
   const ScoreSummaryScreenWrapper({super.key});

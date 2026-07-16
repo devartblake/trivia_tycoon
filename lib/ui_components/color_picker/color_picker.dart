@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/core/services/theme/swatch_service.dart';
+import 'package:synaptix/core/services/theme/swatch_service.dart';
 import 'ui/color_wheel_picker.dart';
 import 'ui/color_slider_picker.dart';
 import 'ui/color_preview.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Modern Color Picker with optimized performance and enhanced UX
 class ColorPicker {

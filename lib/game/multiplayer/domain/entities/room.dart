@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/player_presence.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/player_presence.dart';
 
 /// A lobby/room where players gather before and during a match.
 class Room {

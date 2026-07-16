@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/power_up.dart';
-import 'package:trivia_tycoon/game/providers/core_providers.dart';
-import 'package:trivia_tycoon/game/providers/ui_state_providers.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/models/power_up.dart';
+import 'package:synaptix/game/providers/core_providers.dart';
+import 'package:synaptix/game/providers/ui_state_providers.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 
 // ---------------------------------------------------------------------------
 // Fake storage (in-memory; no Hive required)

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import '../models/question_result_model.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Repository for persisting and retrieving question results for analytics
 class QuestionResultRepository {

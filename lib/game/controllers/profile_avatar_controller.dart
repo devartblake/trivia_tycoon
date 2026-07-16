@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/avatar_upload_service.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
-import 'package:trivia_tycoon/ui_components/depth_card_3d/depth_card.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/avatar_upload_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/profile_sync_service.dart';
+import 'package:synaptix/ui_components/depth_card_3d/depth_card.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 
 enum AvatarType { image, asset2D, asset3D }
 

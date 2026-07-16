@@ -1,4 +1,4 @@
-# Trivia Tycoon — Repository Review
+# Synaptix — Repository Review
 > Generated: 2026-03-13 | Last updated: 2026-03-17
 
 ---
@@ -103,7 +103,7 @@ Large files that should be broken into smaller components:
 
 ## Overall Assessment
 
-Trivia Tycoon has a **solid architectural foundation** with thoughtful module organization and excellent documentation. However, it is not production-ready: too many features are stubbed out, test coverage is minimal, and several screens are monolithic. With focused effort on completing implementations and expanding tests, this would be a well-polished release.
+Synaptix has a **solid architectural foundation** with thoughtful module organization and excellent documentation. However, it is not production-ready: too many features are stubbed out, test coverage is minimal, and several screens are monolithic. With focused effort on completing implementations and expanding tests, this would be a well-polished release.
 
 ---
 

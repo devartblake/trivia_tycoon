@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/manager/tier_manager.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
+import 'package:synaptix/core/manager/tier_manager.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
 
 /// Integration tests for tier progression system
 /// Tests the full flow: Quiz completion → XP award → Level up → Tier progression

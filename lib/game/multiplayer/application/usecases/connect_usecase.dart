@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
 
 /// Connects the user to the multiplayer backend with a token.
 /// Keep this thin so you can add validation / telemetry later without touching UI.

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 
 class CoinBalanceNotifier extends StateNotifier<int> {
   static const _key = 'coinBalance';

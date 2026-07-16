@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:trivia_tycoon/game/multiplayer/core/multiplayer_config.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/repositories/multiplayer_repository_impl.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_client.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/core/multiplayer_config.dart';
+import 'package:synaptix/game/multiplayer/data/repositories/multiplayer_repository_impl.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_client.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 import '../../../screens/multiplayer/multiplayer_game_matchmaking_screen.dart';
 

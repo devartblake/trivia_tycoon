@@ -1,12 +1,12 @@
-﻿import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 import '../../confetti/utils/confetti_storage.dart';
 import '../../confetti/confetti.dart';
 import '../../confetti/core/presets/confetti_presets.dart';
 import '../../confetti/utils/confetti_performance.dart';
 import 'confetti_theme.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class ConfettiController extends ChangeNotifier with DiagnosticableTreeMixin {
   double speed = 1.0;

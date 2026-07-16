@@ -19,7 +19,7 @@ Implemented routes:
 
 Validation run on **April 20, 2026**:
 
-- `dotnet test Tycoon.Backend.Api.Tests\Tycoon.Backend.Api.Tests.csproj --no-build --no-restore --filter PremiumStoreEndpointsTests`
+- `dotnet test Synaptix.Backend.Api.Tests\Synaptix.Backend.Api.Tests.csproj --no-build --no-restore --filter PremiumStoreEndpointsTests`
 - Result: `Passed (9/9)`
 
 ### Alignment summary

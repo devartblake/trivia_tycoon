@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
 
 void main() {
   group('TierApiClient Integration Tests', () {

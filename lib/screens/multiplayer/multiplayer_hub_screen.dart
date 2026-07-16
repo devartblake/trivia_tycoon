@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
-import 'package:trivia_tycoon/screens/multiplayer/widgets/connection_banner.dart';
-import 'package:trivia_tycoon/screens/multiplayer/widgets/room_card.dart';
+import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
+import 'package:synaptix/screens/multiplayer/widgets/connection_banner.dart';
+import 'package:synaptix/screens/multiplayer/widgets/room_card.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import '../../game/providers/feature_flag_providers.dart';
 

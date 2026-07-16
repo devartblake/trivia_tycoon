@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
+import 'package:synaptix/game/analytics/models/spin_live_summary.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

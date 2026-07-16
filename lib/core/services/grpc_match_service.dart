@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/core/networking/grpc/grpc_match_client.dart';
-import 'package:trivia_tycoon/core/networking/grpc/generated/mobile.pb.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/networking/grpc/grpc_match_client.dart';
+import 'package:synaptix/core/networking/grpc/generated/mobile.pb.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Business-logic façade over [GrpcMatchClient].
 ///

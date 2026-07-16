@@ -4,25 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_links/app_links.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/analytics/app_lifecycle.dart';
-import 'package:trivia_tycoon/core/manager/service_manager.dart';
-import 'package:trivia_tycoon/core/services/store/store_link_router.dart';
-import 'package:trivia_tycoon/core/services/theme/theme_notifier.dart';
-import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
-import 'package:trivia_tycoon/game/analytics/models/spin_live_summary.dart';
-import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
-import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart'
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/analytics/app_lifecycle.dart';
+import 'package:synaptix/core/manager/service_manager.dart';
+import 'package:synaptix/core/services/store/store_link_router.dart';
+import 'package:synaptix/core/services/theme/theme_notifier.dart';
+import 'package:synaptix/core/services/user_identity_resolver.dart';
+import 'package:synaptix/game/analytics/models/spin_live_summary.dart';
+import 'package:synaptix/game/analytics/providers/analytics_providers.dart';
+import 'package:synaptix/game/providers/multi_profile_providers.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart'
     as providers;
-import 'package:trivia_tycoon/game/providers/wallet_providers.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
-import 'package:trivia_tycoon/synaptix/theme/synaptix_theme_extension.dart';
+import 'package:synaptix/game/providers/wallet_providers.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../game/providers/auth_providers.dart';
+import '../../game/providers/guest_session_providers.dart';
 import '../../game/providers/onboarding_providers.dart';
 import '../../ui_components/power_ups/power_up_hud_overlay.dart';
 import '../../ui_components/synaptix_toast/synaptix_toast_service.dart';
+
 import '../../widgets/app_logo.dart';
 import '../navigation/app_router.dart';
 import '../theme/app_scroll_behavior.dart';
@@ -387,6 +389,15 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
 
       // Initialize wallet persistence
       await ref.read(walletServiceProvider).init();
+
+      // Guest session timers / leave wipe / hydrate API gate flag.
+      // Full-account sessions clear the guest flag so backend traffic is allowed.
+      final guestController = ref.read(guestSessionControllerProvider);
+      if (isLoggedIn || hasFullAccountIdentity) {
+        await guestController.onAuthenticated();
+      } else {
+        await guestController.start();
+      }
 
       LogManager.info(
           'Auth state initialized: isLoggedIn=$isLoggedIn, hasOnboarded=$hasOnboarded',

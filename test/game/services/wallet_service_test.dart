@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/game/services/wallet_service.dart';
+import 'package:synaptix/game/services/wallet_service.dart';
 
 void main() {
   late Directory tempDir;

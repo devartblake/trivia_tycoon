@@ -1,4 +1,4 @@
-package com.theoreticalmindstech.trivia_tycoon
+package com.theoreticalmindstech.synaptix
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

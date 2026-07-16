@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../game/models/message_reaction.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class MessageReactionService extends ChangeNotifier {
   static final MessageReactionService _instance =

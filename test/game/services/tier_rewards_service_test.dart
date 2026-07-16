@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/services/tier_rewards_service.dart';
-import 'package:trivia_tycoon/game/services/tier_progression_service.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/services/tier_rewards_service.dart';
+import 'package:synaptix/game/services/tier_progression_service.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 
 void main() {
   group('TierRewardsService', () {

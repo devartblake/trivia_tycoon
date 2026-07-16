@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/seasonal_competition_model.dart';
-import 'package:trivia_tycoon/game/models/season_reward_preview_models.dart';
-import 'package:trivia_tycoon/game/models/seasonal_theme_models.dart';
-import 'package:trivia_tycoon/core/theme/themes.dart';
+import 'package:synaptix/game/models/seasonal_competition_model.dart';
+import 'package:synaptix/game/models/season_reward_preview_models.dart';
+import 'package:synaptix/game/models/seasonal_theme_models.dart';
+import 'package:synaptix/core/theme/themes.dart';
 
 Map<String, dynamic> _seasonPlayerJson({
   String playerId = 'p1',

@@ -19,7 +19,7 @@ on:
       importer_script:
         description: "Path to the importer script"
         required: true
-        default: "scripts/import_github_issues_trivia_tycoon.py"
+        default: "scripts/import_github_issues_synaptix.py"
         type: string
 
 permissions:

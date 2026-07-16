@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/screens/challenge/widgets/challenge_panel_widget.dart';
-import 'package:trivia_tycoon/screens/challenge/widgets/match_history_widget.dart';
-import 'package:trivia_tycoon/screens/challenge/widgets/parallax_backdrop_widget.dart';
+import 'package:synaptix/screens/challenge/widgets/challenge_panel_widget.dart';
+import 'package:synaptix/screens/challenge/widgets/match_history_widget.dart';
+import 'package:synaptix/screens/challenge/widgets/parallax_backdrop_widget.dart';
 import '../../game/models/challenge_models.dart';
 
 /// Main Challenge Screen with tabs for Daily, Weekly, and Special challenges

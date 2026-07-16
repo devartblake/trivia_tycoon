@@ -59,7 +59,7 @@ const GrpcSubmitMatchRequest$json = {
       '3': 9,
       '4': 3,
       '5': 11,
-      '6': '.tycoon.mobile.ParticipantResult',
+      '6': '.synaptix.mobile.ParticipantResult',
       '10': 'participants'
     },
   ],
@@ -110,7 +110,7 @@ const GrpcSubmitMatchResponse$json = {
       '3': 4,
       '4': 3,
       '5': 11,
-      '6': '.tycoon.mobile.MatchAward',
+      '6': '.synaptix.mobile.MatchAward',
       '10': 'awards'
     },
   ],
@@ -146,7 +146,7 @@ const PlayerAction$json = {
       '3': 1,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.JoinMatchAction',
+      '6': '.synaptix.mobile.JoinMatchAction',
       '9': 0,
       '10': 'join'
     },
@@ -155,7 +155,7 @@ const PlayerAction$json = {
       '3': 2,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.SubmitAnswerAction',
+      '6': '.synaptix.mobile.SubmitAnswerAction',
       '9': 0,
       '10': 'answer'
     },
@@ -164,7 +164,7 @@ const PlayerAction$json = {
       '3': 3,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.HeartbeatAction',
+      '6': '.synaptix.mobile.HeartbeatAction',
       '9': 0,
       '10': 'ping'
     },
@@ -246,7 +246,7 @@ const MatchEvent$json = {
       '3': 1,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.QuestionEvent',
+      '6': '.synaptix.mobile.QuestionEvent',
       '9': 0,
       '10': 'question'
     },
@@ -255,7 +255,7 @@ const MatchEvent$json = {
       '3': 2,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.OpponentScoreEvent',
+      '6': '.synaptix.mobile.OpponentScoreEvent',
       '9': 0,
       '10': 'opponentScore'
     },
@@ -264,7 +264,7 @@ const MatchEvent$json = {
       '3': 3,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.TimerEvent',
+      '6': '.synaptix.mobile.TimerEvent',
       '9': 0,
       '10': 'timer'
     },
@@ -273,7 +273,7 @@ const MatchEvent$json = {
       '3': 4,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.AnswerResultEvent',
+      '6': '.synaptix.mobile.AnswerResultEvent',
       '9': 0,
       '10': 'answerResult'
     },
@@ -282,7 +282,7 @@ const MatchEvent$json = {
       '3': 5,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.MatchEndEvent',
+      '6': '.synaptix.mobile.MatchEndEvent',
       '9': 0,
       '10': 'matchEnd'
     },
@@ -291,7 +291,7 @@ const MatchEvent$json = {
       '3': 6,
       '4': 1,
       '5': 11,
-      '6': '.tycoon.mobile.ErrorEvent',
+      '6': '.synaptix.mobile.ErrorEvent',
       '9': 0,
       '10': 'error'
     },
@@ -325,7 +325,7 @@ const QuestionEvent$json = {
       '3': 5,
       '4': 3,
       '5': 11,
-      '6': '.tycoon.mobile.Option',
+      '6': '.synaptix.mobile.Option',
       '10': 'options'
     },
     {'1': 'media_url', '3': 6, '4': 1, '5': 9, '10': 'mediaUrl'},
@@ -438,7 +438,7 @@ const MatchEndEvent$json = {
       '3': 6,
       '4': 3,
       '5': 11,
-      '6': '.tycoon.mobile.FinalParticipant',
+      '6': '.synaptix.mobile.FinalParticipant',
       '10': 'participants'
     },
   ],
@@ -511,7 +511,7 @@ const LeaderboardUpdate$json = {
       '3': 4,
       '4': 3,
       '5': 11,
-      '6': '.tycoon.mobile.LeaderboardEntry',
+      '6': '.synaptix.mobile.LeaderboardEntry',
       '10': 'nearby'
     },
     {'1': 'snapshot_at_ms', '3': 5, '4': 1, '5': 3, '10': 'snapshotAtMs'},

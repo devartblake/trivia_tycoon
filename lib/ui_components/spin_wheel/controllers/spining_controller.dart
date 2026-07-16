@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../models/spin_system_models.dart';
 import '../physics/spin_velocity.dart';
@@ -12,7 +12,7 @@ import '../services/rewards/reward_probability.dart';
 import '../ui/dialogs/result_dialog.dart';
 import '../services/spin_tracker.dart';
 import '../services/prize_log_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Enhanced spinning controller with modern architecture and performance optimizations
 final spinningControllerProvider =

@@ -3,15 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/menu/sections/matches_section.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/action_buttons.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/app_drawer.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/curency_display.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/journey_progress.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/rank_card_widget.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/recently_played_widget.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/rewards_banner.dart';
-import 'package:trivia_tycoon/screens/menu/widgets/standard_appbar.dart';
+import 'package:synaptix/screens/menu/sections/matches_section.dart';
+import 'package:synaptix/screens/menu/widgets/action_buttons.dart';
+import 'package:synaptix/screens/menu/widgets/app_drawer.dart';
+import 'package:synaptix/screens/menu/widgets/curency_display.dart';
+import 'package:synaptix/screens/menu/widgets/journey_progress.dart';
+import 'package:synaptix/screens/menu/widgets/rank_card_widget.dart';
+import 'package:synaptix/screens/menu/widgets/recently_played_widget.dart';
+import 'package:synaptix/screens/menu/widgets/rewards_banner.dart';
+import 'package:synaptix/screens/menu/widgets/standard_appbar.dart';
 import '../../core/animations/animation_manager.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/helpers/responsive_layout.dart';
@@ -24,7 +24,7 @@ import '../../game/utils/greeting_utils.dart';
 import '../../ui_components/synaptix_toast/synaptix_toast.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../game/providers/wallet_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import 'widgets/coach_brief_banner.dart';
 import '../../personalization/widgets/recommended_for_you_section.dart';
 
@@ -119,8 +119,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       titleSize: 18,
       messageSize: 15,
       duration: const Duration(seconds: 3),
-      tycoonToastPosition: SynaptixToastPosition.top,
-      tycoonToastStyle: SynaptixToastStyle.floating,
+      toastPosition: SynaptixToastPosition.top,
+      toastStyle: SynaptixToastStyle.floating,
       backgroundGradient: GradientThemes.getGreetingGradient(ageGroup),
       shouldIconPulse: true,
       margin: const EdgeInsets.only(top: 60, left: 16, right: 16),

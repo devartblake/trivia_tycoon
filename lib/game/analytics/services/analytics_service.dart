@@ -4,8 +4,9 @@ import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:trivia_tycoon/core/services/event_queue_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/guest_api_gate.dart';
+import 'package:synaptix/core/services/event_queue_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import '../../../core/services/api_service.dart';
 import '../models/engagement_entry.dart';
 import '../models/mission_analytics_entry.dart';
@@ -314,6 +315,14 @@ class AnalyticsService {
       return;
     }
 
+    // Skip network attempts if in guest mode to avoid spamming 401s
+    if (GuestApiGate.isGuestSession) {
+      LogManager.log('Guest mode - queuing analytics event instead of sending',
+          level: LogLevel.debug, source: 'AnalyticsService');
+      await eventQueueService.enqueueEvent(endpoint, data);
+      return;
+    }
+
     try {
       // FIX: Changed named parameter from `data` to `body` to match ApiService.
       await apiService.post(endpoint, body: data);
@@ -326,6 +335,8 @@ class AnalyticsService {
 
   /// Enhanced retry for queued events with timeout
   Future<void> retryQueuedEvents() async {
+    if (GuestApiGate.isGuestSession) return;
+
     try {
       await eventQueueService.retryQueuedEvents((endpoint, payload) async {
         // Add timeout to prevent individual events from blocking too long

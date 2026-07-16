@@ -1,4 +1,4 @@
-# Sentry Error Tracking for Trivia Tycoon Flutter Client
+# Sentry Error Tracking for Synaptix Flutter Client
 
 **Status:** ✅ Implemented & active in the default entrypoint (`lib/main.dart`)  
 **Updated:** 2026-07-08 — Sentry init was merged into `lib/main.dart`; `main_with_sentry.dart` was removed. All builds get Sentry automatically when a DSN is configured. A `SentryNavigatorObserver` is attached to the app router for screen breadcrumbs.  
@@ -9,7 +9,7 @@
 
 ## Overview
 
-Sentry integration has been added to the Trivia Tycoon Flutter client for centralized error tracking, performance monitoring, and crash reporting.
+Sentry integration has been added to the Synaptix Flutter client for centralized error tracking, performance monitoring, and crash reporting.
 
 ### Features
 
@@ -134,7 +134,7 @@ throw Exception('Something went wrong');
 ### Manual Exception Capture
 
 ```dart
-import 'package:trivia_tycoon/core/services/sentry_service.dart';
+import 'package:synaptix/core/services/sentry_service.dart';
 
 try {
   // Some code

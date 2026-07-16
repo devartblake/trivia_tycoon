@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/core/multiplayer_exceptions.dart';
+import 'package:synaptix/game/multiplayer/core/multiplayer_exceptions.dart';
 
 void main() {
   // -------------------------------------------------------------------------

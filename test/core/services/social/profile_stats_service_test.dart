@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/social/profile_stats_service.dart';
+import 'package:synaptix/core/services/social/profile_stats_service.dart';
 
 GameMatch _match({
   String id = 'm1',

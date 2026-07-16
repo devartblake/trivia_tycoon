@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import '../../game/models/question_model.dart';
 
 class QuestionCache {

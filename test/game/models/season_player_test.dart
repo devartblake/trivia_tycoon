@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/seasonal_competition_model.dart';
+import 'package:synaptix/game/models/seasonal_competition_model.dart';
 
 void main() {
   group('SeasonPlayer.fromJson', () {

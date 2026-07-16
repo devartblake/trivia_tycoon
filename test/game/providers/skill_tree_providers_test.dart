@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/skill_dto.dart';
-import 'package:trivia_tycoon/game/data/skill_tree_dto_mapper.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
+import 'package:synaptix/core/dto/skill_dto.dart';
+import 'package:synaptix/game/data/skill_tree_dto_mapper.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/providers/skill_tree_provider.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

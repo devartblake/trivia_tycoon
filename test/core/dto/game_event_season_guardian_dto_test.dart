@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/game_event_dto.dart';
-import 'package:trivia_tycoon/core/dto/season_dto.dart';
-import 'package:trivia_tycoon/core/dto/guardian_dto.dart';
+import 'package:synaptix/core/dto/game_event_dto.dart';
+import 'package:synaptix/core/dto/season_dto.dart';
+import 'package:synaptix/core/dto/guardian_dto.dart';
 
 void main() {
   // -------------------------------------------------------------------------

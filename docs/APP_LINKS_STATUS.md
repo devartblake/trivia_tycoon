@@ -75,7 +75,7 @@ APP_REDIRECT_BASE_URL=https://app.synaptixgame.com
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "com.theoreticalmindstech.trivia_tycoon",
+    "package_name": "com.theoreticalmindstech.synaptix",
     "sha256_cert_fingerprints": ["YOUR_RELEASE_CERT_SHA256_FINGERPRINT"]  ← NEEDS REPLACEMENT
   }
 }
@@ -87,7 +87,7 @@ APP_REDIRECT_BASE_URL=https://app.synaptixgame.com
   "applinks": {
     "apps": [],
     "details": [{
-      "appID": "YOUR_TEAM_ID.com.theoreticalmindstech.triviaTycoon",  ← NEEDS REPLACEMENT
+      "appID": "YOUR_TEAM_ID.com.theoreticalmindstech.synaptix",  ← NEEDS REPLACEMENT
       "paths": [
         "/store/payment-return",
         "/store/payment-return/*",
@@ -121,7 +121,7 @@ APP_REDIRECT_BASE_URL=https://app.synaptixgame.com
 ## Directory Structure
 
 ```
-trivia_tycoon/
+synaptix/
 ├── web/
 │   └── .well-known/
 │       ├── assetlinks.json                    ✅ For Android

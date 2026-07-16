@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_grid_cell.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_path_point.dart';
-import 'package:trivia_tycoon/game/logic/flow_connect_path_validator.dart';
-import 'package:trivia_tycoon/game/state/flow_connect_game_state.dart';
+import 'package:synaptix/game/models/flow_connect_grid_cell.dart';
+import 'package:synaptix/game/models/flow_connect_path_point.dart';
+import 'package:synaptix/game/logic/flow_connect_path_validator.dart';
+import 'package:synaptix/game/state/flow_connect_game_state.dart';
 
 List<List<FlowConnectGridCell>> _makeGrid(
   int rows,

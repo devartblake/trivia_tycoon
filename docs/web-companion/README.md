@@ -1,6 +1,6 @@
 # Web Companion App — Documentation
 
-This directory contains planning and reference documents for the Trivia Tycoon / Synaptix web companion app — a React + TypeScript web product built alongside the existing Flutter mobile app.
+This directory contains planning and reference documents for the Synaptix / Synaptix web companion app — a React + TypeScript web product built alongside the existing Flutter mobile app.
 
 ## Documents
 

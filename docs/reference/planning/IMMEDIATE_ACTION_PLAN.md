@@ -209,7 +209,7 @@ All the files and detailed guides are in the outputs folder:
 - **RIVERPOD_AUTHAPI_FIX.md** - Provider update guide
 - **COMPLETE_FIX_SUMMARY.md** - All auth fixes summary
 - **FIX_ALL_DEPRECATIONS_GUIDE.md** - Deprecation guide
-- **TRIVIA_TYCOON_UPDATE_CHECKLIST.md** - Complete project review
+- **SYNAPTIX_UPDATE_CHECKLIST.md** - Complete project review
 
 ---
 

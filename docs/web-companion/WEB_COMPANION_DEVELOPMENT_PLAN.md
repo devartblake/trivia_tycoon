@@ -1,4 +1,4 @@
-# Trivia Tycoon — Web Companion App: Full Development Plan
+# Synaptix — Web Companion App: Full Development Plan
 
 > **Document status:** Planning  
 > **Created:** 2026-06-25  

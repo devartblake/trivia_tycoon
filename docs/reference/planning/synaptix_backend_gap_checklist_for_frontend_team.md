@@ -1,4 +1,4 @@
-# Trivia Tycoon Backend Gap Checklist for Frontend Team
+# Synaptix Backend Gap Checklist for Frontend Team
 _Date: 2026-04-21_
 
 ## Purpose
@@ -25,7 +25,7 @@ It is based on the current `TycoonTycoon_Backend` repository state and the four 
 
 # 1) Backend Files and Route Families
 
-## A. `Tycoon.Backend.Api/Program.cs`
+## A. `Synaptix.Backend.Api/Program.cs`
 
 ### What to check
 This file registers the route families at startup.
@@ -51,7 +51,7 @@ If a mapped route returns 404 in production, the issue is likely one of:
 
 ---
 
-## B. `Tycoon.Backend.Api/Features/Store/StoreEndpoints.cs`
+## B. `Synaptix.Backend.Api/Features/Store/StoreEndpoints.cs`
 
 This is the main source of truth for store-related APIs in current `main`.
 
@@ -159,7 +159,7 @@ This is the main source of truth for store-related APIs in current `main`.
 
 ---
 
-## C. `Tycoon.Backend.Api/Features/Messages/MessagesEndpoints.cs`
+## C. `Synaptix.Backend.Api/Features/Messages/MessagesEndpoints.cs`
 
 ### Confirmed direct-message endpoints
 - `GET /messages/conversations`
@@ -189,7 +189,7 @@ All of these are:
 
 ---
 
-## D. `Tycoon.Backend.Api/Features/PlayerNotifications/PlayerNotificationsEndpoints.cs`
+## D. `Synaptix.Backend.Api/Features/PlayerNotifications/PlayerNotificationsEndpoints.cs`
 
 ### Confirmed notification endpoints
 - `GET /notifications/inbox`
@@ -213,7 +213,7 @@ If there are admin-only notification compose and scheduling screens, those are l
 
 ---
 
-## E. `Tycoon.Backend.Api/Features/Ml/MlScoringEndpoints.cs`
+## E. `Synaptix.Backend.Api/Features/Ml/MlScoringEndpoints.cs`
 
 ### Confirmed ML routes
 - `POST /ml/churn-risk`

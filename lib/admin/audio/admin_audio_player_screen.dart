@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_soloud/flutter_soloud.dart' as soloud;
 import 'package:just_audio/just_audio.dart' as just_audio;
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 
 class AdminAudioPlayerScreen extends StatefulWidget {
   const AdminAudioPlayerScreen({super.key});

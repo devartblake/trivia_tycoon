@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/game/services/referral_storage_service.dart';
-import 'package:trivia_tycoon/game/models/referral_models.dart';
+import 'package:synaptix/game/services/referral_storage_service.dart';
+import 'package:synaptix/game/models/referral_models.dart';
 
 ReferralCode _code(String code) => ReferralCode(
       code: code,

@@ -6,7 +6,7 @@ import '../../../game/providers/question_providers.dart' as question_data;
 import '../../../game/models/question_model.dart';
 import '../../../game/services/quiz_category.dart';
 import '../../../game/models/question_difficulty.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 // Provider for category quiz data
 final categoryQuizProvider =

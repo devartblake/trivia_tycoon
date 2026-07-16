@@ -1,6 +1,6 @@
 import '../models/search.dart';
 import '../providers/skill_search_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SearchService {
   final List<SearchProvider> _providers;

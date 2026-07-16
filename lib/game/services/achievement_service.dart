@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 import '../../core/services/api_service.dart';
 import '../../game/models/achievement.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class AchievementService {
   final ApiService apiService;

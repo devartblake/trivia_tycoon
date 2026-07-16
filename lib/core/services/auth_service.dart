@@ -3,7 +3,7 @@ import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
 import 'game_platform_auth_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Named BackendAuthService to avoid collision with the local-storage AuthService
 /// in lib/ui_components/login/providers/auth.dart.

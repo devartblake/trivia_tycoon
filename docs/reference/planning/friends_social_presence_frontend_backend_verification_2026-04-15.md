@@ -6,11 +6,11 @@
 
 **Verification status:** Frontend wiring verified in this workspace. Follow-up frontend auth allowlist coverage for `/users/search` and `DELETE /friends` is also now implemented. The backend source paths below are referenced by the document, but those backend files are not present in this repository, so backend-only claims still need confirmation from the backend repo:
 
-- `Tycoon.Backend.Api/Features/Users/UserFriendsEndpoints.cs`
-- `Tycoon.Backend.Api/Features/Friends/FriendsEndpoints.cs`
-- `Tycoon.Backend.Api/Features/Users/UsersEndpoints.cs`
+- `Synaptix.Backend.Api/Features/Users/UserFriendsEndpoints.cs`
+- `Synaptix.Backend.Api/Features/Friends/FriendsEndpoints.cs`
+- `Synaptix.Backend.Api/Features/Users/UsersEndpoints.cs`
 - `Tycoon.Shared.Contracts/Dtos/SocialDtos.cs`
-- `Tycoon.Backend.Api/Program.cs`
+- `Synaptix.Backend.Api/Program.cs`
 
 ---
 

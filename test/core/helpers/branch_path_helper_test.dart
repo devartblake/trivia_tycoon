@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/helpers/branch_path_helper.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:synaptix/core/helpers/branch_path_helper.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

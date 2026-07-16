@@ -255,7 +255,7 @@ Create a simple API test to verify endpoints:
 
 ```dart
 // test/api_endpoints_test.dart
-import 'package:trivia_tycoon/core/env.dart';
+import 'package:synaptix/core/env.dart';
 
 void main() {
   test('Production endpoints are configured', () {

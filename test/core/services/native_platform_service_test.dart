@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/native_platform_service.dart';
+import 'package:synaptix/core/services/native_platform_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

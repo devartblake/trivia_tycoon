@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/audio/audio_asset_response.dart';
+import 'package:synaptix/core/services/audio/audio_asset_response.dart';
 
 void main() {
   // -------------------------------------------------------------------------

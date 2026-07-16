@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/settings/multi_profile_service.dart';
-import 'package:trivia_tycoon/game/providers/multi_profile_providers.dart';
+import 'package:synaptix/core/services/settings/multi_profile_service.dart';
+import 'package:synaptix/game/providers/multi_profile_providers.dart';
 
 void main() {
   // ---------------------------------------------------------------------------

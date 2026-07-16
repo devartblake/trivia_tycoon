@@ -497,8 +497,8 @@ The following migration files exist in the repo but have **not been applied** to
 
 ```bash
 dotnet ef database update \
-  --project Tycoon.Backend.Migrations \
-  --startup-project Tycoon.Backend.Api
+  --project Synaptix.Backend.Migrations \
+  --startup-project Synaptix.Backend.Api
 ```
 
 This will apply (in order):

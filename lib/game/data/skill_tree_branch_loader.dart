@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 import '../models/skill_tree_graph.dart';
 
 SkillCategory _parseCategory(String raw) {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_network.dart';
-import 'package:trivia_tycoon/core/utils/crypto_address_validator.dart';
+import 'package:synaptix/core/models/crypto/crypto_network.dart';
+import 'package:synaptix/core/utils/crypto_address_validator.dart';
 
 void main() {
   test('accepts valid solana addresses', () {

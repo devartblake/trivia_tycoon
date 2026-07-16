@@ -1,4 +1,4 @@
-package com.theoreticalmindstech.trivia_tycoon
+package com.theoreticalmindstech.synaptix
 
 import android.content.Context
 import android.content.Intent

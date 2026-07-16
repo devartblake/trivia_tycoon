@@ -24,7 +24,7 @@ import '../../../confetti/ui/confetti_debug_overlay.dart';
 import '../../../confetti/ui/confetti_settings.dart';
 import '../../services/spin_tracker.dart';
 import '../../utils/wheel_responsive.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class WheelScreen extends ConsumerStatefulWidget {
   const WheelScreen({super.key});

@@ -140,7 +140,7 @@ openssl enc -aes-256-cbc -salt -in ~/synaptix-keystore.jks \
 4. Click **Create Service Account**
 5. Fill in service account details:
    - Name: `trivia-tycoon-ci`
-   - Description: `CI/CD automation for Trivia Tycoon`
+   - Description: `CI/CD automation for Synaptix`
 6. Click **Create and Continue**
 7. Grant roles: **Editor**
 8. Click **Continue** and **Done**
@@ -182,7 +182,7 @@ In Google Play Console:
 1. Go to your Slack workspace
 2. Open **Manage Apps** or visit https://api.slack.com/apps
 3. Click **Create New App** → **From scratch**
-4. Name: `Trivia Tycoon CI/CD`
+4. Name: `Synaptix CI/CD`
 5. Workspace: Select your workspace
 6. Click **Create App**
 7. Go to **Incoming Webhooks**

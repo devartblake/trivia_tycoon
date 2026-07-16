@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
 
 /// Unified tier progression service
 /// Source of truth: TierApiClient (backend)

@@ -1,4 +1,4 @@
-# Trivia Tycoon / Synaptix Migration Package - GitHub Issues Bundle
+# Synaptix / Synaptix Migration Package - GitHub Issues Bundle
 
 This package converts the migration recommendation into ready-to-create issue records.
 
@@ -135,9 +135,9 @@ The issues below should therefore be interpreted as cleanup and forward-migratio
   - `/questions` remains the gameplay content API and `/modules` remains the learning API.
   - `/quiz` is explicitly marked removed from the backend API, with no ambiguous ownership.
 - Target files:
-  - `Tycoon.Backend.Api/Features/Questions/QuestionsEndpoints.cs`
-  - `Tycoon.Backend.Api/Features/LearningModules/LearningModulesEndpoints.cs`
-  - `Tycoon.Backend.Api/Program.cs`
+  - `Synaptix.Backend.Api/Features/Questions/QuestionsEndpoints.cs`
+  - `Synaptix.Backend.Api/Features/LearningModules/LearningModulesEndpoints.cs`
+  - `Synaptix.Backend.Api/Program.cs`
 - Dependencies: None
 
 ### TT-MIG-007 - Add backend study-set surface for Quizlet-like behavior
@@ -154,8 +154,8 @@ The issues below should therefore be interpreted as cleanup and forward-migratio
   - Study responses may expose answer/explanation data appropriate for self-paced practice.
   - Gameplay and study APIs no longer share ambiguous naming.
 - Target files:
-  - `Tycoon.Backend.Api/Features/StudySets/*`
-  - `Tycoon.Backend.Application/*Study*`
+  - `Synaptix.Backend.Api/Features/StudySets/*`
+  - `Synaptix.Backend.Application/*Study*`
   - `Tycoon.Shared.Contracts.Dtos/*Study*`
 - Dependencies: TT-MIG-006
 
@@ -214,7 +214,7 @@ The issues below should therefore be interpreted as cleanup and forward-migratio
 - Target files:
   - `lib/game/services/question_hub_service.dart`
   - `lib/core/manager/analytics/analytics_stream_manager.dart`
-  - `Tycoon.Backend.Api/*analytics*`
+  - `Synaptix.Backend.Api/*analytics*`
 - Dependencies: TT-MIG-001, TT-MIG-006
 
 ### TT-MIG-011 - Remove or redirect legacy quiz UI after migration cutoff
@@ -251,6 +251,6 @@ The issues below should therefore be interpreted as cleanup and forward-migratio
   - Backend tests cover the final supported semantics: `/questions/*` for gameplay and `/modules/*` for learning.
 - Target files:
   - `docs/*migration*`
-  - `Tycoon.Backend.Api/Program.cs`
+  - `Synaptix.Backend.Api/Program.cs`
   - `integration tests`
 - Dependencies: TT-MIG-010, TT-MIG-011

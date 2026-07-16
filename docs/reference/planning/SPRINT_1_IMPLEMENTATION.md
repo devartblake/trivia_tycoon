@@ -59,7 +59,7 @@ final authHttpClientProvider = Provider<AuthHttpClient>((ref) {
 
 ### Add import at top:
 ```dart
-import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
+import 'package:synaptix/core/services/auth_error_messages.dart';
 ```
 
 ### Find the login button handler and update:
@@ -115,7 +115,7 @@ catch (e) {
 
 ### Add same import:
 ```dart
-import 'package:trivia_tycoon/core/services/auth_error_messages.dart';
+import 'package:synaptix/core/services/auth_error_messages.dart';
 ```
 
 ### Update signup handler:

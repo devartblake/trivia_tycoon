@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'auth_api_client.dart' show AuthApiException;
 import 'auth_token_store.dart';
 import 'auth_service.dart' show BackendAuthService;
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'guest_api_gate.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// HTTP client that automatically adds auth headers and refreshes expired tokens
 ///
@@ -26,6 +27,10 @@ class AuthHttpClient extends http.BaseClient {
   /// Optional callback when refresh fails (user needs to re-login)
   final void Function(Exception error)? onRefreshFailed;
 
+  /// When true (default), guest / unauthenticated sessions skip non-allowlisted
+  /// backend calls entirely (see [GuestApiGate]).
+  final bool enforceGuestGate;
+
   // Serializes concurrent refresh attempts — all callers await the same future.
   Future<void>? _pendingRefresh;
 
@@ -36,6 +41,7 @@ class AuthHttpClient extends http.BaseClient {
     this.autoRefresh = true,
     this.onTokenRefreshed,
     this.onRefreshFailed,
+    this.enforceGuestGate = true,
   }) : _inner = innerClient ?? http.Client();
 
   Future<void> _refreshOnce() {
@@ -63,6 +69,18 @@ class AuthHttpClient extends http.BaseClient {
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     // Load current session
     final session = _tokenStore.load();
+
+    // Guest / unauthenticated gate — never hit the backend for protected paths.
+    if (enforceGuestGate &&
+        GuestApiGate.shouldBlockNetworkRequest(
+          request.url,
+          hasAuthTokens:
+              session.hasTokens && session.accessToken.isNotEmpty,
+        )) {
+      LogManager.debug(
+          '[AuthHttpClient] Guest gate blocked ${request.method} ${request.url.path}');
+      return GuestApiGate.blockedStreamedResponse(request.url);
+    }
 
     // Check if token is expired and auto-refresh is enabled.
     // _pendingRefresh serializes concurrent requests so only one refresh

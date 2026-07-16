@@ -7,9 +7,9 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/animated_bank_badge.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
-import 'package:trivia_tycoon/screens/question/widgets/score_display.dart';
+import 'package:synaptix/screens/leaderboard/widgets/animated_bank_badge.dart';
+import 'package:synaptix/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
+import 'package:synaptix/screens/question/widgets/score_display.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

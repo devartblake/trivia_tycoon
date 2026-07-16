@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/rendering_cache.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/rendering_cache.dart';
 
 void main() {
   group('RenderingCacheManager', () {

@@ -1,5 +1,5 @@
 import '../models/currency_type.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class BalanceChangeEffect {
   static void trigger(CurrencyType type) {

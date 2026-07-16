@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
 import '../../game/analytics/services/analytics_service.dart';
 import 'synaptix_mode.dart';
 

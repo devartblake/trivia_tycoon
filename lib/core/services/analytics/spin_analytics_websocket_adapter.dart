@@ -3,7 +3,7 @@ import '../../bootstrap/app_init.dart';
 import '../../networking/ws_client.dart';
 import '../../networking/ws_protocol.dart';
 import '../../../game/analytics/models/spin_live_summary.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SpinAnalyticsWebSocketAdapter {
   StreamSubscription<WsEnvelope>? _messageSubscription;

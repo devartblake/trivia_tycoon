@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/user_identity_resolver.dart';
+import 'package:synaptix/core/services/user_identity_resolver.dart';
 
 void main() {
   group('UserIdentityResolver.resolveUserIdFromSources', () {

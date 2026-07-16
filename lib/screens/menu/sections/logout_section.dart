@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/core/animations/animation_manager.dart';
+import 'package:synaptix/core/animations/animation_manager.dart';
 import '../../../game/utils/drawer_menu_config.dart';
 import '../dialogs/logout_dialog.dart';
 

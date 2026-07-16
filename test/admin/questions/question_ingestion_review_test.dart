@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/admin/questions/question_ingestion_review.dart';
+import 'package:synaptix/admin/questions/question_ingestion_review.dart';
 
 void main() {
   test('parseQuestionValidationIssues handles string/map/mixed payloads', () {

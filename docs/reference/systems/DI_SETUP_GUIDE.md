@@ -72,11 +72,11 @@ final loginManager = LoginManager(
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/services/auth_service.dart';
-import 'package:trivia_tycoon/core/services/auth_api_client.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
-import 'package:trivia_tycoon/core/services/device_id_service.dart';
-import 'package:trivia_tycoon/core/manager/login_manager.dart';
+import 'package:synaptix/core/services/auth_service.dart';
+import 'package:synaptix/core/services/auth_api_client.dart';
+import 'package:synaptix/core/services/auth_token_store.dart';
+import 'package:synaptix/core/services/device_id_service.dart';
+import 'package:synaptix/core/manager/login_manager.dart';
 // ... other imports
 
 void main() async {

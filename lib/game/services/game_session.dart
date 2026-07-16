@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/services/profile_service.dart';
-import 'package:trivia_tycoon/game/providers/profile_service_provider.dart';
-import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
+import 'package:synaptix/game/services/profile_service.dart';
+import 'package:synaptix/game/providers/profile_service_provider.dart';
+import 'package:synaptix/game/services/skill_cooldown_service.dart';
 import '../../core/manager/tier_manager.dart';
 import '../providers/multi_profile_providers.dart';
 import '../providers/riverpod_providers.dart';
 import '../providers/skill_cooldown_service_provider.dart';
 import '../state/tier_update_result.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// GameSession composes ProfileService and SkillCooldownService.
 /// Add session-wide, match-specific, or run-specific data here.

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 import '../../game/models/currency_type.dart';
 import '../../game/utils/balance_change_effect.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 final currencyManagerProvider = Provider<CurrencyManager>((ref) {
   return CurrencyManager(ref);

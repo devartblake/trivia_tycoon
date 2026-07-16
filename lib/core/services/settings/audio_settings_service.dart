@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Handles audio and music preferences (on/off)
 class AudioSettingsService {

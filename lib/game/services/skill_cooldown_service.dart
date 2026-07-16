@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 
 class SkillCooldownService {
   static const _cooldownsStorageKey = 'skillCooldownExpiry';

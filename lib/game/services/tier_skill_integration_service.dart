@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import 'tier_progression_service.dart';
 
 /// Defines a skill with tier requirements

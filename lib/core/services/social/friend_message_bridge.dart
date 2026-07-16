@@ -2,7 +2,7 @@ import '../../../game/models/conversation_models.dart';
 import '../../../game/models/message_models.dart';
 import '../storage/message_storage_service.dart';
 import 'conversation_storage_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Lightweight bridge between Friend system and Message system
 class FriendMessageBridge {

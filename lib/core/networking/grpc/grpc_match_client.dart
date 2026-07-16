@@ -1,5 +1,5 @@
 import 'package:grpc/service_api.dart';
-import 'package:trivia_tycoon/core/networking/grpc/generated/mobile.pbgrpc.dart';
+import 'package:synaptix/core/networking/grpc/generated/mobile.pbgrpc.dart';
 
 /// Thin typed wrapper around [MobileMatchServiceClient].
 ///

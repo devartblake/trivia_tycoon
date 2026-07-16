@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 void main() {
   // -------------------------------------------------------------------------

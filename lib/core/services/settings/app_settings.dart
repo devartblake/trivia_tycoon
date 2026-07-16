@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/navigation/splash_type.dart';
-import 'package:trivia_tycoon/core/services/storage/config_storage_service.dart';
+import 'package:synaptix/core/services/navigation/splash_type.dart';
+import 'package:synaptix/core/services/storage/config_storage_service.dart';
 import '../../../game/controllers/theme_settings_controller.dart';
 import '../../../ui_components/spin_wheel/models/spin_system_models.dart';
 

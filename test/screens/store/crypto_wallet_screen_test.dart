@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_balance_model.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_history_item.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_history_response.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_staking_model.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_transaction_kind.dart';
-import 'package:trivia_tycoon/core/models/crypto/crypto_transaction_status.dart';
-import 'package:trivia_tycoon/game/providers/crypto_providers.dart';
-import 'package:trivia_tycoon/screens/store/crypto_wallet_screen.dart';
+import 'package:synaptix/core/models/crypto/crypto_balance_model.dart';
+import 'package:synaptix/core/models/crypto/crypto_history_item.dart';
+import 'package:synaptix/core/models/crypto/crypto_history_response.dart';
+import 'package:synaptix/core/models/crypto/crypto_staking_model.dart';
+import 'package:synaptix/core/models/crypto/crypto_transaction_kind.dart';
+import 'package:synaptix/core/models/crypto/crypto_transaction_status.dart';
+import 'package:synaptix/game/providers/crypto_providers.dart';
+import 'package:synaptix/screens/store/crypto_wallet_screen.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

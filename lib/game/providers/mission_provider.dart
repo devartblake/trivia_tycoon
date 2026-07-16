@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../core/helpers/mission_notification_helper.dart';
 import '../models/mission_model.dart';
 import '../services/mission_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class MissionProvider extends ChangeNotifier {
   final MissionNotificationHelper _notificationHelper =

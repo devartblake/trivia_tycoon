@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:trivia_tycoon/core/services/presence/presence_websocket_adapter.dart';
+import 'package:synaptix/core/services/presence/presence_websocket_adapter.dart';
 import '../../../game/models/user_presence_models.dart';
 import '../../utils/input_validator.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class RichPresenceService extends ChangeNotifier {
   static final RichPresenceService _instance = RichPresenceService._internal();

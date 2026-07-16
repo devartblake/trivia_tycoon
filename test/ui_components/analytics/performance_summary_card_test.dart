@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/question_analytics_service.dart';
-import 'package:trivia_tycoon/ui_components/analytics/performance_summary_card.dart';
+import 'package:synaptix/game/services/question_analytics_service.dart';
+import 'package:synaptix/ui_components/analytics/performance_summary_card.dart';
 
 void main() {
   group('PerformanceSummaryCard', () {

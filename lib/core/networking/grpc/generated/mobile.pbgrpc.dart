@@ -19,39 +19,39 @@ import 'mobile.pb.dart' as $0;
 
 export 'mobile.pb.dart';
 
-@$pb.GrpcServiceName('tycoon.mobile.MobileMatchService')
+@$pb.GrpcServiceName('synaptix.mobile.MobileMatchService')
 class MobileMatchServiceClient extends $grpc.Client {
   static final _$startMatch =
       $grpc.ClientMethod<$0.GrpcStartMatchRequest, $0.GrpcStartMatchResponse>(
-          '/tycoon.mobile.MobileMatchService/StartMatch',
+          '/synaptix.mobile.MobileMatchService/StartMatch',
           ($0.GrpcStartMatchRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.GrpcStartMatchResponse.fromBuffer(value));
   static final _$submitMatch =
       $grpc.ClientMethod<$0.GrpcSubmitMatchRequest, $0.GrpcSubmitMatchResponse>(
-          '/tycoon.mobile.MobileMatchService/SubmitMatch',
+          '/synaptix.mobile.MobileMatchService/SubmitMatch',
           ($0.GrpcSubmitMatchRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.GrpcSubmitMatchResponse.fromBuffer(value));
   static final _$playMatch = $grpc.ClientMethod<$0.PlayerAction, $0.MatchEvent>(
-      '/tycoon.mobile.MobileMatchService/PlayMatch',
+      '/synaptix.mobile.MobileMatchService/PlayMatch',
       ($0.PlayerAction value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.MatchEvent.fromBuffer(value));
   static final _$watchLeaderboard =
       $grpc.ClientMethod<$0.LeaderboardWatchRequest, $0.LeaderboardUpdate>(
-          '/tycoon.mobile.MobileMatchService/WatchLeaderboard',
+          '/synaptix.mobile.MobileMatchService/WatchLeaderboard',
           ($0.LeaderboardWatchRequest value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.LeaderboardUpdate.fromBuffer(value));
   static final _$watchMatchmaking = $grpc.ClientMethod<
           $0.WatchMatchmakingRequest, $0.MatchmakingStatusUpdate>(
-      '/tycoon.mobile.MobileMatchService/WatchMatchmaking',
+      '/synaptix.mobile.MobileMatchService/WatchMatchmaking',
       ($0.WatchMatchmakingRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) =>
           $0.MatchmakingStatusUpdate.fromBuffer(value));
   static final _$cancelMatchmaking = $grpc.ClientMethod<
           $0.CancelMatchmakingRequest, $0.CancelMatchmakingResponse>(
-      '/tycoon.mobile.MobileMatchService/CancelMatchmaking',
+      '/synaptix.mobile.MobileMatchService/CancelMatchmaking',
       ($0.CancelMatchmakingRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) =>
           $0.CancelMatchmakingResponse.fromBuffer(value));
@@ -102,9 +102,9 @@ class MobileMatchServiceClient extends $grpc.Client {
   }
 }
 
-@$pb.GrpcServiceName('tycoon.mobile.MobileMatchService')
+@$pb.GrpcServiceName('synaptix.mobile.MobileMatchService')
 abstract class MobileMatchServiceBase extends $grpc.Service {
-  $core.String get $name => 'tycoon.mobile.MobileMatchService';
+  $core.String get $name => 'synaptix.mobile.MobileMatchService';
 
   MobileMatchServiceBase() {
     $addMethod($grpc.ServiceMethod<$0.GrpcStartMatchRequest,

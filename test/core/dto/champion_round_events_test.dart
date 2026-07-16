@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/champion_round_events.dart';
+import 'package:synaptix/core/dto/champion_round_events.dart';
 
 void main() {
   test('ChampionRoundStartedDto parses camelCase payload', () {

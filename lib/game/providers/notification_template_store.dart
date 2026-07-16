@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 
 class NotificationTemplate {
   final String id; // slug

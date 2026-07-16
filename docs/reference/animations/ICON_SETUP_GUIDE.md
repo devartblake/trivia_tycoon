@@ -207,7 +207,7 @@ assets/
 │   │   ├── synaptix_logo.png           (Master icon source)
 │   │   ├── synaptix_appLogo.png
 │   │   ├── appLogo.png
-│   │   └── trivia_tycoon_appLogo.png
+│   │   └── synaptix_appLogo_legacy.png
 │   └── [other images...]
 ├── icons/
 │   └── [app icons]

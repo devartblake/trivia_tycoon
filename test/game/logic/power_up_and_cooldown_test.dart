@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/logic/power_up_effect_applier.dart';
-import 'package:trivia_tycoon/game/logic/skill_cooldown_handler.dart';
-import 'package:trivia_tycoon/game/models/power_up.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
-import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
+import 'package:synaptix/game/logic/power_up_effect_applier.dart';
+import 'package:synaptix/game/logic/skill_cooldown_handler.dart';
+import 'package:synaptix/game/models/power_up.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/question_type.dart' as qtype;
+import 'package:synaptix/game/models/question_difficulty.dart' as qdiff;
 
 QuestionModel _baseQuestion({List<String>? options}) => QuestionModel(
       id: 'q1',

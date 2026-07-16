@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/social/friend_list_item_dto.dart';
-import 'package:trivia_tycoon/core/models/social/friend_request_dto.dart';
-import 'package:trivia_tycoon/core/models/social/friend_suggestion_dto.dart';
-import 'package:trivia_tycoon/core/models/social/paginated_social_response.dart';
+import 'package:synaptix/core/models/social/friend_list_item_dto.dart';
+import 'package:synaptix/core/models/social/friend_request_dto.dart';
+import 'package:synaptix/core/models/social/friend_suggestion_dto.dart';
+import 'package:synaptix/core/models/social/paginated_social_response.dart';
 
 // ─── FriendListItemDto helpers ────────────────────────────────────────────────
 

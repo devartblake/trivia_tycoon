@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/skill_tree_view.dart';
 import '../../game/providers/skill_tree_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class SkillTreeScreen extends ConsumerStatefulWidget {
   final String? groupId;

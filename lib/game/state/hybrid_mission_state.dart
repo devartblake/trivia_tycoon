@@ -1,13 +1,13 @@
 import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/env.dart';
+import 'package:synaptix/core/env.dart';
 import '../../core/repositories/mission_repository.dart';
 import '../data/mission_data_loader.dart';
 import '../models/mission_model.dart';
 import '../providers/riverpod_providers.dart';
 import '../providers/profile_providers.dart' as profile;
 import '../services/mission_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 // Hybrid mission system that combines JSON missions with Supabase persistence
 class HybridMissionNotifier extends StateNotifier<List<Map<String, dynamic>>> {

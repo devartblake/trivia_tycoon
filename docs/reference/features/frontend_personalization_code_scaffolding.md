@@ -4,7 +4,7 @@
 
 ## 1. Purpose
 
-This document provides code-ready Flutter scaffolding for integrating the Unified Personalization Layer into the Synaptix / Trivia Tycoon frontend.
+This document provides code-ready Flutter scaffolding for integrating the Unified Personalization Layer into the Synaptix / Synaptix frontend.
 
 It covers:
 
@@ -996,7 +996,7 @@ class PersonalizationSettingsScreen extends ConsumerWidget {
 Wherever your logged-in home or game menu screen is built:
 
 ```dart
-import 'package:trivia_tycoon/personalization/widgets/recommended_for_you_section.dart';
+import 'package:synaptix/personalization/widgets/recommended_for_you_section.dart';
 
 class GameHomeScreen extends ConsumerWidget {
   const GameHomeScreen({super.key});

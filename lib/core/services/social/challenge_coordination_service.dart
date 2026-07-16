@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../game/models/pvp_challenge_models.dart';
 import 'challenge_message_bridge.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class ChallengeCoordinationService extends ChangeNotifier {
   static final ChallengeCoordinationService _instance =

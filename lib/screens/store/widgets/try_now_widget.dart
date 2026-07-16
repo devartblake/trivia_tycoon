@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_3d_controller/flutter_3d_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 import '../../../core/services/api_service.dart';
 import '../../../game/models/avatar_package_models.dart';
 import '../../../game/providers/riverpod_providers.dart';

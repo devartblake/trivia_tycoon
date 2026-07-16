@@ -1,7 +1,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/progress_indicator/widget/progress_bar_painter.dart';
+import 'package:synaptix/ui_components/progress_indicator/widget/progress_bar_painter.dart';
 
 class SynaptixLinearProgressIndicator extends StatefulWidget {
   /// [value]: A double value representing the current progress percentage (0.0 to 1.0).

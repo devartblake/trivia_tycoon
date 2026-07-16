@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/tier_skill_integration_service.dart';
-import 'package:trivia_tycoon/game/services/tier_progression_service.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
+import 'package:synaptix/game/services/tier_skill_integration_service.dart';
+import 'package:synaptix/game/services/tier_progression_service.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
 
 void main() {
   group('TierSkillIntegrationService', () {

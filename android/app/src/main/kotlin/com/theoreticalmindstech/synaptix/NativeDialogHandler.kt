@@ -1,4 +1,4 @@
-package com.theoreticalmindstech.trivia_tycoon
+package com.theoreticalmindstech.synaptix
 
 import android.app.AlertDialog
 import android.content.Context

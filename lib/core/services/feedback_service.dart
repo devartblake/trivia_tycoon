@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/core/services/native_platform_service.dart';
+import 'package:synaptix/core/services/native_platform_service.dart';
 
 class FeedbackService {
   static final FeedbackService instance = FeedbackService();

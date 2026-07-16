@@ -501,7 +501,7 @@ Focused backend study contract tests passed for:
 
 Current backend caveat:
 
-- the migrations project still has a local CLI verification issue in this environment where `dotnet build Tycoon.Backend.Migrations\Tycoon.Backend.Migrations.csproj --no-restore` exits without surfacing compiler diagnostics
+- the migrations project still has a local CLI verification issue in this environment where `dotnet build Synaptix.Backend.Migrations\Synaptix.Backend.Migrations.csproj --no-restore` exits without surfacing compiler diagnostics
 - the API and test projects build successfully, and the focused Study contract suite is green
 
 ---

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/settings/profile_sync_service.dart';
 
 void main() {
   late Directory tempDir;

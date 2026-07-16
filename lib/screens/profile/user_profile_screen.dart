@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:trivia_tycoon/game/models/leaderboard_entry.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/shimmer_avatar.dart';
+import 'package:synaptix/game/models/leaderboard_entry.dart';
+import 'package:synaptix/screens/leaderboard/widgets/shimmer_avatar.dart';
 import '../../ui_components/qr_code/widgets/qr_code_widget.dart';
 import '../../core/env.dart';
 

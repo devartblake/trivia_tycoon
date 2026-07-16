@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/question_response_contract.dart';
+import 'package:synaptix/game/services/question_response_contract.dart';
 
 void main() {
   group('QuestionResponseContract.parseCollection', () {

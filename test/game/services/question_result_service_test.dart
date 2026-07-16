@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/services/question_result_service.dart';
-import 'package:trivia_tycoon/game/services/xp_service.dart';
-import 'package:trivia_tycoon/game/services/wallet_service.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
+import 'package:synaptix/game/services/question_result_service.dart';
+import 'package:synaptix/game/services/xp_service.dart';
+import 'package:synaptix/game/services/wallet_service.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
 
 void main() {
   group('QuestionResultService', () {

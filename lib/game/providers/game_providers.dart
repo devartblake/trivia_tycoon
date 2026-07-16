@@ -33,7 +33,7 @@ import '../../core/services/settings/theme_settings_service.dart';
 // FIX: was `import '../../core/services/auth_service.dart'` which exports
 // BackendAuthService — not the AuthService type that ServiceManager.authService
 // actually holds. Import the legacy AuthService from its real location instead.
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
+import 'package:synaptix/ui_components/login/providers/auth.dart';
 import '../../core/services/avatar_upload_service.dart';
 import '../../core/services/encryption/encryption_service.dart';
 import '../../core/services/encryption/fernet_service.dart';

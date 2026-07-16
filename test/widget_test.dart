@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/bootstrap/synaptix_app.dart';
+import 'package:synaptix/core/bootstrap/synaptix_app.dart';
 
 void main() {
   testWidgets('SynaptixApp renders', (WidgetTester tester) async {

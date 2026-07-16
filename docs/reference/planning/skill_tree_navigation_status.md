@@ -3,7 +3,7 @@
 _Last updated: 2026-05-10._
 
 ## Scope
-- Source package: `docs/trivia_tycoon_migration_frontend_github_issues.json`
+- Source package: `docs/synaptix_migration_frontend_github_issues.json`
 - Review baseline: `docs/skill_tree_navigation_repo_recommendations.md`
 - Last verified against code: 2026-05-07
 

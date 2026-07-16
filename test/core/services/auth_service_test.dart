@@ -4,15 +4,15 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/security/secure_channel_models.dart';
-import 'package:trivia_tycoon/core/security/secure_session_store.dart';
-import 'package:trivia_tycoon/core/services/auth_api_client.dart';
-import 'package:trivia_tycoon/core/services/auth_http_client.dart';
-import 'package:trivia_tycoon/core/services/auth_service.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
-import 'package:trivia_tycoon/core/services/device_id_service.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_secret_store.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/security/secure_channel_models.dart';
+import 'package:synaptix/core/security/secure_session_store.dart';
+import 'package:synaptix/core/services/auth_api_client.dart';
+import 'package:synaptix/core/services/auth_http_client.dart';
+import 'package:synaptix/core/services/auth_service.dart';
+import 'package:synaptix/core/services/auth_token_store.dart';
+import 'package:synaptix/core/services/device_id_service.dart';
+import 'package:synaptix/core/services/storage/secure_secret_store.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes

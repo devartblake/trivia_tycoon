@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/core/services/event_queue_service.dart';
-import 'package:trivia_tycoon/game/analytics/providers/analytics_providers.dart';
-import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
-import 'package:trivia_tycoon/game/controllers/skill_tree_controller.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_nav_providers.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';
-import 'package:trivia_tycoon/screens/skills_tree/skill_tree_nav_screen.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_notifier.dart';
-import 'package:trivia_tycoon/synaptix/mode/synaptix_mode_provider.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/event_queue_service.dart';
+import 'package:synaptix/game/analytics/providers/analytics_providers.dart';
+import 'package:synaptix/game/analytics/services/analytics_service.dart';
+import 'package:synaptix/game/controllers/skill_tree_controller.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/providers/skill_tree_nav_providers.dart';
+import 'package:synaptix/game/providers/skill_tree_provider.dart';
+import 'package:synaptix/game/providers/xp_provider.dart';
+import 'package:synaptix/screens/skills_tree/skill_tree_nav_screen.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_notifier.dart';
+import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
 
 class _StaticSkillTreeController extends SkillTreeController {
   _StaticSkillTreeController(super.ref, SkillTreeState initial)

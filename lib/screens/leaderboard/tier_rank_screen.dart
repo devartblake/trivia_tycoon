@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/game/controllers/leaderboard_controller.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/leaderboard_swipe_card.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/top_three_leaderboard.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/game/controllers/leaderboard_controller.dart';
+import 'package:synaptix/screens/leaderboard/widgets/leaderboard_swipe_card.dart';
+import 'package:synaptix/screens/leaderboard/widgets/top_three_leaderboard.dart';
 
 enum SortField { score, level, wins, lastActive }
 

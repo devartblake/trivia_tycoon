@@ -6,8 +6,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:trivia_tycoon/core/models/asset_manifest_entry.dart';
-import 'package:trivia_tycoon/core/services/asset_download_service.dart';
+import 'package:synaptix/core/models/asset_manifest_entry.dart';
+import 'package:synaptix/core/services/asset_download_service.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

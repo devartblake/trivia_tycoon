@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:trivia_tycoon/core/dto/web_link_dto.dart';
-import 'package:trivia_tycoon/core/services/web_link_service.dart';
+import 'package:synaptix/core/dto/web_link_dto.dart';
+import 'package:synaptix/core/services/web_link_service.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

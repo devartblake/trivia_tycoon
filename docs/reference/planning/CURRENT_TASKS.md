@@ -40,7 +40,7 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 - [ ] Validate onboarding restore, first challenge completion, reward reveal, and completion handoff to `/home`.
 - [ ] Run kids, teen, and adult mode QA for layout, copy, navigation, and mode-specific rendering.
 - [ ] Verify all core Synaptix surfaces are reachable: Hub, Arena, Labs, Pathways, Journey, Circles, Command, Store, Rewards.
-- [ ] Confirm no high-visibility stale "Trivia Tycoon" labels remain in runtime UI.
+- [ ] Confirm no high-visibility stale "Synaptix" labels remain in runtime UI.
 
 ### Auth / local web verification
 - [x] Add gated live Dart smoke coverage for local Docker/staging auth, CORS preflight, login, `/users/me`, `/users/me/wallet`, refresh, and Spin & Earn confirmed endpoints.
@@ -284,14 +284,14 @@ _PR/branch cross-check pass: 2026-05-10 against `origin/main`, recent remote bra
 
 ### Packet E package root rename
 - [ ] Wait for product/legal store transition plan before changing package root or bundle IDs.
-- [ ] Rename `pubspec.yaml` package from `trivia_tycoon` to `synaptix`.
-- [ ] Update all `package:trivia_tycoon/...` imports.
+- [ ] Rename `pubspec.yaml` package from `synaptix` to `synaptix`.
+- [ ] Update all `package:synaptix/...` imports.
 - [ ] Change Android application ID and iOS bundle identifier to `com.theoreticalmindstech.synaptix`.
 - [ ] Regenerate Firebase/Google service configs and `build_runner` outputs.
 - [ ] Document rollback strategy and run the rename in an isolated branch.
 
 ### Backend Packet E
-- [ ] Defer backend namespace rename from `Tycoon.Backend.*` to `Synaptix.Backend.*` until after Alpha/stable release.
+- [ ] Defer backend namespace rename from `Synaptix.Backend.*` to `Synaptix.Backend.*` until after Alpha/stable release.
 - [ ] Later rename service/telemetry identifiers, Docker/CI labels, Elasticsearch aliases, and related ops naming.
 
 ### Optional ML / personalization UX

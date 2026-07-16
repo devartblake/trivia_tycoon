@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/services/rewards_api_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/game/services/rewards_api_service.dart';
 
 // Stub that throws on any API call to keep tests network-free.
 class _StubApiService extends ApiService {

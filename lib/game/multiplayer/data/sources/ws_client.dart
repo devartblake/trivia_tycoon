@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/ws_envelope_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/mappers/event_mapper.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_protocol.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_socket.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_reliability.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/data/dto/ws_envelope_dto.dart';
+import 'package:synaptix/game/multiplayer/data/mappers/event_mapper.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_protocol.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_socket.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_reliability.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
 
 class WsClient {
   final EventMapper _mapper;

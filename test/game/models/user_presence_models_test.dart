@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/user_presence_models.dart';
+import 'package:synaptix/game/models/user_presence_models.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

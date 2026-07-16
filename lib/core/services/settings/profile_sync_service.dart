@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/api_service.dart';
 
 class ProfileSyncResult {
   final bool synced;

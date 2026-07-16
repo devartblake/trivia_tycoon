@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/ui_components/shimmer_avatar/shimmer_avatar.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/ui_components/shimmer_avatar/shimmer_avatar.dart';
 import '../mode/synaptix_mode.dart';
 import '../mode/synaptix_mode_provider.dart';
 

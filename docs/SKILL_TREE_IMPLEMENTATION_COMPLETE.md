@@ -308,7 +308,7 @@ The implementation includes comprehensive mock data with 10 skills showing:
 
 ### For Route Integration
 - Component is at `lib/screens/analytics/skill_tree_visualization.dart`
-- Import: `import 'package:trivia_tycoon/screens/analytics/skill_tree_visualization.dart';`
+- Import: `import 'package:synaptix/screens/analytics/skill_tree_visualization.dart';`
 - Route path: `/analytics/skills` (recommended)
 - Parent: Analytics dashboard
 - Navigation: Add link in analytics screen

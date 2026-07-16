@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/game/controllers/skill_tree_controller.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/game/providers/skill_cooldown_service_provider.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';
-import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
-import 'package:trivia_tycoon/screens/skills_tree/skill_branch_detail_screen.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
+import 'package:synaptix/game/controllers/skill_tree_controller.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/providers/skill_cooldown_service_provider.dart';
+import 'package:synaptix/game/providers/skill_tree_provider.dart';
+import 'package:synaptix/game/providers/xp_provider.dart';
+import 'package:synaptix/game/services/skill_cooldown_service.dart';
+import 'package:synaptix/screens/skills_tree/skill_branch_detail_screen.dart';
+import 'package:synaptix/ui_components/hex_grid/paint/auto_path_overlay_painter.dart';
 
 class _StaticSkillTreeController extends SkillTreeController {
   _StaticSkillTreeController(super.ref, SkillTreeState initial)

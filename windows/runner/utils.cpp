@@ -13,23 +13,23 @@ void CreateAndAttachConsole() {
     FILE *unused;
     if (freopen_s(&unused, "CONOUT$", "w", stdout) != 0) {
       // Verbose error: failed to redirect stdout.
-      ::OutputDebugStringA("[trivia_tycoon] WARNING: Failed to redirect stdout to console.\n");
+      ::OutputDebugStringA("[synaptix] WARNING: Failed to redirect stdout to console.\n");
     } else {
       _dup2(_fileno(stdout), 1);
     }
     if (freopen_s(&unused, "CONOUT$", "w", stderr) != 0) {
       // Verbose error: failed to redirect stderr.
-      ::OutputDebugStringA("[trivia_tycoon] WARNING: Failed to redirect stderr to console.\n");
+      ::OutputDebugStringA("[synaptix] WARNING: Failed to redirect stderr to console.\n");
     } else {
       _dup2(_fileno(stdout), 2);
     }
     std::ios::sync_with_stdio();
     FlutterDesktopResyncOutputStreams();
-    ::OutputDebugStringA("[trivia_tycoon] Console attached successfully.\n");
+    ::OutputDebugStringA("[synaptix] Console attached successfully.\n");
   } else {
     DWORD err = ::GetLastError();
     std::ostringstream msg;
-    msg << "[trivia_tycoon] ERROR: AllocConsole failed with error code: " << err << "\n";
+    msg << "[synaptix] ERROR: AllocConsole failed with error code: " << err << "\n";
     ::OutputDebugStringA(msg.str().c_str());
   }
 }
@@ -42,7 +42,7 @@ void LogMessage(LogLevel level, const std::string& message) {
     case LogLevel::kError:   prefix = "[ERROR]   "; break;
     case LogLevel::kVerbose: prefix = "[VERBOSE] "; break;
   }
-  std::string full_message = "[trivia_tycoon] " + prefix + message + "\n";
+  std::string full_message = "[synaptix] " + prefix + message + "\n";
   ::OutputDebugStringA(full_message.c_str());
   std::cout << full_message;
 }
@@ -52,7 +52,7 @@ std::vector<std::string> GetCommandLineArguments() {
   int argc;
   wchar_t** argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
   if (argv == nullptr) {
-    ::OutputDebugStringA("[trivia_tycoon] ERROR: CommandLineToArgvW returned nullptr.\n");
+    ::OutputDebugStringA("[synaptix] ERROR: CommandLineToArgvW returned nullptr.\n");
     return std::vector<std::string>();
   }
 

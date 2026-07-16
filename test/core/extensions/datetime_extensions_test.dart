@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/extensions/datetime_extensions.dart';
+import 'package:synaptix/core/extensions/datetime_extensions.dart';
 
 void main() {
   // -------------------------------------------------------------------------

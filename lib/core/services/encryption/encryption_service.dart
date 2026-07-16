@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import '../storage/secure_storage.dart';
 import 'fernet_service.dart';
-import 'package:trivia_tycoon/core/utils/encryption_utils.dart';
+import 'package:synaptix/core/utils/encryption_utils.dart';
 
 /// EncryptionService provides app-wide encryption capabilities
 class EncryptionService {

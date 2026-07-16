@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/user_wallet_model.dart';
+import 'package:synaptix/core/models/user_wallet_model.dart';
 
 void main() {
   group('UserWallet — fromJson field mapping', () {

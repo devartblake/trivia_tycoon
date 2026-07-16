@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = trivia_tycoon
+PRODUCT_NAME = synaptix
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.theoreticalmindstech.triviaTycoon
+PRODUCT_BUNDLE_IDENTIFIER = com.theoreticalmindstech.synaptix
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2025 com.theoreticalmindstech. All rights reserved.

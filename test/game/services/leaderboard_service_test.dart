@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/game/services/leaderboard_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/game/services/leaderboard_service.dart';
 
 // ---------------------------------------------------------------------------
 // Stub

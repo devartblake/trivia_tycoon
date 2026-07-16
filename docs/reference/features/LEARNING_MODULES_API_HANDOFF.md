@@ -300,11 +300,11 @@ make migrate
 
 # Or locally (requires .NET 9 SDK + running PostgreSQL)
 dotnet ef migrations add AddLearningModules \
-  --project Tycoon.Backend.Migrations \
-  --startup-project Tycoon.Backend.Api
+  --project Synaptix.Backend.Migrations \
+  --startup-project Synaptix.Backend.Api
 dotnet ef database update \
-  --project Tycoon.Backend.Migrations \
-  --startup-project Tycoon.Backend.Api
+  --project Synaptix.Backend.Migrations \
+  --startup-project Synaptix.Backend.Api
 ```
 
 ---

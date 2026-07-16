@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/settings/spin_wheel_settings_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/spin_wheel_settings_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/storage/config_storage_service.dart';
 import '../models/spin_system_models.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/presence_dto.dart';
+import 'package:synaptix/game/multiplayer/data/dto/presence_dto.dart';
 
 void main() {
   group('PresenceDto.fromJson', () {

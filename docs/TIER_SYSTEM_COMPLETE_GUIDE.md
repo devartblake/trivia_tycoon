@@ -83,12 +83,12 @@ A complete 10-tier progression system with:
 **Colors:** Gold & Off-White  
 **Rewards:** 25,000 Coins, 1,500 Gems, G.O.A.T. Badge
 
-### Tier 10: TRIVIA TYCOON
+### Tier 10: SYNAPTIX
 **Tagline:** "Unrivaled Champion!"  
 **XP Required:** 100,000  
 **Icon:** Workspace Premium  
 **Colors:** Purple & Gold  
-**Rewards:** 50,000 Coins, 5,000 Gems, Trivia Tycoon Crown
+**Rewards:** 50,000 Coins, 5,000 Gems, Synaptix Crown
 
 ---
 
@@ -198,7 +198,7 @@ Each tier unlocks a unique badge:
 - Rookie Badge, Contender Badge, Challenger Badge
 - Expert Badge, Master Badge, Elite Badge
 - Legend Badge, Icon Badge, G.O.A.T. Badge
-- Trivia Tycoon Crown
+- Synaptix Crown
 
 ---
 
@@ -370,7 +370,7 @@ Awards: 250 coins, 15 gems, Contender Badge
         ↓
 Progress continues through all 10 tiers
         ↓
-At Tier 10 (TRIVIA TYCOON): Unrivaled Champion status
+At Tier 10 (SYNAPTIX): Unrivaled Champion status
 ```
 
 ---

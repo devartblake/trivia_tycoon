@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/message_reaction.dart';
+import 'package:synaptix/game/models/message_reaction.dart';
 
 MessageReaction _reaction({
   String id = 'r1',

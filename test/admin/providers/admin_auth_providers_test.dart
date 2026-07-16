@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/admin/providers/admin_auth_providers.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
-import 'package:trivia_tycoon/core/services/device_id_service.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:synaptix/admin/providers/admin_auth_providers.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/auth_token_store.dart';
+import 'package:synaptix/core/services/device_id_service.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
 
 class _FakeDeviceIdService extends DeviceIdService {
   _FakeDeviceIdService() : super(SecureStorage());

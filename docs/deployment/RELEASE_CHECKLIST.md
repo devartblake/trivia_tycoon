@@ -1,6 +1,6 @@
 # Release Build Checklist
 
-This document outlines all the steps required to prepare and release a production build of Trivia Tycoon for mobile, web, or desktop platforms.
+This document outlines all the steps required to prepare and release a production build of Synaptix for mobile, web, or desktop platforms.
 
 ---
 

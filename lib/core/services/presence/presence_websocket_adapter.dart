@@ -3,7 +3,7 @@ import '../../../core/networking/ws_protocol.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../game/models/user_presence_models.dart';
 import 'rich_presence_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Adapts WebSocket messages to RichPresenceService
 class PresenceWebSocketAdapter {

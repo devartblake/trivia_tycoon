@@ -1,6 +1,6 @@
 # Synaptix Frontend Migration Plan (Flutter App)
 
-**Scope:** All Flutter/Dart frontend work for the Trivia Tycoon -> Synaptix rebrand
+**Scope:** All Flutter/Dart frontend work for the Synaptix -> Synaptix rebrand
 **Codebase:** Flutter app (`lib/` directory and related assets)
 **Companion doc:** `docs/synaptix_backend_plan.md` (backend work in the TycoonTycoon_Backend repo)
 
@@ -10,7 +10,7 @@
 
 ## Global Frontend Principles
 
-1. Do not begin with a global search/replace on `trivia_tycoon` or `Tycoon.*`.
+1. Do not begin with a global search/replace on `synaptix` or `Tycoon.*`.
 2. Preserve runtime behavior before improving architecture purity.
 3. Keep persistence keys, DTO names, and route path constants stable unless there is explicit migration logic.
 4. Treat this as a platform rebrand, not a theme swap.
@@ -64,12 +64,12 @@
 - `lib/main.dart`
 - `lib/screens/menu/game_menu_screen.dart`
 - `lib/core/navigation/app_router.dart` (display labels only)
-- Any app title/about/settings screens that visibly say "Trivia Tycoon"
+- Any app title/about/settings screens that visibly say "Synaptix"
 
 **Work items:**
 
 1. **App logo** (`lib/widgets/app_logo.dart`):
-   - "Trivia Tycoon" -> "Synaptix"
+   - "Synaptix" -> "Synaptix"
    - Tagline "Challenge Your Mind" -> "Train. Compete. Grow."
    - Keep `tTriviaGameImage` asset unchanged for now
    - Keep fallback `Icons.psychology` (fits Synaptix)
@@ -82,8 +82,8 @@
 
 3. **Main app** (`lib/main.dart`):
    - Recovery dialog: "Welcome Back!" -> "Welcome back to Synaptix"
-   - Keep `TriviaTycoonApp` class name stable
-   - Add TODO comment: `// TODO(Synaptix Phase 8): Rename TriviaTycoonApp`
+   - Keep `SynaptixApp` class name stable
+   - Add TODO comment: `// TODO(Synaptix Phase 8): Rename SynaptixApp`
    - Keep `userAgeGroupProvider` override logic intact
 
 4. **Game menu** (`lib/screens/menu/game_menu_screen.dart`):
@@ -98,12 +98,12 @@
    - Defer substantive router work to FE-B2
 
 6. **Safe search/replace** across Flutter UI widgets:
-   - "Trivia Tycoon" -> "Synaptix"
+   - "Synaptix" -> "Synaptix"
    - "Trivia Game" -> "Synaptix Hub" (only in menu/home shell)
-   - **NEVER** bulk replace: `package:trivia_tycoon`, route paths, DTO names, persistence keys
+   - **NEVER** bulk replace: `package:synaptix`, route paths, DTO names, persistence keys
 
 **Do NOT change:**
-- Package root imports (`package:trivia_tycoon/...`)
+- Package root imports (`package:synaptix/...`)
 - Route path constants
 - DTO/model property names
 - Persistence/storage keys
@@ -409,7 +409,7 @@ trackEvent("synaptix_surface_opened", {
 - [x] Economy labels consistent
 
 **Consistency pass:**
-- [x] No remaining "Trivia Tycoon" in high-visibility paths
+- [x] No remaining "Synaptix" in high-visibility paths
 - [x] No mixed old/new language across adjacent screens
 - [x] Mode-specific differences render correctly
 - [ ] Frontend labels match backend dashboards/docs (cross-check with backend plan) — deferred pending backend alignment
@@ -474,8 +474,8 @@ All internal Dart class/enum/constant/file/folder names referencing old branding
 | `README.md` | Title → `# Synaptix`; opening paragraph updated to Synaptix brand copy |
 
 **Explicitly NOT changed (Workstream 2 scope):**
-- `package:trivia_tycoon/` import prefix (564 occurrences)
-- `pubspec.yaml` `name: trivia_tycoon`
+- `package:synaptix/` import prefix (564 occurrences)
+- `pubspec.yaml` `name: synaptix`
 - `'trivia_tycoon_group'` notification channel group key (persisted Android OS value)
 - Android application ID and iOS bundle identifier
 
@@ -483,10 +483,10 @@ All internal Dart class/enum/constant/file/folder names referencing old branding
 
 | Item | Current | Target |
 |---|---|---|
-| `pubspec.yaml` package name | `trivia_tycoon` | `synaptix` |
-| All `package:trivia_tycoon/...` imports | 564 occurrences across `lib/` | `package:synaptix/...` |
-| Android application ID | `com.theoreticalmindstech.trivia_tycoon` | `com.theoreticalmindstech.synaptix` |
-| iOS bundle identifier | `com.theoreticalmindstech.triviaTycoon` | `com.theoreticalmindstech.synaptix` |
+| `pubspec.yaml` package name | `synaptix` | `synaptix` |
+| All `package:synaptix/...` imports | 564 occurrences across `lib/` | `package:synaptix/...` |
+| Android application ID | `com.theoreticalmindstech.synaptix` | `com.theoreticalmindstech.synaptix` |
+| iOS bundle identifier | `com.theoreticalmindstech.synaptix` | `com.theoreticalmindstech.synaptix` |
 | Firebase / Google services config | Tied to current bundle ID | Requires new Firebase app registrations |
 | `build_runner` generated files | Package-scoped | Full regeneration required |
 
@@ -518,7 +518,7 @@ All internal Dart class/enum/constant/file/folder names referencing old branding
 
 | Existing Concept | Synaptix Concept |
 |---|---|
-| Trivia Tycoon | Synaptix |
+| Synaptix | Synaptix |
 | Game menu | Synaptix Hub |
 | Leaderboard | Arena |
 | Tier rank | Arena Tier / Division Rank |

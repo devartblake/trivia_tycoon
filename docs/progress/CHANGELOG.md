@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to **Trivia Tycoon** are documented in this file.
+All notable changes to **Synaptix** are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
@@ -625,7 +625,7 @@ handoff document.
 - `docs/question_flow_frontend_backend_handoff_2026-04-15.md` - added a
   backend-facing question flow contract/handoff document covering endpoints,
   envelopes, fallback behavior, and remaining contract gaps.
-- `docs/TRIVIA_TYCOON_UPDATE_CHECKLIST.md` - replaced the stale auth-only
+- `docs/SYNAPTIX_UPDATE_CHECKLIST.md` - replaced the stale auth-only
   checklist with a current project status snapshot and actionable verification
   checklist.
 
@@ -891,7 +891,7 @@ to fail. Both failures affected all web browsers equally (Chrome, Edge, etc.).
   `SocketException`/`HttpException` type checks replaced with `runtimeType.toString()`
   and `toString().startsWith(…)` guards, which work identically on all platforms.
 - `web/index.html` — title and `apple-mobile-web-app-title` updated from
-  `trivia_tycoon` → `Synaptix`.
+  `synaptix` → `Synaptix`.
 - `web/manifest.json` — `name`, `short_name`, and `description` updated to Synaptix
   branding.
 
@@ -965,7 +965,7 @@ from 31 → 39 files. Coverage now spans all major game and arcade service layer
 - All 53 source-code TODO/FIXME comments resolved. Dart source count: **0**.
 - Hub widget TODOs: `hub_daily_quest`, `hub_featured_match`, `hub_live_ticker` — all
   replaced with provider-driven / data-driven implementations.
-- App rename: `TriviaTycoonApp` → `SynaptixApp` completed in `lib/main.dart`.
+- App rename: `SynaptixApp` → `SynaptixApp` completed in `lib/main.dart`.
 
 ### Added – 3D renderer improvements (2026-04-09)
 
@@ -996,13 +996,13 @@ Implemented all 5 TODO items in `lib/animations/ui/widget_model.dart`:
 #### 1. Branding Customizations (`Runner.rc`)
 - Updated `CompanyName` from the internal bundle ID to the full human-readable
   name **"Theoretical Minds Technologies"**.
-- Updated `FileDescription` to **"Trivia Tycoon - Interactive Trivia Game"**
+- Updated `FileDescription` to **"Synaptix - Interactive Trivia Game"**
   to give Windows users a clear description in Explorer properties.
 - All other version fields (`LegalCopyright`, `ProductName`, `OriginalFilename`)
   were already correct and are left unchanged.
 
 #### 2. Build Configuration (`runner/CMakeLists.txt`)
-- Added a `TRIVIA_TYCOON_DEBUG_BUILD` preprocessor definition that is set only
+- Added a `SYNAPTIX_DEBUG_BUILD` preprocessor definition that is set only
   for `Debug` configurations, enabling conditional debug code paths in C++.
 - Source file list is clearly delimited to make it easy to append new `.cpp`
   files in future feature work.
@@ -1022,8 +1022,8 @@ Implemented all 5 TODO items in `lib/animations/ui/widget_model.dart`:
   a `--key=value` argument pair, returning `default` when the key is absent.
 
 #### 4. Environment Variable Support (`main.cpp`)
-- Reads the `TRIVIA_TYCOON_ENV` environment variable at startup.  When set,
-  its value is forwarded to the Dart entry-point as `--trivia-env=<value>`,
+- Reads the `SYNAPTIX_ENV` environment variable at startup.  When set,
+  its value is forwarded to the Dart entry-point as `--synaptix-env=<value>`,
   allowing runtime environment switching (e.g. `staging`, `production`).
 
 #### 5. Performance Optimizations (`main.cpp`)
@@ -1061,5 +1061,5 @@ Implemented all 5 TODO items in `lib/animations/ui/widget_model.dart`:
   `FlutterDesktopGetDpiForHWND`.
 
 #### 10. Window Title
-- Changed the Win32 window title from the internal package name `trivia_tycoon`
-  to the branded title **"Trivia Tycoon"** in `main.cpp`.
+- Changed the Win32 window title from the internal package name `synaptix`
+  to the branded title **"Synaptix"** in `main.cpp`.

@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_id.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_result.dart';
-import 'package:trivia_tycoon/arcade/services/arcade_personal_best_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_game_id.dart';
+import 'package:synaptix/arcade/domain/arcade_result.dart';
+import 'package:synaptix/arcade/services/arcade_personal_best_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 
 ArcadeResult _result({
   ArcadeGameId gameId = ArcadeGameId.quickMathRush,

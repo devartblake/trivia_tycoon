@@ -1,7 +1,7 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/core/services/settings/quiz_progress_service.dart';
-import 'package:trivia_tycoon/core/services/state_persistence_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/settings/quiz_progress_service.dart';
+import 'package:synaptix/core/services/state_persistence_service.dart';
 
 class CrashRecoveryResult {
   const CrashRecoveryResult({

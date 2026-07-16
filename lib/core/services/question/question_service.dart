@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:trivia_tycoon/core/services/settings/quiz_progress_service.dart';
-import 'package:trivia_tycoon/core/utils/question_cache.dart';
+import 'package:synaptix/core/services/settings/quiz_progress_service.dart';
+import 'package:synaptix/core/utils/question_cache.dart';
 import '../../../game/models/question_difficulty.dart';
 import '../../../game/models/question_model.dart';
 import '../api_service.dart';

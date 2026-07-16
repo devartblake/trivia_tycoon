@@ -124,7 +124,7 @@ class ApiMissionRepository implements MissionRepository {
   // -------------------------
   // Route configuration
   // -------------------------
-  // Confirmed backend routes in Tycoon.Backend.Api.Features.Missions.
+  // Confirmed backend routes in Synaptix.Backend.Api.Features.Missions.
   String _missions() => '/missions';
   String _claimMission(String missionId) => '/missions/$missionId/claim';
   String _matchCompleted() => '/missions/progress/match-completed';

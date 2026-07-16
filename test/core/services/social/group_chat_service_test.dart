@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/social/group_chat_service.dart';
+import 'package:synaptix/core/services/social/group_chat_service.dart';
 
 // Helper to create a public group and return it (auto-assigns unique ID)
 Future<GroupChat> _createPublicGroup(

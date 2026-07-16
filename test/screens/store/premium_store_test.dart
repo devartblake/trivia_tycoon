@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/models/store/premium_store_model.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/store/store_service.dart';
-import 'package:trivia_tycoon/game/controllers/coin_balance_notifier.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/game/state/premium_profile_state.dart';
-import 'package:trivia_tycoon/screens/store/premium_store.dart';
-import 'package:trivia_tycoon/screens/store/widgets/reward_center.dart';
-import 'package:trivia_tycoon/screens/store/widgets/sale_info.dart';
+import 'package:synaptix/core/models/store/premium_store_model.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/store/store_service.dart';
+import 'package:synaptix/game/controllers/coin_balance_notifier.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/game/state/premium_profile_state.dart';
+import 'package:synaptix/screens/store/premium_store.dart';
+import 'package:synaptix/screens/store/widgets/reward_center.dart';
+import 'package:synaptix/screens/store/widgets/sale_info.dart';
 
 class _FakeStorage extends GeneralKeyValueStorageService {
   _FakeStorage({this.initialInt = 0});

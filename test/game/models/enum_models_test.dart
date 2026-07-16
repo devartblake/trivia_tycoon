@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/currency_type.dart';
-import 'package:trivia_tycoon/game/models/drawer_enums.dart';
-import 'package:trivia_tycoon/game/models/menu_enums.dart';
+import 'package:synaptix/game/models/currency_type.dart';
+import 'package:synaptix/game/models/drawer_enums.dart';
+import 'package:synaptix/game/models/menu_enums.dart';
 
 void main() {
   // -------------------------------------------------------------------------

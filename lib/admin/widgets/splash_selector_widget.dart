@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
 import '../../core/services/navigation/splash_type.dart';
 import '../../widgets/splash_screen_preview.dart';
 

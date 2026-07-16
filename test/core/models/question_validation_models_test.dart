@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/question_validation_models.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
+import 'package:synaptix/core/models/question_validation_models.dart';
+import 'package:synaptix/game/models/question_model.dart';
 
 // Minimal valid QuestionModel for constructing submissions
 QuestionModel _makeQuestion({String id = 'q1'}) => QuestionModel.fromJson({

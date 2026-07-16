@@ -1,5 +1,5 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/api_service.dart';
 import '../../core/services/storage/app_cache_service.dart';
 import '../models/referral_models.dart';
 import '../utils/referral_code_gen.dart';

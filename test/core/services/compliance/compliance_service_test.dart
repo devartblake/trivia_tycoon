@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/services/compliance/compliance_api_client.dart';
-import 'package:trivia_tycoon/core/services/compliance/compliance_service.dart';
-import 'package:trivia_tycoon/core/services/compliance/compliance_status_model.dart';
+import 'package:synaptix/core/services/compliance/compliance_api_client.dart';
+import 'package:synaptix/core/services/compliance/compliance_service.dart';
+import 'package:synaptix/core/services/compliance/compliance_status_model.dart';
 
 void main() {
   group('ComplianceService.getStatus', () {

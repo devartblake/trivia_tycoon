@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document summarizes the major architectural improvements to the Trivia Tycoon codebase, completed in this session:
+This document summarizes the major architectural improvements to the Synaptix codebase, completed in this session:
 
 1. **Widget Modularization**: Refactored 1900-line monolith into 31 focused, maintainable files
 2. **Environment Configuration**: Set up production, staging, and development environments

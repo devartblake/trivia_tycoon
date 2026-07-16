@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/env.dart';
-import 'package:trivia_tycoon/core/services/asset_download_service.dart';
+import 'package:synaptix/core/env.dart';
+import 'package:synaptix/core/services/asset_download_service.dart';
 
 class AssetResolver {
   static AssetResolver? _instance;

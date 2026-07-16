@@ -1,4 +1,4 @@
-import 'package:trivia_tycoon/game/multiplayer/services/multiplayer_service.dart';
+import 'package:synaptix/game/multiplayer/services/multiplayer_service.dart';
 
 /// Create a room or join an existing one based on params.
 /// This keeps the controller free from branching logic.

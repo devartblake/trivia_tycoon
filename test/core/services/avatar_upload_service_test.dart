@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/avatar_upload_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/avatar_upload_service.dart';
 
 // ---------------------------------------------------------------------------
 // Test helpers

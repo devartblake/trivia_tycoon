@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/navigation/canonical_routes.dart';
-import 'package:trivia_tycoon/ui_components/navigation/fluid_nav_bar.dart';
-import 'package:trivia_tycoon/ui_components/navigation/fluid_nav_bar_icon.dart';
-import 'package:trivia_tycoon/ui_components/navigation/fluid_nav_bar_style.dart';
+import 'package:synaptix/core/navigation/canonical_routes.dart';
+import 'package:synaptix/ui_components/navigation/fluid_nav_bar.dart';
+import 'package:synaptix/ui_components/navigation/fluid_nav_bar_icon.dart';
+import 'package:synaptix/ui_components/navigation/fluid_nav_bar_style.dart';
 
 class MainNavBar extends StatelessWidget {
   final Widget child;

@@ -1,5 +1,5 @@
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
 
 /// Multi-level cache for tier configuration
 ///

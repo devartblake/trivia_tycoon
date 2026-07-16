@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/state/quiz_state.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/services/quiz_category.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
-import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
+import 'package:synaptix/game/state/quiz_state.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
+import 'package:synaptix/game/models/question_type.dart' as qtype;
+import 'package:synaptix/game/models/question_difficulty.dart' as qdiff;
 
 QuestionModel _q({
   String id = 'q1',

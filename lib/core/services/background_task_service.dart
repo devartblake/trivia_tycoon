@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../ui_components/qr_code/services/qr_history_service.dart';
 import '../services/notification_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Background task service to handle mission reminders and notifications
 class BackgroundTaskService {

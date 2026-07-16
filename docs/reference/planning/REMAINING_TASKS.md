@@ -17,7 +17,7 @@ _Last updated: 2026-05-09 — Personalization doc reconciliation ✅; Sound cue 
 |------|----------|--------|----------|
 | Frontend/backend alpha handoff | High | Store, profile/social, question gameplay, study hub complete; crypto + ML remain | No |
 | **3D Avatar purchase path (Browse → Buy → Download)** | **High** | **Complete** | **No** |
-| **Avatar handler unit tests (18 tests)** | **High** | **Complete — `Tycoon.Backend.Application.Tests/Avatars/AvatarHandlerTests.cs`** | **No** |
+| **Avatar handler unit tests (18 tests)** | **High** | **Complete — `Synaptix.Backend.Application.Tests/Avatars/AvatarHandlerTests.cs`** | **No** |
 | **MinIO catalog seeders (StoreItems, SkillNodes, SeasonRewards, Questions)** | **High** | **Complete** | **No** |
 | **Pending EF migrations (6 total)** | **High** | **SQL script ready — `docs/pending_migrations_2026-04-29.sql`; DBA must apply to staging + prod** | **No** |
 | Store stock system P0 (daily store + stock enforcement) | High | **Complete** | No |
@@ -295,11 +295,11 @@ The `season_reward_rules` table does not yet have an EF Core migration. Run this
 
 ```bash
 dotnet ef migrations add AddSeasonRewardRules \
-  --project Tycoon.Backend.Migrations \
-  --startup-project Tycoon.Backend.Api
+  --project Synaptix.Backend.Migrations \
+  --startup-project Synaptix.Backend.Api
 dotnet ef database update \
-  --project Tycoon.Backend.Migrations \
-  --startup-project Tycoon.Backend.Api
+  --project Synaptix.Backend.Migrations \
+  --startup-project Synaptix.Backend.Api
 ```
 
 ### 11a. P0 — Daily Store + Stock Enforcement ✅ COMPLETE
@@ -514,7 +514,7 @@ Curl CONNECT tunnel failure blocks live smoke-checking in CI. Flutter SDK not on
 - [ ] Onboarding - age group selection -> mode mapping (`Kids`/`Teen`/`Adult`)
 - [ ] Hub rendering - correct mode-specific content for each Synaptix mode
 - [ ] Arena/Labs/Pathways/Journey/Circles/Command navigation - all routes reachable
-- [ ] Brand validation - no visible "Trivia Tycoon" strings anywhere in the UI
+- [ ] Brand validation - no visible "Synaptix" strings anywhere in the UI
 - [ ] Retention hooks - daily bonus prompt, mission notification after first session
 - [ ] Premium Hub - upgrade prompt, feature gating, paywall rendering
 
@@ -528,14 +528,14 @@ All internal Dart class/enum/constant/file/folder names referencing old branding
 
 Key areas cleaned up: `tycoon_toast/` folder → `synaptix_toast/`, `TycoonToast*` → `SynaptixToast*`, `TycoonApiClientEnhanced` → `SynaptixApiClientEnhanced`, `TycoonLinearProgressIndicator` → `SynaptixLinearProgressIndicator`, `LoginMessages` toast constants, `tTriviaGameImage` constant, comment/string updates across 5 additional files, `pubspec.yaml` description, `README.md`.
 
-**Intentionally NOT changed:** `trivia_tycoon_group` notification channel key (Android OS-persisted), `package:trivia_tycoon/` imports (Workstream 2 scope).
+**Intentionally NOT changed:** `trivia_tycoon_group` notification channel key (Android OS-persisted), `package:synaptix/` imports (Workstream 2 scope).
 
 ### 8b. Frontend Workstream 2 (Package Root Rename) ⏸️ BLOCKED — awaiting store plan
 
-- [ ] `pubspec.yaml` `name: trivia_tycoon` → `synaptix`
-- [ ] 564 `package:trivia_tycoon/` import occurrences updated
-- [ ] Android application ID: `com.theoreticalmindstech.trivia_tycoon` → `com.theoreticalmindstech.synaptix`
-- [ ] iOS bundle identifier: `com.theoreticalmindstech.triviaTycoon` → `com.theoreticalmindstech.synaptix`
+- [ ] `pubspec.yaml` `name: synaptix` → `synaptix`
+- [ ] 564 `package:synaptix/` import occurrences updated
+- [ ] Android application ID: `com.theoreticalmindstech.synaptix` → `com.theoreticalmindstech.synaptix`
+- [ ] iOS bundle identifier: `com.theoreticalmindstech.synaptix` → `com.theoreticalmindstech.synaptix`
 - [ ] Firebase / Google services config regenerated for new bundle IDs
 - [ ] Store transition plan agreed with product/legal (currently in discussion)
 
@@ -543,7 +543,7 @@ Key areas cleaned up: `tycoon_toast/` folder → `synaptix_toast/`, `TycoonToast
 
 Intentionally deferred to after Alpha launch. No urgency.
 
-- [ ] Namespace rename: `Tycoon.Backend.*` -> `Synaptix.Backend.*` across all backend projects
+- [ ] Namespace rename: `Synaptix.Backend.*` -> `Synaptix.Backend.*` across all backend projects
 - [ ] Service/telemetry identifier rename
 - [ ] Docker/CI/issuer/audience configuration naming cleanup
 

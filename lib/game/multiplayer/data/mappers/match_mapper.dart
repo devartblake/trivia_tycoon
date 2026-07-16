@@ -1,7 +1,7 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/match.dart';
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_turn.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/match_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/turn_dto.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/match.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_turn.dart';
+import 'package:synaptix/game/multiplayer/data/dto/match_dto.dart';
+import 'package:synaptix/game/multiplayer/data/dto/turn_dto.dart';
 import 'presence_mapper.dart';
 
 class MatchMapper {

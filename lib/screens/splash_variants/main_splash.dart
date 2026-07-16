@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/widgets/app_logo.dart';
+import 'package:synaptix/widgets/app_logo.dart';
 
 class SimpleSplashScreen extends StatefulWidget {
   const SimpleSplashScreen({

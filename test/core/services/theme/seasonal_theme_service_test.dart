@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/theme/seasonal_theme_service.dart';
-import 'package:trivia_tycoon/core/theme/themes.dart';
-import 'package:trivia_tycoon/game/models/seasonal_theme_models.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/theme/seasonal_theme_service.dart';
+import 'package:synaptix/core/theme/themes.dart';
+import 'package:synaptix/game/models/seasonal_theme_models.dart';
 
 void main() {
   late Directory tempDir;

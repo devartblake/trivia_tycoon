@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/core/navigation/navigation_extensions.dart';
+import 'package:synaptix/core/navigation/navigation_extensions.dart';
 
 class PreferencesScreen extends StatefulWidget {
   const PreferencesScreen({super.key});

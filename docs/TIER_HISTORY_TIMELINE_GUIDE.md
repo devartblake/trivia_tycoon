@@ -26,7 +26,7 @@ lib/ui_components/tier/tier_history_timeline.dart (210 lines)
 ### Basic Usage
 
 ```dart
-import 'package:trivia_tycoon/ui_components/tier/tier_history_timeline.dart';
+import 'package:synaptix/ui_components/tier/tier_history_timeline.dart';
 
 // Create events
 final events = [
@@ -68,7 +68,7 @@ TierHistoryTimeline(
 ### Integration with Tier Screen
 
 ```dart
-import 'package:trivia_tycoon/ui_components/tier/tier_history_timeline.dart';
+import 'package:synaptix/ui_components/tier/tier_history_timeline.dart';
 
 class PlayerTierProgressionScreen extends StatelessWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/power_up.dart';
+import 'package:synaptix/game/models/power_up.dart';
 
 Map<String, dynamic> _baseJson({
   String id = 'pu1',

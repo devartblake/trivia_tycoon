@@ -1,16 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/game/controllers/skill_tree_controller.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
-import 'package:trivia_tycoon/game/providers/core_providers.dart';
-import 'package:trivia_tycoon/game/providers/profile_service_provider.dart';
-import 'package:trivia_tycoon/game/providers/skill_cooldown_service_provider.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_provider.dart';
-import 'package:trivia_tycoon/game/services/profile_service.dart';
-import 'package:trivia_tycoon/game/services/skill_cooldown_service.dart';
-import 'package:trivia_tycoon/game/services/xp_service.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/controllers/skill_tree_controller.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/providers/core_providers.dart';
+import 'package:synaptix/game/providers/profile_service_provider.dart';
+import 'package:synaptix/game/providers/skill_cooldown_service_provider.dart';
+import 'package:synaptix/game/providers/skill_tree_provider.dart';
+import 'package:synaptix/game/services/profile_service.dart';
+import 'package:synaptix/game/services/skill_cooldown_service.dart';
+import 'package:synaptix/game/services/xp_service.dart';
+import 'package:synaptix/game/providers/xp_provider.dart';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 

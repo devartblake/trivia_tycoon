@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/theme/swatch_service.dart';
+import 'package:synaptix/core/services/theme/swatch_service.dart';
 
 void main() {
   late Directory tempDir;

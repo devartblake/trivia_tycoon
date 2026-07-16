@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/physics/spin_velocity.dart';
+import 'package:synaptix/ui_components/spin_wheel/physics/spin_velocity.dart';
 import '../../models/spin_system_models.dart';
 import 'segment_image.dart';
 import 'segment_label.dart';

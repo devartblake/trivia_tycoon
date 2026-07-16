@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/arcade/missions/arcade_missions_screen.dart';
-import 'package:trivia_tycoon/arcade/missions/arcade_mission_service.dart';
-import 'package:trivia_tycoon/arcade/services/arcade_daily_bonus_service.dart';
-import 'package:trivia_tycoon/arcade/ui/screens/daily_bonus_screen.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
-import 'package:trivia_tycoon/game/providers/arcade_providers.dart'
+import 'package:synaptix/arcade/missions/arcade_missions_screen.dart';
+import 'package:synaptix/arcade/missions/arcade_mission_service.dart';
+import 'package:synaptix/arcade/services/arcade_daily_bonus_service.dart';
+import 'package:synaptix/arcade/ui/screens/daily_bonus_screen.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/game/providers/arcade_providers.dart'
     show arcadeMissionServiceProvider;
-import 'package:trivia_tycoon/game/providers/wallet_providers.dart';
-import 'package:trivia_tycoon/arcade/providers/arcade_providers.dart'
+import 'package:synaptix/game/providers/wallet_providers.dart';
+import 'package:synaptix/arcade/providers/arcade_providers.dart'
     show arcadeDailyBonusServiceProvider;
 
 // ---------------------------------------------------------------------------

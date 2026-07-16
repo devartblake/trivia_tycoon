@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/champion_event.dart';
+import 'package:synaptix/game/models/champion_event.dart';
 
 void main() {
   group('ChampionEvent.fromJson', () {

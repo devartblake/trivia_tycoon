@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/models/app_config.dart';
-import 'package:trivia_tycoon/game/providers/core_providers.dart';
+import 'package:synaptix/core/models/app_config.dart';
+import 'package:synaptix/game/providers/core_providers.dart';
 
 /// Fetches /api/v1/app/config from the backend.
 ///

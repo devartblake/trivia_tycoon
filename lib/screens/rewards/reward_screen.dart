@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/rewards/widgets/weekly_rewards_widget.dart';
+import 'package:synaptix/screens/rewards/widgets/weekly_rewards_widget.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import '../../game/providers/feature_flag_providers.dart';
@@ -14,7 +14,7 @@ import '../../game/providers/reward_backend_providers.dart';
 import '../../game/providers/spin_providers.dart';
 import '../../game/services/rewards_api_service.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Enhanced rewards screen with modern design and performance optimizations
 class RewardsScreen extends ConsumerStatefulWidget {

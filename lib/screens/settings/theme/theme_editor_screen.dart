@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/navigation/navigation_extensions.dart';
-import 'package:trivia_tycoon/screens/settings/theme/widgets/theme_color_picker.dart';
-import 'package:trivia_tycoon/screens/settings/theme/widgets/theme_preset_list.dart';
+import 'package:synaptix/screens/settings/theme/widgets/theme_color_picker.dart';
+import 'package:synaptix/screens/settings/theme/widgets/theme_preset_list.dart';
 import '../../../game/controllers/theme_settings_controller.dart';
 
 class ThemeEditorScreen extends ConsumerStatefulWidget {

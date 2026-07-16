@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/ui_components/login/models/login_user_type.dart';
-import 'package:trivia_tycoon/core/utils/text_field_utils.dart';
+import 'package:synaptix/ui_components/login/models/login_user_type.dart';
+import 'package:synaptix/core/utils/text_field_utils.dart';
 
 void main() {
   // -------------------------------------------------------------------------

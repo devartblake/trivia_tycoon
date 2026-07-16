@@ -1,4 +1,4 @@
-# Changelog - Trivia Tycoon
+# Changelog - Synaptix
 
 All notable changes to this project are documented in this file.
 

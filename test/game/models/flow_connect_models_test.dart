@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_grid_cell.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_level_data.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_path_point.dart';
+import 'package:synaptix/game/models/flow_connect_grid_cell.dart';
+import 'package:synaptix/game/models/flow_connect_level_data.dart';
+import 'package:synaptix/game/models/flow_connect_path_point.dart';
 
 void main() {
   // -------------------------------------------------------------------------

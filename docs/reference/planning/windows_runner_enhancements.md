@@ -1,7 +1,7 @@
 # Windows Runner Enhancements
 
 This document describes every customisation made to the `windows/runner`
-directory for **Trivia Tycoon** and provides guidance for future maintenance.
+directory for **Synaptix** and provides guidance for future maintenance.
 
 ---
 
@@ -50,7 +50,7 @@ embeds the Flutter engine.  The enhancements documented here improve:
 | Field | Old value | New value |
 |-------|-----------|-----------|
 | `CompanyName` | `com.theoreticalmindstech` | `Theoretical Minds Technologies` |
-| `FileDescription` | `trivia_tycoon` | `Trivia Tycoon - Interactive Trivia Game` |
+| `FileDescription` | `synaptix` | `Synaptix - Interactive Trivia Game` |
 
 **Why**  
 Windows Explorer and installer wizards display these values in the file's
@@ -71,13 +71,13 @@ Added a generator-expression compile definition:
 
 ```cmake
 target_compile_definitions(${BINARY_NAME} PRIVATE
-  "$<$<CONFIG:Debug>:TRIVIA_TYCOON_DEBUG_BUILD>"
+  "$<$<CONFIG:Debug>:SYNAPTIX_DEBUG_BUILD>"
 )
 ```
 
 **Why**  
 The top-level `CMakeLists.txt` already defines `_DEBUG` for Debug builds via
-`apply_standard_settings`.  `TRIVIA_TYCOON_DEBUG_BUILD` is an
+`apply_standard_settings`.  `SYNAPTIX_DEBUG_BUILD` is an
 application-level symbol that lets runner code safely guard debug-only paths
 without relying on the CRT-private `_DEBUG` macro.
 
@@ -155,11 +155,11 @@ starves background workers.
 #### Environment variable
 
 ```cpp
-DWORD env_len = ::GetEnvironmentVariableW(L"TRIVIA_TYCOON_ENV", ...);
+DWORD env_len = ::GetEnvironmentVariableW(L"SYNAPTIX_ENV", ...);
 ```
 
-When `TRIVIA_TYCOON_ENV` is set (e.g. `staging`), the value is appended to
-the Dart entry-point arguments as `--trivia-env=<value>`.  The Dart side can
+When `SYNAPTIX_ENV` is set (e.g. `staging`), the value is appended to
+the Dart entry-point arguments as `--synaptix-env=<value>`.  The Dart side can
 read it with:
 
 ```dart
@@ -178,7 +178,7 @@ resource cache and marginally improve first-paint time.
 
 #### Window title
 
-Changed from `L"trivia_tycoon"` to `L"Trivia Tycoon"` — the branded display
+Changed from `L"synaptix"` to `L"Synaptix"` — the branded display
 name shown in the taskbar and title bar.
 
 ---
@@ -294,7 +294,7 @@ and lists Windows 10/11 as supported operating systems.
 |----------|-----------|
 | `WM_APP` as shortcut relay message | Avoids coupling Win32Window to FlutterWindow; Win32Window simply posts WM_APP and FlutterWindow decides what to do with it. |
 | `LogLevel` in `utils.h` | Keeps log infrastructure centralised and avoids scattered `printf`/`OutputDebugString` calls throughout the codebase. |
-| `TRIVIA_TYCOON_DEBUG_BUILD` preprocessor flag | Named symbol is less fragile than checking `_DEBUG` directly; easier to search for in the codebase. |
+| `SYNAPTIX_DEBUG_BUILD` preprocessor flag | Named symbol is less fragile than checking `_DEBUG` directly; easier to search for in the codebase. |
 | `THREAD_PRIORITY_ABOVE_NORMAL` (not `THREAD_PRIORITY_HIGHEST`) | Avoids starving system services while still ensuring Flutter's rasteriser competes well on a normal workload machine. |
 
 ---
@@ -335,16 +335,16 @@ implementation.  See the [MSDN UIA Provider guide](https://docs.microsoft.com/en
 flutter config --enable-windows-desktop
 flutter pub get
 flutter build windows          # Release
-flutter build windows --debug  # Debug (sets TRIVIA_TYCOON_DEBUG_BUILD)
+flutter build windows --debug  # Debug (sets SYNAPTIX_DEBUG_BUILD)
 ```
 
 ### Test the enhancements manually
 
 | Feature | How to verify |
 |---------|---------------|
-| Branding | Right-click `trivia_tycoon.exe` → Properties → Details |
+| Branding | Right-click `synaptix.exe` → Properties → Details |
 | Dark mode | Toggle *Settings → Personalisation → Colors → Choose your mode* |
 | F1 shortcut | Launch app, press F1; observe platform-channel message in Flutter debug console |
 | Min window size | Try to resize the window smaller than 800 × 600 |
-| `TRIVIA_TYCOON_ENV` | `set TRIVIA_TYCOON_ENV=staging & flutter run -d windows` |
-| Log output | Attach WinDbg or DebugView; look for `[trivia_tycoon]` prefixed lines |
+| `SYNAPTIX_ENV` | `set SYNAPTIX_ENV=staging & flutter run -d windows` |
+| Log output | Attach WinDbg or DebugView; look for `[synaptix]` prefixed lines |

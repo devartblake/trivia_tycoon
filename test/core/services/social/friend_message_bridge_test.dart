@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/social/friend_message_bridge.dart';
-import 'package:trivia_tycoon/core/services/social/conversation_storage_service.dart';
-import 'package:trivia_tycoon/core/services/storage/message_storage_service.dart';
-import 'package:trivia_tycoon/game/models/message_models.dart';
+import 'package:synaptix/core/services/social/friend_message_bridge.dart';
+import 'package:synaptix/core/services/social/conversation_storage_service.dart';
+import 'package:synaptix/core/services/storage/message_storage_service.dart';
+import 'package:synaptix/game/models/message_models.dart';
 
 void main() {
   late MessageStorageService msgStorage;

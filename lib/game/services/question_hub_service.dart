@@ -7,7 +7,7 @@ import '../models/question_difficulty.dart';
 import 'question_loader_service.dart';
 import 'question_response_contract.dart';
 import 'quiz_category.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 enum QuestionDataSource {
   unknown,

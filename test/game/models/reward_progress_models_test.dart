@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/reward_progress_models.dart';
-import 'package:trivia_tycoon/game/models/reward_step_models.dart';
+import 'package:synaptix/game/models/reward_progress_models.dart';
+import 'package:synaptix/game/models/reward_step_models.dart';
 
 RewardStep _step(double points) => RewardStep(
       pointValue: points,

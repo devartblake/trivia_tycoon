@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/champion_vs_tier_card.dart';
-import 'package:trivia_tycoon/screens/leaderboard/widgets/tiebreaker_banner.dart';
-import 'package:trivia_tycoon/ui_components/mission/mission_panel.dart';
-import 'package:trivia_tycoon/ui_components/seasonal/seasonal_events_widget.dart';
+import 'package:synaptix/screens/leaderboard/widgets/live_countdown_timer_widget.dart';
+import 'package:synaptix/screens/leaderboard/widgets/champion_vs_tier_card.dart';
+import 'package:synaptix/screens/leaderboard/widgets/tiebreaker_banner.dart';
+import 'package:synaptix/ui_components/mission/mission_panel.dart';
+import 'package:synaptix/ui_components/seasonal/seasonal_events_widget.dart';
 import '../../core/animations/animation_manager.dart';
 import '../../core/helpers/responsive_layout.dart';
 import '../../core/navigation/canonical_routes.dart';
@@ -15,8 +15,8 @@ import '../../game/models/seasonal_competition_model.dart';
 import '../../game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
 import '../../synaptix/mode/synaptix_mode_provider.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -29,6 +29,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late int playerXP;
   AnimationController? _animationController;
+  dynamic _leaderboardService; // Use dynamic or specific type if imported
 
   // Leaderboard state
   List<LeaderboardEntry> _entries = [];
@@ -59,6 +60,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     });
 
     // Initialize leaderboard
+    final serviceManager = ref.read(serviceManagerProvider);
+    _leaderboardService = serviceManager.leaderboardDataService;
+
     _initializeLeaderboard();
   }
 
@@ -72,8 +76,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   // ✅ ADD THIS - Initialize leaderboard with WebSocket
   Future<void> _initializeLeaderboard() async {
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final leaderboardService = serviceManager.leaderboardDataService;
+      final leaderboardService = _leaderboardService;
 
       // Initialize WebSocket
       leaderboardService.initializeWebSocket(useWebSocket: true);
@@ -104,8 +107,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     if (!mounted) return;
 
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final leaderboardService = serviceManager.leaderboardDataService;
+      final leaderboardService = _leaderboardService;
 
       // Track previous ranks for animations
       for (final entry in _entries) {
@@ -135,10 +137,11 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   // ✅ ADD THIS - Cleanup
   void _cleanupLeaderboard() {
     try {
-      final serviceManager = ref.read(serviceManagerProvider);
-      final leaderboardService = serviceManager.leaderboardDataService;
-      leaderboardService.removeListener(_onLeaderboardUpdate);
-      leaderboardService.unsubscribe();
+      final leaderboardService = _leaderboardService;
+      if (leaderboardService != null) {
+        leaderboardService.removeListener(_onLeaderboardUpdate);
+        leaderboardService.unsubscribe();
+      }
     } catch (e) {
       LogManager.debug('[LeaderboardScreen] Cleanup error: $e');
     }

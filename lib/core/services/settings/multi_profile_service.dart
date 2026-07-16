@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/core/services/settings/profile_sync_service.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/settings/profile_sync_service.dart';
 import 'package:uuid/uuid.dart';
 
 /// ProfileData model for individual profiles

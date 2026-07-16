@@ -3,7 +3,7 @@ import '../../../game/models/seasonal_theme_models.dart';
 import '../../../game/providers/core_providers.dart';
 import '../../theme/themes.dart';
 import '../settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Service for managing seasonal themes
 class SeasonalThemeService {

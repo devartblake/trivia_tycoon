@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/paint/hex_shape.dart';
-import 'package:trivia_tycoon/ui_components/hex_grid/widgets/hexagon.dart';
+import 'package:synaptix/ui_components/hex_grid/paint/hex_shape.dart';
+import 'package:synaptix/ui_components/hex_grid/widgets/hexagon.dart';
 
 import 'index.dart';
 

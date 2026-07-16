@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/challenge_models.dart';
-import 'package:trivia_tycoon/game/services/challenge_service.dart';
+import 'package:synaptix/game/models/challenge_models.dart';
+import 'package:synaptix/game/services/challenge_service.dart';
 
 void main() {
   setUp(() {

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Proto codegen script for trivia_tycoon Flutter project.
+# Proto codegen script for synaptix Flutter project.
 #
 # Generates Dart gRPC stubs from protos/mobile.proto into
 # lib/core/networking/grpc/generated/

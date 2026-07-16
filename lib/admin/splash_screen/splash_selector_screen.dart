@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/admin/widgets/splash_selector_widget.dart';
+import 'package:synaptix/admin/widgets/splash_selector_widget.dart';
 
 class SplashSelectorScreen extends StatelessWidget {
   const SplashSelectorScreen({super.key});

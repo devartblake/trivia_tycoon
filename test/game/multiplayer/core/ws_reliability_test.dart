@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_reliability.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_reliability.dart';
 
 void main() {
   group('ReconnectPolicy.initial()', () {

@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart' as just_audio;
 import 'package:flutter_soloud/flutter_soloud.dart' as soloud;
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 enum SoundEffect {
   spinStart,

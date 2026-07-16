@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/store/store_link_router.dart';
+import 'package:synaptix/core/services/store/store_link_router.dart';
 
 void main() {
   group('StoreLinkRouter', () {

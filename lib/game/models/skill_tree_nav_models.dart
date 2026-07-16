@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/game/models/skill_tree_graph.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart';
 
 /// UI groups (high-level buckets)
 enum SkillTreeGroupId { combat, enhancement, utility, advanced }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/models/store/premium_store_model.dart';
-import 'package:trivia_tycoon/game/state/premium_profile_state.dart';
-import 'package:trivia_tycoon/screens/store/widgets/ad_remove_options.dart';
-import 'package:trivia_tycoon/screens/store/widgets/reward_center.dart';
-import 'package:trivia_tycoon/screens/store/widgets/sale_info.dart';
-import 'package:trivia_tycoon/screens/store/widgets/try_now_widget.dart';
+import 'package:synaptix/core/models/store/premium_store_model.dart';
+import 'package:synaptix/game/state/premium_profile_state.dart';
+import 'package:synaptix/screens/store/widgets/ad_remove_options.dart';
+import 'package:synaptix/screens/store/widgets/reward_center.dart';
+import 'package:synaptix/screens/store/widgets/sale_info.dart';
+import 'package:synaptix/screens/store/widgets/try_now_widget.dart';
 import '../../game/providers/riverpod_providers.dart';
 
 class StoreSecondaryScreen extends ConsumerStatefulWidget {

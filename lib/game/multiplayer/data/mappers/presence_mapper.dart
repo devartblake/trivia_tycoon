@@ -1,5 +1,5 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/player_presence.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/presence_dto.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/player_presence.dart';
+import 'package:synaptix/game/multiplayer/data/dto/presence_dto.dart';
 
 class PresenceMapper {
   const PresenceMapper();

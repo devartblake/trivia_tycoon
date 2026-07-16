@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/game/providers/game_bonus_providers.dart';
-import 'package:trivia_tycoon/game/providers/xp_provider.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/game/providers/game_bonus_providers.dart';
+import 'package:synaptix/game/providers/xp_provider.dart';
 import '../../core/repositories/question_repository.dart';
 import '../../core/services/question/quiz_session_service.dart';
 import '../logic/power_up_effect_applier.dart';

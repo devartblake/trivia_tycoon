@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
 
 import '../../../game/providers/riverpod_providers.dart';
 import '../../domain/arcade_game_id.dart';

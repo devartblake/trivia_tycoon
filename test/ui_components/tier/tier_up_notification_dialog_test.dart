@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/tier_api_client.dart';
-import 'package:trivia_tycoon/ui_components/tier/tier_up_notification_dialog.dart';
+import 'package:synaptix/core/services/tier_api_client.dart';
+import 'package:synaptix/ui_components/tier/tier_up_notification_dialog.dart';
 
 void main() {
   group('TierUpNotificationDialog', () {

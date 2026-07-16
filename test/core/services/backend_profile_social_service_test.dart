@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/social/backend_profile_social_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/social/backend_profile_social_service.dart';
 
 // ---------------------------------------------------------------------------
 // Test helpers

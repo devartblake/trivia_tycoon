@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/crash_recovery_service.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/core/services/settings/quiz_progress_service.dart';
-import 'package:trivia_tycoon/core/services/state_persistence_service.dart';
+import 'package:synaptix/core/services/crash_recovery_service.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/settings/quiz_progress_service.dart';
+import 'package:synaptix/core/services/state_persistence_service.dart';
 
 void main() {
   late Directory tempDir;

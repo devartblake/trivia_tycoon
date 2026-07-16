@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/controllers/onboarding_controller.dart';
+import 'package:synaptix/game/controllers/onboarding_controller.dart';
 
 void main() {
   ModernOnboardingController makeController({int totalSteps = 5}) =>

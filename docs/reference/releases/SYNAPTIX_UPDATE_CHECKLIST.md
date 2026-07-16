@@ -1,4 +1,4 @@
-# Trivia Tycoon Update Checklist
+# Synaptix Update Checklist
 
 **Last updated:** 2026-05-10
 **Purpose:** High-level project status snapshot for the latest frontend migration and verification work. This file replaces the older auth-only checklist, which is no longer an accurate picture of what remains.

@@ -3,7 +3,7 @@ import '../../../game/models/message_models.dart';
 import '../../../game/models/pvp_challenge_models.dart';
 import '../storage/message_storage_service.dart';
 import 'conversation_storage_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Lightweight bridge between Challenge system and Message system
 /// Listens to challenge events and creates appropriate messages

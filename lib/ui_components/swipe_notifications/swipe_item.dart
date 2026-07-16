@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 
-import 'package:trivia_tycoon/animations/animations.dart';
+import 'package:synaptix/animations/animations.dart';
 
 import 'demo_data.dart';
 

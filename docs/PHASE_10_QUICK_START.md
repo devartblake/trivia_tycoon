@@ -12,7 +12,7 @@
 ### Step 1: Launch the App
 ```bash
 # Terminal 1: Start Flutter app
-cd c:\Users\lmxbl\StudioProjects\trivia_tycoon
+cd c:\Users\lmxbl\StudioProjects\synaptix
 flutter run
 
 # Wait for: "Flutter run key commands" message

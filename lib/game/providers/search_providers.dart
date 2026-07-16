@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/skill_search_provider.dart';
-import 'package:trivia_tycoon/game/providers/skill_tree_nav_providers.dart';
+import 'package:synaptix/game/providers/skill_search_provider.dart';
+import 'package:synaptix/game/providers/skill_tree_nav_providers.dart';
 import '../models/search.dart';
 import '../services/search_service.dart';
 

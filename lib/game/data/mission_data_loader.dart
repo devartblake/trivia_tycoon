@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
 import '../providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 // Age group enum
 enum AgeGroup { children, adolescence, adults }
@@ -31,6 +31,7 @@ class MissionDataLoader {
       final assetPath = _assetPaths[ageGroup]!;
       final String jsonString = await AssetResolver.instance.loadString(
         assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+        bundledFallbackPath: assetPath,
       );
       final List<dynamic> jsonList = json.decode(jsonString);
 

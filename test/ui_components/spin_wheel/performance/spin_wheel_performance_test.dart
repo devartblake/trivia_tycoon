@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/rendering_cache.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/models/spin_system_models.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/rendering_cache.dart';
+import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
 
 /// Performance benchmarking suite for Spin Wheel rendering optimization
 ///

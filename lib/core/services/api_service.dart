@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
-import 'package:trivia_tycoon/core/env.dart';
+import 'package:synaptix/core/env.dart';
 import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
 import '../../game/models/champion_prediction.dart';
@@ -12,8 +12,10 @@ import '../../game/models/champion_spectator.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
-import 'package:trivia_tycoon/core/services/asset_resolver.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/core/services/asset_resolver.dart';
+import 'package:synaptix/core/services/guest_api_gate.dart';
+
 
 class ApiRequestException implements Exception {
   final String message;
@@ -87,12 +89,24 @@ class ApiService {
   late CacheOptions _cacheOptions;
   late final CacheStore _cacheStore;
   late DioCacheInterceptor _cacheInterceptor;
+
+  /// Callback when auth tokens are cleared due to 401/refresh failure.
+  final Future<void> Function()? onAuthCleared;
+
+  /// Prefer live tokens from [AuthTokenStore] once ServiceManager finishes boot.
+  static String? Function()? accessTokenProvider;
+
+  static void bindAccessTokenProvider(String? Function()? provider) {
+    accessTokenProvider = provider;
+  }
+
   ApiService({
     required this.baseUrl,
     Dio? dio,
     Dio? refreshDio,
     ConfigService? configService,
     bool initializeCache = true,
+    this.onAuthCleared,
   })  : _dio = dio ??
             Dio(BaseOptions(
               baseUrl: baseUrl,
@@ -108,6 +122,37 @@ class ApiService {
               connectTimeout: EnvConfig.apiConnectTimeout,
               receiveTimeout: EnvConfig.apiRefreshReceiveTimeout,
             )) {
+    // Guest / unauthenticated gate — short-circuit before network I/O.
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Prefer Dio's composed URI; fall back to path-only for unit tests.
+        final uri = options.uri;
+        final hasToken = (_loadAccessToken() ?? '').isNotEmpty;
+        if (GuestApiGate.shouldBlockNetworkRequest(
+          uri,
+          hasAuthTokens: hasToken,
+        )) {
+          LogManager.debug(
+              '[ApiService] Guest gate blocked ${options.method} ${options.path}');
+          return handler.reject(
+            DioException(
+              requestOptions: options,
+              type: DioExceptionType.badResponse,
+              response: Response<Map<String, dynamic>>(
+                requestOptions: options,
+                statusCode: 401,
+                data: GuestApiGate.blockedBody(path: options.path),
+                statusMessage: 'Guest mode — network blocked',
+              ),
+              error: GuestApiGate.blockedErrorCode,
+              message: 'Guest mode — network blocked',
+            ),
+          );
+        }
+        return handler.next(options);
+      },
+    ));
+
     // Disable or reduce logging in release mode
     if (ConfigService.enableLogging && kDebugMode) {
       _dio.interceptors.add(LogInterceptor(
@@ -397,6 +442,11 @@ class ApiService {
   }
 
   String? _loadAccessToken() {
+    final fromProvider = accessTokenProvider?.call();
+    if (fromProvider != null && fromProvider.trim().isNotEmpty) {
+      return fromProvider.trim();
+    }
+
     if (!Hive.isBoxOpen('auth_tokens')) return null;
     final box = Hive.box('auth_tokens');
     final token = box.get('auth_access_token')?.toString();
@@ -766,6 +816,10 @@ class ApiService {
   }
 
   Future<void> _clearSessionTokens() async {
+    if (onAuthCleared != null) {
+      await onAuthCleared!();
+    }
+
     if (!Hive.isBoxOpen('auth_tokens')) return;
 
     final box = Hive.box('auth_tokens');

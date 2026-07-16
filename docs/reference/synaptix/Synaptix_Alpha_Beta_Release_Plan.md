@@ -736,7 +736,7 @@ Return to Home         ✅ Router navigates to /home on completion
 - `PATCH /api/v1/admin/config` — feature flag update
 
 ### Feature Flag Infrastructure
-- `FeatureFlagService` (`Tycoon.Backend.Application/Config/FeatureFlagService.cs`)
+- `FeatureFlagService` (`Synaptix.Backend.Application/Config/FeatureFlagService.cs`)
 - `AdminAppConfig` entity — stores flags as JSON in `FeatureFlagsJson` column
 - Group-level `AddEndpointFilter` gates enforced across all 14 user-facing systems (all return HTTP 403 `FeatureDisabled`)
 - SignalR hubs gated via path-based middleware (`/ws/*`) in `Program.cs`

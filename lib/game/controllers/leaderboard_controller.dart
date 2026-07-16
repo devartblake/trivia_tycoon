@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/game/utils/tier_assigner.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/utils/tier_assigner.dart';
 import '../../admin/leaderboard/leaderboard_filter_screen.dart';
 import '../../core/services/leaderboard_data_service.dart';
 import '../../game/models/leaderboard_entry.dart';
 import '../models/leaderboard_filter_settings.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 enum LeaderboardCategory { topXP, mostWins, daily, weekly, global }
 

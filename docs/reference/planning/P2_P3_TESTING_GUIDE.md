@@ -1,4 +1,4 @@
-# Unit Testing Guide - Trivia Tycoon Auth System
+# Unit Testing Guide - Synaptix Auth System
 
 ## Setup
 
@@ -39,7 +39,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
+import 'package:synaptix/core/services/auth_token_store.dart';
 
 @GenerateMocks([Box])
 import 'auth_token_store_test.mocks.dart';
@@ -209,10 +209,10 @@ void main() {
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
-import 'package:trivia_tycoon/core/services/auth_service.dart';
-import 'package:trivia_tycoon/core/services/auth_api_client.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
-import 'package:trivia_tycoon/core/services/device_id_service.dart';
+import 'package:synaptix/core/services/auth_service.dart';
+import 'package:synaptix/core/services/auth_api_client.dart';
+import 'package:synaptix/core/services/auth_token_store.dart';
+import 'package:synaptix/core/services/device_id_service.dart';
 
 @GenerateMocks([AuthApiClient, AuthTokenStore, DeviceIdService])
 import 'auth_service_test.mocks.dart';

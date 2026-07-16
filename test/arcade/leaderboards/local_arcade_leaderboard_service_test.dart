@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_id.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_result.dart';
-import 'package:trivia_tycoon/arcade/leaderboards/local_arcade_leaderboard_service.dart';
-import 'package:trivia_tycoon/core/services/storage/app_cache_service.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_game_id.dart';
+import 'package:synaptix/arcade/domain/arcade_result.dart';
+import 'package:synaptix/arcade/leaderboards/local_arcade_leaderboard_service.dart';
+import 'package:synaptix/core/services/storage/app_cache_service.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

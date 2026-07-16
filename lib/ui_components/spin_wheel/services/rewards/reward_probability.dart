@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import '../../../../core/services/settings/app_settings.dart';
 import '../../models/spin_system_models.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Enhanced reward probability engine with advanced algorithms
 class EnhancedRewardProbability {

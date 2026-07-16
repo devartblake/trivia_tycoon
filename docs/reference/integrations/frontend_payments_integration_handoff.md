@@ -37,7 +37,7 @@ It covers:
 - Auth, request/response contracts, and error handling
 - Backend-managed webhook behavior the frontend should account for
 
-This handoff is based on the current backend surface in `Tycoon.Backend.Api/Features/Store/StoreEndpoints.cs` and shared DTOs in `Tycoon.Shared.Contracts/Dtos/StoreDtos.cs`.
+This handoff is based on the current backend surface in `Synaptix.Backend.Api/Features/Store/StoreEndpoints.cs` and shared DTOs in `Tycoon.Shared.Contracts/Dtos/StoreDtos.cs`.
 
 ## Base assumptions
 

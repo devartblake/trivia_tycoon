@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../game/providers/riverpod_providers.dart';
-import 'package:trivia_tycoon/game/providers/wallet_providers.dart';
+import 'package:synaptix/game/providers/wallet_providers.dart';
 import '../arcade_mission_models.dart';
 
 class MissionDetailsModal {

@@ -1,5 +1,5 @@
 import 'package:quiver/core.dart';
-import 'package:trivia_tycoon/ui_components/login/models/term_of_service.dart';
+import 'package:synaptix/ui_components/login/models/term_of_service.dart';
 
 class SignupData {
   final String? name;

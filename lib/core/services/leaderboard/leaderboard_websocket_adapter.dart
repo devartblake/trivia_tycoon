@@ -2,7 +2,7 @@ import 'dart:async';
 import '../../../core/networking/ws_protocol.dart';
 import '../../../core/bootstrap/app_init.dart';
 import '../../../game/models/leaderboard_entry.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Adapts WebSocket messages to Leaderboard updates
 class LeaderboardWebSocketAdapter {

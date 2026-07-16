@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/helpers/responsive_layout.dart';
+import 'package:synaptix/core/helpers/responsive_layout.dart';
 
 void main() {
   test('AppBreakpoints classifies mobile, tablet, and desktop widths', () {

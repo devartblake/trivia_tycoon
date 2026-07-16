@@ -7,7 +7,7 @@
 
 ## Overview
 
-This guide explains how to properly deploy the app link verification files for the Synaptix Trivia Tycoon app across web, iOS, and Android platforms.
+This guide explains how to properly deploy the app link verification files for the Synaptix Synaptix app across web, iOS, and Android platforms.
 
 ---
 
@@ -43,7 +43,7 @@ When deploying to production, ensure your web server's root directory includes:
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "com.theoreticalmindstech.trivia_tycoon",
+    "package_name": "com.theoreticalmindstech.synaptix",
     "sha256_cert_fingerprints": [
       "YOUR_RELEASE_CERT_SHA256_FINGERPRINT"  ← REPLACE THIS
     ]
@@ -78,7 +78,7 @@ keytool -list -v -keystore path/to/release.keystore -alias your_alias
     "apps": [],
     "details": [
       {
-        "appID": "YOUR_TEAM_ID.com.theoreticalmindstech.triviaTycoon",  ← REPLACE THIS
+        "appID": "YOUR_TEAM_ID.com.theoreticalmindstech.synaptix",  ← REPLACE THIS
         "paths": [
           "/store/payment-return",
           "/store/payment-return/*",
@@ -132,7 +132,7 @@ keytool -list -v -keystore path/to/release.keystore -alias your_alias
    - Sign in to Apple Developer account
    - Copy your Team ID
    - Update `apple-app-site-association`
-   - Ensure Bundle ID is `com.theoreticalmindstech.triviaTycoon`
+   - Ensure Bundle ID is `com.theoreticalmindstech.synaptix`
 
 2. **Host the file:**
    - Copy `apple-app-site-association` to your web server's `.well-known/` directory

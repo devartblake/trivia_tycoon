@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
 
 /// Lightweight audio cue helper for Synaptix Hub interactions.
 ///

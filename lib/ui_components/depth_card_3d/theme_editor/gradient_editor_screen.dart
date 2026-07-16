@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/depth_card_3d/depth_card.dart';
-import 'package:trivia_tycoon/core/services/settings/app_settings.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:synaptix/ui_components/depth_card_3d/depth_card.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
 import '../../color_picker/ui/color_picker_component.dart';
 import '../models/lighting_options.dart';
 import '../theme_editor/depth_card_theme_selector.dart';

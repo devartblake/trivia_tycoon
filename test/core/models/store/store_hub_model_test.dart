@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/store/store_hub_model.dart';
+import 'package:synaptix/core/models/store/store_hub_model.dart';
 
 void main() {
   // -------------------------------------------------------------------------

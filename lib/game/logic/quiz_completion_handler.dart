@@ -7,7 +7,7 @@ import '../providers/riverpod_providers.dart';
 import '../providers/xp_provider.dart';
 import '../providers/economy_providers.dart';
 import '../services/educational_stats_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class QuizCompletionHandler {
   final WidgetRef ref;

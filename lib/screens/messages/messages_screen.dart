@@ -7,7 +7,7 @@ import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
 import '../../game/providers/message_providers.dart';
 import '../../synaptix/mode/synaptix_mode_provider.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 class MessagesScreen extends ConsumerStatefulWidget {
   const MessagesScreen({super.key});

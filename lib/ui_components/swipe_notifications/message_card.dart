@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'demo_data.dart';
 import '../../screens/app_shell/app_shell.dart';
 import '../../ui_components/swipe_notifications/swipe_item.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 // Content for the list items.
 class EmailCard extends StatelessWidget {

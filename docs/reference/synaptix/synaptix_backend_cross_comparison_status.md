@@ -136,7 +136,7 @@ Still open:
 
 ### 5.2 Deferred Packet E technical cleanup
 Still open and intentionally deferred:
-- `Tycoon.Backend.*` -> `Synaptix.Backend.*`
+- `Synaptix.Backend.*` -> `Synaptix.Backend.*`
 - project/solution rename
 - service/telemetry identifier rename
 - docker / CI / issuer / audience naming cleanup

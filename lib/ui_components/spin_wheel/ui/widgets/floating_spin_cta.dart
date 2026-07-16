@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/spin_tracker.dart';
 import 'dart:math' as math;
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Enhanced Floating CTA button with modern design and smart behavior
 class FloatingSpinCTA extends ConsumerStatefulWidget {

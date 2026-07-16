@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/game/multiplayer/domain/entities/game_event.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/dto/ws_envelope_dto.dart';
-import 'package:trivia_tycoon/game/multiplayer/data/sources/ws_protocol.dart';
+import 'package:synaptix/game/multiplayer/domain/entities/game_event.dart';
+import 'package:synaptix/game/multiplayer/data/dto/ws_envelope_dto.dart';
+import 'package:synaptix/game/multiplayer/data/sources/ws_protocol.dart';
 
 /// Translates raw WS envelopes (from FastAPI) into domain-level [GameEvent]s.
 /// Keep this file focused on parsing and op-name routing only. Business logic

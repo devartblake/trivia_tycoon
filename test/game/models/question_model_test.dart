@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/question_model.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart' as qtype;
-import 'package:trivia_tycoon/game/models/question_difficulty.dart' as qdiff;
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/models/question_type.dart' as qtype;
+import 'package:synaptix/game/models/question_difficulty.dart' as qdiff;
 
 // ---------------------------------------------------------------------------
 // Helper — minimal question via direct constructor

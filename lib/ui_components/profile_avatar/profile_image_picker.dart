@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:trivia_tycoon/core/animations/animation_manager.dart';
+import 'package:synaptix/core/animations/animation_manager.dart';
 
 /// Modern Material 3 Profile Image Picker
 ///

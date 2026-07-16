@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/challenge_models.dart';
+import 'package:synaptix/game/models/challenge_models.dart';
 
 Map<String, dynamic> _baseJson({
   String id = 'ch1',

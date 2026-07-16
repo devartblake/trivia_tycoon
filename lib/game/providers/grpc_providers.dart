@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grpc/service_api.dart';
-import 'package:trivia_tycoon/core/networking/grpc/grpc_channel_manager.dart';
-import 'package:trivia_tycoon/core/networking/grpc/grpc_auth_interceptor.dart';
-import 'package:trivia_tycoon/core/networking/grpc/grpc_match_client.dart';
-import 'package:trivia_tycoon/core/services/grpc_match_service.dart';
-import 'package:trivia_tycoon/game/providers/core_providers.dart';
+import 'package:synaptix/core/networking/grpc/grpc_channel_manager.dart';
+import 'package:synaptix/core/networking/grpc/grpc_auth_interceptor.dart';
+import 'package:synaptix/core/networking/grpc/grpc_match_client.dart';
+import 'package:synaptix/core/services/grpc_match_service.dart';
+import 'package:synaptix/game/providers/core_providers.dart';
 
 // ---------------------------------------------------------------------------
 // Channel (singleton)

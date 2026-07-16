@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
 import '../security/secure_session_store.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class AuthApiException implements Exception {
   final String message;

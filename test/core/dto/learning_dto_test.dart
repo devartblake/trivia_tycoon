@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/learning_dto.dart';
+import 'package:synaptix/core/dto/learning_dto.dart';
 
 void main() {
   // -------------------------------------------------------------------------

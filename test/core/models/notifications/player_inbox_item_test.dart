@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/models/notifications/player_inbox_item.dart';
+import 'package:synaptix/core/models/notifications/player_inbox_item.dart';
 
 Map<String, dynamic> _baseJson({
   String id = 'notif1',

@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/game/models/answer.dart';
-import 'package:trivia_tycoon/game/models/question_type.dart';
-import 'package:trivia_tycoon/game/models/question_difficulty.dart';
+import 'package:synaptix/game/models/answer.dart';
+import 'package:synaptix/game/models/question_type.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
 
 class QuestionModel {
   final String id;

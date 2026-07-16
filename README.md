@@ -134,8 +134,10 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 
 ### 2. Clone Project
 ```bash
-git clone https://github.com/devartblake/trivia_tycoon.git
-cd trivia_tycoon
+# GitHub remote slug is still trivia_tycoon until the repo is renamed on GitHub.
+# Clone into a local folder named synaptix (matches Dart package name).
+git clone https://github.com/devartblake/trivia_tycoon.git synaptix
+cd synaptix
 ```
 
 ### 3. Install Dependencies

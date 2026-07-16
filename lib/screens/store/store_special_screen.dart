@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:trivia_tycoon/core/models/store/store_offer_model.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/store/store_return_url_builder.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:synaptix/core/models/store/store_offer_model.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/store/store_return_url_builder.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
 
 class StoreSpecialScreen extends ConsumerStatefulWidget {
   const StoreSpecialScreen({super.key});

@@ -4,21 +4,21 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-import 'package:trivia_tycoon/core/dto/economy_dto.dart';
-import 'package:trivia_tycoon/core/networking/http_client.dart';
-import 'package:trivia_tycoon/core/networking/synaptix_api_client.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/auth_api_client.dart';
-import 'package:trivia_tycoon/core/services/auth_http_client.dart';
-import 'package:trivia_tycoon/core/services/auth_service.dart';
-import 'package:trivia_tycoon/core/services/auth_token_store.dart';
-import 'package:trivia_tycoon/core/services/device_id_service.dart';
-import 'package:trivia_tycoon/core/services/event_queue_service.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
-import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
-import 'package:trivia_tycoon/game/controllers/economy_notifier.dart';
-import 'package:trivia_tycoon/game/controllers/energy_notifier.dart';
+import 'package:synaptix/core/dto/economy_dto.dart';
+import 'package:synaptix/core/networking/http_client.dart';
+import 'package:synaptix/core/networking/synaptix_api_client.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/auth_api_client.dart';
+import 'package:synaptix/core/services/auth_http_client.dart';
+import 'package:synaptix/core/services/auth_service.dart';
+import 'package:synaptix/core/services/auth_token_store.dart';
+import 'package:synaptix/core/services/device_id_service.dart';
+import 'package:synaptix/core/services/event_queue_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/game/analytics/services/analytics_service.dart';
+import 'package:synaptix/game/controllers/economy_notifier.dart';
+import 'package:synaptix/game/controllers/energy_notifier.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fakes / Stubs

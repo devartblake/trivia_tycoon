@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/game_platform_auth_service.dart';
+import 'package:synaptix/core/services/game_platform_auth_service.dart';
 
 void main() {
   // -------------------------------------------------------------------------

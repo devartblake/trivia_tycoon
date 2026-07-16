@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class ConnectionsPuzzleScreen extends StatefulWidget {
   const ConnectionsPuzzleScreen({super.key});

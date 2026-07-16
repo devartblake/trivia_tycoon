@@ -166,15 +166,15 @@ Still useful before beta:
 
 ### 5.4 Optional Packet E frontend cleanup
 Workstream 1 complete (commit `79bc788`, 2026-05-08); Workstream 2 blocked:
-- ✅ `TriviaTycoonApp` -> `SynaptixApp` — renamed in `main.dart`
-- ✅ All user-visible "Trivia Tycoon" strings updated to Synaptix
+- ✅ `SynaptixApp` -> `SynaptixApp` — renamed in `main.dart`
+- ✅ All user-visible "Synaptix" strings updated to Synaptix
 - ✅ Android label + iOS CFBundleDisplayName → "Synaptix"
 - ✅ Help screen URLs/emails → synaptix.app domain
 - ✅ Profile, invite, admin email updated
 - ✅ **Internal symbol cleanup complete (Workstream 1)** — `tycoon_toast/` → `synaptix_toast/`, all `TycoonToast*`/`TycoonApiClientEnhanced`/`TycoonLinearProgressIndicator` symbols renamed, `LoginMessages` constants renamed, `tTriviaGameImage` renamed, comment/string cleanup across 29 files total
 - ✅ `pubspec.yaml` description updated to `"Synaptix — Train. Compete. Grow."`
 - ✅ `README.md` title and opening paragraph updated
-- ⏸️ Blocked: `package:trivia_tycoon/...` internal import rename (Workstream 2) — awaiting store/legal plan for bundle ID change
+- ⏸️ Blocked: `package:synaptix/...` internal import rename (Workstream 2) — awaiting store/legal plan for bundle ID change
 
 ---
 
@@ -301,7 +301,7 @@ The biggest unfinished frontend-adjacent work is:
 
 ### E. Technical debt (Packet E)
 - [x] Packet E Workstream 1 — internal symbol cleanup complete (commit `79bc788`, 2026-05-08).
-- [ ] Packet E Workstream 2 — package root rename (`package:trivia_tycoon/` → `package:synaptix/`, bundle ID change). Blocked on store/legal plan.
+- [ ] Packet E Workstream 2 — package root rename (`package:synaptix/` → `package:synaptix/`, bundle ID change). Blocked on store/legal plan.
 - [x] Secure channel Phase 1/2/3 endpoint rollout completed for selected social/economy mutations, including encrypted DELETE social operations.
 - [ ] Add encrypted DELETE support or equivalent semantics for `removeFriend`, `cancelFriendRequest`, and `unblockUser`.
 - [x] Secure channel wrong-nonce, session-clear, and 1 KB/10 KB/100 KB payload coverage added.

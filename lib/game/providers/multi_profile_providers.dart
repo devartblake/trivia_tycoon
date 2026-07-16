@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/quiz_results_provider.dart';
-import 'package:trivia_tycoon/core/manager/service_manager.dart';
+import 'package:synaptix/game/providers/quiz_results_provider.dart';
+import 'package:synaptix/core/manager/service_manager.dart';
 import '../../core/services/settings/multi_profile_service.dart';
 import '../../core/services/settings/player_profile_service.dart';
 import '../../core/services/settings/profile_sync_service.dart';

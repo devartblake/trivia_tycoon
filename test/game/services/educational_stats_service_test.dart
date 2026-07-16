@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/game/services/educational_stats_service.dart';
-import 'package:trivia_tycoon/game/providers/quiz_results_provider.dart';
+import 'package:synaptix/game/services/educational_stats_service.dart';
+import 'package:synaptix/game/providers/quiz_results_provider.dart';
 
 QuizResults _makeResult({
   int score = 8,

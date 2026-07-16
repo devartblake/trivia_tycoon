@@ -36,7 +36,7 @@ Your `AuthService` already has all the core logic:
 ### Step 1: Fix Swagger (Do This First!)
 
 ```bash
-# In Tycoon.Backend.Api, find the duplicate
+# In Synaptix.Backend.Api, find the duplicate
 grep -rn "users/me" . --include="*.cs"
 
 # Delete one of the MapGet("/users/me") calls
@@ -172,7 +172,7 @@ Once endpoints are added, test:
 
 ## 📁 Files You Need to Update
 
-### Tycoon.Backend.Api/Program.cs
+### Synaptix.Backend.Api/Program.cs
 Add all auth endpoint mappings from `complete_auth_endpoints.cs`
 
 ### No Changes Needed To:

@@ -1,6 +1,6 @@
-import 'package:trivia_tycoon/core/services/settings/onboarding_settings_service.dart';
-import 'package:trivia_tycoon/core/services/settings/splash_settings_service.dart';
-import 'package:trivia_tycoon/game/analytics/services/analytics_service.dart';
+import 'package:synaptix/core/services/settings/onboarding_settings_service.dart';
+import 'package:synaptix/core/services/settings/splash_settings_service.dart';
+import 'package:synaptix/game/analytics/services/analytics_service.dart';
 import '../../core/services/navigation/splash_type.dart';
 import '../../ui_components/login/providers/auth.dart' show LocalAuthService;
 

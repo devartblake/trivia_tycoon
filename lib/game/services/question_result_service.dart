@@ -1,7 +1,7 @@
 import '../models/question_difficulty.dart';
 import 'xp_service.dart';
 import 'wallet_service.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Represents the result of answering a question
 class QuestionResult {

@@ -1,6 +1,6 @@
 import '../models/qr_matrix.dart';
 import 'dart:math';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 class QrEncoder {
   static const int version = 1; // 21x21

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
 import '../states/admin_filter_state.dart';
 
 /// Manages the state for admin filters with persistence

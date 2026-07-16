@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/game/providers/riverpod_providers.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/qr_scan_type.dart';
 import 'qr_scanner_controller.dart';

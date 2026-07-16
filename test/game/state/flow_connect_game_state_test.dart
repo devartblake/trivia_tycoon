@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/state/flow_connect_game_state.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_grid_cell.dart';
-import 'package:trivia_tycoon/game/models/flow_connect_path_point.dart';
+import 'package:synaptix/game/state/flow_connect_game_state.dart';
+import 'package:synaptix/game/models/flow_connect_grid_cell.dart';
+import 'package:synaptix/game/models/flow_connect_path_point.dart';
 
 // Minimal 2×2 grid helper
 List<List<FlowConnectGridCell>> _makeGrid() => [

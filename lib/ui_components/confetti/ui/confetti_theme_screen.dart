@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/ui_components/confetti/confetti.dart';
-import 'package:trivia_tycoon/ui_components/confetti/utils/confetti_settings_storage.dart';
+import 'package:synaptix/ui_components/confetti/confetti.dart';
+import 'package:synaptix/ui_components/confetti/utils/confetti_settings_storage.dart';
 import '../../../game/providers/core_providers.dart';
 import '../core/confetti_theme.dart';
 import '../ui/confetti_preview.dart';

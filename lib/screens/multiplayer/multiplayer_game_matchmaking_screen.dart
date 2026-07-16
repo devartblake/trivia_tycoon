@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trivia_tycoon/core/animations/animation_manager.dart';
-import 'package:trivia_tycoon/screens/multiplayer/multiplayer_palette.dart';
+import 'package:synaptix/core/animations/animation_manager.dart';
+import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
 import '../../game/services/multiplayer_quiz_service.dart';
 import '../../ui_components/multiplayer/versus/versus_screen.dart';

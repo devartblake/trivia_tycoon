@@ -1,4 +1,4 @@
-package com.theoreticalmindstech.trivia_tycoon
+package com.theoreticalmindstech.synaptix
 
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
@@ -77,7 +77,7 @@ class AndroidSecureSecretStore(context: Context) {
 
     companion object {
         private const val PREFS_NAME = "trivia_secure_secrets"
-        private const val KEY_ALIAS = "trivia_tycoon_secure_store_key"
+        private const val KEY_ALIAS = "synaptix_secure_store_key"
         private const val ANDROID_KEYSTORE = "AndroidKeyStore"
         private const val TRANSFORMATION = "AES/GCM/NoPadding"
         private const val GCM_TAG_LENGTH = 128

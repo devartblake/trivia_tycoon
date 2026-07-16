@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/helpers/menu_helpers.dart';
-import 'package:trivia_tycoon/game/models/menu_enums.dart';
+import 'package:synaptix/core/helpers/menu_helpers.dart';
+import 'package:synaptix/game/models/menu_enums.dart';
 
 void main() {
   // -------------------------------------------------------------------------

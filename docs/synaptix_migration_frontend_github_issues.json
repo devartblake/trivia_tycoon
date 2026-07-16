@@ -1,5 +1,5 @@
 {
-  "source_file": "docs/trivia_tycoon_migration_github_issues.json",
+  "source_file": "docs/synaptix_migration_github_issues.json",
   "scope": "frontend",
   "notes": [
     "This file contains frontend-owned issues plus frontend-relevant views of cross-stack issues.",
@@ -271,7 +271,7 @@
         "lib/core/manager/analytics/analytics_stream_manager.dart"
       ],
       "shared_backend_files": [
-        "Tycoon.Backend.Api/*analytics*"
+        "Synaptix.Backend.Api/*analytics*"
       ],
       "dependencies": [
         "TT-MIG-001",

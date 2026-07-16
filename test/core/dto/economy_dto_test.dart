@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/economy_dto.dart';
+import 'package:synaptix/core/dto/economy_dto.dart';
 
 void main() {
   // -------------------------------------------------------------------------

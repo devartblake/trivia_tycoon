@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 import '../../../game/providers/riverpod_providers.dart';
 import '../../theme/themes.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// River-pod provider for ThemeNotifier
 final themeNotifierProvider = ChangeNotifierProvider<ThemeNotifier>((ref) {

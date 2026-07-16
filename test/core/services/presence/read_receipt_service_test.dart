@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/presence/read_receipt_service.dart';
+import 'package:synaptix/core/services/presence/read_receipt_service.dart';
 
 void main() {
   // ReadReceiptService is a singleton — state persists across tests.

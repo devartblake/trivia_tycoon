@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_difficulty.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_game_id.dart';
-import 'package:trivia_tycoon/arcade/domain/arcade_result.dart';
-import 'package:trivia_tycoon/arcade/services/arcade_session_service.dart';
+import 'package:synaptix/arcade/domain/arcade_difficulty.dart';
+import 'package:synaptix/arcade/domain/arcade_game_id.dart';
+import 'package:synaptix/arcade/domain/arcade_result.dart';
+import 'package:synaptix/arcade/services/arcade_session_service.dart';
 
 ArcadeResult _result({
   int score = 250,

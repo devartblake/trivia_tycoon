@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/services/api_service.dart';
-import 'package:trivia_tycoon/core/services/messaging/direct_message_service.dart';
+import 'package:synaptix/core/services/api_service.dart';
+import 'package:synaptix/core/services/messaging/direct_message_service.dart';
 
 void main() {
   test('getConversations loads direct message summaries from backend',

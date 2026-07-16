@@ -66,7 +66,7 @@ Everyone else is ranked survivors-first then by elimination recency (existing be
 
 ## 4. Monetization mapping (spectacle → product)
 
-| TV concept | Trivia Tycoon translation | Phase |
+| TV concept | Synaptix translation | Phase |
 |---|---|---|
 | High-spectacle 1-vs-100 tension | Live synchronized rounds, champion vs 99, elimination cam | 2 |
 | Premium spectator mode | Entitlement-gated live spectator feed | 4 |

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_tycoon/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 
 /// Styled tab bar for the profile screen collection/stats/awards/created tabs.
 class ProfileTabBar extends StatelessWidget {

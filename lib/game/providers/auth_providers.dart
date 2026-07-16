@@ -7,8 +7,9 @@ import '../../core/services/storage/secure_storage.dart';
 import '../../ui_components/login/models/signup_data.dart';
 import 'core_providers.dart';
 import 'game_providers.dart';
+import 'guest_session_providers.dart';
 import 'multi_profile_providers.dart';
-import 'package:trivia_tycoon/core/manager/log_manager.dart';
+import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Main auth provider - initialized by AppInit, used by router
 final isLoggedInSyncProvider = StateProvider<bool>((ref) => false);
@@ -189,6 +190,7 @@ class AuthOperations {
     // Update Riverpod state immediately
     ref.read(isLoggedInSyncProvider.notifier).state = true;
     ref.read(playerIdentityProvider.notifier).markFullAccount();
+    await ref.read(guestSessionControllerProvider).onAuthenticated();
     await _refreshProfileSelectionGate();
   }
 
@@ -209,6 +211,7 @@ class AuthOperations {
       // Update Riverpod state
       ref.read(isLoggedInSyncProvider.notifier).state = true;
       ref.read(playerIdentityProvider.notifier).markFullAccount();
+      await ref.read(guestSessionControllerProvider).onAuthenticated();
       await _refreshProfileSelectionGate();
     } catch (e) {
       // Rethrow with user-friendly message
@@ -245,6 +248,7 @@ class AuthOperations {
       // Update Riverpod state
       ref.read(isLoggedInSyncProvider.notifier).state = true;
       ref.read(playerIdentityProvider.notifier).markFullAccount();
+      await ref.read(guestSessionControllerProvider).onAuthenticated();
       await _refreshProfileSelectionGate();
     } catch (e) {
       // Rethrow with user-friendly message
@@ -351,6 +355,7 @@ class AuthOperations {
 
       ref.read(isLoggedInSyncProvider.notifier).state = true;
       ref.read(playerIdentityProvider.notifier).markFullAccount();
+      await ref.read(guestSessionControllerProvider).onAuthenticated();
       await _refreshProfileSelectionGate();
     } catch (e) {
       final message = AuthErrorMessages.getLoginErrorMessage(e);

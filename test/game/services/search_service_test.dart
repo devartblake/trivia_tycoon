@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/models/search.dart';
-import 'package:trivia_tycoon/game/providers/skill_search_provider.dart';
-import 'package:trivia_tycoon/game/services/search_service.dart';
+import 'package:synaptix/game/models/search.dart';
+import 'package:synaptix/game/providers/skill_search_provider.dart';
+import 'package:synaptix/game/services/search_service.dart';
 
 // ---------------------------------------------------------------------------
 // Fakes

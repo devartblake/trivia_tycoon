@@ -34,4 +34,4 @@ Requires `protoc` on your PATH:
 ## Keeping in sync
 
 When `protos/mobile.proto` in the backend changes, copy the updated file to
-`trivia_tycoon/protos/mobile.proto` and re-run the generation script.
+`synaptix/protos/mobile.proto` and re-run the generation script.

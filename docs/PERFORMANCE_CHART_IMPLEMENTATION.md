@@ -27,7 +27,7 @@ The PerformanceLineChart system is a comprehensive data visualization solution f
 ### Basic Usage (Standalone)
 
 ```dart
-import 'package:trivia_tycoon/ui_components/analytics/performance_line_chart.dart';
+import 'package:synaptix/ui_components/analytics/performance_line_chart.dart';
 
 // Create sample data
 final data = [
@@ -54,7 +54,7 @@ PerformanceLineChart(
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trivia_tycoon/screens/analytics/performance_chart_screen.dart';
+import 'package:synaptix/screens/analytics/performance_chart_screen.dart';
 
 // Use ConsumerWidget for Riverpod state management
 class MyAnalyticsPage extends ConsumerWidget {
@@ -70,7 +70,7 @@ class MyAnalyticsPage extends ConsumerWidget {
 ### With Selector Component
 
 ```dart
-import 'package:trivia_tycoon/ui_components/analytics/chart_selector.dart';
+import 'package:synaptix/ui_components/analytics/chart_selector.dart';
 
 // Selector provides metric and time range selection UI
 ChartSelector(

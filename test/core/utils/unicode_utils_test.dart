@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/utils/unicode_utils.dart';
+import 'package:synaptix/core/utils/unicode_utils.dart';
 
 void main() {
   // -------------------------------------------------------------------------

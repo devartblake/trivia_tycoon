@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/core/dto/personalization_dto.dart';
-import 'package:trivia_tycoon/core/services/personalization/experiment_store.dart';
+import 'package:synaptix/core/dto/personalization_dto.dart';
+import 'package:synaptix/core/services/personalization/experiment_store.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

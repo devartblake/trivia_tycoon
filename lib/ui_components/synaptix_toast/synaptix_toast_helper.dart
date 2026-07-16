@@ -269,7 +269,7 @@ class SynaptixToastHelper {
       duration: duration,
       shouldIconPulse: true,
       borderRadius: BorderRadius.circular(16),
-      tycoonToastPosition: SynaptixToastPosition.top,
+      toastPosition: SynaptixToastPosition.top,
       margin: EdgeInsets.fromLTRB(16, 40, 16, 16),
       padding: EdgeInsets.all(16),
       boxShadows: [

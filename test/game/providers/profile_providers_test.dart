@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
-import 'package:trivia_tycoon/core/services/settings/general_key_value_storage_service.dart';
-import 'package:trivia_tycoon/core/services/settings/player_profile_service.dart';
-import 'package:trivia_tycoon/core/services/storage/secure_storage.dart';
-import 'package:trivia_tycoon/game/providers/game_providers.dart';
-import 'package:trivia_tycoon/game/providers/profile_providers.dart';
-import 'package:trivia_tycoon/ui_components/login/providers/auth.dart';
+import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
+import 'package:synaptix/core/services/settings/player_profile_service.dart';
+import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/game/providers/game_providers.dart';
+import 'package:synaptix/game/providers/profile_providers.dart';
+import 'package:synaptix/ui_components/login/providers/auth.dart';
 
 void main() {
   late Directory tempDir;

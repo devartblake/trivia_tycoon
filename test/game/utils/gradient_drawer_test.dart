@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_tycoon/game/utils/gradient_themes.dart';
-import 'package:trivia_tycoon/game/utils/drawer_menu_config.dart';
-import 'package:trivia_tycoon/game/models/drawer_menu_data.dart';
+import 'package:synaptix/game/utils/gradient_themes.dart';
+import 'package:synaptix/game/utils/drawer_menu_config.dart';
+import 'package:synaptix/game/models/drawer_menu_data.dart';
 
 void main() {
   // -------------------------------------------------------------------------

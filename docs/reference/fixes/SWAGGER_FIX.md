@@ -14,11 +14,11 @@ You have the same endpoint registered twice in your API.
 
 ### Step 1: Search for Duplicates
 
-In your `Tycoon.Backend.Api` project, search for all instances of `users/me`:
+In your `Synaptix.Backend.Api` project, search for all instances of `users/me`:
 
 **Using terminal:**
 ```bash
-cd Tycoon.Backend.Api
+cd Synaptix.Backend.Api
 grep -rn "users/me" . --include="*.cs"
 ```
 
