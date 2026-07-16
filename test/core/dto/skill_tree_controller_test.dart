@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:synaptix/game/controllers/skill_tree_controller.dart';
 import 'package:synaptix/game/models/skill_tree_graph.dart';
 import 'package:synaptix/game/providers/skill_tree_provider.dart';
@@ -60,6 +61,13 @@ ProviderContainer _makeContainer(
 }
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUpAll(() async {
+    hiveEnv = await HiveTestEnv.create();
+  });
+  tearDownAll(() async {
+    await hiveEnv.dispose();
+  });
   // ── unlock() — legacy points-based ──────────────────────────────────────
 
   group('unlock (points-based)', () {

@@ -4,19 +4,27 @@ import 'package:synaptix/game/services/xp_service.dart';
 import 'package:synaptix/game/services/wallet_service.dart';
 import 'package:synaptix/game/models/question_difficulty.dart';
 
+import '../../support/hive_test_env.dart';
+
 void main() {
   group('QuestionResultService', () {
     late QuestionResultService service;
     late XPService xpService;
     late WalletService walletService;
+    late HiveTestEnv hiveEnv;
 
-    setUp(() {
+    setUp(() async {
+      hiveEnv = await HiveTestEnv.create();
       xpService = XPService();
       walletService = WalletService();
       service = QuestionResultService(
         xpService: xpService,
         walletService: walletService,
       );
+    });
+
+    tearDown(() async {
+      await hiveEnv.dispose();
     });
 
     group('Incorrect answer handling', () {
