@@ -928,8 +928,12 @@ class AppSettings {
 
   /// Remove theme.
   static Future<void> remove(String key) async {
+    // List values live in the 'preferences' box (setStringList) while scalars
+    // live in _boxName; delete from both so remove() works for either.
     final box = await Hive.openBox(_boxName);
     await box.delete(key);
+    final prefsBox = await Hive.openBox('preferences');
+    await prefsBox.delete(key);
   }
 
   /// Admin mode
