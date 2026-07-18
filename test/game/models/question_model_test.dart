@@ -288,7 +288,7 @@ void main() {
 
     test('defaults type to multiple_choice when absent', () {
       final q = QuestionModel.fromJson({'answers': []});
-      expect(q.type, 'multiple_choice');
+      expect(q.type, qtype.QuestionType.multipleChoice);
     });
   });
 
@@ -299,48 +299,48 @@ void main() {
   group('QuestionModel.fromJson — _parseDifficulty', () {
     test('numeric value is preserved as-is', () {
       final q = QuestionModel.fromJson({'difficulty': 3, 'answers': []});
-      expect(q.difficulty, 3);
+      expect(q.difficulty.value, 3);
     });
 
     test('"easy" string maps to 1', () {
       final q = QuestionModel.fromJson({'difficulty': 'easy', 'answers': []});
-      expect(q.difficulty, 1);
+      expect(q.difficulty.value, 1);
     });
 
     test('"medium" string maps to 2', () {
       final q = QuestionModel.fromJson({'difficulty': 'medium', 'answers': []});
-      expect(q.difficulty, 2);
+      expect(q.difficulty.value, 2);
     });
 
     test('"hard" string maps to 3', () {
       final q = QuestionModel.fromJson({'difficulty': 'hard', 'answers': []});
-      expect(q.difficulty, 3);
+      expect(q.difficulty.value, 3);
     });
 
     test('"expert" string maps to 4', () {
       final q = QuestionModel.fromJson({'difficulty': 'expert', 'answers': []});
-      expect(q.difficulty, 4);
+      expect(q.difficulty.value, 4);
     });
 
     test('numeric string "3" parses to 3', () {
       final q = QuestionModel.fromJson({'difficulty': '3', 'answers': []});
-      expect(q.difficulty, 3);
+      expect(q.difficulty.value, 3);
     });
 
     test('unrecognised string defaults to 1', () {
       final q =
           QuestionModel.fromJson({'difficulty': 'unknown', 'answers': []});
-      expect(q.difficulty, 1);
+      expect(q.difficulty.value, 1);
     });
 
     test('null difficulty defaults to 1', () {
       final q = QuestionModel.fromJson({'answers': []});
-      expect(q.difficulty, 1);
+      expect(q.difficulty.value, 1);
     });
 
     test('case-insensitive matching for Easy', () {
       final q = QuestionModel.fromJson({'difficulty': 'Easy', 'answers': []});
-      expect(q.difficulty, 1);
+      expect(q.difficulty.value, 1);
     });
   });
 
@@ -592,7 +592,7 @@ void main() {
       final q = QuestionModel.fromGameplayDto(json);
       expect(q.id, 'gplay_q1');
       expect(q.category, 'history');
-      expect(q.difficulty, 3);
+      expect(q.difficulty.value, 3);
     });
   });
 }
