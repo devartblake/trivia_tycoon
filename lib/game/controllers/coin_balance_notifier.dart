@@ -5,8 +5,13 @@ class CoinBalanceNotifier extends StateNotifier<int> {
   static const _key = 'coinBalance';
   final GeneralKeyValueStorageService storage;
 
+  /// Completes once the persisted balance has been loaded into [state].
+  /// Callers (and tests) can await this before mutating to avoid the initial
+  /// async load clobbering an early write.
+  late final Future<void> initialized;
+
   CoinBalanceNotifier(this.storage) : super(0) {
-    _loadFromStorage();
+    initialized = _loadFromStorage();
   }
 
   Future<void> _loadFromStorage() async {

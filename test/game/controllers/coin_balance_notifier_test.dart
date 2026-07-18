@@ -1,23 +1,22 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 import 'package:synaptix/game/controllers/coin_balance_notifier.dart';
 
+import '../../support/hive_test_env.dart';
+
 void main() {
-  late Directory tempDir;
+  late HiveTestEnv hiveEnv;
   late GeneralKeyValueStorageService storage;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('coin_balance_test');
-    Hive.init(tempDir.path);
+    // Close-only dispose (no dir delete) avoids racing the notifier's
+    // fire-and-forget persist into PathNotFoundException.
+    hiveEnv = await HiveTestEnv.create();
     storage = GeneralKeyValueStorageService();
   });
 
   tearDown(() async {
-    await Hive.close();
-    await tempDir.delete(recursive: true);
+    await hiveEnv.dispose();
   });
 
   CoinBalanceNotifier makeNotifier() => CoinBalanceNotifier(storage);
@@ -27,8 +26,9 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('CoinBalanceNotifier — initial state', () {
-    test('starts at 0', () {
+    test('starts at 0', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       expect(notifier.state, 0);
     });
 
@@ -48,12 +48,14 @@ void main() {
   group('CoinBalanceNotifier — add', () {
     test('adds coins to state', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.add(100);
       expect(notifier.state, 100);
     });
 
     test('accumulates across multiple add calls', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.add(50);
       await notifier.add(25);
       expect(notifier.state, 75);
@@ -61,12 +63,14 @@ void main() {
 
     test('adding zero has no effect', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.add(0);
       expect(notifier.state, 0);
     });
 
     test('adding large values', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.add(1000000);
       expect(notifier.state, 1000000);
     });
@@ -79,6 +83,7 @@ void main() {
   group('CoinBalanceNotifier — deduct', () {
     test('deducts when balance is sufficient', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(200);
       await notifier.deduct(50);
       expect(notifier.state, 150);
@@ -86,6 +91,7 @@ void main() {
 
     test('does not deduct when balance is insufficient', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(30);
       await notifier.deduct(100); // can't afford
       expect(notifier.state, 30);
@@ -93,6 +99,7 @@ void main() {
 
     test('exact deduction brings balance to zero', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(100);
       await notifier.deduct(100);
       expect(notifier.state, 0);
@@ -106,6 +113,7 @@ void main() {
   group('CoinBalanceNotifier — canAfford', () {
     test('returns true when balance >= amount', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(500);
       expect(notifier.canAfford(500), isTrue);
       expect(notifier.canAfford(499), isTrue);
@@ -113,12 +121,14 @@ void main() {
 
     test('returns false when balance < amount', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(99);
       expect(notifier.canAfford(100), isFalse);
     });
 
-    test('returns false for any amount when balance is 0', () {
+    test('returns false for any amount when balance is 0', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       expect(notifier.canAfford(1), isFalse);
     });
   });
@@ -130,12 +140,14 @@ void main() {
   group('CoinBalanceNotifier — set', () {
     test('sets balance to exact value', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(750);
       expect(notifier.state, 750);
     });
 
     test('can set to 0 (reset)', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.add(500);
       await notifier.set(0);
       expect(notifier.state, 0);
@@ -143,6 +155,7 @@ void main() {
 
     test('can overwrite a previously set value', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.set(100);
       await notifier.set(999);
       expect(notifier.state, 999);
@@ -156,6 +169,7 @@ void main() {
   group('CoinBalanceNotifier — reset', () {
     test('resets balance to 0', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.add(300);
       await notifier.reset();
       expect(notifier.state, 0);
@@ -163,6 +177,7 @@ void main() {
 
     test('reset on already-zero notifier stays at 0', () async {
       final notifier = makeNotifier();
+      await notifier.initialized;
       await notifier.reset();
       expect(notifier.state, 0);
     });
