@@ -1,15 +1,47 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
+import 'package:synaptix/game/models/question_result_model.dart';
+import 'package:synaptix/game/providers/question_analytics_provider.dart';
+import 'package:synaptix/game/repositories/question_result_repository.dart';
 import 'package:synaptix/ui_components/analytics/performance_line_chart.dart';
 import 'package:synaptix/ui_components/analytics/chart_selector.dart';
 import 'package:synaptix/ui_components/analytics/performance_chart_provider.dart';
+
+// The chart providers read recent results from QuestionResultRepository (Hive).
+// Seed a repo fake so the aggregation produces the full time series; without
+// data the provider returns [] by design.
+class _FakeQuestionResultRepository extends QuestionResultRepository {
+  final List<QuestionResultModel> _seed;
+  _FakeQuestionResultRepository(this._seed);
+
+  @override
+  List<QuestionResultModel> getRecentResults({int hoursAgo = 24}) => _seed;
+}
+
+QuestionResultModel _seedResult() => QuestionResultModel(
+      questionId: 'q1',
+      category: 'Science',
+      difficulty: QuestionDifficulty.easy,
+      isCorrect: true,
+      timeTakenSeconds: 5,
+      xpEarned: 10,
+      coinsEarned: 5,
+      answeredAt: DateTime.now(),
+    );
 
 void main() {
   group('Performance Chart Providers', () {
     late ProviderContainer container;
 
     setUp(() {
-      container = ProviderContainer();
+      container = ProviderContainer(
+        overrides: [
+          questionResultRepositoryProvider.overrideWithValue(
+            _FakeQuestionResultRepository([_seedResult(), _seedResult()]),
+          ),
+        ],
+      );
     });
 
     test('selectedMetricProvider has default accuracy metric', () {
@@ -203,7 +235,13 @@ void main() {
     late ProviderContainer container;
 
     setUp(() {
-      container = ProviderContainer();
+      container = ProviderContainer(
+        overrides: [
+          questionResultRepositoryProvider.overrideWithValue(
+            _FakeQuestionResultRepository([_seedResult(), _seedResult()]),
+          ),
+        ],
+      );
     });
 
     test('provider caches results for same time range', () async {
