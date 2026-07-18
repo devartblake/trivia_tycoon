@@ -31,42 +31,44 @@ class SynaptixDashboardFooter extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          if (isWide) {
+          // The Synaptix right panel already owns the FriendsOnlineCard, and
+          // it is shown alongside the dashboard in the wide (side panel) and
+          // narrow (inline) layouts. Only the medium layout hides that panel,
+          // so the footer surfaces Friends solely there to avoid rendering the
+          // same card twice on one screen.
+          final showFriends = isMedium && !isWide;
+
+          // A three/two-card row needs real width; below this the cards are
+          // uncomfortably narrow, so stack them. This also keeps the footer
+          // clear of the horizontal RenderFlex overflow the old fixed-width
+          // wide layout produced inside the constrained main column.
+          if (constraints.maxWidth >= 520) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 240,
-                  child: FriendsOnlineCard(friends: home.friends),
-                ),
-                const SizedBox(width: 20),
+                if (showFriends) ...[
+                  Expanded(
+                    flex: 4,
+                    child: FriendsOnlineCard(friends: home.friends),
+                  ),
+                  const SizedBox(width: 16),
+                ],
                 Expanded(flex: 7, child: NewsCard(item: home.newsItem)),
-                const SizedBox(width: 20),
-                SizedBox(
-                  width: 340,
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 5,
                   child: DailyRewardCard(prompt: home.dailyReward),
                 ),
               ],
             );
           }
 
-          if (isMedium && constraints.maxWidth >= 760) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: FriendsOnlineCard(friends: home.friends)),
-                const SizedBox(width: 16),
-                Expanded(child: NewsCard(item: home.newsItem)),
-                const SizedBox(width: 16),
-                Expanded(child: DailyRewardCard(prompt: home.dailyReward)),
-              ],
-            );
-          }
-
           return Column(
             children: [
-              FriendsOnlineCard(friends: home.friends),
-              const SizedBox(height: 12),
+              if (showFriends) ...[
+                FriendsOnlineCard(friends: home.friends),
+                const SizedBox(height: 12),
+              ],
               NewsCard(item: home.newsItem),
               const SizedBox(height: 12),
               DailyRewardCard(prompt: home.dailyReward),

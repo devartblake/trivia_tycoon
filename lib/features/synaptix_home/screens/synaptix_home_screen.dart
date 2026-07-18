@@ -83,11 +83,21 @@ class _SynaptixHomeAdaptiveShell extends StatelessWidget {
               onMenuPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
+          // In the wide layout the footer is a fixed region below the
+          // scrollable dashboard. The stacked layout renders its own footer
+          // inline, so the scaffold footer is left null there to avoid
+          // showing the footer twice.
+          footer: isWide
+              ? SynaptixDashboardFooter(
+                  home: home,
+                  isWide: true,
+                  isMedium: isMedium,
+                )
+              : null,
           body: isWide
               ? SingleChildScrollView(
                   key: const Key('synaptix-main-scroll'),
-                  child: _MainDashboard(
-                      home: home, isWide: isWide, isMedium: isMedium),
+                  child: _MainDashboard(home: home),
                 )
               : _StackedDashboard(home: home, isMedium: isMedium),
         );
@@ -113,7 +123,7 @@ class _StackedDashboard extends StatelessWidget {
             const SynaptixCompactNav(),
             const SizedBox(height: 16),
           ],
-          _MainDashboard(home: home, isWide: false, isMedium: isMedium),
+          _MainDashboard(home: home),
           const SizedBox(height: 12),
           if (isMedium)
             Column(
@@ -147,14 +157,8 @@ class _StackedDashboard extends StatelessWidget {
 
 class _MainDashboard extends StatelessWidget {
   final SynaptixHomeState home;
-  final bool isWide;
-  final bool isMedium;
 
-  const _MainDashboard({
-    required this.home,
-    this.isWide = false,
-    this.isMedium = false,
-  });
+  const _MainDashboard({required this.home});
 
   @override
   Widget build(BuildContext context) {
@@ -258,12 +262,7 @@ class _MainDashboard extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 32),
-        SynaptixDashboardFooter(
-          home: home,
-          isWide: isWide,
-          isMedium: isMedium,
-        ),
+        const SizedBox(height: 20),
       ],
     );
   }
