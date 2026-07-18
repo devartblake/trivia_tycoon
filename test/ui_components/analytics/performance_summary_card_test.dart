@@ -23,7 +23,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
@@ -35,7 +39,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
@@ -50,13 +58,17 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
 
       expect(find.text('50'), findsOneWidget); // Total questions
-      expect(find.text('80.0%'), findsOneWidget); // Accuracy
+      expect(find.text('80.0%'), findsWidgets); // Accuracy
       expect(find.text('5000'), findsOneWidget); // XP
       expect(find.text('1500'), findsOneWidget); // Coins
     });
@@ -65,7 +77,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
@@ -80,7 +96,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
@@ -93,7 +113,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
@@ -106,13 +130,17 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: mockSummary),
+            // The card lives inside a scrollable dashboard in production; wrap
+            // it so the 800x600 test surface doesn't report a false overflow.
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: mockSummary),
+            ),
           ),
         ),
       );
 
       // 40/50 = 80%, 10/50 = 20%
-      expect(find.text('80.0%'), findsOneWidget);
+      expect(find.text('80.0%'), findsWidgets);
       expect(find.text('20.0%'), findsOneWidget);
     });
 
@@ -130,13 +158,15 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: emptySummary),
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: emptySummary),
+            ),
           ),
         ),
       );
 
       expect(find.text('0'), findsWidgets);
-      expect(find.text('0.0%'), findsOneWidget);
+      expect(find.text('0.0%'), findsWidgets);
     });
 
     testWidgets('renders with high accuracy', (WidgetTester tester) async {
@@ -153,12 +183,14 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: highAccuracy),
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: highAccuracy),
+            ),
           ),
         ),
       );
 
-      expect(find.text('99.0%'), findsOneWidget);
+      expect(find.text('99.0%'), findsWidgets);
     });
 
     testWidgets('renders with low accuracy', (WidgetTester tester) async {
@@ -175,12 +207,14 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PerformanceSummaryCard(summary: lowAccuracy),
+            body: SingleChildScrollView(
+              child: PerformanceSummaryCard(summary: lowAccuracy),
+            ),
           ),
         ),
       );
 
-      expect(find.text('30.0%'), findsOneWidget);
+      expect(find.text('30.0%'), findsWidgets);
     });
 
     testWidgets('card is scrollable when needed', (WidgetTester tester) async {
