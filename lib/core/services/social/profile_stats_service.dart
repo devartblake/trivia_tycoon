@@ -320,6 +320,20 @@ class ProfileStatsService extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Clears all in-memory user state. This service is a singleton, so tests
+  /// must reset it between cases or state (matches, stats, achievements)
+  /// accumulates across tests.
+  @visibleForTesting
+  void resetForTest() {
+    _userMatches.clear();
+    _userStats.clear();
+    _userAchievements.clear();
+    for (final controller in _statsStreams.values) {
+      controller.close();
+    }
+    _statsStreams.clear();
+  }
+
   // ============ Record Match ============
 
   Future<void> recordMatch(GameMatch match) async {
