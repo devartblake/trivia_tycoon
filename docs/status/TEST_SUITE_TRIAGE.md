@@ -170,6 +170,17 @@ RetentionEntry weekday off-by-one, the `AppSettings.remove` box mismatch, the
 `CoinBalanceNotifier` init race, and (earlier) the `profile_stats` missing
 `await` + singleton leak. These are the payoff of "identify failures now."
 
+## 4d. Grind progress — leaderboard rework + SynaptixHomeScreen layout
+
+| File(s) | Fix | Δ |
+|---------|-----|--:|
+| `leaderboard_controller_test` | reworked to build a fresh `ChangeNotifierProvider` per test (no shared global → no disposed-controller leakage); draining tearDown; settles after async `_applyFilters` | 25/25 green |
+| `leaderboard_entry` | **real bug**: `fromJson` read snake_case `last_active`/`user_id` while `toJson` emits camelCase → `DateTime.parse(null)` crash + `user_Id` typo; hardened round-trip | — |
+| `synaptix_home_screen` | **real overflow**: wide footer's fixed 240/340 side cards (620px) inside the ~580px main column → 40px RenderFlex overflow; reworked to flexible columns | 8/8 green |
+| `synaptix_home_screen` (dup #1) | **duplicate footer**: `_MainDashboard` + `_StackedDashboard` both appended a footer; footer now a single fixed scaffold slot (wide) / inline once (stacked) | — |
+| `synaptix_home_screen` (dup #2) | **duplicate FriendsOnlineCard**: footer repeated the right panel's Friends card in wide/narrow; footer now shows Friends only in medium (no right panel) | — |
+| `recommendations_card`, `recent_activity_card` | wrapped `ListTile` in transparent `Material` (ink/bg was hidden by the panel decoration; threw under test) | — |
+
 Running total: **330 → ≈139** (≈58% cleared). Reusable helpers now cover the
 dominant setup causes; the rest of the tail is per-file finder/overflow/assertion
 work as catalogued in §4.
