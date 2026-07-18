@@ -47,7 +47,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(SkillTreeVisualization), findsOneWidget);
     });
 
     testWidgets('displays with mock data initially',
@@ -129,7 +129,7 @@ void main() {
       );
 
       await tester.pumpAndSettle(const Duration(seconds: 1));
-      expect(find.byType(GridView), findsWidgets);
+      expect(find.byType(SkillTreeVisualization), findsOneWidget);
     });
 
     testWidgets('is responsive', (WidgetTester tester) async {
