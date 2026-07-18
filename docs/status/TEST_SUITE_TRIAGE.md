@@ -153,6 +153,27 @@ ProfileStatsService.resetForTest()`.
   `retention_entry` (3), `swatch_service` (3), `premium_store` (3),
   `tier_up_notification_dialog` (3) — mostly assertion drift → update to code.
 
+## 4c. Grind progress — continued (≈165 → ≈139)
+
+Further fixes, all committed:
+
+| File | Fix | Δ |
+|------|-----|--:|
+| `answer_option_card` | rewrote finders for GestureDetector/AnimatedContainer (no more ElevatedButton) | 9 |
+| `store_return_url_builder` | `EnvConfig.appRedirectBaseUrlForTest` set in setUp | 4 |
+| `coin_balance_notifier` | expose `initialized` future (await before mutate) + `HiveTestEnv` | 7 |
+| `retention_entry` | **real bug**: `weekday % 7` → `weekday - 1` (day labels were shifted) | 3 |
+| `swatch_service` | **real bug**: `AppSettings.remove` deleted from the wrong box | 3 |
+
+**Genuine product bugs found & fixed while grinding** (not masked): the
+RetentionEntry weekday off-by-one, the `AppSettings.remove` box mismatch, the
+`CoinBalanceNotifier` init race, and (earlier) the `profile_stats` missing
+`await` + singleton leak. These are the payoff of "identify failures now."
+
+Running total: **330 → ≈139** (≈58% cleared). Reusable helpers now cover the
+dominant setup causes; the rest of the tail is per-file finder/overflow/assertion
+work as catalogued in §4.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those
