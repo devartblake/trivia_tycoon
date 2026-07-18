@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synaptix/core/navigation/canonical_routes.dart';
 import 'package:synaptix/features/synaptix_home/models/synaptix_home_state.dart';
@@ -9,6 +10,13 @@ import 'package:synaptix/features/synaptix_home/screens/synaptix_home_screen.dar
 import 'package:synaptix/features/synaptix_home/theme/synaptix_home_theme.dart';
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUp(() async {
+    hiveEnv = await HiveTestEnv.create(boxes: ['auth_tokens']);
+  });
+  tearDown(() async {
+    await hiveEnv.dispose();
+  });
   testWidgets('wide layout renders rail, main dashboard, and right panel',
       (tester) async {
     await _pumpHome(tester, const Size(1280, 900));

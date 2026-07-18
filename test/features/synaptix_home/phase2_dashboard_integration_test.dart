@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:synaptix/features/synaptix_home/widgets/cards/phase2_daily_bonus_card.dart';
 import 'package:synaptix/features/synaptix_home/widgets/cards/phase2_weekly_rewards_card.dart';
 import 'package:synaptix/features/synaptix_home/widgets/cards/phase2_tier_progress_card.dart';
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUp(() async {
+    hiveEnv = await HiveTestEnv.create(boxes: ['auth_tokens']);
+  });
+  tearDown(() async {
+    await hiveEnv.dispose();
+  });
   group('Phase 2 Dashboard Integration', () {
     // ────────────────────────────────────────────────────────────────────────
     // Individual Card Tests

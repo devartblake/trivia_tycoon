@@ -18,9 +18,15 @@ class HiveTestEnv {
 
   HiveTestEnv._(this.dir);
 
-  static Future<HiveTestEnv> create() async {
+  /// Inits Hive against a fresh temp dir. Pass [boxes] to also open named
+  /// boxes that provider graphs expect to already be open (e.g. `auth_tokens`,
+  /// which `authTokenBoxProvider` requires).
+  static Future<HiveTestEnv> create({List<String> boxes = const []}) async {
     final dir = await Directory.systemTemp.createTemp('hive_test_env');
     Hive.init(dir.path);
+    for (final name in boxes) {
+      await Hive.openBox(name);
+    }
     return HiveTestEnv._(dir);
   }
 
