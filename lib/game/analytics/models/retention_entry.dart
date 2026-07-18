@@ -51,7 +51,9 @@ class RetentionEntry {
 
   /// Private helper to format day name (e.g., "Mon", "Tue", etc.)
   static String _formatDay(DateTime date) {
+    // DateTime.weekday is 1=Mon .. 7=Sun, so index by (weekday - 1).
+    // The old `% 7` shifted every label by one (Mon→Tue, Sun→Mon).
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    return weekdays[date.weekday % 7];
+    return weekdays[date.weekday - 1];
   }
 }

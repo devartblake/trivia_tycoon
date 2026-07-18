@@ -198,7 +198,7 @@ void main() {
         score: 7,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       // Widget renders; score animation starts at 0 so final value may not be
       // visible immediately — just verify no exception.
       expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
@@ -213,7 +213,7 @@ void main() {
         classLevel: '6',
         categoryScores: {'science': 5, 'history': 3},
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
     });
 
@@ -224,7 +224,7 @@ void main() {
         totalXP: 500,
         powerUpTimeRemaining: Duration(minutes: 3),
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
     });
 
@@ -235,7 +235,7 @@ void main() {
         totalQuestions: 10,
         totalXP: 1000,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
     });
 
@@ -244,7 +244,7 @@ void main() {
         score: 0,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.byType(EnhancedScoreDisplay), findsOneWidget);
     });
 
@@ -254,7 +254,7 @@ void main() {
         score: 7,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Your Score'), findsOneWidget);
       expect(find.textContaining('/ 10'), findsOneWidget);
     });
@@ -264,7 +264,7 @@ void main() {
         score: 7,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('70%'), findsOneWidget);
     });
 
@@ -274,7 +274,7 @@ void main() {
         score: 9,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Outstanding work!'), findsOneWidget);
     });
 
@@ -283,7 +283,7 @@ void main() {
         score: 8,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Great job!'), findsOneWidget);
     });
 
@@ -292,7 +292,7 @@ void main() {
         score: 7,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Good effort!'), findsOneWidget);
     });
 
@@ -301,7 +301,7 @@ void main() {
         score: 6,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Keep trying!'), findsOneWidget);
     });
 
@@ -311,7 +311,7 @@ void main() {
         score: 5,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Practice makes perfect!'), findsOneWidget);
     });
 
@@ -321,7 +321,7 @@ void main() {
         totalQuestions: 10,
         totalXP: 300,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Experience Points'), findsOneWidget);
     });
 
@@ -331,7 +331,7 @@ void main() {
         totalQuestions: 10,
         totalXP: 0,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Experience Points'), findsNothing);
     });
 
@@ -353,7 +353,7 @@ void main() {
         totalQuestions: 10,
         categoryScores: {'science': 5, 'history': 3},
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Subject Performance'), findsOneWidget);
       expect(find.text('SCIENCE'), findsOneWidget);
       expect(find.text('HISTORY'), findsOneWidget);
@@ -366,7 +366,7 @@ void main() {
         totalQuestions: 10,
         categoryScores: {},
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Subject Performance'), findsNothing);
     });
 
@@ -377,7 +377,7 @@ void main() {
         totalQuestions: 10,
         powerUpTimeRemaining: Duration(seconds: 45),
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Power-Up Active'), findsOneWidget);
       expect(find.text('45s'), findsOneWidget);
     });
@@ -388,7 +388,7 @@ void main() {
         score: 7,
         totalQuestions: 10,
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Power-Up Active'), findsNothing);
     });
 
@@ -398,7 +398,7 @@ void main() {
         totalQuestions: 10,
         classLevel: '6',
       )));
-      await tester.pump();
+      await tester.pumpAndSettle();
       expect(find.text('Class 6'), findsOneWidget);
     });
   });

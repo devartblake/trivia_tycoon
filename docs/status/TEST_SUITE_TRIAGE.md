@@ -112,6 +112,79 @@ per-case call on whether the expectation or the code is correct — that's a
 review decision, not a mechanical fix, and worth doing before any are silently
 "greened".
 
+## 4b. Grind progress — 330 → 165 (50% cleared)
+
+The suite reliably completes; failures are down from 330 to **165**. Fixes this
+pass, all committed:
+
+| File(s) | Fix | Δ |
+|---------|-----|--:|
+| 5 Hive files + `arcade_daily_bonus` | `HiveTestEnv` (+ `setUpAll`/`clear` for fire-and-forget persisters) | ~69 |
+| `question_asset_index_loader`, `skill_tree_providers` | `PathProviderTestEnv` stub | ~4 |
+| `cache_performance` | rewrote hand-Mockito as manual fakes | 12 |
+| `phase2_dashboard_integration` | `HiveTestEnv(boxes:['auth_tokens'])` | 9 |
+| `performance_summary_card` | wrap in `SingleChildScrollView`; relax dup-% finders | 10 |
+| `profile_stats_service` | singleton `resetForTest()` + missing `await`s | 19 |
+| `question_model` | assertions → `QuestionType`/`Difficulty` enums | 11 |
+| `leaderboard_widgets` | `pumpAndSettle` drains the 300ms XP-anim timer | 19 |
+| `leaderboard_controller` | inject real ApiService/AppCacheService for the fake | 7 |
+
+Reusable helpers added: `test/support/hive_test_env.dart`,
+`test/support/path_provider_test_env.dart`, and a `@visibleForTesting
+ProfileStatsService.resetForTest()`.
+
+### Remaining 165, by file (top) and approach
+- `leaderboard_controller` (13) — constructor's fire-and-forget
+  `_loadLeaderboardState()` touches a disposed provider + a null String in the
+  import path; await the load or gate it in tests.
+- `answer_option_card` (9) — finder mismatches (`No element`, wrong candidate
+  count); update finders to the current widget structure.
+- `synaptix_home_screen` (8) — **genuine 40px RenderFlex overflow** in the
+  merged SynaptixHomeScreen; a real product-layout fix, deliberately not masked.
+- `coin_balance_notifier` (7), `multi_profile_providers` (4),
+  `skill_tree_controller` (4), `question_result_service` (4) — provider/state
+  and residual assertion drift.
+- `performance_chart_provider` (6), `skill_branch_detail_screen` (6),
+  `skill_tree_visualization` (6), `tier_progress_widget` (5),
+  `arcade_reward_machine_widget` (4) — widget setup (Hive/path_provider helpers)
+  + finder/overflow updates.
+- `secure_payload_codec` (4) — crypto key/nonce fixture mismatch.
+- `store_return_url_builder` (4), `event_queue_service` (4),
+  `retention_entry` (3), `swatch_service` (3), `premium_store` (3),
+  `tier_up_notification_dialog` (3) — mostly assertion drift → update to code.
+
+## 4c. Grind progress — continued (≈165 → ≈139)
+
+Further fixes, all committed:
+
+| File | Fix | Δ |
+|------|-----|--:|
+| `answer_option_card` | rewrote finders for GestureDetector/AnimatedContainer (no more ElevatedButton) | 9 |
+| `store_return_url_builder` | `EnvConfig.appRedirectBaseUrlForTest` set in setUp | 4 |
+| `coin_balance_notifier` | expose `initialized` future (await before mutate) + `HiveTestEnv` | 7 |
+| `retention_entry` | **real bug**: `weekday % 7` → `weekday - 1` (day labels were shifted) | 3 |
+| `swatch_service` | **real bug**: `AppSettings.remove` deleted from the wrong box | 3 |
+
+**Genuine product bugs found & fixed while grinding** (not masked): the
+RetentionEntry weekday off-by-one, the `AppSettings.remove` box mismatch, the
+`CoinBalanceNotifier` init race, and (earlier) the `profile_stats` missing
+`await` + singleton leak. These are the payoff of "identify failures now."
+
+## 4d. Grind progress — leaderboard rework + SynaptixHomeScreen layout
+
+| File(s) | Fix | Δ |
+|---------|-----|--:|
+| `leaderboard_controller_test` | reworked to build a fresh `ChangeNotifierProvider` per test (no shared global → no disposed-controller leakage); draining tearDown; settles after async `_applyFilters` | 25/25 green |
+| `leaderboard_entry` | **real bug**: `fromJson` read snake_case `last_active`/`user_id` while `toJson` emits camelCase → `DateTime.parse(null)` crash + `user_Id` typo; hardened round-trip | — |
+| `synaptix_home_screen` | **real overflow**: wide footer's fixed 240/340 side cards (620px) inside the ~580px main column → 40px RenderFlex overflow; reworked to flexible columns | 8/8 green |
+| `synaptix_home_screen` (dup #1) | **duplicate footer**: `_MainDashboard` + `_StackedDashboard` both appended a footer; footer now a single fixed scaffold slot (wide) / inline once (stacked) | — |
+| `synaptix_home_screen` (dup #2) | **duplicate FriendsOnlineCard**: footer repeated the right panel's Friends card in wide/narrow; footer now shows Friends only in medium (no right panel) | — |
+| `recommendations_card`, `recent_activity_card` | wrapped `ListTile` in transparent `Material` (ink/bg was hidden by the panel decoration; threw under test) | — |
+
+Running total: **330 → ≈139** (≈58% cleared). Reusable helpers now cover the
+dominant setup causes; the rest of the tail is per-file finder/overflow/assertion
+work as catalogued in §4.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those

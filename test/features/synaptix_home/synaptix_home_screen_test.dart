@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synaptix/core/navigation/canonical_routes.dart';
 import 'package:synaptix/features/synaptix_home/models/synaptix_home_state.dart';
@@ -9,15 +10,25 @@ import 'package:synaptix/features/synaptix_home/screens/synaptix_home_screen.dar
 import 'package:synaptix/features/synaptix_home/theme/synaptix_home_theme.dart';
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUp(() async {
+    hiveEnv = await HiveTestEnv.create(boxes: ['auth_tokens']);
+  });
+  tearDown(() async {
+    await hiveEnv.dispose();
+  });
   testWidgets('wide layout renders rail, main dashboard, and right panel',
       (tester) async {
     await _pumpHome(tester, const Size(1280, 900));
 
     expect(find.text('SYNAPTIX'), findsOneWidget);
     expect(find.text('CURRENT RANK'), findsOneWidget);
-    expect(find.text('SYNAPTIX\nARENA CUP'), findsOneWidget);
-    expect(find.text('DAILY MISSIONS'), findsOneWidget);
-    expect(find.text('LEADERBOARD'), findsOneWidget);
+    // HeroTournamentCard splits featuredEvent.title across two lines.
+    expect(find.text('Weekend\nShowdown'), findsOneWidget);
+    expect(find.text('CHOOSE YOUR MODE'), findsOneWidget);
+    expect(find.text('QUICK STATS'), findsOneWidget);
+    // Friends lives only in the right panel in the wide layout (the footer
+    // no longer duplicates it).
     expect(find.text('FRIENDS ONLINE (2)'), findsOneWidget);
     expect(find.text('SYNAPTIX NEWS'), findsOneWidget);
     expect(find.text('DAILY REWARD'), findsOneWidget);
@@ -45,8 +56,8 @@ void main() {
     expect(find.byTooltip('Open navigation menu'), findsOneWidget);
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Play'), findsOneWidget);
-    expect(find.text('SYNAPTIX\nARENA CUP'), findsOneWidget);
-    expect(find.text('DAILY MISSIONS'), findsOneWidget);
+    expect(find.text('Weekend\nShowdown'), findsOneWidget);
+    expect(find.text('CHOOSE YOUR MODE'), findsOneWidget);
     expect(find.text('SYNAPTIX NEWS'), findsOneWidget);
     expect(find.text('DAILY REWARD'), findsOneWidget);
   });
@@ -57,14 +68,20 @@ void main() {
 
     await _openHomeDrawer(tester);
 
-    expect(find.text('DASHBOARD'), findsOneWidget);
-    expect(find.text('PROFILE'), findsOneWidget);
-    expect(find.text('STORE'), findsOneWidget);
-    expect(find.text('REWARDS'), findsOneWidget);
-    expect(find.text('SKILL TREE'), findsOneWidget);
-    expect(find.text('ARCADE'), findsOneWidget);
-    expect(find.text('SETTINGS'), findsOneWidget);
-    expect(find.text('CURRENT RANK'), findsOneWidget);
+    // Scope to the drawer: the persistent top navigation bar also renders
+    // some of these nav labels in the medium layout, so an unscoped finder
+    // would match twice.
+    Finder inDrawer(String label) =>
+        find.descendant(of: find.byType(Drawer), matching: find.text(label));
+
+    expect(inDrawer('DASHBOARD'), findsOneWidget);
+    expect(inDrawer('PROFILE'), findsOneWidget);
+    expect(inDrawer('STORE'), findsOneWidget);
+    expect(inDrawer('REWARDS'), findsOneWidget);
+    expect(inDrawer('SKILL TREE'), findsOneWidget);
+    expect(inDrawer('ARCADE'), findsOneWidget);
+    expect(inDrawer('SETTINGS'), findsOneWidget);
+    expect(inDrawer('CURRENT RANK'), findsOneWidget);
   });
 
   testWidgets('narrow drawer opens while compact quick nav remains',
@@ -267,7 +284,11 @@ Future<void> _expectDrawerRoute(
   String route,
 ) async {
   await _openHomeDrawer(tester);
-  await tester.tap(find.text(label));
+  // Tap the label inside the drawer specifically — the top navigation bar
+  // mirrors some of these nav labels in the medium layout.
+  await tester.tap(
+    find.descendant(of: find.byType(Drawer), matching: find.text(label)),
+  );
   await tester.pumpAndSettle();
 
   if (route == canonicalHomeRoute) {

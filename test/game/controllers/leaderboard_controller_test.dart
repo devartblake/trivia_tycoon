@@ -11,13 +11,6 @@ import 'package:synaptix/admin/leaderboard/leaderboard_filter_screen.dart';
 
 import '../../support/hive_test_env.dart';
 
-// Real-but-unused dependencies for the fake data service. LeaderboardDataService
-// requires non-null ApiService/AppCacheService; the fake overrides every method
-// that would touch them, so these just satisfy the (non-nullable) types.
-// Assigned in setUp before the provider is first read.
-late ApiService _api;
-late AppCacheService _cache;
-
 // ---------------------------------------------------------------------------
 // Stubs
 // ---------------------------------------------------------------------------
@@ -29,11 +22,13 @@ class _StubAdminFilterController extends AdminFilterController {
 }
 
 /// Fake LeaderboardDataService: returns an empty list on loadLeaderboard.
+/// The (non-nullable) ApiService/AppCacheService are supplied but never
+/// touched because every method that would use them is overridden.
 class _FakeLeaderboardDataService extends LeaderboardDataService {
-  _FakeLeaderboardDataService()
+  _FakeLeaderboardDataService(ApiService api, AppCacheService cache)
       : super(
-          apiService: _api,
-          appCache: _cache,
+          apiService: api,
+          appCache: cache,
           assetLoader: () async => [],
         );
 
@@ -43,20 +38,6 @@ class _FakeLeaderboardDataService extends LeaderboardDataService {
   @override
   Future<void> submitScore(String playerName, int score) async {}
 }
-
-// ---------------------------------------------------------------------------
-// Provider wired for tests
-// ---------------------------------------------------------------------------
-
-/// A test-local provider so we can inject fakes via a ProviderContainer.
-final _testLeaderboardProvider =
-    ChangeNotifierProvider<LeaderboardController>((ref) {
-  return LeaderboardController(
-    dataService: _FakeLeaderboardDataService(),
-    storage: GeneralKeyValueStorageService(),
-    ref: ref,
-  );
-});
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -131,10 +112,25 @@ void main() {
   late HiveTestEnv hiveEnv;
   late ProviderContainer container;
 
+  // Each test gets its OWN controller through a freshly-built provider (not a
+  // shared top-level one), so no controller state leaks between tests. The
+  // controller reads adminFilterProvider through its ref, so we read it via
+  // the container.
+  late ChangeNotifierProvider<LeaderboardController> leaderboardProvider;
+  LeaderboardController readController() => container.read(leaderboardProvider);
+
   setUp(() async {
     hiveEnv = await HiveTestEnv.create();
-    _api = ApiService(baseUrl: 'http://localhost', initializeCache: false);
-    _cache = await AppCacheService.initialize();
+    final api = ApiService(baseUrl: 'http://localhost', initializeCache: false);
+    final cache = await AppCacheService.initialize();
+
+    leaderboardProvider = ChangeNotifierProvider<LeaderboardController>((ref) {
+      return LeaderboardController(
+        dataService: _FakeLeaderboardDataService(api, cache),
+        storage: GeneralKeyValueStorageService(),
+        ref: ref,
+      );
+    });
 
     container = ProviderContainer(
       overrides: [
@@ -146,6 +142,11 @@ void main() {
   });
 
   tearDown(() async {
+    // The controller's constructor load and loadLeaderboard/importLeaderboardData
+    // run some work after an await (e.g. _applyFilters reads adminFilterProvider);
+    // let those drain before the container — and the stubbed provider — are
+    // disposed, so a late continuation never touches a disposed provider.
+    await Future<void>.delayed(const Duration(milliseconds: 250));
     container.dispose();
     await hiveEnv.dispose();
   });
@@ -156,22 +157,22 @@ void main() {
 
   group('LeaderboardController — initial state', () {
     test('isLoading starts false', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       expect(ctrl.isLoading, isFalse);
     });
 
     test('filteredEntries starts empty', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       expect(ctrl.filteredEntries, isEmpty);
     });
 
     test('selectedCategory defaults to topXP', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       expect(ctrl.selectedCategory, LeaderboardCategory.topXP);
     });
 
     test('sortBy defaults to score', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       expect(ctrl.sortBy, 'score');
     });
   });
@@ -182,25 +183,25 @@ void main() {
 
   group('LeaderboardController — setCategory', () {
     test('changes selectedCategory to daily', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.setCategory(LeaderboardCategory.daily);
       expect(ctrl.selectedCategory, LeaderboardCategory.daily);
     });
 
     test('changes selectedCategory to weekly', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.setCategory(LeaderboardCategory.weekly);
       expect(ctrl.selectedCategory, LeaderboardCategory.weekly);
     });
 
     test('changes selectedCategory to global', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.setCategory(LeaderboardCategory.global);
       expect(ctrl.selectedCategory, LeaderboardCategory.global);
     });
 
     test('changes selectedCategory to mostWins', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.setCategory(LeaderboardCategory.mostWins);
       expect(ctrl.selectedCategory, LeaderboardCategory.mostWins);
     });
@@ -212,19 +213,19 @@ void main() {
 
   group('LeaderboardController — applySorting', () {
     test('changes sortBy to rank', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.applySorting('rank');
       expect(ctrl.sortBy, 'rank');
     });
 
     test('changes sortBy to last_active', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.applySorting('last_active');
       expect(ctrl.sortBy, 'last_active');
     });
 
     test('changes sortBy back to score', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.applySorting('rank');
       ctrl.applySorting('score');
       expect(ctrl.sortBy, 'score');
@@ -238,7 +239,7 @@ void main() {
   group('LeaderboardController — category filtering', () {
     Future<LeaderboardController> ctrlWithEntries(
         List<LeaderboardEntry> entries) async {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       await ctrl.importLeaderboardData({
         'allEntries': entries.map((e) => e.toJson()).toList(),
       });
@@ -253,6 +254,7 @@ void main() {
       ];
       final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.daily);
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(ctrl.filteredEntries.length, 1);
       expect(ctrl.filteredEntries.first.timeframe, 'daily');
@@ -266,6 +268,7 @@ void main() {
       ];
       final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.weekly);
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(ctrl.filteredEntries.length, 2);
       expect(
@@ -279,6 +282,7 @@ void main() {
       ];
       final ctrl = await ctrlWithEntries(entries);
       ctrl.setCategory(LeaderboardCategory.global);
+      await Future<void>.delayed(const Duration(milliseconds: 20));
 
       expect(ctrl.filteredEntries.length, 1);
       expect(ctrl.filteredEntries.first.userId, 2);
@@ -310,7 +314,7 @@ void main() {
         _entry(userId: 2, score: 100, rank: 1),
         _entry(userId: 3, score: 75, rank: 3),
       ];
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       await ctrl.importLeaderboardData({
         'allEntries': entries.map((e) => e.toJson()).toList(),
         'sortBy': 'score',
@@ -328,7 +332,7 @@ void main() {
         _entry(userId: 2, score: 100, rank: 1),
         _entry(userId: 3, score: 75, rank: 2),
       ];
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       await ctrl.importLeaderboardData({
         'allEntries': entries.map((e) => e.toJson()).toList(),
       });
@@ -345,7 +349,7 @@ void main() {
   group('LeaderboardController — promoteUser / banUser', () {
     test('promoteUser increments level by 1', () async {
       final entry = _entry(userId: 1, score: 100, rank: 1);
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       await ctrl.importLeaderboardData({
         'allEntries': [entry.toJson()],
       });
@@ -368,7 +372,7 @@ void main() {
         _entry(userId: 1, score: 100, rank: 1),
         _entry(userId: 2, score: 80, rank: 2),
       ];
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       await ctrl.importLeaderboardData({
         'allEntries': entries.map((e) => e.toJson()).toList(),
       });
@@ -376,11 +380,12 @@ void main() {
       final exported0 = ctrl.exportLeaderboardData();
       final beforeCount = (exported0['allEntries'] as List).length;
 
-      // Ban entry by looking it up in exported data
-      final allFromExport = exported0['allEntries'] as List;
-      if (allFromExport.isNotEmpty) {
-        // We can verify banning works by checking exported count decreases
-        ctrl.banUser(entries.first);
+      // banUser removes by object identity, so ban a *live* entry from the
+      // controller's own list (the deserialized instances), not the detached
+      // fixtures — this mirrors how the UI bans the entry it rendered.
+      if (ctrl.filteredEntries.isNotEmpty) {
+        ctrl.banUser(ctrl.filteredEntries.first);
+        await Future<void>.delayed(const Duration(milliseconds: 20));
         final exported1 = ctrl.exportLeaderboardData();
         final afterCount = (exported1['allEntries'] as List).length;
         expect(afterCount, beforeCount - 1);
@@ -394,13 +399,13 @@ void main() {
 
   group('LeaderboardController — pause / resume', () {
     test('pauseLeaderboard sets isLoading to false', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.pauseLeaderboard();
       expect(ctrl.isLoading, isFalse);
     });
 
     test('resumeLeaderboard allows subsequent operations', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.pauseLeaderboard();
       ctrl.resumeLeaderboard();
       // After resume, setCategory should work without throwing
@@ -415,7 +420,7 @@ void main() {
 
   group('LeaderboardController — exportLeaderboardData', () {
     test('returns map with required keys', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       final data = ctrl.exportLeaderboardData();
 
       expect(data.containsKey('allEntries'), isTrue);
@@ -426,7 +431,7 @@ void main() {
     });
 
     test('selectedCategory reflects current category', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       ctrl.setCategory(LeaderboardCategory.weekly);
 
       final data = ctrl.exportLeaderboardData();
@@ -440,7 +445,7 @@ void main() {
 
   group('LeaderboardController — isFilterActive', () {
     test('returns false with default stub filter state', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       expect(ctrl.isFilterActive, isFalse);
     });
   });
@@ -451,7 +456,7 @@ void main() {
 
   group('LeaderboardController — getLeaderboardStats', () {
     test('returns a map including isPaused and isLoading keys', () {
-      final ctrl = container.read(_testLeaderboardProvider);
+      final ctrl = readController();
       final stats = ctrl.getLeaderboardStats();
       expect(stats.containsKey('isPaused'), isTrue);
       expect(stats.containsKey('isLoading'), isTrue);

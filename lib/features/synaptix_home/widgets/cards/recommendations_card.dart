@@ -26,26 +26,31 @@ class RecommendationsCard extends StatelessWidget {
           SynaptixPanelHeader(title: 'RECOMMENDED', action: '$rewards REWARDS'),
           const SizedBox(height: 12),
           for (final item in recommendations)
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(item.icon, color: SynaptixHomeTheme.gold),
-              title: Text(
-                item.title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
+            // Transparent Material so ListTile ink splashes paint above the
+            // panel's colored decoration instead of being hidden by it.
+            Material(
+              type: MaterialType.transparency,
+              child: ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(item.icon, color: SynaptixHomeTheme.gold),
+                title: Text(
+                  item.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
+                subtitle: Text(
+                  item.subtitle,
+                  style: const TextStyle(color: SynaptixHomeTheme.muted),
+                ),
+                trailing: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: SynaptixHomeTheme.muted,
+                ),
+                onTap: () => context.go(item.route),
               ),
-              subtitle: Text(
-                item.subtitle,
-                style: const TextStyle(color: SynaptixHomeTheme.muted),
-              ),
-              trailing: const Icon(
-                Icons.chevron_right_rounded,
-                color: SynaptixHomeTheme.muted,
-              ),
-              onTap: () => context.go(item.route),
             ),
         ],
       ),

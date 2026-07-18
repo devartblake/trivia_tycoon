@@ -186,9 +186,12 @@ class LeaderboardEntry {
   /// Converts JSON to LeaderboardEntry object
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) {
     return LeaderboardEntry(
-      userId: json['user_id'] is int
-          ? json['user_id']
-          : int.tryParse(json['user_id'].toString()) ?? 0,
+      userId: () {
+        // Accept the canonical `userId` (from toJson) or legacy snake_case.
+        final raw = json['userId'] ?? json['user_id'] ?? json['user_Id'];
+        if (raw is int) return raw;
+        return int.tryParse(raw?.toString() ?? '') ?? 0;
+      }(),
       playerName: json['playerName']?.toString() ?? 'Unknown',
       score: json['score'] ?? 0,
       rank: json['rank'] ?? 0,
@@ -204,7 +207,9 @@ class LeaderboardEntry {
       xpProgress: double.tryParse(json['xpProgress'].toString()) ?? 0.0,
       timeframe: json['timeframe']?.toString() ?? '',
       avatar: json['avatar']?.toString() ?? '',
-      lastActive: DateTime.parse(json['last_active']),
+      lastActive: DateTime.tryParse(
+              (json['lastActive'] ?? json['last_active'] ?? '').toString()) ??
+          DateTime.now(),
       timestamp: DateTime.parse(json['timestamp']),
       gender: json['gender']?.toString() ?? '',
       ageGroup: json['ageGroup']?.toString() ?? '',
@@ -238,7 +243,7 @@ class LeaderboardEntry {
   /// Converts LeaderboardEntry object to JSON
   Map<String, dynamic> toJson() {
     return {
-      'user_Id': userId,
+      'userId': userId,
       'playerName': playerName,
       'score': score,
       'rank': rank,

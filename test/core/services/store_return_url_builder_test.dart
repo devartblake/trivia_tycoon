@@ -7,6 +7,9 @@ void main() {
 
   setUpAll(() async {
     await EnvConfig.load();
+    // APP_REDIRECT_BASE_URL isn't provided in unit tests; set the base the
+    // builder needs so it can construct absolute return URLs.
+    EnvConfig.appRedirectBaseUrlForTest = 'https://app.synaptixgame.com';
   });
 
   group('StoreReturnUrlBuilder', () {

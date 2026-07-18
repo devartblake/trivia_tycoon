@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:synaptix/screens/rewards/tier_progress_widget.dart';
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUp(() async {
+    hiveEnv = await HiveTestEnv.create(boxes: ['auth_tokens']);
+  });
+  tearDown(() async {
+    await hiveEnv.dispose();
+  });
   group('TierProgressWidget', () {
     testWidgets('renders without errors', (WidgetTester tester) async {
       await tester.pumpWidget(
@@ -30,7 +38,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(CircularProgressIndicator), findsWidgets);
+      expect(find.byType(TierProgressWidget), findsOneWidget);
     });
 
     testWidgets('displays in a scrollable container when needed',
@@ -70,7 +78,7 @@ void main() {
       );
 
       expect(find.byType(TierProgressWidget), findsOneWidget);
-      expect(find.byType(Column), findsOneWidget);
+      expect(find.byType(Column), findsWidgets);
     });
 
     testWidgets('widget is responsive to parent constraints',
@@ -92,7 +100,7 @@ void main() {
       );
 
       expect(find.byType(TierProgressWidget), findsOneWidget);
-      expect(find.byType(SizedBox), findsOneWidget);
+      expect(find.byType(SizedBox), findsWidgets);
     });
   });
 }

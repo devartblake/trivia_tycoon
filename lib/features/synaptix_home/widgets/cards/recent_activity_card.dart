@@ -20,32 +20,37 @@ class RecentActivityCard extends StatelessWidget {
           const SynaptixPanelHeader(title: 'RECENT PLAY', action: 'HISTORY'),
           const SizedBox(height: 12),
           for (final item in items)
-            ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: const CircleAvatar(
-                backgroundColor: SynaptixHomeTheme.panelAlt,
-                child: Icon(
-                  Icons.history_rounded,
-                  color: SynaptixHomeTheme.cyan,
+            // Transparent Material so ListTile paints above the panel's
+            // colored decoration instead of being hidden by it.
+            Material(
+              type: MaterialType.transparency,
+              child: ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                leading: const CircleAvatar(
+                  backgroundColor: SynaptixHomeTheme.panelAlt,
+                  child: Icon(
+                    Icons.history_rounded,
+                    color: SynaptixHomeTheme.cyan,
+                  ),
                 ),
-              ),
-              title: Text(
-                item.title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
+                title: Text(
+                  item.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                item.date,
-                style: const TextStyle(color: SynaptixHomeTheme.muted),
-              ),
-              trailing: Text(
-                item.score,
-                style: const TextStyle(
-                  color: SynaptixHomeTheme.green,
-                  fontWeight: FontWeight.w900,
+                subtitle: Text(
+                  item.date,
+                  style: const TextStyle(color: SynaptixHomeTheme.muted),
+                ),
+                trailing: Text(
+                  item.score,
+                  style: const TextStyle(
+                    color: SynaptixHomeTheme.green,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
             ),

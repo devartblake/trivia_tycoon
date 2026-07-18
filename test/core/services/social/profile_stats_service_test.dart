@@ -33,11 +33,11 @@ void main() {
   late ProfileStatsService svc;
 
   setUp(() {
-    // Fresh singleton state by clearing internal maps via initialize()
+    // ProfileStatsService is a singleton; reset its in-memory state so each
+    // test starts clean (otherwise match/stat/streak counts accumulate).
     svc = ProfileStatsService();
+    svc.resetForTest();
     svc.initialize();
-    // Clear mock data loaded by initialize to get a clean slate
-    // We use a known userId that won't collide with mock data
   });
 
   const uid = 'test_user_99';
@@ -241,14 +241,14 @@ void main() {
       expect(svc.getAchievements(uid).length, 13);
     });
 
-    test('first_win achievement unlocked after one win', () {
-      svc.recordMatch(_match(userId: uid, result: GameResult.win));
+    test('first_win achievement unlocked after one win', () async {
+      await svc.recordMatch(_match(userId: uid, result: GameResult.win));
       final achievements = svc.getUnlockedAchievements(uid);
       expect(achievements.any((a) => a.id == 'first_win'), isTrue);
     });
 
-    test('perfect_game achievement unlocked for 100% accuracy', () {
-      svc.recordMatch(_match(
+    test('perfect_game achievement unlocked for 100% accuracy', () async {
+      await svc.recordMatch(_match(
         userId: uid,
         result: GameResult.win,
         questionsAnswered: 10,
@@ -258,8 +258,9 @@ void main() {
       expect(unlocked.any((a) => a.id == 'perfect_game'), isTrue);
     });
 
-    test('brain_box unlocked for score >= 1000', () {
-      svc.recordMatch(_match(userId: uid, score: 1000, result: GameResult.win));
+    test('brain_box unlocked for score >= 1000', () async {
+      await svc.recordMatch(
+          _match(userId: uid, score: 1000, result: GameResult.win));
       final unlocked = svc.getUnlockedAchievements(uid);
       expect(unlocked.any((a) => a.id == 'brain_box'), isTrue);
     });
@@ -270,8 +271,8 @@ void main() {
       expect(locked.isNotEmpty, isTrue);
     });
 
-    test('getNewlyUnlockedAchievements returns recently unlocked', () {
-      svc.recordMatch(_match(userId: uid, result: GameResult.win));
+    test('getNewlyUnlockedAchievements returns recently unlocked', () async {
+      await svc.recordMatch(_match(userId: uid, result: GameResult.win));
       final newlyUnlocked = svc.getNewlyUnlockedAchievements(uid);
       expect(newlyUnlocked.any((a) => a.id == 'first_win'), isTrue);
     });

@@ -78,6 +78,12 @@ class EnvConfig {
   /// Optional frontend/app base URL for payment return routing.
   static String? get appRedirectBaseUrl => _appRedirectBaseUrl;
 
+  /// Test hook: override the app redirect base URL (normally resolved from
+  /// APP_REDIRECT_BASE_URL at load time, which isn't set in unit tests).
+  @visibleForTesting
+  static set appRedirectBaseUrlForTest(String? value) =>
+      _appRedirectBaseUrl = value;
+
   /// Public backend health endpoint used by startup readiness checks.
   static String get apiHealthUrl {
     assert(_apiHealthUrl != null, 'API_HEALTH_URL is not loaded from .env');

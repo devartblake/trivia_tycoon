@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synaptix/game/controllers/skill_tree_controller.dart';
 import 'package:synaptix/game/models/skill_tree_graph.dart';
@@ -127,6 +128,13 @@ Widget _buildHarness({
 }
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUp(() async {
+    hiveEnv = await HiveTestEnv.create(boxes: ['auth_tokens']);
+  });
+  tearDown(() async {
+    await hiveEnv.dispose();
+  });
   testWidgets('keeps empty branch state without action bar and path data',
       (tester) async {
     await tester.pumpWidget(
