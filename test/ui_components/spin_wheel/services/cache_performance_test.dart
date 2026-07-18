@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:synaptix/core/services/spin_wheel_api_client.dart';
 import 'package:synaptix/core/services/tier_api_client.dart';
 import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
@@ -14,11 +13,11 @@ void main() {
 
     group('TierConfigCache', () {
       late TierConfigCache cache;
-      late MockTierApiClient mockApiClient;
+      late FakeTierApiClient fakeApiClient;
 
       setUp(() {
-        mockApiClient = MockTierApiClient();
-        cache = TierConfigCache(apiClient: mockApiClient);
+        fakeApiClient = FakeTierApiClient();
+        cache = TierConfigCache(apiClient: fakeApiClient);
       });
 
       tearDown(() {
@@ -27,7 +26,7 @@ void main() {
 
       test('Memory cache hit rate > 80% with repeated requests', () async {
         // Arrange
-        final mockTiers = [
+        fakeApiClient.tiers = [
           TierDefinition(
             id: 'test-1',
             name: 'Test 1',
@@ -38,10 +37,6 @@ void main() {
             rewards: TierReward(badge: 'test', coinsBonus: 10, gemsBonus: 0),
           ),
         ];
-
-        when(mockApiClient.getTierDefinitions()).thenAnswer(
-          (_) async => mockTiers,
-        );
 
         // Act: Make 50 requests
         for (int i = 0; i < 50; i++) {
@@ -52,12 +47,12 @@ void main() {
         final stats = cache.getCacheStats();
         expect(stats, isNotNull);
         // After first miss, 49 hits out of 50 = 98% hit rate
-        expect(verify(mockApiClient.getTierDefinitions()).callCount, 1);
+        expect(fakeApiClient.getTierDefinitionsCalls, 1);
       });
 
       test('Memory cache response < 1ms', () async {
         // Arrange
-        final mockTiers = [
+        fakeApiClient.tiers = [
           TierDefinition(
             id: 'test-1',
             name: 'Test 1',
@@ -68,10 +63,6 @@ void main() {
             rewards: TierReward(badge: 'test', coinsBonus: 10, gemsBonus: 0),
           ),
         ];
-
-        when(mockApiClient.getTierDefinitions()).thenAnswer(
-          (_) async => mockTiers,
-        );
 
         // Prime cache
         await cache.getTierDefinitions();
@@ -87,47 +78,39 @@ void main() {
 
       test('Cache invalidation works on XP award', () async {
         // Arrange
-        when(mockApiClient.getTierDefinitions()).thenAnswer(
-          (_) async => [],
-        );
-
-        when(mockApiClient.getPlayerTierProgress('user_1')).thenAnswer(
-          (_) async => PlayerTierProgress(
-            currentTier: TierDefinition(
-              id: 'test',
-              name: 'Test',
-              level: 1,
-              minXp: 0,
-              maxXp: 100,
-              iconName: 'test',
-              rewards: TierReward(badge: 'test', coinsBonus: 10, gemsBonus: 0),
-            ),
-            currentXp: 0,
-            xpInCurrentTier: 0,
-            xpNeededForNextTier: 100,
-            progressPercentage: 0,
+        fakeApiClient.tiers = [];
+        fakeApiClient.tierProgress = PlayerTierProgress(
+          currentTier: TierDefinition(
+            id: 'test',
+            name: 'Test',
+            level: 1,
+            minXp: 0,
+            maxXp: 100,
+            iconName: 'test',
+            rewards: TierReward(badge: 'test', coinsBonus: 10, gemsBonus: 0),
           ),
+          currentXp: 0,
+          xpInCurrentTier: 0,
+          xpNeededForNextTier: 100,
+          progressPercentage: 0,
         );
-
-        when(mockApiClient.awardXp('user_1', 50, 'test')).thenAnswer(
-          (_) async => XpAwardResult(
-            xpAwarded: 50,
-            totalXp: 50,
-            newLevel: 1,
-            tierUpgraded: false,
-          ),
+        fakeApiClient.xpResult = XpAwardResult(
+          xpAwarded: 50,
+          totalXp: 50,
+          newLevel: 1,
+          tierUpgraded: false,
         );
 
         // Prime cache
         await cache.getPlayerTierProgress('user_1');
-        verify(mockApiClient.getPlayerTierProgress('user_1')).called(1);
+        expect(fakeApiClient.getPlayerTierProgressCalls, 1);
 
         // Act: Award XP (should invalidate cache)
         await cache.awardXp('user_1', 50, 'test');
 
         // Assert: Next call should fetch fresh data
         await cache.getPlayerTierProgress('user_1');
-        verify(mockApiClient.getPlayerTierProgress('user_1')).called(2);
+        expect(fakeApiClient.getPlayerTierProgressCalls, 2);
       });
 
       test('Cache TTL expiration works', () async {
@@ -148,9 +131,7 @@ void main() {
 
       test('Cache memory usage tracking', () async {
         // Arrange
-        when(mockApiClient.getTierDefinitions()).thenAnswer(
-          (_) async => [],
-        );
+        fakeApiClient.tiers = [];
 
         // Act
         await cache.getTierDefinitions();
@@ -169,11 +150,11 @@ void main() {
 
     group('SpinConfigCache', () {
       late SpinConfigCache cache;
-      late MockSpinWheelApiClient mockApiClient;
+      late FakeSpinWheelApiClient fakeApiClient;
 
       setUp(() {
-        mockApiClient = MockSpinWheelApiClient();
-        cache = SpinConfigCache(apiClient: mockApiClient);
+        fakeApiClient = FakeSpinWheelApiClient();
+        cache = SpinConfigCache(apiClient: fakeApiClient);
       });
 
       tearDown(() {
@@ -182,9 +163,7 @@ void main() {
 
       test('Segment cache hit rate > 80%', () async {
         // Arrange
-        when(mockApiClient.getSegments()).thenAnswer(
-          (_) async => [],
-        );
+        fakeApiClient.segments = [];
 
         // Act: Make 100 requests
         for (int i = 0; i < 100; i++) {
@@ -199,19 +178,17 @@ void main() {
 
       test('Probability config cache hit rate > 80%', () async {
         // Arrange
-        when(mockApiClient.getProbabilityConfig()).thenAnswer(
-          (_) async => ProbabilityConfig(
-            version: '1.0.0',
-            lastUpdated: DateTime.now(),
-            baseDistribution: BaseDistribution(
-              jackpot: 0.02,
-              rare: 0.08,
-              uncommon: 0.30,
-              common: 0.60,
-            ),
-            modifiers: {},
-            timeBasedAdjustments: [],
+        fakeApiClient.probabilityConfig = ProbabilityConfig(
+          version: '1.0.0',
+          lastUpdated: DateTime.now(),
+          baseDistribution: BaseDistribution(
+            jackpot: 0.02,
+            rare: 0.08,
+            uncommon: 0.30,
+            common: 0.60,
           ),
+          modifiers: {},
+          timeBasedAdjustments: [],
         );
 
         // Act: Make 100 requests
@@ -227,9 +204,7 @@ void main() {
 
       test('Cached segment response < 1ms', () async {
         // Arrange
-        when(mockApiClient.getSegments()).thenAnswer(
-          (_) async => [],
-        );
+        fakeApiClient.segments = [];
 
         // Prime cache
         await cache.getSegments();
@@ -245,20 +220,17 @@ void main() {
 
       test('Analytics cache invalidation on log', () async {
         // Arrange
-        when(mockApiClient.getAnalytics(period: '24h')).thenAnswer(
-          (_) async => SpinAnalytics(
-            fromDate: DateTime.now(),
-            toDate: DateTime.now(),
-            totalSpins: 0,
-            segmentStats: {},
-            anomalies: [],
-          ),
+        fakeApiClient.analytics = SpinAnalytics(
+          fromDate: DateTime.now(),
+          toDate: DateTime.now(),
+          totalSpins: 0,
+          segmentStats: {},
+          anomalies: [],
         );
 
-        // Note: logSpinResult will be mocked dynamically when called
         // Prime cache
         await cache.getAnalytics();
-        verify(mockApiClient.getAnalytics(period: '24h')).called(1);
+        expect(fakeApiClient.getAnalyticsCalls, 1);
 
         // Act: Log spin result (should invalidate analytics cache)
         await cache.logSpinResult(
@@ -272,28 +244,23 @@ void main() {
 
         // Assert: Next call should fetch fresh data
         await cache.getAnalytics();
-        verify(mockApiClient.getAnalytics(period: '24h')).called(2);
+        expect(fakeApiClient.getAnalyticsCalls, 2);
       });
 
       test('Cache statistics tracking', () async {
         // Arrange
-        when(mockApiClient.getSegments()).thenAnswer(
-          (_) async => [],
-        );
-
-        when(mockApiClient.getProbabilityConfig()).thenAnswer(
-          (_) async => ProbabilityConfig(
-            version: '1.0.0',
-            lastUpdated: DateTime.now(),
-            baseDistribution: BaseDistribution(
-              jackpot: 0.02,
-              rare: 0.08,
-              uncommon: 0.30,
-              common: 0.60,
-            ),
-            modifiers: {},
-            timeBasedAdjustments: [],
+        fakeApiClient.segments = [];
+        fakeApiClient.probabilityConfig = ProbabilityConfig(
+          version: '1.0.0',
+          lastUpdated: DateTime.now(),
+          baseDistribution: BaseDistribution(
+            jackpot: 0.02,
+            rare: 0.08,
+            uncommon: 0.30,
+            common: 0.60,
           ),
+          modifiers: {},
+          timeBasedAdjustments: [],
         );
 
         // Act
@@ -313,9 +280,7 @@ void main() {
 
       test('Clear cache resets statistics', () async {
         // Arrange
-        when(mockApiClient.getSegments()).thenAnswer(
-          (_) async => [],
-        );
+        fakeApiClient.segments = [];
 
         await cache.getSegments();
 
@@ -331,9 +296,7 @@ void main() {
 
       test('Memory usage estimation', () async {
         // Arrange
-        when(mockApiClient.getSegments()).thenAnswer(
-          (_) async => [],
-        );
+        fakeApiClient.segments = [];
 
         // Act
         await cache.getSegments();
@@ -352,21 +315,19 @@ void main() {
 
     group('Cache vs API Performance', () {
       late TierConfigCache tierCache;
-      late MockTierApiClient mockTierApiClient;
+      late FakeTierApiClient fakeTierApiClient;
 
       setUp(() {
-        mockTierApiClient = MockTierApiClient();
-        tierCache = TierConfigCache(apiClient: mockTierApiClient);
+        fakeTierApiClient = FakeTierApiClient();
+        tierCache = TierConfigCache(apiClient: fakeTierApiClient);
       });
 
       test('Cached response 100x faster than uncached', () async {
-        // Arrange
-        when(mockTierApiClient.getTierDefinitions()).thenAnswer(
-          (_) async {
-            await Future.delayed(const Duration(milliseconds: 100));
-            return [];
-          },
-        );
+        // Arrange: the uncached fetch is slow; the cached read serves from
+        // memory without hitting the client at all.
+        fakeTierApiClient.tiers = [];
+        fakeTierApiClient.getTierDefinitionsDelay =
+            const Duration(milliseconds: 100);
 
         // Act: First call (uncached)
         final stopwatch1 = Stopwatch()..start();
@@ -388,11 +349,86 @@ void main() {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Mock Classes
+// Manual fakes
+//
+// The API clients return non-nullable types, which hand-written
+// `extends Mock` classes can't stub under null-safety (Mockito needs codegen).
+// These lightweight fakes record call counts and return configured values;
+// `noSuchMethod` no-ops the unused surface of each interface.
 // ─────────────────────────────────────────────────────────────────────
 
-class MockTierApiClient extends Mock implements TierApiClient {}
+class FakeTierApiClient implements TierApiClient {
+  List<TierDefinition> tiers = [];
+  PlayerTierProgress? tierProgress;
+  XpAwardResult? xpResult;
+  Duration getTierDefinitionsDelay = Duration.zero;
 
-class MockSpinWheelApiClient extends Mock implements SpinWheelApiClient {}
+  int getTierDefinitionsCalls = 0;
+  int getPlayerTierProgressCalls = 0;
+  int awardXpCalls = 0;
 
-/// Spin result for testing
+  @override
+  Future<List<TierDefinition>> getTierDefinitions() async {
+    getTierDefinitionsCalls++;
+    if (getTierDefinitionsDelay > Duration.zero) {
+      await Future.delayed(getTierDefinitionsDelay);
+    }
+    return tiers;
+  }
+
+  @override
+  Future<PlayerTierProgress> getPlayerTierProgress(String userId) async {
+    getPlayerTierProgressCalls++;
+    return tierProgress!;
+  }
+
+  @override
+  Future<XpAwardResult> awardXp(
+      String userId, int amount, String reason) async {
+    awardXpCalls++;
+    return xpResult!;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class FakeSpinWheelApiClient implements SpinWheelApiClient {
+  List<WheelSegment> segments = [];
+  ProbabilityConfig? probabilityConfig;
+  SpinAnalytics? analytics;
+
+  int getSegmentsCalls = 0;
+  int getProbabilityConfigCalls = 0;
+  int getAnalyticsCalls = 0;
+  int logSpinResultCalls = 0;
+
+  @override
+  Future<List<WheelSegment>> getSegments() async {
+    getSegmentsCalls++;
+    return segments;
+  }
+
+  @override
+  Future<ProbabilityConfig> getProbabilityConfig() async {
+    getProbabilityConfigCalls++;
+    return probabilityConfig!;
+  }
+
+  @override
+  Future<SpinAnalytics> getAnalytics({
+    String period = '24h',
+    String? segmentId,
+  }) async {
+    getAnalyticsCalls++;
+    return analytics!;
+  }
+
+  @override
+  Future<void> logSpinResult(SpinResult result) async {
+    logSpinResultCalls++;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
