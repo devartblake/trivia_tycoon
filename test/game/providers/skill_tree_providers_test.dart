@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/path_provider_test_env.dart';
 import 'package:synaptix/core/dto/skill_dto.dart';
 import 'package:synaptix/game/data/skill_tree_dto_mapper.dart';
 import 'package:synaptix/game/models/skill_tree_graph.dart';
@@ -7,6 +8,11 @@ import 'package:synaptix/game/providers/skill_tree_provider.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  late PathProviderTestEnv pathEnv;
+  setUpAll(() async {
+    pathEnv = await PathProviderTestEnv.install();
+  });
+  tearDownAll(() => pathEnv.remove());
 
   // ── skillTreeGraphProvider ────────────────────────────────────────────────
 

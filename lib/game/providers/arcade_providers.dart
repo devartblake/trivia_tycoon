@@ -20,6 +20,8 @@ import '../../core/state/flow_connect_state_notifier.dart';
 import '../../game/data/mission_data_loader.dart';
 import '../../game/models/badge.dart';
 import '../../game/models/champion_event.dart';
+import '../../game/models/champion_prediction.dart';
+import '../../game/models/champion_spectator.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import '../../game/models/tier_model.dart';
@@ -151,6 +153,25 @@ final championEventProvider = FutureProvider<ChampionEvent?>((ref) async {
   } catch (_) {
     return null;
   }
+});
+
+/// The caller's no-loss prediction state for a champion event (null if none /
+/// backend unreachable, so the panel simply hides).
+final championPredictionProvider =
+    FutureProvider.family<ChampionPrediction?, String>(
+        (ref, gameEventId) async {
+  final apiService = ref.read(apiServiceProvider);
+  return apiService.getPrediction(gameEventId);
+});
+
+/// The caller's spectator view of a champion event: live counts + jackpot for
+/// everyone, plus the elimination-cam feed when they hold a premium pass. Null
+/// when there's no such event / backend unreachable, so the panel hides.
+final championSpectatorProvider =
+    FutureProvider.family<ChampionSpectatorView?, String>(
+        (ref, gameEventId) async {
+  final apiService = ref.read(apiServiceProvider);
+  return apiService.getSpectatorView(gameEventId);
 });
 
 // ---------------------------------------------------------------------------

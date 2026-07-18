@@ -223,8 +223,7 @@ class _AgeVerificationStepState extends ConsumerState<AgeVerificationStep> {
 
     widget.controller.updateUserData({
       'declaredAge': age,
-      'dateOfBirth':
-          '${dob.year.toString().padLeft(4, '0')}-'
+      'dateOfBirth': '${dob.year.toString().padLeft(4, '0')}-'
           '${dob.month.toString().padLeft(2, '0')}-'
           '${dob.day.toString().padLeft(2, '0')}',
       'isMinor': _isMinor ?? false,

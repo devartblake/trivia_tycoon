@@ -7,13 +7,14 @@ import '_api_cache_store.dart' if (dart.library.io) '_api_cache_store_io.dart';
 import 'package:synaptix/core/env.dart';
 import '../dto/champion_round_events.dart';
 import '../../game/models/champion_event.dart';
+import '../../game/models/champion_prediction.dart';
+import '../../game/models/champion_spectator.dart';
 import '../../game/models/season_tiebreaker.dart';
 import '../../game/models/seasonal_competition_model.dart';
 import 'analytics/config_service.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 import 'package:synaptix/core/services/asset_resolver.dart';
 import 'package:synaptix/core/services/guest_api_gate.dart';
-
 
 class ApiRequestException implements Exception {
   final String message;
@@ -1038,5 +1039,45 @@ class ApiService {
       body: {'optionId': optionId},
     );
     return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 My Prediction State**
+  /// GET /game-events/{id}/prediction — the caller's pick, live tally, and
+  /// (once the match ends) their reward.
+  Future<ChampionPrediction?> getPrediction(String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/prediction');
+      if (response.isEmpty) return null;
+      return ChampionPrediction.fromJson(response);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// **🔹 Submit a Prediction**
+  /// POST /game-events/{id}/predict — "will the champion defend?" (no stake).
+  Future<String> submitPrediction({
+    required String gameEventId,
+    required bool championDefends,
+  }) async {
+    final response = await post(
+      '/game-events/$gameEventId/predict',
+      body: {'championDefends': championDefends},
+    );
+    return response['status']?.toString() ?? 'Unknown';
+  }
+
+  /// **🔹 Spectator View**
+  /// GET /game-events/{id}/spectate — live counts + jackpot for everyone; the
+  /// elimination-cam feed is populated only when the caller holds a premium
+  /// spectator pass. Anonymous callers still get the free basic view.
+  Future<ChampionSpectatorView?> getSpectatorView(String gameEventId) async {
+    try {
+      final response = await get('/game-events/$gameEventId/spectate');
+      if (response.isEmpty) return null;
+      return ChampionSpectatorView.fromJson(response);
+    } catch (_) {
+      return null;
+    }
   }
 }

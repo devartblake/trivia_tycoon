@@ -19,7 +19,8 @@ class GuestCreateAccountBanner extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: Tooltip(
-        message: 'Create a free account to keep progress and unlock online play',
+        message:
+            'Create a free account to keep progress and unlock online play',
         child: InkWell(
           borderRadius: BorderRadius.circular(22),
           onTap: () => context.go(canonicalRegisterRoute),

@@ -124,7 +124,8 @@ class AppInit {
     await authService.ensureDeviceId();
 
     // 3. Service Manager & Core Logic
-    final serviceManager = await ServiceManager.initialize(authTokenStore: tokenStore);
+    final serviceManager =
+        await ServiceManager.initialize(authTokenStore: tokenStore);
     _serviceManager = serviceManager; // Store for lifecycle callbacks
 
     // ✅ NEW - Initialize lifecycle manager with save callbacks

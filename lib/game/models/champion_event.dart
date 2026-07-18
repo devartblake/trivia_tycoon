@@ -20,6 +20,9 @@ class ChampionEvent {
   final double jackpotMultiplier;
   final String? championPlayerId;
 
+  /// Name of the sponsor funding the jackpot multiplier, if any.
+  final String? sponsorName;
+
   const ChampionEvent({
     required this.id,
     required this.kind,
@@ -34,11 +37,16 @@ class ChampionEvent {
     this.effectiveJackpot = 0,
     this.jackpotMultiplier = 1.0,
     this.championPlayerId,
+    this.sponsorName,
   });
 
   bool get isChampionVsTier => kind == 'champion_vs_tier';
   bool get isOpenForEntry => status == 'Open';
   bool get isLive => status == 'Live';
+
+  /// Whether a sponsor is boosting the jackpot (name set and multiplier > 1).
+  bool get hasSponsor =>
+      sponsorName != null && sponsorName!.isNotEmpty && jackpotMultiplier > 1.0;
 
   /// The jackpot to show players: the multiplied pool once known, else the raw
   /// pool (summaries don't carry a jackpot at all → 0).
@@ -73,6 +81,9 @@ class ChampionEvent {
       effectiveJackpot: (json['effectiveJackpot'] as num?)?.toInt() ?? 0,
       jackpotMultiplier: (json['jackpotMultiplier'] as num?)?.toDouble() ?? 1.0,
       championPlayerId: json['championPlayerId']?.toString(),
+      sponsorName: (json['sponsorName'] as String?)?.trim().isNotEmpty == true
+          ? (json['sponsorName'] as String).trim()
+          : null,
     );
   }
 }

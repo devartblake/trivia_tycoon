@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/hive_test_env.dart';
 import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 import 'package:synaptix/game/providers/core_providers.dart';
 import 'package:synaptix/game/services/profile_service.dart';
@@ -93,6 +94,13 @@ ProfileService _makeSyncService({
 // ---------------------------------------------------------------------------
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUpAll(() async {
+    hiveEnv = await HiveTestEnv.create();
+  });
+  tearDownAll(() async {
+    await hiveEnv.dispose();
+  });
   group('ProfileService — display name', () {
     test('initializes with provided display name', () {
       final container = ProviderContainer();

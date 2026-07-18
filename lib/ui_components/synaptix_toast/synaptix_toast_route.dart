@@ -65,17 +65,15 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
       overlays.add(
         OverlayEntry(
           builder: (context) => Listener(
-            onPointerDown:
-                toast.isDismissible ? (_) => toast.dismiss() : null,
+            onPointerDown: toast.isDismissible ? (_) => toast.dismiss() : null,
             child: _createBackgroundOverlay(),
           ),
         ),
       );
     }
 
-    Widget child = toast.isDismissible
-        ? _getDismissibleToast(_builder)
-        : _getToast();
+    Widget child =
+        toast.isDismissible ? _getDismissibleToast(_builder) : _getToast();
     if (toast.safeArea) {
       child = SafeArea(child: child);
     }
@@ -169,12 +167,12 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
 
   Widget _getDismissibleToast(Widget child) {
     return Dismissible(
-      direction: toast.dismissDirection ==
-              SynaptixToastDismissDirection.horizontal
-          ? DismissDirection.horizontal
-          : (toast.toastPosition == SynaptixToastPosition.top
-              ? DismissDirection.up
-              : DismissDirection.down),
+      direction:
+          toast.dismissDirection == SynaptixToastDismissDirection.horizontal
+              ? DismissDirection.horizontal
+              : (toast.toastPosition == SynaptixToastPosition.top
+                  ? DismissDirection.up
+                  : DismissDirection.down),
       key: UniqueKey(),
       onDismissed: (_) {
         toast.onDismiss?.call();
@@ -275,26 +273,23 @@ class SynaptixToastRoute<T extends Object?> extends OverlayRoute<T> {
     );
   }
 
-  Animation<double>? createBlurFilterAnimation() =>
-      toast.routeBlur == null
-          ? null
-          : Tween<double>(begin: 0.0, end: toast.routeBlur).animate(
-              CurvedAnimation(
-                parent: _controller!,
-                curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
-              ),
-            );
+  Animation<double>? createBlurFilterAnimation() => toast.routeBlur == null
+      ? null
+      : Tween<double>(begin: 0.0, end: toast.routeBlur).animate(
+          CurvedAnimation(
+            parent: _controller!,
+            curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
+          ),
+        );
 
-  Animation<Color?>? createColorFilterAnimation() =>
-      toast.routeColor == null
-          ? null
-          : ColorTween(begin: Colors.transparent, end: toast.routeColor)
-              .animate(
-              CurvedAnimation(
-                parent: _controller!,
-                curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
-              ),
-            );
+  Animation<Color?>? createColorFilterAnimation() => toast.routeColor == null
+      ? null
+      : ColorTween(begin: Colors.transparent, end: toast.routeColor).animate(
+          CurvedAnimation(
+            parent: _controller!,
+            curve: const Interval(0.0, 0.35, curve: Curves.easeInOut),
+          ),
+        );
 
   @override
   TickerFuture didPush() {

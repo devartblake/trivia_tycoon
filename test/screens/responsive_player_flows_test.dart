@@ -19,8 +19,7 @@ import 'package:synaptix/game/models/question_model.dart';
 import 'package:synaptix/game/models/question_type.dart' as qtype;
 import 'package:synaptix/game/models/question_difficulty.dart' as qdiff;
 import 'package:synaptix/game/providers/message_providers.dart';
-import 'package:synaptix/game/providers/profile_providers.dart'
-    as profile_data;
+import 'package:synaptix/game/providers/profile_providers.dart' as profile_data;
 import 'package:synaptix/game/providers/question_providers.dart'
     as question_data;
 import 'package:synaptix/game/services/quiz_category.dart';

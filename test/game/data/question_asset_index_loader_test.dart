@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import '../../support/path_provider_test_env.dart';
 import 'package:synaptix/game/data/question_asset_index_loader.dart';
 import 'package:synaptix/game/models/answer.dart';
 import 'package:synaptix/game/models/question_model.dart';
@@ -7,6 +8,11 @@ import 'package:synaptix/game/models/question_difficulty.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  late PathProviderTestEnv pathEnv;
+  setUpAll(() async {
+    pathEnv = await PathProviderTestEnv.install();
+  });
+  tearDownAll(() => pathEnv.remove());
 
   group('QuestionAssetIndexLoader', () {
     test('resolves science path from question_paths_index.json', () async {

@@ -1,7 +1,8 @@
 /// Backend-driven app configuration fetched from /api/v1/app/config on startup.
 ///
-/// Safe defaults keep all non-core features disabled so the app is always in a
-/// known state even when the backend is unreachable or returns a partial response.
+/// Features are available to everyone by default; access is only removed from
+/// banned/suspended accounts (enforced backend-side). Crypto and the dev-tester
+/// tools stay off by default until explicitly enabled by the backend/admin.
 class FeatureFlags {
   final bool coreTriviaEnabled;
   final bool walletEnabled;
@@ -29,23 +30,25 @@ class FeatureFlags {
     this.walletEnabled = true,
     this.leaderboardEnabled = true,
     this.storeEnabled = true,
-    this.realtimeMultiplayerEnabled = false,
-    this.matchmakingEnabled = false,
-    this.tournamentsEnabled = false,
+    this.realtimeMultiplayerEnabled = true,
+    this.matchmakingEnabled = true,
+    this.tournamentsEnabled = true,
+    // Crypto stays gated until the feature is finished / admin-enabled.
     this.cryptoEnabled = false,
-    // Social (Friends/Parties) ships enabled; it is only turned off
-    // per-player via moderation (ban) driven by the backend config.
+    // Everything below is available to all users; access is only removed
+    // per-player via moderation (ban/suspend) enforced by the backend.
     this.socialEnabled = true,
-    this.skillTreeEnabled = false,
-    this.notificationsEnabled = false,
-    this.advancedSeasonsEnabled = false,
-    this.tomPersonalizationEnabled = false,
-    this.aiSidecarEnabled = false,
-    this.guildsEnabled = false,
-    this.territoryEnabled = false,
-    this.guardiansEnabled = false,
-    this.experimentsEnabled = false,
+    this.skillTreeEnabled = true,
+    this.notificationsEnabled = true,
+    this.advancedSeasonsEnabled = true,
+    this.tomPersonalizationEnabled = true,
+    this.aiSidecarEnabled = true,
+    this.guildsEnabled = true,
+    this.territoryEnabled = true,
+    this.guardiansEnabled = true,
+    this.experimentsEnabled = true,
     this.rewardReactorEnabled = true,
+    // Dev-only tooling stays off in normal builds.
     this.devTesterEnabled = false,
   });
 
@@ -57,21 +60,25 @@ class FeatureFlags {
       walletEnabled: flag('walletEnabled', fallback: true),
       leaderboardEnabled: flag('leaderboardEnabled', fallback: true),
       storeEnabled: flag('storeEnabled', fallback: true),
-      realtimeMultiplayerEnabled: flag('realtimeMultiplayerEnabled'),
-      matchmakingEnabled: flag('matchmakingEnabled'),
-      tournamentsEnabled: flag('tournamentsEnabled'),
+      realtimeMultiplayerEnabled:
+          flag('realtimeMultiplayerEnabled', fallback: true),
+      matchmakingEnabled: flag('matchmakingEnabled', fallback: true),
+      tournamentsEnabled: flag('tournamentsEnabled', fallback: true),
+      // Crypto remains opt-in (backend defaults it off).
       cryptoEnabled: flag('cryptoEnabled'),
       socialEnabled: flag('socialEnabled', fallback: true),
-      skillTreeEnabled: flag('skillTreeEnabled'),
-      notificationsEnabled: flag('notificationsEnabled'),
-      advancedSeasonsEnabled: flag('advancedSeasonsEnabled'),
-      tomPersonalizationEnabled: flag('tomPersonalizationEnabled'),
-      aiSidecarEnabled: flag('aiSidecarEnabled'),
-      guildsEnabled: flag('guildsEnabled'),
-      territoryEnabled: flag('territoryEnabled'),
-      guardiansEnabled: flag('guardiansEnabled'),
-      experimentsEnabled: flag('experimentsEnabled'),
+      skillTreeEnabled: flag('skillTreeEnabled', fallback: true),
+      notificationsEnabled: flag('notificationsEnabled', fallback: true),
+      advancedSeasonsEnabled: flag('advancedSeasonsEnabled', fallback: true),
+      tomPersonalizationEnabled:
+          flag('tomPersonalizationEnabled', fallback: true),
+      aiSidecarEnabled: flag('aiSidecarEnabled', fallback: true),
+      guildsEnabled: flag('guildsEnabled', fallback: true),
+      territoryEnabled: flag('territoryEnabled', fallback: true),
+      guardiansEnabled: flag('guardiansEnabled', fallback: true),
+      experimentsEnabled: flag('experimentsEnabled', fallback: true),
       rewardReactorEnabled: flag('rewardReactorEnabled', fallback: true),
+      // Dev-only tooling stays off unless the backend explicitly enables it.
       devTesterEnabled: flag('devTesterEnabled'),
     );
   }

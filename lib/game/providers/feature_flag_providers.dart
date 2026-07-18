@@ -21,8 +21,10 @@ final appConfigProvider = FutureProvider<AppConfig>((ref) async {
 /// Synchronous view of the current feature flags.
 ///
 /// Returns [FeatureFlags.defaultAlpha] while [appConfigProvider] is loading
-/// or has errored. This means disabled features remain blocked even on the
-/// first frame — the safe default is always closed, not open.
+/// or has errored. Features default open (available to everyone) so the app is
+/// fully usable on the first frame / when the backend is unreachable; crypto
+/// and dev-tooling are the only defaults that stay closed. Per-user access is
+/// removed server-side via moderation (ban/suspend), not by these flags.
 final featureFlagsProvider = Provider<FeatureFlags>((ref) {
   return ref.watch(appConfigProvider).maybeWhen(
         data: (config) => config.features,

@@ -74,8 +74,7 @@ class AuthHttpClient extends http.BaseClient {
     if (enforceGuestGate &&
         GuestApiGate.shouldBlockNetworkRequest(
           request.url,
-          hasAuthTokens:
-              session.hasTokens && session.accessToken.isNotEmpty,
+          hasAuthTokens: session.hasTokens && session.accessToken.isNotEmpty,
         )) {
       LogManager.debug(
           '[AuthHttpClient] Guest gate blocked ${request.method} ${request.url.path}');

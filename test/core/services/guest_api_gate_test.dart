@@ -19,7 +19,8 @@ void main() {
         isTrue,
       );
       expect(
-        GuestApiGate.isAllowlisted(Uri.parse('https://host/auth/device/bootstrap')),
+        GuestApiGate.isAllowlisted(
+            Uri.parse('https://host/auth/device/bootstrap')),
         isTrue,
       );
     });

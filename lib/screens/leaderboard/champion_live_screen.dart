@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/dto/champion_round_events.dart';
+import '../../game/models/champion_spectator.dart';
+import '../../game/providers/arcade_providers.dart'
+    show championSpectatorProvider;
 import '../../game/providers/core_providers.dart' show apiServiceProvider;
 import '../../game/providers/hub_providers.dart';
 import '../../game/providers/learning_providers.dart'
@@ -102,6 +105,13 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
   void _onRoundResolved(ChampionRoundResolvedDto r) {
     if (!_isForThisEvent(r.gameEventId)) return;
     setState(() => _lastResolved = r);
+    _refreshSpectator();
+  }
+
+  /// Re-pull the spectator view so the elimination cam reflects the fresh
+  /// casualties. Cheap: free viewers get counts only, premium the full feed.
+  void _refreshSpectator() {
+    ref.invalidate(championSpectatorProvider(widget.gameEventId));
   }
 
   void _onMatchEnded(ChampionMatchEndedDto r) {
@@ -130,6 +140,7 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
     _duelClear = Timer(const Duration(seconds: 5), () {
       if (mounted) setState(() => _duel = null);
     });
+    _refreshSpectator();
   }
 
   Future<void> _submitRound(String optionId) async {
@@ -269,6 +280,8 @@ class _ChampionLiveScreenState extends ConsumerState<ChampionLiveScreen> {
             const SizedBox(height: 20),
             _championControls(),
           ],
+          const SizedBox(height: 20),
+          _EliminationCam(gameEventId: widget.gameEventId),
         ],
       ),
     );
@@ -571,6 +584,149 @@ class _DuelPicker extends StatelessWidget {
           const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+}
+
+/// Elimination cam. Everyone sees the live alive-count and jackpot; only
+/// premium-pass holders get the running feed of who just got knocked out.
+/// Free viewers get a locked upsell teaser instead.
+class _EliminationCam extends ConsumerWidget {
+  final String gameEventId;
+  const _EliminationCam({required this.gameEventId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final async = ref.watch(championSpectatorProvider(gameEventId));
+    final view = async.valueOrNull;
+    if (view == null) return const SizedBox.shrink();
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.videocam_rounded,
+                  color: Color(0xFFEF4444), size: 20),
+              const SizedBox(width: 8),
+              const Text('Elimination Cam',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800)),
+              const Spacer(),
+              if (view.isPremium)
+                const _PremiumBadge()
+              else
+                const Icon(Icons.lock_rounded, color: Colors.white38, size: 16),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (view.isPremium) _feed(view) else _upsell(view),
+        ],
+      ),
+    );
+  }
+
+  Widget _feed(ChampionSpectatorView view) {
+    if (view.eliminationFeed.isEmpty) {
+      return const Text('No eliminations yet — the mob is holding strong.',
+          style: TextStyle(color: Colors.white54, fontSize: 13));
+    }
+    // Newest first.
+    final feed = [...view.eliminationFeed]
+      ..sort((a, b) => b.eliminatedAtUtc.compareTo(a.eliminatedAtUtc));
+    return Column(
+      children: [
+        for (final e in feed.take(8))
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                Icon(
+                    e.wasChampion
+                        ? Icons.emoji_events_rounded
+                        : Icons.person_off_rounded,
+                    color: e.wasChampion
+                        ? const Color(0xFFFCD34D)
+                        : const Color(0xFFEF4444),
+                    size: 18),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    e.wasChampion
+                        ? '${e.handle} — the Champion fell!'
+                        : e.handle,
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                ),
+                if (e.finalRank != null)
+                  Text('#${e.finalRank}',
+                      style:
+                          const TextStyle(color: Colors.white38, fontSize: 12)),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _upsell(ChampionSpectatorView view) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text('${view.aliveCount} still alive · 🏆 ${view.jackpotPool}',
+            style: const TextStyle(color: Color(0xFFFCD34D), fontSize: 13)),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFA855F7).withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFA855F7)),
+          ),
+          child: const Row(
+            children: [
+              Icon(Icons.lock_rounded, color: Color(0xFFC4B5FD), size: 18),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Premium: watch every elimination as it happens, live.',
+                  style: TextStyle(color: Color(0xFFDDD6FE), fontSize: 13),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PremiumBadge extends StatelessWidget {
+  const _PremiumBadge();
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFCD34D).withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Text('PREMIUM',
+          style: TextStyle(
+              color: Color(0xFFFCD34D),
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5)),
     );
   }
 }

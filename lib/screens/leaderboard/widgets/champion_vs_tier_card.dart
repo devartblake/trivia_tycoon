@@ -9,6 +9,7 @@ import '../../../game/providers/core_providers.dart' show apiServiceProvider;
 import '../../../game/providers/learning_providers.dart'
     show currentPlayerIdProvider;
 import '../champion_live_screen.dart';
+import 'champion_prediction_panel.dart';
 
 /// Weekly "Champion vs Tier" headline card: the tier's #1 defends the crown
 /// against 99 challengers, and every elimination grows the jackpot. Hides
@@ -127,7 +128,7 @@ class _CardState extends ConsumerState<_Card> {
               const SizedBox(width: 20),
               if (event.jackpotMultiplier > 1.0)
                 _Stat(
-                  label: 'Sponsor',
+                  label: event.hasSponsor ? 'Boost' : 'Sponsor',
                   value: '${event.jackpotMultiplier.toStringAsFixed(1)}×',
                   icon: Icons.bolt_rounded,
                   accent: const Color(0xFF34D399),
@@ -143,6 +144,28 @@ class _CardState extends ConsumerState<_Card> {
               ],
             ],
           ),
+          if (event.hasSponsor) ...[
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const Icon(Icons.verified_rounded,
+                    color: Color(0xFF34D399), size: 15),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Jackpot ${event.jackpotMultiplier.toStringAsFixed(1)}× boosted by ${event.sponsorName}',
+                    style: const TextStyle(
+                      color: Color(0xFF6EE7B7),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 16),
           if (isChampion)
             Container(
@@ -204,6 +227,9 @@ class _CardState extends ConsumerState<_Card> {
                       ),
               ),
             ),
+          // No-loss prediction — the audience hook for everyone who isn't
+          // one of the ~100 participants.
+          ChampionPredictionPanel(gameEventId: event.id),
         ],
       ),
     );
