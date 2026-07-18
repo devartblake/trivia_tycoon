@@ -112,6 +112,47 @@ per-case call on whether the expectation or the code is correct — that's a
 review decision, not a mechanical fix, and worth doing before any are silently
 "greened".
 
+## 4b. Grind progress — 330 → 165 (50% cleared)
+
+The suite reliably completes; failures are down from 330 to **165**. Fixes this
+pass, all committed:
+
+| File(s) | Fix | Δ |
+|---------|-----|--:|
+| 5 Hive files + `arcade_daily_bonus` | `HiveTestEnv` (+ `setUpAll`/`clear` for fire-and-forget persisters) | ~69 |
+| `question_asset_index_loader`, `skill_tree_providers` | `PathProviderTestEnv` stub | ~4 |
+| `cache_performance` | rewrote hand-Mockito as manual fakes | 12 |
+| `phase2_dashboard_integration` | `HiveTestEnv(boxes:['auth_tokens'])` | 9 |
+| `performance_summary_card` | wrap in `SingleChildScrollView`; relax dup-% finders | 10 |
+| `profile_stats_service` | singleton `resetForTest()` + missing `await`s | 19 |
+| `question_model` | assertions → `QuestionType`/`Difficulty` enums | 11 |
+| `leaderboard_widgets` | `pumpAndSettle` drains the 300ms XP-anim timer | 19 |
+| `leaderboard_controller` | inject real ApiService/AppCacheService for the fake | 7 |
+
+Reusable helpers added: `test/support/hive_test_env.dart`,
+`test/support/path_provider_test_env.dart`, and a `@visibleForTesting
+ProfileStatsService.resetForTest()`.
+
+### Remaining 165, by file (top) and approach
+- `leaderboard_controller` (13) — constructor's fire-and-forget
+  `_loadLeaderboardState()` touches a disposed provider + a null String in the
+  import path; await the load or gate it in tests.
+- `answer_option_card` (9) — finder mismatches (`No element`, wrong candidate
+  count); update finders to the current widget structure.
+- `synaptix_home_screen` (8) — **genuine 40px RenderFlex overflow** in the
+  merged SynaptixHomeScreen; a real product-layout fix, deliberately not masked.
+- `coin_balance_notifier` (7), `multi_profile_providers` (4),
+  `skill_tree_controller` (4), `question_result_service` (4) — provider/state
+  and residual assertion drift.
+- `performance_chart_provider` (6), `skill_branch_detail_screen` (6),
+  `skill_tree_visualization` (6), `tier_progress_widget` (5),
+  `arcade_reward_machine_widget` (4) — widget setup (Hive/path_provider helpers)
+  + finder/overflow updates.
+- `secure_payload_codec` (4) — crypto key/nonce fixture mismatch.
+- `store_return_url_builder` (4), `event_queue_service` (4),
+  `retention_entry` (3), `swatch_service` (3), `premium_store` (3),
+  `tier_up_notification_dialog` (3) — mostly assertion drift → update to code.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those
