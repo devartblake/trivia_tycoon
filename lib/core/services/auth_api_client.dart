@@ -393,6 +393,12 @@ class AuthApiClient {
     if (response.containsKey('is_premium')) {
       metadata['is_premium'] = response['is_premium'];
     }
+    if (response.containsKey('premium')) {
+      metadata['premium'] = response['premium'];
+    }
+    if (response.containsKey('subscriptionStatus')) {
+      metadata['subscriptionStatus'] = response['subscriptionStatus'];
+    }
 
     return metadata;
   }

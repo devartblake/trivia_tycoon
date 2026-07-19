@@ -387,7 +387,9 @@ void main() {
       );
 
       await manager.login('user@example.test', 'password');
-      expect(await profileService.getUserId(), 'user-123');
+      // The response's userId ('uid-abc') overrides the default and is what
+      // gets persisted.
+      expect(await profileService.getUserId(), 'uid-abc');
     });
   });
 }
