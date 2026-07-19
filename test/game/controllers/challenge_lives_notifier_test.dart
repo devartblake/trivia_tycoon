@@ -1,22 +1,22 @@
-import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 import 'package:synaptix/game/controllers/challenge_lives_notifier.dart';
 
+import '../../support/hive_test_env.dart';
+
 void main() {
-  late Directory tempDir;
+  late HiveTestEnv hiveEnv;
   late GeneralKeyValueStorageService storage;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('challenge_lives_test_');
-    Hive.init(tempDir.path);
+    hiveEnv = await HiveTestEnv.create(boxes: ['settings']);
     storage = GeneralKeyValueStorageService();
   });
 
   tearDown(() async {
-    await Hive.close();
-    await tempDir.delete(recursive: true);
+    // Drain fire-and-forget persists before closing the box.
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await hiveEnv.dispose();
   });
 
   ChallengeLivesNotifier makeNotifier() => ChallengeLivesNotifier(storage);

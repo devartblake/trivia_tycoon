@@ -159,10 +159,15 @@ class ChallengeLivesNotifier extends StateNotifier<ChallengeLivesState> {
   // ---------------------------------------------------------------------------
 
   Future<void> _saveRunState() async {
-    await _storage.setInt('challenge_lives_current', state.current);
-    await _storage.setBool('challenge_run_active', state.isRunActive);
+    // Snapshot the state before the first await. The constructor's
+    // fire-and-forget loadRunState() can otherwise resolve mid-save and
+    // clobber `state`, causing a partially-updated snapshot (e.g. current
+    // saved from the new run but isRunActive read back as the stale default).
+    final snapshot = state;
+    await _storage.setInt('challenge_lives_current', snapshot.current);
+    await _storage.setBool('challenge_run_active', snapshot.isRunActive);
     await _storage.setInt(
-        'challenge_premium_revives_used', state.premiumRevivesUsed);
+        'challenge_premium_revives_used', snapshot.premiumRevivesUsed);
   }
 
   /// Restore persisted run state on app restart (e.g., if app was killed mid-run).

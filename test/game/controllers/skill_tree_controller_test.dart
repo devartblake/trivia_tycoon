@@ -350,8 +350,8 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      // Allow the async _restoreProfile to complete.
-      await Future.delayed(Duration.zero);
+      // Wait for the async _restoreProfile chain to finish.
+      await container.read(skillTreeProvider.notifier).restored;
 
       expect(
         container.read(skillTreeProvider).graph.getNodeById('root')?.unlocked,
@@ -393,8 +393,8 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      // Allow _restoreProfile (and ProfileService._loadFromStorage) to finish.
-      await Future.delayed(Duration.zero);
+      // Wait for _restoreProfile (and ProfileService._loadFromStorage) to finish.
+      await container.read(skillTreeProvider.notifier).restored;
 
       expect(
         container.read(skillTreeProvider).graph.getNodeById('root')?.unlocked,
@@ -431,8 +431,8 @@ void main() {
       addTearDown(container.dispose);
 
       // Wait for restore to finish and capture the controller.
-      await Future.delayed(Duration.zero);
       final ctrl = container.read(skillTreeProvider.notifier);
+      await ctrl.restored;
 
       // Simulate the hot-swap that skillTreeProvider does when
       // mergedSkillTreeGraphProvider resolves (root starts locked in the new graph).

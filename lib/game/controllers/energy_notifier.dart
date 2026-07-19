@@ -71,9 +71,14 @@ class EnergyNotifier extends StateNotifier<EnergyState> {
   final GeneralKeyValueStorageService _storage;
   Timer? _refillTimer;
 
+  /// Completes when the initial async storage load has finished. Awaitable so
+  /// callers (and tests) can sequence work after the persisted state is applied
+  /// instead of racing the fire-and-forget load in the constructor.
+  late final Future<void> initialized;
+
   EnergyNotifier(this._storage)
       : super(const EnergyState(current: kEnergyMax, max: kEnergyMax)) {
-    _loadEnergyState();
+    initialized = _loadEnergyState();
     _startRefillTimer();
   }
 
@@ -84,6 +89,10 @@ class EnergyNotifier extends StateNotifier<EnergyState> {
     final lastRefillString = await _storage.getString('energy_last_refill');
     final lastRefill =
         lastRefillString != null ? DateTime.tryParse(lastRefillString) : null;
+
+    // The load is fire-and-forget from the constructor; bail out if the
+    // notifier was disposed while the async storage reads were in flight.
+    if (!mounted) return;
 
     final storedCurrent = rawCurrent is int ? rawCurrent : null;
     final storedMax = rawMax is int ? rawMax : null;
@@ -98,11 +107,14 @@ class EnergyNotifier extends StateNotifier<EnergyState> {
   }
 
   Future<void> _saveEnergyState() async {
-    await _storage.setInt('energy_current', state.current);
-    await _storage.setInt('energy_max', state.max);
-    if (state.lastRefillTime != null) {
+    // Snapshot the state once while still mounted; reading `state` again after
+    // an await would throw if the notifier is disposed mid-save.
+    final snapshot = state;
+    await _storage.setInt('energy_current', snapshot.current);
+    await _storage.setInt('energy_max', snapshot.max);
+    if (snapshot.lastRefillTime != null) {
       await _storage.setString(
-          'energy_last_refill', state.lastRefillTime!.toIso8601String());
+          'energy_last_refill', snapshot.lastRefillTime!.toIso8601String());
     }
   }
 
