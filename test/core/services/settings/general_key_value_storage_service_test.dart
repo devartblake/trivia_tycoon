@@ -100,7 +100,12 @@ void main() {
   group('setColor / getColor', () {
     test('round-trip for Colors.red', () async {
       await svc.setColor('theme', Colors.red);
-      expect(await svc.getColor('theme'), Colors.red);
+      // Stored as an ARGB int, so it round-trips to a plain Color; compare by
+      // value rather than by (MaterialColor) type.
+      expect(
+        (await svc.getColor('theme'))?.toARGB32(),
+        Colors.red.toARGB32(),
+      );
     });
 
     test('round-trip for arbitrary ARGB color', () async {
@@ -116,7 +121,7 @@ void main() {
     test('overwrites with new color', () async {
       await svc.setColor('c', Colors.blue);
       await svc.setColor('c', Colors.green);
-      expect(await svc.getColor('c'), Colors.green);
+      expect((await svc.getColor('c'))?.toARGB32(), Colors.green.toARGB32());
     });
   });
 
