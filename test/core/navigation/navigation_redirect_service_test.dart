@@ -41,8 +41,8 @@ void main() {
     });
 
     test(
-        'anonymous incomplete users return to login unless entering onboarding',
-        () {
+        'anonymous incomplete users resume onboarding (guests may play), '
+        'and onboarding itself is allowed', () {
       final container = _container(
         identity: _anonymousIdentity,
         onboardingComplete: false,
@@ -51,14 +51,16 @@ void main() {
 
       final service = container.read(navigationRedirectServiceProvider);
 
+      // A playable (anonymous/guest) identity with incomplete onboarding is
+      // routed into onboarding rather than bounced to login.
       expect(
         service.determineRedirect(canonicalSettingsRoute),
-        canonicalLoginRoute,
+        canonicalOnboardingRoute,
       );
       expect(service.determineRedirect(canonicalOnboardingRoute), isNull);
     });
 
-    test('anonymous device tokens do not bypass the login choice', () {
+    test('anonymous device with a session resumes onboarding, not home', () {
       final container = _container(
         isLoggedIn: true,
         identity: _anonymousIdentity,
@@ -70,7 +72,7 @@ void main() {
         container
             .read(navigationRedirectServiceProvider)
             .determineRedirect(canonicalHomeRoute),
-        canonicalLoginRoute,
+        canonicalOnboardingRoute,
       );
     });
 
