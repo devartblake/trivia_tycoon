@@ -102,33 +102,50 @@ class QuestionFeedbackPanel extends StatelessWidget {
               ),
             ),
           ],
-          if (xpEarned != null || coinsEarned != null) ...[
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (xpEarned != null)
-                  _RewardChip(
-                    icon: Icons.flash_on,
-                    label: 'XP',
-                    value: xpEarned.toString(),
-                    color: Colors.amber,
-                  ),
-                if (coinsEarned != null)
-                  _RewardChip(
-                    icon: Icons.monetization_on,
-                    label: 'Coins',
-                    value: coinsEarned.toString(),
-                    color: Colors.orange,
-                  ),
-                if (streakBonus == true)
-                  _RewardChip(
-                    icon: Icons.local_fire_department,
-                    label: 'Streak!',
-                    value: '🔥',
-                    color: Colors.red,
-                  ),
-              ],
+          // Rewards are only meaningful for a correct answer. Each chip shows
+          // only when its value is positive; the streak chip is independent of
+          // the XP/coin values so a streak bonus can display on its own.
+          if (isCorrect) ...[
+            Builder(
+              builder: (context) {
+                final showXp = (xpEarned ?? 0) > 0;
+                final showCoins = (coinsEarned ?? 0) > 0;
+                final showStreak = streakBonus == true;
+                if (!showXp && !showCoins && !showStreak) {
+                  return const SizedBox.shrink();
+                }
+                return Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        if (showXp)
+                          _RewardChip(
+                            icon: Icons.flash_on,
+                            label: 'XP',
+                            value: xpEarned.toString(),
+                            color: Colors.amber,
+                          ),
+                        if (showCoins)
+                          _RewardChip(
+                            icon: Icons.monetization_on,
+                            label: 'Coins',
+                            value: coinsEarned.toString(),
+                            color: Colors.orange,
+                          ),
+                        if (showStreak)
+                          _RewardChip(
+                            icon: Icons.local_fire_department,
+                            label: 'Streak!',
+                            value: '🔥',
+                            color: Colors.red,
+                          ),
+                      ],
+                    ),
+                  ],
+                );
+              },
             ),
           ],
           if (onNext != null) ...[

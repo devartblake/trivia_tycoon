@@ -14,6 +14,8 @@ SkillCategory _parseCategory(String raw) {
 Future<SkillTreeGraph> loadBranchSkillTreeFromAsset(String assetPath) async {
   final txt = await AssetResolver.instance.loadString(
     assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+    // Fall back to the bundled asset when no server-cached copy exists.
+    bundledFallbackPath: assetPath,
   );
   final data = json.decode(txt);
 
