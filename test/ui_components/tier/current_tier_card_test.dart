@@ -149,7 +149,8 @@ void main() {
         ),
       );
 
-      expect(find.byIcon(Icons.diamond), findsOneWidget);
+      // Platinum header icon is diamond, which also appears as the Gems reward.
+      expect(find.byIcon(Icons.diamond), findsWidgets);
     });
 
     testWidgets('uses correct color for Silver tier',
@@ -211,7 +212,9 @@ void main() {
       );
 
       expect(find.byIcon(Icons.card_giftcard), findsOneWidget);
-      expect(find.byIcon(Icons.monetization_on), findsOneWidget);
+      // The Gold tier header icon is monetization_on, which also appears as the
+      // Coins reward badge — assert presence rather than a single occurrence.
+      expect(find.byIcon(Icons.monetization_on), findsWidgets);
       expect(find.byIcon(Icons.diamond), findsOneWidget);
     });
 
