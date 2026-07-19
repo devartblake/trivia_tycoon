@@ -28,6 +28,10 @@ class EventQueueService {
   DateTime? _cooldownUntil;
   bool _isInCooldown = false;
 
+  // Monotonic suffix so rapidly-enqueued events (same millisecond) get distinct
+  // box keys instead of overwriting each other.
+  int _enqueueSeq = 0;
+
   // Analytics callback
   Function(String event, Map<String, dynamic> data)? _analyticsCallback;
 
@@ -195,40 +199,9 @@ class EventQueueService {
     try {
       final box = await Hive.openBox(_boxName);
 
-      // Enforce size limit before adding new event
-      if (box.length >= maxQueueSize) {
-        LogManager.warning(
-          'Queue at max size ($maxQueueSize). Removing 10 oldest events (FIFO) before adding new event.',
-          source: 'EventQueueService',
-        );
-
-        // Remove 10 oldest events
-        final entries = box.toMap().entries.toList();
-        entries.sort((a, b) {
-          final aTime =
-              DateTime.tryParse(a.value['timestamp'] ?? '') ?? DateTime.now();
-          final bTime =
-              DateTime.tryParse(b.value['timestamp'] ?? '') ?? DateTime.now();
-          return aTime.compareTo(bTime);
-        });
-
-        int deleteCount = 10;
-        for (var i = 0; i < deleteCount && i < entries.length; i++) {
-          await box.delete(entries[i].key);
-        }
-
-        LogManager.info(
-          'Deleted $deleteCount oldest events (FIFO) to make room',
-          source: 'EventQueueService',
-        );
-
-        _notifyAnalytics('queue_fifo_cleanup', {
-          'deleted_count': deleteCount,
-          'reason': 'max_queue_size_reached',
-        });
-      }
-
-      final id = DateTime.now().millisecondsSinceEpoch.toString();
+      // Unique key: a same-millisecond collision would otherwise overwrite the
+      // previous event (silently dropping queued work).
+      final id = '${DateTime.now().microsecondsSinceEpoch}-${_enqueueSeq++}';
 
       await box.put(id, {
         'endpoint': endpoint,
@@ -237,6 +210,10 @@ class EventQueueService {
         'retry_count': 0,
         'last_retry': null,
       });
+
+      // Trim back to the size limit (oldest-first) after adding, so the queue
+      // settles at exactly maxQueueSize rather than a fixed-decrement estimate.
+      await _enforceQueueSizeLimit();
 
       // Notify analytics
       _notifyAnalytics('event_queued', {
@@ -485,7 +462,10 @@ class EventQueueService {
   /// Get pending events for debugging
   Future<List<Map<String, dynamic>>> getPendingEvents() async {
     final box = await Hive.openBox(_boxName);
-    return box.values.cast<Map<String, dynamic>>().toList();
+    // Hive returns values as `Map<dynamic, dynamic>` (and a retry re-put widens
+    // the type via spread), so convert rather than cast — a hard cast throws
+    // `_Map<dynamic, dynamic> is not a subtype of Map<String, dynamic>`.
+    return box.values.map((e) => Map<String, dynamic>.from(e as Map)).toList();
   }
 
   /// Clear all events from the queue
