@@ -56,6 +56,9 @@ void main() {
         encryptedBody: encrypted.toJson(),
         keyBytes: keyBytes,
         context: ctx,
+        // Match the request-direction encryption above (the AAD binds
+        // request/response so cross-direction decrypts fail by design).
+        isResponse: false,
       );
 
       expect(decrypted, equals(body));
@@ -240,6 +243,7 @@ void main() {
           encryptedBody: encrypted.toJson(),
           keyBytes: keyBytes,
           context: ctx,
+          isResponse: false,
         );
 
         expect(decrypted, equals(body));
@@ -456,7 +460,8 @@ void main() {
         selectedSuite: 'X25519-HKDF-SHA256-AES256GCM',
         clientToServerKey: List<int>.generate(32, (i) => i),
         serverToClientKey: List<int>.generate(32, (i) => 255 - i),
-        expiresAtUtc: DateTime.utc(2026, 6, 1, 12, 0),
+        // Far-future so isExpired stays false regardless of when the suite runs.
+        expiresAtUtc: DateTime.utc(2099, 6, 1, 12, 0),
         nextSequence: 42,
       );
 
@@ -604,11 +609,13 @@ void main() {
       // encryptedAtUtc in the payload must match the context (single source of truth).
       expect(encrypted.encryptedAtUtc, equals(timestamp));
 
-      // Decrypting with the same context (request→response direction flip) must succeed.
+      // Decrypting with the same context and matching (request) direction must
+      // succeed; the AAD binds request/response so the directions must agree.
       final decrypted = await codec.decryptJson(
         encryptedBody: encrypted.toJson(),
         keyBytes: keyBytes,
         context: ctx,
+        isResponse: false,
       );
       expect(decrypted, equals(body));
     });
