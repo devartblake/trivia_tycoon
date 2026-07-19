@@ -185,6 +185,41 @@ Running total: **330 → ≈139** (≈58% cleared). Reusable helpers now cover t
 dominant setup causes; the rest of the tail is per-file finder/overflow/assertion
 work as catalogued in §4.
 
+## 4e. Grind progress — full-suite pass (153 failures → targeted clears)
+
+A fresh full-suite run (post-merge) reported **7,294 pass / 11 skip / 153 fail**.
+The compact reporter interleaves concurrently-run files, so per-file attribution
+from the log is unreliable — failing *test names* are the reliable signal. Cleared
+this pass (each verified green in isolation), with the genuine product bugs called
+out:
+
+| File | Fix | Real bug? |
+|------|-----|-----------|
+| `energy_notifier` (20) | HiveTestEnv; `mounted` guard + `initialized` future; `_saveEnergyState` snapshots state before await | **yes** — disposal-time `state` write + save-across-await |
+| `challenge_lives_notifier` (22) | HiveTestEnv; `_saveRunState` snapshots state | **yes** — constructor load clobbered a run mid-save, persisting `isRunActive:false` |
+| `skill_tree_controller` (4) | `copyWith` sentinel so `selectedId` can be cleared; `restored` future | **yes** — `select(null)`/loadGraph deselect were no-ops |
+| `multi_profile_providers` (15) | `ProfileManagerNotifier.ready` future + `mounted` guard; HiveTestEnv; await-before-read | **yes** — disposal race |
+| `wallet_service` (9) | HiveTestEnv | no (temp-dir race) |
+| `event_queue_service` (6) | unique keys; trim to `maxQueueSize`; `Map.from` decode | **yes** — same-ms key collision dropped events; hard-cast threw on retry re-put |
+| `question_result_service` (4) | isolate difficulty multiplier from per-difficulty time bonus; coin rounding | no (stale fixtures) |
+| tier widgets (7) | `findsWidgets` where header icon == a reward icon; scope dialog transitions | no (dup-icon assertions) |
+| `secure_payload_codec` (4) | direction-parameterized AAD (defaults preserve prod); far-future session expiry | no (untestable symmetric round-trip + date rot) |
+| `login_manager` (2) | map top-level `subscriptionStatus`/`premium` into metadata | **yes** — top-level premium field dropped |
+
+Also removed two mis-filed duplicate test files under `test/core/dto/`
+(`skill_tree_controller`, `profile_service`) that were strict subsets of the
+canonical `test/game/**` versions.
+
+**Needs a product decision (left unchanged):**
+- `navigation_redirect_service` (2) — the tests assert an `anonymousDevice`
+  identity with incomplete onboarding routes to `/login` ("device tokens do not
+  bypass the login choice"), but the current service deliberately routes any
+  playable identity (incl. guests) to `/onboarding`. Whether anonymous-device
+  should be forced through login is an auth-policy call, not a mechanical fix.
+- `premium_store` (2–3) — the store screen's layered animations + async
+  `playerRewardsProvider` make the reward-card content unreliable to assert
+  under the current pump strategy; needs a closer look (gated store feature).
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those
