@@ -243,24 +243,35 @@ void main() {
     testWidgets('handles multiple rapid selections',
         (WidgetTester tester) async {
       final selections = <String>[];
+      var metric = PerformanceMetric.accuracy;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ChartSelector(
-              selectedMetric: PerformanceMetric.accuracy,
-              selectedTimeRange: TimeRange.hours24,
-              onMetricChanged: (m) {
-                selections.add(m.toString());
+            // Reflect the new selection back into the widget (as the real
+            // parent does) so each tap is a genuine change — the selector
+            // suppresses re-selecting the already-active metric.
+            body: StatefulBuilder(
+              builder: (context, setState) {
+                return ChartSelector(
+                  selectedMetric: metric,
+                  selectedTimeRange: TimeRange.hours24,
+                  onMetricChanged: (m) {
+                    selections.add(m.toString());
+                    setState(() => metric = m);
+                  },
+                  onTimeRangeChanged: (_) {},
+                );
               },
-              onTimeRangeChanged: (_) {},
             ),
           ),
         ),
       );
 
       await tester.tap(find.text('XP Earned'));
+      await tester.pump();
       await tester.tap(find.text('Questions'));
+      await tester.pump();
       await tester.tap(find.text('Accuracy'));
       await tester.pumpAndSettle();
 

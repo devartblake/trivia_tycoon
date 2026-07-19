@@ -250,7 +250,11 @@ void main() {
 
     testWidgets('responsive chart sizing', (WidgetTester tester) async {
       tester.view.physicalSize = const Size(800, 600);
+      // Without pinning the ratio the logical width is 800/dpr (~266px), which
+      // overflows the chart's horizontal content.
+      tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
         MaterialApp(

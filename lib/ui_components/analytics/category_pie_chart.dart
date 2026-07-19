@@ -28,10 +28,13 @@ class CategoryPieChart extends StatelessWidget {
       );
     }
 
-    // Sort by total questions (descending) and take top 5
-    final topCategories = [...categories]
-      ..sort((a, b) => b.totalQuestions.compareTo(a.totalQuestions))
-      ..take(5).toList();
+    // Sort by total questions (descending) and take top 5. Note: `take` must
+    // not be a cascade — `..take(5)` would discard its result and leave every
+    // category in the list.
+    final topCategories = ([...categories]
+          ..sort((a, b) => b.totalQuestions.compareTo(a.totalQuestions)))
+        .take(5)
+        .toList();
 
     final colors = _generateColors(topCategories.length);
 
