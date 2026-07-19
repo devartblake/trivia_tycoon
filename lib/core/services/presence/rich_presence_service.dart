@@ -56,6 +56,9 @@ class RichPresenceService extends ChangeNotifier {
     String? activity,
     GameActivity? gameActivity,
     Map<String, dynamic>? customData,
+    // Explicitly drop the game activity — a plain `gameActivity: null` can't be
+    // distinguished from "not provided" and would otherwise be preserved.
+    bool clearGameActivity = false,
   }) async {
     final currentPresence =
         _currentUserPresence ?? UserPresence.createDefault();
@@ -66,7 +69,9 @@ class RichPresenceService extends ChangeNotifier {
       activity: activity != null
           ? InputValidator.safeString(activity)
           : currentPresence.activity,
-      gameActivity: gameActivity ?? currentPresence.gameActivity,
+      gameActivity: clearGameActivity
+          ? null
+          : (gameActivity ?? currentPresence.gameActivity),
       lastSeen: DateTime.now(),
       customData: customData ?? currentPresence.customData,
     );
@@ -115,7 +120,7 @@ class RichPresenceService extends ChangeNotifier {
     await updateCurrentUserPresence(
       status: PresenceStatus.online,
       activity: null,
-      gameActivity: null,
+      clearGameActivity: true,
     );
   }
 

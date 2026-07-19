@@ -92,6 +92,7 @@ class ProfileService {
 
   Future<String?> getBranchAutoPathNodeId(String branchId) async {
     if (branchId.isEmpty) return null;
+    await _initFuture;
     final cached = _branchAutoPathProgress[branchId];
     if (cached != null && cached.isNotEmpty) return cached;
 
@@ -106,6 +107,9 @@ class ProfileService {
 
   Future<void> setBranchAutoPathNodeId(String branchId, String nodeId) async {
     if (branchId.isEmpty || nodeId.isEmpty) return;
+    // Let the constructor's background load finish so it can't re-populate the
+    // map from a stale snapshot after this write.
+    await _initFuture;
     _branchAutoPathProgress[branchId] = nodeId;
     await _storage.setJson(
       _branchAutoPathProgressKey,
@@ -140,6 +144,7 @@ class ProfileService {
 
   Future<void> clearBranchAutoPathNodeId(String branchId) async {
     if (branchId.isEmpty) return;
+    await _initFuture;
     _branchAutoPathProgress.remove(branchId);
     await _storage.setJson(
       _branchAutoPathProgressKey,
