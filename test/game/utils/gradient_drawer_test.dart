@@ -232,10 +232,10 @@ void main() {
       }
     });
 
-    test('first item is Home with route "/"', () {
+    test('first item is Home with the canonical home route', () {
       final home = DrawerMenuConfig.mainMenuItems.first;
       expect(home.title, 'Home');
-      expect(home.route, '/');
+      expect(home.route, '/home');
     });
 
     test('last item is Arena with route "/leaderboard"', () {
