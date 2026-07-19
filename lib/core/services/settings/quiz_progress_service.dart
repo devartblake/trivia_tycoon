@@ -465,7 +465,11 @@ class QuizProgressService {
   Map<String, dynamic> getQuizStats() {
     try {
       final box = Hive.box(_settingsBox);
-      final playerProgress = box.get(_playerProgressKey, defaultValue: {});
+      // Hive returns Map<dynamic, dynamic>; coerce so it can be passed to the
+      // Map<String, dynamic> helpers below without a cast error (which would
+      // otherwise fall through to the catch and return an empty map).
+      final playerProgress = Map<String, dynamic>.from(
+          box.get(_playerProgressKey, defaultValue: {}) as Map);
 
       return {
         'totalQuizzes': playerProgress['total_quizzes'] ?? 0,
