@@ -85,38 +85,50 @@ class _ReactorReelColumnState extends State<ReactorReelColumn>
       child: SizedBox(
         width: 72,
         height: _tileHeight * _visibleTiles,
-        child: AnimatedBuilder(
-          animation: _scrollAnimation,
-          builder: (context, _) {
-            final count = widget.symbols.isEmpty ? 1 : widget.symbols.length;
-            final totalScrollHeight = _tileHeight * (count + _visibleTiles);
+        // Clip to the reel window and let the taller strip of tiles lay out at
+        // its natural height (an OverflowBox lifts the parent's height
+        // constraint) so the scrolling Column doesn't trip a RenderFlex
+        // overflow.
+        child: ClipRect(
+          child: OverflowBox(
+            minHeight: 0,
+            maxHeight: double.infinity,
+            alignment: Alignment.topCenter,
+            child: AnimatedBuilder(
+              animation: _scrollAnimation,
+              builder: (context, _) {
+                final count =
+                    widget.symbols.isEmpty ? 1 : widget.symbols.length;
+                final totalScrollHeight = _tileHeight * (count + _visibleTiles);
 
-            final offset = widget.isSpinning
-                ? _scrollAnimation.value * totalScrollHeight
-                : 0.0;
+                final offset = widget.isSpinning
+                    ? _scrollAnimation.value * totalScrollHeight
+                    : 0.0;
 
-            return Transform.translate(
-              offset: Offset(0, -offset),
-              child: Column(
-                children: _displaySymbols.asMap().entries.map((entry) {
-                  final count =
-                      widget.symbols.isEmpty ? 1 : widget.symbols.length;
-                  final isWinning = !widget.isSpinning &&
-                      entry.key == 1 &&
-                      entry.value ==
-                          widget.symbols[widget.winningSymbolIndex % count];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: ReactorSymbolTile(
-                      symbolKey: entry.value,
-                      isWinning: isWinning,
-                      seasonKey: widget.seasonKey,
-                    ),
-                  );
-                }).toList(),
-              ),
-            );
-          },
+                return Transform.translate(
+                  offset: Offset(0, -offset),
+                  child: Column(
+                    children: _displaySymbols.asMap().entries.map((entry) {
+                      final count =
+                          widget.symbols.isEmpty ? 1 : widget.symbols.length;
+                      final isWinning = !widget.isSpinning &&
+                          entry.key == 1 &&
+                          entry.value ==
+                              widget.symbols[widget.winningSymbolIndex % count];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: ReactorSymbolTile(
+                          symbolKey: entry.value,
+                          isWinning: isWinning,
+                          seasonKey: widget.seasonKey,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
