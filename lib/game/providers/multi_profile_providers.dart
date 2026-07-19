@@ -217,8 +217,13 @@ class ProfileManagerState {
 class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
   final Ref ref;
 
+  /// Completes when the constructor's async [_initialize] has finished loading
+  /// (or failed). Awaitable so callers/tests can sequence after initialization
+  /// rather than polling `isInitialized` or guessing a delay.
+  late final Future<void> ready;
+
   ProfileManagerNotifier(this.ref) : super(const ProfileManagerState()) {
-    _initialize();
+    ready = _initialize();
   }
 
   Future<void> _initialize() async {
@@ -235,6 +240,9 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
       final profiles = await multiProfileService.getAllProfiles();
       final activeProfile = await multiProfileService.getActiveProfile();
 
+      // Bail out if the notifier was disposed while awaiting storage.
+      if (!mounted) return;
+
       // Update the active profile state provider
       ref.read(activeProfileStateProvider.notifier).state = activeProfile;
 
@@ -245,6 +253,7 @@ class ProfileManagerNotifier extends StateNotifier<ProfileManagerState> {
         activeProfile: activeProfile,
       );
     } catch (e) {
+      if (!mounted) return;
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
