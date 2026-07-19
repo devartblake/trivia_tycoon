@@ -220,6 +220,46 @@ canonical `test/game/**` versions.
   `playerRewardsProvider` make the reward-card content unreliable to assert
   under the current pump strategy; needs a closer look (gated store feature).
 
+## 4f. Grind progress — 153 → ~36 (full-suite)
+
+Continued clearing the tail; full-suite failures now **~36** (7,385 pass / 11
+skip). Additional genuine product bugs fixed at the root this pass:
+
+| Area | Bug |
+|------|-----|
+| `ColorUtils.blend` | fed 0.0–1.0 Color channels into `Color.fromARGB` (0–255) → blends near-black |
+| `RewardProgress.currentStepIndex` | returned `i-1`, lagging one step |
+| `CategoryPieChart` | `..take(5)` cascade discarded → rendered every category |
+| `QuestionFeedbackPanel` | streak badge nested in the xp/coins block; rewards shown for wrong answers |
+| `ReactorReelColumn` | reel `Column` overflowed its window (no clip) |
+| `getQuizStats` | `Map<dynamic,dynamic>`→`Map<String,dynamic>` threw into an empty-map catch |
+| `loadSkillTreeFromAsset` | never passed a bundled fallback → skill tree failed offline/first-run |
+| `ChallengeService` | const-canonical list defeated cache invalidation |
+| `RichPresenceService.clearGameActivity` | `?? current` swallowed the null clear |
+| `MessageReactionService` | custom-emoji premium gate missed the `customEmoji` arg |
+| `ProfileService` branch clear | constructor load raced the clear, re-populating it |
+| `SpectateStreamingService.watchGame` | returned a new broadcast wrapper each call |
+| `EventQueueService` | same-ms key collision + trim + retry re-put cast |
+| notifier saves (energy/challenge) | read `state` across awaits → half-updated persisted snapshot |
+| `LoginManager`/auth | top-level `subscriptionStatus`/`premium` dropped from metadata |
+| `SkillTreeState.copyWith` | couldn't clear `selectedId` |
+
+### Remaining ~36 — categorized
+- **Test pollution (pass in isolation, fail in full suite):** `auth_service`
+  (×2), `multiplayer_core`, `memory_flip_controller`, `tier_progression_service`,
+  `leaderboard_service`, `admin_auth_providers`, `event_queue_service` (1),
+  `login_manager` (1), `multi_profile_providers` (1), `mission_model`,
+  `user_profile_model`, `adapted_quiz_state`, `ws_client`, `game_flow`,
+  `branch_path_helper`. These need a shared-static / Hive-box reset between
+  tests, not per-file fixes.
+- **Gated features (intentionally not chased):** `crypto_wallet_screen` (2),
+  `crypto_providers` (2, brittle fetch-count asserts), `premium_store` (3).
+- **Needs product decision:** `navigation_redirect_service` (2) — anonymous
+  device → `/login` (test) vs `/onboarding` (code).
+- **Complex widget/async:** `skill_tree_visualization` (4),
+  `performance_chart_screen` (2), reward loading-state screens (2),
+  `arcade_game_shell`, `spectate_streaming` cache (fixed), `cache_performance`.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those
