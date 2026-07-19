@@ -5,6 +5,9 @@ import '../models/skill_tree_graph.dart';
 Future<SkillTreeGraph> loadSkillTreeFromAsset(String assetPath) async {
   final jsonStr = await AssetResolver.instance.loadString(
     assetPath.replaceFirst(RegExp(r'^assets/data/'), 'game-config/'),
+    // Fall back to the bundled asset when no server-cached copy exists, so the
+    // skill tree still loads offline / on first run (and under test).
+    bundledFallbackPath: assetPath,
   );
   final map = json.decode(jsonStr) as Map<String, dynamic>;
 

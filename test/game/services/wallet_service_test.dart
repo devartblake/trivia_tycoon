@@ -1,20 +1,19 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:synaptix/game/services/wallet_service.dart';
 
+import '../../support/hive_test_env.dart';
+
 void main() {
-  late Directory tempDir;
+  late HiveTestEnv hiveEnv;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('wallet_service_test');
-    Hive.init(tempDir.path);
+    hiveEnv = await HiveTestEnv.create(boxes: ['wallet_data']);
   });
 
   tearDown(() async {
-    await Hive.close();
-    await tempDir.delete(recursive: true);
+    // Drain fire-and-forget persists before closing the box.
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await hiveEnv.dispose();
   });
 
   WalletService make() => WalletService();

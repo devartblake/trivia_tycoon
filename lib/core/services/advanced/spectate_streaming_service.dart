@@ -113,6 +113,10 @@ class SpectateStreamingService extends ChangeNotifier {
 
   final Map<String, GameSpectateState> _activeGames = {};
   final Map<String, StreamController<GameSpectateState>> _gameStreams = {};
+  // Cached stream views so watchGame returns the identical Stream for a gameId
+  // (a broadcast controller's `.stream` getter otherwise returns a new wrapper
+  // on each access).
+  final Map<String, Stream<GameSpectateState>> _gameStreamViews = {};
   final Map<String, Set<String>> _spectators =
       {}; // gameId -> Set of spectatorIds
 
@@ -130,6 +134,7 @@ class SpectateStreamingService extends ChangeNotifier {
       controller.close();
     }
     _gameStreams.clear();
+    _gameStreamViews.clear();
     super.dispose();
   }
 
@@ -197,7 +202,9 @@ class SpectateStreamingService extends ChangeNotifier {
 
   // Watch a specific game
   Stream<GameSpectateState> watchGame(String gameId) {
-    _gameStreams[gameId] ??= StreamController<GameSpectateState>.broadcast();
+    final controller = _gameStreams[gameId] ??=
+        StreamController<GameSpectateState>.broadcast();
+    _gameStreamViews[gameId] ??= controller.stream;
 
     // Create mock game if it doesn't exist (for demo)
     if (!_activeGames.containsKey(gameId)) {
@@ -211,7 +218,7 @@ class SpectateStreamingService extends ChangeNotifier {
       });
     }
 
-    return _gameStreams[gameId]!.stream;
+    return _gameStreamViews[gameId]!;
   }
 
   // Get list of available games to spectate

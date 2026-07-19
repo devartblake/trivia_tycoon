@@ -80,7 +80,9 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('PVPChallenge model', () {
-    final now = DateTime(2026, 1, 1);
+    // Relative to the real clock: isExpired compares expiresAt against
+    // DateTime.now(), so a fixed literal would rot into the past.
+    final now = DateTime.now();
     final challenge = PVPChallenge(
       id: 'ch1',
       challengerId: 'c_user',

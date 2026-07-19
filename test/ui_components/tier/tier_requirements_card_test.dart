@@ -209,8 +209,9 @@ void main() {
       expect(find.byIcon(Icons.school), findsWidgets); // For XP icons
       expect(find.byIcon(Icons.trending_up), findsOneWidget);
       expect(find.byIcon(Icons.card_giftcard), findsOneWidget);
-      expect(find.byIcon(Icons.monetization_on), findsOneWidget);
-      expect(find.byIcon(Icons.diamond), findsOneWidget);
+      expect(find.byIcon(Icons.monetization_on), findsWidgets);
+      // diamond appears for both the tier icon and the gems reward badge.
+      expect(find.byIcon(Icons.diamond), findsWidgets);
     });
 
     testWidgets('uses correct color for Platinum tier',
@@ -226,7 +227,7 @@ void main() {
         ),
       );
 
-      expect(find.byIcon(Icons.diamond), findsOneWidget);
+      expect(find.byIcon(Icons.diamond), findsWidgets);
     });
 
     testWidgets('uses correct color for Gold tier',

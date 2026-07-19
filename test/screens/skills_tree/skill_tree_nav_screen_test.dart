@@ -16,6 +16,8 @@ import 'package:synaptix/screens/skills_tree/skill_tree_nav_screen.dart';
 import 'package:synaptix/synaptix/mode/synaptix_mode_notifier.dart';
 import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
 
+import '../../support/hive_test_env.dart';
+
 class _StaticSkillTreeController extends SkillTreeController {
   _StaticSkillTreeController(super.ref, SkillTreeState initial)
       : super(
@@ -144,21 +146,31 @@ Widget _buildHarness() {
 }
 
 void main() {
+  late HiveTestEnv hiveEnv;
+  setUp(() async {
+    hiveEnv = await HiveTestEnv.create();
+  });
+  tearDown(() async {
+    await hiveEnv.dispose();
+  });
+
   testWidgets(
       'route icon deep-links to branch detail with step=0 and showPath=1',
       (tester) async {
     await tester.pumpWidget(_buildHarness());
     await tester.pumpAndSettle();
 
+    // The deep-link icon lives on the "Scholar" branch card (keyed by branch
+    // id), not on the graph node titled "Scholar Root".
     final deepLinkIconFinder = find.descendant(
       of: find.ancestor(
-        of: find.text('Scholar Root'),
-        matching: find.byType(Material),
+        of: find.text('Scholar'),
+        matching: find.byType(InkWell),
       ),
       matching: find.byIcon(Icons.alt_route),
     );
 
-    await tester.tap(deepLinkIconFinder);
+    await tester.tap(deepLinkIconFinder.first);
     await tester.pumpAndSettle();
 
     expect(find.textContaining('/skill-branch/scholar?step=0&showPath=1'),

@@ -185,6 +185,81 @@ Running total: **330 → ≈139** (≈58% cleared). Reusable helpers now cover t
 dominant setup causes; the rest of the tail is per-file finder/overflow/assertion
 work as catalogued in §4.
 
+## 4e. Grind progress — full-suite pass (153 failures → targeted clears)
+
+A fresh full-suite run (post-merge) reported **7,294 pass / 11 skip / 153 fail**.
+The compact reporter interleaves concurrently-run files, so per-file attribution
+from the log is unreliable — failing *test names* are the reliable signal. Cleared
+this pass (each verified green in isolation), with the genuine product bugs called
+out:
+
+| File | Fix | Real bug? |
+|------|-----|-----------|
+| `energy_notifier` (20) | HiveTestEnv; `mounted` guard + `initialized` future; `_saveEnergyState` snapshots state before await | **yes** — disposal-time `state` write + save-across-await |
+| `challenge_lives_notifier` (22) | HiveTestEnv; `_saveRunState` snapshots state | **yes** — constructor load clobbered a run mid-save, persisting `isRunActive:false` |
+| `skill_tree_controller` (4) | `copyWith` sentinel so `selectedId` can be cleared; `restored` future | **yes** — `select(null)`/loadGraph deselect were no-ops |
+| `multi_profile_providers` (15) | `ProfileManagerNotifier.ready` future + `mounted` guard; HiveTestEnv; await-before-read | **yes** — disposal race |
+| `wallet_service` (9) | HiveTestEnv | no (temp-dir race) |
+| `event_queue_service` (6) | unique keys; trim to `maxQueueSize`; `Map.from` decode | **yes** — same-ms key collision dropped events; hard-cast threw on retry re-put |
+| `question_result_service` (4) | isolate difficulty multiplier from per-difficulty time bonus; coin rounding | no (stale fixtures) |
+| tier widgets (7) | `findsWidgets` where header icon == a reward icon; scope dialog transitions | no (dup-icon assertions) |
+| `secure_payload_codec` (4) | direction-parameterized AAD (defaults preserve prod); far-future session expiry | no (untestable symmetric round-trip + date rot) |
+| `login_manager` (2) | map top-level `subscriptionStatus`/`premium` into metadata | **yes** — top-level premium field dropped |
+
+Also removed two mis-filed duplicate test files under `test/core/dto/`
+(`skill_tree_controller`, `profile_service`) that were strict subsets of the
+canonical `test/game/**` versions.
+
+**Needs a product decision (left unchanged):**
+- `navigation_redirect_service` (2) — the tests assert an `anonymousDevice`
+  identity with incomplete onboarding routes to `/login` ("device tokens do not
+  bypass the login choice"), but the current service deliberately routes any
+  playable identity (incl. guests) to `/onboarding`. Whether anonymous-device
+  should be forced through login is an auth-policy call, not a mechanical fix.
+- `premium_store` (2–3) — the store screen's layered animations + async
+  `playerRewardsProvider` make the reward-card content unreliable to assert
+  under the current pump strategy; needs a closer look (gated store feature).
+
+## 4f. Grind progress — 153 → ~36 (full-suite)
+
+Continued clearing the tail; full-suite failures now **~36** (7,385 pass / 11
+skip). Additional genuine product bugs fixed at the root this pass:
+
+| Area | Bug |
+|------|-----|
+| `ColorUtils.blend` | fed 0.0–1.0 Color channels into `Color.fromARGB` (0–255) → blends near-black |
+| `RewardProgress.currentStepIndex` | returned `i-1`, lagging one step |
+| `CategoryPieChart` | `..take(5)` cascade discarded → rendered every category |
+| `QuestionFeedbackPanel` | streak badge nested in the xp/coins block; rewards shown for wrong answers |
+| `ReactorReelColumn` | reel `Column` overflowed its window (no clip) |
+| `getQuizStats` | `Map<dynamic,dynamic>`→`Map<String,dynamic>` threw into an empty-map catch |
+| `loadSkillTreeFromAsset` | never passed a bundled fallback → skill tree failed offline/first-run |
+| `ChallengeService` | const-canonical list defeated cache invalidation |
+| `RichPresenceService.clearGameActivity` | `?? current` swallowed the null clear |
+| `MessageReactionService` | custom-emoji premium gate missed the `customEmoji` arg |
+| `ProfileService` branch clear | constructor load raced the clear, re-populating it |
+| `SpectateStreamingService.watchGame` | returned a new broadcast wrapper each call |
+| `EventQueueService` | same-ms key collision + trim + retry re-put cast |
+| notifier saves (energy/challenge) | read `state` across awaits → half-updated persisted snapshot |
+| `LoginManager`/auth | top-level `subscriptionStatus`/`premium` dropped from metadata |
+| `SkillTreeState.copyWith` | couldn't clear `selectedId` |
+
+### Remaining ~36 — categorized
+- **Test pollution (pass in isolation, fail in full suite):** `auth_service`
+  (×2), `multiplayer_core`, `memory_flip_controller`, `tier_progression_service`,
+  `leaderboard_service`, `admin_auth_providers`, `event_queue_service` (1),
+  `login_manager` (1), `multi_profile_providers` (1), `mission_model`,
+  `user_profile_model`, `adapted_quiz_state`, `ws_client`, `game_flow`,
+  `branch_path_helper`. These need a shared-static / Hive-box reset between
+  tests, not per-file fixes.
+- **Gated features (intentionally not chased):** `crypto_wallet_screen` (2),
+  `crypto_providers` (2, brittle fetch-count asserts), `premium_store` (3).
+- **Needs product decision:** `navigation_redirect_service` (2) — anonymous
+  device → `/login` (test) vs `/onboarding` (code).
+- **Complex widget/async:** `skill_tree_visualization` (4),
+  `performance_chart_screen` (2), reward loading-state screens (2),
+  `arcade_game_shell`, `spectate_streaming` cache (fixed), `cache_performance`.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those

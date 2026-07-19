@@ -84,7 +84,9 @@ void main() {
           difficulty: QuestionDifficulty.easy,
           selectedAnswer: 'Correct',
           isCorrect: true,
-          timeTaken: const Duration(seconds: 15),
+          // 20s of a 30s limit → normal speed (1.0x time bonus), so the
+          // difficulty multiplier is isolated.
+          timeTaken: const Duration(seconds: 20),
           baseXPReward: 100,
           baseCoinReward: 50,
         );
@@ -102,7 +104,8 @@ void main() {
           difficulty: QuestionDifficulty.medium,
           selectedAnswer: 'Correct',
           isCorrect: true,
-          timeTaken: const Duration(seconds: 15),
+          // 20s of a 25s limit → normal speed (1.0x time bonus).
+          timeTaken: const Duration(seconds: 20),
           baseXPReward: 100,
           baseCoinReward: 50,
         );
@@ -110,7 +113,7 @@ void main() {
         final progression = await service.processResult(result);
 
         expect(progression.xpEarned, equals(150)); // 100 * 1.5
-        expect(progression.coinsEarned, equals(62)); // 50 * 1.25
+        expect(progression.coinsEarned, equals(63)); // (50 * 1.25).round()
       });
 
       test('Hard difficulty applies 2.0x XP multiplier', () async {
@@ -156,7 +159,9 @@ void main() {
           difficulty: QuestionDifficulty.boss,
           selectedAnswer: 'Correct',
           isCorrect: true,
-          timeTaken: const Duration(seconds: 15),
+          // 8s of a 10s limit → normal speed (1.0x time bonus). The old 15s
+          // exceeded the boss limit and applied a 0.5x timeout penalty.
+          timeTaken: const Duration(seconds: 8),
           baseXPReward: 100,
           baseCoinReward: 50,
         );
@@ -259,11 +264,15 @@ void main() {
       });
 
       test('Streak bonus applies after 1st correct answer', () async {
+        // Use hard difficulty: its streakMultiplier is > 1.0, so the streak
+        // bonus actually increases XP (easy's streakMultiplier is 1.0, which
+        // would leave the two answers equal). Both answers share the same
+        // timeTaken so the streak bonus is the only variable between them.
         // First answer
         final result1 = QuestionResult(
           questionId: 'q1',
           category: 'Math',
-          difficulty: QuestionDifficulty.easy,
+          difficulty: QuestionDifficulty.hard,
           selectedAnswer: 'Correct',
           isCorrect: true,
           timeTaken: const Duration(seconds: 10),
@@ -277,7 +286,7 @@ void main() {
         final result2 = QuestionResult(
           questionId: 'q2',
           category: 'Math',
-          difficulty: QuestionDifficulty.easy,
+          difficulty: QuestionDifficulty.hard,
           selectedAnswer: 'Correct',
           isCorrect: true,
           timeTaken: const Duration(seconds: 10),

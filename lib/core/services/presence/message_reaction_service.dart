@@ -64,7 +64,11 @@ class MessageReactionService extends ChangeNotifier {
     bool isPremium = false,
   }) async {
     if (!_reactionsEnabled) return false;
-    if (type.isCustom && !_customReactionsEnabled) return false;
+    // A custom emoji is a premium reaction even when paired with a standard
+    // reaction type, so gate on either signal.
+    if ((type.isCustom || customEmoji != null) && !_customReactionsEnabled) {
+      return false;
+    }
 
     // Remove existing reaction from user first
     await removeUserReaction(messageId, userId);

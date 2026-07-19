@@ -1,23 +1,26 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:synaptix/core/services/settings/general_key_value_storage_service.dart';
 import 'package:synaptix/game/controllers/energy_notifier.dart';
 
+import '../../support/hive_test_env.dart';
+
 void main() {
-  late Directory tempDir;
+  late HiveTestEnv hiveEnv;
   late GeneralKeyValueStorageService storage;
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('energy_notifier_test');
-    Hive.init(tempDir.path);
+    // HiveTestEnv leaves the temp dir in place on dispose so EnergyNotifier's
+    // fire-and-forget persists don't race a dir delete into PathNotFound.
+    hiveEnv = await HiveTestEnv.create(boxes: ['settings']);
     storage = GeneralKeyValueStorageService();
   });
 
   tearDown(() async {
-    await Hive.close();
-    await tempDir.delete(recursive: true);
+    // Let any fire-and-forget _loadEnergyState/_saveEnergyState finish touching
+    // the box before it is closed, so they don't throw "Box has already been
+    // closed" into the next test.
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await hiveEnv.dispose();
   });
 
   EnergyNotifier makeNotifier() => EnergyNotifier(storage);

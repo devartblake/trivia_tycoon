@@ -12,11 +12,15 @@ class RewardProgress {
     this.claimedRewards = const [],
   });
 
-  /// Get the current step index based on points
+  /// Get the current step index based on points. The index advances only once
+  /// a step's threshold is strictly exceeded, so sitting exactly on a step's
+  /// value keeps you on that step (e.g. 100 pts with a 100-pt step → index 0),
+  /// while going past it moves to the next (150 pts → index 1).
   int get currentStepIndex {
+    if (steps.isEmpty) return 0;
     for (int i = 0; i < steps.length; i++) {
-      if (currentPoints < steps[i].pointValue) {
-        return i > 0 ? i - 1 : 0;
+      if (currentPoints <= steps[i].pointValue) {
+        return i;
       }
     }
     return steps.length - 1;

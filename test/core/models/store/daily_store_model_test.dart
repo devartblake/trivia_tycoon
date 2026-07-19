@@ -360,7 +360,8 @@ void main() {
         resetIntervalSeconds: 86400,
       );
       expect(data.timeUntilReset.isNegative, isFalse);
-      expect(data.timeUntilReset.inHours, greaterThan(4));
+      // inHours truncates (a hair under 5h → 4), so assert in minutes.
+      expect(data.timeUntilReset.inMinutes, greaterThan(4 * 60));
     });
 
     test('negative duration when past reset', () {

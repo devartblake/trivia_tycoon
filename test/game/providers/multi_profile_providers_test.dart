@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:synaptix/core/services/settings/multi_profile_service.dart';
 import 'package:synaptix/game/providers/multi_profile_providers.dart';
+
+import '../../support/hive_test_env.dart';
 
 void main() {
   // ---------------------------------------------------------------------------
@@ -130,16 +129,12 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('ProfileManagerNotifier', () {
-    late Directory tempDir;
+    late HiveTestEnv hiveEnv;
     late MultiProfileService profileSvc;
     late ProviderContainer container;
 
     setUp(() async {
-      tempDir =
-          await Directory.systemTemp.createTemp('providers_notifier_test_');
-      Hive.init(tempDir.path);
-      await Hive.openBox('multi_profiles');
-      await Hive.openBox('settings');
+      hiveEnv = await HiveTestEnv.create(boxes: ['multi_profiles', 'settings']);
 
       profileSvc = MultiProfileService();
       container = ProviderContainer(
@@ -149,13 +144,16 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      // Wait for ProfileManagerNotifier._initialize() to complete
-      await Future.delayed(const Duration(milliseconds: 400));
+      // Instantiate the notifier and wait for its async _initialize to finish
+      // (reading the provider is what creates it — a bare delay before the
+      // first read would elapse before the notifier even exists).
+      await container.read(profileManagerProvider.notifier).ready;
     });
 
     tearDown(() async {
-      await Hive.close();
-      await tempDir.delete(recursive: true);
+      // Drain any fire-and-forget persists before closing the boxes.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await hiveEnv.dispose();
     });
 
     test('isLoading is false after initialization', () {
@@ -292,14 +290,11 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('convenience providers', () {
-    late Directory tempDir;
+    late HiveTestEnv hiveEnv;
     late ProviderContainer container;
 
     setUp(() async {
-      tempDir = await Directory.systemTemp.createTemp('convenience_test_');
-      Hive.init(tempDir.path);
-      await Hive.openBox('multi_profiles');
-      await Hive.openBox('settings');
+      hiveEnv = await HiveTestEnv.create(boxes: ['multi_profiles', 'settings']);
 
       final profileSvc = MultiProfileService();
       container = ProviderContainer(
@@ -308,12 +303,12 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      await Future.delayed(const Duration(milliseconds: 300));
+      await container.read(profileManagerProvider.notifier).ready;
     });
 
     tearDown(() async {
-      await Hive.close();
-      await tempDir.delete(recursive: true);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await hiveEnv.dispose();
     });
 
     test('isProfileLoadingProvider is false after init', () {

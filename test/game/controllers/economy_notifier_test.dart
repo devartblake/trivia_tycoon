@@ -224,8 +224,8 @@ SynaptixApiClient _buildRealClient(_StubHttpClient stub, Box authBox) {
       AuthApiClient(stub, apiBaseUrl: 'https://test', deviceId: deviceId);
   final auth =
       BackendAuthService(deviceId: deviceId, tokenStore: store, api: authApi);
-  final authHttp =
-      AuthHttpClient(auth, store, innerClient: stub, autoRefresh: false);
+  final authHttp = AuthHttpClient(auth, store,
+      innerClient: stub, autoRefresh: false, enforceGuestGate: false);
   final httpClient = HttpClient(authClient: authHttp, baseUrl: 'https://test');
   return SynaptixApiClient(httpClient: httpClient);
 }

@@ -30,15 +30,21 @@ class SkillTreeState {
   SkillTreeState copyWith({
     SkillTreeGraph? graph,
     Map<String, Offset>? positions,
-    String? selectedId,
+    // Sentinel so callers can explicitly clear the selection with `null`;
+    // a plain nullable parameter can't distinguish "not passed" from "clear".
+    Object? selectedId = _unset,
     int? playerPoints,
   }) =>
       SkillTreeState(
         graph: graph ?? this.graph,
         positions: positions ?? this.positions,
-        selectedId: selectedId ?? this.selectedId,
+        selectedId: identical(selectedId, _unset)
+            ? this.selectedId
+            : selectedId as String?,
         playerPoints: playerPoints ?? this.playerPoints,
       );
+
+  static const Object _unset = Object();
 
   static SkillTreeState empty() => SkillTreeState(
       graph: const SkillTreeGraph(nodes: [], edges: []),
@@ -59,6 +65,12 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
   /// server data arrives after the controller is already constructed.
   Set<String> _restoredUnlockIds = {};
 
+  /// Completes when the constructor's [_restoreProfile] has finished applying
+  /// the persisted graph / unlocked IDs. Awaitable so callers (and tests) can
+  /// sequence work after restore instead of guessing how many microtasks the
+  /// chained storage reads take.
+  late final Future<void> restored;
+
   SkillTreeController(
     this.ref, {
     required SkillTreeGraph initialGraph,
@@ -71,7 +83,7 @@ class SkillTreeController extends StateNotifier<SkillTreeState> {
           playerPoints: startingPoints, // example starting points
         )) {
     _computeLayout();
-    _restoreProfile();
+    restored = _restoreProfile();
   }
 
   /// Swap in a new graph (e.g., a branch). Optionally recompute layout.

@@ -11,24 +11,25 @@ class SecurePayloadCodec {
   static const _aadVersion = 'syn-sec-v1';
   final Cipher _cipher = AesGcm.with256bits();
 
-  String _buildRequestAad(SecureRequestContext ctx) =>
-      '$_aadVersion|request|${ctx.method.toUpperCase()}|${ctx.pathAndQuery}'
-      '|${ctx.sessionId}|${ctx.sequence}|${ctx.subjectId}|${ctx.encryptedAtUtc}';
-
-  String _buildResponseAad(SecureRequestContext ctx) =>
-      '$_aadVersion|response|${ctx.method.toUpperCase()}|${ctx.pathAndQuery}'
+  String _buildAad(SecureRequestContext ctx, {required bool isResponse}) =>
+      '$_aadVersion|${isResponse ? 'response' : 'request'}'
+      '|${ctx.method.toUpperCase()}|${ctx.pathAndQuery}'
       '|${ctx.sessionId}|${ctx.sequence}|${ctx.subjectId}|${ctx.encryptedAtUtc}';
 
   Future<EncryptedPayload> encryptJson({
     required Map<String, dynamic> body,
     required List<int> keyBytes,
     required SecureRequestContext context,
+    // Defaults to the request direction: the client encrypts requests. The
+    // request/response tag is bound into the AAD so a payload can't be replayed
+    // in the opposite direction. decryptJson must use the matching direction.
+    bool isResponse = false,
   }) async {
     final random = Random.secure();
     final nonce = List<int>.generate(12, (_) => random.nextInt(256));
     final secretKey = SecretKey(keyBytes);
     final clear = utf8.encode(jsonEncode(body));
-    final aad = utf8.encode(_buildRequestAad(context));
+    final aad = utf8.encode(_buildAad(context, isResponse: isResponse));
 
     final box = await _cipher.encrypt(
       clear,
@@ -50,13 +51,16 @@ class SecurePayloadCodec {
     required Map<String, dynamic> encryptedBody,
     required List<int> keyBytes,
     required SecureRequestContext context,
+    // Defaults to the response direction: the client decrypts responses. Pass
+    // isResponse: false to decrypt a payload that was encrypted as a request.
+    bool isResponse = true,
   }) async {
     try {
       final payload = EncryptedPayload.fromJson(encryptedBody);
       final nonce = base64Url.decode(payload.nonce);
       final cipherText = base64Url.decode(payload.ciphertext);
       final mac = Mac(base64Url.decode(payload.mac));
-      final aad = utf8.encode(_buildResponseAad(context));
+      final aad = utf8.encode(_buildAad(context, isResponse: isResponse));
 
       final clear = await _cipher.decrypt(
         SecretBox(cipherText, nonce: nonce, mac: mac),

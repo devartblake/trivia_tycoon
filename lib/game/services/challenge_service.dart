@@ -57,11 +57,13 @@ class ChallengeService {
 
   /// Get challenge list by type
   static List<Challenge> _getChallengeList(ChallengeType type) {
-    return switch (type) {
+    // Return a fresh list each time (the per-type getters are const-canonical,
+    // so without this a regenerated bundle would reuse the identical list).
+    return List<Challenge>.of(switch (type) {
       ChallengeType.daily => _getDailyChallenges(),
       ChallengeType.weekly => _getWeeklyChallenges(),
       ChallengeType.special => _getSpecialChallenges(),
-    };
+    });
   }
 
   static List<Challenge> _getDailyChallenges() {
