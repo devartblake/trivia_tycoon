@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:synaptix/core/config/log_verbosity.dart';
 import 'package:synaptix/core/services/guest_api_gate.dart';
 import 'package:synaptix/core/services/event_queue_service.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
@@ -40,11 +41,19 @@ class AnalyticsService {
 
   AnalyticsService(this.apiService, this.eventQueueService);
 
+  /// Chatty, high-frequency lifecycle / per-event logs. Suppressed unless
+  /// [LogVerbosity.analytics] is on, so the console stays quiet in normal runs.
+  /// Warnings and errors bypass this and are logged directly.
+  void _vlog(String message, {LogLevel level = LogLevel.debug}) {
+    if (LogVerbosity.analytics) {
+      LogManager.log(message, level: level, source: 'AnalyticsService');
+    }
+  }
+
   /// Initializes the enhanced analytics service with persistence and connectivity monitoring
   Future<void> initialize(
       {String? initialSessionId, bool silent = true}) async {
-    LogManager.log('Initializing AnalyticsService',
-        level: LogLevel.info, source: 'AnalyticsService');
+    _vlog('Initializing AnalyticsService', level: LogLevel.info);
 
     try {
       // Initialize Hive boxes for offline/session events
@@ -69,8 +78,7 @@ class AnalyticsService {
       // Start retry loop
       _startRetryLoop();
 
-      LogManager.log('AnalyticsService initialized successfully',
-          level: LogLevel.info, source: 'AnalyticsService');
+      _vlog('AnalyticsService initialized successfully', level: LogLevel.info);
     } catch (e) {
       LogManager.log('Failed to initialize AnalyticsService: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -86,8 +94,7 @@ class AnalyticsService {
     _boxInitFuture ??= () async {
       _offlineEventsBox = await Hive.openBox('offline_analytics_events');
       _sessionDataBox = await Hive.openBox('analytics_session_data');
-      LogManager.log('Offline/session analytics boxes opened successfully',
-          level: LogLevel.debug, source: 'AnalyticsService');
+      _vlog('Offline/session analytics boxes opened successfully');
     }();
 
     await _boxInitFuture;
@@ -108,8 +115,8 @@ class AnalyticsService {
     // Store session data for recovery
     await _sessionDataBox?.put('current_session', _sessionMetrics);
 
-    LogManager.log('New analytics session started: $_currentSessionId',
-        level: LogLevel.info, source: 'AnalyticsService');
+    _vlog('New analytics session started: $_currentSessionId',
+        level: LogLevel.info);
   }
 
   /// Initialize connectivity monitoring
@@ -119,10 +126,7 @@ class AnalyticsService {
       final connectivityResults = await Connectivity().checkConnectivity();
       _isOnline = _hasInternetConnectivity(connectivityResults);
 
-      LogManager.log(
-          'Initial connectivity status: ${_isOnline ? 'online' : 'offline'}',
-          level: LogLevel.debug,
-          source: 'AnalyticsService');
+      _vlog('Initial connectivity status: ${_isOnline ? 'online' : 'offline'}');
 
       // Listen for connectivity changes
       _connectivitySubscription = Connectivity()
@@ -132,12 +136,12 @@ class AnalyticsService {
         _isOnline = _hasInternetConnectivity(results);
 
         if (!wasOnline && _isOnline) {
-          LogManager.log('Network restored - syncing offline events',
-              level: LogLevel.info, source: 'AnalyticsService');
+          _vlog('Network restored - syncing offline events',
+              level: LogLevel.info);
           _syncOfflineEvents();
         } else if (wasOnline && !_isOnline) {
-          LogManager.log('Network lost - switching to offline mode',
-              level: LogLevel.warning, source: 'AnalyticsService');
+          _vlog('Network lost - switching to offline mode',
+              level: LogLevel.warning);
         }
       });
       _connectivityInitialized = true;
@@ -160,8 +164,7 @@ class AnalyticsService {
   Future<void> logEvent(String name, Map<String, dynamic> data) async {
     // Skip logging if paused
     if (_isPaused) {
-      LogManager.log('Analytics paused - skipping event: $name',
-          level: LogLevel.debug, source: 'AnalyticsService');
+      _vlog('Analytics paused - skipping event: $name');
       return;
     }
 
@@ -271,8 +274,7 @@ class AnalyticsService {
       };
 
       await _sendWithRetry('/analytics/startup_event', payload);
-      LogManager.log('App startup tracked',
-          level: LogLevel.info, source: 'AnalyticsService');
+      _vlog('App startup tracked', level: LogLevel.info);
     } catch (e) {
       LogManager.log('Startup tracking failed: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -298,8 +300,7 @@ class AnalyticsService {
       'connectivity_status': _isOnline ? 'online' : 'offline',
     };
 
-    LogManager.log('Session tracked for user: $userId',
-        level: LogLevel.info, source: 'AnalyticsService');
+    _vlog('Session tracked for user: $userId', level: LogLevel.info);
 
     if (_isOnline) {
       await _sendWithRetry('/analytics/session_start', payload);
@@ -315,11 +316,12 @@ class AnalyticsService {
       return;
     }
 
-    // Skip network attempts if in guest mode to avoid spamming 401s
+    // In guest mode we never reach the backend (GuestApiGate blocks it and
+    // retryQueuedEvents() no-ops for guests), so *drop* the event rather than
+    // enqueue it — queuing here only churns the capped queue and spams
+    // FIFO-cleanup logs while the events can never actually flush.
     if (GuestApiGate.isGuestSession) {
-      LogManager.log('Guest mode - queuing analytics event instead of sending',
-          level: LogLevel.debug, source: 'AnalyticsService');
-      await eventQueueService.enqueueEvent(endpoint, data);
+      _vlog('Guest mode - dropping analytics event ($endpoint)');
       return;
     }
 
@@ -327,8 +329,8 @@ class AnalyticsService {
       // FIX: Changed named parameter from `data` to `body` to match ApiService.
       await apiService.post(endpoint, body: data);
     } catch (e) {
-      LogManager.log('Failed to send event to $endpoint, queuing for retry',
-          level: LogLevel.warning, source: 'AnalyticsService');
+      _vlog('Failed to send event to $endpoint, queuing for retry',
+          level: LogLevel.warning);
       await eventQueueService.enqueueEvent(endpoint, data);
     }
   }
@@ -357,8 +359,7 @@ class AnalyticsService {
           rethrow;
         }
       });
-      LogManager.log('Event queue retry completed',
-          level: LogLevel.debug, source: 'AnalyticsService');
+      _vlog('Event queue retry completed');
     } catch (e) {
       LogManager.log('Event queue retry failed: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -369,8 +370,7 @@ class AnalyticsService {
   void _retryQueuedEventsInBackground() {
     Future(() async {
       try {
-        LogManager.log('Starting background retry of queued events',
-            level: LogLevel.debug, source: 'AnalyticsService');
+        _vlog('Starting background retry of queued events');
         await retryQueuedEvents();
       } catch (e) {
         LogManager.log('Background retry failed: $e',
@@ -388,8 +388,7 @@ class AnalyticsService {
         if (!eventQueueService.isInCooldown) {
           _retryQueuedEventsInBackground(); // Use background method
         } else {
-          LogManager.log('Skipping retry - EventQueue in cooldown mode',
-              level: LogLevel.debug, source: 'AnalyticsService');
+          _vlog('Skipping retry - EventQueue in cooldown mode');
         }
 
         if (_isOnline) {
@@ -419,10 +418,9 @@ class AnalyticsService {
       await _sessionDataBox?.put(
           'last_session_$_currentSessionId', sessionSummary);
 
-      LogManager.log(
+      _vlog(
           'Session ended: $_currentSessionId (${sessionDuration.inMinutes} minutes)',
-          level: LogLevel.info,
-          source: 'AnalyticsService');
+          level: LogLevel.info);
     } catch (e) {
       LogManager.log('Failed to end session: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -476,8 +474,7 @@ class AnalyticsService {
     if (_connectivityInitialized) {
       _connectivitySubscription.cancel();
     }
-    LogManager.log('AnalyticsService disposed',
-        level: LogLevel.info, source: 'AnalyticsService');
+    _vlog('AnalyticsService disposed', level: LogLevel.info);
   }
 
   // Your existing analytics fetch methods remain the same...
@@ -516,8 +513,7 @@ class AnalyticsService {
   /// Called when app goes to background or is about to be terminated
   Future<void> flushEvents() async {
     try {
-      LogManager.log('Flushing all pending analytics events',
-          level: LogLevel.info, source: 'AnalyticsService');
+      _vlog('Flushing all pending analytics events', level: LogLevel.info);
 
       // End current session
       await _endCurrentSession();
@@ -533,8 +529,7 @@ class AnalyticsService {
       // Save current session state
       await _saveAnalyticsState();
 
-      LogManager.log('All analytics events flushed successfully',
-          level: LogLevel.info, source: 'AnalyticsService');
+      _vlog('All analytics events flushed successfully', level: LogLevel.info);
     } catch (e) {
       LogManager.log('Error flushing analytics events: $e',
           level: LogLevel.error, source: 'AnalyticsService');
@@ -548,8 +543,7 @@ class AnalyticsService {
         await _syncOfflineEvents();
         await retryQueuedEvents();
       }
-      LogManager.log('Pending events flushed',
-          level: LogLevel.debug, source: 'AnalyticsService');
+      _vlog('Pending events flushed');
     } catch (e) {
       LogManager.log('Error flushing pending events: $e',
           level: LogLevel.warning, source: 'AnalyticsService');
@@ -562,8 +556,7 @@ class AnalyticsService {
     try {
       _isPaused = true;
       _retryTimer?.cancel();
-      LogManager.log('Analytics collection paused',
-          level: LogLevel.info, source: 'AnalyticsService');
+      _vlog('Analytics collection paused', level: LogLevel.info);
     } catch (e) {
       LogManager.log('Error pausing analytics collection: $e',
           level: LogLevel.warning, source: 'AnalyticsService');
@@ -576,8 +569,7 @@ class AnalyticsService {
     try {
       _isPaused = false;
       _startRetryLoop();
-      LogManager.log('Analytics collection resumed',
-          level: LogLevel.info, source: 'AnalyticsService');
+      _vlog('Analytics collection resumed', level: LogLevel.info);
     } catch (e) {
       LogManager.log('Error resuming analytics collection: $e',
           level: LogLevel.warning, source: 'AnalyticsService');
@@ -597,8 +589,7 @@ class AnalyticsService {
       };
 
       await _sessionDataBox?.put('analytics_state', analyticsState);
-      LogManager.log('Analytics state saved',
-          level: LogLevel.debug, source: 'AnalyticsService');
+      _vlog('Analytics state saved');
     } catch (e) {
       LogManager.log('Failed to save analytics state: $e',
           level: LogLevel.warning, source: 'AnalyticsService');
