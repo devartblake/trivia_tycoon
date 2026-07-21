@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:synaptix/core/config/log_verbosity.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Used by queue handlers to mark a failed event as permanent (do not retry).
@@ -37,6 +38,11 @@ class EventQueueService {
 
   EventQueueService();
 
+  /// Gates chatty, per-cycle informational logging. Warnings that signal real
+  /// trouble (cooldown entry, errors) are never suppressed by this. Flip
+  /// [LogVerbosity.analytics] from a debug menu to see the full trace.
+  bool get _verbose => LogVerbosity.analytics;
+
   /// Initialize the service and load previous state
   Future<void> initialize({
     Function(String event, Map<String, dynamic> data)? analyticsCallback,
@@ -44,10 +50,12 @@ class EventQueueService {
     _analyticsCallback = analyticsCallback;
     await _loadState();
 
-    LogManager.info(
-      'EventQueueService initialized - Consecutive failures: $_consecutiveFailures',
-      source: 'EventQueueService',
-    );
+    if (_verbose) {
+      LogManager.info(
+        'EventQueueService initialized - Consecutive failures: $_consecutiveFailures',
+        source: 'EventQueueService',
+      );
+    }
 
     // Check queue size on initialization
     await _enforceQueueSizeLimit();
@@ -71,7 +79,7 @@ class EventQueueService {
         _cooldownUntil = DateTime.parse(cooldownUntilStr);
         _isInCooldown = DateTime.now().isBefore(_cooldownUntil!);
 
-        if (_isInCooldown) {
+        if (_isInCooldown && _verbose) {
           final remaining = _cooldownUntil!.difference(DateTime.now());
           LogManager.warning(
             'Service in cooldown mode - ${remaining.inMinutes} minutes remaining',
@@ -122,10 +130,12 @@ class EventQueueService {
       _consecutiveFailures = 0;
       _saveState();
 
-      LogManager.success(
-        'Cooldown period ended - resuming normal operations',
-        source: 'EventQueueService',
-      );
+      if (_verbose) {
+        LogManager.success(
+          'Cooldown period ended - resuming normal operations',
+          source: 'EventQueueService',
+        );
+      }
     }
 
     return _isInCooldown;
@@ -140,10 +150,12 @@ class EventQueueService {
 
       final excessCount = box.length - maxQueueSize;
 
-      LogManager.warning(
-        'Queue size (${box.length}) exceeds limit ($maxQueueSize). Removing $excessCount oldest events (FIFO).',
-        source: 'EventQueueService',
-      );
+      if (_verbose) {
+        LogManager.warning(
+          'Queue size (${box.length}) exceeds limit ($maxQueueSize). Removing $excessCount oldest events (FIFO).',
+          source: 'EventQueueService',
+        );
+      }
 
       // Get all entries sorted by timestamp (oldest first)
       final entries = box.toMap().entries.toList();
@@ -162,10 +174,12 @@ class EventQueueService {
         deleted++;
       }
 
-      LogManager.info(
-        'Deleted $deleted oldest events to maintain queue size limit',
-        source: 'EventQueueService',
-      );
+      if (_verbose) {
+        LogManager.info(
+          'Deleted $deleted oldest events to maintain queue size limit',
+          source: 'EventQueueService',
+        );
+      }
 
       _notifyAnalytics('queue_size_limit_enforced', {
         'deleted_count': deleted,
@@ -187,12 +201,14 @@ class EventQueueService {
   Future<bool> enqueueEvent(
       String endpoint, Map<String, dynamic> payload) async {
     if (isInCooldown) {
-      LogManager.logWithCustomColor(
-        'Cannot enqueue - service in cooldown mode',
-        source: 'EventQueueService',
-        color: LogColors.brightRed,
-        bold: true,
-      );
+      if (_verbose) {
+        LogManager.logWithCustomColor(
+          'Cannot enqueue - service in cooldown mode',
+          source: 'EventQueueService',
+          color: LogColors.brightRed,
+          bold: true,
+        );
+      }
       return false;
     }
 
@@ -237,11 +253,13 @@ class EventQueueService {
       Future<void> Function(String endpoint, Map<String, dynamic> payload)
           handler) async {
     if (isInCooldown) {
-      final remaining = _cooldownUntil!.difference(DateTime.now());
-      LogManager.warning(
-        'Skipping retry - in cooldown mode (${remaining.inMinutes}m remaining)',
-        source: 'EventQueueService',
-      );
+      if (_verbose) {
+        final remaining = _cooldownUntil!.difference(DateTime.now());
+        LogManager.warning(
+          'Skipping retry - in cooldown mode (${remaining.inMinutes}m remaining)',
+          source: 'EventQueueService',
+        );
+      }
       return;
     }
 
@@ -310,10 +328,12 @@ class EventQueueService {
     _consecutiveFailures++;
     _lastFailureTime = DateTime.now();
 
-    LogManager.warning(
-      'Retry cycle failed - Consecutive failures: $_consecutiveFailures/$maxConsecutiveFailures',
-      source: 'EventQueueService',
-    );
+    if (_verbose) {
+      LogManager.warning(
+        'Retry cycle failed - Consecutive failures: $_consecutiveFailures/$maxConsecutiveFailures',
+        source: 'EventQueueService',
+      );
+    }
 
     // Notify analytics of failure
     _notifyAnalytics('retry_cycle_failed', {
@@ -353,7 +373,11 @@ class EventQueueService {
   /// Report retry cycle results
   void _reportRetryCycle(int successCount, int failureCount, int droppedCount,
       int remainingCount) {
-    if (successCount > 0 || failureCount > 0 || droppedCount > 0) {
+    // #3: retry-cycle dividers/summary are debug-only noise. Gate the whole
+    // block behind the verbose flag so normal runs stay quiet; the
+    // `retry_cycle_complete` analytics event below still fires unconditionally.
+    if (_verbose &&
+        (successCount > 0 || failureCount > 0 || droppedCount > 0)) {
       LogManager.divider(label: 'RETRY CYCLE COMPLETE');
       LogManager.success('Succeeded: $successCount',
           source: 'EventQueueService');
@@ -392,8 +416,10 @@ class EventQueueService {
         });
       } catch (e) {
         // Don't let analytics failure affect queue operations
-        LogManager.debug(
-            '[EventQueueService] Analytics notification failed: $e');
+        if (_verbose) {
+          LogManager.debug(
+              '[EventQueueService] Analytics notification failed: $e');
+        }
       }
     }
   }
@@ -430,10 +456,12 @@ class EventQueueService {
             LogManager.exportLogsAsJson(source: 'EventQueueService'),
       };
 
-      LogManager.highlight(
-        'Exported ${events.length} failed events for player: $playerId',
-        source: 'EventQueueService',
-      );
+      if (_verbose) {
+        LogManager.highlight(
+          'Exported ${events.length} failed events for player: $playerId',
+          source: 'EventQueueService',
+        );
+      }
 
       return exportData;
     } catch (e) {
