@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:synaptix/core/config/log_verbosity.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import 'package:synaptix/game/controllers/settings_controller.dart';
 import '../../core/helpers/responsive_layout.dart';
@@ -477,6 +479,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             child: _PersonalizationSection(),
           ),
         ),
+        // Developer-only tools. Compiled out of release builds entirely — the
+        // `kDebugMode` constant lets the tree-shaker drop this whole branch.
+        if (kDebugMode)
+          const SliverToBoxAdapter(
+            child: AppResponsiveWidth(
+              padding: EdgeInsets.zero,
+              child: _DeveloperSection(),
+            ),
+          ),
         const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
     );
@@ -1000,6 +1011,99 @@ class _PersonalizationTileState extends ConsumerState<_PersonalizationTile> {
               onTap: () => context.push(
                 '/settings/personalization?playerId=${widget.playerId}',
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Developer Section (debug builds only) ─────────────────────────────────────
+
+/// Debug-only tools surfaced at the bottom of Settings. The parent gates this
+/// behind `kDebugMode`, so it never renders — or ships — in a release build.
+///
+/// Currently exposes a single switch for [LogVerbosity.analytics], which
+/// re-enables the verbose AnalyticsService + EventQueueService console tracing
+/// while diagnosing analytics/queue behaviour on a device. The flag is a plain
+/// static, so the change takes effect immediately for subsequent logs.
+class _DeveloperSection extends StatefulWidget {
+  const _DeveloperSection();
+
+  @override
+  State<_DeveloperSection> createState() => _DeveloperSectionState();
+}
+
+class _DeveloperSectionState extends State<_DeveloperSection> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF59E0B).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.bug_report_rounded,
+                        color: Color(0xFFF59E0B), size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Developer (debug only)',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SwitchListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+              title: const Text(
+                'Verbose analytics logs',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+              subtitle: Text(
+                LogVerbosity.analytics
+                    ? 'AnalyticsService & EventQueueService trace logging ON'
+                    : 'Chatty analytics/queue logs suppressed',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: const Color(0xFF64748B).withValues(alpha: 0.85),
+                ),
+              ),
+              value: LogVerbosity.analytics,
+              activeThumbColor: const Color(0xFFF59E0B),
+              onChanged: (value) =>
+                  setState(() => LogVerbosity.analytics = value),
             ),
           ],
         ),
