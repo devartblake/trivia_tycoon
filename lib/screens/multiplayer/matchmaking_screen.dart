@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
+import 'package:synaptix/core/design_system/glass_app_bar.dart';
+import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
+import 'package:synaptix/core/design_system/neon_button.dart';
+import 'package:synaptix/core/design_system/neural_bloom_indicator.dart';
 import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
 import 'package:synaptix/screens/multiplayer/widgets/connection_banner.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
@@ -48,8 +54,6 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
   Widget build(BuildContext context) {
     final mpState = ref.watch(multiplayerControllerProvider);
     final roomState = ref.watch(roomControllerProvider);
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return PopScope(
         canPop: false, // Prevent default back behavior
@@ -62,14 +66,9 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             context.go('/multiplayer'); // Go back to MultiplayerHub
           }
         },
-        child: Scaffold(
-          backgroundColor:
-              isDark ? const Color(0xFF0A0A0F) : MultiplayerPalette.background,
-          appBar: AppBar(
-            title: const Text('Find Match'),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: true,
+        child: SynaptixScaffold(
+          appBar: GlassAppBar(
+            title: const GlowText('Find Match'),
             leading: IconButton(
               onPressed: () async {
                 final ok = await showExitMatchConfirm(context,
@@ -78,48 +77,39 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                   context.go('/multiplayer');
                 }
               },
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
             ),
           ),
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ConnectionBanner(state: mpState),
-                  const SizedBox(height: 32),
-                  _buildMatchmakingOptions(theme, isDark),
-                  const SizedBox(height: 32),
-                  if (roomState.loading) _buildLoadingCard(theme, isDark),
-                  if (!roomState.loading && roomState.roomId != null)
-                    _buildRoomJoinedCard(roomState, theme, isDark),
-                  const SizedBox(height: 24),
-                  _buildQuickTips(theme, isDark),
-                ],
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 12),
+                    ConnectionBanner(state: mpState),
+                    const SizedBox(height: 32),
+                    _buildMatchmakingOptions(),
+                    const SizedBox(height: 32),
+                    if (roomState.loading) _buildLoadingCard(),
+                    if (!roomState.loading && roomState.roomId != null)
+                      _buildRoomJoinedCard(roomState),
+                    const SizedBox(height: 24),
+                    _buildQuickTips(),
+                  ],
+                ),
               ),
             ),
           ),
         ));
   }
 
-  Widget _buildMatchmakingOptions(ThemeData theme, bool isDark) {
-    return Container(
+  Widget _buildMatchmakingOptions() {
+    return AdaptiveGlassCard(
+      glowColor: MultiplayerPalette.primary,
       padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.3)
-                : Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,27 +133,28 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 ),
               ),
               const SizedBox(width: 16),
-              Text(
+              const Text(
                 'Find Your Match',
-                style: theme.textTheme.titleLarge?.copyWith(
+                style: TextStyle(
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                  color: Colors.white,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 24),
-          _buildCreateRoomSection(theme, isDark),
+          _buildCreateRoomSection(),
           const SizedBox(height: 20),
-          const Divider(),
+          const Divider(color: Colors.white10),
           const SizedBox(height: 20),
-          _buildBrowseRoomsSection(theme, isDark),
+          _buildBrowseRoomsSection(),
         ],
       ),
     );
   }
 
-  Widget _buildCreateRoomSection(ThemeData theme, bool isDark) {
+  Widget _buildCreateRoomSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -175,11 +166,11 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               size: 20,
             ),
             const SizedBox(width: 8),
-            Text(
+            const Text(
               'Create New Room',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                color: Colors.white,
               ),
             ),
           ],
@@ -187,21 +178,21 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
-            color: isDark
-                ? const Color(0xFF2A2A3E)
-                : MultiplayerPalette.surfaceAlt,
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isDark ? Colors.grey.shade700 : Colors.grey.shade200,
+              color: Colors.white.withValues(alpha: 0.2),
             ),
           ),
           child: TextField(
             controller: _roomNameController,
-            decoration: InputDecoration(
+            style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(
               hintText: 'Enter room name...',
-              prefixIcon: const Icon(Icons.meeting_room_rounded),
+              hintStyle: TextStyle(color: Colors.white38),
+              prefixIcon: Icon(Icons.meeting_room_rounded, color: Colors.white70),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(16),
+              contentPadding: EdgeInsets.all(16),
             ),
             maxLength: 30,
             buildCounter: (context,
@@ -210,27 +201,23 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
           ),
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: () => _createRoom(),
-            icon: const Icon(Icons.add_rounded),
-            label: const Text('Create Room'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: MultiplayerPalette.success,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+        NeonButton(
+          onPressed: () => _createRoom(),
+          color: MultiplayerPalette.success,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add_rounded, color: Colors.white),
+              SizedBox(width: 8),
+              Text('Create Room'),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBrowseRoomsSection(ThemeData theme, bool isDark) {
+  Widget _buildBrowseRoomsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -242,117 +229,70 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               size: 20,
             ),
             const SizedBox(width: 8),
-            Text(
+            const Text(
               'Browse Existing Rooms',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                color: Colors.white,
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton.icon(
-            onPressed: () => _browseRooms(),
-            icon: const Icon(Icons.search_rounded),
-            label: const Text('Browse Rooms'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: MultiplayerPalette.primary,
-              side: const BorderSide(color: MultiplayerPalette.primary),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+        NeonButton(
+          onPressed: () => _browseRooms(),
+          color: MultiplayerPalette.primary,
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.search_rounded, color: Colors.white),
+              SizedBox(width: 8),
+              Text('Browse Rooms'),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildLoadingCard(ThemeData theme, bool isDark) {
-    return AnimatedBuilder(
-      animation: _pulseAnimation,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _pulseAnimation.value,
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  MultiplayerPalette.primary,
-                  MultiplayerPalette.secondary
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: MultiplayerPalette.primary.withValues(alpha: 0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Row(
+  Widget _buildLoadingCard() {
+    return AdaptiveGlassCard(
+      glowColor: MultiplayerPalette.primary,
+      padding: const EdgeInsets.all(24),
+      child: Row(
+        children: [
+          const NeuralBloomIndicator(size: 40),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
+                const GlowText(
+                  'Creating Room...',
+                  style: TextStyle(
                     color: Colors.white,
-                    strokeWidth: 2,
+                    fontSize: 16,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Creating Room...',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        'Setting up your multiplayer room',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                Text(
+                  'Setting up your multiplayer room',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    fontSize: 14,
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildRoomJoinedCard(dynamic roomState, ThemeData theme, bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: MultiplayerPalette.success.withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRoomJoinedCard(dynamic roomState) {
+    return AdaptiveGlassCard(
+      glowColor: MultiplayerPalette.success,
+      padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -371,39 +311,34 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
+              const GlowText(
                 'Room Joined!',
                 style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             'Room ID: ${roomState.roomId}',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
+            style: const TextStyle(
+              color: Colors.white70,
               fontSize: 14,
             ),
           ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () => context.go('/multiplayer/rooms'),
-              icon: const Icon(Icons.meeting_room_rounded),
-              label: const Text('Enter Lobby'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: MultiplayerPalette.success,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
+          const SizedBox(height: 20),
+          NeonButton(
+            onPressed: () => context.go('/multiplayer/rooms'),
+            color: MultiplayerPalette.success,
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.meeting_room_rounded, color: Colors.white),
+                SizedBox(width: 8),
+                Text('Enter Lobby'),
+              ],
             ),
           ),
         ],
@@ -411,16 +346,9 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
     );
   }
 
-  Widget _buildQuickTips(ThemeData theme, bool isDark) {
-    return Container(
+  Widget _buildQuickTips() {
+    return AdaptiveGlassCard(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E2E) : MultiplayerPalette.surfaceAlt,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: MultiplayerPalette.primary.withValues(alpha: 0.2),
-        ),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -435,13 +363,13 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
               Text(
                 'Quick Tips',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.bold,
                   color: MultiplayerPalette.primary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           _buildTip('Create a custom room to play with friends'),
           _buildTip('Browse public rooms for quick matches'),
           _buildTip('Room names can be up to 30 characters long'),

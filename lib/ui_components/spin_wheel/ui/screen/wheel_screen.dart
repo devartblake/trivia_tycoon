@@ -3,27 +3,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/services/api_service.dart' show ApiRequestException;
-import '../../../../core/services/arcade/spin_wheel_api_service.dart';
-import '../../../../game/analytics/providers/analytics_providers.dart';
-import '../../../../game/providers/riverpod_providers.dart'
+import 'package:synaptix/core/services/api_service.dart' show ApiRequestException;
+import 'package:synaptix/core/services/arcade/spin_wheel_api_service.dart';
+import 'package:synaptix/game/analytics/providers/analytics_providers.dart';
+import 'package:synaptix/game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
-import '../../../../core/services/settings/app_settings.dart';
-import '../../../../core/services/notification_service.dart';
-import '../../models/spin_system_models.dart';
-import '../../physics/non_uniform_motion.dart';
-import '../../physics/updated_spin_handler.dart';
-import '../../utils/spin_transition_utils.dart';
-import '../dialogs/result_dialog.dart';
-import '../toasts/spin_ready_toast.dart';
-import '../widgets/stat_card_widget.dart';
-import '../widgets/wheel_widget.dart';
-import '../widgets/spin_button.dart';
-import '../widgets/spin_cooldown_widget.dart';
-import '../../../confetti/ui/confetti_debug_overlay.dart';
-import '../../../confetti/ui/confetti_settings.dart';
-import '../../services/spin_tracker.dart';
-import '../../utils/wheel_responsive.dart';
+import 'package:synaptix/core/services/settings/app_settings.dart';
+import 'package:synaptix/core/services/notification_service.dart';
+import 'package:synaptix/game/providers/spin_providers.dart';
+import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
+import 'package:synaptix/ui_components/spin_wheel/physics/non_uniform_motion.dart';
+import 'package:synaptix/ui_components/spin_wheel/physics/updated_spin_handler.dart';
+import 'package:synaptix/ui_components/spin_wheel/utils/spin_transition_utils.dart';
+import 'package:synaptix/ui_components/spin_wheel/ui/dialogs/result_dialog.dart';
+import 'package:synaptix/ui_components/spin_wheel/ui/widgets/stat_card_widget.dart';
+import 'package:synaptix/ui_components/spin_wheel/ui/widgets/wheel_widget.dart';
+import 'package:synaptix/ui_components/spin_wheel/ui/widgets/spin_button.dart';
+import 'package:synaptix/ui_components/spin_wheel/ui/widgets/spin_cooldown_widget.dart';
+import 'package:synaptix/ui_components/confetti/ui/confetti_debug_overlay.dart';
+import 'package:synaptix/ui_components/confetti/ui/confetti_settings.dart';
+import 'package:synaptix/ui_components/spin_wheel/services/spin_tracker.dart';
+import 'package:synaptix/ui_components/spin_wheel/utils/wheel_responsive.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 
 class WheelScreen extends ConsumerStatefulWidget {
@@ -51,7 +51,6 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   // Analytics tracking
   DateTime? _screenEnteredTime;
   int _spinCount = 0;
-  Timer? _cooldownCheckTimer;
 
   @override
   void initState() {
@@ -61,33 +60,11 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     _loadSegments();
     _checkSpinAvailability();
     _trackScreenView();
-    _startCooldownMonitor();
-  }
-
-  // Monitor cooldown and show toast when ready
-  void _startCooldownMonitor() {
-    _cooldownCheckTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
-      final wasCanSpin = _canSpin;
-      await _checkSpinAvailability();
-
-      // If spin just became available
-      if (_canSpin && !wasCanSpin && mounted) {
-        await _showSpinReadyToast();
-      }
+    
+    // Clear any pending notifications when the user is actively viewing the wheel
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(notificationServiceProvider).cancelSpinNotifications();
     });
-  }
-
-  Future<void> _showSpinReadyToast() async {
-    await _trackUserAction('spin_ready_toast_shown');
-
-    if (!mounted) return;
-    await SpinReadyToast.show(
-      context: context,
-      onSpinNow: () {
-        _handleSpin();
-      },
-      customMessage: 'Your cooldown has expired! Spin now to win rewards!',
-    );
   }
 
   @override
@@ -98,7 +75,6 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
 
   @override
   void dispose() {
-    _cooldownCheckTimer?.cancel();
     _animationController.dispose();
     _scaleController.dispose();
     super.dispose();
@@ -399,13 +375,16 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
           HapticFeedback.heavyImpact();
           _trackSpinCompleted(segment);
           _claimSpinReward(segment);
+          
+          // Refresh global state
+          ref.read(spinStateNotifierProvider.notifier).refresh();
+          
           Future.delayed(const Duration(milliseconds: 500), () {
             if (mounted) _showResultDialog(segment);
           });
         },
       );
       _scheduleCooldownNotification();
-      await _checkSpinAvailability();
     } catch (e) {
       setState(() {
         _isSpinning = false;
@@ -493,8 +472,9 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
   }
 
   Future<void> _scheduleCooldownNotification() async {
-    await NotificationService().cancelSpinNotifications();
-    final scheduled = await NotificationService().scheduleSpinReadyNotification(
+    final service = ref.read(notificationServiceProvider);
+    await service.cancelSpinNotifications();
+    final scheduled = await service.scheduleSpinReadyNotification(
       SpinTracker.cooldown,
     );
     if (!scheduled) {

@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:synaptix/core/manager/log_manager.dart';
-import 'package:synaptix/core/services/notification_service.dart';
 
 import '../../services/spin_tracker.dart';
 
@@ -131,30 +129,9 @@ class _SpinButtonState extends ConsumerState<SpinButton>
 
     if (canSpin && !wasCanSpin && !widget.isSpinning) {
       _pulseController.repeat(reverse: true);
-      _showSpinAvailableNotification();
     } else if (!canSpin) {
       _pulseController.stop();
       _pulseController.reset();
-    }
-  }
-
-  void _showSpinAvailableNotification() {
-    if (_canSpin) {
-      HapticFeedback.lightImpact();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(Icons.casino, color: Colors.white),
-              const SizedBox(width: 8),
-              Text('Spin is now available!'),
-            ],
-          ),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
     }
   }
 
@@ -166,22 +143,8 @@ class _SpinButtonState extends ConsumerState<SpinButton>
     await _buttonController.forward();
     _buttonController.reverse();
 
-    await SpinTracker.registerSpin();
-    _scheduleCooldownNotification();
     widget.onSpin();
     await _checkSpinEligibility();
-  }
-
-  Future<void> _scheduleCooldownNotification() async {
-    await NotificationService().cancelSpinNotifications();
-    final scheduled = await NotificationService().scheduleSpinReadyNotification(
-      SpinTracker.cooldown,
-    );
-    if (!scheduled) {
-      LogManager.debug(
-        '[SpinButton] Spin ready notification skipped - permissions unavailable',
-      );
-    }
   }
 
   @override
@@ -248,7 +211,7 @@ class _SpinButtonState extends ConsumerState<SpinButton>
                       Text(
                         widget.isSpinning ? 'SPINNING' : 'SPIN',
                         style: theme.textTheme.labelMedium?.copyWith(
-                          color: Colors.blueGrey,
+                          color: Colors.white70,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.2,
                         ),

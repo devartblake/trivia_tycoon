@@ -5,50 +5,73 @@ import '../../game/providers/skill_progression_provider.dart'
     show allSkillsProvider;
 import '../../game/models/skill_tree_graph.dart' hide SkillNode;
 import '../../core/theme/skill_category_colors.dart';
+import '../../core/design_system/synaptix_scaffold.dart';
+import '../../core/design_system/glass_app_bar.dart';
+import '../../core/design_system/segmented_selection_hub.dart';
+import '../../core/design_system/glow_text.dart';
 
 /// Visualization of player's skill tree progression
-class SkillTreeVisualization extends ConsumerWidget {
+class SkillTreeVisualization extends ConsumerStatefulWidget {
   const SkillTreeVisualization({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SkillTreeVisualization> createState() => _SkillTreeVisualizationState();
+}
+
+class _SkillTreeVisualizationState extends ConsumerState<SkillTreeVisualization> {
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final List<SkillNode> allSkills = ref.watch(allSkillsProvider);
 
     return Hero(
       tag: 'surface_pathways',
-      child: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Skill Tree'),
-            elevation: 0,
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.calculate), text: 'Mathematics'),
-                Tab(icon: Icon(Icons.science), text: 'Science'),
-                Tab(icon: Icon(Icons.psychology), text: 'Logic'),
-              ],
-            ),
+      child: SynaptixScaffold(
+        appBar: GlassAppBar(
+          title: const GlowText('Skill Tree'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          body: TabBarView(
+        ),
+        body: SafeArea(
+          child: Column(
             children: [
-              _SkillCategoryView(
-                title: 'Mathematics',
-                skills: _getMathSkills(allSkills),
-                icon: Icons.calculate,
-                color: SkillCategoryColors.backgroundFor(context, SkillCategory.scholar),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SegmentedSelectionHub(
+                  items: const ['Math', 'Science', 'Logic'],
+                  selectedIndex: _selectedIndex,
+                  onItemSelected: (index) => setState(() => _selectedIndex = index),
+                ),
               ),
-              _SkillCategoryView(
-                title: 'Science',
-                skills: _getScienceSkills(allSkills),
-                icon: Icons.science,
-                color: SkillCategoryColors.backgroundFor(context, SkillCategory.xp),
-              ),
-              _SkillCategoryView(
-                title: 'Logic',
-                skills: _getLogicSkills(allSkills),
-                icon: Icons.psychology,
-                color: SkillCategoryColors.backgroundFor(context, SkillCategory.timer),
+              const SizedBox(height: 16),
+              Expanded(
+                child: IndexedStack(
+                  index: _selectedIndex,
+                  children: [
+                    _SkillCategoryView(
+                      title: 'Mathematics',
+                      skills: _getMathSkills(allSkills),
+                      icon: Icons.calculate,
+                      color: SkillCategoryColors.backgroundFor(context, SkillCategory.scholar),
+                    ),
+                    _SkillCategoryView(
+                      title: 'Science',
+                      skills: _getScienceSkills(allSkills),
+                      icon: Icons.science,
+                      color: SkillCategoryColors.backgroundFor(context, SkillCategory.xp),
+                    ),
+                    _SkillCategoryView(
+                      title: 'Logic',
+                      skills: _getLogicSkills(allSkills),
+                      icon: Icons.psychology,
+                      color: SkillCategoryColors.backgroundFor(context, SkillCategory.timer),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

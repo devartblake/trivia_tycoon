@@ -14,7 +14,6 @@ import '../../game/providers/spin_providers.dart';
 import '../../ui_components/spin_wheel/models/spin_system_models.dart';
 import '../../ui_components/spin_wheel/services/spin_tracker.dart'
     show SpinStatistics, SpinTracker;
-import '../../ui_components/spin_wheel/ui/toasts/spin_ready_premium_toast.dart';
 import '../../ui_components/spin_wheel/ui/widgets/wheel_widget.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 
@@ -67,12 +66,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
       _loadSpinData(),
       _loadSegments(),
     ]);
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        unawaited(_checkAndShowSpinReadyToast());
-      }
-    });
   }
 
   void _initAnimations() {
@@ -182,19 +175,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
         _segmentsLoading = false;
       });
       await _trackError('load_spin_segments_failed', e.toString());
-    }
-  }
-
-  Future<void> _checkAndShowSpinReadyToast() async {
-    if (_spinsRemaining > 0 && mounted) {
-      await PremiumSpinReadyToast.show(
-        context: context,
-        onSpinNow: _navigateToFullWheelScreen,
-        spinsRemaining: _spinsRemaining,
-        rewardPoints: _currentSpinSliderValue.toInt(),
-        bonusMessage:
-            _spinsRemaining >= _dailyLimit ? 'All free spins available!' : null,
-      );
     }
   }
 
@@ -1434,15 +1414,6 @@ class _SpinEarnScreenState extends ConsumerState<SpinEarnScreen>
                           hapticEnabled = value;
                         });
                       },
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _checkAndShowSpinReadyToast,
-                        icon: const Icon(Icons.casino),
-                        label: const Text('Check Spin Status'),
-                      ),
                     ),
                   ],
                 ),

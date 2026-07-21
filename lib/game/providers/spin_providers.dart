@@ -12,3 +12,21 @@ final spinStatisticsProvider =
     return EnhancedSpinTracker.getStatistics();
   }
 });
+
+/// Centralized notifier for spin availability and cooldown state
+class SpinStateNotifier extends AutoDisposeAsyncNotifier<SpinStatistics> {
+  @override
+  Future<SpinStatistics> build() async {
+    return ref.watch(spinStatisticsProvider.future);
+  }
+
+  /// Manually refresh availability
+  Future<void> refresh() async {
+    ref.invalidate(spinStatisticsProvider);
+  }
+}
+
+final spinStateNotifierProvider =
+    AsyncNotifierProvider.autoDispose<SpinStateNotifier, SpinStatistics>(() {
+  return SpinStateNotifier();
+});

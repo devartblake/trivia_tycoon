@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import 'package:synaptix/game/providers/riverpod_providers.dart';
+import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
+import 'package:synaptix/core/design_system/glass_app_bar.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
 import 'package:synaptix/synaptix/mode/synaptix_mode.dart';
 import 'package:synaptix/synaptix/mode/synaptix_mode_provider.dart';
 import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
@@ -64,25 +67,16 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
     final userProfile = profileService.getProfile();
     final playerName = userProfile['name'] ?? 'Player';
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0F23),
+    return SynaptixScaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: canPop,
+      appBar: GlassAppBar(
         leading: canPop
             ? IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
                 onPressed: () => context.safeBack(),
               )
             : null,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'Synaptix Hub',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const GlowText('Synaptix Hub'),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),
@@ -90,78 +84,57 @@ class _GameMenuScreenState extends ConsumerState<GameMenuScreen>
           ),
         ],
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          // Layer 0: Background image
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.15,
-              child: Image.asset(
-                'assets/images/backgrounds/geometry_background.jpg',
-                fit: BoxFit.cover,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+
+              // Welcome header
+              SynaptixHubHeader(
+                playerName: playerName,
+                isDarkBackground: true,
               ),
-            ),
-          ),
 
-          // Layer 1: Scrollable content
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
+              // Progress snapshot
+              const SynaptixProgressSnapshot(isDarkBackground: true),
+              const SizedBox(height: 16),
 
-                  // Welcome header
-                  SynaptixHubHeader(
-                    playerName: playerName,
-                    isDarkBackground: true,
-                  ),
+              // Retention banner (daily bonus + bonus challenge)
+              const HubRetentionBanner(),
 
-                  // Progress snapshot
-                  const SynaptixProgressSnapshot(isDarkBackground: true),
-                  const SizedBox(height: 16),
+              // Live win ticker
+              const HubLiveTicker(),
+              const SizedBox(height: 20),
 
-                  // Retention banner (daily bonus + bonus challenge)
-                  const HubRetentionBanner(),
+              // Featured match centerpiece
+              HubFeaturedMatch(pulseAnimation: _pulseAnimation),
+              const SizedBox(height: 16),
 
-                  // Live win ticker
-                  const HubLiveTicker(),
-                  const SizedBox(height: 20),
+              // Metallic action buttons
+              const HubMetallicButtons(),
+              const SizedBox(height: 16),
 
-                  // Featured match centerpiece
-                  HubFeaturedMatch(pulseAnimation: _pulseAnimation),
-                  const SizedBox(height: 16),
+              // Daily quest
+              const HubDailyQuest(),
+              const SizedBox(height: 24),
 
-                  // Metallic action buttons
-                  const HubMetallicButtons(),
-                  const SizedBox(height: 16),
-
-                  // Daily quest
-                  const HubDailyQuest(),
-                  const SizedBox(height: 24),
-
-                  // Quick-launch grid section
-                  const Text(
-                    'Explore',
-                    style: TextStyle(
-                      fontFamily: 'OpenSans',
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildQuickLaunchGrid(context, mode),
-
-                  const SizedBox(height: 80),
-                ],
+              // Quick-launch grid section
+              const GlowText(
+                'Explore',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
-            ),
+              const SizedBox(height: 12),
+              _buildQuickLaunchGrid(context, mode),
+
+              const SizedBox(height: 80),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

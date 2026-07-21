@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:synaptix/core/design_system/demographic_asset_wrapper.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
 import '../mode/synaptix_mode.dart';
 import '../mode/synaptix_mode_provider.dart';
 
@@ -28,22 +30,35 @@ class SynaptixHubHeader extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            greeting,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: titleColor,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GlowText(
+                  greeting,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: titleColor,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _subtitle(mode),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: subtitleColor,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            _subtitle(mode),
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: subtitleColor,
-            ),
+          const DemographicAssetWrapper(
+            kidsAsset: 'assets/images/avatars/kids_mascot.png',
+            teenAsset: 'assets/images/avatars/teen_avatar.png',
+            adultAsset: 'assets/images/avatars/adult_professional.png',
+            width: 60,
+            height: 60,
           ),
         ],
       ),
