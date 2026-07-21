@@ -850,5 +850,48 @@
       "G12",
       "derivative"
     ]
+  },
+  {
+    "id": "M_ADV_1",
+    "category": "Basic Math",
+    "question": "What is the result of 15 * 3?",
+    "answers": [],
+    "options": [],
+    "correctAnswer": "45",
+    "type": "free_text",
+    "difficulty": 1,
+    "tags": [
+      "multiplication"
+    ]
+  },
+  {
+    "id": "M_ADV_2",
+    "category": "Pre-Algebra",
+    "question": "Order these numbers from smallest to largest.",
+    "options": [
+      "0.5",
+      "1/4",
+      "75%",
+      "0.1"
+    ],
+    "correctAnswer": "[\"0.1\",\"1/4\",\"0.5\",\"75%\"]",
+    "type": "sorting",
+    "difficulty": 2,
+    "tags": [
+      "number sense"
+    ]
+  },
+  {
+    "id": "M_ADV_3",
+    "category": "Arithmetic",
+    "question": "What is 100 divided by 4?",
+    "answers": [],
+    "options": [],
+    "correctAnswer": "25",
+    "type": "free_text",
+    "difficulty": 1,
+    "tags": [
+      "division"
+    ]
   }
 ]

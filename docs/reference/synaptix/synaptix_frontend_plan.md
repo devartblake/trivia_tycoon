@@ -144,12 +144,12 @@
 
 4. `lib/synaptix/theme/synaptix_theme_extension.dart`
    - `SynaptixTheme extends ThemeExtension<SynaptixTheme>`
-   - Properties: primarySurface, accentGlow, useHighEnergyMotion, useSoftCorners, cardRadius
+   - Properties: primarySurface, accentGlow, mainBackgroundGradient, glassOverlay, headlineFont, bodyFont, icons (IconProfile), chartPalette, hapticIntensity, useHighEnergyMotion, defaultCurve, snappyCurve, useSoftCorners, cardRadius
 
-5. `lib/synaptix/theme/synaptix_theme_presets.dart`
-   - Kids: bright, soft corners, cardRadius 20, high-energy motion
-   - Teen: dark navy, neon accent, cardRadius 14, high-energy
-   - Adult: charcoal, muted cyan, cardRadius 12, restrained motion
+5. `lib/synaptix/theme/synaptix_theme_presets.dart` (Included in extension file)
+   - Kids: bright, soft corners, bouncy curves, energetic haptics, primary chart palette, cardRadius 20
+   - Teen: dark navy, neon accent, sharp corners, snappy curves, standard haptics, neon chart palette, cardRadius 14
+   - Adult: charcoal, muted cyan, smooth curves, soft haptics, professional chart palette, cardRadius 12
 
 **Modifications to existing files:**
 

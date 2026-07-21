@@ -18,7 +18,7 @@
       }
     ],
     "correctAnswer": "Eiffel Tower",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -46,7 +46,7 @@
       }
     ],
     "correctAnswer": "Statue of Liberty",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -74,7 +74,7 @@
       }
     ],
     "correctAnswer": "Great Wall of China",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -102,7 +102,7 @@
       }
     ],
     "correctAnswer": "Machu Picchu",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -130,7 +130,7 @@
       }
     ],
     "correctAnswer": "Sydney Opera House",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -158,7 +158,7 @@
       }
     ],
     "correctAnswer": "Taj Mahal",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -186,7 +186,7 @@
       }
     ],
     "correctAnswer": "Colosseum",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -214,7 +214,7 @@
       }
     ],
     "correctAnswer": "Christ the Redeemer",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -242,7 +242,7 @@
       }
     ],
     "correctAnswer": "Eiffel Tower",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -270,7 +270,7 @@
       }
     ],
     "correctAnswer": "Statue of Liberty",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -298,7 +298,7 @@
       }
     ],
     "correctAnswer": "Great Wall of China",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -326,7 +326,7 @@
       }
     ],
     "correctAnswer": "Machu Picchu",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -354,7 +354,7 @@
       }
     ],
     "correctAnswer": "Sydney Opera House",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -382,7 +382,7 @@
       }
     ],
     "correctAnswer": "Taj Mahal",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -410,7 +410,7 @@
       }
     ],
     "correctAnswer": "Colosseum",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -438,7 +438,7 @@
       }
     ],
     "correctAnswer": "Christ the Redeemer",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -774,7 +774,7 @@
       }
     ],
     "correctAnswer": "Koala",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -806,7 +806,7 @@
       }
     ],
     "correctAnswer": "Mona Lisa",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -838,7 +838,7 @@
       }
     ],
     "correctAnswer": "Starry Night",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -870,7 +870,7 @@
       }
     ],
     "correctAnswer": "The Persistence of Memory",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -902,7 +902,7 @@
       }
     ],
     "correctAnswer": "The Scream",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -934,7 +934,7 @@
       }
     ],
     "correctAnswer": "Pyramids of Giza",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -966,7 +966,7 @@
       }
     ],
     "correctAnswer": "Rosetta Stone",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 3,
     "tags": [
       "multimedia",
@@ -1002,7 +1002,7 @@
       }
     ],
     "correctAnswer": "Animal cell",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1038,7 +1038,7 @@
       }
     ],
     "correctAnswer": "Water cycle",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1074,7 +1074,7 @@
       }
     ],
     "correctAnswer": "Solar system",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1110,7 +1110,7 @@
       }
     ],
     "correctAnswer": "DNA double helix",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1142,7 +1142,7 @@
       }
     ],
     "correctAnswer": "Piano",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1174,7 +1174,7 @@
       }
     ],
     "correctAnswer": "Violin",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1206,7 +1206,7 @@
       }
     ],
     "correctAnswer": "Guitar",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1238,7 +1238,7 @@
       }
     ],
     "correctAnswer": "Flute",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1270,7 +1270,7 @@
       }
     ],
     "correctAnswer": "Trumpet",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1298,7 +1298,7 @@
       }
     ],
     "correctAnswer": "Star Wars",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1326,7 +1326,7 @@
       }
     ],
     "correctAnswer": "Jurassic Park",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1354,7 +1354,7 @@
       }
     ],
     "correctAnswer": "Harry Potter",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1382,7 +1382,7 @@
       }
     ],
     "correctAnswer": "Mission: Impossible",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1414,7 +1414,7 @@
       }
     ],
     "correctAnswer": "I Have a Dream",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 3,
     "tags": [
       "multimedia",
@@ -1446,7 +1446,7 @@
       }
     ],
     "correctAnswer": "Moon Landing",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 3,
     "tags": [
       "multimedia",
@@ -1478,7 +1478,7 @@
       }
     ],
     "correctAnswer": "Ocean Waves",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -1510,7 +1510,7 @@
       }
     ],
     "correctAnswer": "Rainforest",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -1542,7 +1542,7 @@
       }
     ],
     "correctAnswer": "Thunderstorm",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -1574,7 +1574,7 @@
       }
     ],
     "correctAnswer": "NBA",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1606,7 +1606,7 @@
       }
     ],
     "correctAnswer": "FIFA",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1638,7 +1638,7 @@
       }
     ],
     "correctAnswer": "Olympics",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1670,7 +1670,7 @@
       }
     ],
     "correctAnswer": "NFL",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1698,7 +1698,7 @@
       }
     ],
     "correctAnswer": "first human on the Moon",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1726,7 +1726,7 @@
       }
     ],
     "correctAnswer": "volcanic eruption",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1754,7 +1754,7 @@
       }
     ],
     "correctAnswer": "bicycle kick",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1782,7 +1782,7 @@
       }
     ],
     "correctAnswer": "ballet",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1814,7 +1814,7 @@
       }
     ],
     "correctAnswer": "New York City",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1845,7 +1845,7 @@
       }
     ],
     "correctAnswer": "Beethoven",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 3,
     "tags": [
       "multimedia",
@@ -1877,7 +1877,7 @@
       }
     ],
     "correctAnswer": "Pineapple",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -1908,7 +1908,7 @@
       }
     ],
     "correctAnswer": "Darth Vader",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1940,7 +1940,7 @@
       }
     ],
     "correctAnswer": "Photosynthesis",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -1972,7 +1972,7 @@
       }
     ],
     "correctAnswer": "Pineapple",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -2003,7 +2003,7 @@
       }
     ],
     "correctAnswer": "Darth Vader",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2035,7 +2035,7 @@
       }
     ],
     "correctAnswer": "Photosynthesis",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2067,7 +2067,7 @@
       }
     ],
     "correctAnswer": "Pineapple",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -2098,7 +2098,7 @@
       }
     ],
     "correctAnswer": "Darth Vader",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2130,7 +2130,7 @@
       }
     ],
     "correctAnswer": "Photosynthesis",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2162,7 +2162,7 @@
       }
     ],
     "correctAnswer": "Pineapple",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -2193,7 +2193,7 @@
       }
     ],
     "correctAnswer": "Darth Vader",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2225,7 +2225,7 @@
       }
     ],
     "correctAnswer": "Photosynthesis",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2257,7 +2257,7 @@
       }
     ],
     "correctAnswer": "Pineapple",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -2288,7 +2288,7 @@
       }
     ],
     "correctAnswer": "Darth Vader",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2320,7 +2320,7 @@
       }
     ],
     "correctAnswer": "Photosynthesis",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2352,7 +2352,7 @@
       }
     ],
     "correctAnswer": "Pineapple",
-    "type": "multiple_choice",
+    "type": "image_choice",
     "difficulty": 1,
     "tags": [
       "multimedia",
@@ -2383,7 +2383,7 @@
       }
     ],
     "correctAnswer": "Darth Vader",
-    "type": "multiple_choice",
+    "type": "audio_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",
@@ -2415,7 +2415,7 @@
       }
     ],
     "correctAnswer": "Photosynthesis",
-    "type": "multiple_choice",
+    "type": "video_choice",
     "difficulty": 2,
     "tags": [
       "multimedia",

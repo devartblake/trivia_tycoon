@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/utils/color_utils.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
+import '../../synaptix/theme/synaptix_theme_extension.dart';
 
 // Synaptix Phase 2: The SynaptixTheme (lib/synaptix/theme/) is a parallel
 // ThemeExtension layered on top of this system — it does NOT replace AppTheme
@@ -144,36 +145,71 @@ class AppTheme {
   }
 
   /// Generates ThemeData for the app
-  ThemeData get themeData => ThemeData.from(
-        textTheme: (isDark ? ThemeData.dark() : ThemeData.light()).textTheme,
-        colorScheme: ColorScheme(
-          brightness: isDark ? Brightness.dark : Brightness.light,
-          primary: accent1,
-          primaryContainer: accent1Darker,
-          secondary: accent2,
-          secondaryContainer: accent1Dark,
-          surface: surface,
-          onSurface: txt,
-          onError: txt,
-          onPrimary: accentTxt,
-          onSecondary: accentTxt,
-          error: error,
-        ),
-      ).copyWith(
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: greyWeak),
-          ),
-        ),
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: accent1.withValues(alpha: 0.5),
-          cursorColor: accent1,
-          selectionHandleColor: accent1,
-        ),
-        highlightColor: accent1,
+  ThemeData getThemeData({SynaptixTheme? extension}) {
+    final baseTextTheme =
+        (isDark ? ThemeData.dark() : ThemeData.light()).textTheme;
+
+    TextTheme finalTheme = baseTextTheme;
+    if (extension != null) {
+      finalTheme = baseTextTheme.copyWith(
+        displayLarge:
+            baseTextTheme.displayLarge?.copyWith(fontFamily: extension.headlineFont),
+        displayMedium:
+            baseTextTheme.displayMedium?.copyWith(fontFamily: extension.headlineFont),
+        displaySmall:
+            baseTextTheme.displaySmall?.copyWith(fontFamily: extension.headlineFont),
+        headlineLarge:
+            baseTextTheme.headlineLarge?.copyWith(fontFamily: extension.headlineFont),
+        headlineMedium:
+            baseTextTheme.headlineMedium?.copyWith(fontFamily: extension.headlineFont),
+        headlineSmall:
+            baseTextTheme.headlineSmall?.copyWith(fontFamily: extension.headlineFont),
+        titleLarge:
+            baseTextTheme.titleLarge?.copyWith(fontFamily: extension.headlineFont),
+        bodyLarge: baseTextTheme.bodyLarge?.copyWith(fontFamily: extension.bodyFont),
+        bodyMedium: baseTextTheme.bodyMedium?.copyWith(fontFamily: extension.bodyFont),
+        bodySmall: baseTextTheme.bodySmall?.copyWith(fontFamily: extension.bodyFont),
       );
+    }
+
+    return ThemeData.from(
+      textTheme: finalTheme,
+      colorScheme: ColorScheme(
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        primary: accent1,
+        primaryContainer: accent1Darker,
+        secondary: accent2,
+        secondaryContainer: accent1Dark,
+        surface: surface,
+        onSurface: txt,
+        onError: txt,
+        onPrimary: accentTxt,
+        onSecondary: accentTxt,
+        error: error,
+      ),
+    ).copyWith(
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: greyWeak),
+        ),
+      ),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: accent1.withValues(alpha: 0.5),
+        cursorColor: accent1,
+        selectionHandleColor: accent1,
+      ),
+      highlightColor: accent1,
+      splashColor: extension?.accentGlow.withValues(alpha: 0.12) ?? accent1.withValues(alpha: 0.12),
+      hoverColor: extension?.accentGlow.withValues(alpha: 0.04) ?? accent1.withValues(alpha: 0.04),
+      focusColor: extension?.accentGlow.withValues(alpha: 0.12) ?? accent1.withValues(alpha: 0.12),
+      extensions: extension != null ? [extension] : null,
+    );
+  }
+
+  // Deprecated: use getThemeData(extension: ...)
+  ThemeData get themeData => getThemeData();
 
   Color shift(Color c, double d) =>
       ColorUtils.shiftHsl(c, d * (isDark ? -1 : 1));

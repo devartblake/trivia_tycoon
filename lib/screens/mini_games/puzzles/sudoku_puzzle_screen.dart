@@ -4,6 +4,7 @@ import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 
 class SudokuPuzzleScreen extends StatefulWidget {
   const SudokuPuzzleScreen({super.key});
@@ -314,7 +315,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         winPercentage: 100,
         bestScore: time,
         currentStreak: 1,
-        primaryColor: const Color(0xFF6366F1),
+        primaryColor: Theme.of(context).extension<SynaptixTheme>()?.accentGlow ?? const Color(0xFF6366F1),
         gameIcon: Icons.grid_4x4,
       ),
       onShare: () {
@@ -333,14 +334,17 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
   }
 
   void _showHowToPlay() {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final accentColor = synaptix?.accentGlow ?? const Color(0xFF6366F1);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: EdgeInsets.only(
           top: 20,
@@ -368,44 +372,44 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                    color: accentColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.lightbulb,
-                    color: Color(0xFF6366F1),
+                    color: accentColor,
                     size: 24,
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
+                Text(
                   'How to Play',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
-            _buildRule('Fill the 9×9 grid with digits from 1 to 9.'),
+            _buildRule('Fill the 9×9 grid with digits from 1 to 9.', accentColor),
             _buildRule(
-                'Each row must contain all digits from 1 to 9 without repetition.'),
+                'Each row must contain all digits from 1 to 9 without repetition.', accentColor),
             _buildRule(
-                'Each column must contain all digits from 1 to 9 without repetition.'),
+                'Each column must contain all digits from 1 to 9 without repetition.', accentColor),
             _buildRule(
-                'Each 3×3 box must contain all digits from 1 to 9 without repetition.'),
+                'Each 3×3 box must contain all digits from 1 to 9 without repetition.', accentColor),
             _buildRule(
-                'Tap a cell to select it, then tap a number below to place it.'),
-            _buildRule('Gray cells are fixed and cannot be changed.'),
+                'Tap a cell to select it, then tap a number below to place it.', accentColor),
+            _buildRule('Gray cells are fixed and cannot be changed.', accentColor),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
+                  backgroundColor: accentColor,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -470,7 +474,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
     );
   }
 
-  Widget _buildRule(String text) {
+  Widget _buildRule(String text, Color color) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
@@ -481,7 +485,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color: const Color(0xFF6366F1),
+              color: color,
               shape: BoxShape.circle,
             ),
           ),
@@ -489,10 +493,10 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 height: 1.5,
-                color: Color(0xFF475569),
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
               ),
             ),
           ),
@@ -503,13 +507,16 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final accentColor = synaptix?.accentGlow ?? const Color(0xFF6366F1);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Sudoku',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF6366F1),
+        backgroundColor: accentColor,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -574,8 +581,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
+        decoration: BoxDecoration(
+          gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
             colors: [
               Color(0xFFF8FAFF),
               Color(0xFFFFFFFF),
@@ -598,28 +605,26 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color:
-                                const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color: accentColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1)
-                                  .withValues(alpha: 0.3),
+                              color: accentColor.withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.lightbulb_outline,
-                                color: Color(0xFF6366F1),
+                                color: accentColor,
                                 size: 20,
                               ),
                               const SizedBox(width: 8),
-                              const Text(
+                              Text(
                                 'How to Play',
                                 style: TextStyle(
-                                  color: Color(0xFF6366F1),
+                                  color: accentColor,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -658,12 +663,11 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                       Container(
                         constraints: const BoxConstraints(maxWidth: 450),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF6366F1)
-                                  .withValues(alpha: 0.15),
+                              color: accentColor.withValues(alpha: 0.15),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),
@@ -672,7 +676,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                         padding: const EdgeInsets.all(8),
                         child: AspectRatio(
                           aspectRatio: 1,
-                          child: _buildSudokuGrid(),
+                          child: _buildSudokuGrid(accentColor),
                         ),
                       ),
                     ],
@@ -684,7 +688,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).bottomAppBarTheme.color ?? Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
@@ -699,7 +703,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children:
-                          List.generate(9, (i) => _buildNumberButton(i + 1)),
+                          List.generate(9, (i) => _buildNumberButton(i + 1, accentColor)),
                     ),
                     const SizedBox(height: 12),
                     // Action buttons
@@ -725,7 +729,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
     );
   }
 
-  Widget _buildSudokuGrid() {
+  Widget _buildSudokuGrid(Color accentColor) {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -738,12 +742,12 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         int row = index ~/ gridSize;
         int col = index % gridSize;
 
-        return _buildCell(row, col);
+        return _buildCell(row, col, accentColor);
       },
     );
   }
 
-  Widget _buildCell(int row, int col) {
+  Widget _buildCell(int row, int col, Color accentColor) {
     final isSelected = selectedCell?.x == row && selectedCell?.y == col;
     final isFixedCell = isFixed[row][col];
     final value = puzzle[row][col];
@@ -757,18 +761,18 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF6366F1).withValues(alpha: 0.2)
+              ? accentColor.withValues(alpha: 0.2)
               : isFixedCell
-                  ? Colors.grey.shade200
-                  : Colors.white,
+                  ? Colors.grey.withValues(alpha: 0.1)
+                  : Colors.transparent,
           border: Border(
             right: BorderSide(
               width: isRightBorder ? 2 : 0.5,
-              color: isRightBorder ? Colors.black : Colors.grey.shade300,
+              color: isRightBorder ? Theme.of(context).dividerColor : Colors.grey.withValues(alpha: 0.3),
             ),
             bottom: BorderSide(
               width: isBottomBorder ? 2 : 0.5,
-              color: isBottomBorder ? Colors.black : Colors.grey.shade300,
+              color: isBottomBorder ? Theme.of(context).dividerColor : Colors.grey.withValues(alpha: 0.3),
             ),
           ),
         ),
@@ -780,7 +784,7 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                     fontSize: 20,
                     fontWeight:
                         isFixedCell ? FontWeight.bold : FontWeight.normal,
-                    color: isFixedCell ? Colors.black : const Color(0xFF6366F1),
+                    color: isFixedCell ? Theme.of(context).textTheme.bodyLarge?.color : accentColor,
                   ),
                 )
               : null,
@@ -789,18 +793,18 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
     );
   }
 
-  Widget _buildNumberButton(int number) {
+  Widget _buildNumberButton(int number, Color accentColor) {
     return GestureDetector(
       onTap: () => _placeNumber(number),
       child: Container(
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: const Color(0xFF6366F1),
+          color: accentColor,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+              color: accentColor.withValues(alpha: 0.3),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),

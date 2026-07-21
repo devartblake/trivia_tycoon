@@ -2,24 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
-import '../../core/dto/powerup_dto.dart';
-import '../../core/helpers/quiz_helpers.dart';
-import '../../game/models/question_difficulty.dart';
-import '../../game/models/question_model.dart';
-import '../../game/providers/quiz_providers.dart';
-import '../../game/providers/quiz_results_provider.dart';
-import '../../game/providers/learning_providers.dart'
+import 'package:synaptix/core/dto/powerup_dto.dart';
+import 'package:synaptix/core/helpers/quiz_helpers.dart';
+import 'package:synaptix/game/models/question_difficulty.dart';
+import 'package:synaptix/game/models/question_model.dart';
+import 'package:synaptix/game/providers/quiz_providers.dart';
+import 'package:synaptix/game/providers/quiz_results_provider.dart';
+import 'package:synaptix/game/providers/learning_providers.dart'
     show currentPlayerIdProvider;
-import '../../game/providers/personalization_providers.dart';
-import '../../game/providers/powerup_providers.dart';
-import '../../game/providers/tier_progression_provider.dart';
-import '../../game/services/quiz_category.dart';
+import 'package:synaptix/game/providers/personalization_providers.dart';
+import 'package:synaptix/game/providers/powerup_providers.dart';
+import 'package:synaptix/game/providers/tier_progression_provider.dart';
+import 'package:synaptix/core/services/feedback_service.dart';
+import 'package:synaptix/core/services/native_platform_service.dart';
+import 'package:synaptix/game/services/quiz_category.dart';
 // New question system components
-import 'widgets/question_renderer.dart';
-import 'widgets/question_metadata.dart';
-import 'widgets/category_header_bar.dart';
-import 'widgets/segmented_progress_strip.dart';
-import 'widgets/powerup_tray.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
+import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/screens/question/widgets/question_renderer.dart';
+import 'package:synaptix/screens/question/widgets/question_metadata.dart';
+import 'package:synaptix/screens/question/widgets/category_header_bar.dart';
+import 'package:synaptix/screens/question/widgets/segmented_progress_strip.dart';
+import 'package:synaptix/screens/question/widgets/powerup_tray.dart';
+import 'package:synaptix/ui_components/animations/particle_emitter.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final String? classLevel;
@@ -52,6 +57,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   late PageController _pageController;
   late AnimationController _animationController;
   QuizCategory? _resolvedCategory;
+  bool _showSuccessParticles = false;
 
   /// Idempotency/scoping key for server-side powerup consumption this session.
   final String _powerupEventId = const Uuid().v4();
@@ -454,6 +460,16 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     final evaluation = await notifier.answerQuestion(answer);
     final isCorrect = evaluation.isCorrect;
 
+    if (!mounted) return;
+
+    if (isCorrect) {
+      FeedbackService.instance.haptic(NativeHapticPattern.success, context);
+      soundManager.playUISound('success', context);
+    } else if (!isTimeout) {
+      FeedbackService.instance.haptic(NativeHapticPattern.error, context);
+      soundManager.playUISound('error', context);
+    }
+
     // Fire behaviour event (fire-and-forget)
     ref.read(currentPlayerIdProvider).whenData((playerId) {
       if (playerId != null && playerId.isNotEmpty) {
@@ -475,6 +491,15 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     // Get updated state to calculate XP gained
     final updatedState = ref.read(adaptedQuizProvider);
     final xpGained = updatedState.totalXP - previousXP;
+
+    if (isCorrect) {
+      setState(() => _showSuccessParticles = true);
+      // Reset trigger after a delay
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) setState(() => _showSuccessParticles = false);
+      });
+    }
+
     // Use the limit the countdown actually started at (class-based, or the
     // difficulty-based limit in timed-challenge/boss play).
     final timeLimit = state.questionTimeLimit;
@@ -569,6 +594,7 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   @override
   Widget build(BuildContext context) {
     final quizState = ref.watch(adaptedQuizProvider);
+    final themeExtension = Theme.of(context).extension<SynaptixTheme>();
 
     if (quizState.isLoading) {
       return Scaffold(
@@ -746,11 +772,15 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
                       const SizedBox(height: 8),
 
                       // Dynamic question widget based on type (using new type-safe renderer)
-                      QuestionRenderer(
-                        question: currentQuestion,
-                        onAnswerSelected: _handleAnswer,
-                        showFeedback: quizState.showFeedback,
-                        selectedAnswer: quizState.selectedAnswer,
+                      ParticleEmitter(
+                        trigger: _showSuccessParticles,
+                        color: themeExtension?.accentGlow ?? Colors.amber,
+                        child: QuestionRenderer(
+                          question: currentQuestion,
+                          onAnswerSelected: _handleAnswer,
+                          showFeedback: quizState.showFeedback,
+                          selectedAnswer: quizState.selectedAnswer,
+                        ),
                       ),
                     ],
                   ),

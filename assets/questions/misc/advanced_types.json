@@ -1,0 +1,98 @@
+[
+  {
+    "id": "ADV_SORT_1",
+    "category": "Science",
+    "question": "Order the planets from the Sun outwards.",
+    "options": [
+      "Jupiter",
+      "Mars",
+      "Earth",
+      "Mercury",
+      "Venus",
+      "Saturn",
+      "Neptune",
+      "Uranus"
+    ],
+    "correctAnswer": "[\"Mercury\",\"Venus\",\"Earth\",\"Mars\",\"Jupiter\",\"Saturn\",\"Uranus\",\"Neptune\"]",
+    "type": "sorting",
+    "difficulty": 2,
+    "tags": [
+      "astronomy",
+      "planets"
+    ]
+  },
+  {
+    "id": "ADV_MATCH_1",
+    "category": "Geography",
+    "question": "Match the country to its capital city.",
+    "options": [
+      "France",
+      "Japan",
+      "Brazil",
+      "Egypt",
+      "Paris",
+      "Tokyo",
+      "Brasilia",
+      "Cairo"
+    ],
+    "correctAnswer": "{\"France\":\"Paris\",\"Japan\":\"Tokyo\",\"Brazil\":\"Brasilia\",\"Egypt\":\"Cairo\"}",
+    "type": "matching",
+    "difficulty": 2,
+    "tags": [
+      "capitals",
+      "geography"
+    ]
+  },
+  {
+    "id": "ADV_TEXT_1",
+    "category": "Science",
+    "question": "What is the largest planet in our solar system?",
+    "answers": [],
+    "options": [],
+    "correctAnswer": "Jupiter",
+    "type": "free_text",
+    "difficulty": 1,
+    "powerUpHint": "It's a gas giant with a Great Red Spot.",
+    "tags": [
+      "planets"
+    ]
+  },
+  {
+    "id": "ADV_DRAG_1",
+    "category": "Science",
+    "question": "Categorize these animals based on their biological class.",
+    "options": [
+      "Lion",
+      "Cobra",
+      "Elephant",
+      "Crocodile",
+      "Whale",
+      "Iguana"
+    ],
+    "correctAnswer": "{\"Lion\":\"Mammal\",\"Elephant\":\"Mammal\",\"Whale\":\"Mammal\",\"Cobra\":\"Reptile\",\"Crocodile\":\"Reptile\",\"Iguana\":\"Reptile\"}",
+    "type": "drag_drop",
+    "difficulty": 2,
+    "tags": [
+      "Mammal",
+      "Reptile"
+    ]
+  },
+  {
+    "id": "ADV_SORT_2",
+    "category": "History",
+    "question": "Order these historical periods from earliest to latest.",
+    "options": [
+      "Middle Ages",
+      "Renaissance",
+      "Ancient Egypt",
+      "Industrial Revolution"
+    ],
+    "correctAnswer": "[\"Ancient Egypt\",\"Middle Ages\",\"Renaissance\",\"Industrial Revolution\"]",
+    "type": "sorting",
+    "difficulty": 3,
+    "tags": [
+      "history",
+      "timeline"
+    ]
+  }
+]

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import '../../core/helpers/responsive_layout.dart';
+import '../../synaptix/theme/synaptix_theme_extension.dart';
 
 class MiniGamesHubScreen extends StatelessWidget {
   const MiniGamesHubScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
+        decoration: BoxDecoration(
+          gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
             colors: [
               Color(0xFFF8FAFF),
               Color(0xFFFFFFFF),
@@ -209,6 +212,8 @@ class MiniGamesHubScreen extends StatelessWidget {
 
   // App Bar
   Widget _buildAppBar(BuildContext context) {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+
     return SliverAppBar(
       expandedHeight: 140,
       floating: false,
@@ -234,8 +239,8 @@ class MiniGamesHubScreen extends StatelessWidget {
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
+          decoration: BoxDecoration(
+            gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
               colors: [
                 Color(0xFF6366F1),
                 Color(0xFF8B5CF6),

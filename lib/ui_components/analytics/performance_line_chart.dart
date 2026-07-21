@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../../synaptix/theme/synaptix_theme_extension.dart';
 
 /// Enum for selectable metrics
 enum PerformanceMetric {
@@ -71,7 +72,8 @@ class _PerformanceLineChartState extends State<PerformanceLineChart> {
 
   /// Build the line chart
   Widget _buildChart(BuildContext context) {
-    final lineColor = widget.lineColor ?? Theme.of(context).primaryColor;
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final lineColor = widget.lineColor ?? synaptix?.chartPalette.first ?? Theme.of(context).primaryColor;
     final spots = _convertDataToSpots();
 
     if (spots.isEmpty) {

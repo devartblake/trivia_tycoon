@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart' as just_audio;
 import 'package:flutter_soloud/flutter_soloud.dart' as soloud;
 import 'package:synaptix/core/services/settings/app_settings.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 
 enum SoundEffect {
   spinStart,
@@ -108,8 +110,18 @@ class SoundManager {
   }
 
   /// Play a sound effect using SoLoud
-  Future<void> playSound(SoundEffect effect, {double? volume}) async {
+  Future<void> playSound(SoundEffect effect, {double? volume, double? pitch, BuildContext? context}) async {
     if (!_initialized || !_soundEnabled || _soLoud == null) return;
+
+    final synaptix = context != null ? Theme.of(context).extension<SynaptixTheme>() : null;
+    final volumeMultiplier = synaptix?.soundVolumeMultiplier ?? 1.0;
+    final soundStyle = synaptix?.preferredSoundStyle ?? SynaptixSoundStyle.digital;
+
+    double effectivePitch = pitch ?? 1.0;
+    if (pitch == null) {
+      if (soundStyle == SynaptixSoundStyle.bouncy) effectivePitch = 1.15;
+      if (soundStyle == SynaptixSoundStyle.minimalist) effectivePitch = 0.85;
+    }
 
     try {
       final audioSource = _audioSources[effect];
@@ -123,8 +135,12 @@ class SoundManager {
         // Play the sound
         final handle = await _soLoud!.play(
           audioSource,
-          volume: volume ?? _soundVolume,
+          volume: (volume ?? _soundVolume) * volumeMultiplier,
         );
+        
+        if (effectivePitch != 1.0) {
+          _soLoud!.setRelativePlaySpeed(handle, effectivePitch);
+        }
 
         _activeSounds[effect] = handle;
 
@@ -254,18 +270,18 @@ class SoundManager {
   }
 
   /// Play UI feedback sounds
-  Future<void> playSuccess() async {
-    await playSound(SoundEffect.success);
+  Future<void> playSuccess([BuildContext? context]) async {
+    await playSound(SoundEffect.success, context: context);
     HapticFeedback.lightImpact();
   }
 
-  Future<void> playError() async {
-    await playSound(SoundEffect.error);
+  Future<void> playError([BuildContext? context]) async {
+    await playSound(SoundEffect.error, context: context);
     HapticFeedback.mediumImpact();
   }
 
-  Future<void> playNotification() async {
-    await playSound(SoundEffect.notification);
+  Future<void> playNotification([BuildContext? context]) async {
+    await playSound(SoundEffect.notification, context: context);
   }
 
   /// Update sound settings
@@ -370,7 +386,7 @@ class SoundManager {
 /// Extension for easy access to sound manager
 extension SoundManagerExtension on SoundManager {
   /// Quick method to play common UI sounds with haptics
-  Future<void> playUISound(String action) async {
+  Future<void> playUISound(String action, [BuildContext? context]) async {
     switch (action.toLowerCase()) {
       case 'click':
       case 'tap':
@@ -380,34 +396,34 @@ extension SoundManagerExtension on SoundManager {
         await playButtonHover();
         break;
       case 'success':
-        await playSuccess();
+        await playSuccess(context);
         break;
       case 'error':
-        await playError();
+        await playError(context);
         break;
       case 'notification':
-        await playNotification();
+        await playNotification(context);
         break;
       // Skill-tree / pathways unlock — emphatic success with haptic
       case 'unlock':
-        await playSound(SoundEffect.success, volume: 1.0);
+        await playSound(SoundEffect.success, volume: 1.0, context: context);
         HapticFeedback.heavyImpact();
         break;
       // Reward reveal or XP milestone — prize sound at moderate volume
       case 'reward':
-        await playSound(SoundEffect.prizeWin, volume: 0.8);
+        await playSound(SoundEffect.prizeWin, volume: 0.8, context: context);
         break;
       // Tab/section switch — soft click
       case 'tab':
-        await playSound(SoundEffect.buttonClick, volume: 0.5);
+        await playSound(SoundEffect.buttonClick, volume: 0.5, context: context);
         break;
       // Friend request sent or social invite
       case 'invite':
       case 'request':
-        await playSound(SoundEffect.notification, volume: 0.9);
+        await playSound(SoundEffect.notification, volume: 0.9, context: context);
         break;
       default:
-        await playSound(SoundEffect.buttonClick);
+        await playSound(SoundEffect.buttonClick, context: context);
     }
   }
 
@@ -417,19 +433,19 @@ extension SoundManagerExtension on SoundManager {
   }
 
   /// Play layered celebration sounds
-  Future<void> playCelebration({bool isBigWin = false}) async {
+  Future<void> playCelebration({bool isBigWin = false, BuildContext? context}) async {
     if (isBigWin) {
-      await playSound(SoundEffect.bigWin);
+      await playSound(SoundEffect.bigWin, context: context);
       Future.delayed(const Duration(milliseconds: 300), () {
-        playSound(SoundEffect.success, volume: 0.7);
+        playSound(SoundEffect.success, volume: 0.7, context: context);
       });
       Future.delayed(const Duration(milliseconds: 600), () {
-        playSound(SoundEffect.prizeWin, volume: 0.5);
+        playSound(SoundEffect.prizeWin, volume: 0.5, context: context);
       });
     } else {
-      await playSound(SoundEffect.prizeWin);
+      await playSound(SoundEffect.prizeWin, context: context);
       Future.delayed(const Duration(milliseconds: 200), () {
-        playSound(SoundEffect.success, volume: 0.6);
+        playSound(SoundEffect.success, volume: 0.6, context: context);
       });
     }
 

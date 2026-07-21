@@ -5,6 +5,9 @@ import '../../game/providers/question_analytics_provider.dart';
 import '../../ui_components/analytics/performance_summary_card.dart';
 import '../../ui_components/analytics/categories_card.dart';
 import '../../ui_components/analytics/trending_card.dart';
+import '../../ui_components/analytics/category_pie_chart.dart';
+
+/// Main player analytics dashboard screen
 
 /// Main player analytics dashboard screen
 class PlayerAnalyticsDashboard extends ConsumerWidget {
@@ -49,16 +52,7 @@ class PlayerAnalyticsDashboard extends ConsumerWidget {
               const SizedBox(height: 20),
 
               // Categories Performance
-              Text(
-                'Category Breakdown',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              _CategoryPerformanceSection(
-                performanceSummary: performanceSummary,
-              ),
+              const _CategoryPerformanceSection(),
               const SizedBox(height: 20),
 
               // Weak Categories
@@ -101,48 +95,19 @@ class PlayerAnalyticsDashboard extends ConsumerWidget {
   }
 }
 
-/// Section showing category performance breakdown
+/// Section showing category performance breakdown using the Neural Bloom
 class _CategoryPerformanceSection extends ConsumerWidget {
-  final dynamic performanceSummary;
-
-  const _CategoryPerformanceSection({
-    required this.performanceSummary,
-  });
+  const _CategoryPerformanceSection();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Get all category data
-    // For now, we'll show a message that data is loading
-    // In a real implementation, we'd fetch all categories
+    final categories = ref.watch(allCategoriesPerformanceProvider);
 
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Performance by Category',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Category data will appear after answering more questions.',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 12),
-            LinearProgressIndicator(
-              backgroundColor: Colors.grey.shade200,
-              valueColor: AlwaysStoppedAnimation(Colors.blue.shade400),
-            ),
-          ],
-        ),
+    return CategoryPieChart(
+      categories: categories,
+      onCategoryTap: (category) => context.push(
+        '/analytics/category/$category',
+        extra: category,
       ),
     );
   }

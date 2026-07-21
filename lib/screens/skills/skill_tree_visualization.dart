@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../game/models/skill_progression_model.dart';
 import '../../game/providers/skill_progression_provider.dart'
     show allSkillsProvider;
+import '../../game/models/skill_tree_graph.dart' hide SkillNode;
+import '../../core/theme/skill_category_colors.dart';
 
 /// Visualization of player's skill tree progression
 class SkillTreeVisualization extends ConsumerWidget {
@@ -10,43 +12,46 @@ class SkillTreeVisualization extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allSkills = ref.watch(allSkillsProvider);
+    final List<SkillNode> allSkills = ref.watch(allSkillsProvider);
 
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Skill Tree'),
-          elevation: 0,
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.calculate), text: 'Mathematics'),
-              Tab(icon: Icon(Icons.science), text: 'Science'),
-              Tab(icon: Icon(Icons.psychology), text: 'Logic'),
+    return Hero(
+      tag: 'surface_pathways',
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Skill Tree'),
+            elevation: 0,
+            bottom: const TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.calculate), text: 'Mathematics'),
+                Tab(icon: Icon(Icons.science), text: 'Science'),
+                Tab(icon: Icon(Icons.psychology), text: 'Logic'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              _SkillCategoryView(
+                title: 'Mathematics',
+                skills: _getMathSkills(allSkills),
+                icon: Icons.calculate,
+                color: SkillCategoryColors.backgroundFor(context, SkillCategory.scholar),
+              ),
+              _SkillCategoryView(
+                title: 'Science',
+                skills: _getScienceSkills(allSkills),
+                icon: Icons.science,
+                color: SkillCategoryColors.backgroundFor(context, SkillCategory.xp),
+              ),
+              _SkillCategoryView(
+                title: 'Logic',
+                skills: _getLogicSkills(allSkills),
+                icon: Icons.psychology,
+                color: SkillCategoryColors.backgroundFor(context, SkillCategory.timer),
+              ),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            _SkillCategoryView(
-              title: 'Mathematics',
-              skills: _getMathSkills(allSkills),
-              icon: Icons.calculate,
-              color: Colors.blue,
-            ),
-            _SkillCategoryView(
-              title: 'Science',
-              skills: _getScienceSkills(allSkills),
-              icon: Icons.science,
-              color: Colors.green,
-            ),
-            _SkillCategoryView(
-              title: 'Logic',
-              skills: _getLogicSkills(allSkills),
-              icon: Icons.psychology,
-              color: Colors.purple,
-            ),
-          ],
         ),
       ),
     );

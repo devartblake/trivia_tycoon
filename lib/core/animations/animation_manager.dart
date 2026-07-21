@@ -1,10 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../synaptix/theme/synaptix_theme_extension.dart';
 
 /// Centralized helper methods for common app animations.
 class AnimationManager {
   const AnimationManager._();
+
+  static Curve _resolveCurve(BuildContext? context, {Curve? manual, bool snappy = false}) {
+    if (manual != null) return manual;
+    if (context == null) return snappy ? Curves.easeOutCubic : Curves.easeInOut;
+
+    final theme = Theme.of(context).extension<SynaptixTheme>();
+    if (theme == null) return snappy ? Curves.easeOutCubic : Curves.easeInOut;
+
+    return snappy ? theme.snappyCurve : theme.defaultCurve;
+  }
 
   static AnimationController createController({
     required TickerProvider vsync,
@@ -78,10 +89,12 @@ class AnimationManager {
     Widget? child,
     Duration duration = const Duration(milliseconds: 300),
     int delay = 0,
-    Curve curve = Curves.easeInOut,
+    Curve? curve,
+    BuildContext? context,
     double begin = 0,
     double end = 1,
   }) {
+    final resolvedCurve = _resolveCurve(context, manual: curve);
     if (child != null) {
       return _ManagedAnimation(
         duration: duration,
@@ -89,7 +102,7 @@ class AnimationManager {
         builder: (animation) => FadeTransition(
           opacity: _buildFadeAnimation(
             animation,
-            curve: curve,
+            curve: resolvedCurve,
             begin: begin,
             end: end,
           ),
@@ -101,7 +114,7 @@ class AnimationManager {
     if (animation != null) {
       return _buildFadeAnimation(
         animation,
-        curve: curve,
+        curve: resolvedCurve,
         begin: begin,
         end: end,
       );
@@ -116,16 +129,20 @@ class AnimationManager {
     Duration duration = const Duration(milliseconds: 500),
     int delay = 0,
     Offset begin = const Offset(0, 0.3),
-    Curve fadeCurve = Curves.easeInOut,
-    Curve slideCurve = Curves.easeOutBack,
+    Curve? fadeCurve,
+    Curve? slideCurve,
+    BuildContext? context,
   }) {
+    final resolvedFade = _resolveCurve(context, manual: fadeCurve);
+    final resolvedSlide = _resolveCurve(context, manual: slideCurve, snappy: true);
+
     if (animation != null) {
       return _buildFadeSlideTransition(
         animation: animation,
         child: child,
         begin: begin,
-        fadeCurve: fadeCurve,
-        slideCurve: slideCurve,
+        fadeCurve: resolvedFade,
+        slideCurve: resolvedSlide,
       );
     }
 
@@ -136,8 +153,8 @@ class AnimationManager {
         animation: managedAnimation,
         child: child,
         begin: begin,
-        fadeCurve: fadeCurve,
-        slideCurve: slideCurve,
+        fadeCurve: resolvedFade,
+        slideCurve: resolvedSlide,
       ),
     );
   }
@@ -215,17 +232,19 @@ class AnimationManager {
     Animation<double>? animation,
     Duration duration = const Duration(milliseconds: 450),
     int delay = 0,
-    Curve curve = Curves.elasticOut,
+    Curve? curve,
+    BuildContext? context,
     double beginScale = 0.85,
     double endScale = 1.0,
   }) {
+    final resolvedCurve = _resolveCurve(context, manual: curve, snappy: true);
     return _animatedOrManaged(
       animation: animation,
       duration: duration,
       delay: delay,
       builder: (activeAnimation) => ScaleTransition(
         scale: Tween<double>(begin: beginScale, end: endScale).animate(
-          CurvedAnimation(parent: activeAnimation, curve: curve),
+          CurvedAnimation(parent: activeAnimation, curve: resolvedCurve),
         ),
         child: child,
       ),

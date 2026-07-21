@@ -29,74 +29,77 @@ class ArcadeHubScreen extends ConsumerWidget {
     final registry = ref.watch(arcadeRegistryProvider);
     final games = registry.games;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          // Modern AppBar with gradient
-          _buildModernAppBar(context, ref),
+    return Hero(
+      tag: 'surface_labs',
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0A0A0F),
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            // Modern AppBar with gradient
+            _buildModernAppBar(context, ref),
 
-          // Stats/Achievement Banner
-          SliverToBoxAdapter(
-            child: AppResponsiveWidth(
-              padding: EdgeInsets.zero,
-              child: _buildStatsBanner(context),
-            ),
-          ),
-
-          // Quick Actions Row (3 cards)
-          SliverToBoxAdapter(
-            child: AppResponsiveWidth(
-              padding: EdgeInsets.zero,
-              child: _buildQuickActionsRow(context, ref),
-            ),
-          ),
-
-          // Featured Game Section
-          if (games.isNotEmpty)
+            // Stats/Achievement Banner
             SliverToBoxAdapter(
               child: AppResponsiveWidth(
                 padding: EdgeInsets.zero,
-                child: _buildFeaturedSection(context, games.first),
+                child: _buildStatsBanner(context),
               ),
             ),
 
-          SliverToBoxAdapter(
-            child: AppResponsiveWidth(
-              padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
-              child: Column(
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.games_rounded, color: Colors.white, size: 24),
-                      SizedBox(width: 12),
-                      Text(
-                        'All Games',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
+            // Quick Actions Row (3 cards)
+            SliverToBoxAdapter(
+              child: AppResponsiveWidth(
+                padding: EdgeInsets.zero,
+                child: _buildQuickActionsRow(context, ref),
+              ),
+            ),
+
+            // Featured Game Section
+            if (games.isNotEmpty)
+              SliverToBoxAdapter(
+                child: AppResponsiveWidth(
+                  padding: EdgeInsets.zero,
+                  child: _buildFeaturedSection(context, games.first),
+                ),
+              ),
+
+            SliverToBoxAdapter(
+              child: AppResponsiveWidth(
+                padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
+                child: Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.games_rounded, color: Colors.white, size: 24),
+                        SizedBox(width: 12),
+                        Text(
+                          'All Games',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.5,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  for (final game in games)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: _buildModernGameCard(context, game),
+                      ],
                     ),
-                ],
+                    const SizedBox(height: 16),
+                    for (final game in games)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildModernGameCard(context, game),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 100),
-          ),
-        ],
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 100),
+            ),
+          ],
+        ),
       ),
     );
   }

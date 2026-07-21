@@ -151,19 +151,21 @@ Play → Reward → Unlock → Progress → Repeat
 # 8. UI POLISH SYSTEM — Partially Implemented
 
 ## Design Language ✅
-- Neon glass UI ✅ (GlassCard pattern in Hub)
-- Frosted cards ✅ (glassmorphic featured match, daily quest)
-- Glow accents ✅ (emerald glow on buttons, progress bars)
+- **Demographic Branding** ✅ (Dynamic mode-aware colors, fonts, and icons)
+- **Neon glass UI** ✅ (GlassCard pattern in Hub)
+- **Frosted cards** ✅ (glassmorphic featured match, daily quest)
+- **Glow accents** ✅ (emerald glow on buttons, progress bars)
 
 ## Motion ✅
-- Micro animations ✅ (pulse on featured match, ticker scroll)
-- Transitions ✅ (onboarding page transitions, fade/slide)
-- Progress feedback ✅ (progress bar animations, XP counters)
+- **Mode-Aware Curves** ✅ (Elastic for Kids, Cubic for Adults)
+- **Micro animations** ✅ (pulse on featured match, ticker scroll)
+- **Transitions** ✅ (onboarding page transitions, fade/slide)
+- **Progress feedback** ✅ (progress bar animations, XP counters)
 
-## Feedback — Partially Implemented
-- Haptics ✅ (metallic buttons: `HapticFeedback.lightImpact()`)
-- Sound cues — not yet implemented
-- Visual pulses ✅ (pulse animation on play button)
+## Feedback ✅
+- **Demographic Haptics** ✅ (Intensity scaled: energetic, standard, soft)
+- **Sound cues** — not yet implemented
+- **Visual pulses** ✅ (pulse animation on play button)
 
 ---
 
@@ -219,7 +221,7 @@ Discover → Onboard → Play → Progress → Compete → Earn → Share → Re
 
 1. ✅ Implement Flutter onboarding system (full code) — `0a60048`
 2. Build monetization backend (FastAPI) — not started
-3. ✅ Implement UI polish system (animations + design system) — `3f4c65b` (partial — sound cues remaining)
+3. ✅ Implement UI polish system (animations + design system + dynamic themes) — `3f4c65b` (Area 1-10 complete)
 4. Prepare beta launch — in progress (alpha demo phase)
 5. Scale growth engine — not started
 

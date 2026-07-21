@@ -166,20 +166,23 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   Widget build(BuildContext context) {
     final layout = AppResponsive.layoutOf(context);
 
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0F23),
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          _buildSliverAppBar(layout),
-          SliverToBoxAdapter(
-            child: AnimationManager.fadeSlideIn(
-              animation: _animationController!,
-              begin: const Offset(0, 0.3),
-              child: _buildResponsiveLeaderboardContent(layout),
+    return Hero(
+      tag: 'surface_arena',
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0F0F23),
+        body: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            _buildSliverAppBar(layout),
+            SliverToBoxAdapter(
+              child: AnimationManager.fadeSlideIn(
+                animation: _animationController!,
+                begin: const Offset(0, 0.3),
+                child: _buildResponsiveLeaderboardContent(layout),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

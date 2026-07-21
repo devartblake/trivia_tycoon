@@ -51,6 +51,20 @@ This repository includes the entire player-facing and admin-facing Flutter appli
 
 ## ✨ Core Features
 
+### 🎨 Adaptive UI & Theme System
+- **Demographic-Aware Branding** — The entire app (colors, fonts, icons) adapts to the user's age group (Kids, Teen, Adult) via the `SynaptixTheme` extension.
+- **Dynamic Motion & Haptics** — Animation curves and haptic feedback intensity are mode-aware (e.g., bouncy for Kids, subtle for Adults).
+- **Standardized Interaction States** — Globally consistent splash, hover, and focus effects derived from the mode's accent glow.
+- **Themed Data Visualization** — Analytics and charts automatically swap color palettes based on the active demographic mode.
+- **Dark Mode Support** — Comprehensive dark mode integration across all screens, including the Admin Dashboard and Mini-Games.
+
+### 🎨 Adaptive UI & Theme System
+- **Demographic-Aware Branding** — The entire app (colors, fonts, icons) adapts to the user's age group (Kids, Teen, Adult) via the `SynaptixTheme` extension.
+- **Dynamic Motion & Haptics** — Animation curves and haptic feedback intensity are mode-aware (e.g., bouncy for Kids, subtle for Adults).
+- **Standardized Interaction States** — Globally consistent splash, hover, and focus effects derived from the mode's accent glow.
+- **Themed Data Visualization** — Analytics and charts automatically swap color palettes based on the active demographic mode.
+- **Dark Mode Support** — Comprehensive dark mode integration across all screens, including the Admin Dashboard and Mini-Games.
+
 ### 🧠 Gameplay & Player Progression
 - Honeycomb-style skill tree (Knowledge, Power-ups, Strategy, Timer, Stealth, Wildcard, and more)
 - **28+ skill effects** fully routed through `SkillEffectHandler` across 5 effect groups

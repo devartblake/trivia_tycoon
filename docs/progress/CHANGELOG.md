@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2026-07-20] Theme System & Demographic Adaptivity (Areas 1-10)
+
+Comprehensive refactor of the theme engine to support mode-aware visuals and interactions.
+
+### Added
+- **Dynamic Demographic Theme System** — Expanded `SynaptixTheme` extension with properties for `accentGlow`, `primarySurface`, `mainBackgroundGradient`, `glassOverlay`, `headlineFont`, `bodyFont`, `icons` (IconProfile), `chartPalette`, `hapticIntensity`, `defaultCurve`, and `snappyCurve`.
+- **Icon Profile System** — Semantic icon mapping for `success`, `challenge`, `leaderboard`, etc.
+- **Themed Data Visualization** — `chartPalette` integration for analytics components.
+- **Demographic-Aware Haptics** — Physical feedback intensity scaled via `FeedbackService`.
+
+### Changed
+- **Adaptive Mini-Games** — Sudoku and 2048 UIs migrated from hardcoded Indigo to the dynamic theme system.
+- **Themed Skill Tree** — `SkillCategoryColors` tinted by the active mode's `accentGlow`.
+- **Adaptive Admin Dashboard** — Full Dark Mode support and demographic branding for admin tools.
+- **Dynamic Motion & Curves** — `AnimationManager` now resolves curves from the theme context.
+- **Standardized Interaction States** — Consistent splash/hover/focus colors derived from `accentGlow`.
+- **Mode-Specific Typography** — Mode-based font overrides in `AppTheme`.
+
+### Fixed
+- **Question View Layout Crash** — Removed illegal `Expanded` widget from `Wrap`.
+- **Secure Channel Gate Blocking** — Allowlisted `/api/v1/security/sessions` in `GuestApiGate`.
+
+---
+
 ## [2026-06-13] Alpha Audit Remediation — API contract alignment & release hygiene
 
 Client half of the platform-audit remediation (PRs **#269**, **#270**), aligning the app with the backend's new `/api/v1` contract.

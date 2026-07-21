@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../game/models/skill_tree_graph.dart';
+import '../../synaptix/theme/synaptix_theme_extension.dart';
 
 class SkillCategoryColors {
   static const Map<SkillCategory, Color> background = {
@@ -38,8 +39,24 @@ class SkillCategoryColors {
     SkillCategory.unknown: Color(0xFF888888),
   };
 
-  static Color backgroundFor(SkillCategory c) =>
-      background[c] ?? const Color(0xFF4A4A4A);
+  static Color backgroundFor(BuildContext? context, SkillCategory c) {
+    if (context != null) {
+      final synaptix = Theme.of(context).extension<SynaptixTheme>();
+      if (synaptix != null) {
+        return synaptix.skillNodeColor(c);
+      }
+    }
+    return background[c] ?? const Color(0xFF4A4A4A);
+  }
 
-  static Color glowFor(SkillCategory c) => glow[c] ?? const Color(0xFFB0B0B0);
+  static Color glowFor(BuildContext? context, SkillCategory c) {
+    final baseGlow = glow[c] ?? const Color(0xFFB0B0B0);
+    if (context != null) {
+      final synaptix = Theme.of(context).extension<SynaptixTheme>();
+      if (synaptix != null) {
+        return Color.lerp(baseGlow, synaptix.accentGlow, 0.2)!;
+      }
+    }
+    return baseGlow;
+  }
 }

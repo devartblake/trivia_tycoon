@@ -31,68 +31,77 @@ class SynaptixHubCard extends ConsumerWidget {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final radius = synaptix?.cardRadius ?? 16.0;
 
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        playHubTapSound(ref);
-        final mode = ref.read(synaptixModeProvider);
-        ref
-            .read(analyticsServiceProvider)
-            .trackEvent('synaptix_hub_card_tapped', {
-          'surface': surface,
-          'synaptix_mode': mode.name,
-          'entry_point': 'hub_card',
-          'audience_segment': mode.name,
-        });
-        context.push(route);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: gradient,
-          borderRadius: BorderRadius.circular(radius),
-          boxShadow: [
-            BoxShadow(
-              color: gradient.colors.first.withValues(alpha: 0.35),
-              blurRadius: 14,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: Colors.white, size: 28),
-              ),
-              const Spacer(),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 0.3,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.8),
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+    return Hero(
+      tag: 'surface_$surface',
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          playHubTapSound(ref);
+          final mode = ref.read(synaptixModeProvider);
+          ref
+              .read(analyticsServiceProvider)
+              .trackEvent('synaptix_hub_card_tapped', {
+            'surface': surface,
+            'synaptix_mode': mode.name,
+            'entry_point': 'hub_card',
+            'audience_segment': mode.name,
+          });
+          context.push(route);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(radius),
+            boxShadow: [
+              BoxShadow(
+                color: gradient.colors.first.withValues(alpha: 0.35),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
               ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: Colors.white, size: 28),
+                ),
+                const Spacer(),
+                Material(
+                  color: Colors.transparent,
+                  child: Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Material(
+                  color: Colors.transparent,
+                  child: Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.8),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

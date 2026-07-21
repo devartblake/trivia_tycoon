@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synaptix/admin/providers/admin_auth_providers.dart';
 import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
@@ -11,6 +12,7 @@ class AdminDashboardScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isAdminAsync = ref.watch(unifiedIsAdminProvider);
     final theme = Theme.of(context);
+    final synaptix = theme.extension<SynaptixTheme>();
 
     return isAdminAsync.when(
       loading: () => const Scaffold(
@@ -37,7 +39,7 @@ class AdminDashboardScreen extends ConsumerWidget {
         }
 
         return Scaffold(
-          backgroundColor: Colors.grey[50],
+          backgroundColor: theme.scaffoldBackgroundColor,
           body: CustomScrollView(
             slivers: [
               // This SliverAppBar section is correct
@@ -54,8 +56,8 @@ class AdminDashboardScreen extends ConsumerWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Colors.deepOrange[400]!,
-                          Colors.orange[300]!,
+                          synaptix?.accentGlow ?? Colors.deepOrange[400]!,
+                          theme.primaryColor,
                         ],
                       ),
                     ),
@@ -70,7 +72,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(synaptix?.cardRadius ?? 20),
                               ),
                               child: const Icon(
                                 Icons.admin_panel_settings_rounded,
@@ -153,6 +155,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                       return _buildActionCard(
                         context: context,
                         action: action,
+                        synaptix: synaptix,
                       );
                     },
                     childCount: actions.length,
@@ -196,7 +199,8 @@ class AdminDashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildActionCard(
-      {required BuildContext context, required _AdminAction action}) {
+      {required BuildContext context, required _AdminAction action, SynaptixTheme? synaptix}) {
+    final theme = Theme.of(context);
     return SizedBox(
       width: 280,
       child: Material(
@@ -206,11 +210,11 @@ class AdminDashboardScreen extends ConsumerWidget {
             soundManager.playButtonClick();
             action.onTap();
           },
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(synaptix?.cardRadius ?? 20),
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              color: theme.cardColor,
+              borderRadius: BorderRadius.circular(synaptix?.cardRadius ?? 20),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
@@ -230,7 +234,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: action.color.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(synaptix?.useSoftCorners == true ? 14 : 4),
                     ),
                     child: Icon(
                       action.icon,
@@ -248,7 +252,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[900],
+                          color: theme.textTheme.bodyLarge?.color,
                           height: 1.2,
                         ),
                         maxLines: 2,
@@ -259,7 +263,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                         action.subtitle,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey[600],
+                          color: theme.textTheme.bodySmall?.color,
                           height: 1.3,
                         ),
                         maxLines: 2,
@@ -297,10 +301,11 @@ class AdminDashboardScreen extends ConsumerWidget {
       {required BuildContext context,
       required List<({IconData icon, String label, String value, Color color})>
           stats}) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -318,7 +323,7 @@ class AdminDashboardScreen extends ConsumerWidget {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.grey[300],
+                color: theme.dividerColor,
               ),
               const SizedBox(width: 16),
             ],
@@ -340,7 +345,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[900],
+                      color: theme.textTheme.headlineMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -348,7 +353,7 @@ class AdminDashboardScreen extends ConsumerWidget {
                     stats[i].label,
                     style: TextStyle(
                       fontSize: 13,
-                      color: Colors.grey[600],
+                      color: theme.textTheme.bodySmall?.color,
                     ),
                   ),
                 ],

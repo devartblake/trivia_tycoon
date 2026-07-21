@@ -27,6 +27,27 @@ final categoryPerformanceProvider =
   return analyticsService.getCategoryPerformance(category);
 });
 
+/// Provides all categories with their performance data
+final allCategoriesPerformanceProvider = Provider<List<CategoryPerformance>>((ref) {
+  final analyticsService = ref.watch(questionAnalyticsServiceProvider);
+  // We'll use a representative list of categories to scan
+  const categoriesToScan = [
+    'Science',
+    'History',
+    'Geography',
+    'Mathematics',
+    'Arts',
+    'Literature',
+    'Sports',
+    'Entertainment'
+  ];
+
+  return categoriesToScan
+      .map((c) => analyticsService.getCategoryPerformance(c))
+      .where((p) => p.totalQuestions > 0)
+      .toList();
+});
+
 /// Provides trending performance for last 24 hours
 final trendingPerformanceProvider = Provider((ref) {
   final analyticsService = ref.watch(questionAnalyticsServiceProvider);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../game/models/skill_progression_model.dart';
+import 'package:synaptix/game/models/skill_progression_model.dart';
+import 'package:synaptix/game/models/skill_tree_graph.dart' hide SkillNode;
+import 'package:synaptix/core/theme/skill_category_colors.dart';
 
 /// Card displaying a single skill node in the skill tree
 class SkillNodeCard extends StatelessWidget {
@@ -15,14 +17,22 @@ class SkillNodeCard extends StatelessWidget {
   });
 
   /// Get card color based on skill state
-  Color _getCardColor() {
-    if (skill.isMastered) {
-      return Colors.amber;
+  Color _getCardColor(BuildContext context) {
+    if (skill.level == 0) {
+      return Colors.grey;
     }
-    if (skill.level > 0) {
-      return Colors.blue;
-    }
-    return Colors.grey;
+
+    // Try to map category string to SkillCategory enum
+    final category = _mapCategory(skill.category);
+    return SkillCategoryColors.backgroundFor(context, category);
+  }
+
+  SkillCategory _mapCategory(String category) {
+    final lower = category.toLowerCase();
+    if (lower.contains('math')) return SkillCategory.scholar;
+    if (lower.contains('science')) return SkillCategory.xp;
+    if (lower.contains('logic')) return SkillCategory.timer;
+    return SkillCategory.general;
   }
 
   /// Get icon based on skill state
@@ -37,13 +47,16 @@ class SkillNodeCard extends StatelessWidget {
   }
 
   /// Get icon color
-  Color _getIconColor() {
-    return _getCardColor();
+  Color _getIconColor(BuildContext context) {
+    if (skill.level == 0) return Colors.grey.shade600;
+    
+    final category = _mapCategory(skill.category);
+    return SkillCategoryColors.glowFor(context, category);
   }
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = _getCardColor();
+    final cardColor = _getCardColor(context);
     final backgroundColor = cardColor.withValues(alpha: 0.1);
     final borderColor = isSelected ? cardColor : Colors.transparent;
 
@@ -51,7 +64,7 @@ class SkillNodeCard extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: isSelected ? 4 : 2,
-        color: backgroundColor,
+        color: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
@@ -59,7 +72,11 @@ class SkillNodeCard extends StatelessWidget {
             width: isSelected ? 2 : 1,
           ),
         ),
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: backgroundColor,
+          ),
           padding: const EdgeInsets.all(12),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +85,7 @@ class SkillNodeCard extends StatelessWidget {
               Icon(
                 _getIcon(),
                 size: 32,
-                color: _getIconColor(),
+                color: _getIconColor(context),
               ),
               const SizedBox(height: 8),
 

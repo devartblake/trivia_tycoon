@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'performance_line_chart.dart';
+import '../../synaptix/theme/synaptix_theme_extension.dart';
 
 /// Component for selecting chart metric and time range
 class ChartSelector extends StatelessWidget {
@@ -73,7 +74,9 @@ class ChartSelector extends StatelessWidget {
     String label,
     PerformanceMetric metric,
   ) {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final isSelected = selectedMetric == metric;
+    final primaryColor = synaptix?.accentGlow ?? Theme.of(context).primaryColor;
 
     return FilterChip(
       label: Text(label),
@@ -84,9 +87,9 @@ class ChartSelector extends StatelessWidget {
         }
       },
       backgroundColor: Colors.grey[100],
-      selectedColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+      selectedColor: primaryColor.withValues(alpha: 0.2),
       labelStyle: TextStyle(
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
+        color: isSelected ? primaryColor : Colors.grey[700],
         fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
       ),
     );
@@ -129,9 +132,12 @@ class ChartSelector extends StatelessWidget {
     String label,
     TimeRange range,
   ) {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final isSelected = selectedTimeRange == range;
+    final primaryColor = synaptix?.accentGlow ?? Theme.of(context).primaryColor;
 
     return Material(
+      color: Colors.transparent,
       child: InkWell(
         onTap: () => onTimeRangeChanged(range),
         borderRadius: BorderRadius.circular(8),
@@ -139,7 +145,7 @@ class ChartSelector extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color:
-                isSelected ? Theme.of(context).primaryColor : Colors.grey[100],
+                isSelected ? primaryColor : Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
             border: isSelected ? null : Border.all(color: Colors.grey[300]!),
           ),

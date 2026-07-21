@@ -60,6 +60,7 @@ Result: 22 tests passed.
 | Daily Bonus | API integrated | Backend status/claim/config contract wired. |
 | Weekly Rewards | API integrated | Backend schedule/streak/claim contract wired. |
 | Tier Progression | API integrated | Backend progression contract wired with fallback definitions. |
+| Theme System | Demographic Adaptivity Complete | Areas 1-10 refactored for mode-aware visuals/haptics. |
 | Missions | Pending/separate | Backend endpoints exist in audit, frontend replacement not covered by this Phase 2 pass. |
 | Challenges | Pending/separate | Not part of current Phase 2 reward/progression verification. |
 | Categories | Pending/separate | Not part of current Phase 2 reward/progression verification. |

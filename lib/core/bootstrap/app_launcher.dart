@@ -526,7 +526,6 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
 
   Widget _buildApp(ThemeType themeType) {
     final themeNotifier = ref.watch(providers.themeNotifierProvider);
-    final appTheme = AppTheme.fromType(themeType, ThemeMode.light);
     final synaptixMode = ref.watch(synaptixModeProvider);
     final synaptixTheme = SynaptixTheme.fromMode(synaptixMode);
 
@@ -539,13 +538,10 @@ class _AppLauncherState extends ConsumerState<AppLauncher>
         scrollBehavior: AppScrollBehavior(),
 
         // Use active theme with Synaptix mode extension
-        theme: appTheme.themeData.copyWith(
-          extensions: [synaptixTheme],
-        ),
-        darkTheme:
-            AppTheme.fromType(themeType, ThemeMode.dark).themeData.copyWith(
-          extensions: [synaptixTheme],
-        ),
+        theme: AppTheme.fromType(themeType, ThemeMode.light)
+            .getThemeData(extension: synaptixTheme),
+        darkTheme: AppTheme.fromType(themeType, ThemeMode.dark)
+            .getThemeData(extension: synaptixTheme),
         themeMode: themeNotifier.themeMode,
 
         // Use the new provider-based router

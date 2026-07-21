@@ -25,14 +25,14 @@ void main() {
   group('SkillCategoryColors.backgroundFor — spot checks', () {
     test('scholar returns Color(0xFF3B5B8C)', () {
       expect(
-        SkillCategoryColors.backgroundFor(SkillCategory.scholar),
+        SkillCategoryColors.backgroundFor(null, SkillCategory.scholar),
         const Color(0xFF3B5B8C),
       );
     });
 
     test('unknown returns Color(0xFF3B3B3B)', () {
       expect(
-        SkillCategoryColors.backgroundFor(SkillCategory.unknown),
+        SkillCategoryColors.backgroundFor(null, SkillCategory.unknown),
         const Color(0xFF3B3B3B),
       );
     });
@@ -45,14 +45,14 @@ void main() {
   group('SkillCategoryColors.glowFor — spot checks', () {
     test('xp returns Color(0xFF6EFFC1)', () {
       expect(
-        SkillCategoryColors.glowFor(SkillCategory.xp),
+        SkillCategoryColors.glowFor(null, SkillCategory.xp),
         const Color(0xFF6EFFC1),
       );
     });
 
     test('combat returns Color(0xFFFF8E6E)', () {
       expect(
-        SkillCategoryColors.glowFor(SkillCategory.combat),
+        SkillCategoryColors.glowFor(null, SkillCategory.combat),
         const Color(0xFFFF8E6E),
       );
     });
@@ -66,7 +66,7 @@ void main() {
     test('backgroundFor returns a Color for every SkillCategory', () {
       for (final category in SkillCategory.values) {
         expect(
-          SkillCategoryColors.backgroundFor(category),
+          SkillCategoryColors.backgroundFor(null, category),
           isA<Color>(),
           reason: 'backgroundFor($category) should return a Color',
         );
@@ -76,7 +76,7 @@ void main() {
     test('glowFor returns a Color for every SkillCategory', () {
       for (final category in SkillCategory.values) {
         expect(
-          SkillCategoryColors.glowFor(category),
+          SkillCategoryColors.glowFor(null, category),
           isA<Color>(),
           reason: 'glowFor($category) should return a Color',
         );

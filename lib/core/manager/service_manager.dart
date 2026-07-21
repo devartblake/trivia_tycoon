@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import '../services/compliance/compliance_api_client.dart';
 import '../services/compliance/compliance_service.dart';
+import 'package:synaptix/core/services/feedback_service.dart';
 import 'package:synaptix/core/services/event_queue_service.dart';
 import 'package:synaptix/core/services/settings/admin_settings_service.dart';
 import 'package:synaptix/core/services/settings/audio_settings_service.dart';
@@ -67,6 +68,7 @@ class ServiceManager {
   final ApiService apiService;
   final LocalAuthService authService;
   final AnalyticsService analyticsService;
+  final FeedbackService feedbackService;
   final EventQueueService eventQueueService;
   final AudioSettingsService audioSettingsService;
   final LeaderboardDataService leaderboardDataService;
@@ -122,6 +124,7 @@ class ServiceManager {
     required this.apiService,
     required this.authService,
     required this.analyticsService,
+    required this.feedbackService,
     required this.eventQueueService,
     required this.audioSettingsService,
     required this.leaderboardDataService,
@@ -247,6 +250,7 @@ class ServiceManager {
     final customTheme = await CustomThemeService.initialize();
     final swatch = SwatchService();
     final eventQueueService = EventQueueService();
+    final feedbackService = FeedbackService();
 
     final analytics = AnalyticsService(api, eventQueueService);
     await analytics.initialize();
@@ -372,6 +376,7 @@ class ServiceManager {
       apiService: api,
       authService: auth,
       analyticsService: analytics,
+      feedbackService: feedbackService,
       eventQueueService: eventQueueService,
       audioSettingsService: audio,
       leaderboardDataService: leaderboard,

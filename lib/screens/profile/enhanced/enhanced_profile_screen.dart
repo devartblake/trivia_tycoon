@@ -250,118 +250,121 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            _buildModernAppBar(context, innerBoxIsScrolled),
-          ],
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Profile Header with Title
-              SliverToBoxAdapter(
-                child: ProfileHeaderSection(
-                  userData: _userData,
-                  isOwnProfile: widget.isOwnProfile,
-                  onEditProfile: _navigateToEditProfile,
-                ),
-              ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Rich Presence Card
-              SliverToBoxAdapter(child: _buildPresenceCard()),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Stats Cards
-              SliverToBoxAdapter(
-                child: ProfileStatsSection(
-                  userData: _userData,
-                  onFriendsTap: _showMutualFriends,
-                ),
-              ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // XP Progress Bar
-              SliverToBoxAdapter(child: _buildXPProgressCard()),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              SliverToBoxAdapter(
-                child: CryptoHoldingsCard(
-                  userId: widget.userId,
-                  isOwnProfile: widget.isOwnProfile,
-                ),
-              ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Quick Actions (Message/Challenge)
-              if (!widget.isOwnProfile)
-                SliverToBoxAdapter(
-                  child: ProfileActionsSection(
-                    onMessage: () => _handleMenuAction('message'),
-                    onChallenge: () => _handleMenuAction('challenge'),
-                  ),
-                ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Arcade Summary
-              SliverToBoxAdapter(
-                child: ArcadeSummarySection(
-                  arcadeData: _arcadeData,
-                  onViewAllScores: _navigateToArcadeScores,
-                ),
-              ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Missions Preview
-              SliverToBoxAdapter(
-                child: MissionsPreviewSection(
-                  missionsData: _missionsData,
-                  onViewMissions: _navigateToMissions,
-                ),
-              ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Daily Bonus Status
-              if (widget.isOwnProfile)
-                SliverToBoxAdapter(
-                  child: DailyBonusSection(
-                    bonusData: _dailyBonusData,
-                    onClaimBonus: _claimDailyBonus,
-                  ),
-                ),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 20)),
-
-              // Tabs
-              SliverToBoxAdapter(child: _buildTabBar()),
-
-              SliverToBoxAdapter(child: const SizedBox(height: 16)),
-
-              // Tab Content
-              SliverFillRemaining(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildStatsTab(),
-                    _buildActivityTab(),
-                    _buildAchievementsTab(),
-                    _buildCollectionTab(),
-                  ],
-                ),
-              ),
+    return Hero(
+      tag: 'surface_journey',
+      child: Scaffold(
+        backgroundColor: const Color(0xFF0A0A0F),
+        body: FadeTransition(
+          opacity: _fadeAnimation,
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              _buildModernAppBar(context, innerBoxIsScrolled),
             ],
+            body: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Profile Header with Title
+                SliverToBoxAdapter(
+                  child: ProfileHeaderSection(
+                    userData: _userData,
+                    isOwnProfile: widget.isOwnProfile,
+                    onEditProfile: _navigateToEditProfile,
+                  ),
+                ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Rich Presence Card
+                SliverToBoxAdapter(child: _buildPresenceCard()),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Stats Cards
+                SliverToBoxAdapter(
+                  child: ProfileStatsSection(
+                    userData: _userData,
+                    onFriendsTap: _showMutualFriends,
+                  ),
+                ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // XP Progress Bar
+                SliverToBoxAdapter(child: _buildXPProgressCard()),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                SliverToBoxAdapter(
+                  child: CryptoHoldingsCard(
+                    userId: widget.userId,
+                    isOwnProfile: widget.isOwnProfile,
+                  ),
+                ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Quick Actions (Message/Challenge)
+                if (!widget.isOwnProfile)
+                  SliverToBoxAdapter(
+                    child: ProfileActionsSection(
+                      onMessage: () => _handleMenuAction('message'),
+                      onChallenge: () => _handleMenuAction('challenge'),
+                    ),
+                  ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Arcade Summary
+                SliverToBoxAdapter(
+                  child: ArcadeSummarySection(
+                    arcadeData: _arcadeData,
+                    onViewAllScores: _navigateToArcadeScores,
+                  ),
+                ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Missions Preview
+                SliverToBoxAdapter(
+                  child: MissionsPreviewSection(
+                    missionsData: _missionsData,
+                    onViewMissions: _navigateToMissions,
+                  ),
+                ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Daily Bonus Status
+                if (widget.isOwnProfile)
+                  SliverToBoxAdapter(
+                    child: DailyBonusSection(
+                      bonusData: _dailyBonusData,
+                      onClaimBonus: _claimDailyBonus,
+                    ),
+                  ),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 20)),
+
+                // Tabs
+                SliverToBoxAdapter(child: _buildTabBar()),
+
+                SliverToBoxAdapter(child: const SizedBox(height: 16)),
+
+                // Tab Content
+                SliverFillRemaining(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildStatsTab(),
+                      _buildActivityTab(),
+                      _buildAchievementsTab(),
+                      _buildCollectionTab(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

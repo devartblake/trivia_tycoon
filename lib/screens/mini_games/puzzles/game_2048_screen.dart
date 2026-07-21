@@ -4,6 +4,7 @@ import 'dart:math';
 
 import '../dialogs/game_result_dialog.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
+import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 
 class Game2048Screen extends StatefulWidget {
   const Game2048Screen({super.key});
@@ -63,7 +64,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
         winPercentage: 100,
         bestScore: '$score',
         currentStreak: 1,
-        primaryColor: const Color(0xFF6366F1),
+        primaryColor: Theme.of(context).extension<SynaptixTheme>()?.accentGlow ?? const Color(0xFF6366F1),
         gameIcon: Icons.apps,
       ),
       onShare: () {
@@ -79,14 +80,17 @@ class _Game2048ScreenState extends State<Game2048Screen> {
   }
 
   void _showHowToPlay() {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final accentColor = synaptix?.accentGlow ?? const Color(0xFF6366F1);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         padding: EdgeInsets.only(
           top: 20,
@@ -114,22 +118,22 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                    color: accentColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.lightbulb,
-                    color: Color(0xFF6366F1),
+                    color: accentColor,
                     size: 24,
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Text(
+                Text(
                   'How to Play',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
+                    color: Theme.of(context).textTheme.titleLarge?.color,
                   ),
                 ),
               ],
@@ -151,8 +155,8 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                         margin: const EdgeInsets.only(top: 2),
                         width: 6,
                         height: 6,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF6366F1),
+                        decoration: BoxDecoration(
+                          color: accentColor,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -160,10 +164,10 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                       Expanded(
                         child: Text(
                           text,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 15,
                             height: 1.5,
-                            color: Color(0xFF475569),
+                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                           ),
                         ),
                       ),
@@ -176,7 +180,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6366F1),
+                  backgroundColor: accentColor,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -199,13 +203,16 @@ class _Game2048ScreenState extends State<Game2048Screen> {
 
   @override
   Widget build(BuildContext context) {
+    final synaptix = Theme.of(context).extension<SynaptixTheme>();
+    final accentColor = synaptix?.accentGlow ?? const Color(0xFF6366F1);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           '2048',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF6366F1),
+        backgroundColor: accentColor,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -246,8 +253,8 @@ class _Game2048ScreenState extends State<Game2048Screen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
+        decoration: BoxDecoration(
+          gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
             colors: [Color(0xFFF8FAFF), Color(0xFFFFFFFF)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -267,25 +274,23 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color:
-                                const Color(0xFF6366F1).withValues(alpha: 0.1),
+                            color: accentColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xFF6366F1)
-                                  .withValues(alpha: 0.3),
+                              color: accentColor.withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
+                            children: [
                               Icon(Icons.lightbulb_outline,
-                                  color: Color(0xFF6366F1), size: 20),
-                              SizedBox(width: 8),
+                                  color: accentColor, size: 20),
+                              const SizedBox(width: 8),
                               Text(
                                 'How to Play',
                                 style: TextStyle(
-                                  color: Color(0xFF6366F1),
+                                  color: accentColor,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -302,7 +307,7 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               _buildScoreCard('Score', _gameController.score,
-                                  const Color(0xFF6366F1)),
+                                  accentColor),
                               const SizedBox(width: 16),
                               _buildScoreCard('Best', _gameController.bestScore,
                                   const Color(0xFFFFD700)),
@@ -323,9 +328,9 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                             icon: const Icon(Icons.undo, size: 18),
                             label: const Text('Undo'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFE0DDD9),
-                              foregroundColor: const Color(0xFF4A4A4A),
-                              disabledBackgroundColor: const Color(0xFFE0DDD9)
+                              backgroundColor: Theme.of(context).cardColor,
+                              foregroundColor: Theme.of(context).textTheme.bodyMedium?.color,
+                              disabledBackgroundColor: Theme.of(context).cardColor
                                   .withValues(alpha: 0.5),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 14),

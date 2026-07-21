@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented in this file.
 
+## [4.3.0] - 2026-07-20
+
+### Comprehensive Theme System & Demographic Adaptivity (Areas 1-10)
+
+#### Added
+- **Dynamic Demographic Theme System** — Expanded `SynaptixTheme` extension with properties for `accentGlow`, `primarySurface`, `mainBackgroundGradient`, `glassOverlay`, `headlineFont`, `bodyFont`, `icons` (IconProfile), `chartPalette`, `hapticIntensity`, `defaultCurve`, and `snappyCurve`.
+- **Icon Profile System** — Semantic icon mapping for `success`, `challenge`, `leaderboard`, etc., allowing the UI to swap between playful icons (Kids), modern icons (Teen), and minimalist icons (Adult) automatically.
+- **Themed Data Visualization** — `chartPalette` integration for analytics. Charts now use mode-appropriate colors (e.g., Neon for Teens, Professional for Adults).
+- **Demographic-Aware Haptics** — Physical feedback intensity (`soft`, `standard`, `energetic`) now scales based on the user's age group via `FeedbackService`.
+
+#### Changed
+- **Adaptive Mini-Games** — Sudoku and 2048 UIs migrated from hardcoded Indigo to the dynamic theme system. Both games now respect global Dark/Light mode and demographic branding.
+- **Themed Skill Tree** — `SkillCategoryColors` refactored to consume theme context. Node colors and glows are now dynamically tinted by the active mode's `accentGlow`.
+- **Adaptive Admin Dashboard** — Full Dark Mode support and demographic branding applied to admin tools. Header gradients and action cards now respect the active theme.
+- **Dynamic Motion & Curves** — `AnimationManager` now resolves transition curves from the theme. Kids mode uses bouncy `Elastic` curves; Adult mode uses smooth professional easing.
+- **Standardized Interaction States** — `splashColor`, `hoverColor`, and `focusColor` are now globally consistent and derived from the theme's `accentGlow`.
+- **Mode-Specific Typography** — Integrated `headlineFont` and `bodyFont` into `AppTheme`. Typography now shifts automatically (e.g., serif vs sans-serif) based on the user's demographic mode.
+
+#### Fixed
+- **Question View Layout Crash** — Removed illegal `Expanded` widget inside a `Wrap` in `question_view_screen.dart`.
+- **Secure Channel Gate Blocking** — Added `/api/v1/security/sessions` to the `GuestApiGate` allowlist to ensure secure sessions can be established during guest-to-account transitions.
+
 ## [Unreleased] - Sprint 2 (API contract alignment, server-authoritative XP)
 
 _Backend contracts verified directly against `TycoonTycoon_Backend` source; companion backend branch: `claude/sprint2-server-xp-friends`._
