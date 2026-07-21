@@ -1,27 +1,33 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/services/notification_service.dart';
-import '../../admin/providers/admin_auth_providers.dart';
-import '../services/channel_prefs.dart';
-import 'notification_history_store.dart';
-import 'notification_template_store.dart';
-import 'core_providers.dart';
+import 'package:synaptix/core/services/notification_service.dart';
+import 'package:synaptix/admin/providers/admin_auth_providers.dart';
+import 'package:synaptix/game/services/channel_prefs.dart';
+import 'package:synaptix/game/providers/notification_history_store.dart';
+import 'package:synaptix/game/providers/notification_template_store.dart';
+import 'package:synaptix/game/providers/core_providers.dart';
+
+/// Global notification service provider
+final notificationServiceProvider = Provider<NotificationService>((ref) {
+  return NotificationService();
+});
 
 /// Permission status
 final permissionAllowedProvider = FutureProvider<bool>((ref) async {
-  return NotificationService().isAllowed();
+  return ref.watch(notificationServiceProvider).isAllowed();
 });
 
 /// All scheduled notifications
 final scheduledProvider = FutureProvider<List<NotificationModel>>((ref) async {
-  return NotificationService().listScheduled();
+  return ref.watch(notificationServiceProvider).listScheduled();
 });
 
 /// Available channels (from Awesome Notifications)
 /// Channels, filtered by enabled flag.
 final notificationChannelsProvider =
     FutureProvider<List<NotificationChannel>>((ref) async {
-  final known = NotificationService().knownChannels;
+  final service = ref.watch(notificationServiceProvider);
+  final known = service.knownChannels;
   final prefs = ChannelPrefs.instance;
   final List<NotificationChannel> enabledOnly = [];
   for (final c in known) {
@@ -35,16 +41,10 @@ final notificationChannelsProvider =
   if (enabledOnly.isEmpty) {
     enabledOnly.addAll([
       NotificationChannel(
-        channelKey: NotificationService.adminBasicChannel,
+        channelKey: 'admin_basic',
         channelName: 'Admin Basic',
         channelDescription: 'General admin notifications',
         importance: NotificationImportance.High,
-      ),
-      NotificationChannel(
-        channelKey: NotificationService.adminPromosChannel,
-        channelName: 'Admin Promotions',
-        channelDescription: 'Promotional messages',
-        importance: NotificationImportance.Default,
       ),
     ]);
   }
@@ -59,7 +59,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
   Future<void> requestPermission() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await NotificationService().requestPermission();
+      await ref.read(notificationServiceProvider).requestPermission();
       ref.invalidate(permissionAllowedProvider);
     });
   }
@@ -85,7 +85,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
         },
       );
 
-      await NotificationService().sendNow(
+      await ref.read(notificationServiceProvider).sendNow(
         id: id,
         channelKey: channelKey,
         title: title,
@@ -153,14 +153,13 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
           ),
         );
       } else {
-        await NotificationService().scheduleAt(
+        await ref.read(notificationServiceProvider).scheduleAt(
           id: id,
           channelKey: channelKey,
           title: title,
           body: body,
           scheduledAt: scheduledAt,
           payload: payload,
-          precise: true,
         );
       }
       ref.invalidate(scheduledProvider);
@@ -170,7 +169,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
   Future<void> cancel(int id) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await NotificationService().cancel(id);
+      await ref.read(notificationServiceProvider).cancel(id);
       ref.invalidate(scheduledProvider);
     });
   }
@@ -178,7 +177,7 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
   Future<void> cancelAll() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await NotificationService().cancelAll();
+      await ref.read(notificationServiceProvider).cancelAll();
       ref.invalidate(scheduledProvider);
     });
   }

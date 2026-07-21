@@ -44,8 +44,9 @@ class ComplianceApiClient {
   }
 
   void _log(String method, String path, int status) {
-    if (kDebugMode)
+    if (kDebugMode) {
       LogManager.debug('[ComplianceApiClient] $method $path -> $status');
+    }
   }
 
   // ── Compliance status ─────────────────────────────────────────────────────

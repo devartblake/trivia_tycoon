@@ -289,6 +289,11 @@ class SynaptixTheme extends ThemeExtension<SynaptixTheme> {
     return Color.lerp(baseColor, accentGlow, 0.15)!;
   }
 
+  /// Resolve a surface-aware glass tint.
+  Color glassColor({double opacity = 0.1}) {
+    return Colors.white.withValues(alpha: opacity);
+  }
+
   @override
   SynaptixTheme lerp(SynaptixTheme? other, double t) {
     if (other == null) return this;

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
+import 'package:synaptix/core/design_system/glass_app_bar.dart';
+import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
+import 'package:synaptix/core/design_system/neon_button.dart';
+import 'package:synaptix/core/design_system/holographic_dialog.dart';
 import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
 import 'package:synaptix/screens/multiplayer/widgets/player_chip.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
@@ -30,130 +36,10 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(roomControllerProvider);
     final players = state.players;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
-
-        final ok = await showExitMatchConfirm(context, title: 'Leave lobby?');
-        if (ok == true && context.mounted) {
-          context.go('/multiplayer');
-        }
-      },
-      child: Scaffold(
-        backgroundColor:
-            isDark ? const Color(0xFF0A0A0F) : MultiplayerPalette.background,
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            _buildSliverAppBar(state, theme, isDark, context),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    _buildRoomInfoCard(state, theme, isDark),
-                    const SizedBox(height: 24),
-                    _buildPlayersSection(players, theme, isDark),
-                    const SizedBox(height: 24),
-                    _buildGameSettings(theme, isDark),
-                    const SizedBox(height: 32),
-                    _buildStartButton(state, theme, isDark, context),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSliverAppBar(
-      dynamic state, ThemeData theme, bool isDark, BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: 120,
-      floating: false,
-      pinned: true,
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                MultiplayerPalette.primary,
-                MultiplayerPalette.secondary,
-                MultiplayerPalette.accent,
-              ],
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.meeting_room_rounded,
-                          color: Colors.white,
-                          size: 28,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              state.roomName ?? state.roomId ?? 'Room Lobby',
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Waiting for players to join...',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.9),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      leading: Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: IconButton(
+    return SynaptixScaffold(
+      appBar: GlassAppBar(
+        leading: IconButton(
           onPressed: () async {
             final ok =
                 await showExitMatchConfirm(context, title: 'Leave lobby?');
@@ -161,18 +47,11 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
               context.go('/multiplayer');
             }
           },
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
         ),
-      ),
-      actions: [
-        Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: IconButton(
+        title: GlowText(state.roomName ?? state.roomId ?? 'Room Lobby'),
+        actions: [
+          IconButton(
             icon: const Icon(Icons.logout_rounded, color: Colors.white),
             onPressed: () async {
               final ok =
@@ -182,27 +61,37 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
               }
             },
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRoomInfoCard(dynamic state, ThemeData theme, bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.3)
-                : Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+        ],
+      ),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          const SliverToBoxAdapter(child: SizedBox(height: kToolbarHeight + 20)),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  _buildRoomInfoCard(state),
+                  const SizedBox(height: 24),
+                  _buildPlayersSection(players),
+                  const SizedBox(height: 24),
+                  _buildGameSettings(),
+                  const SizedBox(height: 32),
+                  _buildStartButton(state, context),
+                ],
+              ),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRoomInfoCard(dynamic state) {
+    return AdaptiveGlassCard(
+      glowColor: MultiplayerPalette.success,
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           Row(
@@ -222,12 +111,12 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
+              const Text(
                 'Room Information',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -240,7 +129,6 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                   icon: Icons.tag_rounded,
                   label: 'Room ID',
                   value: state.roomId ?? 'Unknown',
-                  isDark: isDark,
                 ),
               ),
               const SizedBox(width: 16),
@@ -249,7 +137,6 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                   icon: Icons.admin_panel_settings_rounded,
                   label: 'Host',
                   value: state.isHost ? 'You' : 'Other Player',
-                  isDark: isDark,
                 ),
               ),
             ],
@@ -263,12 +150,11 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
     required IconData icon,
     required String label,
     required String value,
-    required bool isDark,
   }) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF2A2A3E) : MultiplayerPalette.surfaceAlt,
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -281,18 +167,18 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
-              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+              color: Colors.white60,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ],
@@ -300,23 +186,10 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
     );
   }
 
-  Widget _buildPlayersSection(
-      List<dynamic> players, ThemeData theme, bool isDark) {
-    return Container(
+  Widget _buildPlayersSection(List<dynamic> players) {
+    return AdaptiveGlassCard(
+      glowColor: MultiplayerPalette.primary,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.3)
-                : Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -342,10 +215,10 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
               const SizedBox(width: 12),
               Text(
                 'Players (${players.length}/8)',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                  color: Colors.white,
                 ),
               ),
               const Spacer(),
@@ -359,7 +232,7 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                     color: MultiplayerPalette.success.withValues(alpha: 0.3),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Waiting',
                   style: TextStyle(
                     fontSize: 12,
@@ -372,7 +245,7 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
           ),
           const SizedBox(height: 16),
           if (players.isEmpty)
-            SizedBox(
+            const SizedBox(
               height: 100,
               child: Center(
                 child: Column(
@@ -381,13 +254,13 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                     Icon(
                       Icons.person_add_rounded,
                       size: 32,
-                      color: Colors.grey.shade400,
+                      color: Colors.white24,
                     ),
                     const SizedBox(height: 8),
                     Text(
                       'Waiting for players to join...',
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: Colors.white38,
                         fontSize: 14,
                       ),
                     ),
@@ -413,22 +286,10 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
     );
   }
 
-  Widget _buildGameSettings(ThemeData theme, bool isDark) {
-    return Container(
+  Widget _buildGameSettings() {
+    return AdaptiveGlassCard(
+      glowColor: MultiplayerPalette.accent,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E1E2E) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.3)
-                : Colors.grey.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -452,12 +313,12 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
+              const Text(
                 'Game Settings',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -470,7 +331,6 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                   icon: Icons.quiz_rounded,
                   label: 'Questions',
                   value: '10',
-                  isDark: isDark,
                 ),
               ),
               const SizedBox(width: 12),
@@ -479,7 +339,6 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                   icon: Icons.timer_rounded,
                   label: 'Time Limit',
                   value: '30s',
-                  isDark: isDark,
                 ),
               ),
               const SizedBox(width: 12),
@@ -488,7 +347,6 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                   icon: Icons.category_rounded,
                   label: 'Category',
                   value: 'Mixed',
-                  isDark: isDark,
                 ),
               ),
             ],
@@ -502,12 +360,11 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
     required IconData icon,
     required String label,
     required String value,
-    required bool isDark,
   }) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF2A2A3E) : MultiplayerPalette.surfaceAlt,
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -520,18 +377,18 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
           const SizedBox(height: 8),
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
-              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+              color: Colors.white60,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white : MultiplayerPalette.textPrimary,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ],
@@ -539,50 +396,27 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
     );
   }
 
-  Widget _buildStartButton(
-      dynamic state, ThemeData theme, bool isDark, BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 56,
-      decoration: BoxDecoration(
-        gradient: state.isHost
-            ? const LinearGradient(
-                colors: [MultiplayerPalette.success, Color(0xFF2E8E68)],
-              )
-            : null,
-        color: state.isHost ? null : Colors.grey.shade400,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: state.isHost
-            ? [
-                BoxShadow(
-                  color: MultiplayerPalette.success.withValues(alpha: 0.3),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ]
-            : null,
-      ),
-      child: ElevatedButton.icon(
-        onPressed: state.isHost ? () => context.go('/multiplayer/match') : null,
-        icon: Icon(
-          state.isHost ? Icons.play_arrow_rounded : Icons.lock_rounded,
-          color: Colors.white,
-        ),
-        label: Text(
-          state.isHost ? 'Start Match' : 'Waiting for Host',
-          style: const TextStyle(
+  Widget _buildStartButton(dynamic state, BuildContext context) {
+    return NeonButton(
+      onPressed: state.isHost ? () => context.go('/multiplayer/match') : null,
+      color: MultiplayerPalette.success,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            state.isHost ? Icons.play_arrow_rounded : Icons.lock_rounded,
             color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
           ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+          const SizedBox(width: 8),
+          Text(
+            state.isHost ? 'Start Match' : 'Waiting for Host',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

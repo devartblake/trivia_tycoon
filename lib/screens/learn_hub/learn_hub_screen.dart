@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
+import 'package:synaptix/core/design_system/glass_app_bar.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
+import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
+import 'package:synaptix/core/design_system/neural_bloom_indicator.dart';
 import '../../core/dto/learning_dto.dart';
 import '../../game/providers/learning_providers.dart';
 import 'widgets/module_card.dart';
@@ -27,19 +32,21 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
   Widget build(BuildContext context) {
     final playerIdAsync = ref.watch(currentPlayerIdProvider);
 
-    return Scaffold(
-      appBar: AppBar(
+    return SynaptixScaffold(
+      appBar: GlassAppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           tooltip: 'Back',
           onPressed: _handleBackPressed,
         ),
-        title: const Text('Learn Hub'),
+        title: const GlowText('Learn Hub'),
       ),
-      body: playerIdAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => _buildModuleList(null),
-        data: (playerId) => _buildModuleList(playerId),
+      body: SafeArea(
+        child: playerIdAsync.when(
+          loading: () => const Center(child: NeuralBloomIndicator()),
+          error: (_, __) => _buildModuleList(null),
+          data: (playerId) => _buildModuleList(playerId),
+        ),
       ),
     );
   }
@@ -69,7 +76,7 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
         ),
         Expanded(
           child: modulesAsync.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: NeuralBloomIndicator()),
             error: (error, _) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24),
@@ -79,9 +86,9 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
                     const Icon(Icons.error_outline,
                         size: 48, color: Colors.red),
                     const SizedBox(height: 12),
-                    Text(
+                    const GlowText(
                       'Could not load modules.',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: TextStyle(fontSize: 18),
                     ),
                     const SizedBox(height: 8),
                     TextButton(

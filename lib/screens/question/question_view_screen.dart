@@ -16,25 +16,25 @@ import 'package:synaptix/game/providers/tier_progression_provider.dart';
 import 'package:synaptix/core/services/feedback_service.dart';
 import 'package:synaptix/core/services/native_platform_service.dart';
 import 'package:synaptix/game/services/quiz_category.dart';
-// New question system components
 import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 import 'package:synaptix/ui_components/spin_wheel/core/sound_manager.dart';
 import 'package:synaptix/screens/question/widgets/question_renderer.dart';
 import 'package:synaptix/screens/question/widgets/question_metadata.dart';
-import 'package:synaptix/screens/question/widgets/category_header_bar.dart';
-import 'package:synaptix/screens/question/widgets/segmented_progress_strip.dart';
 import 'package:synaptix/screens/question/widgets/powerup_tray.dart';
 import 'package:synaptix/ui_components/animations/particle_emitter.dart';
+import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
+import 'package:synaptix/core/design_system/glass_app_bar.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
+import 'package:synaptix/core/design_system/holographic_dialog.dart';
+import 'package:synaptix/core/design_system/neon_button.dart';
+import 'package:synaptix/core/design_system/neural_progress_bar.dart';
 
 class AdaptedQuestionScreen extends ConsumerStatefulWidget {
   final String? classLevel;
-  final String? category; // Keep as string for route compatibility
+  final String? category;
   final int? questionCount;
   final List<QuestionModel>? initialQuestions;
   final String? displayTitle;
-
-  /// Timed-challenge mode: per-question countdown from the question's
-  /// difficulty instead of the class-level limit.
   final bool timedChallenge;
 
   const AdaptedQuestionScreen({
@@ -58,8 +58,6 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   late AnimationController _animationController;
   QuizCategory? _resolvedCategory;
   bool _showSuccessParticles = false;
-
-  /// Idempotency/scoping key for server-side powerup consumption this session.
   final String _powerupEventId = const Uuid().v4();
 
   @override
@@ -71,10 +69,8 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
       vsync: this,
     );
 
-    // Resolve category string to QuizCategory enum
     _resolvedCategory = _resolveCategoryFromString(widget.category);
 
-    // Start quiz when screen loads with educational parameters
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notifier = ref.read(adaptedQuizProvider.notifier);
       final initialQuestions = widget.initialQuestions;
@@ -103,96 +99,46 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     super.dispose();
   }
 
-  /// Resolve category string to QuizCategory enum
   QuizCategory? _resolveCategoryFromString(String? categoryString) {
-    if (categoryString == null ||
-        categoryString.isEmpty ||
-        categoryString.toLowerCase() == 'mixed') {
-      return null; // Will use mixed/general approach
-    }
-
-    // Try to map string to QuizCategory using the manager
+    if (categoryString == null || categoryString.isEmpty || categoryString.toLowerCase() == 'mixed') return null;
     final resolvedCategory = QuizCategoryManager.fromString(categoryString);
-    if (resolvedCategory != null) {
-      return resolvedCategory;
-    }
-
-    // Fallback mappings for common UI strings
+    if (resolvedCategory != null) return resolvedCategory;
     switch (categoryString.toLowerCase()) {
-      case 'math':
-      case 'mathematics':
-        return QuizCategory.mathematics;
-      case 'science':
-        return QuizCategory.science;
-      case 'history':
-        return QuizCategory.history;
-      case 'geography':
-        return QuizCategory.geography;
-      case 'arts':
-      case 'art':
-        return QuizCategory.arts;
-      case 'literature':
-      case 'english':
-        return QuizCategory.literature;
-      case 'technology':
-      case 'tech':
-        return QuizCategory.technology;
-      case 'health':
-        return QuizCategory.health;
-      case 'sports':
-        return QuizCategory.sports;
-      case 'entertainment':
-        return QuizCategory.entertainment;
-      case 'social_studies':
-      case 'social':
-        return QuizCategory.socialStudies;
-      default:
-        return QuizCategory.general; // Fallback to general
+      case 'math': case 'mathematics': return QuizCategory.mathematics;
+      case 'science': return QuizCategory.science;
+      case 'history': return QuizCategory.history;
+      case 'geography': return QuizCategory.geography;
+      case 'arts': case 'art': return QuizCategory.arts;
+      case 'literature': case 'english': return QuizCategory.literature;
+      case 'technology': case 'tech': return QuizCategory.technology;
+      case 'health': return QuizCategory.health;
+      case 'sports': return QuizCategory.sports;
+      case 'entertainment': return QuizCategory.entertainment;
+      case 'social_studies': case 'social': return QuizCategory.socialStudies;
+      default: return QuizCategory.general;
     }
   }
 
-  /// Get category-based styling and colors
   Color _getCategoryColor() {
-    if (_resolvedCategory != null) {
-      return _resolvedCategory!.primaryColor;
-    }
+    if (_resolvedCategory != null) return _resolvedCategory!.primaryColor;
     return QuizHelpers.getClassColor(widget.classLevel ?? '1');
   }
 
-  /// Dark neutral canvas (Trivia-Crack style): makes the white question card
-  /// and answer pills pop, with a whisper of the category color blended in.
-  /// Boss questions get a darker, red-tinted canvas for dramatic tension.
   Color _getCategoryBackgroundColor() {
     final quizState = ref.read(adaptedQuizProvider);
-    if (quizState.currentQuestion?.difficulty == QuestionDifficulty.boss) {
-      return const Color(0xFF2B1D22);
-    }
+    if (quizState.currentQuestion?.difficulty == QuestionDifficulty.boss) return const Color(0xFF2B1D22);
     const canvas = Color(0xFF3E4348);
-    if (_resolvedCategory != null) {
-      return Color.alphaBlend(
-        _resolvedCategory!.primaryColor.withValues(alpha: 0.06),
-        canvas,
-      );
-    }
+    if (_resolvedCategory != null) return Color.alphaBlend(_resolvedCategory!.primaryColor.withValues(alpha: 0.06), canvas);
     return canvas;
   }
 
   String _getCategoryDisplayName() {
-    if (widget.displayTitle != null && widget.displayTitle!.trim().isNotEmpty) {
-      return widget.displayTitle!;
-    }
-    if (_resolvedCategory != null) {
-      return _resolvedCategory!.displayName;
-    }
+    if (widget.displayTitle != null && widget.displayTitle!.trim().isNotEmpty) return widget.displayTitle!;
+    if (_resolvedCategory != null) return _resolvedCategory!.displayName;
     return widget.category ?? 'Mixed';
   }
 
-  IconData _getCategoryIcon() {
-    if (_resolvedCategory != null) {
-      return _resolvedCategory!.icon;
-    }
-    return Icons.quiz;
-  }
+  IconData _getCategoryIcon() => _resolvedCategory?.icon ?? Icons.quiz;
 
   Future<void> _showEnhancedFeedbackDialog({
     required bool isCorrect,
@@ -203,265 +149,94 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     required bool isTimeout,
     required VoidCallback onNext,
   }) async {
-    await showGeneralDialog(
+    final dialogColor = isTimeout ? Colors.orange.shade700 : (isCorrect ? Colors.green.shade700 : Colors.red.shade700);
+    await HolographicDialog.show(
       context: context,
-      barrierDismissible: false,
-      barrierLabel: 'Feedback',
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        final dialogColor = isTimeout
-            ? Colors.orange.shade700
-            : (isCorrect ? Colors.green.shade700 : Colors.red.shade700);
-
-        return Align(
-          alignment: Alignment.center,
-          child: Material(
-            color: Colors.transparent,
-            child: ScaleTransition(
-              scale: animation,
-              child: Container(
-                margin: const EdgeInsets.all(24),
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: dialogColor,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Column(
+      glowColor: dialogColor,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 500),
+              builder: (context, double value, child) {
+                return Transform.scale(
+                  scale: value,
+                  child: Container(
+                    width: 80, height: 80,
+                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
+                    child: Icon(isTimeout ? Icons.access_time : (isCorrect ? Icons.check_circle : Icons.cancel), color: Colors.white, size: 48),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            GlowText(isTimeout ? "Time's Up!" : (isCorrect ? "Correct!" : "Incorrect!"), style: const TextStyle(fontSize: 28)),
+            const SizedBox(height: 8),
+            if (!isCorrect || isTimeout) ...[
+              const Text("Correct answer:", style: TextStyle(color: Colors.white70, fontSize: 14)),
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+                child: Text(correctAnswer, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
+              ),
+              const SizedBox(height: 16),
+            ],
+            if (isCorrect && !isTimeout && xpGained > 0) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Result icon with animation
-                    TweenAnimationBuilder(
-                      tween: Tween<double>(begin: 0.0, end: 1.0),
-                      duration: const Duration(milliseconds: 500),
-                      builder: (context, double value, child) {
-                        return Transform.scale(
-                          scale: value,
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              isTimeout
-                                  ? Icons.access_time
-                                  : (isCorrect
-                                      ? Icons.check_circle
-                                      : Icons.cancel),
-                              color: Colors.white,
-                              size: 48,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    Text(
-                      isTimeout
-                          ? "Time's Up!"
-                          : (isCorrect ? "Correct!" : "Incorrect!"),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    // Show correct answer if wrong or timeout
-                    if (!isCorrect || isTimeout) ...[
-                      Text(
-                        "Correct answer:",
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          correctAnswer,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    // XP and bonuses (only for correct answers)
-                    if (isCorrect && !isTimeout && xpGained > 0) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star,
-                                color: Colors.white, size: 16),
-                            const SizedBox(width: 6),
-                            Text(
-                              "XP Gained: ",
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
-                                fontSize: 12,
-                              ),
-                            ),
-                            Text(
-                              "+$xpGained",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (hasTimeBonus) ...[
-                        const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.speed,
-                                  color: Colors.white, size: 16),
-                              const SizedBox(width: 6),
-                              Text(
-                                "Time Bonus: 50% Extra!",
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.9),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 16),
-                    ],
-
-                    // Question explanation (if available)
-                    if (question.powerUpHint != null &&
-                        question.powerUpHint!.isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.lightbulb_outline,
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(
-                                  "Explanation:",
-                                  style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.8),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              question.powerUpHint!,
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.9),
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: dialogColor,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                        onNext();
-                      },
-                      child: Text(
-                        ref.read(adaptedQuizProvider).isLastQuestion
-                            ? "View Results"
-                            : "Continue",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                    const SizedBox(width: 6),
+                    Text("XP Gained: ", style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 12)),
+                    Text("+$xpGained", style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
+              if (hasTimeBonus) ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.speed, color: Colors.cyanAccent, size: 16),
+                      SizedBox(width: 6),
+                      Text("Time Bonus: 50% Extra!", style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 16),
+            ],
+            NeonButton(
+              color: dialogColor,
+              onPressed: () { Navigator.pop(context); onNext(); },
+              child: Text(ref.read(adaptedQuizProvider).isLastQuestion ? "VIEW RESULTS" : "CONTINUE"),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
   void _handleAnswer(String answer) async {
     final notifier = ref.read(adaptedQuizProvider.notifier);
     final state = ref.read(adaptedQuizProvider);
-
     final currentQuestion = state.currentQuestion;
     if (currentQuestion == null) return;
-
-    final isTimeout = answer.isEmpty; // Empty string indicates timeout
+    final isTimeout = answer.isEmpty;
     final previousXP = state.totalXP;
-
     final evaluation = await notifier.answerQuestion(answer);
     final isCorrect = evaluation.isCorrect;
-
     if (!mounted) return;
-
     if (isCorrect) {
       FeedbackService.instance.haptic(NativeHapticPattern.success, context);
       soundManager.playUISound('success', context);
@@ -469,123 +244,60 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
       FeedbackService.instance.haptic(NativeHapticPattern.error, context);
       soundManager.playUISound('error', context);
     }
-
-    // Fire behaviour event (fire-and-forget)
     ref.read(currentPlayerIdProvider).whenData((playerId) {
       if (playerId != null && playerId.isNotEmpty) {
         ref.read(personalizationServiceProvider).fireQuestionAnswered(
-              playerId: playerId,
-              category: currentQuestion.category,
-              difficulty: currentQuestion.difficulty.toString(),
-              mode: state.classLevel,
-              correct: isCorrect,
-              timeMs: state.timeRemaining > 0
-                  ? ((state.questionTimeLimit - state.timeRemaining) * 1000)
-                      .toInt()
-                  : 0,
+              playerId: playerId, category: currentQuestion.category, difficulty: currentQuestion.difficulty.toString(),
+              mode: state.classLevel, correct: isCorrect,
+              timeMs: state.timeRemaining > 0 ? ((state.questionTimeLimit - state.timeRemaining) * 1000).toInt() : 0,
               questionId: currentQuestion.id,
             );
       }
     });
-
-    // Get updated state to calculate XP gained
     final updatedState = ref.read(adaptedQuizProvider);
     final xpGained = updatedState.totalXP - previousXP;
-
     if (isCorrect) {
       setState(() => _showSuccessParticles = true);
-      // Reset trigger after a delay
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (mounted) setState(() => _showSuccessParticles = false);
-      });
+      Future.delayed(const Duration(milliseconds: 100), () { if (mounted) setState(() => _showSuccessParticles = false); });
     }
-
-    // Use the limit the countdown actually started at (class-based, or the
-    // difficulty-based limit in timed-challenge/boss play).
     final timeLimit = state.questionTimeLimit;
     final hasTimeBonus = !isTimeout && state.timeRemaining > (timeLimit * 0.7);
-
     await _showEnhancedFeedbackDialog(
-      isCorrect: isCorrect,
-      question: currentQuestion,
-      correctAnswer: evaluation.correctAnswer ?? currentQuestion.correctAnswer,
-      xpGained: xpGained,
-      hasTimeBonus: hasTimeBonus,
-      isTimeout: isTimeout,
+      isCorrect: isCorrect, question: currentQuestion, correctAnswer: evaluation.correctAnswer ?? currentQuestion.correctAnswer,
+      xpGained: xpGained, hasTimeBonus: hasTimeBonus, isTimeout: isTimeout,
       onNext: () async {
         final currentState = ref.read(adaptedQuizProvider);
-
         if (currentState.isLastQuestion) {
-          final reconciledState = await ref
-              .read(adaptedQuizProvider.notifier)
-              .reconcileAuthoritativeResults();
-
-          // The backend may have awarded tier XP for this session during
-          // reconciliation — refetch tier progress so the UI reflects it.
-          if (reconciledState.serverXpAward != null) {
-            ref.invalidate(playerTierProgressProvider);
-          }
-
-          // STOP THE STOPWATCH HERE BEFORE NAVIGATION
+          final reconciledState = await ref.read(adaptedQuizProvider.notifier).reconcileAuthoritativeResults();
+          if (reconciledState.serverXpAward != null) ref.invalidate(playerTierProgressProvider);
           ref.read(adaptedQuizProvider.notifier).completeQuiz();
-
-          // Get the final state with duration
           final finalState = ref.read(adaptedQuizProvider);
-
-          // Fire match_completed behaviour event (fire-and-forget)
           ref.read(currentPlayerIdProvider).whenData((playerId) {
             if (playerId != null && playerId.isNotEmpty) {
               ref.read(personalizationServiceProvider).fireMatchCompleted(
-                playerId: playerId,
-                mode: finalState.classLevel,
-                category: _getCategoryDisplayName(),
-                metadata: {
-                  'score': reconciledState.score,
-                  'totalQuestions': finalState.totalQuestions,
-                },
+                playerId: playerId, mode: finalState.classLevel, category: _getCategoryDisplayName(),
+                metadata: { 'score': reconciledState.score, 'totalQuestions': finalState.totalQuestions },
               );
             }
           });
-
-          // Create quiz results with all required fields and safe typing
           final quizResults = QuizResults(
-            score: reconciledState.score,
-            totalQuestions: finalState.totalQuestions,
-            totalXP: finalState.totalXP,
-            coins: finalState.coins ?? 0,
-            diamonds: finalState.diamonds ?? 0,
-            stars: finalState.stars ?? 0,
-            classLevel: finalState.classLevel,
-            category:
-                _getCategoryDisplayName(), // Use resolved category display name
-            categoryScores: Map<String, int>.from(
-              reconciledState.categoryScores ?? {},
-            ),
-            achievements: List<String>.from(finalState.achievements ?? []),
-            quizDuration: finalState.quizDuration,
-            answerSubmissions: reconciledState.answerSubmissions
-                .map((submission) => <String, dynamic>{
-                      'questionId': submission.question.id,
-                      'selectedOptionId': submission.question
-                          .optionIdForAnswer(submission.selectedAnswer),
-                      if (submission.answerTimeMs != null)
-                        'answerTimeMs': submission.answerTimeMs,
-                    })
-                .toList(growable: false),
+            score: reconciledState.score, totalQuestions: finalState.totalQuestions, totalXP: finalState.totalXP,
+            coins: finalState.coins ?? 0, diamonds: finalState.diamonds ?? 0, stars: finalState.stars ?? 0,
+            classLevel: finalState.classLevel, category: _getCategoryDisplayName(),
+            categoryScores: Map<String, int>.from(reconciledState.categoryScores ?? {}),
+            achievements: List<String>.from(finalState.achievements ?? []), quizDuration: finalState.quizDuration,
+            answerSubmissions: reconciledState.answerSubmissions.map((submission) => <String, dynamic>{
+              'questionId': submission.question.id,
+              'selectedOptionId': submission.question.optionIdForAnswer(submission.selectedAnswer),
+              if (submission.answerTimeMs != null) 'answerTimeMs': submission.answerTimeMs,
+            }).toList(growable: false),
           );
-
-          // Store results in provider
           ref.read(quizResultsProvider.notifier).state = quizResults;
-
-          // Navigate to score summary (processing will happen there)
           if (!mounted) return;
           context.go('/score-summary');
         } else {
           ref.read(adaptedQuizProvider.notifier).nextQuestion();
-          _pageController.nextPage(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
+          _pageController.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
         }
       },
     );
@@ -595,381 +307,123 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   Widget build(BuildContext context) {
     final quizState = ref.watch(adaptedQuizProvider);
     final themeExtension = Theme.of(context).extension<SynaptixTheme>();
-
     if (quizState.isLoading) {
-      return Scaffold(
-        backgroundColor: _getCategoryBackgroundColor(),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircularProgressIndicator(color: Colors.white),
-              const SizedBox(height: 16),
-              Text(
-                'Loading ${_getCategoryDisplayName()} questions for Class ${quizState.classLevel}...',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white.withValues(alpha: 0.85),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
+      return SynaptixScaffold(body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const NeuralBloomIndicator(), const SizedBox(height: 16),
+        Text('Loading ${_getCategoryDisplayName()} questions...', style: const TextStyle(fontSize: 16, color: Colors.white70), textAlign: TextAlign.center),
+      ])));
     }
-
     if (quizState.error != null) {
-      return Scaffold(
-        backgroundColor: _getCategoryBackgroundColor(),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.error, size: 64, color: Colors.red.shade300),
-              const SizedBox(height: 16),
-              Text(
-                'Error loading questions',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red.shade300,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  quizState.error!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
-                ),
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: () {
-                  final notifier = ref.read(adaptedQuizProvider.notifier);
-                  final initialQuestions = widget.initialQuestions;
-                  if (initialQuestions != null && initialQuestions.isNotEmpty) {
-                    notifier.startQuizWithQuestions(
-                      questions: initialQuestions,
-                      classLevel: widget.classLevel ?? '1',
-                      category: _resolvedCategory,
-                      timedChallenge: widget.timedChallenge,
-                    );
-                  } else {
-                    notifier.startQuizWithCategory(
-                      classLevel: widget.classLevel ?? '1',
-                      category: _resolvedCategory,
-                      questionCount: widget.questionCount ?? 10,
-                      timedChallenge: widget.timedChallenge,
-                    );
-                  }
-                },
-                icon: const Icon(Icons.refresh),
-                label: const Text('Try Again'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _getCategoryColor(),
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      return SynaptixScaffold(body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Icon(Icons.error, size: 64, color: Colors.redAccent), const SizedBox(height: 16),
+        const GlowText('Error loading questions', style: TextStyle(fontSize: 18, color: Colors.redAccent)),
+        const SizedBox(height: 8),
+        Padding(padding: const EdgeInsets.symmetric(horizontal: 32), child: Text(quizState.error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white60))),
+        const SizedBox(height: 24),
+        NeonButton(onPressed: () {
+          final notifier = ref.read(adaptedQuizProvider.notifier);
+          final initialQuestions = widget.initialQuestions;
+          if (initialQuestions != null && initialQuestions.isNotEmpty) {
+            notifier.startQuizWithQuestions(questions: initialQuestions, classLevel: widget.classLevel ?? '1', category: _resolvedCategory, timedChallenge: widget.timedChallenge);
+          } else {
+            notifier.startQuizWithCategory(classLevel: widget.classLevel ?? '1', category: _resolvedCategory, questionCount: widget.questionCount ?? 10, timedChallenge: widget.timedChallenge);
+          }
+        }, child: const Text('TRY AGAIN')),
+      ])));
     }
-
     if (quizState.questions.isEmpty || quizState.currentQuestion == null) {
-      return Scaffold(
-        backgroundColor: _getCategoryBackgroundColor(),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(_getCategoryIcon(),
-                  size: 64, color: Colors.white.withValues(alpha: 0.4)),
-              const SizedBox(height: 16),
-              Text(
-                'No questions available',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white.withValues(alpha: 0.85),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'for ${_getCategoryDisplayName()} - Class ${quizState.classLevel}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withValues(alpha: 0.6),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      return SynaptixScaffold(body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(_getCategoryIcon(), size: 64, color: Colors.white24), const SizedBox(height: 16),
+        const GlowText('No questions available', style: TextStyle(fontSize: 18)),
+        const SizedBox(height: 8),
+        Text('for ${_getCategoryDisplayName()}', style: const TextStyle(fontSize: 14, color: Colors.white60)),
+      ])));
     }
-
     final currentQuestion = quizState.currentQuestion!;
-
-    return Scaffold(
-      backgroundColor: _getCategoryBackgroundColor(),
-      appBar: CategoryHeaderBar(
+    return SynaptixScaffold(
+      appBar: GlassAppBar(
         color: _getCategoryColor(),
-        icon: _getCategoryIcon(),
-        title: _getCategoryDisplayName(),
-        subtitle: 'Class ${quizState.classLevel}',
-        timeRemaining: quizState.timeRemaining,
-        timerExpired: quizState.isTimerExpired,
-        isPaused: quizState.isPaused,
-        score: quizState.score,
-        xp: quizState.totalXP,
+        leading: IconButton(icon: const Icon(Icons.close_rounded, color: Colors.white), onPressed: () => Navigator.of(context).pop()),
+        title: GlowText(_getCategoryDisplayName()),
+        actions: [
+          Padding(padding: const EdgeInsets.only(right: 12), child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.white.withValues(alpha: 0.2))),
+            child: Row(children: [ const Icon(Icons.star, color: Colors.amber, size: 16), const SizedBox(width: 4), Text('${quizState.totalXP}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold))]),
+          )),
+        ],
       ),
       body: Column(
         children: [
-          // Segmented per-question progress strip
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-            child: SegmentedProgressStrip(
-              total: quizState.totalQuestions,
-              currentIndex: quizState.currentIndex,
-              activeColor: _getCategoryColor(),
-            ),
-          ),
-
-          // Main content
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: quizState.questions.length,
-              itemBuilder: (context, index) {
-                if (index != quizState.currentIndex) return const SizedBox();
-
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (currentQuestion.difficulty ==
-                          QuestionDifficulty.boss) ...[
-                        const _BossBanner(),
-                        const SizedBox(height: 12),
-                      ],
-                      // Enhanced question metadata with category integration
-                      QuestionMetadata(
-                        question: currentQuestion,
-                        showDifficultyBadge: true,
-                        showTags: true,
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Audio player (if question has audio)
-                      if (currentQuestion.hasAudio)
-                        _buildAudioPlayer(quizState, currentQuestion),
-
-                      const SizedBox(height: 8),
-
-                      // Dynamic question widget based on type (using new type-safe renderer)
-                      ParticleEmitter(
-                        trigger: _showSuccessParticles,
-                        color: themeExtension?.accentGlow ?? Colors.amber,
-                        child: QuestionRenderer(
-                          question: currentQuestion,
-                          onAnswerSelected: _handleAnswer,
-                          showFeedback: quizState.showFeedback,
-                          selectedAnswer: quizState.selectedAnswer,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+          const SizedBox(height: kToolbarHeight + 20),
+          Padding(padding: const EdgeInsets.fromLTRB(16, 12, 16, 4), child: NeuralProgressBar(total: quizState.totalQuestions, current: quizState.currentIndex, color: _getCategoryColor())),
+          Expanded(child: PageView.builder(
+            controller: _pageController, physics: const NeverScrollableScrollPhysics(), itemCount: quizState.questions.length,
+            itemBuilder: (context, index) {
+              if (index != quizState.currentIndex) return const SizedBox();
+              return SingleChildScrollView(padding: const EdgeInsets.all(16.0), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                if (currentQuestion.difficulty == QuestionDifficulty.boss) ...[ const _BossBanner(), const SizedBox(height: 12) ],
+                QuestionMetadata(question: currentQuestion, showDifficultyBadge: true, showTags: true),
+                const SizedBox(height: 16),
+                if (currentQuestion.hasAudio) _buildAudioPlayer(quizState, currentQuestion),
+                const SizedBox(height: 8),
+                ParticleEmitter(trigger: _showSuccessParticles, color: themeExtension?.accentGlow ?? Colors.amber, child: QuestionRenderer(question: currentQuestion, onAnswerSelected: _handleAnswer, showFeedback: quizState.showFeedback, selectedAnswer: quizState.selectedAnswer)),
+              ]));
+            },
+          )),
         ],
       ),
-
-      // Fixed bottom power-up tray (Trivia-Crack style)
-      bottomNavigationBar: PowerupTray(
-        powerUps: QuizHelpers.getAvailablePowerUps(
-            currentQuestion, quizState.classLevel),
-        enabled: !(quizState.showFeedback ||
-            quizState.hasUsedPowerUp ||
-            quizState.isTimerExpired),
-        onActivate: _activatePowerUp,
-      ),
+      bottomNavigationBar: PowerupTray(powerUps: QuizHelpers.getAvailablePowerUps(currentQuestion, quizState.classLevel), enabled: !(quizState.showFeedback || quizState.hasUsedPowerUp || quizState.isTimerExpired), onActivate: _activatePowerUp),
     );
   }
 
   Widget _buildAudioPlayer(quizState, QuestionModel question) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _getCategoryColor().withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _getCategoryColor().withValues(alpha: 0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.headphones, color: _getCategoryColor()),
-              const SizedBox(width: 8),
-              const Text(
-                'Audio Question',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  if (quizState.isAudioPlaying) {
-                    ref.read(adaptedQuizProvider.notifier).pauseAudio();
-                  } else {
-                    ref.read(adaptedQuizProvider.notifier).playAudio();
-                  }
-                },
-                icon: Icon(
-                  quizState.isAudioPlaying
-                      ? Icons.pause_circle
-                      : Icons.play_circle,
-                  size: 48,
-                  color: _getCategoryColor(),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LinearProgressIndicator(
-                      value: quizState.audioDuration != null
-                          ? quizState.audioPosition.inMilliseconds /
-                              quizState.audioDuration!.inMilliseconds
-                          : 0.0,
-                      backgroundColor:
-                          _getCategoryColor().withValues(alpha: 0.2),
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(_getCategoryColor()),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Tap play to hear the audio question',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          if (question.audioTranscript != null) ...[
-            const SizedBox(height: 12),
-            ExpansionTile(
-              title: const Text('View Transcript'),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(question.audioTranscript!),
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
+      margin: const EdgeInsets.only(bottom: 16), padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: _getCategoryColor().withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12), border: Border.all(color: _getCategoryColor().withValues(alpha: 0.3))),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [ Icon(Icons.headphones, color: _getCategoryColor()), const SizedBox(width: 8), const Text('Audio Question', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16))]),
+        const SizedBox(height: 12),
+        Row(children: [
+          IconButton(onPressed: () { if (quizState.isAudioPlaying) ref.read(adaptedQuizProvider.notifier).pauseAudio(); else ref.read(adaptedQuizProvider.notifier).playAudio(); }, icon: Icon(quizState.isAudioPlaying ? Icons.pause_circle : Icons.play_circle, size: 48, color: _getCategoryColor())),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            LinearProgressIndicator(value: quizState.audioDuration != null ? quizState.audioPosition.inMilliseconds / quizState.audioDuration!.inMilliseconds : 0.0, backgroundColor: _getCategoryColor().withValues(alpha: 0.2), valueColor: AlwaysStoppedAnimation<Color>(_getCategoryColor())),
+            const SizedBox(height: 4), const Text('Tap play to hear the audio question', style: TextStyle(fontSize: 12, color: Colors.white60))
+          ])),
+        ]),
+        if (question.audioTranscript != null) ...[ const SizedBox(height: 12), ExpansionTile(title: const Text('View Transcript', style: TextStyle(color: Colors.white70)), children: [ Padding(padding: const EdgeInsets.all(8.0), child: Text(question.audioTranscript!, style: const TextStyle(color: Colors.white60))) ]) ],
+      ]),
     );
   }
 
-  /// Maps a local quiz powerup type to the backend inventory type, or null when
-  /// the powerup has no server-tracked equivalent (e.g. hint, shield).
   PowerupType? _mapToBackendPowerup(String type) {
-    switch (type) {
-      case 'eliminate':
-        return PowerupType.fiftyFifty;
-      case 'time_boost':
-        return PowerupType.extraTime;
-      default:
-        return null;
-    }
+    switch (type) { case 'eliminate': return PowerupType.fiftyFifty; case 'time_boost': return PowerupType.extraTime; default: return null; }
   }
 
-  /// Consumes the powerup from the player's server inventory (when it has a
-  /// backend equivalent) before applying the local effect. Server denials
-  /// (out of stock / cooldown) block activation; offline/unmapped powerups fall
-  /// through to the existing local-only behaviour so solo play never breaks.
   Future<void> _activatePowerUp(String type) async {
     final backendType = _mapToBackendPowerup(type);
     final playerId = ref.read(currentPlayerIdProvider).valueOrNull;
-
     if (backendType != null && playerId != null && playerId.isNotEmpty) {
-      final result = await ref
-          .read(powerupInventoryProvider(playerId).notifier)
-          .use(eventId: _powerupEventId, type: backendType);
-
-      // result == null → request failed; don't punish the player, apply locally.
-      if (result != null &&
-          result.status != 'Used' &&
-          result.status != 'Duplicate') {
+      final result = await ref.read(powerupInventoryProvider(playerId).notifier).use(eventId: _powerupEventId, type: backendType);
+      if (result != null && result.status != 'Used' && result.status != 'Duplicate') {
         if (!mounted) return;
-        final msg = switch (result.status) {
-          'Insufficient' => 'Out of that powerup.',
-          'Cooldown' => 'That powerup is on cooldown.',
-          _ => 'Powerup unavailable.',
-        };
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(msg)));
+        final msg = switch (result.status) { 'Insufficient' => 'Out of that powerup.', 'Cooldown' => 'That powerup is on cooldown.', _ => 'Powerup unavailable.' };
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating));
         return;
       }
     }
-
     ref.read(adaptedQuizProvider.notifier).applyPowerUp(type);
   }
 }
 
-/// Dramatic banner shown above boss questions: higher stakes, shorter timer.
 class _BossBanner extends StatelessWidget {
   const _BossBanner();
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF7F1D1D), Color(0xFFB91C1C)],
-        ),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFF87171)),
-      ),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.whatshot_rounded, color: Color(0xFFFDE68A), size: 20),
-          SizedBox(width: 8),
-          Text(
-            'BOSS QUESTION — 5× XP',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.2,
-            ),
-          ),
-          SizedBox(width: 8),
-          Icon(Icons.whatshot_rounded, color: Color(0xFFFDE68A), size: 20),
-        ],
-      ),
+      width: double.infinity, padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF7F1D1D), Color(0xFFB91C1C)]), borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFF87171))),
+      child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [ Icon(Icons.whatshot_rounded, color: Color(0xFFFDE68A), size: 20), SizedBox(width: 8), Text('BOSS QUESTION — 5× XP', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, letterSpacing: 1.2)), SizedBox(width: 8), Icon(Icons.whatshot_rounded, color: Color(0xFFFDE68A), size: 20)]),
     );
   }
 }

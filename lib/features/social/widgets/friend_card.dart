@@ -1,14 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import '../../../core/services/social/friends_models.dart';
 
 /// Card widget displaying a friend's information
-///
-/// Shows:
-/// - Avatar
-/// - Username
-/// - Online status indicator
-/// - Level/rank (if available)
-/// - Action menu (challenge, message, remove)
 class FriendCard extends StatelessWidget {
   final Friend friend;
   final VoidCallback? onChallenge;
@@ -23,24 +16,23 @@ class FriendCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+    return AdaptiveGlassCard(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: EdgeInsets.zero,
       child: ListTile(
         leading: Stack(
           children: [
             // Avatar
             CircleAvatar(
               radius: 24,
-              backgroundColor: theme.colorScheme.primaryContainer,
+              backgroundColor: Colors.white.withValues(alpha: 0.1),
               backgroundImage: friend.avatarUrl != null
                   ? NetworkImage(friend.avatarUrl!)
                   : null,
               child: friend.avatarUrl == null
-                  ? Icon(
+                  ? const Icon(
                       Icons.person_rounded,
-                      color: theme.colorScheme.primary,
+                      color: Colors.white70,
                     )
                   : null,
             ),
@@ -60,7 +52,10 @@ class FriendCard extends StatelessWidget {
             ),
           ],
         ),
-        title: Text(friend.username),
+        title: Text(
+          friend.username,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         subtitle: Row(
           children: [
             Icon(
@@ -69,14 +64,21 @@ class FriendCard extends StatelessWidget {
               color: friend.isOnline ? Colors.green : Colors.grey,
             ),
             const SizedBox(width: 4),
-            Text(friend.isOnline ? 'Online' : 'Offline'),
+            Text(
+              friend.isOnline ? 'Online' : 'Offline',
+              style: const TextStyle(color: Colors.white70),
+            ),
             if (friend.level != null) ...[
               const SizedBox(width: 8),
-              Text('Lvl ${friend.level}'),
+              Text(
+                'Lvl ${friend.level}',
+                style: const TextStyle(color: Colors.white70),
+              ),
             ],
           ],
         ),
         trailing: PopupMenuButton<String>(
+          iconColor: Colors.white70,
           onSelected: (value) {
             switch (value) {
               case 'challenge':

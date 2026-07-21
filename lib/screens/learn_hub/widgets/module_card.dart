@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 
+import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import '../../../core/dto/learning_dto.dart';
 
 class ModuleCard extends StatelessWidget {
@@ -13,67 +14,58 @@ class ModuleCard extends StatelessWidget {
     final theme = Theme.of(context);
     final color = module.difficultyColour;
 
-    return Card(
+    return AdaptiveGlassCard(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: color.withValues(alpha: 0.6), width: 1.5),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      glowColor: color,
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      module.title,
-                      style: theme.textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  if (module.isCompleted)
-                    Icon(Icons.check_circle, color: Colors.green, size: 20),
-                ],
+              Expanded(
+                child: Text(
+                  module.title,
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                module.description,
-                style: theme.textTheme.bodySmall,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              if (module.isCompleted)
+                const Icon(Icons.check_circle, color: Colors.green, size: 20),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            module.description,
+            style: theme.textTheme.bodySmall?.copyWith(color: Colors.white70),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              _DifficultyBadge(
+                label: module.difficultyText,
+                color: color,
               ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  _DifficultyBadge(
-                    label: module.difficultyText,
-                    color: color,
-                  ),
-                  const SizedBox(width: 8),
-                  _InfoChip(
-                    icon: Icons.menu_book_outlined,
-                    label: '${module.lessonCount} lessons',
-                  ),
-                  const Spacer(),
-                  _InfoChip(
-                    icon: Icons.star_outline,
-                    label: '+${module.rewardXp} XP',
-                  ),
-                  const SizedBox(width: 6),
-                  _InfoChip(
-                    icon: Icons.monetization_on_outlined,
-                    label: '+${module.rewardCoins}',
-                  ),
-                ],
+              const SizedBox(width: 8),
+              _InfoChip(
+                icon: Icons.menu_book_outlined,
+                label: '${module.lessonCount} lessons',
+              ),
+              const Spacer(),
+              _InfoChip(
+                icon: Icons.star_outline,
+                label: '+${module.rewardXp} XP',
+              ),
+              const SizedBox(width: 6),
+              _InfoChip(
+                icon: Icons.monetization_on_outlined,
+                label: '+${module.rewardCoins}',
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -117,11 +109,11 @@ class _InfoChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: Colors.grey.shade600),
+        Icon(icon, size: 14, color: Colors.white70),
         const SizedBox(width: 3),
         Text(
           label,
-          style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+          style: const TextStyle(fontSize: 12, color: Colors.white60),
         ),
       ],
     );

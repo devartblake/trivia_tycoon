@@ -6,6 +6,7 @@ import '../../game/providers/xp_provider.dart';
 import '../../game/providers/riverpod_providers.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/animations/animation_manager.dart';
+import '../../core/design_system/neon_button.dart';
 
 class MissionPanel extends ConsumerStatefulWidget {
   final int playerXP;
@@ -527,25 +528,21 @@ class _MissionPanelState extends ConsumerState<MissionPanel>
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       width: double.infinity,
-      child: ElevatedButton.icon(
+      child: NeonButton(
         onPressed: _navigateToMissionScreen,
-        icon: const Icon(Icons.assignment, size: 20),
-        label: const Text(
-          'View All Missions',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6C5CE7),
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 8,
-          shadowColor: const Color(0xFF6C5CE7).withValues(alpha: 0.3),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.assignment, size: 20, color: Colors.white),
+            SizedBox(width: 8),
+            Text(
+              'View All Missions',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );

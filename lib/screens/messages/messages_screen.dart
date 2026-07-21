@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/navigation/navigation_extensions.dart';
 import '../../core/helpers/responsive_layout.dart';
+import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
+import 'package:synaptix/core/design_system/glass_app_bar.dart';
+import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
+import 'package:synaptix/core/design_system/glow_text.dart';
+import 'package:synaptix/core/design_system/neon_button.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../../game/models/conversation_models.dart';
 import '../../game/providers/message_providers.dart';
@@ -87,25 +92,40 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             ? _previewConversation
             : null;
 
-        return Scaffold(
-          backgroundColor: const Color(0xFF2F3136),
-          appBar: _buildAppBar(),
-          body: layout.isDesktop
-              ? _buildDesktopMessagesLayout(
-                  filteredConversations,
-                  unreadCount,
-                  previewConversation,
-                )
-              : AppResponsiveWidth(
-                  tabletMaxWidth: 760,
-                  desktopMaxWidth: 860,
-                  padding: EdgeInsets.zero,
-                  child: _buildMessagesColumn(
+        return SynaptixScaffold(
+          appBar: GlassAppBar(
+            leading: IconButton(
+              onPressed: () => context.safeBack(),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+            title: const GlowText('Messages'),
+          ),
+          body: SafeArea(
+            child: layout.isDesktop
+                ? _buildDesktopMessagesLayout(
                     filteredConversations,
                     unreadCount,
+                    previewConversation,
+                  )
+                : AppResponsiveWidth(
+                    tabletMaxWidth: 760,
+                    desktopMaxWidth: 860,
+                    padding: EdgeInsets.zero,
+                    child: _buildMessagesColumn(
+                      filteredConversations,
+                      unreadCount,
+                    ),
                   ),
-                ),
-          floatingActionButton: _buildCreateDMButton(),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _showCreateDMDialog(),
+            backgroundColor: const Color(0xFF5865F2),
+            child: const Icon(Icons.add_comment_rounded, color: Colors.white),
+          ),
         );
       },
     );
@@ -204,7 +224,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   Widget _buildSearchAndAdd(int unreadCount) {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: const Color(0xFF202225),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final stack = constraints.maxWidth < 360;
@@ -221,32 +240,23 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             ],
           );
 
-          final addFriend = GestureDetector(
-            onTap: () => _showAddFriendDialog(),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFF40444B),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.person_add, color: Colors.white70, size: 20),
-                  SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      'Add Friends',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+          final addFriend = NeonButton(
+            onPressed: () => _showAddFriendDialog(),
+            height: 48,
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.person_add, color: Colors.white, size: 20),
+                SizedBox(width: 12),
+                Text(
+                  'Add Friends',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
 
@@ -275,43 +285,41 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   Widget _buildIconButton(IconData icon, VoidCallback onPressed,
       {int badgeCount = 0}) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF40444B),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          IconButton(
-            icon: Icon(icon, color: Colors.white70, size: 20),
-            onPressed: onPressed,
-            constraints: const BoxConstraints(),
-            padding: EdgeInsets.zero,
-          ),
-          if (badgeCount > 0)
-            Positioned(
-              right: -5,
-              top: -5,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                child: Text(
-                  badgeCount.toString(),
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+    return AdaptiveGlassCard(
+      padding: EdgeInsets.zero,
+      borderRadius: 12,
+      onTap: onPressed,
+      child: Container(
+        width: 48,
+        height: 48,
+        alignment: Alignment.center,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Icon(icon, color: Colors.white, size: 20),
+            if (badgeCount > 0)
+              Positioned(
+                right: -5,
+                top: -5,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                  child: Text(
+                    badgeCount.toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -358,38 +366,32 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   Widget _buildMessageList(List<Conversation> conversations) {
     if (conversations.isEmpty) {
-      return Container(
-        color: const Color(0xFF36393F),
-        child: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.chat_bubble_outline,
-                  color: Color(0xFF72767D), size: 64),
-              SizedBox(height: 16),
-              Text(
-                'No conversations yet',
-                style: TextStyle(
-                  color: Color(0xFF72767D),
-                  fontSize: 16,
-                ),
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.chat_bubble_outline,
+                color: Color(0xFF72767D), size: 64),
+            SizedBox(height: 16),
+            Text(
+              'No conversations yet',
+              style: TextStyle(
+                color: Color(0xFF72767D),
+                fontSize: 16,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
 
-    return Container(
-      color: const Color(0xFF36393F),
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        itemCount: conversations.length,
-        itemBuilder: (context, index) {
-          final conversation = conversations[index];
-          return _buildConversationTile(conversation);
-        },
-      ),
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      itemCount: conversations.length,
+      itemBuilder: (context, index) {
+        final conversation = conversations[index];
+        return _buildConversationTile(conversation);
+      },
     );
   }
 
@@ -398,7 +400,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final String displayTitle = conversation.displayTitle;
     final String lastMessagePreview = conversation.lastMessagePreview;
 
-    return InkWell(
+    return AdaptiveGlassCard(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: EdgeInsets.zero,
       onTap: () {
         soundManager.playButtonClick();
         if (AppResponsive.layoutOf(context).isDesktop) {
@@ -430,7 +434,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -455,7 +459,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                   Text(
                     lastMessagePreview,
                     style: const TextStyle(
-                      color: Color(0xFFB9BBBE),
+                      color: Colors.white70,
                       fontSize: 14,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -473,7 +477,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                       ? _formatTimestamp(conversation.lastMessageTime!)
                       : 'New',
                   style: const TextStyle(
-                    color: Color(0xFF72767D),
+                    color: Colors.white60,
                     fontSize: 12,
                   ),
                 ),
@@ -495,12 +499,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                     ),
                   ),
               ],
-            ),
-            const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.volume_up,
-                  color: Color(0xFF72767D), size: 20),
-              onPressed: () {},
             ),
           ],
         ),
@@ -756,103 +754,97 @@ class OnlineGroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      height: 120,
+    return AdaptiveGlassCard(
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF40444B),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFF3BA55C).withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  group.name,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF3BA55C),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${group.onlineCount}/${group.memberCount}',
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Flexible(
-            child: Text(
-              group.activity,
-              style: const TextStyle(color: Color(0xFFB9BBBE), fontSize: 12),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            ),
-          ),
-          const Spacer(),
-          SizedBox(
-            height: 24,
-            child: Stack(
+      borderRadius: 12,
+      child: SizedBox(
+        width: 180,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               children: [
-                ...group.avatars.take(4).toList().asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final avatar = entry.value;
-                  return Positioned(
-                    left: index * 16.0,
-                    child: CircleAvatar(
-                      radius: 12,
-                      backgroundColor: const Color(0xFF40444B),
+                Expanded(
+                  child: Text(
+                    group.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3BA55C),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    '${group.onlineCount}/${group.memberCount}',
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Flexible(
+              child: Text(
+                group.activity,
+                style: const TextStyle(color: Colors.white70, fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+            const Spacer(),
+            SizedBox(
+              height: 24,
+              child: Stack(
+                children: [
+                  ...group.avatars.take(4).toList().asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final avatar = entry.value;
+                    return Positioned(
+                      left: index * 16.0,
                       child: CircleAvatar(
-                        radius: 10,
-                        backgroundImage: AssetImage(avatar),
+                        radius: 12,
+                        backgroundColor: const Color(0xFF40444B),
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundImage: AssetImage(avatar),
+                        ),
                       ),
-                    ),
-                  );
-                }),
-                if (group.avatars.length > 4)
-                  Positioned(
-                    left: 4 * 16.0,
-                    child: CircleAvatar(
-                      radius: 12,
-                      backgroundColor: const Color(0xFF40444B),
+                    );
+                  }),
+                  if (group.avatars.length > 4)
+                    Positioned(
+                      left: 4 * 16.0,
                       child: CircleAvatar(
-                        radius: 10,
-                        backgroundColor: const Color(0xFF72767D),
-                        child: Text(
-                          '+${group.avatars.length - 4}',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold),
+                        radius: 12,
+                        backgroundColor: const Color(0xFF40444B),
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor: const Color(0xFF72767D),
+                          child: Text(
+                            '+${group.avatars.length - 4}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

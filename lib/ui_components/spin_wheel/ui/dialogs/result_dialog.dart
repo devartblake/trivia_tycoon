@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:synaptix/core/design_system/holographic_dialog.dart';
 import 'package:synaptix/ui_components/spin_wheel/ui/widgets/animations/reward_glow_animation.dart';
 import '../../models/spin_system_models.dart';
 import '../widgets/coin/coin_balance_display.dart';
@@ -173,64 +174,24 @@ class _ResultDialogState extends State<ResultDialog>
   Widget build(BuildContext context) {
     if (!_isVisible) return const SizedBox.shrink();
 
-    return Material(
-      color: Colors.black.withValues(alpha: 0.6),
-      child: Center(
-        child: AnimatedBuilder(
-          animation: Listenable.merge([
-            _scaleAnimation,
-            _slideAnimation,
-            _celebrationAnimation,
-            _bounceAnimation,
-          ]),
-          builder: (context, child) {
-            return Transform.scale(
-              scale: _scaleAnimation.value,
-              child: SlideTransition(
-                position: _slideAnimation,
-                child: _buildDialogContent(),
-              ),
-            );
-          },
-        ),
-      ),
+    return HolographicDialog(
+      glowColor: _getRewardColor(),
+      width: 400,
+      child: _buildDialogContent(),
     );
   }
 
   Widget _buildDialogContent() {
     final theme = Theme.of(context);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 32),
-      constraints: const BoxConstraints(maxWidth: 400),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white,
-            Colors.grey.shade50,
-          ],
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 20,
-            spreadRadius: 5,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildHeader(theme),
-          _buildRewardContent(),
-          _buildCoinSection(),
-          _buildActionButtons(theme),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildHeader(theme),
+        _buildRewardContent(),
+        _buildCoinSection(),
+        _buildActionButtons(theme),
+      ],
     );
   }
 
