@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
 import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
-import 'package:synaptix/core/design_system/neon_button.dart';
 import 'package:synaptix/core/design_system/glow_text.dart';
 import 'package:synaptix/core/design_system/glass_app_bar.dart';
 import '../../../core/helpers/responsive_layout.dart';
@@ -40,7 +39,8 @@ class ArcadeHubScreen extends ConsumerWidget {
         appBar: GlassAppBar(
           title: const GlowText('Labs'),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: Colors.white),
             onPressed: () => context.safeBack(),
           ),
           actions: const [
@@ -53,7 +53,8 @@ class ArcadeHubScreen extends ConsumerWidget {
         body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            const SliverToBoxAdapter(child: SizedBox(height: kToolbarHeight + 20)),
+            const SliverToBoxAdapter(
+                child: SizedBox(height: kToolbarHeight + 20)),
 
             // Stats/Achievement Banner
             SliverToBoxAdapter(
@@ -87,7 +88,8 @@ class ArcadeHubScreen extends ConsumerWidget {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.games_rounded, color: Colors.white, size: 24),
+                        Icon(Icons.games_rounded,
+                            color: Colors.white, size: 24),
                         SizedBox(width: 12),
                         GlowText(
                           'All Games',
@@ -679,8 +681,7 @@ class ArcadeHubScreen extends ConsumerWidget {
                   runSpacing: 6,
                   children: game.supportedDifficulties
                       .take(3)
-                      .map((difficulty) =>
-                          _buildDifficultyChip(difficulty))
+                      .map((difficulty) => _buildDifficultyChip(difficulty))
                       .toList(),
                 ),
               ],

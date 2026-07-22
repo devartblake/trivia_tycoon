@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:synaptix/core/design_system/synaptix_scaffold.dart';
 import 'package:synaptix/core/design_system/glass_app_bar.dart';
 import 'package:synaptix/core/design_system/glow_text.dart';
-import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import 'package:synaptix/core/design_system/neural_bloom_indicator.dart';
 import '../../core/dto/learning_dto.dart';
 import '../../game/providers/learning_providers.dart';
@@ -35,7 +34,8 @@ class _LearnHubScreenState extends ConsumerState<LearnHubScreen> {
     return SynaptixScaffold(
       appBar: GlassAppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           tooltip: 'Back',
           onPressed: _handleBackPressed,
         ),

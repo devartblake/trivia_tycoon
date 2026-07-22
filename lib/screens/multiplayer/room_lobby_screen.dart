@@ -6,7 +6,6 @@ import 'package:synaptix/core/design_system/glass_app_bar.dart';
 import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import 'package:synaptix/core/design_system/glow_text.dart';
 import 'package:synaptix/core/design_system/neon_button.dart';
-import 'package:synaptix/core/design_system/holographic_dialog.dart';
 import 'package:synaptix/screens/multiplayer/multiplayer_palette.dart';
 import 'package:synaptix/screens/multiplayer/widgets/player_chip.dart';
 import '../../game/multiplayer/providers/multiplayer_providers.dart';
@@ -47,7 +46,8 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
               context.go('/multiplayer');
             }
           },
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: Colors.white, size: 20),
         ),
         title: GlowText(state.roomName ?? state.roomId ?? 'Room Lobby'),
         actions: [
@@ -66,7 +66,8 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: kToolbarHeight + 20)),
+          const SliverToBoxAdapter(
+              child: SizedBox(height: kToolbarHeight + 20)),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),

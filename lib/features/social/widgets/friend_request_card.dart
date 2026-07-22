@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import '../../../core/services/social/friends_models.dart';
 

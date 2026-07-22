@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import '../../../core/services/social/friends_models.dart';
 
@@ -54,7 +55,8 @@ class FriendCard extends StatelessWidget {
         ),
         title: Text(
           friend.username,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Row(
           children: [
