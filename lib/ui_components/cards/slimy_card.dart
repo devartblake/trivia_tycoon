@@ -133,7 +133,7 @@ class _SlimyCardState extends State<SlimyCard>
               // Animated expansion
               SizeTransition(
                 sizeFactor: _animation,
-                axisAlignment: 1,
+                alignment: const Alignment(-1.0, 1.0),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -243,7 +243,7 @@ class _SlimyCardState extends State<SlimyCard>
                 const SizedBox(height: 8),
                 SizeTransition(
                   sizeFactor: _animation,
-                  axisAlignment: 1,
+                  alignment: const Alignment(-1.0, 1.0),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child: widget.bottomChild,

@@ -126,8 +126,9 @@ class CurrentTierCard extends StatelessWidget {
 
   IconData _getTierIcon() {
     if (progress.currentTier.name.contains('Platinum')) return Icons.diamond;
-    if (progress.currentTier.name.contains('Gold'))
+    if (progress.currentTier.name.contains('Gold')) {
       return Icons.monetization_on;
+    }
     if (progress.currentTier.name.contains('Silver')) return Icons.shield;
     return Icons.school;
   }

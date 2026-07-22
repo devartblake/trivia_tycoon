@@ -103,7 +103,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   QuizCategory? _resolveCategoryFromString(String? categoryString) {
     if (categoryString == null ||
         categoryString.isEmpty ||
-        categoryString.toLowerCase() == 'mixed') return null;
+        categoryString.toLowerCase() == 'mixed') {
+      return null;
+    }
     final resolvedCategory = QuizCategoryManager.fromString(categoryString);
     if (resolvedCategory != null) return resolvedCategory;
     switch (categoryString.toLowerCase()) {
@@ -145,8 +147,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
   }
 
   String _getCategoryDisplayName() {
-    if (widget.displayTitle != null && widget.displayTitle!.trim().isNotEmpty)
+    if (widget.displayTitle != null && widget.displayTitle!.trim().isNotEmpty) {
       return widget.displayTitle!;
+    }
     if (_resolvedCategory != null) return _resolvedCategory!.displayName;
     return widget.category ?? 'Mixed';
   }
@@ -341,8 +344,9 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
           final reconciledState = await ref
               .read(adaptedQuizProvider.notifier)
               .reconcileAuthoritativeResults();
-          if (reconciledState.serverXpAward != null)
+          if (reconciledState.serverXpAward != null) {
             ref.invalidate(playerTierProgressProvider);
+          }
           ref.read(adaptedQuizProvider.notifier).completeQuiz();
           final finalState = ref.read(adaptedQuizProvider);
           ref.read(currentPlayerIdProvider).whenData((playerId) {
@@ -573,10 +577,11 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
         Row(children: [
           IconButton(
               onPressed: () {
-                if (quizState.isAudioPlaying)
+                if (quizState.isAudioPlaying) {
                   ref.read(adaptedQuizProvider.notifier).pauseAudio();
-                else
+                } else {
                   ref.read(adaptedQuizProvider.notifier).playAudio();
+                }
               },
               icon: Icon(
                   quizState.isAudioPlaying

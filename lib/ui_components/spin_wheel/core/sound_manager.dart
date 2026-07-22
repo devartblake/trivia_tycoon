@@ -126,8 +126,9 @@ class SoundManager {
           audioSource,
           volume: (volume ?? _soundVolume) * volumeMultiplier,
         );
-        if (effectivePitch != 1.0)
+        if (effectivePitch != 1.0) {
           _soLoud!.setRelativePlaySpeed(handle, effectivePitch);
+        }
         _activeSounds[effect] = handle;
         _cleanupSoundHandle(effect, handle);
       }
@@ -225,7 +226,9 @@ class SoundManager {
     _soundEnabled = enabled;
     await AppSettings.saveSoundsOn(enabled);
     if (!enabled && _soLoud != null) {
-      for (final handle in _activeSounds.values) _soLoud!.stop(handle);
+      for (final handle in _activeSounds.values) {
+        _soLoud!.stop(handle);
+      }
       _activeSounds.clear();
     }
   }
@@ -262,10 +265,13 @@ class SoundManager {
   Future<void> dispose() async {
     try {
       if (_soLoud != null) {
-        for (final handle in _activeSounds.values) _soLoud!.stop(handle);
+        for (final handle in _activeSounds.values) {
+          _soLoud!.stop(handle);
+        }
         _activeSounds.clear();
-        for (final source in _audioSources.values)
+        for (final source in _audioSources.values) {
           _soLoud!.disposeSource(source);
+        }
         _audioSources.clear();
         _soLoud!.deinit();
         _soLoud = null;
