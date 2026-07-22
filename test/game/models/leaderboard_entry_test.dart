@@ -375,7 +375,7 @@ void main() {
       final entry = _entry(userId: 5, playerName: 'Tess', score: 999);
       final json = entry.toJson();
 
-      expect(json['user_Id'], 5);
+      expect(json['userId'], 5);
       expect(json['playerName'], 'Tess');
       expect(json['score'], 999);
     });

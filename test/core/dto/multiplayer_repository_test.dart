@@ -20,8 +20,12 @@ class _FakeWsClient extends WsClient {
     sent.add(Map<String, dynamic>.from(json));
   }
 
+  // Cache the stream so `events` returns a stable instance (a broadcast
+  // controller hands out a new wrapper on each `.stream` access), matching how
+  // a real ws client exposes a single events stream.
+  late final Stream<GameEvent> _events = _evtCtrl.stream;
   @override
-  Stream<GameEvent> get events => _evtCtrl.stream;
+  Stream<GameEvent> get events => _events;
 
   @override
   void dispose() {
