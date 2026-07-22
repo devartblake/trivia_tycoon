@@ -177,6 +177,10 @@ class AuthErrorMessages {
       return 'Please check your input and try again.';
     }
 
+    if (errorStr.contains('403') || errorStr.contains('Forbidden')) {
+      return 'You don\'t have permission to perform this action.';
+    }
+
     return getUserFriendlyMessage(error);
   }
 
