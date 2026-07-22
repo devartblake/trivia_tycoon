@@ -174,9 +174,12 @@ void main() {
       expect(ctrl.state.score, greaterThanOrEqualTo(0));
     });
 
-    test('resets streak to 0', () {
+    test('resets streak to 0', () async {
       final ctrl = _controller();
       ctrl.answer(ctrl.state.question.answer, (_) {}); // correct → streak 1
+      // answer() applies a ~120ms double-tap lock; wait it out so the second
+      // answer actually processes instead of being ignored.
+      await Future<void>.delayed(const Duration(milliseconds: 150));
       ctrl.answer(wrongOption(ctrl), (_) {}); // wrong → streak 0
       expect(ctrl.state.streak, 0);
     });
