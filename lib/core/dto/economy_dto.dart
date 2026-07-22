@@ -64,11 +64,13 @@ class EconomyStateDto {
   });
 
   factory EconomyStateDto.fromJson(Map<String, dynamic> j) {
-    final rawModes = j['modes'] as Map<String, dynamic>? ?? {};
+    final rawModes = j['modes'] == null
+        ? const <String, dynamic>{}
+        : Map<String, dynamic>.from(j['modes'] as Map);
     final modes = rawModes.map(
       (key, value) => MapEntry(
         key,
-        ModeCostDto.fromJson(value as Map<String, dynamic>),
+        ModeCostDto.fromJson(Map<String, dynamic>.from(value as Map)),
       ),
     );
     return EconomyStateDto(
@@ -109,11 +111,14 @@ class SessionStartDto {
   });
 
   factory SessionStartDto.fromJson(Map<String, dynamic> j) {
-    final rawCosts = j['adjustedCosts'] as Map<String, dynamic>? ?? {};
+    final rawCosts = j['adjustedCosts'] == null
+        ? const <String, dynamic>{}
+        : Map<String, dynamic>.from(j['adjustedCosts'] as Map);
     return SessionStartDto(
       discountApplied: j['discountApplied'] as bool? ?? false,
       adjustedCosts: rawCosts.map(
-        (k, v) => MapEntry(k, ModeCostDto.fromJson(v as Map<String, dynamic>)),
+        (k, v) => MapEntry(
+            k, ModeCostDto.fromJson(Map<String, dynamic>.from(v as Map))),
       ),
     );
   }

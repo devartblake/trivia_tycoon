@@ -142,7 +142,9 @@ class PlayerRecommendationDto {
         source: j['source']?.toString() ?? 'sidecar',
         priority: (j['priority'] as num?)?.toInt() ?? 1,
         score: (j['score'] as num?)?.toDouble() ?? 0.0,
-        payload: (j['payload'] as Map<String, dynamic>?) ?? {},
+        payload: j['payload'] == null
+            ? const <String, dynamic>{}
+            : Map<String, dynamic>.from(j['payload'] as Map),
         expiresAt: j['expiresAt']?.toString(),
       );
 }
@@ -218,7 +220,9 @@ class ExperimentAssignmentDto {
         experimentKey: j['experimentKey']?.toString() ?? '',
         variantKey: j['variantKey']?.toString() ?? 'control',
         isControl: j['isControl'] as bool? ?? true,
-        config: (j['config'] as Map<String, dynamic>?) ?? {},
+        config: j['config'] == null
+            ? const <String, dynamic>{}
+            : Map<String, dynamic>.from(j['config'] as Map),
       );
 
   // Typed config accessors (see Part 6 of handoff doc)
