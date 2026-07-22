@@ -51,7 +51,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
     ));
 
     _animationController.forward();
-    
+
     // Clear any pending notifications when the user is actively viewing the arena
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Logic for future notification clearing
@@ -91,7 +91,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: kToolbarHeight + 20)),
+          const SliverToBoxAdapter(
+              child: SizedBox(height: kToolbarHeight + 20)),
           SliverToBoxAdapter(
             child: AnimatedBuilder(
               animation: _fadeAnimation,
@@ -148,7 +149,7 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
                 onTap: () async {
                   final ok =
                       await ref.read(multiplayerServiceProvider).quickMatch();
-                  if (!mounted) return;
+                  if (!context.mounted) return;
                   if (ok) context.push('/multiplayer/find');
                 },
               ),
@@ -201,7 +202,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
         height: 120,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: gradient.colors.map((c) => c.withValues(alpha: 0.3)).toList(),
+            colors:
+                gradient.colors.map((c) => c.withValues(alpha: 0.3)).toList(),
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -378,7 +380,8 @@ class _MultiplayerHubScreenState extends ConsumerState<MultiplayerHubScreen>
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.red),
             const SizedBox(height: 16),
-            const Text('Error loading rooms', style: TextStyle(color: Colors.white)),
+            const Text('Error loading rooms',
+                style: TextStyle(color: Colors.white)),
             const SizedBox(height: 8),
             Text('$error',
                 style: const TextStyle(fontSize: 12, color: Colors.white60)),

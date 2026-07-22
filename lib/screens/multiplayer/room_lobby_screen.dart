@@ -257,7 +257,7 @@ class _RoomLobbyScreenState extends ConsumerState<RoomLobbyScreen> {
                       size: 32,
                       color: Colors.white24,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Text(
                       'Waiting for players to join...',
                       style: TextStyle(

@@ -144,17 +144,6 @@ class _AdaptedQuestionScreenState extends ConsumerState<AdaptedQuestionScreen>
     return QuizHelpers.getClassColor(widget.classLevel ?? '1');
   }
 
-  Color _getCategoryBackgroundColor() {
-    final quizState = ref.read(adaptedQuizProvider);
-    if (quizState.currentQuestion?.difficulty == QuestionDifficulty.boss)
-      return const Color(0xFF2B1D22);
-    const canvas = Color(0xFF3E4348);
-    if (_resolvedCategory != null)
-      return Color.alphaBlend(
-          _resolvedCategory!.primaryColor.withValues(alpha: 0.06), canvas);
-    return canvas;
-  }
-
   String _getCategoryDisplayName() {
     if (widget.displayTitle != null && widget.displayTitle!.trim().isNotEmpty)
       return widget.displayTitle!;

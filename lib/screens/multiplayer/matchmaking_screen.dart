@@ -23,7 +23,6 @@ class MatchmakingScreen extends ConsumerStatefulWidget {
 class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
   final TextEditingController _roomNameController = TextEditingController();
 
   @override
@@ -33,13 +32,6 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _pulseAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.05,
-    ).animate(CurvedAnimation(
-      parent: _pulseController,
-      curve: Curves.easeInOut,
-    ));
     _pulseController.repeat(reverse: true);
   }
 
@@ -77,7 +69,8 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
                   context.go('/multiplayer');
                 }
               },
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                  color: Colors.white, size: 20),
             ),
           ),
           body: SafeArea(
@@ -190,7 +183,8 @@ class _MatchmakingScreenState extends ConsumerState<MatchmakingScreen>
             decoration: const InputDecoration(
               hintText: 'Enter room name...',
               hintStyle: TextStyle(color: Colors.white38),
-              prefixIcon: Icon(Icons.meeting_room_rounded, color: Colors.white70),
+              prefixIcon:
+                  Icon(Icons.meeting_room_rounded, color: Colors.white70),
               border: InputBorder.none,
               contentPadding: EdgeInsets.all(16),
             ),
