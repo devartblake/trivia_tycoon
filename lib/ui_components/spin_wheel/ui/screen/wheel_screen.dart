@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:synaptix/core/services/api_service.dart' show ApiRequestException;
+import 'package:synaptix/core/services/api_service.dart'
+    show ApiRequestException;
 import 'package:synaptix/core/services/arcade/spin_wheel_api_service.dart';
 import 'package:synaptix/game/analytics/providers/analytics_providers.dart';
 import 'package:synaptix/game/providers/riverpod_providers.dart'
     hide analyticsServiceProvider;
 import 'package:synaptix/core/services/settings/app_settings.dart';
-import 'package:synaptix/core/services/notification_service.dart';
 import 'package:synaptix/game/providers/spin_providers.dart';
 import 'package:synaptix/ui_components/spin_wheel/models/spin_system_models.dart';
 import 'package:synaptix/ui_components/spin_wheel/physics/non_uniform_motion.dart';
@@ -60,7 +60,7 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
     _loadSegments();
     _checkSpinAvailability();
     _trackScreenView();
-    
+
     // Clear any pending notifications when the user is actively viewing the wheel
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(notificationServiceProvider).cancelSpinNotifications();
@@ -375,10 +375,10 @@ class _WheelScreenState extends ConsumerState<WheelScreen>
           HapticFeedback.heavyImpact();
           _trackSpinCompleted(segment);
           _claimSpinReward(segment);
-          
+
           // Refresh global state
           ref.read(spinStateNotifierProvider.notifier).refresh();
-          
+
           Future.delayed(const Duration(milliseconds: 500), () {
             if (mounted) _showResultDialog(segment);
           });

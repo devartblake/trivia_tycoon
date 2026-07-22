@@ -76,9 +76,9 @@ class RoomCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'ID: $id',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white70,
                       ),
@@ -87,8 +87,8 @@ class RoomCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: statusInfo.$2.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
