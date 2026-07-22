@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import '../../../core/dto/learning_dto.dart';
@@ -26,8 +26,8 @@ class ModuleCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   module.title,
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
               if (module.isCompleted)

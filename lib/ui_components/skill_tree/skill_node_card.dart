@@ -49,7 +49,7 @@ class SkillNodeCard extends StatelessWidget {
   /// Get icon color
   Color _getIconColor(BuildContext context) {
     if (skill.level == 0) return Colors.grey.shade600;
-    
+
     final category = _mapCategory(skill.category);
     return SkillCategoryColors.glowFor(context, category);
   }

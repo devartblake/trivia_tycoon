@@ -86,12 +86,12 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
       );
 
       await ref.read(notificationServiceProvider).sendNow(
-        id: id,
-        channelKey: channelKey,
-        title: title,
-        body: body,
-        payload: payload,
-      );
+            id: id,
+            channelKey: channelKey,
+            title: title,
+            body: body,
+            payload: payload,
+          );
       // No scheduled refresh needed for instant notifications
       await NotificationHistoryStore.instance.addNow(
         title: title,
@@ -154,13 +154,13 @@ class NotificationAdminActions extends AutoDisposeAsyncNotifier<void> {
         );
       } else {
         await ref.read(notificationServiceProvider).scheduleAt(
-          id: id,
-          channelKey: channelKey,
-          title: title,
-          body: body,
-          scheduledAt: scheduledAt,
-          payload: payload,
-        );
+              id: id,
+              channelKey: channelKey,
+              title: title,
+              body: body,
+              scheduledAt: scheduledAt,
+              payload: payload,
+            );
       }
       ref.invalidate(scheduledProvider);
     });

@@ -7,7 +7,8 @@ import '../../synaptix/theme/synaptix_theme_extension.dart';
 class AnimationManager {
   const AnimationManager._();
 
-  static Curve _resolveCurve(BuildContext? context, {Curve? manual, bool snappy = false}) {
+  static Curve _resolveCurve(BuildContext? context,
+      {Curve? manual, bool snappy = false}) {
     if (manual != null) return manual;
     if (context == null) return snappy ? Curves.easeOutCubic : Curves.easeInOut;
 
@@ -134,7 +135,8 @@ class AnimationManager {
     BuildContext? context,
   }) {
     final resolvedFade = _resolveCurve(context, manual: fadeCurve);
-    final resolvedSlide = _resolveCurve(context, manual: slideCurve, snappy: true);
+    final resolvedSlide =
+        _resolveCurve(context, manual: slideCurve, snappy: true);
 
     if (animation != null) {
       return _buildFadeSlideTransition(

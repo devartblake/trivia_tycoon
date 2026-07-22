@@ -152,23 +152,26 @@ class AppTheme {
     TextTheme finalTheme = baseTextTheme;
     if (extension != null) {
       finalTheme = baseTextTheme.copyWith(
-        displayLarge:
-            baseTextTheme.displayLarge?.copyWith(fontFamily: extension.headlineFont),
-        displayMedium:
-            baseTextTheme.displayMedium?.copyWith(fontFamily: extension.headlineFont),
-        displaySmall:
-            baseTextTheme.displaySmall?.copyWith(fontFamily: extension.headlineFont),
-        headlineLarge:
-            baseTextTheme.headlineLarge?.copyWith(fontFamily: extension.headlineFont),
-        headlineMedium:
-            baseTextTheme.headlineMedium?.copyWith(fontFamily: extension.headlineFont),
-        headlineSmall:
-            baseTextTheme.headlineSmall?.copyWith(fontFamily: extension.headlineFont),
-        titleLarge:
-            baseTextTheme.titleLarge?.copyWith(fontFamily: extension.headlineFont),
-        bodyLarge: baseTextTheme.bodyLarge?.copyWith(fontFamily: extension.bodyFont),
-        bodyMedium: baseTextTheme.bodyMedium?.copyWith(fontFamily: extension.bodyFont),
-        bodySmall: baseTextTheme.bodySmall?.copyWith(fontFamily: extension.bodyFont),
+        displayLarge: baseTextTheme.displayLarge
+            ?.copyWith(fontFamily: extension.headlineFont),
+        displayMedium: baseTextTheme.displayMedium
+            ?.copyWith(fontFamily: extension.headlineFont),
+        displaySmall: baseTextTheme.displaySmall
+            ?.copyWith(fontFamily: extension.headlineFont),
+        headlineLarge: baseTextTheme.headlineLarge
+            ?.copyWith(fontFamily: extension.headlineFont),
+        headlineMedium: baseTextTheme.headlineMedium
+            ?.copyWith(fontFamily: extension.headlineFont),
+        headlineSmall: baseTextTheme.headlineSmall
+            ?.copyWith(fontFamily: extension.headlineFont),
+        titleLarge: baseTextTheme.titleLarge
+            ?.copyWith(fontFamily: extension.headlineFont),
+        bodyLarge:
+            baseTextTheme.bodyLarge?.copyWith(fontFamily: extension.bodyFont),
+        bodyMedium:
+            baseTextTheme.bodyMedium?.copyWith(fontFamily: extension.bodyFont),
+        bodySmall:
+            baseTextTheme.bodySmall?.copyWith(fontFamily: extension.bodyFont),
       );
     }
 
@@ -201,9 +204,12 @@ class AppTheme {
         selectionHandleColor: accent1,
       ),
       highlightColor: accent1,
-      splashColor: extension?.accentGlow.withValues(alpha: 0.12) ?? accent1.withValues(alpha: 0.12),
-      hoverColor: extension?.accentGlow.withValues(alpha: 0.04) ?? accent1.withValues(alpha: 0.04),
-      focusColor: extension?.accentGlow.withValues(alpha: 0.12) ?? accent1.withValues(alpha: 0.12),
+      splashColor: extension?.accentGlow.withValues(alpha: 0.12) ??
+          accent1.withValues(alpha: 0.12),
+      hoverColor: extension?.accentGlow.withValues(alpha: 0.04) ??
+          accent1.withValues(alpha: 0.04),
+      focusColor: extension?.accentGlow.withValues(alpha: 0.12) ??
+          accent1.withValues(alpha: 0.12),
       extensions: extension != null ? [extension] : null,
     );
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 
 /// A biological-inspired pulsing loading indicator for Synaptix.
-/// 
+///
 /// Replaces the standard [CircularProgressIndicator] with a "Neural Bloom"
 /// aesthetic consisting of interconnected pulsing nodes.
 class NeuralBloomIndicator extends StatefulWidget {
@@ -43,7 +43,7 @@ class _NeuralBloomIndicatorState extends State<NeuralBloomIndicator>
   Widget build(BuildContext context) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final accent = widget.color ?? synaptix?.accentGlow ?? Colors.cyanAccent;
-    
+
     // Adjust speed based on demographic motion preference
     if (synaptix?.useHighEnergyMotion == false) {
       _controller.duration = const Duration(milliseconds: 3000);
@@ -121,7 +121,7 @@ class _NeuralBloomIndicatorPainter extends CustomPainter {
       // Core
       canvas.drawCircle(nodePos, 4.0, nodePaint..color = color);
     }
-    
+
     // 3. Central nucleus
     final nucleusPulse = (cos(animationValue * 2 * pi) + 1) / 2;
     canvas.drawCircle(

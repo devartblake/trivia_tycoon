@@ -315,7 +315,9 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
         winPercentage: 100,
         bestScore: time,
         currentStreak: 1,
-        primaryColor: Theme.of(context).extension<SynaptixTheme>()?.accentGlow ?? const Color(0xFF6366F1),
+        primaryColor:
+            Theme.of(context).extension<SynaptixTheme>()?.accentGlow ??
+                const Color(0xFF6366F1),
         gameIcon: Icons.grid_4x4,
       ),
       onShare: () {
@@ -393,16 +395,22 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildRule('Fill the 9×9 grid with digits from 1 to 9.', accentColor),
             _buildRule(
-                'Each row must contain all digits from 1 to 9 without repetition.', accentColor),
+                'Fill the 9×9 grid with digits from 1 to 9.', accentColor),
             _buildRule(
-                'Each column must contain all digits from 1 to 9 without repetition.', accentColor),
+                'Each row must contain all digits from 1 to 9 without repetition.',
+                accentColor),
             _buildRule(
-                'Each 3×3 box must contain all digits from 1 to 9 without repetition.', accentColor),
+                'Each column must contain all digits from 1 to 9 without repetition.',
+                accentColor),
             _buildRule(
-                'Tap a cell to select it, then tap a number below to place it.', accentColor),
-            _buildRule('Gray cells are fixed and cannot be changed.', accentColor),
+                'Each 3×3 box must contain all digits from 1 to 9 without repetition.',
+                accentColor),
+            _buildRule(
+                'Tap a cell to select it, then tap a number below to place it.',
+                accentColor),
+            _buildRule(
+                'Gray cells are fixed and cannot be changed.', accentColor),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
@@ -496,7 +504,11 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
               style: TextStyle(
                 fontSize: 15,
                 height: 1.5,
-                color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.color
+                    ?.withValues(alpha: 0.8),
               ),
             ),
           ),
@@ -582,14 +594,15 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
-            colors: [
-              Color(0xFFF8FAFF),
-              Color(0xFFFFFFFF),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          gradient: synaptix?.mainBackgroundGradient ??
+              const LinearGradient(
+                colors: [
+                  Color(0xFFF8FAFF),
+                  Color(0xFFFFFFFF),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
         ),
         child: SafeArea(
           child: Column(
@@ -688,7 +701,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).bottomAppBarTheme.color ?? Theme.of(context).cardColor,
+                  color: Theme.of(context).bottomAppBarTheme.color ??
+                      Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
@@ -702,8 +716,8 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                     // Number buttons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children:
-                          List.generate(9, (i) => _buildNumberButton(i + 1, accentColor)),
+                      children: List.generate(
+                          9, (i) => _buildNumberButton(i + 1, accentColor)),
                     ),
                     const SizedBox(height: 12),
                     // Action buttons
@@ -768,11 +782,15 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
           border: Border(
             right: BorderSide(
               width: isRightBorder ? 2 : 0.5,
-              color: isRightBorder ? Theme.of(context).dividerColor : Colors.grey.withValues(alpha: 0.3),
+              color: isRightBorder
+                  ? Theme.of(context).dividerColor
+                  : Colors.grey.withValues(alpha: 0.3),
             ),
             bottom: BorderSide(
               width: isBottomBorder ? 2 : 0.5,
-              color: isBottomBorder ? Theme.of(context).dividerColor : Colors.grey.withValues(alpha: 0.3),
+              color: isBottomBorder
+                  ? Theme.of(context).dividerColor
+                  : Colors.grey.withValues(alpha: 0.3),
             ),
           ),
         ),
@@ -784,7 +802,9 @@ class _SudokuPuzzleScreenState extends State<SudokuPuzzleScreen> {
                     fontSize: 20,
                     fontWeight:
                         isFixedCell ? FontWeight.bold : FontWeight.normal,
-                    color: isFixedCell ? Theme.of(context).textTheme.bodyLarge?.color : accentColor,
+                    color: isFixedCell
+                        ? Theme.of(context).textTheme.bodyLarge?.color
+                        : accentColor,
                   ),
                 )
               : null,

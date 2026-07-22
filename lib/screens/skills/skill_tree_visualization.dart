@@ -15,10 +15,12 @@ class SkillTreeVisualization extends ConsumerStatefulWidget {
   const SkillTreeVisualization({super.key});
 
   @override
-  ConsumerState<SkillTreeVisualization> createState() => _SkillTreeVisualizationState();
+  ConsumerState<SkillTreeVisualization> createState() =>
+      _SkillTreeVisualizationState();
 }
 
-class _SkillTreeVisualizationState extends ConsumerState<SkillTreeVisualization> {
+class _SkillTreeVisualizationState
+    extends ConsumerState<SkillTreeVisualization> {
   int _selectedIndex = 0;
 
   @override
@@ -31,7 +33,8 @@ class _SkillTreeVisualizationState extends ConsumerState<SkillTreeVisualization>
         appBar: GlassAppBar(
           title: const GlowText('Skill Tree'),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -44,7 +47,8 @@ class _SkillTreeVisualizationState extends ConsumerState<SkillTreeVisualization>
                 child: SegmentedSelectionHub(
                   items: const ['Math', 'Science', 'Logic'],
                   selectedIndex: _selectedIndex,
-                  onItemSelected: (index) => setState(() => _selectedIndex = index),
+                  onItemSelected: (index) =>
+                      setState(() => _selectedIndex = index),
                 ),
               ),
               const SizedBox(height: 16),
@@ -56,19 +60,22 @@ class _SkillTreeVisualizationState extends ConsumerState<SkillTreeVisualization>
                       title: 'Mathematics',
                       skills: _getMathSkills(allSkills),
                       icon: Icons.calculate,
-                      color: SkillCategoryColors.backgroundFor(context, SkillCategory.scholar),
+                      color: SkillCategoryColors.backgroundFor(
+                          context, SkillCategory.scholar),
                     ),
                     _SkillCategoryView(
                       title: 'Science',
                       skills: _getScienceSkills(allSkills),
                       icon: Icons.science,
-                      color: SkillCategoryColors.backgroundFor(context, SkillCategory.xp),
+                      color: SkillCategoryColors.backgroundFor(
+                          context, SkillCategory.xp),
                     ),
                     _SkillCategoryView(
                       title: 'Logic',
                       skills: _getLogicSkills(allSkills),
                       icon: Icons.psychology,
-                      color: SkillCategoryColors.backgroundFor(context, SkillCategory.timer),
+                      color: SkillCategoryColors.backgroundFor(
+                          context, SkillCategory.timer),
                     ),
                   ],
                 ),

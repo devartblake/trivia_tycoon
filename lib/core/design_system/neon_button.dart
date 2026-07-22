@@ -28,7 +28,8 @@ class NeonButton extends StatefulWidget {
   State<NeonButton> createState() => _NeonButtonState();
 }
 
-class _NeonButtonState extends State<NeonButton> with SingleTickerProviderStateMixin {
+class _NeonButtonState extends State<NeonButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   bool _isHovered = false;
@@ -71,7 +72,7 @@ class _NeonButtonState extends State<NeonButton> with SingleTickerProviderStateM
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final accent = widget.color ?? synaptix?.accentGlow ?? Colors.cyanAccent;
     final isDisabled = widget.onPressed == null;
-    
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),

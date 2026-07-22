@@ -73,7 +73,9 @@ class _PerformanceLineChartState extends State<PerformanceLineChart> {
   /// Build the line chart
   Widget _buildChart(BuildContext context) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
-    final lineColor = widget.lineColor ?? synaptix?.chartPalette.first ?? Theme.of(context).primaryColor;
+    final lineColor = widget.lineColor ??
+        synaptix?.chartPalette.first ??
+        Theme.of(context).primaryColor;
     final spots = _convertDataToSpots();
 
     if (spots.isEmpty) {

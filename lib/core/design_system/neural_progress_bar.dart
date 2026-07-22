@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:synaptix/synaptix/theme/synaptix_theme_extension.dart';
 
 /// A biological-inspired non-linear progress indicator.
-/// 
+///
 /// Replaces standard linear bars with glowing "neural nodes" connected by
 /// energy filaments.
 class NeuralProgressBar extends StatefulWidget {
@@ -81,7 +81,8 @@ class _NeuralProgressBarPainter extends CustomPainter {
     if (total <= 0) return;
 
     final nodeRadius = size.height / 4;
-    final spacing = (size.width - (nodeRadius * 2)) / (total > 1 ? total - 1 : 1);
+    final spacing =
+        (size.width - (nodeRadius * 2)) / (total > 1 ? total - 1 : 1);
     final centerY = size.height / 2;
 
     final filamentPaint = Paint()
@@ -94,25 +95,25 @@ class _NeuralProgressBarPainter extends CustomPainter {
     for (var i = 0; i < total - 1; i++) {
       final startX = nodeRadius + (i * spacing);
       final endX = nodeRadius + ((i + 1) * spacing);
-      
+
       final isCompleted = i < current;
-      
-      filamentPaint.color = isCompleted 
-          ? color.withValues(alpha: 0.4) 
+
+      filamentPaint.color = isCompleted
+          ? color.withValues(alpha: 0.4)
           : Colors.white.withValues(alpha: 0.1);
-          
+
       final path = Path();
       path.moveTo(startX, centerY);
-      
+
       // Add organic "sag" or "tension" to the filament based on pulse
       final controlY = centerY + (2.0 * sin(pulse * pi + i));
       path.quadraticBezierTo(
-        (startX + endX) / 2, 
-        controlY, 
-        endX, 
+        (startX + endX) / 2,
+        controlY,
+        endX,
         centerY,
       );
-      
+
       canvas.drawPath(path, filamentPaint);
     }
 
@@ -130,7 +131,7 @@ class _NeuralProgressBarPainter extends CustomPainter {
           nodeRadius + (4.0 * pulse),
           Paint()..color = color.withValues(alpha: glowAlpha),
         );
-        
+
         canvas.drawCircle(
           Offset(x, centerY),
           nodeRadius,
@@ -159,8 +160,8 @@ class _NeuralProgressBarPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _NeuralProgressBarPainter oldDelegate) {
-    return oldDelegate.current != current || 
-           oldDelegate.pulse != pulse || 
-           oldDelegate.total != total;
+    return oldDelegate.current != current ||
+        oldDelegate.pulse != pulse ||
+        oldDelegate.total != total;
   }
 }

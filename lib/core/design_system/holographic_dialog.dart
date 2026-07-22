@@ -4,7 +4,7 @@ import 'package:synaptix/ui_components/depth_card_3d/widgets/parallax_wrapper.da
 import 'adaptive_glass_card.dart';
 
 /// A 3D-interactive modal dialog with holographic depth.
-/// 
+///
 /// Features a "Neural Snap" entrance animation and reacts to user touch/hover
 /// using parallax tilt logic.
 class HolographicDialog extends StatefulWidget {
@@ -50,7 +50,8 @@ class HolographicDialog extends StatefulWidget {
         );
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final curve = CurvedAnimation(parent: animation, curve: Curves.elasticOut);
+        final curve =
+            CurvedAnimation(parent: animation, curve: Curves.elasticOut);
         return ScaleTransition(
           scale: Tween<double>(begin: 0.8, end: 1.0).animate(curve),
           child: FadeTransition(

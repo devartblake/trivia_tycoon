@@ -86,9 +86,10 @@ class SoundManager {
     } catch (_) {}
   }
 
-  Future<void> playSound(SoundEffect effect, {
-    double? volume, 
-    double? pitch, 
+  Future<void> playSound(
+    SoundEffect effect, {
+    double? volume,
+    double? pitch,
     BuildContext? context,
     double? overrideVolumeMultiplier,
     SynaptixSoundStyle? overrideSoundStyle,
@@ -96,12 +97,16 @@ class SoundManager {
     if (!_initialized || !_soundEnabled || _soLoud == null) return;
 
     double volumeMultiplier = overrideVolumeMultiplier ?? 1.0;
-    SynaptixSoundStyle soundStyle = overrideSoundStyle ?? SynaptixSoundStyle.digital;
+    SynaptixSoundStyle soundStyle =
+        overrideSoundStyle ?? SynaptixSoundStyle.digital;
 
-    if (overrideVolumeMultiplier == null && context != null && context.mounted) {
+    if (overrideVolumeMultiplier == null &&
+        context != null &&
+        context.mounted) {
       final themeExtension = Theme.of(context).extension<SynaptixTheme>();
       volumeMultiplier = themeExtension?.soundVolumeMultiplier ?? 1.0;
-      soundStyle = themeExtension?.preferredSoundStyle ?? SynaptixSoundStyle.digital;
+      soundStyle =
+          themeExtension?.preferredSoundStyle ?? SynaptixSoundStyle.digital;
     }
 
     double effectivePitch = pitch ?? 1.0;
@@ -121,7 +126,8 @@ class SoundManager {
           audioSource,
           volume: (volume ?? _soundVolume) * volumeMultiplier,
         );
-        if (effectivePitch != 1.0) _soLoud!.setRelativePlaySpeed(handle, effectivePitch);
+        if (effectivePitch != 1.0)
+          _soLoud!.setRelativePlaySpeed(handle, effectivePitch);
         _activeSounds[effect] = handle;
         _cleanupSoundHandle(effect, handle);
       }
@@ -164,7 +170,8 @@ class SoundManager {
       if (loopDuration.inMilliseconds > 0) {
         final loopSource = _audioSources[SoundEffect.spinLoop];
         if (loopSource != null) {
-          final loopHandle = await _soLoud!.play(loopSource, volume: _soundVolume * 0.8, looping: true);
+          final loopHandle = await _soLoud!
+              .play(loopSource, volume: _soundVolume * 0.8, looping: true);
           Future.delayed(loopDuration, () {
             if (_soLoud != null) _soLoud!.stop(loopHandle);
           });
@@ -257,7 +264,8 @@ class SoundManager {
       if (_soLoud != null) {
         for (final handle in _activeSounds.values) _soLoud!.stop(handle);
         _activeSounds.clear();
-        for (final source in _audioSources.values) _soLoud!.disposeSource(source);
+        for (final source in _audioSources.values)
+          _soLoud!.disposeSource(source);
         _audioSources.clear();
         _soLoud!.deinit();
         _soLoud = null;
@@ -303,7 +311,8 @@ extension SoundManagerExtension on SoundManager {
         break;
       case 'invite':
       case 'request':
-        await playSound(SoundEffect.notification, volume: 0.9, context: context);
+        await playSound(SoundEffect.notification,
+            volume: 0.9, context: context);
         break;
       default:
         await playSound(SoundEffect.buttonClick, context: context);
@@ -314,7 +323,8 @@ extension SoundManagerExtension on SoundManager {
     await playSound(SoundEffect.wheelTick, volume: 0.6);
   }
 
-  Future<void> playCelebration({bool isBigWin = false, BuildContext? context}) async {
+  Future<void> playCelebration(
+      {bool isBigWin = false, BuildContext? context}) async {
     double volMult = 1.0;
     SynaptixSoundStyle style = SynaptixSoundStyle.digital;
 
@@ -325,20 +335,32 @@ extension SoundManagerExtension on SoundManager {
     }
 
     if (isBigWin) {
-      await playSound(SoundEffect.bigWin, overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
+      await playSound(SoundEffect.bigWin,
+          overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
       await Future.delayed(const Duration(milliseconds: 300));
-      await playSound(SoundEffect.success, volume: 0.7, overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
+      await playSound(SoundEffect.success,
+          volume: 0.7,
+          overrideVolumeMultiplier: volMult,
+          overrideSoundStyle: style);
       await Future.delayed(const Duration(milliseconds: 300));
-      await playSound(SoundEffect.prizeWin, volume: 0.5, overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
+      await playSound(SoundEffect.prizeWin,
+          volume: 0.5,
+          overrideVolumeMultiplier: volMult,
+          overrideSoundStyle: style);
     } else {
-      await playSound(SoundEffect.prizeWin, overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
+      await playSound(SoundEffect.prizeWin,
+          overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
       await Future.delayed(const Duration(milliseconds: 200));
-      await playSound(SoundEffect.success, volume: 0.6, overrideVolumeMultiplier: volMult, overrideSoundStyle: style);
+      await playSound(SoundEffect.success,
+          volume: 0.6,
+          overrideVolumeMultiplier: volMult,
+          overrideSoundStyle: style);
     }
     HapticFeedback.heavyImpact();
   }
 
-  Future<void> fadeOutMusic({Duration duration = const Duration(seconds: 2)}) async {
+  Future<void> fadeOutMusic(
+      {Duration duration = const Duration(seconds: 2)}) async {
     if (!isMusicPlaying) return;
     const steps = 20;
     final stepDuration = duration.inMilliseconds ~/ steps;
@@ -351,7 +373,8 @@ extension SoundManagerExtension on SoundManager {
     await setMusicVolume(musicVolume);
   }
 
-  Future<void> fadeInMusic(String musicPath, {Duration duration = const Duration(seconds: 2)}) async {
+  Future<void> fadeInMusic(String musicPath,
+      {Duration duration = const Duration(seconds: 2)}) async {
     final originalVolume = musicVolume;
     await setMusicVolume(0.0);
     await playBackgroundMusic(musicPath);

@@ -25,7 +25,7 @@ class DemographicAssetWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(synaptixModeProvider);
-    
+
     final String resolvedAsset = switch (mode) {
       SynaptixMode.kids => kidsAsset,
       SynaptixMode.teen => teenAsset,

@@ -4,6 +4,7 @@ import '../mode/synaptix_mode.dart';
 import '../../game/models/skill_tree_graph.dart';
 
 enum SynaptixHapticIntensity { soft, standard, energetic }
+
 enum SynaptixSoundStyle { bouncy, digital, minimalist }
 
 /// Mapping of semantic icon roles to specific IconData.
@@ -304,8 +305,8 @@ class SynaptixTheme extends ThemeExtension<SynaptixTheme> {
           t < 0.5 ? useHighEnergyMotion : other.useHighEnergyMotion,
       defaultCurve: t < 0.5 ? defaultCurve : other.defaultCurve,
       snappyCurve: t < 0.5 ? snappyCurve : other.snappyCurve,
-      mainBackgroundGradient:
-          LinearGradient.lerp(mainBackgroundGradient, other.mainBackgroundGradient, t)!,
+      mainBackgroundGradient: LinearGradient.lerp(
+          mainBackgroundGradient, other.mainBackgroundGradient, t)!,
       glassOverlay: Decoration.lerp(glassOverlay, other.glassOverlay, t)!,
       headlineFont: t < 0.5 ? headlineFont : other.headlineFont,
       bodyFont: t < 0.5 ? bodyFont : other.bodyFont,

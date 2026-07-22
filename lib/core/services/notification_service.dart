@@ -4,8 +4,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:synaptix/core/services/settings/app_settings.dart';
 import 'package:synaptix/synaptix/mode/synaptix_mode.dart';
 import 'package:synaptix/game/providers/notification_history_store.dart';
-import 'package:synaptix/game/services/channel_prefs.dart'
-    show kNotifDraftsKey;
+import 'package:synaptix/game/services/channel_prefs.dart' show kNotifDraftsKey;
 import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Modernized Notification Service for Synaptix.
@@ -74,8 +73,7 @@ class NotificationService {
       title: receivedAction.title ?? '',
       body: receivedAction.body ?? '',
       channelKey: receivedAction.channelKey ?? '',
-      payload:
-          receivedAction.payload?.map((k, v) => MapEntry(k, v.toString())),
+      payload: receivedAction.payload?.map((k, v) => MapEntry(k, v.toString())),
       type: 'dismissed',
     ));
   }
@@ -88,8 +86,7 @@ class NotificationService {
       title: receivedAction.title ?? '',
       body: receivedAction.body ?? '',
       channelKey: receivedAction.channelKey ?? '',
-      payload:
-          receivedAction.payload?.map((k, v) => MapEntry(k, v.toString())),
+      payload: receivedAction.payload?.map((k, v) => MapEntry(k, v.toString())),
       type: 'action',
     ));
   }
@@ -110,7 +107,8 @@ class NotificationService {
         channelGroups: [
           NotificationChannelGroup(
             channelGroupKey: _groupKey,
-            channelGroupName: mode == SynaptixMode.kids ? 'Quest Central' : 'Synaptix',
+            channelGroupName:
+                mode == SynaptixMode.kids ? 'Quest Central' : 'Synaptix',
           ),
         ],
         debug: true,
@@ -172,7 +170,8 @@ class NotificationService {
         channelGroupKey: _groupKey,
         channelKey: basicChannelKey,
         channelName: isKids ? 'Fun Alerts' : 'Basic Notifications',
-        channelDescription: isAdult ? 'General system updates' : 'General notifications',
+        channelDescription:
+            isAdult ? 'General system updates' : 'General notifications',
         defaultColor: isKids ? Colors.orange : const Color(0xFF6C5CE7),
         importance: NotificationImportance.High,
         channelShowBadge: true,
@@ -345,7 +344,8 @@ class NotificationService {
   Future<bool> _ensurePermissions() async {
     if (!_initialized) await initialize();
     if (!await isAllowed()) {
-      return await AwesomeNotifications().requestPermissionToSendNotifications();
+      return await AwesomeNotifications()
+          .requestPermissionToSendNotifications();
     }
     return true;
   }
@@ -355,14 +355,15 @@ class NotificationService {
   }
 
   Future<bool> isAllowed() => AwesomeNotifications().isNotificationAllowed();
-  
+
   Future<void> requestPermission() async {
-    _hasPermissions = await AwesomeNotifications().requestPermissionToSendNotifications();
+    _hasPermissions =
+        await AwesomeNotifications().requestPermissionToSendNotifications();
   }
 
   Future<void> cancel(int id) => AwesomeNotifications().cancel(id);
   Future<void> cancelAll() => AwesomeNotifications().cancelAll();
-  
+
   Future<List<NotificationModel>> listScheduled() =>
       AwesomeNotifications().listScheduledNotifications();
 
@@ -492,7 +493,8 @@ class NotificationService {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
               ),
-              child: const Text('Enable', style: TextStyle(color: Colors.white)),
+              child:
+                  const Text('Enable', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),

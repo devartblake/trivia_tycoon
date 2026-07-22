@@ -25,7 +25,7 @@ class _SegmentedSelectionHubState extends State<SegmentedSelectionHub> {
   Widget build(BuildContext context) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final accent = widget.color ?? synaptix?.accentGlow ?? Colors.cyanAccent;
-    
+
     return Container(
       height: 50,
       padding: const EdgeInsets.all(4),
@@ -40,7 +40,7 @@ class _SegmentedSelectionHubState extends State<SegmentedSelectionHub> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final itemWidth = (constraints.maxWidth - 8) / widget.items.length;
-          
+
           return Stack(
             children: [
               AnimatedPositioned(
@@ -66,7 +66,7 @@ class _SegmentedSelectionHubState extends State<SegmentedSelectionHub> {
               Row(
                 children: List.generate(widget.items.length, (index) {
                   final isSelected = index == widget.selectedIndex;
-                  
+
                   return Expanded(
                     child: GestureDetector(
                       onTap: () => widget.onItemSelected(index),
@@ -76,7 +76,9 @@ class _SegmentedSelectionHubState extends State<SegmentedSelectionHub> {
                           duration: const Duration(milliseconds: 200),
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.white60,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             fontSize: 13,
                             fontFamily: synaptix?.headlineFont,
                           ),

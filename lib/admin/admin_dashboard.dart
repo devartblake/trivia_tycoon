@@ -72,7 +72,8 @@ class AdminDashboardScreen extends ConsumerWidget {
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(synaptix?.cardRadius ?? 20),
+                                borderRadius: BorderRadius.circular(
+                                    synaptix?.cardRadius ?? 20),
                               ),
                               child: const Icon(
                                 Icons.admin_panel_settings_rounded,
@@ -199,7 +200,9 @@ class AdminDashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildActionCard(
-      {required BuildContext context, required _AdminAction action, SynaptixTheme? synaptix}) {
+      {required BuildContext context,
+      required _AdminAction action,
+      SynaptixTheme? synaptix}) {
     final theme = Theme.of(context);
     return SizedBox(
       width: 280,
@@ -234,7 +237,8 @@ class AdminDashboardScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: action.color.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(synaptix?.useSoftCorners == true ? 14 : 4),
+                      borderRadius: BorderRadius.circular(
+                          synaptix?.useSoftCorners == true ? 14 : 4),
                     ),
                     child: Icon(
                       action.icon,

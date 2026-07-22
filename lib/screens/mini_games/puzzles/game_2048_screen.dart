@@ -64,7 +64,9 @@ class _Game2048ScreenState extends State<Game2048Screen> {
         winPercentage: 100,
         bestScore: '$score',
         currentStreak: 1,
-        primaryColor: Theme.of(context).extension<SynaptixTheme>()?.accentGlow ?? const Color(0xFF6366F1),
+        primaryColor:
+            Theme.of(context).extension<SynaptixTheme>()?.accentGlow ??
+                const Color(0xFF6366F1),
         gameIcon: Icons.apps,
       ),
       onShare: () {
@@ -167,7 +169,11 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                           style: TextStyle(
                             fontSize: 15,
                             height: 1.5,
-                            color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.color
+                                ?.withValues(alpha: 0.8),
                           ),
                         ),
                       ),
@@ -254,11 +260,12 @@ class _Game2048ScreenState extends State<Game2048Screen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
-            colors: [Color(0xFFF8FAFF), Color(0xFFFFFFFF)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          gradient: synaptix?.mainBackgroundGradient ??
+              const LinearGradient(
+                colors: [Color(0xFFF8FAFF), Color(0xFFFFFFFF)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
         ),
         child: SafeArea(
           child: Column(
@@ -306,8 +313,8 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _buildScoreCard('Score', _gameController.score,
-                                  accentColor),
+                              _buildScoreCard(
+                                  'Score', _gameController.score, accentColor),
                               const SizedBox(width: 16),
                               _buildScoreCard('Best', _gameController.bestScore,
                                   const Color(0xFFFFD700)),
@@ -329,8 +336,10 @@ class _Game2048ScreenState extends State<Game2048Screen> {
                             label: const Text('Undo'),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context).cardColor,
-                              foregroundColor: Theme.of(context).textTheme.bodyMedium?.color,
-                              disabledBackgroundColor: Theme.of(context).cardColor
+                              foregroundColor:
+                                  Theme.of(context).textTheme.bodyMedium?.color,
+                              disabledBackgroundColor: Theme.of(context)
+                                  .cardColor
                                   .withValues(alpha: 0.5),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 14),
