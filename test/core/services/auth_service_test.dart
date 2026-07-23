@@ -599,4 +599,27 @@ void main() {
       );
     });
   });
+
+  group('AuthApiClient.bootstrapDevice — identity', () {
+    test('reads the user id nested under user.id', () async {
+      // The backend returns the id nested (no top-level userId); the session
+      // must still carry it, otherwise auth_user_id is never persisted and the
+      // app falls back to a generated local_<guid> identity.
+      final client = _StubHttpClient((_) => _jsonResp({
+            'accessToken': 'access-token',
+            'refreshToken': 'refresh-token',
+            'expiresIn': 900,
+            'user': {
+              'id': '712dbcd9-6cea-45c7-81ed-e902d1c309e7',
+              'handle': 'guest_a50c187bc8',
+            },
+          }));
+
+      final api = AuthApiClient(client,
+          apiBaseUrl: 'https://api.test', deviceId: _FakeDeviceIdService());
+
+      final session = await api.bootstrapDevice();
+      expect(session.userId, '712dbcd9-6cea-45c7-81ed-e902d1c309e7');
+    });
+  });
 }

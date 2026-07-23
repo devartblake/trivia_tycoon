@@ -296,6 +296,30 @@ shell branch — popping the last page trips GoRouter's
 `context.safeBack()` helper (`lib/core/navigation/navigation_extensions.dart`),
 which pops when possible and otherwise falls back to `/home`.
 
+## 4i. Runtime investigation — device log (guest session)
+
+A guest-session device log surfaced three more issues beyond the Skill Tree
+crash (§4h):
+
+- **Identity dropped after device bootstrap (root cause of the 404 cascade)** —
+  `POST /auth/device/bootstrap` returns the id nested under `user.id`, but
+  `AuthApiClient._parseSession` only read a top-level `userId`/`user_id`, so
+  `session.userId` was null. `tokenStore.save()` then cleared `auth_user_id`,
+  the profile id was never set, and `UserIdentityResolver` fell back to a
+  generated `local_<guid>`. That local id drove the personalization 404
+  (`/personalization/home/local_…`), weekly-rewards 404
+  (`/rewards/weekly-streak/local_…`), and the "Missing user ID" / mock fallbacks
+  in the tier + weekly clients. Fixed by having `_parseSession` also read the
+  nested `user.id`; regression test added.
+- **Spin start missing idempotencyKey** — `SpinWheelApiService.startSpin` sent
+  only `{playerId}`, but `POST /arcade/spin/start` now requires an
+  `idempotencyKey` (returns 400 without it), so every real spin fell back to the
+  mock outcome. Now includes a generated key.
+- **SecureChannel session start 500s (backend)** — `POST /security/sessions`
+  returns `500 {"error":"An internal error occurred."}` on the backend; the
+  client already retries and degrades gracefully ("Secure session bootstrap
+  skipped"). Server-side issue, noted for the backend, no client change.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those

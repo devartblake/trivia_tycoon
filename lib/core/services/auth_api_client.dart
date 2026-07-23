@@ -792,10 +792,20 @@ class AuthApiClient {
     // Try common shapes:
     // { accessToken, refreshToken, expiresAtUtc, userId }
     // { access_token, refresh_token, expires_at, user_id }
+    // { ..., user: { id, handle, ... } }   ← device/bootstrap + login shape
     final access = _asString(json['accessToken'] ?? json['access_token']);
     final refresh = _asString(json['refreshToken'] ?? json['refresh_token']);
 
-    final userId = _asNullableString(json['userId'] ?? json['user_id']);
+    // The device-bootstrap/login payloads carry the id nested under `user.id`
+    // rather than a top-level `userId`; without this fallback session.userId is
+    // null, auth_user_id is never persisted, and the app falls back to a
+    // generated local_<guid> identity (404s on personalization/rewards, tier
+    // and weekly clients log "Missing user ID").
+    final nestedUser = json['user'];
+    final nestedUserId =
+        nestedUser is Map ? (nestedUser['id'] ?? nestedUser['userId']) : null;
+    final userId =
+        _asNullableString(json['userId'] ?? json['user_id'] ?? nestedUserId);
 
     // Parse expiration
     DateTime? expiresAtUtc;
