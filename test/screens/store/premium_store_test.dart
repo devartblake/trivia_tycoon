@@ -133,6 +133,13 @@ void main() {
 
   testWidgets('premium store hides special offers when saleInfo is null',
       (tester) async {
+    // The store is a lazy CustomScrollView; give it a tall viewport so the
+    // reward center (below the banners) is actually built.
+    tester.view.physicalSize = const Size(1080, 4000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     final storeData = PremiumStoreData(
       adFree: AdFreeConfig.fallback,
       saleInfo: null,
@@ -191,7 +198,7 @@ void main() {
       ),
     );
 
-    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
 
     expect(find.text('Special Offers'), findsNothing);
     expect(find.text('Day 3 of 7'), findsOneWidget);
