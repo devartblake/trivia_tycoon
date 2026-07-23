@@ -9,6 +9,7 @@ import '../../core/design_system/synaptix_scaffold.dart';
 import '../../core/design_system/glass_app_bar.dart';
 import '../../core/design_system/segmented_selection_hub.dart';
 import '../../core/design_system/glow_text.dart';
+import '../../core/navigation/navigation_extensions.dart';
 
 /// Visualization of player's skill tree progression
 class SkillTreeVisualization extends ConsumerStatefulWidget {
@@ -35,7 +36,11 @@ class _SkillTreeVisualizationState
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded,
                 color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
+            // /skills is entered via context.go(), which replaces the stack, so
+            // this can be the only page in the shell branch. A bare pop() would
+            // pop the last page and trip GoRouter's currentConfiguration
+            // assertion — use safeBack so it falls back to /home instead.
+            onPressed: () => context.safeBack(),
           ),
         ),
         body: SafeArea(

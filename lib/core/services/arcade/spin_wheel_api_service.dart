@@ -140,8 +140,11 @@ class SpinWheelApiService {
   Future<SpinStartResponse> startSpin({String? playerId}) async {
     _log.info('Requesting server-generated spin start');
     try {
+      // The backend requires an idempotencyKey on start (returns 400 without
+      // it); scope one per start so a retried request resolves to the same spin.
       final body = <String, dynamic>{
         if (playerId != null) 'playerId': playerId,
+        'idempotencyKey': generateIdempotencyKey(),
       };
       final json = await _apiService.post('/arcade/spin/start', body: body);
       return SpinStartResponse.fromJson(json);
