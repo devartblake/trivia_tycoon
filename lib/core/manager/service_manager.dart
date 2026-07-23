@@ -343,6 +343,34 @@ class ServiceManager {
       tokenStore: tokenStore,
       baseUrl: apiV1BaseUrl,
     );
+
+    // Token refresh must travel the KMS secure channel (backend /auth/refresh is
+    // RequireSecureChannel), but it cannot go through `authHttpClient` — that
+    // client auto-refreshes on expiry, so the refresh POST (and the
+    // /security/sessions/start it needs) would recurse into refresh. Build a
+    // dedicated transport with autoRefresh disabled (and the guest gate off, so
+    // guests can always refresh), reusing the shared secure-session store, then
+    // late-inject it into authApiClient to break the construction cycle.
+    // See docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md (Phase 2, B-proactive).
+    final refreshAuthHttpClient = AuthHttpClient(
+      coreAuth,
+      tokenStore,
+      autoRefresh: false,
+      enforceGuestGate: false,
+    );
+    final refreshSecureChannel = DefaultSecureChannelService(
+      httpClient: refreshAuthHttpClient,
+      sessionStore: secureSessionStore,
+      deviceIdService: deviceIdSvc,
+      baseUrl: baseUrl,
+    );
+    final refreshEncryptedClient = EncryptedApiClient(
+      authClient: refreshAuthHttpClient,
+      secureChannel: refreshSecureChannel,
+      tokenStore: tokenStore,
+      baseUrl: apiV1BaseUrl,
+    );
+    authApiClient.attachRefreshTransport(refreshEncryptedClient);
     final history = QrHistoryService(cache: cache, settings: qrSettings);
     final httpClient = HttpClient(
       authClient: authHttpClient,

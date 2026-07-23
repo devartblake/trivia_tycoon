@@ -81,12 +81,14 @@ class AuthHttpClient extends http.BaseClient {
       return GuestApiGate.blockedStreamedResponse(request.url);
     }
 
-    // Check if token is expired and auto-refresh is enabled.
+    // Refresh *proactively* — while the access token is still valid — so the KMS
+    // secure channel can be (re)started with a valid bearer before the encrypted
+    // /auth/refresh runs (see GUEST_IDENTITY_KMS_TIERING_PLAN.md, B-proactive).
     // _pendingRefresh serializes concurrent requests so only one refresh
     // call is issued even when multiple requests detect expiry simultaneously.
-    if (autoRefresh && session.hasTokens && session.isExpired) {
+    if (autoRefresh && session.hasTokens && session.isExpiringSoon()) {
       try {
-        LogManager.debug('[AuthHttpClient] Token expired, refreshing...');
+        LogManager.debug('[AuthHttpClient] Token expiring soon, refreshing...');
         await _refreshOnce();
         onTokenRefreshed?.call();
         LogManager.debug('[AuthHttpClient] Token refreshed successfully');

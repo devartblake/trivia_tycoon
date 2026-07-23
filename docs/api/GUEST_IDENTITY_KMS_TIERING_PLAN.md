@@ -123,12 +123,27 @@ focused, live-verified refactor, not a one-line change):**
   token to start a channel), fall back to `bootstrapDevice()` re-issue for guests
   / re-login prompt for accounts — never a silent logout.
 
-**Why not shipped from here:** the whole point of B is that the encrypted refresh
-handshake actually works end-to-end, which can only be verified against a running
-KMS + backend; and it edits the critical auth path (a wrong move logs out every
-user). It should land as its own PR validated with a live smoke test, using the
-recursion-safe design above. Client unit tests can cover `isExpiringSoon`, the
-parse/persist, and that refresh uses the non-refreshing transport.
+**Status: IMPLEMENTED (client), pending live smoke.** Landed:
+- `EncryptedRefreshTransport` seam (`lib/core/networking/`); `EncryptedApiClient`
+  implements it.
+- `AuthApiClient.refresh()` routes through the injected transport (encrypted
+  `/auth/refresh`) and reuses `_parseSession`; `attachRefreshTransport()` is
+  late-injected.
+- `service_manager` builds a dedicated `AuthHttpClient(autoRefresh:false,
+  enforceGuestGate:false)` → its own `DefaultSecureChannelService` → its own
+  `EncryptedApiClient` for the refresh path (recursion-safe), and attaches it.
+- `AuthHttpClient.send()` now triggers on `isExpiringSoon()` (proactive) instead
+  of `isExpired`.
+- Unit tests: `isExpiringSoon` (5), `refresh()` routes through the encrypted
+  transport + parses nested `user.id` (1). `flutter analyze` clean.
+
+**Still required before enabling for users (live smoke):** verify end-to-end
+against a running KMS + backend that (1) the encrypted `/auth/refresh` handshake
+succeeds (AAD/path binding for `/api/v1/auth/refresh` matches
+`SecureChannelMiddleware.BuildAad`, same as the 16 gated endpoints), (2) proactive
+refresh + `/security/sessions/renew` keep a long session alive, and (3) the
+expired-idle path fails cleanly to re-bootstrap/re-login rather than a silent
+logout. The unit tests cannot exercise the real handshake.
 
 ### Phase 3 — prefer platform identity for the default guest (client)
 Lean into the existing `platformLinked` bootstrap

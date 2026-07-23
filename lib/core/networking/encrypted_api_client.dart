@@ -8,8 +8,9 @@ import '../security/secure_channel_models.dart';
 import '../security/secure_channel_service.dart';
 import '../services/auth_http_client.dart';
 import '../services/auth_token_store.dart';
+import 'encrypted_refresh_transport.dart';
 
-class EncryptedApiClient {
+class EncryptedApiClient implements EncryptedRefreshTransport {
   final AuthHttpClient _authClient;
   final SecureChannelService _secureChannel;
   final AuthTokenStore _tokenStore;
@@ -24,6 +25,7 @@ class EncryptedApiClient {
         _secureChannel = secureChannel,
         _tokenStore = tokenStore;
 
+  @override
   Future<Map<String, dynamic>> postEncrypted(
     String path, {
     required Map<String, dynamic> body,

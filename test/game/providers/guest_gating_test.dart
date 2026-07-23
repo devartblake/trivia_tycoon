@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:synaptix/game/providers/auth_providers.dart';
 
 class _FakeIdentity extends PlayerIdentityNotifier {
-  _FakeIdentity(Ref ref, PlayerIdentityKind kind) : super(ref) {
+  _FakeIdentity(super.ref, PlayerIdentityKind kind) {
     state = PlayerIdentityState(isReady: true, kind: kind);
   }
 }
