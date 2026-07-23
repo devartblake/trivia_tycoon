@@ -382,6 +382,7 @@ class _DailyBonusSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: const ValueKey('dailyBonusLoadingSkeleton'),
       elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(24.0),

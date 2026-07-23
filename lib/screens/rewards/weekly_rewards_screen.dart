@@ -511,6 +511,7 @@ class _WeeklyCalendarSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      key: const ValueKey('weeklyRewardsLoadingSkeleton'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
