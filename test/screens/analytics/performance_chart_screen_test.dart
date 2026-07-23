@@ -2,8 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:synaptix/screens/analytics/performance_chart_screen.dart';
+import 'package:synaptix/ui_components/analytics/performance_chart_provider.dart';
 import 'package:synaptix/ui_components/analytics/performance_line_chart.dart';
 import 'package:synaptix/ui_components/analytics/chart_selector.dart';
+
+/// Non-empty chart data so the summary-statistics section renders (it is hidden
+/// when the data is empty).
+final _sampleChartData = <PerformanceDataPoint>[
+  PerformanceDataPoint(
+    timestamp: DateTime(2026, 1, 1),
+    accuracy: 70,
+    xpEarned: 100,
+    questionsAnswered: 10,
+  ),
+  PerformanceDataPoint(
+    timestamp: DateTime(2026, 1, 2),
+    accuracy: 90,
+    xpEarned: 200,
+    questionsAnswered: 12,
+  ),
+];
 
 void main() {
   group('PerformanceChartScreen (Riverpod)', () {
@@ -118,6 +136,10 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            performanceChartDisplayProvider
+                .overrideWith((ref) async => _sampleChartData),
+          ],
           child: MaterialApp(
             home: Scaffold(
               body: PerformanceChartScreen(),
@@ -135,6 +157,10 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            performanceChartDisplayProvider
+                .overrideWith((ref) async => _sampleChartData),
+          ],
           child: MaterialApp(
             home: Scaffold(
               body: PerformanceChartScreen(),
