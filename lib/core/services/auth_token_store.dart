@@ -29,6 +29,20 @@ class AuthSession {
     return DateTime.now().toUtc().isAfter(expiresAtUtc!);
   }
 
+  /// True once the access token is within [lead] of expiry (or already expired).
+  /// Used to refresh *proactively* — while the token is still valid — so the KMS
+  /// secure channel can be (re)started with a valid bearer before the encrypted
+  /// `/auth/refresh` runs. See docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md
+  /// (Phase 2, Option B-proactive). [now] is injectable for tests.
+  bool isExpiringSoon({
+    Duration lead = const Duration(minutes: 3),
+    DateTime? now,
+  }) {
+    if (expiresAtUtc == null) return false;
+    final current = (now ?? DateTime.now()).toUtc();
+    return current.isAfter(expiresAtUtc!.subtract(lead));
+  }
+
   String? get role {
     if (metadata == null) return null;
 

@@ -82,11 +82,53 @@ only if/when they hit a secure-channel-gated endpoint (which `EncryptedApiClient
 establishes on demand). Cuts per-guest KMS session churn and removes the
 launch-time handshake (the 500-at-launch source). Auth provider tests green.
 
-### Phase 2 — decouple guest token refresh from the channel (backend + client)
-Depending on Phase 0: either give device-guest tokens a refresh path that does
-not require the secure channel (keep channel-bound refresh for elevated
-sessions only), or fix the client to refresh over the encrypted channel. This is
-the change that lets guests stay logged in without a standing KMS session.
+### Phase 2 — refresh over the encrypted channel, proactively (Option **B-proactive**, chosen)
+Decision: **keep** `/auth/refresh` `RequireSecureChannel` (the backend team treats
+it as a first-class secure-channel endpoint — `SecureChannelFilterTests` uses it
+as *the* canonical test target), and fix the client to refresh **over** the
+encrypted channel, triggered **proactively** while the access token is still
+valid. This preserves the security posture and keeps Phase 1 (guests only spin up
+a KMS session if active past the refresh threshold, not at launch).
+
+**⚠️ Hazards found while implementing (must be handled — this is why it is a
+focused, live-verified refactor, not a one-line change):**
+
+1. **Auto-refresh recursion.** `EncryptedApiClient` and `SecureChannelService`
+   both transport over `AuthHttpClient`, which auto-refreshes on expiry. If the
+   refresh POST (or the `/security/sessions/start` it needs) goes through that
+   same client, it re-enters refresh → infinite recursion. This is exactly why
+   the current refresh uses a *separate* non-refreshing transport
+   (`ApiService._refreshDio`, `AuthApiClient`'s raw `http.Client`).
+2. **DI cycle.** `authApiClient → coreAuth → authHttpClient → secureChannel /
+   encryptedApiClient → authHttpClient`. The refresh path cannot simply depend on
+   `EncryptedApiClient`.
+
+**Recursion-safe design:**
+- Build a dedicated **`AuthHttpClient(coreAuth, tokenStore, autoRefresh: false)`**
+  and a dedicated `DefaultSecureChannelService` over it (sharing
+  `secureSessionStore`) for the refresh path only. `autoRefresh:false` breaks the
+  recursion; late-inject it to break the construction cycle.
+- Route `AuthApiClient.refresh()` (and unify `ApiService._refreshSessionToken`)
+  through that channel: encrypt `{refreshToken}` → `POST /api/v1/auth/refresh`
+  with the secure envelope + `X-Syn-Sec-*` headers → decrypt → reuse
+  `AuthApiClient._parseSession` (keeps the nested-`user.id` handling). Confirm the
+  request AAD (`method|path|sessionId|seq|subject`) matches what
+  `SecureChannelMiddleware.BuildAad` expects for `/api/v1/auth/refresh`.
+- **Proactive trigger:** add `AuthSession.isExpiringSoon({lead})` and change
+  `AuthHttpClient.send()` from `session.isExpired` → `isExpiringSoon` (refresh at
+  ~80% TTL / a few minutes before expiry) so the token is still valid when the
+  channel is (re)started, and **renew** (`/security/sessions/renew`) the session
+  before its 30-min TTL.
+- **Expired-idle edge:** if the app was idle and the token fully expired (no valid
+  token to start a channel), fall back to `bootstrapDevice()` re-issue for guests
+  / re-login prompt for accounts — never a silent logout.
+
+**Why not shipped from here:** the whole point of B is that the encrypted refresh
+handshake actually works end-to-end, which can only be verified against a running
+KMS + backend; and it edits the critical auth path (a wrong move logs out every
+user). It should land as its own PR validated with a live smoke test, using the
+recursion-safe design above. Client unit tests can cover `isExpiringSoon`, the
+parse/persist, and that refresh uses the non-refreshing transport.
 
 ### Phase 3 — prefer platform identity for the default guest (client)
 Lean into the existing `platformLinked` bootstrap
