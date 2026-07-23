@@ -322,11 +322,12 @@ void main() {
         // Arrange
         mockHttpClient.setException(Exception('Null response'));
 
-        // Act & Assert - Should not throw
-        expect(
-          () => tierApiClient.getTierDefinitions(),
-          throwsA(anything), // Will throw because exception escapes try-catch
-        );
+        // Act - getTierDefinitions catches the error and falls back to mock
+        // tiers rather than throwing.
+        final tiers = await tierApiClient.getTierDefinitions();
+
+        // Assert - graceful fallback, not a throw
+        expect(tiers, isNotEmpty);
       });
 
       test('Handles malformed tier data', () async {

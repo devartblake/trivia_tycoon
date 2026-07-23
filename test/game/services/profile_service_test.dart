@@ -123,7 +123,13 @@ void main() {
     late ProfileService svc;
 
     setUp(() {
-      container = ProviderContainer();
+      // Isolate storage per test: the default provider is a shared singleton, so
+      // a category unlocked in one test would otherwise persist into the next.
+      container = ProviderContainer(
+        overrides: [
+          generalKeyValueStorageProvider.overrideWithValue(_FakeStorage()),
+        ],
+      );
       svc = _makeSyncService(container: container);
     });
     tearDown(() => container.dispose());

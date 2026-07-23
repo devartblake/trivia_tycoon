@@ -156,6 +156,10 @@ class TierApiClient {
               ?.map((e) => TierDefinition.fromJson(
                     Map<String, dynamic>.from(e as Map),
                   ))
+              // Drop malformed entries (a tier with no id, e.g. `{}`) so a junk
+              // payload falls back to the mock tiers instead of surfacing a
+              // meaningless tier.
+              .where((t) => t.id.isNotEmpty)
               .toList();
 
           if (tiers != null && tiers.isNotEmpty) {
