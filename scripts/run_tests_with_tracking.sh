@@ -32,6 +32,10 @@ with open(machine_log, encoding="utf-8") as f:
             event = json.loads(line)
         except json.JSONDecodeError:
             continue
+        # The --machine stream can include non-object JSON lines (e.g. a
+        # top-level array); only per-event objects carry a "type".
+        if not isinstance(event, dict):
+            continue
         t = event.get("type")
         if t == "suite":
             suite += 1
