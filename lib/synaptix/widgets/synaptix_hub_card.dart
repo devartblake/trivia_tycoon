@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:synaptix/core/design_system/adaptive_glass_card.dart';
 import '../../game/analytics/providers/analytics_providers.dart';
 import '../mode/synaptix_mode_provider.dart';
-import '../theme/synaptix_theme_extension.dart';
 import '../utils/hub_feedback.dart';
 
 /// Reusable quick-launch card for the Synaptix Hub grid.
@@ -28,9 +27,6 @@ class SynaptixHubCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final synaptix = Theme.of(context).extension<SynaptixTheme>();
-    final radius = synaptix?.cardRadius ?? 16.0;
-
     return Hero(
       tag: 'surface_$surface',
       child: AdaptiveGlassCard(

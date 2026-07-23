@@ -74,6 +74,9 @@ class _SkillTierSectionState extends State<SkillTierSection> {
       crossAxisCount: columnCount,
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
+      // Cards are taller than they are wide; a square cell clips the icon +
+      // name + level rows at narrow (mobile) widths.
+      childAspectRatio: 0.72,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: widget.skills

@@ -36,17 +36,19 @@ class DateFormatter {
     if (absDiff.inSeconds < 60) {
       return difference.isNegative ? 'just now' : 'in a moment';
     } else if (absDiff.inMinutes < 60) {
-      final mins = absDiff.inMinutes;
+      // Round rather than truncate: a future "+2 min" target is measured a few
+      // ms later (~1m59s), which inMinutes would floor to 1.
+      final mins = (absDiff.inSeconds / 60).round();
       return difference.isNegative
           ? '$mins ${mins == 1 ? 'minute' : 'minutes'} ago'
           : 'in $mins ${mins == 1 ? 'minute' : 'minutes'}';
     } else if (absDiff.inHours < 24) {
-      final hours = absDiff.inHours;
+      final hours = (absDiff.inMinutes / 60).round();
       return difference.isNegative
           ? '$hours ${hours == 1 ? 'hour' : 'hours'} ago'
           : 'in $hours ${hours == 1 ? 'hour' : 'hours'}';
     } else {
-      final days = absDiff.inDays;
+      final days = (absDiff.inHours / 24).round();
       return difference.isNegative
           ? '$days ${days == 1 ? 'day' : 'days'} ago'
           : 'in $days ${days == 1 ? 'day' : 'days'}';

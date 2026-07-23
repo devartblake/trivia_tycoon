@@ -155,6 +155,13 @@ void main() {
     });
 
     testWidgets('pending withdrawal shows polling notice', (tester) async {
+      // The body is a lazy ListView; give it a tall viewport so the transaction
+      // history section (below balance/staking) is actually built.
+      tester.view.physicalSize = const Size(1080, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       await tester.pumpWidget(
         _wrap(
           flags: _enabledFlags,
@@ -170,6 +177,11 @@ void main() {
     });
 
     testWidgets('no crypto activity shown for empty history', (tester) async {
+      tester.view.physicalSize = const Size(1080, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       await tester.pumpWidget(_wrap(flags: _enabledFlags));
       await tester.pump();
 

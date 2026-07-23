@@ -54,7 +54,9 @@ class _CategoryPieChartState extends State<CategoryPieChart>
       );
     }
 
-    final accentColor = Theme.of(context).extension<SynaptixTheme>()?.accentGlow ?? Theme.of(context).primaryColor;
+    final accentColor =
+        Theme.of(context).extension<SynaptixTheme>()?.accentGlow ??
+            Theme.of(context).primaryColor;
 
     // Sort by total questions (descending) and take top 5-7 for the bloom
     final topCategories = ([...widget.categories]

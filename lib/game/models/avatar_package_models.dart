@@ -399,7 +399,7 @@ class FolderIndex {
       }
     }
     return FolderIndex(
-      version: (json['version'] ?? 1) is int ? (json['version'] as int) : 1,
+      version: json['version'] is int ? json['version'] as int : 1,
       items: items,
     );
   }

@@ -307,7 +307,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                  constraints:
+                      const BoxConstraints(minWidth: 16, minHeight: 16),
                   child: Text(
                     badgeCount.toString(),
                     style: const TextStyle(
@@ -370,8 +371,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.chat_bubble_outline,
-                color: Color(0xFF72767D), size: 64),
+            Icon(Icons.chat_bubble_outline, color: Color(0xFF72767D), size: 64),
             SizedBox(height: 16),
             Text(
               'No conversations yet',
@@ -662,27 +662,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     return 'now';
   }
 
-  Widget _buildCreateDMButton() {
-    return FloatingActionButton.extended(
-      onPressed: () => _showCreateDMDialog(),
-      backgroundColor: const Color(0xFF5865F2),
-      foregroundColor: Colors.white,
-      elevation: 6,
-      extendedPadding: const EdgeInsets.symmetric(horizontal: 20),
-      label: const Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.add_comment_rounded, size: 20),
-          SizedBox(width: 8),
-          Text(
-            'Create DM',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _openConversationDetail(Conversation conversation) {
     context.push(
       '/messages/detail/${conversation.id}',
@@ -777,7 +756,8 @@ class OnlineGroupWidget extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: const Color(0xFF3BA55C),
                     borderRadius: BorderRadius.circular(8),
@@ -806,7 +786,12 @@ class OnlineGroupWidget extends StatelessWidget {
               height: 24,
               child: Stack(
                 children: [
-                  ...group.avatars.take(4).toList().asMap().entries.map((entry) {
+                  ...group.avatars
+                      .take(4)
+                      .toList()
+                      .asMap()
+                      .entries
+                      .map((entry) {
                     final index = entry.key;
                     final avatar = entry.value;
                     return Positioned(

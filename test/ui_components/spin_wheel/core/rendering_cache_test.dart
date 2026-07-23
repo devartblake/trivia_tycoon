@@ -73,8 +73,9 @@ void main() {
 
         // Paint objects should be the same instance (reused from pool)
         expect(identical(paint1, paint2), true);
-        // But color should be updated
-        expect(paint1.color, Colors.red);
+        // But color should be updated. Paint.color normalises to a plain
+        // Color, which no longer == a MaterialColor, so compare by value.
+        expect(paint1.color, isSameColorAs(Colors.red));
       });
 
       test('getSegmentStrokePaint returns cached stroke paint', () {

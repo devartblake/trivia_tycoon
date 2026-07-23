@@ -11,7 +11,8 @@ class FeedbackService {
   FeedbackService({NativePlatformService? native})
       : _native = native ?? NativePlatformService.instance;
 
-  Future<void> haptic(NativeHapticPattern pattern, [BuildContext? context]) async {
+  Future<void> haptic(NativeHapticPattern pattern,
+      [BuildContext? context]) async {
     SynaptixHapticIntensity? intensity;
     if (context != null) {
       intensity = Theme.of(context).extension<SynaptixTheme>()?.hapticIntensity;
@@ -48,16 +49,32 @@ class FeedbackService {
       NativeHapticPattern pattern, SynaptixHapticIntensity intensity) {
     if (intensity == SynaptixHapticIntensity.energetic) {
       // Upgrade feedback for high energy
-      if (pattern == NativeHapticPattern.selection) return NativeHapticPattern.light;
-      if (pattern == NativeHapticPattern.light) return NativeHapticPattern.medium;
-      if (pattern == NativeHapticPattern.medium) return NativeHapticPattern.heavy;
-      if (pattern == NativeHapticPattern.success) return NativeHapticPattern.heavy;
+      if (pattern == NativeHapticPattern.selection) {
+        return NativeHapticPattern.light;
+      }
+      if (pattern == NativeHapticPattern.light) {
+        return NativeHapticPattern.medium;
+      }
+      if (pattern == NativeHapticPattern.medium) {
+        return NativeHapticPattern.heavy;
+      }
+      if (pattern == NativeHapticPattern.success) {
+        return NativeHapticPattern.heavy;
+      }
     } else if (intensity == SynaptixHapticIntensity.soft) {
       // Downgrade feedback for soft mode
-      if (pattern == NativeHapticPattern.heavy) return NativeHapticPattern.medium;
-      if (pattern == NativeHapticPattern.medium) return NativeHapticPattern.light;
-      if (pattern == NativeHapticPattern.light) return NativeHapticPattern.selection;
-      if (pattern == NativeHapticPattern.error) return NativeHapticPattern.medium;
+      if (pattern == NativeHapticPattern.heavy) {
+        return NativeHapticPattern.medium;
+      }
+      if (pattern == NativeHapticPattern.medium) {
+        return NativeHapticPattern.light;
+      }
+      if (pattern == NativeHapticPattern.light) {
+        return NativeHapticPattern.selection;
+      }
+      if (pattern == NativeHapticPattern.error) {
+        return NativeHapticPattern.medium;
+      }
     }
     return pattern;
   }

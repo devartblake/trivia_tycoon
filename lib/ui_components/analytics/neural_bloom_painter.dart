@@ -66,7 +66,8 @@ class NeuralBloomPainter extends CustomPainter {
       // Draw axis line
       canvas.drawLine(
         center,
-        Offset(center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
+        Offset(
+            center.dx + radius * cos(angle), center.dy + radius * sin(angle)),
         webPaint,
       );
     }

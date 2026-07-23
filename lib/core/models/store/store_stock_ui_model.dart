@@ -175,8 +175,11 @@ class PlayerStoreItem {
           StoreAvailabilityState.fromJson(Map<String, dynamic>.from(availJson));
     } else {
       final availState = json['availabilityState'] as String?;
-      final isAvail =
-          json['isAvailable'] as bool? ?? (availState == 'available');
+      // Absent availability signals default to purchasable, matching the nested
+      // StoreAvailabilityState.fromJson({}) default; only an explicit non-
+      // 'available' state (e.g. 'locked') marks it unavailable.
+      final isAvail = json['isAvailable'] as bool? ??
+          (availState == null || availState == 'available');
       final discountPct = (json['discountPercent'] as num?)?.toInt() ?? 0;
       availability = StoreAvailabilityState(
         isVisible: true,

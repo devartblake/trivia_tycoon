@@ -24,12 +24,17 @@ class PlayerProfileService {
   static const _reducedMotionKey = 'reducedMotion';
   static const _tonePreferenceKey = 'tonePreference';
 
-  /// Gets the settings box, opening it if necessary
+  /// In-flight open future, cached so concurrent callers share a single
+  /// [Hive.openBox] instead of each racing to open the same box (which can
+  /// double-open or interleave reads/writes non-deterministically).
+  Future<Box>? _openFuture;
+
+  /// Gets the settings box, opening it if necessary.
   Future<Box> _getBox() async {
     if (Hive.isBoxOpen(_boxName)) {
       return Hive.box(_boxName);
     }
-    return await Hive.openBox(_boxName);
+    return _openFuture ??= Hive.openBox(_boxName);
   }
 
   // ------------------------- NEW METHOD ----------------------

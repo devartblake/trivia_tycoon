@@ -28,7 +28,8 @@ final categoryPerformanceProvider =
 });
 
 /// Provides all categories with their performance data
-final allCategoriesPerformanceProvider = Provider<List<CategoryPerformance>>((ref) {
+final allCategoriesPerformanceProvider =
+    Provider<List<CategoryPerformance>>((ref) {
   final analyticsService = ref.watch(questionAnalyticsServiceProvider);
   // We'll use a representative list of categories to scan
   const categoriesToScan = [

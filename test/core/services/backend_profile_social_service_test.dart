@@ -134,23 +134,22 @@ void main() {
     expect((body as Map)['username'], 'alexj');
   });
 
-  test('removeFriend sends compatibility body to delete route', () async {
+  test('removeFriend DELETEs the authenticated per-friend route', () async {
+    // The acting player comes from the JWT server-side; the friend id is in the
+    // path, not a spoofable request body. (This replaced the old unauthenticated
+    // DELETE /friends that took player ids in the body.)
     String? path;
-    dynamic body;
     final service = BackendProfileSocialService(
       _fakeApi(
         response: {'removed': true},
         onRequest: (p, b, _) {
           path = p;
-          body = b;
         },
       ),
     );
 
     await service.removeFriend('friend-456');
-    expect(path, '/friends');
-    expect((body as Map)['friendId'], 'friend-456');
-    expect((body as Map)['targetUserId'], 'friend-456');
+    expect(path, '/users/me/friends/friend-456');
   });
 
   // ---------------------------------------------------------------------------

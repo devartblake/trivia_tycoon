@@ -480,13 +480,14 @@ class _QuestionListScreenState extends ConsumerState<QuestionListScreen> {
                 : ReorderableListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: _paginated().length,
-                    onReorder: (oldIndex, newIndex) {
+                    onReorderItem: (oldIndex, newIndex) {
                       setState(() {
+                        // onReorderItem already adjusts newIndex for the removal
+                        // at oldIndex, so no manual decrement is needed.
                         final actualOldIndex =
                             _currentPage * _pageSize + oldIndex;
-                        var actualNewIndex =
+                        final actualNewIndex =
                             _currentPage * _pageSize + newIndex;
-                        if (actualNewIndex > actualOldIndex) actualNewIndex--;
 
                         final item = _filtered.removeAt(actualOldIndex);
                         _filtered.insert(actualNewIndex, item);

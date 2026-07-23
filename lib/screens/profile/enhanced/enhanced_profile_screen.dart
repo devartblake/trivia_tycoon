@@ -117,18 +117,20 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
     final backendService = ref.read(backendProfileSocialServiceProvider);
     try {
       final summary = await backendService.getCareerSummary(widget.userId);
-      if (mounted)
+      if (mounted) {
         setState(() {
           _mergeCareerSummary(summary);
         });
+      }
     } catch (_) {}
     if (!widget.isOwnProfile) return;
     try {
       final loadout = await backendService.getLoadout();
-      if (mounted)
+      if (mounted) {
         setState(() {
           _mergeLoadout(loadout);
         });
+      }
     } catch (_) {}
   }
 
@@ -576,11 +578,12 @@ class _EnhancedProfileScreenState extends ConsumerState<EnhancedProfileScreen>
     final profile = ref.read(activeProfileStateProvider);
     if (profile != null) {
       final result = await EditProfileBottomSheet.show(context, profile);
-      if (result == true && mounted)
+      if (result == true && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('Profile updated!'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: const Color(0xFF10B981)));
+      }
     }
   }
 

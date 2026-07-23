@@ -82,7 +82,7 @@ class _SortingViewState extends State<SortingView> {
         ),
         const SizedBox(height: 16),
         ReorderableListView(
-          onReorder: !widget.showFeedback ? _onReorder : (_, __) {},
+          onReorderItem: !widget.showFeedback ? _onReorder : (_, __) {},
           children: currentOrder.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;

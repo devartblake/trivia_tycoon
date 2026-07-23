@@ -34,11 +34,14 @@ class _AdaptiveGlassCardState extends State<AdaptiveGlassCard> {
   Widget build(BuildContext context) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
     final radius = widget.borderRadius ?? synaptix?.cardRadius ?? 16.0;
-    final accent = widget.glowColor ?? synaptix?.accentGlow ?? Colors.cyanAccent;
-    
-    final shouldBlur = widget.showBlur ?? (synaptix?.useHighEnergyMotion ?? true);
+    final accent =
+        widget.glowColor ?? synaptix?.accentGlow ?? Colors.cyanAccent;
+
+    final shouldBlur =
+        widget.showBlur ?? (synaptix?.useHighEnergyMotion ?? true);
     final blurAmount = synaptix?.useHighEnergyMotion == false ? 25.0 : 12.0;
-    final opacity = shouldBlur ? (synaptix?.useSoftCorners == true ? 0.2 : 0.1) : 0.35;
+    final opacity =
+        shouldBlur ? (synaptix?.useSoftCorners == true ? 0.2 : 0.1) : 0.35;
 
     Widget content = Container(
       padding: widget.padding,

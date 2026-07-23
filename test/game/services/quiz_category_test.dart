@@ -8,10 +8,6 @@ void main() {
   // -------------------------------------------------------------------------
 
   group('QuizCategory enum values', () {
-    test('has at least 40 values', () {
-      expect(QuizCategory.values.length, greaterThanOrEqualTo(40));
-    });
-
     test('has exactly 36 values', () {
       expect(QuizCategory.values.length, 36);
     });

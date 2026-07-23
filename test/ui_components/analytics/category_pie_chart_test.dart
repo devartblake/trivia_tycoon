@@ -3,6 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:synaptix/game/services/question_analytics_service.dart';
 import 'package:synaptix/ui_components/analytics/category_pie_chart.dart';
 
+// NOTE: CategoryPieChart was redesigned into the "Neural Bloom" visualization —
+// a CustomPaint bloom plus a category legend. The per-category accuracy %,
+// correct/total counts, LinearProgressIndicator bars, and the onCategoryTap
+// interaction were dropped in that redesign, so those assertions were removed
+// here (accuracy is now conveyed visually by the bloom rather than as text).
 void main() {
   group('CategoryPieChart', () {
     late List<CategoryPerformance> mockCategories;
@@ -33,97 +38,39 @@ void main() {
       ];
     });
 
-    testWidgets('displays title', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: mockCategories),
-          ),
-        ),
-      );
+    Widget wrap(List<CategoryPerformance> categories) => MaterialApp(
+          home: Scaffold(body: CategoryPieChart(categories: categories)),
+        );
 
-      expect(find.text('Performance by Category'), findsOneWidget);
+    testWidgets('displays title', (WidgetTester tester) async {
+      await tester.pumpWidget(wrap(mockCategories));
+      expect(find.text('Neural Bloom'), findsOneWidget);
     });
 
-    testWidgets('displays all categories', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: mockCategories),
-          ),
-        ),
-      );
+    testWidgets('displays subtitle', (WidgetTester tester) async {
+      await tester.pumpWidget(wrap(mockCategories));
+      expect(find.text('Your cognitive growth by category'), findsOneWidget);
+    });
 
+    testWidgets('displays all categories in the legend',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(wrap(mockCategories));
       expect(find.text('Math'), findsOneWidget);
       expect(find.text('Science'), findsOneWidget);
       expect(find.text('History'), findsOneWidget);
     });
 
-    testWidgets('displays accuracy percentages', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: mockCategories),
-          ),
-        ),
-      );
-
-      expect(find.text('90.0%'), findsOneWidget);
-      expect(find.text('80.0%'), findsOneWidget);
-      expect(find.text('70.0%'), findsOneWidget);
-    });
-
-    testWidgets('displays correct/total questions',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: mockCategories),
-          ),
-        ),
-      );
-
-      expect(find.text('18/20 correct'), findsOneWidget);
-      expect(find.text('12/15 correct'), findsOneWidget);
-      expect(find.text('7/10 correct'), findsOneWidget);
+    testWidgets('renders the bloom visualization', (WidgetTester tester) async {
+      await tester.pumpWidget(wrap(mockCategories));
+      expect(find.byType(CustomPaint), findsWidgets);
     });
 
     testWidgets('shows empty state', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: []),
-          ),
-        ),
-      );
-
+      await tester.pumpWidget(wrap(const []));
       expect(find.text('No category data available'), findsOneWidget);
     });
 
-    testWidgets('handles callback on category tap',
-        (WidgetTester tester) async {
-      String? selectedCategory;
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(
-              categories: mockCategories,
-              onCategoryTap: (category) {
-                selectedCategory = category;
-              },
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.text('Math').first);
-      await tester.pumpAndSettle();
-
-      expect(selectedCategory, 'Math');
-    });
-
-    testWidgets('limits to top 5 categories', (WidgetTester tester) async {
+    testWidgets('limits to the top categories', (WidgetTester tester) async {
       final manyCategories = List.generate(
         10,
         (i) => CategoryPerformance(
@@ -135,17 +82,12 @@ void main() {
         ),
       );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: manyCategories),
-          ),
-        ),
-      );
+      await tester.pumpWidget(wrap(manyCategories));
 
+      // Top entries (by total questions) appear; the long tail is trimmed.
       expect(find.text('Category 0'), findsOneWidget);
       expect(find.text('Category 4'), findsOneWidget);
-      expect(find.text('Category 9'), findsNothing); // Should not show 6th+
+      expect(find.text('Category 9'), findsNothing);
     });
 
     testWidgets('sorts by questions count (descending)',
@@ -167,75 +109,10 @@ void main() {
         ),
       ];
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: unsortedCategories),
-          ),
-        ),
-      );
+      await tester.pumpWidget(wrap(unsortedCategories));
 
-      final highFinder = find.text('High');
-      final lowFinder = find.text('Low');
-      expect(highFinder, findsOneWidget);
-      expect(lowFinder, findsOneWidget);
-    });
-
-    testWidgets('displays progress bar for each category',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: mockCategories),
-          ),
-        ),
-      );
-
-      expect(find.byType(LinearProgressIndicator), findsWidgets);
-    });
-
-    testWidgets('handles perfect accuracy (100%)', (WidgetTester tester) async {
-      final perfectCategories = [
-        CategoryPerformance(
-          category: 'Perfect',
-          totalQuestions: 10,
-          correctQuestions: 10,
-          accuracy: 100.0,
-          totalXP: 1000,
-        ),
-      ];
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: perfectCategories),
-          ),
-        ),
-      );
-
-      expect(find.text('100.0%'), findsOneWidget);
-    });
-
-    testWidgets('handles zero accuracy (0%)', (WidgetTester tester) async {
-      final zeroCategories = [
-        CategoryPerformance(
-          category: 'Zero',
-          totalQuestions: 10,
-          correctQuestions: 0,
-          accuracy: 0.0,
-          totalXP: 0,
-        ),
-      ];
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: CategoryPieChart(categories: zeroCategories),
-          ),
-        ),
-      );
-
-      expect(find.text('0.0%'), findsOneWidget);
+      expect(find.text('High'), findsOneWidget);
+      expect(find.text('Low'), findsOneWidget);
     });
   });
 }

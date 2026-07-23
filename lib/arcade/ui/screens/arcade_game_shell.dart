@@ -70,7 +70,13 @@ class _ArcadeGameShellState extends ConsumerState<ArcadeGameShell> {
 
     return _ArcadeShellScope(
       api: api,
-      child: widget.game.builder(context, widget.difficulty),
+      // Build the game below the scope via a Builder so the context it receives
+      // can resolve ArcadeGameShell.of(context); using this State's `context`
+      // would look up from above the scope and find nothing.
+      child: Builder(
+        builder: (innerContext) =>
+            widget.game.builder(innerContext, widget.difficulty),
+      ),
     );
   }
 

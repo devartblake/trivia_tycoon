@@ -144,8 +144,7 @@ class ChartSelector extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color:
-                isSelected ? primaryColor : Colors.grey[100],
+            color: isSelected ? primaryColor : Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
             border: isSelected ? null : Border.all(color: Colors.grey[300]!),
           ),

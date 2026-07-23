@@ -14,14 +14,15 @@ class MiniGamesHubScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
-            colors: [
-              Color(0xFFF8FAFF),
-              Color(0xFFFFFFFF),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          gradient: synaptix?.mainBackgroundGradient ??
+              const LinearGradient(
+                colors: [
+                  Color(0xFFF8FAFF),
+                  Color(0xFFFFFFFF),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
         ),
         child: ResponsiveLayout(
           mobile: _buildMobileLayout(context),
@@ -240,14 +241,15 @@ class MiniGamesHubScreen extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(
-            gradient: synaptix?.mainBackgroundGradient ?? const LinearGradient(
-              colors: [
-                Color(0xFF6366F1),
-                Color(0xFF8B5CF6),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            gradient: synaptix?.mainBackgroundGradient ??
+                const LinearGradient(
+                  colors: [
+                    Color(0xFF6366F1),
+                    Color(0xFF8B5CF6),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
           ),
           child: SafeArea(
             child: Padding(

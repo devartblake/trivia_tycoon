@@ -30,8 +30,6 @@ class _ResultDialogState extends State<ResultDialog>
   late AnimationController _celebrationController;
   late AnimationController _coinController;
 
-  late Animation<double> _scaleAnimation;
-  late Animation<Offset> _slideAnimation;
   late Animation<double> _celebrationAnimation;
   late Animation<double> _bounceAnimation;
   bool _isVisible = false;
@@ -64,22 +62,6 @@ class _ResultDialogState extends State<ResultDialog>
       duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _scaleController,
-      curve: Curves.elasticOut,
-    ));
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutBack,
-    ));
 
     _celebrationAnimation = Tween<double>(
       begin: 0.0,

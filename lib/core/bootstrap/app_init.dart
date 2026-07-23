@@ -175,15 +175,19 @@ class AppInit {
   static Future<Map<String, dynamic>?> _getCurrentGameState() async {
     try {
       if (_serviceManager == null) return null;
-      final quizProgress = await _serviceManager!.quizProgressService.getQuizProgress();
-      final playerProgress = await _serviceManager!.quizProgressService.getPlayerProgress();
+      final quizProgress =
+          await _serviceManager!.quizProgressService.getQuizProgress();
+      final playerProgress =
+          await _serviceManager!.quizProgressService.getPlayerProgress();
       if (!quizProgress.containsKey('quiz_id')) return null;
       return {
         'quiz_progress': quizProgress,
         'player_progress': playerProgress,
         'snapshot_time': DateTime.now().toIso8601String(),
       };
-    } catch (_) { return null; }
+    } catch (_) {
+      return null;
+    }
   }
 
   static Future<Map<String, dynamic>?> _getCurrentUserSession() async {
@@ -192,14 +196,17 @@ class AppInit {
       final isLoggedIn = await _serviceManager!.authService.isLoggedIn();
       if (!isLoggedIn) return null;
       final session = _tokenStore?.load();
-      final profile = await _serviceManager!.playerProfileService.loadCompleteProfile();
+      final profile =
+          await _serviceManager!.playerProfileService.loadCompleteProfile();
       return {
         'is_logged_in': isLoggedIn,
         ...profile,
         'has_tokens': session?.hasTokens ?? false,
         'session_start': DateTime.now().toIso8601String(),
       };
-    } catch (_) { return null; }
+    } catch (_) {
+      return null;
+    }
   }
 
   static Future<Map<String, dynamic>?> _getCurrentWebSocketState() async {
@@ -225,7 +232,7 @@ class AppInit {
 
     final baseWsUrl = Uri.parse(EnvConfig.apiWsBaseUrl);
     final wsUrl = baseWsUrl.replace(
-      queryParameters: { ...baseWsUrl.queryParameters, 'playerId': playerId },
+      queryParameters: {...baseWsUrl.queryParameters, 'playerId': playerId},
     ).toString();
 
     _wsClient = WsClient(
@@ -269,7 +276,7 @@ class AppInit {
       final profile = serviceManager.playerProfileService.getProfile();
       final ageGroup = profile['age_group']?.toString() ?? 'teens';
       final mode = SynaptixModeNotifier.mapAgeGroupToMode(ageGroup);
-      
+
       await NotificationService().initialize(mode: mode);
       await _initializeReferralStorage();
 
@@ -277,7 +284,8 @@ class AppInit {
       configService.initServices(serviceManager);
       await configService.loadConfig();
 
-      _spinAnalyticsTracker = SpinAnalyticsTracker(serviceManager.analyticsService);
+      _spinAnalyticsTracker =
+          SpinAnalyticsTracker(serviceManager.analyticsService);
       await serviceManager.analyticsService.trackStartup();
 
       if (container != null) {
@@ -294,7 +302,7 @@ class AppInit {
     try {
       await serviceManager.analyticsService.trackLifecycleEvent(
         event,
-        additionalData: { 'timestamp': DateTime.now().toIso8601String() },
+        additionalData: {'timestamp': DateTime.now().toIso8601String()},
       );
     } catch (_) {}
   }
@@ -361,7 +369,8 @@ class AppInit {
       );
       final remoteProfile = await profileSyncService.fetchRemoteProfile();
       if (remoteProfile != null && remoteProfile.isNotEmpty) {
-        await serviceManager.playerProfileService.saveProfileBatch(remoteProfile);
+        await serviceManager.playerProfileService
+            .saveProfileBatch(remoteProfile);
         return;
       }
     } catch (_) {}
@@ -375,10 +384,12 @@ class AppInit {
       ServiceManager serviceManager, ProviderContainer? container) async {
     try {
       final multiProfileService = MultiProfileService();
-      await multiProfileService.initializeAndMigrate(serviceManager.playerProfileService);
+      await multiProfileService
+          .initializeAndMigrate(serviceManager.playerProfileService);
       final activeProfile = await multiProfileService.getActiveProfile();
       if (container != null && activeProfile != null) {
-        container.read(activeProfileStateProvider.notifier).state = activeProfile;
+        container.read(activeProfileStateProvider.notifier).state =
+            activeProfile;
       }
     } catch (_) {}
   }

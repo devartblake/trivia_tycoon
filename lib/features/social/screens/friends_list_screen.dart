@@ -35,7 +35,8 @@ class _FriendsListScreenState extends ConsumerState<FriendsListScreen> {
       appBar: GlassAppBar(
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,
+              color: Colors.white, size: 20),
         ),
         title: const GlowText('Friends'),
         actions: [
@@ -55,7 +56,8 @@ class _FriendsListScreenState extends ConsumerState<FriendsListScreen> {
               child: SegmentedSelectionHub(
                 items: const ['Friends', 'Requests'],
                 selectedIndex: _selectedIndex,
-                onItemSelected: (index) => setState(() => _selectedIndex = index),
+                onItemSelected: (index) =>
+                    setState(() => _selectedIndex = index),
               ),
             ),
             const SizedBox(height: 16),
@@ -90,7 +92,8 @@ class _FriendsListScreenState extends ConsumerState<FriendsListScreen> {
           : RefreshIndicator(
               onRefresh: () async => ref.refresh(friendsListProvider),
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 itemCount: friends.length,
                 itemBuilder: (context, index) {
                   final friend = friends[index];
@@ -141,7 +144,8 @@ class _FriendsListScreenState extends ConsumerState<FriendsListScreen> {
           : RefreshIndicator(
               onRefresh: () async => ref.refresh(pendingFriendRequestsProvider),
               child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 itemCount: requests.length,
                 itemBuilder: (context, index) {
                   final request = requests[index];
@@ -324,13 +328,15 @@ class _FriendsListScreenState extends ConsumerState<FriendsListScreen> {
                 Expanded(
                   child: TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel', style: TextStyle(color: Colors.white60)),
+                    child: const Text('Cancel',
+                        style: TextStyle(color: Colors.white60)),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     onPressed: () async {
                       Navigator.pop(context);
                       try {
@@ -356,7 +362,8 @@ class _FriendsListScreenState extends ConsumerState<FriendsListScreen> {
                         }
                       }
                     },
-                    child: const Text('Remove', style: TextStyle(color: Colors.white)),
+                    child: const Text('Remove',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

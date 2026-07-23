@@ -141,11 +141,13 @@ class SkillTreeVisualization extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Your Skill Tree',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+              Flexible(
+                child: Text(
+                  'Your Skill Tree',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
             ],
           ),
@@ -235,23 +237,29 @@ class SkillTreeVisualization extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildStatCard(
-          context: context,
-          label: 'Total Skills',
-          value: totalSkills.toString(),
-          icon: Icons.psychology,
+        Expanded(
+          child: _buildStatCard(
+            context: context,
+            label: 'Total Skills',
+            value: totalSkills.toString(),
+            icon: Icons.psychology,
+          ),
         ),
-        _buildStatCard(
-          context: context,
-          label: 'Unlocked',
-          value: unlockedCount.toString(),
-          icon: Icons.check_circle,
+        Expanded(
+          child: _buildStatCard(
+            context: context,
+            label: 'Unlocked',
+            value: unlockedCount.toString(),
+            icon: Icons.check_circle,
+          ),
         ),
-        _buildStatCard(
-          context: context,
-          label: 'Mastered',
-          value: masteredCount.toString(),
-          icon: Icons.star,
+        Expanded(
+          child: _buildStatCard(
+            context: context,
+            label: 'Mastered',
+            value: masteredCount.toString(),
+            icon: Icons.star,
+          ),
         ),
       ],
     );

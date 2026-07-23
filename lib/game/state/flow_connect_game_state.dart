@@ -141,15 +141,18 @@ class FlowConnectGameState {
           _historyIndex == other._historyIndex;
 
   @override
-  int get hashCode =>
-      grid.hashCode ^
-      currentPath.hashCode ^
-      currentNumber.hashCode ^
-      isComplete.hashCode ^
-      gridSize.hashCode ^
-      totalNumbers.hashCode ^
-      status.hashCode ^
-      _pathHistory.hashCode ^
-      _numberHistory.hashCode ^
-      _historyIndex.hashCode;
+  int get hashCode => Object.hash(
+        // Value-based to match `==` (which uses listEquals): distinct-but-equal
+        // list instances must hash the same, or the hashCode/== contract breaks.
+        Object.hashAll(grid),
+        Object.hashAll(currentPath),
+        currentNumber,
+        isComplete,
+        gridSize,
+        totalNumbers,
+        status,
+        Object.hashAll(_pathHistory),
+        Object.hashAll(_numberHistory),
+        _historyIndex,
+      );
 }

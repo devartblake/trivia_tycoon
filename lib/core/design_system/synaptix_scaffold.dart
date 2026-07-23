@@ -25,7 +25,7 @@ class SynaptixScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final synaptix = Theme.of(context).extension<SynaptixTheme>();
-    
+
     return Scaffold(
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       appBar: appBar,
@@ -39,16 +39,16 @@ class SynaptixScaffold extends ConsumerWidget {
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: synaptix?.mainBackgroundGradient ?? 
-                    const LinearGradient(
-                      colors: [Color(0xFF1A1A2E), Color(0xFF0F0F23)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
+                  gradient: synaptix?.mainBackgroundGradient ??
+                      const LinearGradient(
+                        colors: [Color(0xFF1A1A2E), Color(0xFF0F0F23)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                 ),
               ),
             ),
-            
+
             // 2. Base Body
             body,
           ],
