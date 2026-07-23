@@ -43,7 +43,8 @@ final _mockSkills = <SkillNode>[
 Widget _buildWidget({List<SkillNode>? skills}) {
   return ProviderScope(
     overrides: [
-      skillProgressionProvider.overrideWith((ref) async => skills ?? _mockSkills),
+      skillProgressionProvider
+          .overrideWith((ref) async => skills ?? _mockSkills),
     ],
     child: const MaterialApp(
       home: Scaffold(
