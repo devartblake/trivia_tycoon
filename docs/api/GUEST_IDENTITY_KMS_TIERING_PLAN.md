@@ -60,13 +60,19 @@ all* to stay logged in — the crux of the tiering.
 
 ### Phase 0 — resolve the P0 refresh coupling (above). ✅ RESOLVED
 Confirmed with the product owner: **guests stay logged in past access-token
-expiry.** Since the client refreshes/re-bootstraps over plain JSON (which does
-not use the secure channel), the eager KMS pre-warm is **not** what keeps a
-guest authenticated — so removing it for guests cannot log them out. (The
-`/auth/refresh` `RequireSecureChannel` vs plain-JSON-client inconsistency is
-noted as separate tech-debt: either the channel isn't enforced on refresh in
-the live env, or persistence relies on re-bootstrap; worth a follow-up, but it
-does not block the tiering.)
+expiry, and it is driven by client-side Hive caching** — the auth tokens and
+profile/session state persist in Hive and are read back on launch, so the UI
+treats the guest as authenticated regardless of live token validity. Login
+persistence therefore does **not** depend on the KMS secure channel at all, so
+removing the eager pre-warm for guests cannot log them out.
+
+Implication (separate tech-debt, does not block the tiering): because
+persistence is cache-backed, the plain-JSON `POST /auth/refresh` is almost
+certainly still being **rejected** by the backend's `RequireSecureChannel`
+(masked by the cache for read/cached flows). It would surface as a real defect
+only on an **authenticated live write after the ~15-min access token expires**
+(e.g. progress sync): the call 401s, refresh fails, and the guest silently falls
+back to stale cache. Fix in Phase 2.
 
 ### Phase 1 — stop eager KMS pre-warm for anonymous guests (client). ✅ DONE
 Removed `_ensureSecureSessionForAuthRefresh` from the **anonymous-device**
