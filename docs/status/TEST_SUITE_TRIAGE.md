@@ -260,6 +260,42 @@ skip). Additional genuine product bugs fixed at the root this pass:
   `performance_chart_screen` (2), reward loading-state screens (2),
   `arcade_game_shell`, `spectate_streaming` cache (fixed), `cache_performance`.
 
+## 4g. Grind complete — full suite green (36 → 0)
+
+The full suite now reports **7,418 pass / 11 skip / 0 fail**, `flutter analyze`
+is clean, and `dart format --set-exit-if-changed lib test` passes. Landed via
+PR #287 (merged to `main`). Final clears this pass, with the genuine product
+fixes called out:
+
+| File(s) | Fix | Real bug? |
+|---------|-----|-----------|
+| `skill_tree_visualization` (analytics, 4) | override `skillProgressionProvider` with mock data so the data state (not the error state) renders; `devicePixelRatio` on the responsive-size tests | **yes** — header text, summary stat cards, and the tier grid overflowed at mobile widths (Flexible header, Expanded stat cards, taller `childAspectRatio`) |
+| `widget_test` (SynaptixApp renders, 1) | wrap the pumped `SynaptixApp` in a `ProviderScope` (it reads providers in `didChangeDependencies`) | no (test setup) |
+| `rendering_cache` (1) | `isSameColorAs` — `Paint.color` normalises to a plain `Color`, which no longer `==` a `MaterialColor` after the SDK bump | no (SDK color-equality drift) |
+| `backend_profile_social` removeFriend (1) | assert the authenticated `DELETE /users/me/friends/{id}` route (both client stacks use it) instead of the old spoofable `DELETE /friends` + body | no (stale contract) |
+| `settings_controller` (1) | cache the `_loadSettings()` future and await it in mutators | **yes** — an in-flight initial load could clobber a value the user just set; also cached `PlayerProfileService._getBox()`'s `openBox` future to stop concurrent double-opens |
+| `premium_store` claim tests (2) | settle the staggered card scale-in before tapping; override `walletProvider` to fail fast; await the coin notifier's `initialized` before the claim | no (harness) — the earlier "gated feature" caveat is now resolved |
+
+### CI-infra follow-ups (the green suite surfaced these)
+- **`coverage` / `quality-gates` format gate** — a test edit wasn't
+  `dart format`-clean; reformatted.
+- **`tracked_tests` job** — `scripts/run_tests_with_tracking.sh`'s summary
+  parser crashed (`'list' object has no attribute 'get'`) on a top-level JSON
+  array line from `flutter test --machine`, failing the job even though every
+  test passed. Guarded with an `isinstance(event, dict)` check.
+
+## 4h. Runtime crash — Skill Tree back button (GoRouter)
+
+Separate from the test grind: a device log showed a hard crash tapping the
+back button on `/skills`. `lib/screens/skills/skill_tree_visualization.dart`
+called `Navigator.of(context).pop()` directly. `/skills` is entered via
+`context.go()`, which **replaces** the stack, so it can be the only page in the
+shell branch — popping the last page trips GoRouter's
+`currentConfiguration.isNotEmpty` assertion, cascading into a
+`Navigator.dispose` `!_debugLocked` crash. Fixed by using the existing
+`context.safeBack()` helper (`lib/core/navigation/navigation_extensions.dart`),
+which pops when possible and otherwise falls back to `/home`.
+
 ## 5. Note on the 40% coverage gate
 CI also enforces ≥40% line coverage on `lib/game/` and `lib/core/`. Fixing the
 above failures (which currently abort mid-file) restores the coverage those
