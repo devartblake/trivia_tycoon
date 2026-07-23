@@ -51,6 +51,9 @@ _Backend contracts verified directly against `TycoonTycoon_Backend` source; comp
 - `getMixedQuiz` posts the real `MixedQuestionSetRequest` to `POST /questions/mixed` — multi-category requests now work (the old GET path silently dropped all but one category)
 - Friends client migrated to the canonical authenticated surface `/users/me/friends/*` + `/users/search?handle=` with real DTO field mappings; party client/service/models rewritten to the actual `/party` contract (leader-based creation, roster shape, invite bodies)
 
+### Changed
+- **Tiered identity (Phase 1)** — anonymous device-guests no longer pre-warm a KMS secure session at app launch. Token persistence travels plain JSON (which doesn't use the secure channel) and the secure-channel-gated store/crypto endpoints establish the session lazily on demand, so the eager handshake was pure per-guest KMS churn (and the source of the launch-time secure-session 500). Login / platform-linked / full-account paths still pre-warm. See `docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md`.
+
 ### Fixed
 - **Guest identity dropped after device bootstrap** — `POST /auth/device/bootstrap` returns the user id nested under `user.id`, but the session parser only read a top-level `userId`, so the real id was discarded and the app fell back to a generated `local_<guid>` identity. That caused 404s on personalization (`/personalization/home/local_…`) and weekly rewards (`/rewards/weekly-streak/local_…`) and "Missing user ID" mock fallbacks in the tier/weekly clients. The parser now also reads the nested `user.id`.
 - **Spin & Earn start ignored by backend** — `POST /arcade/spin/start` now requires an `idempotencyKey` (400 without it), so every real spin silently fell back to a mock outcome; the client now sends one.

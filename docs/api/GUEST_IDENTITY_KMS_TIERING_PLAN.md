@@ -58,15 +58,23 @@ all* to stay logged in — the crux of the tiering.
 
 ## Phased implementation (safe, independently shippable)
 
-### Phase 0 — resolve the P0 refresh coupling (above). **Blocks Phases 1–2.**
+### Phase 0 — resolve the P0 refresh coupling (above). ✅ RESOLVED
+Confirmed with the product owner: **guests stay logged in past access-token
+expiry.** Since the client refreshes/re-bootstraps over plain JSON (which does
+not use the secure channel), the eager KMS pre-warm is **not** what keeps a
+guest authenticated — so removing it for guests cannot log them out. (The
+`/auth/refresh` `RequireSecureChannel` vs plain-JSON-client inconsistency is
+noted as separate tech-debt: either the channel isn't enforced on refresh in
+the live env, or persistence relies on re-bootstrap; worth a follow-up, but it
+does not block the tiering.)
 
-### Phase 1 — stop eager KMS pre-warm for anonymous guests (client)
-Skip `_ensureSecureSessionForAuthRefresh` on the **anonymous-device** bootstrap
-path; keep it for login / platform-linked / full-account paths. Guests then
-create a KMS session only if/when they hit a gated endpoint (which
-`EncryptedApiClient` already handles on demand). Directly cuts guest KMS churn
-and removes the launch-time handshake. *Precondition: Phase 0 confirms guest
-refresh does not depend on the pre-warmed channel.*
+### Phase 1 — stop eager KMS pre-warm for anonymous guests (client). ✅ DONE
+Removed `_ensureSecureSessionForAuthRefresh` from the **anonymous-device**
+bootstrap path in `lib/game/providers/auth_providers.dart`; kept it on the
+platform-linked / full-account / login paths. Guests now create a KMS session
+only if/when they hit a secure-channel-gated endpoint (which `EncryptedApiClient`
+establishes on demand). Cuts per-guest KMS session churn and removes the
+launch-time handshake (the 500-at-launch source). Auth provider tests green.
 
 ### Phase 2 — decouple guest token refresh from the channel (backend + client)
 Depending on Phase 0: either give device-guest tokens a refresh path that does
