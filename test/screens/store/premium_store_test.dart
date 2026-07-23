@@ -209,6 +209,13 @@ void main() {
 
   testWidgets('reward claim updates coin balance and shows success dialog',
       (tester) async {
+    // The reward cards scale in with a staggered elasticOut animation; give a
+    // tall viewport so both cards lay out without overflow.
+    tester.view.physicalSize = const Size(1000, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     final fakeStore = _FakeRewardStoreService(
       claimResponse: <String, dynamic>{
         'success': true,
@@ -227,6 +234,10 @@ void main() {
         coinBalanceProvider.overrideWith(
           (ref) => CoinBalanceNotifier(_FakeStorage(initialInt: 100)),
         ),
+        // The authoritative wallet refresh hits the backend; fail it fast so
+        // the claim keeps the backend-returned balance without dragging in the
+        // wallet/currency/Hive stack.
+        walletProvider.overrideWith((ref) => throw Exception('no backend')),
       ],
     );
     addTearDown(container.dispose);
@@ -242,10 +253,21 @@ void main() {
       ),
     );
 
-    await tester.pump(const Duration(seconds: 2));
+    // Settle the scale-in animations so the Claim button is hit-testable.
+    await tester.pumpAndSettle();
+
+    // Force the coin notifier's initial async load to complete now; otherwise
+    // it is created lazily during the claim and its load clobbers the
+    // backend-set balance (state goes 0 → set(1940) → load resolves → 100).
+    await container.read(coinBalanceProvider.notifier).initialized;
+
     await tester.tap(find.text('Claim').first);
-    await tester.pump();
-    await tester.pump();
+    // A loading spinner is shown while the claim resolves, so flush the
+    // claim → wallet-refresh → success-dialog chain with explicit pumps
+    // rather than pumpAndSettle (which never settles on the spinner).
+    for (var i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
 
     expect(fakeStore.claimCalls, 1);
     expect(fakeStore.lastPlayerId, 'player-123');
@@ -255,6 +277,11 @@ void main() {
   });
 
   testWidgets('reward claim conflict shows backend message', (tester) async {
+    tester.view.physicalSize = const Size(1000, 1400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     final fakeStore = _FakeRewardStoreService(
       claimError: ApiRequestException(
         'Daily check-in has already been claimed for today.',
@@ -283,10 +310,15 @@ void main() {
       ),
     );
 
-    await tester.pump(const Duration(seconds: 2));
+    // Settle the scale-in animations so the Claim button is hit-testable.
+    await tester.pumpAndSettle();
+
     await tester.tap(find.text('Claim').first);
-    await tester.pump();
-    await tester.pump();
+    // The claim throws before any wallet work; flush the loading dialog → snack
+    // chain with explicit pumps.
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     expect(
       find.text('Daily check-in has already been claimed for today.'),
