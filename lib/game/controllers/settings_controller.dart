@@ -28,13 +28,18 @@ class SettingsController {
   /// List of purchased songs
   ValueNotifier<List<String>> purchasedSongs = ValueNotifier([]);
 
+  /// Completes when the initial [_loadSettings] pass has finished. Mutators
+  /// await this so a value written by the user isn't clobbered by the async
+  /// load landing afterwards.
+  late final Future<void> _loaded;
+
   /// Loads settings from persistent storage.
   SettingsController({
     required this.audioService,
     required this.profileService,
     required this.purchaseService,
   }) {
-    _loadSettings();
+    _loaded = _loadSettings();
   }
 
   /// Toggles the master audio setting.
@@ -57,12 +62,14 @@ class SettingsController {
 
   /// Updates the player's name.
   Future<void> setPlayerName(String name) async {
+    await _loaded;
     playerName.value = name;
     await profileService.savePlayerName(name);
   }
 
   /// Purchases a song and stores it persistently.
   Future<void> purchaseSong(String songFilename) async {
+    await _loaded;
     List<String> purchased = await purchaseService.getPurchasedSongs();
     if (!purchased.contains(songFilename)) {
       purchased.add(songFilename);
