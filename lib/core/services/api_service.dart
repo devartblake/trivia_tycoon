@@ -15,6 +15,7 @@ import 'analytics/config_service.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 import 'package:synaptix/core/services/asset_resolver.dart';
 import 'package:synaptix/core/services/guest_api_gate.dart';
+import 'package:synaptix/core/networking/certificate_pinning.dart';
 
 class ApiRequestException implements Exception {
   final String message;
@@ -121,6 +122,18 @@ class ApiService {
               connectTimeout: EnvConfig.apiConnectTimeout,
               receiveTimeout: EnvConfig.apiRefreshReceiveTimeout,
             )) {
+    // TLS certificate pinning for the API host (only for Dios we created here;
+    // injected Dios in tests keep their own adapter). Inactive unless configured
+    // via TLS_PINNING_ENABLED + TLS_API_PINS. See docs/api/TLS_CERTIFICATE_PINNING.md.
+    final pinnedAdapter =
+        createPinnedDioAdapter(CertificatePinningPolicy.fromEnv());
+    if (pinnedAdapter != null) {
+      if (dio == null) _dio.httpClientAdapter = pinnedAdapter;
+      if (dio == null && refreshDio == null) {
+        _refreshDio.httpClientAdapter = pinnedAdapter;
+      }
+    }
+
     // Guest / unauthenticated gate — short-circuit before network I/O.
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {

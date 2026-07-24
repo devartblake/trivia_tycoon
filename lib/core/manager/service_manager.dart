@@ -27,6 +27,7 @@ import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import 'package:synaptix/core/services/question/question_service.dart';
 import 'package:synaptix/core/services/storage/secure_storage.dart';
 import 'package:synaptix/core/services/storage/encrypted_box_opener.dart';
+import 'package:synaptix/core/networking/certificate_pinning.dart';
 import 'package:synaptix/core/services/theme/swatch_service.dart';
 import 'package:synaptix/core/services/api_service.dart';
 import 'package:synaptix/core/services/encryption/encryption_service.dart';
@@ -320,8 +321,13 @@ class ServiceManager {
     ApiService.bindAccessTokenProvider(() => tokenStore.accessTokenSync);
     final deviceIdSvc = DeviceIdService(secureStorage);
     final secureSessionStore = SecureSessionStore(secureStorage);
+
+    // TLS certificate pinning for the API host. Inactive unless configured via
+    // TLS_PINNING_ENABLED + TLS_API_PINS; when active, every client that talks
+    // only to the API host below is pinned. See docs/api/TLS_CERTIFICATE_PINNING.md.
+    final pinningPolicy = CertificatePinningPolicy.fromEnv();
     final authApiClient = AuthApiClient(
-      http.Client(),
+      createPinnedApiClient(pinningPolicy),
       apiBaseUrl: apiV1BaseUrl,
       deviceId: deviceIdSvc,
       secureSessionStore: secureSessionStore,
@@ -331,7 +337,8 @@ class ServiceManager {
       tokenStore: tokenStore,
       api: authApiClient,
     );
-    final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
+    final authHttpClient = AuthHttpClient(coreAuth, tokenStore,
+        innerClient: createPinnedApiClient(pinningPolicy));
     final secureChannel = DefaultSecureChannelService(
       httpClient: authHttpClient,
       sessionStore: secureSessionStore,
@@ -361,6 +368,7 @@ class ServiceManager {
       tokenStore,
       autoRefresh: false,
       enforceGuestGate: false,
+      innerClient: createPinnedApiClient(pinningPolicy),
     );
     final refreshSecureChannel = DefaultSecureChannelService(
       httpClient: refreshAuthHttpClient,
