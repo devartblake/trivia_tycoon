@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:synaptix/core/services/analytics/config_service.dart';
 import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/services/storage/encrypted_box_opener.dart';
 import 'package:synaptix/core/services/theme/theme_notifier.dart';
 import 'package:synaptix/core/manager/service_manager.dart';
 import 'package:synaptix/game/analytics/services/spin_analytics_tracker.dart';
@@ -68,9 +69,14 @@ class AppInit {
       Hive.registerAdapter(ReferralInviteHiveAdapter());
     }
 
-    final authTokenBox = await Hive.openBox('auth_tokens');
     await Hive.openBox('settings');
     await Hive.openBox('secrets');
+
+    // Open auth_tokens encrypted at rest (bearer/refresh tokens live here on the
+    // legacy ApiService path). Migrates a pre-existing plaintext box on first run.
+    final bootstrapSecureStorage = SecureStorage();
+    final authTokenBox =
+        await EncryptedBoxOpener(bootstrapSecureStorage).openAuthTokens();
 
     _persistenceService = StatePersistenceService();
     await _persistenceService!.initialize();

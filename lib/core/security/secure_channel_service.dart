@@ -34,6 +34,15 @@ abstract class SecureChannelService {
 
   Future<void> clearSession();
   Future<SecureSession?> loadSession();
+
+  /// Best-effort server-side teardown of the current secure session
+  /// (POST /security/sessions/revoke), then clears it locally. Safe to call
+  /// when no session exists. Used on logout so a rotated bearer can't keep a
+  /// live KMS session.
+  Future<void> revokeSession({
+    required String accessToken,
+    String reason = 'logout',
+  });
 }
 
 class DefaultSecureChannelService implements SecureChannelService {
@@ -198,5 +207,43 @@ class DefaultSecureChannelService implements SecureChannelService {
   Future<void> clearSession() async {
     _ephemeralKeyPair = null;
     await _sessionStore.clear();
+  }
+
+  @override
+  Future<void> revokeSession({
+    required String accessToken,
+    String reason = 'logout',
+  }) async {
+    final session = await _sessionStore.load();
+    if (session == null || session.sessionId.isEmpty) {
+      await clearSession();
+      return;
+    }
+
+    try {
+      final uri = Uri.parse('$_baseUrl/api/v1/security/sessions/revoke');
+      final response = await _httpClient.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'sessionId': session.sessionId,
+          'reason': reason,
+        }),
+      );
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        LogManager.debug(
+            '[SecureChannelService] Revoke returned ${response.statusCode}: ${response.body}');
+      }
+    } catch (e) {
+      // Best-effort: a failed server revoke must not block logout.
+      LogManager.debug('[SecureChannelService] Revoke failed: $e');
+    } finally {
+      await clearSession();
+    }
   }
 }

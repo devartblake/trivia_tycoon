@@ -32,6 +32,13 @@ class EnvConfig {
   static Duration _apiSendTimeout = const Duration(seconds: 10);
   static Duration _apiRefreshReceiveTimeout = const Duration(seconds: 20);
 
+  /// TLS certificate pinning for the API host (client → API). Disabled unless
+  /// TLS_PINNING_ENABLED=true and at least one pin is supplied via TLS_API_PINS
+  /// (comma-separated base64 SHA-256 of the leaf certificate DER). See
+  /// docs/api/TLS_CERTIFICATE_PINNING.md for how to obtain the fingerprints.
+  static bool _tlsPinningEnabled = false;
+  static List<String> _tlsApiPins = const [];
+
   /// Getter for the backend API Base URL (bare host, no version prefix).
   /// Use this for non-versioned surfaces: WebSocket/health URLs, gRPC host
   /// derivation, asset resolution.
@@ -44,6 +51,18 @@ class EnvConfig {
   /// public client endpoint under /api/v1 (single source of truth), so every
   /// REST client that talks to a feature/auth endpoint must build on this.
   static String get apiV1BaseUrl => '$apiBaseUrl/api/v1';
+
+  /// Whether TLS certificate pinning is enabled for the API host.
+  static bool get tlsPinningEnabled => _tlsPinningEnabled;
+
+  /// Base64 SHA-256 leaf-DER pins configured for the API host.
+  static List<String> get tlsApiPins => List.unmodifiable(_tlsApiPins);
+
+  /// Host that client → API traffic is pinned to (derived from the API base URL).
+  static String? get tlsApiHost {
+    if (_apiBaseUrl == null || _apiBaseUrl!.isEmpty) return null;
+    return Uri.tryParse(_apiBaseUrl!)?.host;
+  }
 
   static Duration get apiConnectTimeout => _apiConnectTimeout;
   static Duration get apiReceiveTimeout => _apiReceiveTimeout;
@@ -432,6 +451,18 @@ class EnvConfig {
         fallback: const Duration(seconds: 20),
         min: const Duration(seconds: 5),
       );
+      _tlsPinningEnabled = _parseBool(
+        const bool.hasEnvironment('TLS_PINNING_ENABLED')
+            ? const String.fromEnvironment('TLS_PINNING_ENABLED')
+            : dotenv.env['TLS_PINNING_ENABLED'],
+        fallback: false,
+      );
+      _tlsApiPins = _parseCsvSet(
+        const String.fromEnvironment('TLS_API_PINS').isNotEmpty
+            ? const String.fromEnvironment('TLS_API_PINS')
+            : dotenv.env['TLS_API_PINS'],
+        fallback: const {},
+      ).toList();
 
       // Perform checks to ensure essential variables are present
       if (_apiBaseUrl == null ||

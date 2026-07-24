@@ -70,6 +70,25 @@ final playerIdentityProvider =
   return PlayerIdentityNotifier(ref);
 });
 
+/// True when the current player is an anonymous device-guest (not yet a
+/// platform-linked or full account). Account-required surfaces — real-money
+/// store purchases, crypto wallet — use this to hide their entry points and
+/// gate their routes, prompting the guest to upgrade instead. See
+/// [accountRequiredGuard] and `docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md`.
+final isGuestProvider = Provider<bool>((ref) {
+  final identity = ref.watch(playerIdentityProvider);
+  return identity.kind == PlayerIdentityKind.anonymousDevice;
+});
+
+/// True when the player has (or should have) an account strong enough to reach
+/// account-required features: platform-linked or full account. Unresolved
+/// identities are treated as not-yet-eligible.
+final hasUpgradedAccountProvider = Provider<bool>((ref) {
+  final kind = ref.watch(playerIdentityProvider).kind;
+  return kind == PlayerIdentityKind.platformLinked ||
+      kind == PlayerIdentityKind.fullAccount;
+});
+
 class PlayerIdentityNotifier extends StateNotifier<PlayerIdentityState> {
   final Ref ref;
   Future<void>? _initializing;
@@ -138,7 +157,15 @@ class PlayerIdentityNotifier extends StateNotifier<PlayerIdentityState> {
       final session = await ref.read(authApiClientProvider).bootstrapDevice();
       if (session.hasTokens) {
         await tokenStore.save(session);
-        await _ensureSecureSessionForAuthRefresh(ref);
+        // Tiered identity (Phase 1): anonymous device-guests do NOT pre-warm a
+        // KMS secure session at launch. Token refresh/re-bootstrap travels plain
+        // JSON and does not use the channel, and the secure-channel-gated
+        // endpoints (store/crypto) establish the session lazily on demand via
+        // EncryptedApiClient — which almost no guest ever reaches. This removes
+        // the per-guest KMS session churn (and the launch-time handshake seen in
+        // the device log). Elevated paths (login / platform-linked / full
+        // account) still pre-warm above. See
+        // docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md.
         ref.read(isLoggedInSyncProvider.notifier).state = true;
       }
     } catch (e) {

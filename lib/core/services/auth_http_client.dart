@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'auth_api_client.dart' show AuthApiException;
 import 'auth_token_store.dart';
@@ -34,6 +35,12 @@ class AuthHttpClient extends http.BaseClient {
   // Serializes concurrent refresh attempts — all callers await the same future.
   Future<void>? _pendingRefresh;
 
+  /// Effective proactive-refresh lead for this instance: a base lead plus a
+  /// per-instance random offset. The jitter de-synchronizes refresh cohorts
+  /// (clients that logged in together) so a shortened access-token TTL doesn't
+  /// produce synchronized refresh spikes against /auth/refresh + KMS.
+  final Duration _refreshLead;
+
   AuthHttpClient(
     this._authService,
     this._tokenStore, {
@@ -42,7 +49,17 @@ class AuthHttpClient extends http.BaseClient {
     this.onTokenRefreshed,
     this.onRefreshFailed,
     this.enforceGuestGate = true,
-  }) : _inner = innerClient ?? http.Client();
+    Duration baseRefreshLead = const Duration(minutes: 3),
+    Duration maxRefreshJitter = const Duration(seconds: 90),
+    Random? jitterRandom,
+  })  : _inner = innerClient ?? http.Client(),
+        _refreshLead = baseRefreshLead +
+            Duration(
+              milliseconds: maxRefreshJitter.inMilliseconds <= 0
+                  ? 0
+                  : (jitterRandom ?? Random())
+                      .nextInt(maxRefreshJitter.inMilliseconds),
+            );
 
   Future<void> _refreshOnce() {
     _pendingRefresh ??=
@@ -81,12 +98,16 @@ class AuthHttpClient extends http.BaseClient {
       return GuestApiGate.blockedStreamedResponse(request.url);
     }
 
-    // Check if token is expired and auto-refresh is enabled.
+    // Refresh *proactively* — while the access token is still valid — so the KMS
+    // secure channel can be (re)started with a valid bearer before the encrypted
+    // /auth/refresh runs (see GUEST_IDENTITY_KMS_TIERING_PLAN.md, B-proactive).
     // _pendingRefresh serializes concurrent requests so only one refresh
     // call is issued even when multiple requests detect expiry simultaneously.
-    if (autoRefresh && session.hasTokens && session.isExpired) {
+    if (autoRefresh &&
+        session.hasTokens &&
+        session.isExpiringSoon(lead: _refreshLead)) {
       try {
-        LogManager.debug('[AuthHttpClient] Token expired, refreshing...');
+        LogManager.debug('[AuthHttpClient] Token expiring soon, refreshing...');
         await _refreshOnce();
         onTokenRefreshed?.call();
         LogManager.debug('[AuthHttpClient] Token refreshed successfully');

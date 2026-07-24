@@ -26,6 +26,8 @@ import 'package:synaptix/ui_components/qr_code/services/qr_history_service.dart'
 import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import 'package:synaptix/core/services/question/question_service.dart';
 import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/services/storage/encrypted_box_opener.dart';
+import 'package:synaptix/core/networking/certificate_pinning.dart';
 import 'package:synaptix/core/services/theme/swatch_service.dart';
 import 'package:synaptix/core/services/api_service.dart';
 import 'package:synaptix/core/services/encryption/encryption_service.dart';
@@ -219,7 +221,7 @@ class ServiceManager {
         await (() async {
           final authBox = Hive.isBoxOpen('auth_tokens')
               ? Hive.box('auth_tokens')
-              : await Hive.openBox('auth_tokens');
+              : await EncryptedBoxOpener(SecureStorage()).openAuthTokens();
           final store = AuthTokenStore(authBox);
           await store.initialize();
           return store;
@@ -319,8 +321,13 @@ class ServiceManager {
     ApiService.bindAccessTokenProvider(() => tokenStore.accessTokenSync);
     final deviceIdSvc = DeviceIdService(secureStorage);
     final secureSessionStore = SecureSessionStore(secureStorage);
+
+    // TLS certificate pinning for the API host. Inactive unless configured via
+    // TLS_PINNING_ENABLED + TLS_API_PINS; when active, every client that talks
+    // only to the API host below is pinned. See docs/api/TLS_CERTIFICATE_PINNING.md.
+    final pinningPolicy = CertificatePinningPolicy.fromEnv();
     final authApiClient = AuthApiClient(
-      http.Client(),
+      createPinnedApiClient(pinningPolicy),
       apiBaseUrl: apiV1BaseUrl,
       deviceId: deviceIdSvc,
       secureSessionStore: secureSessionStore,
@@ -330,7 +337,8 @@ class ServiceManager {
       tokenStore: tokenStore,
       api: authApiClient,
     );
-    final authHttpClient = AuthHttpClient(coreAuth, tokenStore);
+    final authHttpClient = AuthHttpClient(coreAuth, tokenStore,
+        innerClient: createPinnedApiClient(pinningPolicy));
     final secureChannel = DefaultSecureChannelService(
       httpClient: authHttpClient,
       sessionStore: secureSessionStore,
@@ -343,6 +351,38 @@ class ServiceManager {
       tokenStore: tokenStore,
       baseUrl: apiV1BaseUrl,
     );
+    // Let logout tear down the server-side KMS session (breaks the ctor cycle:
+    // coreAuth -> authHttpClient -> secureChannel -> coreAuth).
+    coreAuth.attachSecureChannel(secureChannel);
+
+    // Token refresh must travel the KMS secure channel (backend /auth/refresh is
+    // RequireSecureChannel), but it cannot go through `authHttpClient` — that
+    // client auto-refreshes on expiry, so the refresh POST (and the
+    // /security/sessions/start it needs) would recurse into refresh. Build a
+    // dedicated transport with autoRefresh disabled (and the guest gate off, so
+    // guests can always refresh), reusing the shared secure-session store, then
+    // late-inject it into authApiClient to break the construction cycle.
+    // See docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md (Phase 2, B-proactive).
+    final refreshAuthHttpClient = AuthHttpClient(
+      coreAuth,
+      tokenStore,
+      autoRefresh: false,
+      enforceGuestGate: false,
+      innerClient: createPinnedApiClient(pinningPolicy),
+    );
+    final refreshSecureChannel = DefaultSecureChannelService(
+      httpClient: refreshAuthHttpClient,
+      sessionStore: secureSessionStore,
+      deviceIdService: deviceIdSvc,
+      baseUrl: baseUrl,
+    );
+    final refreshEncryptedClient = EncryptedApiClient(
+      authClient: refreshAuthHttpClient,
+      secureChannel: refreshSecureChannel,
+      tokenStore: tokenStore,
+      baseUrl: apiV1BaseUrl,
+    );
+    authApiClient.attachRefreshTransport(refreshEncryptedClient);
     final history = QrHistoryService(cache: cache, settings: qrSettings);
     final httpClient = HttpClient(
       authClient: authHttpClient,

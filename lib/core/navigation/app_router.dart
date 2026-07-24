@@ -11,6 +11,7 @@ import 'package:synaptix/admin/events_management/admin_event_queue_screen.dart';
 import 'package:synaptix/core/router/auth_guard.dart';
 import 'package:synaptix/core/router/enhanced_admin_guard.dart';
 import 'package:synaptix/core/router/feature_flag_guard.dart';
+import 'package:synaptix/core/router/account_required_guard.dart';
 import 'package:synaptix/core/models/app_config.dart';
 import 'package:synaptix/screens/invite_log_screen.dart';
 import 'package:synaptix/screens/compliance/age_gate_screen.dart';
@@ -658,6 +659,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           final r = featureFlagGuard(context, state,
               isEnabled: (FeatureFlags f) => f.cryptoEnabled);
           if (r != null) return r;
+          // Crypto is account-required: every action here calls a
+          // secure-channel-gated endpoint a device-guest can't complete.
+          // Send guests to the upgrade prompt instead.
+          final a = accountRequiredGuard(context, state);
+          if (a != null) return a;
           return onboardingGuard(context, state);
         },
       ),

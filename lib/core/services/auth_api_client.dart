@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
 import '../security/secure_session_store.dart';
+import '../networking/encrypted_refresh_transport.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 
 class AuthApiException implements Exception {
@@ -41,6 +42,13 @@ class AuthApiClient {
   final DeviceIdService _deviceId;
   final SecureSessionStore? _secureSessionStore;
 
+  /// Encrypted transport for `/auth/refresh`, late-injected after construction
+  /// to break the DI cycle. When present, refresh travels the KMS secure channel
+  /// (satisfying `RequireSecureChannel`); it MUST be backed by a non
+  /// auto-refreshing client to avoid refresh recursion. See
+  /// `docs/api/GUEST_IDENTITY_KMS_TIERING_PLAN.md` (Phase 2, B-proactive).
+  EncryptedRefreshTransport? _refreshTransport;
+
   AuthApiClient(this._http,
       {required String apiBaseUrl,
       required DeviceIdService deviceId,
@@ -50,6 +58,11 @@ class AuthApiClient {
             : apiBaseUrl,
         _deviceId = deviceId,
         _secureSessionStore = secureSessionStore;
+
+  /// Wires the encrypted refresh transport (see [_refreshTransport]).
+  void attachRefreshTransport(EncryptedRefreshTransport transport) {
+    _refreshTransport = transport;
+  }
 
   Uri _u(String path) => Uri.parse('$_apiBaseUrl$path');
 
@@ -414,6 +427,19 @@ class AuthApiClient {
       'deviceId': deviceId,
       'deviceType': resolvedDeviceType,
     };
+
+    // Preferred path: refresh over the KMS secure channel so it satisfies the
+    // backend's RequireSecureChannel on /auth/refresh. The transport is backed
+    // by a non auto-refreshing client, so it cannot recurse into refresh; the
+    // caller triggers this proactively (isExpiringSoon) while the access token
+    // is still valid, so the channel can be (re)started with a valid bearer.
+    final transport = _refreshTransport;
+    if (transport != null) {
+      _logRequest('POST', refreshPath, body: payload);
+      final json = await transport.postEncrypted(refreshPath, body: payload);
+      LogManager.debug('[AuthApiClient] Refresh (secure channel) succeeded');
+      return _parseSession(json);
+    }
 
     _logRequest('POST', refreshPath, body: payload);
 
