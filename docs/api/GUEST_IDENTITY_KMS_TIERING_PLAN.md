@@ -155,8 +155,20 @@ rules (IAP entitlements need a durable account; Apple Guideline 4.8).
 ### Phase 4 — KMS keys by tier (backend, `Synaptix.Security.Kms.*`)
 Ephemeral guests: session-only ephemeral keys (the ECDH+HKDF handshake already
 derives these — no durable per-guest envelope). Provision durable KMS-managed
-key material only on promotion to platform-linked / full account. Add a sweep
-for expired guest sessions in the session store so it doesn't grow unbounded.
+key material only on promotion to platform-linked / full account.
+
+**Session growth / sweep — resolved.** Investigated the "add a sweep for
+expired guest sessions" item: the KMS session store and replay-protection store
+are both `IDistributedCache`-backed and write every entry with
+`AbsoluteExpirationRelativeToNow`, so Redis (and the in-memory dev fallback)
+**auto-evict** expired sessions — no unbounded growth, and `IDistributedCache`
+exposes no key enumeration to sweep anyway. The one real gap was that
+`RenewAsync` had **no maximum absolute lifetime** (a session could be renewed
+every 30 min indefinitely). Fixed by capping renewable lifetime at
+`MaxSessionLifetime` (12h) in `SecureSessionService.RenewAsync`: an over-age
+session is **retired (deleted)** and the client must perform a fresh handshake.
+Covered by `SecureSessionServiceTests` (within-lifetime renews; over-age throws
++ deletes).
 
 ### Phase 5 — promotion flow
 On guest → platform/email upgrade, carry progress via the existing account-link
