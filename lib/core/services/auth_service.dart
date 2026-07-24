@@ -3,6 +3,7 @@ import 'auth_api_client.dart';
 import 'auth_token_store.dart';
 import 'device_id_service.dart';
 import 'game_platform_auth_service.dart';
+import 'package:synaptix/core/security/secure_channel_service.dart';
 import 'package:synaptix/core/manager/log_manager.dart';
 
 /// Named BackendAuthService to avoid collision with the local-storage AuthService
@@ -11,6 +12,11 @@ class BackendAuthService {
   final DeviceIdService _deviceId;
   final AuthTokenStore _store;
   final AuthApiClient _api;
+
+  /// Optional secure-channel service, late-injected to break the construction
+  /// cycle (channel depends on the auth HTTP client, which depends on this).
+  /// Used to revoke the server-side KMS session on logout.
+  SecureChannelService? _secureChannel;
 
   /// Exposes token storage for callers that still rely on direct access.
   AuthTokenStore get tokenStore => _store;
@@ -22,6 +28,12 @@ class BackendAuthService {
   })  : _deviceId = deviceId,
         _store = tokenStore,
         _api = api;
+
+  /// Attaches the secure-channel service after construction so logout can tear
+  /// down the server-side KMS session. See ServiceManager wiring.
+  void attachSecureChannel(SecureChannelService secureChannel) {
+    _secureChannel = secureChannel;
+  }
 
   /// Get current session from storage
   AuthSession get currentSession => _store.load();
@@ -99,10 +111,24 @@ class BackendAuthService {
         LogManager.debug(
             '[AuthService] Logout request failed, proceeding with local clear: $e');
       }
-    } finally {
-      // Always clear local tokens, even if backend call fails
-      await _store.clear();
     }
+
+    // Best-effort: revoke the server-side KMS secure session while the bearer
+    // is still valid, so a rotated/leaked session can't outlive logout.
+    try {
+      await _secureChannel?.revokeSession(
+        accessToken: existing.accessToken,
+        reason: 'logout',
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        LogManager.debug(
+            '[AuthService] Secure session revoke failed (best-effort): $e');
+      }
+    }
+
+    // Always clear local tokens, even if backend calls fail.
+    await _store.clear();
   }
 
   // -------------------------------------------------------------------------

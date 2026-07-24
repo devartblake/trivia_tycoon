@@ -26,6 +26,7 @@ import 'package:synaptix/ui_components/qr_code/services/qr_history_service.dart'
 import 'package:synaptix/core/services/storage/app_cache_service.dart';
 import 'package:synaptix/core/services/question/question_service.dart';
 import 'package:synaptix/core/services/storage/secure_storage.dart';
+import 'package:synaptix/core/services/storage/encrypted_box_opener.dart';
 import 'package:synaptix/core/services/theme/swatch_service.dart';
 import 'package:synaptix/core/services/api_service.dart';
 import 'package:synaptix/core/services/encryption/encryption_service.dart';
@@ -219,7 +220,7 @@ class ServiceManager {
         await (() async {
           final authBox = Hive.isBoxOpen('auth_tokens')
               ? Hive.box('auth_tokens')
-              : await Hive.openBox('auth_tokens');
+              : await EncryptedBoxOpener(SecureStorage()).openAuthTokens();
           final store = AuthTokenStore(authBox);
           await store.initialize();
           return store;
@@ -343,6 +344,9 @@ class ServiceManager {
       tokenStore: tokenStore,
       baseUrl: apiV1BaseUrl,
     );
+    // Let logout tear down the server-side KMS session (breaks the ctor cycle:
+    // coreAuth -> authHttpClient -> secureChannel -> coreAuth).
+    coreAuth.attachSecureChannel(secureChannel);
 
     // Token refresh must travel the KMS secure channel (backend /auth/refresh is
     // RequireSecureChannel), but it cannot go through `authHttpClient` — that
