@@ -162,6 +162,32 @@ for expired guest sessions in the session store so it doesn't grow unbounded.
 On guest → platform/email upgrade, carry progress via the existing account-link
 flow and promote the KMS subject in place (session `subjectId` rebinding).
 
+### Phase 2b — refresh/session security tightening (non-breaking). ✅ DONE
+Priority order implemented (value-per-risk), all backward-compatible:
+
+1. **Refresh-token reuse detection + family revocation (backend).**
+   `RefreshInternalAsync` now matches the stored token regardless of revoked
+   state. A rotated (already-revoked) token presented again is treated as
+   replay: outside a 30 s grace window it revokes the entire active token
+   family for that user+device and logs a warning; inside the window it's a
+   benign retry (network drop after rotation) and the family is untouched.
+2. **Channel-subject binding (backend).** `RefreshAsync` takes an optional
+   `expectedSubject`; `HandleTokenRefresh` passes the authenticated subject
+   from the request's `ClaimsPrincipal` (the secure channel's subject), so a
+   stolen refresh token can't be rotated over a different subject's channel.
+   Null (anonymous refresh) preserves prior behavior.
+   Covered by `RefreshTokenSecurityTests` (family revocation, grace-window
+   retry, subject mismatch, matching-subject rotation).
+3. **Encrypt `auth_tokens` at rest (client).** `EncryptedBoxOpener` opens the
+   box with an AES-256 cipher keyed from the OS keychain and migrates any
+   pre-existing plaintext box on first run (fails safe to plaintext if the
+   keychain is unavailable). Closes the legacy-`ApiService` plaintext-token
+   exposure. Covered by `encrypted_box_opener_test`.
+4. **Revoke KMS session on logout (client).** `SecureChannelService.revokeSession()`
+   POSTs `/security/sessions/revoke` with the still-valid bearer, then clears
+   the local session; `BackendAuthService.logout()` calls it best-effort
+   before clearing local tokens. Covered by `logout_revoke_test`.
+
 ## Not doing
 - Removing guest play (hurts the funnel; not required by stores).
 - Any auth/refresh code change before Phase 0 is answered.
